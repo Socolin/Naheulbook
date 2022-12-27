@@ -67,7 +67,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Character = character,
             Action = ChangeEvActionName,
             Date = DateTime.Now,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -78,7 +78,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Character = character,
             Action = ChangeEaActionName,
             Date = DateTime.Now,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -89,7 +89,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Character = character,
             Action = ChangeFatePointActionName,
             Date = DateTime.Now,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -100,7 +100,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Character = character,
             Action = ChangeExperienceActionName,
             Date = DateTime.Now,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -111,7 +111,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Character = character,
             Action = ChangeSexActionName,
             Date = DateTime.Now,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -122,7 +122,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Character = character,
             Action = ChangeNameActionName,
             Date = DateTime.Now,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -133,7 +133,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = AddItemActionName,
             Date = DateTime.Now,
-            ItemId = item.Id
+            ItemId = item.Id,
         };
     }
 
@@ -144,7 +144,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = EquipActionName,
             Date = DateTime.Now,
-            ItemId = itemId
+            ItemId = itemId,
         };
     }
 
@@ -155,7 +155,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = UnEquipActionName,
             Date = DateTime.Now,
-            ItemId = itemId
+            ItemId = itemId,
         };
     }
 
@@ -166,7 +166,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = character.Id,
             Action = ApplyModifierActionName,
             Date = DateTime.Now,
-            CharacterModifier = characterModifier
+            CharacterModifier = characterModifier,
         };
     }
 
@@ -177,7 +177,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = RemoveModifierActionName,
             Date = DateTime.Now,
-            CharacterModifierId = characterModifierId
+            CharacterModifierId = characterModifierId,
         };
     }
 
@@ -188,7 +188,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = ActiveModifierActionName,
             Date = DateTime.Now,
-            CharacterModifierId = characterModifierId
+            CharacterModifierId = characterModifierId,
         };
     }
 
@@ -199,7 +199,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = DisableModifierActionName,
             Date = DateTime.Now,
-            CharacterModifierId = characterModifierId
+            CharacterModifierId = characterModifierId,
         };
     }
 
@@ -210,7 +210,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = GiveItemActionName,
             Date = DateTime.Now,
-            ItemId = item.Id
+            ItemId = item.Id,
         };
     }
 
@@ -221,7 +221,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = GivenItemActionName,
             Date = DateTime.Now,
-            Item = item
+            Item = item,
         };
     }
 
@@ -232,7 +232,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = LootItemActionName,
             Date = DateTime.Now,
-            Item = item
+            Item = item,
         };
     }
 
@@ -244,7 +244,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Action = ChangeQuantityActionName,
             Date = DateTime.Now,
             ItemId = item.Id,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -256,7 +256,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Action = UseChargeActionName,
             Date = DateTime.Now,
             ItemId = item.Id,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -267,7 +267,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = ReadBookActionName,
             Date = DateTime.Now,
-            ItemId = item.Id
+            ItemId = item.Id,
         };
     }
 
@@ -278,7 +278,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = IdentifyActionName,
             Date = DateTime.Now,
-            ItemId = item.Id
+            ItemId = item.Id,
         };
     }
 
@@ -289,7 +289,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = LevelUpActionName,
             Date = DateTime.Now,
-            Info = level.ToString()
+            Info = level.ToString(),
         };
     }
 }

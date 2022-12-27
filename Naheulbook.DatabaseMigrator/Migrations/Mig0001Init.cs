@@ -25,7 +25,7 @@ public class Mig0001Init : Migration
             "monster_template", "monster_template_simple_inventory", "monster_trait", "monster_type", "origin",
             "origin_bonus", "origin_info", "origin_requirement", "origin_restrict", "origin_skill", "quest",
             "quest_template", "skill", "skill_effect", "speciality", "speciality_modifier", "speciality_special",
-            "spell", "spell_category", "stat", "user", "user_session"
+            "spell", "spell_category", "stat", "user", "user_session",
         };
 
 

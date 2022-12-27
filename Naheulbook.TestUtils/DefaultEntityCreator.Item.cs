@@ -22,7 +22,7 @@ public partial class DefaultEntityCreator
             CleanName = $"some-item-name-{suffix}",
             Name = $"some-item-name-{suffix}",
             Source = "official",
-            TechName = $"some-tech-name-{suffix}"
+            TechName = $"some-tech-name-{suffix}",
         };
     }
 
@@ -36,7 +36,7 @@ public partial class DefaultEntityCreator
             Name = $"some-item-name-{suffix}",
             Note = $"some-note-{suffix}",
             Special = $"some-special-{suffix}",
-            Icon = $"some-icon-{suffix}"
+            Icon = $"some-icon-{suffix}",
         };
     }
 
@@ -51,7 +51,7 @@ public partial class DefaultEntityCreator
             Note = $"some-note-{suffix}",
             Description = $"some-description-{suffix}",
             TechName = $"some-tech-name-{suffix}",
-            Name = $"some-name-{suffix}"
+            Name = $"some-name-{suffix}",
         };
     }
 
@@ -64,7 +64,7 @@ public partial class DefaultEntityCreator
         {
             Count = 1,
             Name = $"some-name-{suffix}",
-            TechName = $"some-tech-name-{suffix}"
+            TechName = $"some-tech-name-{suffix}",
         };
     }
 
@@ -100,17 +100,17 @@ public partial class DefaultEntityCreator
                     new ActiveStatsModifier
                     {
                         Active = true,
-                        Description = "some-description"
-                    }
+                        Description = "some-description",
+                    },
                 },
                 new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 }),
             ItemTemplateId = itemTemplate.Id,
             CharacterId = character.Id,
-            Character = character
+            Character = character,
         };
     }
 
@@ -122,7 +122,7 @@ public partial class DefaultEntityCreator
             Modifiers = @"[{""key"":""value""}]",
             ItemTemplateId = itemTemplate.Id,
             MonsterId = monster.Id,
-            Monster = monster
+            Monster = monster,
         };
     }
 
@@ -134,7 +134,7 @@ public partial class DefaultEntityCreator
             Modifiers = @"[{""key"":""value""}]",
             ItemTemplateId = itemTemplate.Id,
             LootId = loot.Id,
-            Loot = loot
+            Loot = loot,
         };
     }
 
@@ -146,7 +146,7 @@ public partial class DefaultEntityCreator
         return new ItemTypeEntity
         {
             DisplayName = $"some-display-name-{suffix}",
-            TechName = $"some-tech-name-{suffix}"
+            TechName = $"some-tech-name-{suffix}",
         };
     }
 }

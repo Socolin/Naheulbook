@@ -51,8 +51,8 @@ public class MonsterTemplateService : IMonsterTemplateService
                     Chance = i.Chance,
                     ItemTemplate = itemTemplates.First(x => x.Id == i.ItemTemplateId),
                     MaxCount = i.MaxCount,
-                    MinCount = i.MinCount
-                }).ToList()
+                    MinCount = i.MinCount,
+                }).ToList(),
             };
 
             uow.MonsterTemplates.Add(monsterTemplate);
@@ -91,7 +91,7 @@ public class MonsterTemplateService : IMonsterTemplateService
                 Chance = i.Chance,
                 ItemTemplate = itemTemplates.First(x => x.Id == i.ItemTemplateId),
                 MaxCount = i.MaxCount,
-                MinCount = i.MinCount
+                MinCount = i.MinCount,
             });
 
             foreach (var item in newItems)

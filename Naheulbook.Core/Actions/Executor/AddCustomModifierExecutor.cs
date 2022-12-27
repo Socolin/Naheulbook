@@ -54,8 +54,8 @@ public class AddCustomModifierExecutor : IAddCustomModifierExecutor
             {
                 Type = v.Type,
                 StatName = v.Stat,
-                Value = v.Value
-            }).ToList()
+                Value = v.Value,
+            }).ToList(),
         };
 
         context.TargetCharacter.Modifiers.Add(characterModifier);

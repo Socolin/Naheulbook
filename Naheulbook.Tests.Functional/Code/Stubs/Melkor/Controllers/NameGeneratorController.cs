@@ -16,7 +16,7 @@ public class NameGeneratorController : ControllerBase
         return new List<string>
         {
             "some-random-name-1",
-            "some-random-name-2"
+            "some-random-name-2",
         };
     }
 }

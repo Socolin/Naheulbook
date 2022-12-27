@@ -40,7 +40,7 @@ public class GroupHistoryUtil : IGroupHistoryUtil
             Group = group,
             Action = StartCombatActionName,
             Date = DateTime.Now,
-            Gm = false
+            Gm = false,
         };
     }
 
@@ -51,7 +51,7 @@ public class GroupHistoryUtil : IGroupHistoryUtil
             Group = group,
             Action = EndCombatActionName,
             Date = DateTime.Now,
-            Gm = false
+            Gm = false,
         };
     }
 
@@ -63,7 +63,7 @@ public class GroupHistoryUtil : IGroupHistoryUtil
             Action = UpdateMankdebolActionName,
             Date = DateTime.Now,
             Gm = true,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -75,7 +75,7 @@ public class GroupHistoryUtil : IGroupHistoryUtil
             Action = UpdateDebilibeukActionName,
             Date = DateTime.Now,
             Gm = true,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -87,7 +87,7 @@ public class GroupHistoryUtil : IGroupHistoryUtil
             Action = UpdateDateActionName,
             Date = DateTime.Now,
             Gm = false,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -99,7 +99,7 @@ public class GroupHistoryUtil : IGroupHistoryUtil
             Action = AddTimeActionName,
             Date = DateTime.Now,
             Gm = false,
-            Data = _jsonUtil.Serialize(new {timeOffset, date})
+            Data = _jsonUtil.Serialize(new {timeOffset, date}),
         };
     }
 
@@ -111,7 +111,7 @@ public class GroupHistoryUtil : IGroupHistoryUtil
             Action = EventRpActionName,
             Date = DateTime.Now,
             Gm = isGm,
-            Info = info
+            Info = info,
         };
     }
 }

@@ -92,7 +92,7 @@ public class ItemTemplateSectionServiceTests
             Special = "some-specials0,some-specials1,some-specials2",
             Note = "some-note",
             Icon = "some-icon",
-            SubCategories = new List<ItemTemplateSubCategoryEntity>()
+            SubCategories = new List<ItemTemplateSubCategoryEntity>(),
         };
     }
 }

@@ -175,7 +175,7 @@ public class ItemsController : ControllerBase
             return new TakeItemResponse
             {
                 RemainingQuantity = remainingQuantity,
-                TakenItem = _mapper.Map<ItemResponse>(takenItem)
+                TakenItem = _mapper.Map<ItemResponse>(takenItem),
             };
         }
         catch (ForbiddenAccessException ex)
@@ -202,7 +202,7 @@ public class ItemsController : ControllerBase
 
             return new GiveItemResponse
             {
-                RemainingQuantity = remainingQuantity
+                RemainingQuantity = remainingQuantity,
             };
         }
         catch (ForbiddenAccessException ex)

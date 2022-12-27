@@ -80,7 +80,7 @@ public class MonsterServiceTests
             Name = "some-monster-name",
             Data = "some-json-data",
             Modifiers = "some-json-modifiers",
-            Group = group
+            Group = group,
         });
     }
 
@@ -204,7 +204,7 @@ public class MonsterServiceTests
             Name = "some-monster-name",
             Data = new MonsterData {At = 8, Prd = 10},
             Items = new List<CreateItemRequest>(),
-            Modifiers = new List<ActiveStatsModifier>()
+            Modifiers = new List<ActiveStatsModifier>(),
         };
     }
 }

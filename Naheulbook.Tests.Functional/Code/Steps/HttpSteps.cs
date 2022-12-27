@@ -109,8 +109,8 @@ public class HttpSteps
             Content = new StringContent(contentData, Encoding.UTF8, "application/json"),
             Headers =
             {
-                Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt())
-            }
+                Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt()),
+            },
         };
         var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
         var content = await response.Content.ReadAsStringAsync();
@@ -130,8 +130,8 @@ public class HttpSteps
         {
             Headers =
             {
-                ContentType = new MediaTypeHeaderValue("image/png")
-            }
+                ContentType = new MediaTypeHeaderValue("image/png"),
+            },
         };
 
         var multipartContent = new MultipartFormDataContent();
@@ -143,8 +143,8 @@ public class HttpSteps
             Content = multipartContent,
             Headers =
             {
-                Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt())
-            }
+                Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt()),
+            },
         };
         var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
         var content = await response.Content.ReadAsStringAsync();

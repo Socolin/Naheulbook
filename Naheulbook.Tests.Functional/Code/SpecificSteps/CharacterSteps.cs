@@ -36,7 +36,7 @@ public class CharacterSteps
                 {
                     c.Jobs = new List<CharacterJobEntity>
                     {
-                        new CharacterJobEntity {JobId = _testDataUtil.GetLast<JobEntity>().Id}
+                        new CharacterJobEntity {JobId = _testDataUtil.GetLast<JobEntity>().Id},
                     };
                 });
             }
@@ -89,7 +89,7 @@ public class CharacterSteps
         _testDataUtil.AddItem(_testDataUtil.GetLast<CharacterEntity>());
         _testDataUtil.GetLast<CharacterEntity>().Items = new List<ItemEntity>
         {
-            _testDataUtil.GetLast<ItemEntity>()
+            _testDataUtil.GetLast<ItemEntity>(),
         };
         _testDataUtil.SaveChanges();
     }
@@ -104,7 +104,7 @@ public class CharacterSteps
 
         _testDataUtil.GetLast<CharacterEntity>().Items = new List<ItemEntity>
         {
-            _testDataUtil.GetLast<ItemEntity>()
+            _testDataUtil.GetLast<ItemEntity>(),
         };
         _testDataUtil.SaveChanges();
     }

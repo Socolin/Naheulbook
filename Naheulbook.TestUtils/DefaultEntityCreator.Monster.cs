@@ -17,7 +17,7 @@ public partial class DefaultEntityCreator
             MonsterTemplates = new List<MonsterTemplateEntity>(),
             Name = $"some-name-{suffix}",
             Type = monsterType,
-            TypeId = monsterType.Id
+            TypeId = monsterType.Id,
         };
     }
 
@@ -29,7 +29,7 @@ public partial class DefaultEntityCreator
         return new MonsterTypeEntity()
         {
             Name = $"some-monster-type-name-{suffix}",
-            SubCategories = new List<MonsterSubCategoryEntity>()
+            SubCategories = new List<MonsterSubCategoryEntity>(),
         };
     }
 
@@ -42,7 +42,7 @@ public partial class DefaultEntityCreator
         {
             Name = $"some-monster-trait-name-{suffix}",
             Description = $"some-monster-trait-description-{suffix}",
-            Levels = @"[""level1"", ""level2""]"
+            Levels = @"[""level1"", ""level2""]",
         };
     }
 
@@ -55,7 +55,7 @@ public partial class DefaultEntityCreator
         {
             Name = $"some-monster-template-name-{suffix}",
             SubCategory = subCategory,
-            Data = @"{""key"":""value""}"
+            Data = @"{""key"":""value""}",
         };
     }
 
@@ -69,7 +69,7 @@ public partial class DefaultEntityCreator
             Name = $"some-monster-name-{suffix}",
             Group = group,
             GroupId = group.Id,
-            Data = @"{""key"": ""value""}"
+            Data = @"{""key"": ""value""}",
         };
     }
 }

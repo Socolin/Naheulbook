@@ -97,8 +97,8 @@ public class AddEffectExecutor : IAddEffectExecutor
             {
                 Type = v.Type,
                 StatName = v.StatName,
-                Value = v.Value
-            }).ToList()
+                Value = v.Value,
+            }).ToList(),
         };
 
         if (context.TargetCharacter.Modifiers == null)

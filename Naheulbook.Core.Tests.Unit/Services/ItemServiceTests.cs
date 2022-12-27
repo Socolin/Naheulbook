@@ -427,8 +427,8 @@ public class ItemServiceTests
                 ? null
                 : new CharacterEntity
                 {
-                    Id = characterId.Value
-                }
+                    Id = characterId.Value,
+                },
         };
 
         _itemDataUtil.GetItemData(item)

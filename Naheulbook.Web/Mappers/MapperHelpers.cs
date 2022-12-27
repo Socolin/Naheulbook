@@ -10,7 +10,7 @@ public class MapperHelpers
     private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
     {
         NullValueHandling = NullValueHandling.Ignore,
-        Formatting = Formatting.None
+        Formatting = Formatting.None,
     };
 
     public static string[] FromCommaSeparatedStringArray(string? str)

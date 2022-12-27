@@ -23,7 +23,7 @@ public class JwtServiceTests
         var authenticationConfiguration = new AuthenticationConfiguration()
         {
             JwtSigningKey = Convert.ToBase64String(Encoding.UTF8.GetBytes("some-key")),
-            JwtExpirationDelayInMinutes = 3
+            JwtExpirationDelayInMinutes = 3,
         };
 
         _timeService = Substitute.For<ITimeService>();

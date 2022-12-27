@@ -57,7 +57,7 @@ public class LootService : ILootService
                 Name = request.Name,
                 IsVisibleForPlayer = false,
                 Items = new List<ItemEntity>(),
-                Monsters = new List<MonsterEntity>()
+                Monsters = new List<MonsterEntity>(),
             };
 
             uow.Loots.Add(loot);

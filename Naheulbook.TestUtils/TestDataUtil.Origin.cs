@@ -31,15 +31,15 @@ public partial class TestDataUtil
         origin.Information.Add(new OriginInfoEntity
         {
             Description = $"some-origin-info-description-{suffix}",
-            Title = $"some-origin-info-title-{suffix}"
+            Title = $"some-origin-info-title-{suffix}",
         });
         origin.Bonuses = new List<OriginBonus>
         {
             new OriginBonus
             {
                 Flags = "[]",
-                Description = $"some-description-{suffix}"
-            }
+                Description = $"some-description-{suffix}",
+            },
         };
         origin.Requirements = new List<OriginRequirementEntity>
         {
@@ -47,8 +47,8 @@ public partial class TestDataUtil
             {
                 MaxValue = 5,
                 MinValue = 2,
-                Stat = stat
-            }
+                Stat = stat,
+            },
         };
         origin.Skills = new List<OriginSkillEntity>
         {
@@ -56,22 +56,22 @@ public partial class TestDataUtil
             {
                 Skill = skill1,
                 SkillId = skill1.Id,
-                Default = true
+                Default = true,
             },
             new OriginSkillEntity
             {
                 Skill = skill2,
                 SkillId = skill2.Id,
-                Default = false
-            }
+                Default = false,
+            },
         };
         origin.Restrictions = new List<OriginRestrictEntity>
         {
             new OriginRestrictEntity
             {
                 Text = "some-restriction-text",
-                Flags = @"[{""data"": null, ""type"": ""value""}]"
-            }
+                Flags = @"[{""data"": null, ""type"": ""value""}]",
+            },
         };
 
         SaveEntity(origin, customizer);

@@ -46,7 +46,7 @@ public class UserAccessTokenService : IUserAccessTokenService
                 Key = RngHelper.GetRandomHexString(64),
                 Name = request.Name,
                 UserId = userId,
-                DateCreated = _timeService.UtcNow
+                DateCreated = _timeService.UtcNow,
             };
             uow.UserAccessTokenRepository.Add(token);
             await uow.SaveChangesAsync();

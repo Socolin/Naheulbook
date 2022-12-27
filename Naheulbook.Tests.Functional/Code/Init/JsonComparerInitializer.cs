@@ -30,7 +30,7 @@ public class JsonComparerInitializer
             {
                 DiffAddition = AnsiColor.Background(TerminalRgbColor.FromHex("21541A")),
                 DiffDeletion = AnsiColor.Background(TerminalRgbColor.FromHex("542822")),
-            }
+            },
         };
         _objectContainer.RegisterInstanceAs(jsonColorOptions, typeof(JsonComparerColorOptions));
         var jsonComparer = JsonComparer.GetDefault((name, value) =>

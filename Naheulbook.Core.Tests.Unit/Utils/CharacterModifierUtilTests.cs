@@ -30,7 +30,7 @@ public class CharacterModifierUtilTests
         var characterModifier = new CharacterModifierEntity
         {
             IsActive = initialValue,
-            Reusable = true
+            Reusable = true,
         };
 
         _util.ToggleModifier(new CharacterEntity(), characterModifier);

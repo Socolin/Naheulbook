@@ -15,7 +15,7 @@ public partial class DefaultEntityCreator
         {
             Name = $"some-stat-name-{suffix}",
             Description = $"some-stat-description-{suffix}",
-            DisplayName = $"some-stat-display-name-{suffix}"
+            DisplayName = $"some-stat-display-name-{suffix}",
         };
     }
 }

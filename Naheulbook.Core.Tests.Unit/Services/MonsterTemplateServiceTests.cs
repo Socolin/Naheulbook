@@ -81,7 +81,7 @@ public class MonsterTemplateServiceTests
     {
         var request = new MonsterTemplateRequest
         {
-            SubCategoryId = 42
+            SubCategoryId = 42,
         };
         var executionContext = new NaheulbookExecutionContext();
 
@@ -97,7 +97,7 @@ public class MonsterTemplateServiceTests
     {
         return new MonsterSubCategoryEntity
         {
-            Id = subCategoryId
+            Id = subCategoryId,
         };
     }
 
@@ -116,9 +116,9 @@ public class MonsterTemplateServiceTests
                     Chance = 0.5f,
                     MinCount = 1,
                     MaxCount = 2,
-                    ItemTemplateId = itemTemplateId
-                }
-            }
+                    ItemTemplateId = itemTemplateId,
+                },
+            },
         };
     }
 
@@ -136,9 +136,9 @@ public class MonsterTemplateServiceTests
                     MinCount = 1,
                     MaxCount = 2,
                     ItemTemplate = itemTemplate,
-                }
+                },
             },
-            Name = "some-monster-name"
+            Name = "some-monster-name",
         };
     }
 }

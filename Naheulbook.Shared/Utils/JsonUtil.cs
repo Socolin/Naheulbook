@@ -16,7 +16,7 @@ public class JsonUtil : IJsonUtil
     private readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings
     {
         NullValueHandling = NullValueHandling.Ignore,
-        ContractResolver = new CamelCasePropertyNamesContractResolver()
+        ContractResolver = new CamelCasePropertyNamesContractResolver(),
     };
 
     public string? Serialize(object? obj)

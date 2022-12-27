@@ -71,7 +71,7 @@ public class ItemTemplateSubCategoryServiceTests
             TechName= "some-tech-name",
             Description = "some-description",
             Note = "some-note",
-            SectionId = 1
+            SectionId = 1,
         };
     }
 }

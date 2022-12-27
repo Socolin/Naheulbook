@@ -35,7 +35,7 @@ public class EffectTypesController : ControllerBase
             var effectType = await _effectService.CreateEffectTypeAsync(executionContext, request);
             return new JsonResult(_mapper.Map<EffectTypeResponse>(effectType))
             {
-                StatusCode = 201
+                StatusCode = 201,
             };
         }
         catch (ForbiddenAccessException ex)

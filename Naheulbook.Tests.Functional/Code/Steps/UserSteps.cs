@@ -134,8 +134,8 @@ public class UserSteps
             RequestUri = new Uri(new Uri(_naheulbookApiServer.ListenUrls.First()), $"/api/v2/users/{_scenarioContext.GetUsername()}/jwt"),
             Content = new StringContent(JsonConvert.SerializeObject(new GenerateJwtRequest
             {
-                Password = _scenarioContext.GetPassword()
-            }), Encoding.UTF8, "application/json")
+                Password = _scenarioContext.GetPassword(),
+            }), Encoding.UTF8, "application/json"),
         };
         var response = await httpClient.SendAsync(httpRequestMessage);
         response.EnsureSuccessStatusCode();

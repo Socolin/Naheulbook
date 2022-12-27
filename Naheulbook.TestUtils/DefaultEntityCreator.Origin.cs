@@ -26,7 +26,7 @@ public partial class DefaultEntityCreator
             Information = new List<OriginInfoEntity>(),
             Requirements = new List<OriginRequirementEntity>(),
             Restrictions = new List<OriginRestrictEntity>(),
-            Skills = new List<OriginSkillEntity>()
+            Skills = new List<OriginSkillEntity>(),
         };
     }
 
@@ -36,7 +36,7 @@ public partial class DefaultEntityCreator
         {
             Origin = origin,
             Sex = sex,
-            Url = "/generateurs/noms/naheulbeuk/sex/originname"
+            Url = "/generateurs/noms/naheulbeuk/sex/originname",
         };
     }
 }

@@ -44,7 +44,7 @@ public class ItemTemplateSectionsController : ControllerBase
             var itemTemplateSectionResponse = _mapper.Map<ItemTemplateSectionResponse>(itemTemplateSection);
             return new JsonResult(itemTemplateSectionResponse)
             {
-                StatusCode = StatusCodes.Status201Created
+                StatusCode = StatusCodes.Status201Created,
             };
         }
         catch (ForbiddenAccessException ex)

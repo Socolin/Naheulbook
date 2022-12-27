@@ -44,7 +44,7 @@ public class TwitterAuthenticationController : ControllerBase
 
         return new TwitterAuthenticationInitResponse
         {
-            LoginToken = requestToken.OAuthToken
+            LoginToken = requestToken.OAuthToken,
         };
     }
 
@@ -72,7 +72,7 @@ public class TwitterAuthenticationController : ControllerBase
         return new UserJwtResponse
         {
             Token = token,
-            UserInfo = _mapper.Map<UserInfoResponse>(user)
+            UserInfo = _mapper.Map<UserInfoResponse>(user),
         };
     }
 }

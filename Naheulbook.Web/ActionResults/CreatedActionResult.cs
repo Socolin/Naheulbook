@@ -40,7 +40,7 @@ public class CreatedActionResult<TValue> : IConvertToActionResult
 
         return new JsonResult(Value)
         {
-            StatusCode = StatusCode
+            StatusCode = StatusCode,
         };
     }
 }

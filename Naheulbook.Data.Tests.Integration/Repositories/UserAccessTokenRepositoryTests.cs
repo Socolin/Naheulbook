@@ -50,7 +50,7 @@ public class UserAccessTokenRepositoryTests : RepositoryTestsBase<NaheulbookDbCo
             Key = "some-random-key",
             DateCreated = DateTimeOffset.Now.ToUniversalTime(),
             UserId = user.Id,
-            Name = "some-name"
+            Name = "some-name",
         };
     }
 }

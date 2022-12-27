@@ -13,7 +13,7 @@ public partial class DefaultEntityCreator
         {
             Data = "{}",
             GroupId = group.Id,
-            Name = $"some-npc-name-{suffix}"
+            Name = $"some-npc-name-{suffix}",
         };
     }
 }

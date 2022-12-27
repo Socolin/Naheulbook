@@ -71,7 +71,7 @@ public class Startup
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver
                 {
-                    NamingStrategy = new CamelCaseNamingStrategy()
+                    NamingStrategy = new CamelCaseNamingStrategy(),
                 };
             });
         services.AddValidatorsFromAssemblyContaining<ValidateUserRequest>();

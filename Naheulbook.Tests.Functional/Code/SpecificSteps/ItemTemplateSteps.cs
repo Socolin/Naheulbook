@@ -87,16 +87,16 @@ public class ItemTemplateSteps
                 }},
                 new NhbkAction{Type = "addEv",Data = new NhbkActionData
                 {
-                    Ev = 1
+                    Ev = 1,
                 }},
                 new NhbkAction{Type = "addEa",Data = new NhbkActionData
                 {
-                    Ea = 1
+                    Ea = 1,
                 }},
                 new NhbkAction{Type = "custom",Data = new NhbkActionData
                 {
-                    Text = "some-text"
-                }}
+                    Text = "some-text",
+                }},
             };
             itemTemplate.Data = JsonConvert.SerializeObject(itemTemplateData);
         });
@@ -125,7 +125,7 @@ public class ItemTemplateSteps
                     Stat = _testDataUtil.GetLast<StatEntity>(),
                     MinValue = 2,
                     MaxValue = 12,
-                }
+                },
             };
             itemTemplate.Modifiers = new List<ItemTemplateModifierEntity>
             {
@@ -137,36 +137,36 @@ public class ItemTemplateSteps
                     Stat = _testDataUtil.GetLast<StatEntity>(),
                     Value = -2,
                     Type = "ADD",
-                }
+                },
             };
             itemTemplate.Skills = new List<ItemTemplateSkillEntity>
             {
                 new ItemTemplateSkillEntity
                 {
-                    Skill = _testDataUtil.GetFromEnd<SkillEntity>(0)
-                }
+                    Skill = _testDataUtil.GetFromEnd<SkillEntity>(0),
+                },
             };
             itemTemplate.UnSkills = new List<ItemTemplateUnSkillEntity>
             {
                 new ItemTemplateUnSkillEntity
                 {
-                    Skill = _testDataUtil.GetFromEnd<SkillEntity>(1)
-                }
+                    Skill = _testDataUtil.GetFromEnd<SkillEntity>(1),
+                },
             };
             itemTemplate.Slots = new List<ItemTemplateSlotEntity>
             {
                 new ItemTemplateSlotEntity
                 {
-                    Slot = _testDataUtil.GetLast<SlotEntity>()
-                }
+                    Slot = _testDataUtil.GetLast<SlotEntity>(),
+                },
             };
             itemTemplate.SkillModifiers = new List<ItemTemplateSkillModifierEntity>
             {
                 new ItemTemplateSkillModifierEntity
                 {
                     Skill = _testDataUtil.GetFromEnd<SkillEntity>(2),
-                    Value = 2
-                }
+                    Value = 2,
+                },
             };
         });
     }

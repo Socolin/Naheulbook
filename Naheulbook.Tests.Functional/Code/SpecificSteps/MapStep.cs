@@ -50,12 +50,12 @@ public class MapStep
                                     new MapMarkerLinkEntity
                                     {
                                         Name = "some-link-name",
-                                        TargetMapId = targetMap.Id
-                                    }
-                                }
-                            }
-                        }
-                    }
+                                        TargetMapId = targetMap.Id,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 };
             });
     }
@@ -81,10 +81,10 @@ public class MapStep
                                 Description = "some-marker-description",
                                 MarkerInfo = "{}",
                                 Type = "point",
-                                Links = new List<MapMarkerLinkEntity>()
-                            }
-                        }
-                    }
+                                Links = new List<MapMarkerLinkEntity>(),
+                            },
+                        },
+                    },
                 };
             });
     }
@@ -100,8 +100,8 @@ public class MapStep
                     new MapLayerEntity
                     {
                         Name = "some-layer-name",
-                        Source = "official"
-                    }
+                        Source = "official",
+                    },
                 };
             });
     }

@@ -67,7 +67,7 @@ public partial class TestDataUtil
                     Stat = Get<StatEntity>(),
                     MinValue = 2,
                     MaxValue = 12,
-                }
+                },
             };
             itemTemplate.Modifiers = new List<ItemTemplateModifierEntity>
             {
@@ -78,37 +78,37 @@ public partial class TestDataUtil
                     RequiredOrigin = Get<OriginEntity>(),
                     Stat = Get<StatEntity>(),
                     Value = 2,
-                    Type = "ADD"
-                }
+                    Type = "ADD",
+                },
             };
             itemTemplate.Skills = new List<ItemTemplateSkillEntity>
             {
                 new ItemTemplateSkillEntity
                 {
-                    Skill = Get<SkillEntity>(0)
-                }
+                    Skill = Get<SkillEntity>(0),
+                },
             };
             itemTemplate.UnSkills = new List<ItemTemplateUnSkillEntity>
             {
                 new ItemTemplateUnSkillEntity
                 {
-                    Skill = Get<SkillEntity>(1)
-                }
+                    Skill = Get<SkillEntity>(1),
+                },
             };
             itemTemplate.Slots = new List<ItemTemplateSlotEntity>
             {
                 new ItemTemplateSlotEntity
                 {
-                    Slot = Get<SlotEntity>(0)
-                }
+                    Slot = Get<SlotEntity>(0),
+                },
             };
             itemTemplate.SkillModifiers = new List<ItemTemplateSkillModifierEntity>
             {
                 new ItemTemplateSkillModifierEntity
                 {
                     Skill = Get<SkillEntity>(2),
-                    Value = 2
-                }
+                    Value = 2,
+                },
             };
         });
     }

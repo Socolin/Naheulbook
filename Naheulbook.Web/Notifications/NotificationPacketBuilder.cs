@@ -17,7 +17,7 @@ public class NotificationPacketBuilder : INotificationPacketBuilder
         Character,
         Group,
         Monster,
-        Loot
+        Loot,
     }
 
     private readonly IHubGroupUtil _hubGroupUtil;

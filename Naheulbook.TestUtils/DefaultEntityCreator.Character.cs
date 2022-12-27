@@ -65,7 +65,7 @@ public partial class DefaultEntityCreator
             IsActive = true,
             Reusable = false,
             Permanent = false,
-            Values = values
+            Values = values,
         };
     }
 
@@ -75,7 +75,7 @@ public partial class DefaultEntityCreator
         {
             StatName = stat.Name,
             Value = value,
-            Type = "ADD"
+            Type = "ADD",
         };
     }
 
@@ -91,7 +91,7 @@ public partial class DefaultEntityCreator
             Date = new DateTime(2019, 10, 5, 5, 7, 8, DateTimeKind.Utc),
             CharacterId = character.Id,
             Action = $"some-character-history-action-{suffix}",
-            Info = $"some-info-{suffix}"
+            Info = $"some-info-{suffix}",
         };
     }
 }

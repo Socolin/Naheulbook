@@ -32,8 +32,8 @@ public partial class TestDataUtil
         {
             new JobBonusEntity
             {
-                Description = $"some-job-bonus-description-{suffix}"
-            }
+                Description = $"some-job-bonus-description-{suffix}",
+            },
         };
         job.Requirements = new List<JobRequirementEntity>
         {
@@ -42,27 +42,27 @@ public partial class TestDataUtil
                 Stat = stat,
                 MinValue = 2,
                 MaxValue = 4,
-            }
+            },
         };
         job.Restrictions = new List<JobRestrictionEntity>
         {
             new JobRestrictionEntity
             {
                 Text = $"some-job-restriction-{suffix}",
-                Flags = "[]"
-            }
+                Flags = "[]",
+            },
         };
         job.Skills = new List<JobSkillEntity>
         {
             new JobSkillEntity
             {
                 Default = true,
-                Skill = skill1
+                Skill = skill1,
             },
             new JobSkillEntity
             {
                 Default = false,
-                Skill = skill2
+                Skill = skill2,
             },
         };
 
@@ -97,8 +97,8 @@ public partial class TestDataUtil
             new SpecialityModifierEntity
             {
                 Stat = GetLast<StatEntity>().Name,
-                Value = 2
-            }
+                Value = 2,
+            },
         };
 
         speciality.Specials = new List<SpecialitySpecialEntity>
@@ -108,7 +108,7 @@ public partial class TestDataUtil
                 Description = $"some-speciality-special-description-{suffix}",
                 Flags = @"[{""data"": ""some-data"", ""type"": ""ONE_SPECIALITY""}]",
                 IsBonus = true,
-            }
+            },
         };
         return SaveEntity(speciality, customizer);
     }

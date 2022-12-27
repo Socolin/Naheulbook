@@ -36,7 +36,7 @@ public class GoogleClient : IGoogleClient
             ["code"] = code,
             ["grant_type"] = "authorization_code",
             ["client_id"] = _configuration.AppId,
-            ["client_secret"] = _configuration.AppSecret
+            ["client_secret"] = _configuration.AppSecret,
         };
 
         using (var client = new HttpClient())

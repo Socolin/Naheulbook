@@ -25,14 +25,14 @@ public class MailService : IMailService
         {
             UseDefaultCredentials = false,
             EnableSsl = _mailConfiguration.Smtp.Ssl,
-            Credentials = new NetworkCredential(_mailConfiguration.Smtp.Username, _mailConfiguration.Smtp.Password)
+            Credentials = new NetworkCredential(_mailConfiguration.Smtp.Username, _mailConfiguration.Smtp.Password),
         };
 
         var mailMessage = new MailMessage
         {
             From = new MailAddress(_mailConfiguration.FromAddress),
             Body = $"ActivationCode: {activationCode}",
-            Subject = "Activate naheulbook account"
+            Subject = "Activate naheulbook account",
         };
         mailMessage.To.Add(email);
 

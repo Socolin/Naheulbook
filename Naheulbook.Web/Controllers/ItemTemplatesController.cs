@@ -90,7 +90,7 @@ public class ItemTemplatesController : ControllerBase
             var itemTemplateResponse = _mapper.Map<ItemTemplateResponse>(itemTemplate);
             return new JsonResult(itemTemplateResponse)
             {
-                StatusCode = StatusCodes.Status201Created
+                StatusCode = StatusCodes.Status201Created,
             };
         }
         catch (ForbiddenAccessException ex)

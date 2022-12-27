@@ -72,8 +72,8 @@ public class EffectRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
                 {
                     Stat = TestDataUtil.GetLast<StatEntity>(),
                     Type = "ADD",
-                    Value = 4
-                }
+                    Value = 4,
+                },
             });
 
         var actualEffect = await _effectRepository.GetWithModifiersAsync(TestDataUtil.Get<EffectEntity>().Id);

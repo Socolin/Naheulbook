@@ -403,7 +403,7 @@ public class CharacterService : ICharacterService
 
             character.Jobs.Add(new CharacterJobEntity
             {
-                Job = job
+                Job = job,
             });
 
             var notificationSession = _notificationSessionFactory.CreateSession();

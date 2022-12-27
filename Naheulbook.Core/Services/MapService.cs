@@ -83,7 +83,7 @@ public class MapService : IMapService
                 Name = request.Name,
                 Data = _jsonUtil.SerializeNonNull(mapData),
                 ImageData = "{}",
-                Layers = new List<MapLayerEntity>()
+                Layers = new List<MapLayerEntity>(),
             };
 
             uow.Maps.Add(map);
@@ -149,7 +149,7 @@ public class MapService : IMapService
                 Source = request.Source,
                 IsGm = request.IsGm,
                 MapId = mapId,
-                UserId = request.Source == "official" ? null : executionContext.UserId
+                UserId = request.Source == "official" ? null : executionContext.UserId,
             };
 
             uow.MapLayers.Add(mapLayer);
@@ -222,7 +222,7 @@ public class MapService : IMapService
             Description = request.Description,
             Type = request.Type,
             MarkerInfo = _jsonUtil.SerializeNonNull(request.MarkerInfo),
-            Links = new List<MapMarkerLinkEntity>()
+            Links = new List<MapMarkerLinkEntity>(),
         };
 
         uow.MapMarkers.Add(mapMarker);
@@ -325,7 +325,7 @@ public class MapService : IMapService
             MapMarkerId = mapMarkerId,
             TargetMap = targetMap,
             TargetMapId = request.TargetMapId,
-            TargetMapMarkerId = request.TargetMapMarkerId
+            TargetMapMarkerId = request.TargetMapMarkerId,
         };
 
         uow.MapMarkerLinks.Add(mapMarkerLink);

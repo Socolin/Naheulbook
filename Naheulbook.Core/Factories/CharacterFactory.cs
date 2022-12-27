@@ -45,14 +45,14 @@ public class CharacterFactory : ICharacterFactory
             {
                 new CharacterJobEntity
                 {
-                    JobId = characterRequest.JobId.Value
-                }
+                    JobId = characterRequest.JobId.Value,
+                },
             };
 
         character.Skills = characterRequest.SkillIds
             .Select(x => new CharacterSkillEntity
             {
-                SkillId = x
+                SkillId = x,
             })
             .ToList();
 
@@ -78,8 +78,8 @@ public class CharacterFactory : ICharacterFactory
             {
                 new CharacterSpecialityEntity
                 {
-                    SpecialityId = characterRequest.SpecialityId.Value
-                }
+                    SpecialityId = characterRequest.SpecialityId.Value,
+                },
             };
 
         return character;
@@ -115,16 +115,16 @@ public class CharacterFactory : ICharacterFactory
 
         character.Jobs = characterRequest.JobIds.Select(jobId => new CharacterJobEntity
         {
-            JobId = jobId
+            JobId = jobId,
         }).ToList();
 
         character.Skills = characterRequest.SkillIds.Select(x => new CharacterSkillEntity
         {
-            SkillId = x
+            SkillId = x,
         }).ToList();
         character.Specialities = characterRequest.SpecialityIds.SelectMany(x => x.Value).Select(specialityId => new CharacterSpecialityEntity
         {
-            SpecialityId = specialityId
+            SpecialityId = specialityId,
         }).ToList();
 
         return character;

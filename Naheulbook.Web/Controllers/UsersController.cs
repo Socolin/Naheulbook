@@ -113,7 +113,7 @@ public class UsersController : ControllerBase
         return new UserJwtResponse
         {
             Token = token,
-            UserInfo = _mapper.Map<UserInfoResponse>(userInfo)
+            UserInfo = _mapper.Map<UserInfoResponse>(userInfo),
         };
     }
 

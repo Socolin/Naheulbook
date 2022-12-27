@@ -38,7 +38,7 @@ public class ItemTemplateUtilTests
             Data = @"{""key"": ""value""}",
             Source = "some-source",
             TechName = "some-tech-name",
-            SubCategoryId = 1
+            SubCategoryId = 1,
         };
 
         var request = new ItemTemplateRequest
@@ -47,7 +47,7 @@ public class ItemTemplateUtilTests
             Data = JObject.FromObject(new {newKey = "newValue"}),
             Source = "some-new-source",
             TechName = "some-new-tech-name",
-            SubCategoryId = 2
+            SubCategoryId = 2,
         };
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
@@ -86,14 +86,14 @@ public class ItemTemplateUtilTests
                 new ItemTemplateSlotEntity
                 {
                     SlotId = 1,
-                    Slot = slot1
+                    Slot = slot1,
                 },
                 new ItemTemplateSlotEntity
                 {
                     SlotId = 2,
-                    Slot = slot2
-                }
-            }
+                    Slot = slot2,
+                },
+            },
         };
 
         var request = new ItemTemplateRequest
@@ -102,7 +102,7 @@ public class ItemTemplateUtilTests
             {
                 new IdRequest {Id = 2},
                 new IdRequest {Id = 3},
-            }
+            },
         };
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
@@ -110,12 +110,12 @@ public class ItemTemplateUtilTests
         itemTemplate.Slots.Should().BeEquivalentTo(new [] {
             new ItemTemplateSlotEntity
             {
-                SlotId = 2
+                SlotId = 2,
             },
             new ItemTemplateSlotEntity
             {
-                SlotId = 3
-            }
+                SlotId = 3,
+            },
         });
     }
 
@@ -131,16 +131,16 @@ public class ItemTemplateUtilTests
                     Id = 1,
                     StatName = "some-stat-name-1",
                     MinValue = 2,
-                    MaxValue = 3
+                    MaxValue = 3,
                 },
                 new ItemTemplateRequirementEntity
                 {
                     Id = 2,
                     StatName = "some-stat-name-2",
                     MinValue = 4,
-                    MaxValue = 7
-                }
-            }
+                    MaxValue = 7,
+                },
+            },
         };
 
         var request = new ItemTemplateRequest
@@ -151,15 +151,15 @@ public class ItemTemplateUtilTests
                 {
                     Stat = "some-stat-name-2",
                     Min = 3,
-                    Max = 8
+                    Max = 8,
                 },
                 new ItemTemplateRequirementRequest
                 {
                     Stat = "some-stat-name-3",
                     Min = 4,
-                    Max = 12
-                }
-            }
+                    Max = 12,
+                },
+            },
         };
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
@@ -169,14 +169,14 @@ public class ItemTemplateUtilTests
             {
                 StatName = "some-stat-name-2",
                 MinValue = 3,
-                MaxValue = 8
+                MaxValue = 8,
             },
             new ItemTemplateRequirementEntity
             {
                 StatName = "some-stat-name-3",
                 MinValue = 4,
-                MaxValue = 12
-            }
+                MaxValue = 12,
+            },
         });
     }
 
@@ -193,7 +193,7 @@ public class ItemTemplateUtilTests
                     Id = 1,
                     StatName = "some-stat-name-1",
                     Value = 2,
-                    Special = "some-special-1"
+                    Special = "some-special-1",
                 },
                 new ItemTemplateModifierEntity
                 {
@@ -201,8 +201,8 @@ public class ItemTemplateUtilTests
                     StatName = "some-stat-name-2",
                     Value = 3,
                     Special = "some-special-2",
-                }
-            }
+                },
+            },
         };
 
         var request = new ItemTemplateRequest
@@ -214,7 +214,7 @@ public class ItemTemplateUtilTests
                     Stat = "some-stat-name-2",
                     JobId = new Guid("00000000-0000-0000-0000-000000000011"),
                     Type = "ADD",
-                    Value = 3
+                    Value = 3,
                 },
                 new ItemTemplateModifierRequest
                 {
@@ -222,9 +222,9 @@ public class ItemTemplateUtilTests
                     OriginId = new Guid("00000000-0000-0000-0000-000000000001"),
                     Type = "ADD",
                     Value = 3,
-                    Special = new List<string> {"some-special-3"}
-                }
-            }
+                    Special = new List<string> {"some-special-3"},
+                },
+            },
         };
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
@@ -236,7 +236,7 @@ public class ItemTemplateUtilTests
                 RequiredJobId = new Guid("00000000-0000-0000-0000-000000000011"),
                 Type = "ADD",
                 Value = 3,
-                Special = ""
+                Special = "",
             },
             new ItemTemplateModifierEntity
             {
@@ -244,8 +244,8 @@ public class ItemTemplateUtilTests
                 RequiredOriginId = new Guid("00000000-0000-0000-0000-000000000001"),
                 Type = "ADD",
                 Value = 3,
-                Special = "some-special-3"
-            }
+                Special = "some-special-3",
+            },
         });
     }
 
@@ -257,13 +257,13 @@ public class ItemTemplateUtilTests
             Skills = new List<ItemTemplateSkillEntity>
             {
                 new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000001")},
-                new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000002")}
+                new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000002")},
             },
             UnSkills = new List<ItemTemplateUnSkillEntity>
             {
                 new ItemTemplateUnSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000003")},
-                new ItemTemplateUnSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000004")}
-            }
+                new ItemTemplateUnSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000004")},
+            },
         };
 
         var request = new ItemTemplateRequest
@@ -271,24 +271,24 @@ public class ItemTemplateUtilTests
             SkillIds = new List<Guid>
             {
                 new Guid("00000000-0000-0000-0000-000000000004"),
-                new Guid("00000000-0000-0000-0000-000000000005")
+                new Guid("00000000-0000-0000-0000-000000000005"),
             },
             UnSkillIds = new List<Guid>
             {
                 new Guid("00000000-0000-0000-0000-000000000006"),
-                new Guid("00000000-0000-0000-0000-000000000007")
-            }
+                new Guid("00000000-0000-0000-0000-000000000007"),
+            },
         };
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
 
         itemTemplate.Skills.Should().BeEquivalentTo(new [] {
             new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000004")},
-            new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000005")}
+            new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000005")},
         });
         itemTemplate.UnSkills.Should().BeEquivalentTo(new [] {
             new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000006")},
-            new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000007")}
+            new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000007")},
         });
     }
 
@@ -301,8 +301,8 @@ public class ItemTemplateUtilTests
             SkillModifiers = new List<ItemTemplateSkillModifierEntity>
             {
                 new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000001"), Value = 1},
-                new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000002"), Value = 2}
-            }
+                new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000002"), Value = 2},
+            },
         };
 
         var request = new ItemTemplateRequest
@@ -311,14 +311,14 @@ public class ItemTemplateUtilTests
             {
                 new ItemTemplateSkillModifierRequest {SkillId = new Guid("00000000-0000-0000-0000-000000000004"), Value = 3},
                 new ItemTemplateSkillModifierRequest {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4},
-            }
+            },
         };
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
 
         itemTemplate.SkillModifiers.Should().BeEquivalentTo(new [] {
             new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000004"), Value = 3},
-            new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4}
+            new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4},
         });
     }
 
@@ -328,7 +328,7 @@ public class ItemTemplateUtilTests
         var itemTemplate = CreateItemTemplateSource("official");
         var iteTemplates = new List<ItemTemplateEntity>
         {
-            itemTemplate
+            itemTemplate,
         };
 
         var actualItemTemplates = _util.FilterItemTemplatesBySource(iteTemplates, null, false);
@@ -342,7 +342,7 @@ public class ItemTemplateUtilTests
         var itemTemplate = CreateItemTemplateSource("community");
         var iteTemplates = new List<ItemTemplateEntity>
         {
-            itemTemplate
+            itemTemplate,
         };
 
         var actualItemTemplates = _util.FilterItemTemplatesBySource(iteTemplates, null, true);
@@ -356,7 +356,7 @@ public class ItemTemplateUtilTests
         var itemTemplate = CreateItemTemplateSource("community");
         var iteTemplates = new List<ItemTemplateEntity>
         {
-            itemTemplate
+            itemTemplate,
         };
 
         var actualItemTemplates = _util.FilterItemTemplatesBySource(iteTemplates, null, false);
@@ -370,7 +370,7 @@ public class ItemTemplateUtilTests
         var itemTemplate = CreateItemTemplateSource("private", 42);
         var iteTemplates = new List<ItemTemplateEntity>
         {
-            itemTemplate
+            itemTemplate,
         };
 
         var actualItemTemplates = _util.FilterItemTemplatesBySource(iteTemplates, 12, false);
@@ -384,7 +384,7 @@ public class ItemTemplateUtilTests
         var itemTemplate = CreateItemTemplateSource("private", 42);
         var iteTemplates = new List<ItemTemplateEntity>
         {
-            itemTemplate
+            itemTemplate,
         };
 
         var actualItemTemplates = _util.FilterItemTemplatesBySource(iteTemplates, 42, false);
@@ -397,7 +397,7 @@ public class ItemTemplateUtilTests
         return new ItemTemplateEntity
         {
             Source = source,
-            SourceUserId = sourceUserId
+            SourceUserId = sourceUserId,
         };
     }
 
@@ -405,7 +405,7 @@ public class ItemTemplateUtilTests
     {
         return new SlotEntity()
         {
-            Name = $"some-slot-name-{idx}"
+            Name = $"some-slot-name-{idx}",
         };
     }
 }

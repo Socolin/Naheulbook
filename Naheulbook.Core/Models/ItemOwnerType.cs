@@ -4,5 +4,5 @@ public enum ItemOwnerType
 {
     Character,
     Loot,
-    Monster
+    Monster,
 }

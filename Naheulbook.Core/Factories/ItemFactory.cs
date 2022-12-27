@@ -69,7 +69,7 @@ public class ItemFactory : IItemFactory
         var item = new ItemEntity
         {
             Data = _jsonUtil.SerializeNonNull(itemData),
-            ItemTemplateId = itemTemplate.Id
+            ItemTemplateId = itemTemplate.Id,
         };
         return item;
     }
@@ -81,7 +81,7 @@ public class ItemFactory : IItemFactory
         {
             Modifiers = originalItem.Modifiers,
             ItemTemplateId = originalItem.ItemTemplateId,
-            Data = _jsonUtil.SerializeNonNull(originItemData)
+            Data = _jsonUtil.SerializeNonNull(originItemData),
         };
 
         return clonedItem;

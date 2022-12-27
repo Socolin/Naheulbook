@@ -43,7 +43,7 @@ public class GroupUtilTests
         var groupHistoryEntry = new GroupHistoryEntryEntity();
         var request = new PatchGroupRequest
         {
-            Mankdebol = 4
+            Mankdebol = 4,
         };
 
         _groupHistoryUtil.CreateLogChangeMankdebol(group, null, 4)
@@ -68,7 +68,7 @@ public class GroupUtilTests
         var groupHistoryEntry = new GroupHistoryEntryEntity();
         var request = new PatchGroupRequest
         {
-            Debilibeuk = 4
+            Debilibeuk = 4,
         };
 
         _groupHistoryUtil.CreateLogChangeDebilibeuk(group, null, 4)
@@ -95,8 +95,8 @@ public class GroupUtilTests
         {
             Date = new NhbkDateRequest()
             {
-                Day = 8
-            }
+                Day = 8,
+            },
         };
 
         _groupHistoryUtil.CreateLogChangeDate(group, Arg.Any<NhbkDate>(), Arg.Any<NhbkDate>())

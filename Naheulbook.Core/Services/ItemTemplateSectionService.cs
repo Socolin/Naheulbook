@@ -51,7 +51,7 @@ public class ItemTemplateSectionService : IItemTemplateSectionService
             Special = string.Join(",", request.Specials),
             Note = request.Note,
             Icon = request.Icon,
-            SubCategories = new List<ItemTemplateSubCategoryEntity>()
+            SubCategories = new List<ItemTemplateSubCategoryEntity>(),
         };
 
         using (var uow = _unitOfWorkFactory.CreateUnitOfWork())

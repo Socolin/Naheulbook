@@ -122,7 +122,7 @@ public class ItemDataUtilTests
 
         return new ItemEntity
         {
-            Data = SomeItemDataJson
+            Data = SomeItemDataJson,
         };
     }
 }

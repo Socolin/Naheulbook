@@ -41,7 +41,7 @@ public partial class TestDataUtil
             Character = character,
             CharacterId = character.Id,
             Group = group,
-            GroupId = group.Id
+            GroupId = group.Id,
         };
         return SaveEntity(groupInvite, null);
     }

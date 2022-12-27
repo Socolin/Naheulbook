@@ -61,7 +61,7 @@ public class NpcService : INpcService
         {
             GroupId = groupId,
             Name = request.Name,
-            Data = _jsonUtil.SerializeNonNull(request.Data)
+            Data = _jsonUtil.SerializeNonNull(request.Data),
         };
 
         uow.Npcs.Add(npc);

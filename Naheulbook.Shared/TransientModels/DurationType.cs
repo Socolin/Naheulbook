@@ -7,5 +7,5 @@ public enum DurationType
     Time,
     Combat,
     Lap,
-    Forever
+    Forever,
 }

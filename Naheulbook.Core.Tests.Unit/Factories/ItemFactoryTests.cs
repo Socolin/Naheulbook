@@ -147,7 +147,7 @@ public class ItemFactoryTests
         return new ItemTemplateEntity
         {
             Id = Guid.NewGuid(),
-            Data = "some-item-template-data"
+            Data = "some-item-template-data",
         };
     }
 }

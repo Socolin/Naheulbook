@@ -91,7 +91,7 @@ public class MonsterService : IMonsterService
                 Group = group,
                 Name = request.Name,
                 Data = _jsonUtil.Serialize(request.Data),
-                Modifiers = _jsonUtil.Serialize(request.Modifiers)
+                Modifiers = _jsonUtil.Serialize(request.Modifiers),
             };
 
             // FIXME: test this

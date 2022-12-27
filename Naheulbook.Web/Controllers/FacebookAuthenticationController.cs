@@ -52,7 +52,7 @@ public class FacebookAuthenticationController : ControllerBase
         return new AuthenticationInitResponse
         {
             LoginToken = loginToken,
-            AppKey = _configuration.AppId
+            AppKey = _configuration.AppId,
         };
     }
 
@@ -81,7 +81,7 @@ public class FacebookAuthenticationController : ControllerBase
         return new UserJwtResponse
         {
             Token = token,
-            UserInfo = _mapper.Map<UserInfoResponse>(user)
+            UserInfo = _mapper.Map<UserInfoResponse>(user),
         };
     }
 }

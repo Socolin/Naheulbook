@@ -176,9 +176,9 @@ public class CharacterUtil : ICharacterUtil
                 {
                     StatName = "CHA",
                     Value = 1,
-                    Type = "ADD"
-                }
-            }
+                    Type = "ADD",
+                },
+            },
         };
     }
 
@@ -188,7 +188,7 @@ public class CharacterUtil : ICharacterUtil
         {
             SpecialityId = speciality.Id,
             Speciality = speciality,
-            CharacterId = character.Id
+            CharacterId = character.Id,
         };
     }
 
@@ -197,7 +197,7 @@ public class CharacterUtil : ICharacterUtil
         return new CharacterSkillEntity
         {
             CharacterId = character.Id,
-            SkillId = skillId
+            SkillId = skillId,
         };
     }
 
@@ -216,13 +216,13 @@ public class CharacterUtil : ICharacterUtil
         {
             StatName = request.EvOrEa,
             Value = request.EvOrEaValue,
-            Type = "ADD"
+            Type = "ADD",
         });
         levelUpCharacterModifier.Values.Add(new CharacterModifierValueEntity
         {
             StatName = request.StatToUp,
             Value = 1,
-            Type = "ADD"
+            Type = "ADD",
         });
         return levelUpCharacterModifier;
     }

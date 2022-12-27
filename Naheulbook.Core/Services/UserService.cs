@@ -63,7 +63,7 @@ public class UserService : IUserService
             {
                 Username = username,
                 HashedPassword = _passwordHashingService.HashPassword(password),
-                ActivationCode = activationCode
+                ActivationCode = activationCode,
             };
 
             uow.Users.Add(user);

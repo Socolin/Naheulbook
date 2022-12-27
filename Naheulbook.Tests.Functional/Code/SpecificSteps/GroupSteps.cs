@@ -87,14 +87,14 @@ public class GroupSteps
             Day = StepArgumentUtil.ParseNth(day),
             Hour = hour,
             Minute = minute,
-            Year = year
+            Year = year,
         };
 
         group.Data = JsonConvert.SerializeObject(groupData,
             new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
             });
         _testDataUtil.SaveChanges();
     }

@@ -13,7 +13,7 @@ public partial class DefaultEntityCreator
 
         return new EffectTypeEntity
         {
-            Name = $"some-effect-type-name-{suffix}"
+            Name = $"some-effect-type-name-{suffix}",
         };
     }
 
@@ -28,7 +28,7 @@ public partial class DefaultEntityCreator
             Note = $"some-effect-name-{suffix}",
             DiceCount = 1,
             DiceSize = 20,
-            Type = effectType
+            Type = effectType,
         };
     }
 
@@ -44,7 +44,7 @@ public partial class DefaultEntityCreator
             Dice = 4,
             Name = $"some-effect-name-{suffix}",
             DurationType = "combat",
-            CombatCount = 2
+            CombatCount = 2,
         };
     }
 }

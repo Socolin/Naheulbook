@@ -59,7 +59,7 @@ public class EventService : IEventService
                 Name = request.Name,
                 Description = request.Description,
                 GroupId = groupId,
-                Timestamp = request.Timestamp
+                Timestamp = request.Timestamp,
             };
 
             uow.Events.Add(groupEvent);

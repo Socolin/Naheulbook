@@ -41,7 +41,7 @@ public static class HttpScenarioContextExtensions
         {
             return JsonConvert.DeserializeObject<JToken>(json, new JsonSerializerSettings()
             {
-                DateParseHandling = DateParseHandling.None
+                DateParseHandling = DateParseHandling.None,
             });
         }
         catch (JsonReaderException ex)

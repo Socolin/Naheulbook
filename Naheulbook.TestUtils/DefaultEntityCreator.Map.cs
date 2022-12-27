@@ -23,10 +23,10 @@ public partial class DefaultEntityCreator
                 Width = 40,
                 Height = 20,
                 ZoomCount = 5,
-                ExtraZoomCount = 1
+                ExtraZoomCount = 1,
             }, new JsonSerializerSettings
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
             }),
             Data = JsonConvert.SerializeObject(new MapData
             {
@@ -36,13 +36,13 @@ public partial class DefaultEntityCreator
                     new MapData.MapAttribution
                     {
                         Name = "some-attribution-name",
-                        Url = "some-attribution-url"
-                    }
-                }
+                        Url = "some-attribution-url",
+                    },
+                },
             }, new JsonSerializerSettings
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            })
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            }),
         };
     }
 }

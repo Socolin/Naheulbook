@@ -45,7 +45,7 @@ public class ItemTemplateUtil : IItemTemplateUtil
         {
             StatName = x.Stat,
             MaxValue = x.Max,
-            MinValue = x.Min
+            MinValue = x.Min,
         }).ToList() ?? new List<ItemTemplateRequirementEntity>();
 
         itemTemplate.Modifiers = request.Modifiers?.Select(x => new ItemTemplateModifierEntity
@@ -55,23 +55,23 @@ public class ItemTemplateUtil : IItemTemplateUtil
             RequiredOriginId = x.OriginId,
             Value = x.Value,
             Type = x.Type,
-            Special = x.Special == null ? "" : string.Join(',', x.Special)
+            Special = x.Special == null ? "" : string.Join(',', x.Special),
         }).ToList() ?? new List<ItemTemplateModifierEntity>();
 
         itemTemplate.Skills = request.SkillIds?.Select(skillId => new ItemTemplateSkillEntity
         {
-            SkillId = skillId
+            SkillId = skillId,
         }).ToList() ?? new List<ItemTemplateSkillEntity>();
 
         itemTemplate.UnSkills = request.UnSkillIds?.Select(skillId => new ItemTemplateUnSkillEntity
         {
-            SkillId = skillId
+            SkillId = skillId,
         }).ToList() ?? new List<ItemTemplateUnSkillEntity>();
 
         itemTemplate.SkillModifiers = request.SkillModifiers?.Select(x => new ItemTemplateSkillModifierEntity
         {
             SkillId = x.SkillId,
-            Value = x.Value
+            Value = x.Value,
         }).ToList() ?? new List<ItemTemplateSkillModifierEntity>();
     }
 

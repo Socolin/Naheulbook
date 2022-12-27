@@ -32,7 +32,7 @@ public class JTokenTransform
             {
                 return JsonConvert.DeserializeObject<JToken>(expandedJson, new JsonSerializerSettings()
                 {
-                    DateParseHandling = DateParseHandling.None
+                    DateParseHandling = DateParseHandling.None,
                 });
             }
             catch (JsonReaderException ex)

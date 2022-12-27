@@ -64,8 +64,8 @@ public class MonsterSteps
                     Chance = 0.5f,
                     ItemTemplate = _testDataUtil.GetLast<ItemTemplateEntity>(),
                     MinCount = 1,
-                    MaxCount = 3
-                }
+                    MaxCount = 3,
+                },
             };
         });
     }
@@ -88,8 +88,8 @@ public class MonsterSteps
                 LapCount = lapCount,
                 CurrentLapCount = lapCount,
                 Name = "some-name",
-                DurationType = "lap"
-            }
+                DurationType = "lap",
+            },
         }));
     }
 

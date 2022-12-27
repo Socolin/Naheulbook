@@ -15,7 +15,7 @@ public partial class DefaultEntityCreator
         {
             TechName = $"some-tech-name-{suffix}",
             DisplayName = $"some-display-name-{suffix}",
-            Description = $"some-description-{suffix}"
+            Description = $"some-description-{suffix}",
         };
     }
 
@@ -29,7 +29,7 @@ public partial class DefaultEntityCreator
             Name = $"some-name-{suffix}",
             Note = "some-note",
             StartDay = 1,
-            EndDay = 10
+            EndDay = 10,
         };
     }
 }

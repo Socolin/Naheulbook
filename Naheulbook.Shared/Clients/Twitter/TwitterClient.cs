@@ -35,7 +35,7 @@ public class TwitterClient : ITwitterClient
 
             return new TwitterRequestTokenResponse
             {
-                OAuthToken = oauthResult["oauth_token"]
+                OAuthToken = oauthResult["oauth_token"],
             };
         }
         catch (Exception ex)
@@ -48,7 +48,7 @@ public class TwitterClient : ITwitterClient
     {
         var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret, AccessTokenUri)
         {
-            AccessSecret = loginToken
+            AccessSecret = loginToken,
         };
         oauth.AddOauthParameter("token", oauthToken);
         oauth.AddParameter("oauth_verifier", oauthVerifier);
@@ -60,7 +60,7 @@ public class TwitterClient : ITwitterClient
             return new TwitterAccessTokenResponse
             {
                 ScreenName = oauthResult["screen_name"],
-                UserId = oauthResult["user_id"]
+                UserId = oauthResult["user_id"],
             };
         }
         catch (Exception ex)

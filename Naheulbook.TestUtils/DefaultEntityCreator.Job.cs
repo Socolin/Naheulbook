@@ -33,7 +33,7 @@ public partial class DefaultEntityCreator
             Name = $"some-speciality-name-{suffix}",
             Description = $"some-speciality-description-{suffix}",
             Flags = @"[{""type"": ""value""}]",
-            Job = job
+            Job = job,
         };
     }
 }

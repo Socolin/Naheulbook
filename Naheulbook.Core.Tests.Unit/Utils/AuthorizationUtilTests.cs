@@ -261,7 +261,7 @@ public class AuthorizationUtilTests
         var groupInvite = new GroupInviteEntity
         {
             Group = new GroupEntity {MasterId = 1},
-            Character = new CharacterEntity {OwnerId = 2}
+            Character = new CharacterEntity {OwnerId = 2},
         };
         var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 3};
 
@@ -276,7 +276,7 @@ public class AuthorizationUtilTests
         var groupInvite = new GroupInviteEntity
         {
             Group = new GroupEntity {MasterId = 1},
-            Character = new CharacterEntity {OwnerId = 2}
+            Character = new CharacterEntity {OwnerId = 2},
         };
         var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 2};
 
@@ -291,7 +291,7 @@ public class AuthorizationUtilTests
         var groupInvite = new GroupInviteEntity
         {
             Group = new GroupEntity {MasterId = 1},
-            Character = new CharacterEntity {OwnerId = 2}
+            Character = new CharacterEntity {OwnerId = 2},
         };
         var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 1};
 
@@ -306,7 +306,7 @@ public class AuthorizationUtilTests
         var groupInvite = new GroupInviteEntity
         {
             Group = new GroupEntity {MasterId = 1},
-            Character = new CharacterEntity {OwnerId = 2}
+            Character = new CharacterEntity {OwnerId = 2},
         };
         var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 3};
 
@@ -322,7 +322,7 @@ public class AuthorizationUtilTests
         {
             Group = new GroupEntity {MasterId = 1},
             Character = new CharacterEntity {OwnerId = 2},
-            FromGroup = false
+            FromGroup = false,
         };
         var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 2};
 
@@ -338,7 +338,7 @@ public class AuthorizationUtilTests
         {
             Group = new GroupEntity {MasterId = 1},
             Character = new CharacterEntity {OwnerId = 2},
-            FromGroup = true
+            FromGroup = true,
         };
         var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 1};
 
@@ -354,7 +354,7 @@ public class AuthorizationUtilTests
         {
             Group = new GroupEntity {MasterId = 1},
             Character = new CharacterEntity {OwnerId = 2},
-            FromGroup = false
+            FromGroup = false,
         };
         var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 1};
 
@@ -370,7 +370,7 @@ public class AuthorizationUtilTests
         {
             Group = new GroupEntity {MasterId = 1},
             Character = new CharacterEntity {OwnerId = 2},
-            FromGroup = true
+            FromGroup = true,
         };
         var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 2};
 

@@ -17,7 +17,7 @@ public static class AutoFill<T> where T : class, new()
             Flags = flags,
             IntValue = autoFillSettings.StartIntValue,
             Settings = autoFillSettings,
-            IgnoredMembers = BuildIgnoredProperties(ignoring)
+            IgnoredMembers = BuildIgnoredProperties(ignoring),
         };
 
         return (T) CreateElement(typeof(T), context);

@@ -37,7 +37,7 @@ public class HttpExceptionMiddleware
             context.Response.ContentType = "application/json";
             await context.Response.WriteAsync(JsonConvert.SerializeObject(new
             {
-                ex.Message
+                ex.Message,
             }));
         }
         catch (Exception ex)
@@ -55,7 +55,7 @@ public class HttpExceptionMiddleware
 
             await context.Response.WriteAsync(JsonConvert.SerializeObject(new
             {
-                Message = $"An unexpected error occured, and was logged with reference id: {context.TraceIdentifier}"
+                Message = $"An unexpected error occured, and was logged with reference id: {context.TraceIdentifier}",
             }));
 
         }

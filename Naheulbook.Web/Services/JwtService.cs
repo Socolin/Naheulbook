@@ -32,7 +32,7 @@ public class JwtService : IJwtService
         var payload = new Dictionary<string, object>()
         {
             {"sub", userId},
-            {"exp", expiration}
+            {"exp", expiration},
         };
 
         return JWT.Encode(payload, Convert.FromBase64String(_configuration.JwtSigningKey), JwsAlgorithm.HS256);

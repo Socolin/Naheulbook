@@ -49,7 +49,7 @@ public class OriginsController : ControllerBase
             var randomName = await _characterRandomNameService.GenerateRandomCharacterNameAsync(originId, sex);
             return new RandomCharacterNameResponse
             {
-                Name = randomName
+                Name = randomName,
             };
         }
         catch (OriginNotFoundException ex)

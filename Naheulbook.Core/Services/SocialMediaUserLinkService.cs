@@ -37,7 +37,7 @@ public class SocialMediaUserLinkService : ISocialMediaUserLinkService
                 {
                     FbId = facebookId,
                     Admin = false,
-                    DisplayName = name
+                    DisplayName = name,
                 };
                 uow.Users.Add(user);
                 await uow.SaveChangesAsync();
@@ -70,7 +70,7 @@ public class SocialMediaUserLinkService : ISocialMediaUserLinkService
                 {
                     GoogleId = googleId,
                     Admin = false,
-                    DisplayName = name
+                    DisplayName = name,
                 };
                 uow.Users.Add(user);
                 await uow.SaveChangesAsync();
@@ -103,7 +103,7 @@ public class SocialMediaUserLinkService : ISocialMediaUserLinkService
                 {
                     TwitterId = twitterId,
                     Admin = false,
-                    DisplayName = name
+                    DisplayName = name,
                 };
                 uow.Users.Add(user);
                 await uow.SaveChangesAsync();
@@ -136,7 +136,7 @@ public class SocialMediaUserLinkService : ISocialMediaUserLinkService
                 {
                     MicrosoftId = microsoftId,
                     Admin = false,
-                    DisplayName = name
+                    DisplayName = name,
                 };
                 uow.Users.Add(user);
                 await uow.SaveChangesAsync();

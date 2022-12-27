@@ -236,7 +236,7 @@ public class EffectServiceTests
             DiceCount = 1,
             DiceSize = 2,
             TypeId = 3,
-            Effects = new List<EffectEntity>()
+            Effects = new List<EffectEntity>(),
         };
     }
 
@@ -259,22 +259,22 @@ public class EffectServiceTests
                 {
                     StatName = "some-stat",
                     Type = "some-type",
-                    Value = (short) (5 + offset)
+                    Value = (short) (5 + offset),
                 },
                 new EffectModifierEntity
                 {
                     StatName = "some-stat",
                     Type = "some-type",
-                    Value = (short) (6 + offset)
+                    Value = (short) (6 + offset),
                 },
                 new EffectModifierEntity
                 {
                     StatName = "some-stat",
                     Type = "some-type",
-                    Value = (short) (7 + offset)
-                }
+                    Value = (short) (7 + offset),
+                },
             },
-            SubCategoryId = subCategoryId
+            SubCategoryId = subCategoryId,
         };
     }
 }

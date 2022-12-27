@@ -56,7 +56,7 @@ public class SocialMediaUserLinkServiceTests
         {
             FbId = facebookId,
             Admin = false,
-            DisplayName = "some-name"
+            DisplayName = "some-name",
         });
     }
 
@@ -95,7 +95,7 @@ public class SocialMediaUserLinkServiceTests
         {
             GoogleId = googleId,
             Admin = false,
-            DisplayName = "some-name"
+            DisplayName = "some-name",
         });
     }
 
@@ -134,7 +134,7 @@ public class SocialMediaUserLinkServiceTests
         {
             TwitterId = twitterId,
             Admin = false,
-            DisplayName = "some-name"
+            DisplayName = "some-name",
         });
     }
 
@@ -173,7 +173,7 @@ public class SocialMediaUserLinkServiceTests
         {
             MicrosoftId = microsoftId,
             Admin = false,
-            DisplayName = "some-name"
+            DisplayName = "some-name",
         });
     }
 }

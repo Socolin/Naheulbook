@@ -29,9 +29,9 @@ public partial class DefaultEntityCreator
                 new SkillEffect
                 {
                     Value = 5,
-                    StatName = "CHA"
-                }
-            }
+                    StatName = "CHA",
+                },
+            },
         };
     }
 }

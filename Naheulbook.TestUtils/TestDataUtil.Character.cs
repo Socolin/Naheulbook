@@ -83,13 +83,13 @@ public partial class TestDataUtil
 
         character.Specialities = new List<CharacterSpecialityEntity>
         {
-            new CharacterSpecialityEntity {Speciality = GetLast<SpecialityEntity>()}
+            new CharacterSpecialityEntity {Speciality = GetLast<SpecialityEntity>()},
         };
 
         character.Skills = new List<CharacterSkillEntity>
         {
             new CharacterSkillEntity {Skill = GetFromEnd<SkillEntity>(0)},
-            new CharacterSkillEntity {Skill = GetFromEnd<SkillEntity>(1)}
+            new CharacterSkillEntity {Skill = GetFromEnd<SkillEntity>(1)},
         };
 
         character.Group = GetLast<GroupEntity>();

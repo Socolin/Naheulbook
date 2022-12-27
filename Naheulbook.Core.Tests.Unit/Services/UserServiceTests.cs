@@ -167,7 +167,7 @@ public class UserServiceTests
         return new UserEntity()
         {
             Username = SomeUsername,
-            ActivationCode = SomeActivationCode
+            ActivationCode = SomeActivationCode,
         };
     }
 }

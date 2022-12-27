@@ -116,7 +116,7 @@ public class EffectControllerTests
             TypeId = 24,
             DiceSize = 25,
             DiceCount = 26,
-            Note = "some-note"
+            Note = "some-note",
         };
     }
 }

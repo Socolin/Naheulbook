@@ -68,7 +68,7 @@ public class EffectService : IEffectService
         var effectType = new EffectTypeEntity
         {
             Name = request.Name,
-            SubCategories = new List<EffectSubCategoryEntity>()
+            SubCategories = new List<EffectSubCategoryEntity>(),
         };
 
         using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
@@ -91,7 +91,7 @@ public class EffectService : IEffectService
             DiceSize = request.DiceSize,
             DiceCount = request.DiceCount,
             Note = request.Note,
-            Effects = new List<EffectEntity>()
+            Effects = new List<EffectEntity>(),
         };
 
         using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
@@ -120,8 +120,8 @@ public class EffectService : IEffectService
             DurationType = request.DurationType,
             Modifiers = request.Modifiers.Select(s => new EffectModifierEntity
             {
-                StatName = s.Stat, Type = s.Type, Value = s.Value
-            }).ToList()
+                StatName = s.Stat, Type = s.Type, Value = s.Value,
+            }).ToList(),
         };
 
         using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
@@ -154,7 +154,7 @@ public class EffectService : IEffectService
             effect.DurationType = request.DurationType;
             effect.Modifiers = request.Modifiers.Select(s => new EffectModifierEntity
             {
-                StatName = s.Stat, Type = s.Type, Value = s.Value
+                StatName = s.Stat, Type = s.Type, Value = s.Value,
             }).ToList();
 
             await uow.SaveChangesAsync();

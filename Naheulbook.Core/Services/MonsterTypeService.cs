@@ -49,7 +49,7 @@ public class MonsterTypeService : IMonsterTypeService
             var monsterType = new MonsterTypeEntity
             {
                 Name = request.Name,
-                SubCategories = new List<MonsterSubCategoryEntity>()
+                SubCategories = new List<MonsterSubCategoryEntity>(),
             };
 
             uow.MonsterTypes.Add(monsterType);
@@ -72,7 +72,7 @@ public class MonsterTypeService : IMonsterTypeService
             var monsterSubCategory = new MonsterSubCategoryEntity
             {
                 Name = request.Name,
-                TypeId = monsterTypeId
+                TypeId = monsterTypeId,
             };
 
             uow.MonsterSubCategories.Add(monsterSubCategory);

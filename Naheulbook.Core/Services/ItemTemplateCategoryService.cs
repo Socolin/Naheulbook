@@ -39,7 +39,7 @@ public class ItemTemplateSubCategoryService : IItemTemplateSubCategoryService
             Name = request.Name,
             Note = request.Note,
             Description = request.Description,
-            TechName = request.TechName
+            TechName = request.TechName,
         };
 
         using (var uow = _unitOfWorkFactory.CreateUnitOfWork())

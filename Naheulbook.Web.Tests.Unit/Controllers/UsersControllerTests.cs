@@ -39,8 +39,8 @@ public class UsersControllerTests
         {
             ControllerContext = new ControllerContext
             {
-                HttpContext = _httpContext
-            }
+                HttpContext = _httpContext,
+            },
         };
     }
 
@@ -145,7 +145,7 @@ public class UsersControllerTests
         var generateJwtRequest = new GenerateJwtRequest {Password = SomePassword};
         var user = new UserEntity
         {
-            Id = 1
+            Id = 1,
         };
 
         _userService.CheckPasswordAsync(SomeUsername, SomePassword)
@@ -188,7 +188,7 @@ public class UsersControllerTests
     {
         return new ValidateUserRequest()
         {
-            ActivationCode = SomeActivationCode
+            ActivationCode = SomeActivationCode,
         };
     }
 
@@ -197,7 +197,7 @@ public class UsersControllerTests
         return new CreateUserRequest
         {
             Username = SomeUsername,
-            Password = SomePassword
+            Password = SomePassword,
         };
     }
 }
