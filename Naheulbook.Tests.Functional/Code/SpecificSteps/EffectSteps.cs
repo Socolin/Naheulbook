@@ -39,7 +39,8 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps
                 _testDataUtil.AddEffectSubCategory();
 
             for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
-                _testDataUtil.AddEffect();
+                _testDataUtil.AddEffect()
+                    .AddEffectModifier();
         }
     }
 }

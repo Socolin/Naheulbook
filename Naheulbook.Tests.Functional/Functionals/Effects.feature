@@ -20,16 +20,6 @@ Feature: Effect
                 "stat": "${Effect.Modifiers.[0].StatName}",
                 "value": ${Effect.Modifiers.[0].Value},
                 "type": "${Effect.Modifiers.[0].Type}"
-            },
-            {
-                "stat": "${Effect.Modifiers.[1].StatName}",
-                "value": ${Effect.Modifiers.[1].Value},
-                "type": "${Effect.Modifiers.[1].Type}"
-            },
-            {
-                "stat": "${Effect.Modifiers.[2].StatName}",
-                "value": ${Effect.Modifiers.[2].Value},
-                "type": "${Effect.Modifiers.[2].Type}"
             }
         ]
     }
@@ -249,16 +239,6 @@ Feature: Effect
                 "stat": "${Effect.Modifiers.[0].StatName}",
                 "value": ${Effect.Modifiers.[0].Value},
                 "type": "${Effect.Modifiers.[0].Type}"
-            },
-            {
-                "stat": "${Effect.Modifiers.[1].StatName}",
-                "value": ${Effect.Modifiers.[1].Value},
-                "type": "${Effect.Modifiers.[1].Type}"
-            },
-            {
-                "stat": "${Effect.Modifiers.[2].StatName}",
-                "value": ${Effect.Modifiers.[2].Value},
-                "type": "${Effect.Modifiers.[2].Type}"
             }
         ]
     }

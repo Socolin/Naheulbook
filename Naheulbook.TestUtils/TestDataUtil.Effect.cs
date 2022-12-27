@@ -47,8 +47,11 @@ namespace Naheulbook.TestUtils
 
         public TestDataUtil AddEffectModifier(out EffectModifierEntity effectModifier, Action<EffectModifierEntity> customizer = null)
         {
+            var stat = GetLastIfExists<StatEntity>();
+            if (stat == null)
+                AddStat(out stat);
+
             var effect = GetLast<EffectEntity>();
-            var stat = GetLast<StatEntity>();
             effectModifier = new EffectModifierEntity
             {
                 EffectId = effect.Id,
