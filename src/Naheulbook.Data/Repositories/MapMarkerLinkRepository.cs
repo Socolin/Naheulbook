@@ -7,7 +7,7 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IMapMarkerLinkRepository : IRepository<MapMarkerLinkEntity>
 {
-    Task<MapMarkerLinkEntity> GetWithLayerAsync(int mapMarkerLinkId);
+    Task<MapMarkerLinkEntity?> GetWithLayerAsync(int mapMarkerLinkId);
     Task LoadTargetMapAsync(MapMarkerLinkEntity mapMarkerLink);
 }
 
@@ -18,7 +18,7 @@ public class MapMarkerLinkRepository : Repository<MapMarkerLinkEntity, Naheulboo
     {
     }
 
-    public Task<MapMarkerLinkEntity> GetWithLayerAsync(int mapMarkerLinkId)
+    public Task<MapMarkerLinkEntity?> GetWithLayerAsync(int mapMarkerLinkId)
     {
         return Context.MapMarkerLinks
             .Include(x => x.MapMarker)

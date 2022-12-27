@@ -47,6 +47,8 @@ public class CharacterRepository : Repository<CharacterEntity, NaheulbookDbConte
             .Include(c => c.Invites)
             .ThenInclude(i => i.Group)
             .FirstOrDefaultAsync(x => x.Id == id);
+        if (character == null)
+            return null;
 
         await Context.Entry(character)
             .Collection(c => c.Items)

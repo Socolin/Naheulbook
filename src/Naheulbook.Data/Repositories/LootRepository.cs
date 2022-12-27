@@ -12,7 +12,7 @@ public interface ILootRepository : IRepository<LootEntity>
 {
     Task<List<LootEntity>> GetByGroupIdAsync(int groupId);
     Task<List<LootEntity>> GetLootsVisibleByCharactersOfGroupAsync(int groupId);
-    Task<LootEntity> GetWithAllDataAsync(int lootId);
+    Task<LootEntity?> GetWithAllDataAsync(int lootId);
 }
 
 public class LootRepository : Repository<LootEntity, NaheulbookDbContext>, ILootRepository
@@ -41,7 +41,7 @@ public class LootRepository : Repository<LootEntity, NaheulbookDbContext>, ILoot
             .ToListAsync();
     }
 
-    public Task<LootEntity> GetWithAllDataAsync(int lootId)
+    public Task<LootEntity?> GetWithAllDataAsync(int lootId)
     {
         return Context.Loots
             .IncludeItemDetails(l => l.Items)

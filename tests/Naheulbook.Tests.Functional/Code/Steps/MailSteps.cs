@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -29,12 +30,12 @@ public class MailSteps
         if (mail == null)
         {
             var mailsDetails = string.Join("\n", _mailReceiver.Mails.Select(m => "'" + string.Join("','", m.To) + "' - " + m.Subject.FirstOrDefault()));
-            Assert.Fail($"Did not received any mail with destination: {email}. Received {_mailReceiver.Mails.Count} mails:\n{mailsDetails}");
+            throw new Exception($"Did not received any mail with destination: {email}. Received {_mailReceiver.Mails.Count} mails:\n{mailsDetails}");
         }
 
         _scenarioContext.SetLastReceivedMail(mail);
 
-        var activationCode = ParseActivationCodeFromActivationMail(mail!);
+        var activationCode = ParseActivationCodeFromActivationMail(mail);
         if (activationCode == null)
             Assert.Fail($"Fail to find activation code in mail body:\n'{mail.Data}'");
 

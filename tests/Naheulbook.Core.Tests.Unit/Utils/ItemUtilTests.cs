@@ -66,6 +66,6 @@ public class ItemUtilTests
 
         _util.EquipItem(item, 8);
 
-        item.Character.HistoryEntries?.Last()?.Action.Should().BeEquivalentTo(expectedAction);
+        item.Character.HistoryEntries.Last().Action.Should().BeEquivalentTo(expectedAction);
     }
 }

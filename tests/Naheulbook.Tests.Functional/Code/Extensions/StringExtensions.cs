@@ -23,7 +23,7 @@ public static class StringExtensions
         {
             try
             {
-                var value = GetValue(str, replacementToken, context, testDataUtil);
+                var value = GetValue(replacementToken, context, testDataUtil);
                 string replacementValue;
                 switch (value)
                 {
@@ -65,7 +65,7 @@ public static class StringExtensions
         return str;
     }
 
-    private static object GetValue(string str, string replacementToken, ScenarioContext context, TestDataUtil testDataUtil)
+    private static object GetValue(string replacementToken, ScenarioContext context, TestDataUtil testDataUtil)
     {
         if (replacementToken.Contains("."))
         {
@@ -120,7 +120,7 @@ public static class StringExtensions
                     var propertyInfo = obj?.GetType().GetProperty(propertyName);
                     if (propertyInfo == null)
                         throw new Exception($"Failed to find property `{string.Join(".", propertiesNames)}` in object.");
-                    obj = propertyInfo?.GetValue(obj);
+                    obj = propertyInfo.GetValue(obj);
                 }
             }
         }

@@ -10,6 +10,7 @@ using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.Extensions;
 
 namespace Naheulbook.Core.Services;
 
@@ -367,7 +368,7 @@ public class CharacterService : ICharacterService
 
             var origin = await uow.Origins.GetWithAllDataAsync(character.OriginId);
 
-            var levelUpResult = _characterUtil.LevelUpCharacter(character, origin, specialities, request);
+            var levelUpResult = _characterUtil.LevelUpCharacter(character, origin.NotNull(), specialities, request);
 
             uow.CharacterModifiers.AddRange(levelUpResult.NewModifiers);
             uow.CharacterSkills.AddRange(levelUpResult.NewSkills);

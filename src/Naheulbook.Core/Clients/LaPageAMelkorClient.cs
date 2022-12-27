@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Naheulbook.Shared.Extensions;
 using Newtonsoft.Json;
 
 namespace Naheulbook.Core.Clients;
@@ -28,6 +29,7 @@ public class LaPageAMelkorClient : ILaPageAMelkorClient
             throw new GenericHttpClientException(url, (int) response.StatusCode, responseContent);
         }
 
-        return JsonConvert.DeserializeObject<List<string>>(responseContent);
+        var randomNames = JsonConvert.DeserializeObject<List<string>>(responseContent);
+        return randomNames.NotNull();
     }
 }

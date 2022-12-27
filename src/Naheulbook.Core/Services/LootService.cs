@@ -7,6 +7,7 @@ using Naheulbook.Core.Utils;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.Extensions;
 
 namespace Naheulbook.Core.Services;
 
@@ -120,7 +121,7 @@ public class LootService : ILootService
             {
                 var fullLootData = await uow.Loots.GetWithAllDataAsync(lootId);
                 foreach (var character in group.Characters)
-                    session.NotifyCharacterShowLoot(character.Id, fullLootData);
+                    session.NotifyCharacterShowLoot(character.Id, fullLootData.NotNull());
             }
             else
             {

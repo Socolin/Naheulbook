@@ -39,16 +39,16 @@ public class ItemTemplateUtil : IItemTemplateUtil
 
         itemTemplate.CleanName = _stringCleanupUtil.RemoveAccents(request.Name);
 
-        itemTemplate.Slots = request.Slots?.Select(x => new ItemTemplateSlotEntity {SlotId = x.Id}).ToList() ?? new List<ItemTemplateSlotEntity>();
+        itemTemplate.Slots = request.Slots.Select(x => new ItemTemplateSlotEntity {SlotId = x.Id}).ToList();
 
-        itemTemplate.Requirements = request.Requirements?.Select(x => new ItemTemplateRequirementEntity
+        itemTemplate.Requirements = request.Requirements.Select(x => new ItemTemplateRequirementEntity
         {
             StatName = x.Stat,
             MaxValue = x.Max,
             MinValue = x.Min,
-        }).ToList() ?? new List<ItemTemplateRequirementEntity>();
+        }).ToList();
 
-        itemTemplate.Modifiers = request.Modifiers?.Select(x => new ItemTemplateModifierEntity
+        itemTemplate.Modifiers = request.Modifiers.Select(x => new ItemTemplateModifierEntity
         {
             StatName = x.Stat,
             RequiredJobId = x.JobId,
@@ -56,23 +56,23 @@ public class ItemTemplateUtil : IItemTemplateUtil
             Value = x.Value,
             Type = x.Type,
             Special = x.Special == null ? "" : string.Join(',', x.Special),
-        }).ToList() ?? new List<ItemTemplateModifierEntity>();
+        }).ToList();
 
-        itemTemplate.Skills = request.SkillIds?.Select(skillId => new ItemTemplateSkillEntity
+        itemTemplate.Skills = request.SkillIds.Select(skillId => new ItemTemplateSkillEntity
         {
             SkillId = skillId,
-        }).ToList() ?? new List<ItemTemplateSkillEntity>();
+        }).ToList();
 
-        itemTemplate.UnSkills = request.UnSkillIds?.Select(skillId => new ItemTemplateUnSkillEntity
+        itemTemplate.UnSkills = request.UnSkillIds.Select(skillId => new ItemTemplateUnSkillEntity
         {
             SkillId = skillId,
-        }).ToList() ?? new List<ItemTemplateUnSkillEntity>();
+        }).ToList();
 
-        itemTemplate.SkillModifiers = request.SkillModifiers?.Select(x => new ItemTemplateSkillModifierEntity
+        itemTemplate.SkillModifiers = request.SkillModifiers.Select(x => new ItemTemplateSkillModifierEntity
         {
             SkillId = x.SkillId,
             Value = x.Value,
-        }).ToList() ?? new List<ItemTemplateSkillModifierEntity>();
+        }).ToList();
     }
 
     public IEnumerable<ItemTemplateEntity> FilterItemTemplatesBySource(IEnumerable<ItemTemplateEntity> itemTemplates, int? currentUserId, bool includeCommunityItem)

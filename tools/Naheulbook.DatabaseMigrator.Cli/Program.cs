@@ -17,12 +17,17 @@ internal class Program
             .AddJsonFile($"appsettings.local.json", true)
             .AddCommandLine(args)
             .Build();
-        var serviceProvider = CreateServices(config["ConnectionStrings:DefaultConnection"]);
+        var connectionString = config["ConnectionStrings:DefaultConnection"];
+        if (connectionString == null)
+            throw new Exception("Missing configuration ConnectionStrings:DefaultConnection");
+        var operation = config["operation"];
+        if (operation == null)
+            throw new Exception("Missing operation");
 
-        using (var scope = serviceProvider.CreateScope())
-        {
-            UpdateDatabase(scope.ServiceProvider, config["operation"]);
-        }
+        var serviceProvider = CreateServices(connectionString);
+
+        using var scope = serviceProvider.CreateScope();
+        UpdateDatabase(scope.ServiceProvider, operation);
     }
 
     private static IServiceProvider CreateServices(string connectionString)

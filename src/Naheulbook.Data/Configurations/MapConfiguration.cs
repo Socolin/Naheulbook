@@ -48,7 +48,7 @@ public class MapLayerConfiguration : IEntityTypeConfiguration<MapLayerEntity>
         builder.Property(e => e.IsGm)
             .HasColumnName("isGm");
 
-        builder.HasOne(e => e.Map!)
+        builder.HasOne(e => e.Map)
             .WithMany(e => e.Layers)
             .HasForeignKey(e => e.MapId)
             .HasConstraintName("FK_map_layer_map");
@@ -89,7 +89,7 @@ public class MapMarkerConfiguration : IEntityTypeConfiguration<MapMarkerEntity>
         builder.Property(e => e.LayerId)
             .HasColumnName("layerId");
 
-        builder.HasOne(e => e.Layer!)
+        builder.HasOne(e => e.Layer)
             .WithMany(e => e.Markers)
             .HasForeignKey(e => e.LayerId)
             .HasConstraintName("FK_map_marker_map_layer");
@@ -120,12 +120,12 @@ public class MapMarkerLinkConfiguration : IEntityTypeConfiguration<MapMarkerLink
             .IsRequired(false)
             .HasColumnName("targetMapMarkerId");
 
-        builder.HasOne(e => e.MapMarker!)
+        builder.HasOne(e => e.MapMarker)
             .WithMany(e => e.Links)
             .HasForeignKey(e => e.MapMarkerId)
             .HasConstraintName("fk_map_markers_links_map_markers");
 
-        builder.HasOne(e => e.TargetMap!)
+        builder.HasOne(e => e.TargetMap)
             .WithMany()
             .HasForeignKey(e => e.TargetMapId)
             .HasConstraintName("fk_map_markers_link_target_map");

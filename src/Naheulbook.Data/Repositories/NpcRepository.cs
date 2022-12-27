@@ -10,7 +10,7 @@ namespace Naheulbook.Data.Repositories;
 public interface INpcRepository : IRepository<NpcEntity>
 {
     Task<List<NpcEntity>> GetByGroupIdAsync(int groupId);
-    Task<NpcEntity> GetWitGroupAsync(int npcId);
+    Task<NpcEntity?> GetWitGroupAsync(int npcId);
 }
 
 public class NpcRepository : Repository<NpcEntity, NaheulbookDbContext>, INpcRepository
@@ -26,7 +26,7 @@ public class NpcRepository : Repository<NpcEntity, NaheulbookDbContext>, INpcRep
             .ToListAsync();
     }
 
-    public Task<NpcEntity> GetWitGroupAsync(int npcId)
+    public Task<NpcEntity?> GetWitGroupAsync(int npcId)
     {
         return Context.Npcs
             .Include(x => x.Group)
