@@ -23,6 +23,7 @@ import {
 } from '../api/responses';
 import {NpcRequest} from '../api/requests';
 import {PatchGroupConfigRequest} from '../api/requests/patch-group-config-request';
+import {DeadMonsterResponse} from '../api/responses/dead-monster-response';
 
 @Injectable()
 export class GroupService {
@@ -98,13 +99,8 @@ export class GroupService {
         }));
     }
 
-    loadDeadMonsters(groupId: number, startIndex: number, count: number): Observable<Monster[]> {
-        return forkJoin([
-            this.httpClient.get<MonsterResponse[]>(`/api/v2/groups/${groupId}/deadMonsters?startIndex=${startIndex}&count=${count}`),
-            this.skillService.getSkillsById()
-        ]).pipe(map(([monsterResponses, skillsById]) => {
-            return Monster.fromResponses(monsterResponses, skillsById)
-        }));
+    loadDeadMonsters(groupId: number, startIndex: number, count: number): Observable<DeadMonsterResponse[]> {
+        return this.httpClient.get<DeadMonsterResponse[]>(`/api/v2/groups/${groupId}/deadMonsters?startIndex=${startIndex}&count=${count}`);
     }
 
     /* Loot */

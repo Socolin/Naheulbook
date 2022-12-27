@@ -1,8 +1,8 @@
-import {Injectable, TemplateRef} from '@angular/core';
-import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
-import {ComponentType} from '@angular/cdk/overlay';
-import {Location} from '@angular/common';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Injectable, TemplateRef } from '@angular/core';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { ComponentType } from '@angular/cdk/overlay';
+import { Location } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable()
 export class NhbkMatDialog {

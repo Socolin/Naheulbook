@@ -17,6 +17,7 @@ import {NhbkMatDialog} from '../material-workaround';
 import {EndCombatDialogComponent, EndCombatDialogResult} from './end-combat-dialog.component';
 import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
 import {Router} from '@angular/router';
+import {DeadMonsterResponse} from '../api/responses/dead-monster-response';
 
 @Component({
     selector: 'fighter-panel',
@@ -28,7 +29,7 @@ export class FighterPanelComponent implements OnInit, OnDestroy {
 
     public loadingNextLap = false;
 
-    public deadMonsters: Monster[] = [];
+    public deadMonsters: DeadMonsterResponse[] = [];
     public allDeadMonstersLoaded = false;
 
     @ViewChild('deadMonstersDialog', {static: true})

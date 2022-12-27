@@ -265,7 +265,7 @@ export class CharacterComponent implements OnInit, OnDestroy {
                 this.notification.info('', notificationData.message);
             });
             this.route.fragment.pipe(
-                filter(fragment => !!fragment),
+                filter((fragment: string | null): fragment is string => fragment !== null),
                 map(fragment => fragment.indexOf('?') === -1 ? fragment : fragment.substring(0, fragment.indexOf('?')))
             ).subscribe(tab => {
                 this.mainTabGroup.selectedIndex = this.getTabIndexFromHash(tab);

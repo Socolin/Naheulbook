@@ -37,7 +37,7 @@ import {
     GroupAddEffectDialogData,
     GroupAddEffectDialogResult
 } from './group-add-effect-dialog.component';
-import {CharacterSearchResponse, UserInfoResponse, UserSearchResponse} from '../api/responses';
+import {CharacterSearchResponse, UserSearchResponse} from '../api/responses';
 import {
     DateSelectorDialogComponent,
     DateSelectorDialogData,
@@ -401,6 +401,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         this.routeFragmentSub = this.route.fragment
             .pipe(
                 filter(fragment => !!fragment),
+                map(fragment => fragment!),
                 map(fragment => fragment.indexOf('?') === -1 ? fragment : fragment.substring(0, fragment.indexOf('?')))
             ).subscribe(value => {
                 this.currentTabIndex = this.getTabIndexFromHash(value);
