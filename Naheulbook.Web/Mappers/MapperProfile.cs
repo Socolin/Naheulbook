@@ -175,7 +175,7 @@ namespace Naheulbook.Web.Mappers
                 .ForMember(m => m.Flags, opt => opt.MapFrom(s => MapperHelpers.FromJson<List<FlagResponse>>(s.Flags)))
                 .ForMember(m => m.AvailableSkillIds, opt => opt.MapFrom(j => j.Skills.Where(s => !s.Default).OrderBy(s => s.SkillId).Select(s => s.SkillId)))
                 .ForMember(m => m.SkillIds, opt => opt.MapFrom(j => j.Skills.Where(s => s.Default).OrderBy(s => s.SkillId).Select(s => s.SkillId)));
-            CreateMap<JobBonus, DescribedFlagResponse>()
+            CreateMap<JobBonusEntity, DescribedFlagResponse>()
                 .ForMember(m => m.Flags, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<FlagResponse>>(b.Flags)));
             CreateMap<JobRequirementEntity, StatRequirementResponse>()
                 .ForMember(m => m.Stat, opt => opt.MapFrom(r => r.StatName))

@@ -24,7 +24,7 @@ namespace Naheulbook.Data.Models
         private ICollection<OriginSkillEntity>? _originSkills;
         public ICollection<OriginSkillEntity> OriginSkills { get => _originSkills.ThrowIfNotLoaded(); set => _originSkills = value; }
 
-        private ICollection<JobSkill>? _jobSkills;
-        public ICollection<JobSkill> JobSkills { get => _jobSkills.ThrowIfNotLoaded(); set => _jobSkills = value; }
+        private ICollection<JobSkillEntity>? _jobSkills;
+        public ICollection<JobSkillEntity> JobSkills { get => _jobSkills.ThrowIfNotLoaded(); set => _jobSkills = value; }
     }
 }

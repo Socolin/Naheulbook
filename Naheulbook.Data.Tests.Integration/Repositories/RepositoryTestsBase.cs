@@ -206,6 +206,28 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                         .Excluding(x => x.Specialities)
                         .As<EquivalencyAssertionOptions<T>>();
                     break;
+                case EquivalencyAssertionOptions<JobBonusEntity> entityOptions:
+                    equivalencyAssertionOptions = entityOptions
+                        .Excluding(x => x.Job)
+                        .As<EquivalencyAssertionOptions<T>>();
+                    break;
+                case EquivalencyAssertionOptions<JobRequirementEntity> entityOptions:
+                    equivalencyAssertionOptions = entityOptions
+                        .Excluding(x => x.Job)
+                        .Excluding(x => x.Stat)
+                        .As<EquivalencyAssertionOptions<T>>();
+                    break;
+                case EquivalencyAssertionOptions<JobRestrictionEntity> entityOptions:
+                    equivalencyAssertionOptions = entityOptions
+                        .Excluding(x => x.Job)
+                        .As<EquivalencyAssertionOptions<T>>();
+                    break;
+                case EquivalencyAssertionOptions<JobSkillEntity> entityOptions:
+                    equivalencyAssertionOptions = entityOptions
+                        .Excluding(x => x.Job)
+                        .Excluding(x => x.Skill)
+                        .As<EquivalencyAssertionOptions<T>>();
+                    break;
                 case EquivalencyAssertionOptions<OriginEntity> entityOptions:
                     equivalencyAssertionOptions = entityOptions
                         .Excluding(x => x.Bonuses)
@@ -217,6 +239,13 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
                     break;
                 case EquivalencyAssertionOptions<SlotEntity> entityOptions:
                     equivalencyAssertionOptions = entityOptions
+                        .As<EquivalencyAssertionOptions<T>>();
+                    break;
+                case EquivalencyAssertionOptions<SpecialityEntity> entityOptions:
+                    equivalencyAssertionOptions = entityOptions
+                        .Excluding(x => x.Job)
+                        .Excluding(x => x.Modifiers)
+                        .Excluding(x => x.Specials)
                         .As<EquivalencyAssertionOptions<T>>();
                     break;
                 case EquivalencyAssertionOptions<UserEntity> entityOptions:

@@ -15,8 +15,8 @@ namespace Naheulbook.Data.Models
         public string Data { get; set; } = null!;
         public bool? IsMagic { get; set; }
 
-        private ICollection<JobBonus>? _bonuses;
-        public ICollection<JobBonus> Bonuses { get => _bonuses.ThrowIfNotLoaded(); set => _bonuses = value; }
+        private ICollection<JobBonusEntity>? _bonuses;
+        public ICollection<JobBonusEntity> Bonuses { get => _bonuses.ThrowIfNotLoaded(); set => _bonuses = value; }
 
         private ICollection<JobRequirementEntity>? _requirements;
         public ICollection<JobRequirementEntity> Requirements { get => _requirements.ThrowIfNotLoaded(); set => _requirements = value; }
@@ -24,8 +24,8 @@ namespace Naheulbook.Data.Models
         private ICollection<JobRestrictionEntity>? _restrictions;
         public ICollection<JobRestrictionEntity> Restrictions { get => _restrictions.ThrowIfNotLoaded(); set => _restrictions = value; }
 
-        private ICollection<JobSkill> _skills = null!;
-        public ICollection<JobSkill> Skills { get => _skills.ThrowIfNotLoaded(); set => _skills = value; }
+        private ICollection<JobSkillEntity> _skills = null!;
+        public ICollection<JobSkillEntity> Skills { get => _skills.ThrowIfNotLoaded(); set => _skills = value; }
 
         private ICollection<SpecialityEntity>? _specialities;
         public ICollection<SpecialityEntity> Specialities { get => _specialities.ThrowIfNotLoaded(); set => _specialities = value; }

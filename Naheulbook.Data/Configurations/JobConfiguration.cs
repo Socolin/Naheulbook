@@ -42,9 +42,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class JobBonusConfiguration : IEntityTypeConfiguration<JobBonus>
+    public class JobBonusConfiguration : IEntityTypeConfiguration<JobBonusEntity>
     {
-        public void Configure(EntityTypeBuilder<JobBonus> builder)
+        public void Configure(EntityTypeBuilder<JobBonusEntity> builder)
         {
             builder.ToTable("job_bonuses");
 
@@ -147,9 +147,9 @@ namespace Naheulbook.Data.Configurations
         }
     }
 
-    public class JobSkillConfiguration : IEntityTypeConfiguration<JobSkill>
+    public class JobSkillConfiguration : IEntityTypeConfiguration<JobSkillEntity>
     {
-        public void Configure(EntityTypeBuilder<JobSkill> builder)
+        public void Configure(EntityTypeBuilder<JobSkillEntity> builder)
         {
             builder.HasKey(e => new {e.JobId, e.SkillId});
 

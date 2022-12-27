@@ -1,7 +1,6 @@
+using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Naheulbook.Data.DbContexts;
-using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
 using NUnit.Framework;
 
@@ -20,18 +19,30 @@ namespace Naheulbook.Data.Tests.Integration.Repositories
         [Test]
         public async Task CanGetAllWithAllData()
         {
-            TestDataUtil.AddJobWithAllData();
+            TestDataUtil
+                .AddStat()
+                .AddSkill(out var skill1)
+                .AddSkill(out var skill2)
+                .AddJob(out var job)
+                .AddJobBonus(out var jobBonus)
+                .AddJobRequirement(out var jobRequirement)
+                .AddJobRestriction(out var jobRestriction)
+                .AddJobSkill(out var jobSkill1, skill1)
+                .AddJobSkill(out var jobSkill2, skill2)
+                .AddSpeciality(out var speciality)
+                ;
 
             var actualJobs = await _jobRepository.GetAllWithAllDataAsync();
 
-            actualJobs.Should().BeEquivalentTo(
-                TestDataUtil.GetAll<JobEntity>(),
-                config => config
-                    .Excluding(o => o.Id)
-                    .Excluding(o => o.Bonuses)
-                    .Excluding(info => info.Path.EndsWith(".Stat"))
-                    .Excluding(info => info.Path.EndsWith(".Skill"))
-                    .IgnoringCyclicReferences());
+            AssertEntitiesAreLoaded(actualJobs, new[] {job});
+            var actualJob = actualJobs.Single();
+            AssertEntitiesAreLoaded(actualJob.Bonuses, new[] {jobBonus});
+            AssertEntitiesAreLoaded(actualJob.Requirements, new[] {jobRequirement});
+            AssertEntitiesAreLoaded(actualJob.Restrictions, new[] {jobRestriction});
+            AssertEntitiesAreLoaded(actualJob.Skills, new[] {jobSkill1, jobSkill2});
+            AssertEntityIsLoaded(actualJob.Skills.Single(x => x.SkillId == jobSkill1.SkillId), jobSkill1);
+            AssertEntityIsLoaded(actualJob.Skills.Single(x => x.SkillId == jobSkill2.SkillId), jobSkill2);
+            AssertEntitiesAreLoaded(actualJob.Specialities, new[] {speciality});
         }
     }
 }
