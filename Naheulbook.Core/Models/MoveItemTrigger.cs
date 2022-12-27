@@ -1,8 +1,7 @@
-namespace Naheulbook.Core.Models
+namespace Naheulbook.Core.Models;
+
+public enum MoveItemTrigger
 {
-    public enum MoveItemTrigger
-    {
-        TakeItemFromLoot,
-        GiveItem
-    }
+    TakeItemFromLoot,
+    GiveItem
 }

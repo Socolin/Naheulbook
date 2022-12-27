@@ -1,11 +1,10 @@
 // ReSharper disable UnusedMember.Global
 
-namespace Naheulbook.Web.Responses
+namespace Naheulbook.Web.Responses;
+
+public class ItemSlotResponse
 {
-    public class ItemSlotResponse
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public string TechName { get; set; } = null!;
-    }
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+    public string TechName { get; set; } = null!;
 }

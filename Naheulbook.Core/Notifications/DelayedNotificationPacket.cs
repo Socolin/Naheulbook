@@ -1,33 +1,32 @@
 using System;
 
-namespace Naheulbook.Core.Notifications
+namespace Naheulbook.Core.Notifications;
+
+public class DelayedNotificationPacket : INotificationPacket
 {
-    public class DelayedNotificationPacket : INotificationPacket
+    private readonly Func<INotificationPacket> _buildPacket;
+    private INotificationPacket? _builtPacket;
+
+    public DelayedNotificationPacket(Func<INotificationPacket> buildPacket)
     {
-        private readonly Func<INotificationPacket> _buildPacket;
-        private INotificationPacket? _builtPacket;
+        _buildPacket = buildPacket;
+    }
 
-        public DelayedNotificationPacket(Func<INotificationPacket> buildPacket)
+    public string GroupName
+    {
+        get
         {
-            _buildPacket = buildPacket;
+            _builtPacket ??= _buildPacket();
+            return _builtPacket.GroupName;
         }
+    }
 
-        public string GroupName
+    public INotificationPacketPayload Payload
+    {
+        get
         {
-            get
-            {
-                _builtPacket ??= _buildPacket();
-                return _builtPacket.GroupName;
-            }
-        }
-
-        public INotificationPacketPayload Payload
-        {
-            get
-            {
-                _builtPacket ??= _buildPacket();
-                return _builtPacket.Payload;
-            }
+            _builtPacket ??= _buildPacket();
+            return _builtPacket.Payload;
         }
     }
 }

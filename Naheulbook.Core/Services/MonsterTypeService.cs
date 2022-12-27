@@ -6,80 +6,79 @@ using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface IMonsterTypeService
 {
-    public interface IMonsterTypeService
+    Task<List<MonsterTypeEntity>> GetMonsterTypesWithCategoriesAsync();
+    Task<MonsterTypeEntity> CreateMonsterTypeAsync(NaheulbookExecutionContext executionContext, CreateMonsterTypeRequest request);
+    Task<MonsterSubCategoryEntity> CreateMonsterSubCategoryAsync(NaheulbookExecutionContext executionContext, int monsterTypeId, CreateMonsterSubCategoryRequest request);
+}
+
+public class MonsterTypeService : IMonsterTypeService
+{
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    private readonly IAuthorizationUtil _authorizationUtil;
+
+    public MonsterTypeService(
+        IUnitOfWorkFactory unitOfWorkFactory,
+        IAuthorizationUtil authorizationUtil
+    )
     {
-        Task<List<MonsterTypeEntity>> GetMonsterTypesWithCategoriesAsync();
-        Task<MonsterTypeEntity> CreateMonsterTypeAsync(NaheulbookExecutionContext executionContext, CreateMonsterTypeRequest request);
-        Task<MonsterSubCategoryEntity> CreateMonsterSubCategoryAsync(NaheulbookExecutionContext executionContext, int monsterTypeId, CreateMonsterSubCategoryRequest request);
+        _unitOfWorkFactory = unitOfWorkFactory;
+        _authorizationUtil = authorizationUtil;
     }
 
-    public class MonsterTypeService : IMonsterTypeService
+    public async Task<List<MonsterTypeEntity>> GetMonsterTypesWithCategoriesAsync()
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IAuthorizationUtil _authorizationUtil;
-
-        public MonsterTypeService(
-            IUnitOfWorkFactory unitOfWorkFactory,
-            IAuthorizationUtil authorizationUtil
-        )
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _authorizationUtil = authorizationUtil;
+            return await uow.MonsterTypes.GetAllWithCategoriesAsync();
         }
+    }
 
-        public async Task<List<MonsterTypeEntity>> GetMonsterTypesWithCategoriesAsync()
+    public async Task<MonsterTypeEntity> CreateMonsterTypeAsync(
+        NaheulbookExecutionContext executionContext,
+        CreateMonsterTypeRequest request
+    )
+    {
+        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            var monsterType = new MonsterTypeEntity
             {
-                return await uow.MonsterTypes.GetAllWithCategoriesAsync();
-            }
+                Name = request.Name,
+                SubCategories = new List<MonsterSubCategoryEntity>()
+            };
+
+            uow.MonsterTypes.Add(monsterType);
+            await uow.SaveChangesAsync();
+
+            return monsterType;
         }
+    }
 
-        public async Task<MonsterTypeEntity> CreateMonsterTypeAsync(
-            NaheulbookExecutionContext executionContext,
-            CreateMonsterTypeRequest request
-        )
+    public async Task<MonsterSubCategoryEntity> CreateMonsterSubCategoryAsync(
+        NaheulbookExecutionContext executionContext,
+        int monsterTypeId,
+        CreateMonsterSubCategoryRequest request
+    )
+    {
+        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            var monsterSubCategory = new MonsterSubCategoryEntity
             {
-                var monsterType = new MonsterTypeEntity
-                {
-                    Name = request.Name,
-                    SubCategories = new List<MonsterSubCategoryEntity>()
-                };
+                Name = request.Name,
+                TypeId = monsterTypeId
+            };
 
-                uow.MonsterTypes.Add(monsterType);
-                await uow.SaveChangesAsync();
+            uow.MonsterSubCategories.Add(monsterSubCategory);
+            await uow.SaveChangesAsync();
 
-                return monsterType;
-            }
-        }
-
-        public async Task<MonsterSubCategoryEntity> CreateMonsterSubCategoryAsync(
-            NaheulbookExecutionContext executionContext,
-            int monsterTypeId,
-            CreateMonsterSubCategoryRequest request
-        )
-        {
-            await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var monsterSubCategory = new MonsterSubCategoryEntity
-                {
-                    Name = request.Name,
-                    TypeId = monsterTypeId
-                };
-
-                uow.MonsterSubCategories.Add(monsterSubCategory);
-                await uow.SaveChangesAsync();
-
-                return monsterSubCategory;
-            }
+            return monsterSubCategory;
         }
     }
 }

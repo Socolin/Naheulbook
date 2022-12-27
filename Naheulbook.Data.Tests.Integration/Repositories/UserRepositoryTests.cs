@@ -6,86 +6,85 @@ using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Repositories;
 using NUnit.Framework;
 
-namespace Naheulbook.Data.Tests.Integration.Repositories
+namespace Naheulbook.Data.Tests.Integration.Repositories;
+
+public class UserRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
 {
-    public class UserRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
+    private UserRepository _userRepository;
+
+    [SetUp]
+    public void SetUp()
     {
-        private UserRepository _userRepository;
+        _userRepository = new UserRepository(RepositoryDbContext);
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _userRepository = new UserRepository(RepositoryDbContext);
-        }
+    #region GetByUsernameAsync
 
-        #region GetByUsernameAsync
+    [Test]
+    public async Task CanGetUserByUsername()
+    {
+        TestDataUtil.AddUser(out var user, u => u.Admin = true);
 
-        [Test]
-        public async Task CanGetUserByUsername()
-        {
-            TestDataUtil.AddUser(out var user, u => u.Admin = true);
+        var actualUser = await _userRepository.GetByUsernameAsync(user.Username!);
 
-            var actualUser = await _userRepository.GetByUsernameAsync(user.Username!);
+        AssertEntityIsLoaded(actualUser, user);
+    }
 
-            AssertEntityIsLoaded(actualUser, user);
-        }
+    #endregion
 
-        #endregion
+    #region GetByFacebookIdAsync
 
-        #region GetByFacebookIdAsync
+    [Test]
+    public async Task CanGetUserByFacebookId()
+    {
+        TestDataUtil.AddUser(out var user);
 
-        [Test]
-        public async Task CanGetUserByFacebookId()
-        {
-            TestDataUtil.AddUser(out var user);
+        var actualUser = await _userRepository.GetByFacebookIdAsync(user.FbId!);
 
-            var actualUser = await _userRepository.GetByFacebookIdAsync(user.FbId!);
+        AssertEntityIsLoaded(actualUser, user);
+    }
 
-            AssertEntityIsLoaded(actualUser, user);
-        }
+    #endregion
 
-        #endregion
+    #region GetByGoogleIdAsync
 
-        #region GetByGoogleIdAsync
+    #endregion
 
-        #endregion
+    #region GetByTwitterIdAsync
 
-        #region GetByTwitterIdAsync
+    #endregion
 
-        #endregion
+    #region GetByMicrosoftIdAsync
 
-        #region GetByMicrosoftIdAsync
+    #endregion
 
-        #endregion
+    #region SearchUsersAsync
 
-        #region SearchUsersAsync
+    [Test]
+    public async Task SearchUser_ShouldReturnsMatchingUsers()
+    {
+        TestDataUtil.AddUser(out var user, u => u.ShowInSearchUntil = RoundDate(DateTime.Now.AddDays(1)));
 
-        [Test]
-        public async Task SearchUser_ShouldReturnsMatchingUsers()
-        {
-            TestDataUtil.AddUser(out var user, u => u.ShowInSearchUntil = RoundDate(DateTime.Now.AddDays(1)));
+        var actualEntities = await _userRepository.SearchUsersAsync(user.DisplayName!);
 
-            var actualEntities = await _userRepository.SearchUsersAsync(user.DisplayName!);
+        AssertEntitiesAreLoaded(actualEntities, new[] {user});
+    }
 
-            AssertEntitiesAreLoaded(actualEntities, new[] {user});
-        }
+    [Test]
+    public async Task SearchUser_ShouldNotDisplayUser_WhenShowInSearchUntilIsOlderThanNow()
+    {
+        TestDataUtil.AddUser(out var user, u => u.ShowInSearchUntil = DateTime.Now.AddDays(-1));
 
-        [Test]
-        public async Task SearchUser_ShouldNotDisplayUser_WhenShowInSearchUntilIsOlderThanNow()
-        {
-            TestDataUtil.AddUser(out var user, u => u.ShowInSearchUntil = DateTime.Now.AddDays(-1));
+        var users = await _userRepository.SearchUsersAsync(user.DisplayName!);
 
-            var users = await _userRepository.SearchUsersAsync(user.DisplayName!);
+        users.Should().BeEmpty();
+    }
 
-            users.Should().BeEmpty();
-        }
-
-        #endregion
+    #endregion
 
 
-        private static DateTime? RoundDate(DateTime date)
-        {
-            return date.AddNanoseconds(-date.Nanosecond());
-        }
+    private static DateTime? RoundDate(DateTime date)
+    {
+        return date.AddNanoseconds(-date.Nanosecond());
     }
 }

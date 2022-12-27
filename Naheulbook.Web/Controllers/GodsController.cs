@@ -5,29 +5,28 @@ using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Services;
 using Naheulbook.Web.Responses;
 
-namespace Naheulbook.Web.Controllers
+namespace Naheulbook.Web.Controllers;
+
+[Route("api/v2/gods")]
+[ApiController]
+public class GodsController : ControllerBase
 {
-    [Route("api/v2/gods")]
-    [ApiController]
-    public class GodsController : ControllerBase
+    private readonly IMapper _mapper;
+    private readonly IGodService _godService;
+
+    public GodsController(
+        IMapper mapper,
+        IGodService godService
+    )
     {
-        private readonly IMapper _mapper;
-        private readonly IGodService _godService;
+        _mapper = mapper;
+        _godService = godService;
+    }
 
-        public GodsController(
-            IMapper mapper,
-            IGodService godService
-        )
-        {
-            _mapper = mapper;
-            _godService = godService;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<List<GodResponse>>> GetAllGodsAsync()
-        {
-            var gods = await _godService.GetAllGodsAsync();
-            return _mapper.Map<List<GodResponse>>(gods);
-        }
+    [HttpGet]
+    public async Task<ActionResult<List<GodResponse>>> GetAllGodsAsync()
+    {
+        var gods = await _godService.GetAllGodsAsync();
+        return _mapper.Map<List<GodResponse>>(gods);
     }
 }

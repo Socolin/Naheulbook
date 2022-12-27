@@ -3,116 +3,115 @@ using Naheulbook.Core.Models;
 using Naheulbook.Data.Models;
 using Naheulbook.Shared.Utils;
 
-namespace Naheulbook.Core.Utils
+namespace Naheulbook.Core.Utils;
+
+public interface IGroupHistoryUtil
 {
-    public interface IGroupHistoryUtil
+    GroupHistoryEntryEntity CreateLogStartCombat(GroupEntity group);
+    GroupHistoryEntryEntity CreateLogEndCombat(GroupEntity group);
+    GroupHistoryEntryEntity CreateLogChangeMankdebol(GroupEntity group, int? oldValue, int newValue);
+    GroupHistoryEntryEntity CreateLogChangeDebilibeuk(GroupEntity group, int? oldValue, int newValue);
+    GroupHistoryEntryEntity CreateLogChangeDate(GroupEntity group, NhbkDate? oldValue, NhbkDate newValue);
+    GroupHistoryEntryEntity CreateLogAddTime(GroupEntity group, NhbkDate date, NhbkDateOffset timeOffset);
+    GroupHistoryEntryEntity CreateLogEventRp(GroupEntity @group, bool isGm, string info);
+}
+
+public class GroupHistoryUtil : IGroupHistoryUtil
+{
+    private const string StartCombatActionName = "START_COMBAT";
+    private const string EndCombatActionName = "END_COMBAT";
+    private const string UpdateMankdebolActionName = "MANKDEBOL";
+    private const string UpdateDebilibeukActionName = "DEBILIBEUK";
+    private const string UpdateDateActionName = "CHANGE_DATE";
+    private const string AddTimeActionName = "ADD_TIME";
+    private const string EventRpActionName = "EVENT_RP";
+
+    private readonly IJsonUtil _jsonUtil;
+
+    public GroupHistoryUtil(IJsonUtil jsonUtil)
     {
-        GroupHistoryEntryEntity CreateLogStartCombat(GroupEntity group);
-        GroupHistoryEntryEntity CreateLogEndCombat(GroupEntity group);
-        GroupHistoryEntryEntity CreateLogChangeMankdebol(GroupEntity group, int? oldValue, int newValue);
-        GroupHistoryEntryEntity CreateLogChangeDebilibeuk(GroupEntity group, int? oldValue, int newValue);
-        GroupHistoryEntryEntity CreateLogChangeDate(GroupEntity group, NhbkDate? oldValue, NhbkDate newValue);
-        GroupHistoryEntryEntity CreateLogAddTime(GroupEntity group, NhbkDate date, NhbkDateOffset timeOffset);
-        GroupHistoryEntryEntity CreateLogEventRp(GroupEntity @group, bool isGm, string info);
+        _jsonUtil = jsonUtil;
     }
 
-    public class GroupHistoryUtil : IGroupHistoryUtil
+    public GroupHistoryEntryEntity CreateLogStartCombat(GroupEntity group)
     {
-        private const string StartCombatActionName = "START_COMBAT";
-        private const string EndCombatActionName = "END_COMBAT";
-        private const string UpdateMankdebolActionName = "MANKDEBOL";
-        private const string UpdateDebilibeukActionName = "DEBILIBEUK";
-        private const string UpdateDateActionName = "CHANGE_DATE";
-        private const string AddTimeActionName = "ADD_TIME";
-        private const string EventRpActionName = "EVENT_RP";
-
-        private readonly IJsonUtil _jsonUtil;
-
-        public GroupHistoryUtil(IJsonUtil jsonUtil)
+        return new GroupHistoryEntryEntity
         {
-            _jsonUtil = jsonUtil;
-        }
+            Group = group,
+            Action = StartCombatActionName,
+            Date = DateTime.Now,
+            Gm = false
+        };
+    }
 
-        public GroupHistoryEntryEntity CreateLogStartCombat(GroupEntity group)
+    public GroupHistoryEntryEntity CreateLogEndCombat(GroupEntity group)
+    {
+        return new GroupHistoryEntryEntity
         {
-            return new GroupHistoryEntryEntity
-            {
-                Group = group,
-                Action = StartCombatActionName,
-                Date = DateTime.Now,
-                Gm = false
-            };
-        }
+            Group = group,
+            Action = EndCombatActionName,
+            Date = DateTime.Now,
+            Gm = false
+        };
+    }
 
-        public GroupHistoryEntryEntity CreateLogEndCombat(GroupEntity group)
+    public GroupHistoryEntryEntity CreateLogChangeMankdebol(GroupEntity group, int? oldValue, int newValue)
+    {
+        return new GroupHistoryEntryEntity
         {
-            return new GroupHistoryEntryEntity
-            {
-                Group = group,
-                Action = EndCombatActionName,
-                Date = DateTime.Now,
-                Gm = false
-            };
-        }
+            Group = group,
+            Action = UpdateMankdebolActionName,
+            Date = DateTime.Now,
+            Gm = true,
+            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+        };
+    }
 
-        public GroupHistoryEntryEntity CreateLogChangeMankdebol(GroupEntity group, int? oldValue, int newValue)
+    public GroupHistoryEntryEntity CreateLogChangeDebilibeuk(GroupEntity group, int? oldValue, int newValue)
+    {
+        return new GroupHistoryEntryEntity
         {
-            return new GroupHistoryEntryEntity
-            {
-                Group = group,
-                Action = UpdateMankdebolActionName,
-                Date = DateTime.Now,
-                Gm = true,
-                Data = _jsonUtil.Serialize(new {oldValue, newValue})
-            };
-        }
+            Group = group,
+            Action = UpdateDebilibeukActionName,
+            Date = DateTime.Now,
+            Gm = true,
+            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+        };
+    }
 
-        public GroupHistoryEntryEntity CreateLogChangeDebilibeuk(GroupEntity group, int? oldValue, int newValue)
+    public GroupHistoryEntryEntity CreateLogChangeDate(GroupEntity group, NhbkDate? oldValue, NhbkDate newValue)
+    {
+        return new GroupHistoryEntryEntity
         {
-            return new GroupHistoryEntryEntity
-            {
-                Group = group,
-                Action = UpdateDebilibeukActionName,
-                Date = DateTime.Now,
-                Gm = true,
-                Data = _jsonUtil.Serialize(new {oldValue, newValue})
-            };
-        }
+            Group = group,
+            Action = UpdateDateActionName,
+            Date = DateTime.Now,
+            Gm = false,
+            Data = _jsonUtil.Serialize(new {oldValue, newValue})
+        };
+    }
 
-        public GroupHistoryEntryEntity CreateLogChangeDate(GroupEntity group, NhbkDate? oldValue, NhbkDate newValue)
+    public GroupHistoryEntryEntity CreateLogAddTime(GroupEntity group, NhbkDate date, NhbkDateOffset timeOffset)
+    {
+        return new GroupHistoryEntryEntity
         {
-            return new GroupHistoryEntryEntity
-            {
-                Group = group,
-                Action = UpdateDateActionName,
-                Date = DateTime.Now,
-                Gm = false,
-                Data = _jsonUtil.Serialize(new {oldValue, newValue})
-            };
-        }
+            Group = group,
+            Action = AddTimeActionName,
+            Date = DateTime.Now,
+            Gm = false,
+            Data = _jsonUtil.Serialize(new {timeOffset, date})
+        };
+    }
 
-        public GroupHistoryEntryEntity CreateLogAddTime(GroupEntity group, NhbkDate date, NhbkDateOffset timeOffset)
+    public GroupHistoryEntryEntity CreateLogEventRp(GroupEntity @group, bool isGm, string info)
+    {
+        return new GroupHistoryEntryEntity
         {
-            return new GroupHistoryEntryEntity
-            {
-                Group = group,
-                Action = AddTimeActionName,
-                Date = DateTime.Now,
-                Gm = false,
-                Data = _jsonUtil.Serialize(new {timeOffset, date})
-            };
-        }
-
-        public GroupHistoryEntryEntity CreateLogEventRp(GroupEntity @group, bool isGm, string info)
-        {
-            return new GroupHistoryEntryEntity
-            {
-                Group = group,
-                Action = EventRpActionName,
-                Date = DateTime.Now,
-                Gm = isGm,
-                Info = info
-            };
-        }
+            Group = group,
+            Action = EventRpActionName,
+            Date = DateTime.Now,
+            Gm = isGm,
+            Info = info
+        };
     }
 }

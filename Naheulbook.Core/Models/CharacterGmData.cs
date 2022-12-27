@@ -1,8 +1,7 @@
-namespace Naheulbook.Core.Models
+namespace Naheulbook.Core.Models;
+
+public class CharacterGmData
 {
-    public class CharacterGmData
-    {
-        public int Mankdebol { get; set; }
-        public int Debilibeuk { get; set; }
-    }
+    public int Mankdebol { get; set; }
+    public int Debilibeuk { get; set; }
 }

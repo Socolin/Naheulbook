@@ -11,58 +11,57 @@ using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
-namespace Naheulbook.Web.Controllers
+namespace Naheulbook.Web.Controllers;
+
+[Route("api/v2/itemTemplateSubCategories")]
+[ApiController]
+public class ItemTemplateSubCategoriesController : ControllerBase
 {
-    [Route("api/v2/itemTemplateSubCategories")]
-    [ApiController]
-    public class ItemTemplateSubCategoriesController : ControllerBase
+    private readonly IItemTemplateSubCategoryService _itemTemplateSubSubCategoryService;
+    private readonly IMapper _mapper;
+
+    public ItemTemplateSubCategoriesController(IItemTemplateSubCategoryService itemTemplateSubSubCategoryService, IMapper mapper)
     {
-        private readonly IItemTemplateSubCategoryService _itemTemplateSubSubCategoryService;
-        private readonly IMapper _mapper;
+        _itemTemplateSubSubCategoryService = itemTemplateSubSubCategoryService;
+        _mapper = mapper;
+    }
 
-        public ItemTemplateSubCategoriesController(IItemTemplateSubCategoryService itemTemplateSubSubCategoryService, IMapper mapper)
+    [HttpPost]
+    public async Task<CreatedActionResult<ItemTemplateSubCategoryResponse>> PostCreateItemTemplateSubCategoryAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        CreateItemTemplateSubCategoryRequest request
+    )
+    {
+        try
         {
-            _itemTemplateSubSubCategoryService = itemTemplateSubSubCategoryService;
-            _mapper = mapper;
+            var itemTemplateSubCategory = await _itemTemplateSubSubCategoryService.CreateItemTemplateSubCategoryAsync(executionContext, request);
+            return _mapper.Map<ItemTemplateSubCategoryResponse>(itemTemplateSubCategory);
         }
-
-        [HttpPost]
-        public async Task<CreatedActionResult<ItemTemplateSubCategoryResponse>> PostCreateItemTemplateSubCategoryAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            CreateItemTemplateSubCategoryRequest request
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                var itemTemplateSubCategory = await _itemTemplateSubSubCategoryService.CreateItemTemplateSubCategoryAsync(executionContext, request);
-                return _mapper.Map<ItemTemplateSubCategoryResponse>(itemTemplateSubCategory);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
+    }
 
-        [HttpGet("{ItemTemplateSubCategoryName}/itemTemplates")]
-        public async Task<ActionResult<List<ItemTemplateResponse>>> GetItemTemplatesBySubCategoryTechNameAsync(
-            [FromServices] OptionalNaheulbookExecutionContext executionContext,
-            [FromRoute] string itemTemplateSubCategoryName,
-            [FromQuery] bool includeCommunityItems = true
-        )
+    [HttpGet("{ItemTemplateSubCategoryName}/itemTemplates")]
+    public async Task<ActionResult<List<ItemTemplateResponse>>> GetItemTemplatesBySubCategoryTechNameAsync(
+        [FromServices] OptionalNaheulbookExecutionContext executionContext,
+        [FromRoute] string itemTemplateSubCategoryName,
+        [FromQuery] bool includeCommunityItems = true
+    )
+    {
+        try
         {
-            try
-            {
-                var itemTemplates = await _itemTemplateSubSubCategoryService.GetItemTemplatesBySubCategoryTechNameAsync(
-                    itemTemplateSubCategoryName,
-                    executionContext.ExecutionExecutionContext?.UserId,
-                    includeCommunityItems
-                );
-                return _mapper.Map<List<ItemTemplateResponse>>(itemTemplates);
-            }
-            catch (ItemTemplateSubCategoryNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            var itemTemplates = await _itemTemplateSubSubCategoryService.GetItemTemplatesBySubCategoryTechNameAsync(
+                itemTemplateSubCategoryName,
+                executionContext.ExecutionExecutionContext?.UserId,
+                includeCommunityItems
+            );
+            return _mapper.Map<List<ItemTemplateResponse>>(itemTemplates);
+        }
+        catch (ItemTemplateSubCategoryNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }
     }
 }

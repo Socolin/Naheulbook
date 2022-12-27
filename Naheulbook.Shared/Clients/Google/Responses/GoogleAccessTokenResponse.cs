@@ -1,10 +1,9 @@
 using Newtonsoft.Json;
 
-namespace Naheulbook.Shared.Clients.Google.Responses
+namespace Naheulbook.Shared.Clients.Google.Responses;
+
+public class GoogleAccessTokenResponse
 {
-    public class GoogleAccessTokenResponse
-    {
-        [JsonProperty("access_token")]
-        public string AccessToken { get; set; } = null!;
-    }
+    [JsonProperty("access_token")]
+    public string AccessToken { get; set; } = null!;
 }

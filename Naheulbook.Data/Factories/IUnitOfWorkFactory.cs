@@ -1,9 +1,8 @@
 using Naheulbook.Data.Extensions.UnitOfWorks;
 
-namespace Naheulbook.Data.Factories
+namespace Naheulbook.Data.Factories;
+
+public interface IUnitOfWorkFactory
 {
-    public interface IUnitOfWorkFactory
-    {
-        IUnitOfWork CreateUnitOfWork();
-    }
+    IUnitOfWork CreateUnitOfWork();
 }

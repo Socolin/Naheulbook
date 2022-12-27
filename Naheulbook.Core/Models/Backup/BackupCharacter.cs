@@ -1,9 +1,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace Naheulbook.Core.Models.Backup
+namespace Naheulbook.Core.Models.Backup;
+
+public class BackupCharacter
 {
-    public class BackupCharacter
-    {
-        public int Version { get; set; }
-    }
+    public int Version { get; set; }
 }

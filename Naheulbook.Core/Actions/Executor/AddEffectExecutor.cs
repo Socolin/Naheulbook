@@ -7,109 +7,108 @@ using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Shared.TransientModels;
 
-namespace Naheulbook.Core.Actions.Executor
+namespace Naheulbook.Core.Actions.Executor;
+
+public interface IAddEffectExecutor : IActionExecutor
 {
-    public interface IAddEffectExecutor : IActionExecutor
+}
+
+public class AddEffectExecutor : IAddEffectExecutor
+{
+    private const string ActionType = "addEffect";
+    private readonly ICharacterHistoryUtil _characterHistoryUtil;
+
+    public AddEffectExecutor(ICharacterHistoryUtil characterHistoryUtil)
     {
+        _characterHistoryUtil = characterHistoryUtil;
     }
 
-    public class AddEffectExecutor : IAddEffectExecutor
+    public async Task ExecuteAsync(
+        NhbkAction action,
+        ActionContext context,
+        INotificationSession notificationSession
+    )
     {
-        private const string ActionType = "addEffect";
-        private readonly ICharacterHistoryUtil _characterHistoryUtil;
+        if (action.Type != ActionType)
+            throw new InvalidActionTypeException(action.Type, ActionType);
+        if (action.Data == null)
+            throw new InvalidActionDataException(action.Type);
+        if (!action.Data.EffectId.HasValue)
+            throw new InvalidActionDataException(action.Type);
+        if (action.Data.EffectData == null)
+            throw new InvalidActionDataException(action.Type);
 
-        public AddEffectExecutor(ICharacterHistoryUtil characterHistoryUtil)
+        var effect = await context.UnitOfWork.Effects.GetWithEffectWithModifiersAsync(action.Data.EffectId.Value);
+        if (effect == null)
+            throw new EffectNotFoundException();
+
+        var combatCount = effect.CombatCount;
+        var timeDuration = effect.TimeDuration;
+        var duration = effect.Duration;
+        var lapCount = effect.LapCount;
+
+        var customDurationType = action.Data.EffectData.Value<string?>("durationType");
+        if (!string.IsNullOrEmpty(customDurationType))
         {
-            _characterHistoryUtil = characterHistoryUtil;
+            timeDuration = null;
+            duration = null;
+            combatCount = null;
+            lapCount = null;
+            switch (customDurationType)
+            {
+                case "combat":
+                    combatCount = action.Data.EffectData.Value<int?>("combatCount");
+                    break;
+                case "time":
+                    timeDuration = action.Data.EffectData.Value<int?>("timeDuration");
+                    break;
+                case "custom":
+                    duration = action.Data.EffectData.Value<string>("duration");
+                    break;
+                case "lap":
+                    lapCount = action.Data.EffectData.Value<int?>("lapCount");
+                    break;
+                case "forever":
+                    break;
+                default:
+                    throw new InvalidCustomDurationActionException(customDurationType);
+            }
         }
 
-        public async Task ExecuteAsync(
-            NhbkAction action,
-            ActionContext context,
-            INotificationSession notificationSession
-        )
+
+
+        var characterModifier = new CharacterModifierEntity
         {
-            if (action.Type != ActionType)
-                throw new InvalidActionTypeException(action.Type, ActionType);
-            if (action.Data == null)
-                throw new InvalidActionDataException(action.Type);
-            if (!action.Data.EffectId.HasValue)
-                throw new InvalidActionDataException(action.Type);
-            if (action.Data.EffectData == null)
-                throw new InvalidActionDataException(action.Type);
-
-            var effect = await context.UnitOfWork.Effects.GetWithEffectWithModifiersAsync(action.Data.EffectId.Value);
-            if (effect == null)
-                throw new EffectNotFoundException();
-
-            var combatCount = effect.CombatCount;
-            var timeDuration = effect.TimeDuration;
-            var duration = effect.Duration;
-            var lapCount = effect.LapCount;
-
-            var customDurationType = action.Data.EffectData.Value<string?>("durationType");
-            if (!string.IsNullOrEmpty(customDurationType))
+            Name = effect.Name,
+            Permanent = false,
+            DurationType = customDurationType ?? effect.DurationType,
+            Duration = duration,
+            Type = effect.SubCategory.Name,
+            Description = effect.Description,
+            Reusable = false,
+            IsActive = true,
+            CombatCount = combatCount,
+            CurrentCombatCount = combatCount,
+            TimeDuration = timeDuration,
+            CurrentTimeDuration = timeDuration,
+            LapCount = lapCount,
+            CurrentLapCount = lapCount,
+            Values = effect.Modifiers.Select(v => new CharacterModifierValueEntity
             {
-                timeDuration = null;
-                duration = null;
-                combatCount = null;
-                lapCount = null;
-                switch (customDurationType)
-                {
-                    case "combat":
-                        combatCount = action.Data.EffectData.Value<int?>("combatCount");
-                        break;
-                    case "time":
-                        timeDuration = action.Data.EffectData.Value<int?>("timeDuration");
-                        break;
-                    case "custom":
-                        duration = action.Data.EffectData.Value<string>("duration");
-                        break;
-                    case "lap":
-                        lapCount = action.Data.EffectData.Value<int?>("lapCount");
-                        break;
-                    case "forever":
-                        break;
-                    default:
-                        throw new InvalidCustomDurationActionException(customDurationType);
-                }
-            }
+                Type = v.Type,
+                StatName = v.StatName,
+                Value = v.Value
+            }).ToList()
+        };
 
-
-
-            var characterModifier = new CharacterModifierEntity
-            {
-                Name = effect.Name,
-                Permanent = false,
-                DurationType = customDurationType ?? effect.DurationType,
-                Duration = duration,
-                Type = effect.SubCategory.Name,
-                Description = effect.Description,
-                Reusable = false,
-                IsActive = true,
-                CombatCount = combatCount,
-                CurrentCombatCount = combatCount,
-                TimeDuration = timeDuration,
-                CurrentTimeDuration = timeDuration,
-                LapCount = lapCount,
-                CurrentLapCount = lapCount,
-                Values = effect.Modifiers.Select(v => new CharacterModifierValueEntity
-                {
-                    Type = v.Type,
-                    StatName = v.StatName,
-                    Value = v.Value
-                }).ToList()
-            };
-
-            if (context.TargetCharacter.Modifiers == null)
-            {
-                context.TargetCharacter.Modifiers = new List<CharacterModifierEntity>();
-            }
-
-            context.TargetCharacter.Modifiers.Add(characterModifier);
-
-            context.TargetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogAddModifier(context.TargetCharacter, characterModifier));
-            notificationSession.NotifyCharacterAddModifier(context.TargetCharacter.Id, characterModifier, true);
+        if (context.TargetCharacter.Modifiers == null)
+        {
+            context.TargetCharacter.Modifiers = new List<CharacterModifierEntity>();
         }
+
+        context.TargetCharacter.Modifiers.Add(characterModifier);
+
+        context.TargetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogAddModifier(context.TargetCharacter, characterModifier));
+        notificationSession.NotifyCharacterAddModifier(context.TargetCharacter.Id, characterModifier, true);
     }
 }

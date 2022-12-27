@@ -1,17 +1,16 @@
 using System;
 using Naheulbook.Data.Extensions;
 
-namespace Naheulbook.Data.Models
-{
-    public class UserAccessTokenEntity
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; } = null!;
-        public string Key { get; set; } = null!;
-        public DateTimeOffset DateCreated { get; set; }
+namespace Naheulbook.Data.Models;
 
-        public int UserId { get; set; }
-        private UserEntity? _user;
-        public UserEntity User { get => _user.ThrowIfNotLoaded(); set => _user = value; }
-    }
+public class UserAccessTokenEntity
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = null!;
+    public string Key { get; set; } = null!;
+    public DateTimeOffset DateCreated { get; set; }
+
+    public int UserId { get; set; }
+    private UserEntity? _user;
+    public UserEntity User { get => _user.ThrowIfNotLoaded(); set => _user = value; }
 }

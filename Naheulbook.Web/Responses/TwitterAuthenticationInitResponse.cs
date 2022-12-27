@@ -1,7 +1,6 @@
-namespace Naheulbook.Web.Responses
+namespace Naheulbook.Web.Responses;
+
+public class TwitterAuthenticationInitResponse
 {
-    public class TwitterAuthenticationInitResponse
-    {
-        public string LoginToken { get; set; } = null!;
-    }
+    public string LoginToken { get; set; } = null!;
 }

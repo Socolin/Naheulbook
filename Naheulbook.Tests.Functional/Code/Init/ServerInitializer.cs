@@ -8,66 +8,65 @@ using Naheulbook.Tests.Functional.Code.Servers;
 using Socolin.TestUtils.FakeSmtp;
 using TechTalk.SpecFlow;
 
-namespace Naheulbook.Tests.Functional.Code.Init
+namespace Naheulbook.Tests.Functional.Code.Init;
+
+[Binding]
+public class ServerInitializer
 {
-    [Binding]
-    public class ServerInitializer
+    private readonly IObjectContainer _objectContainer;
+    private readonly ScenarioContext _scenarioContext;
+
+    public ServerInitializer(
+        IObjectContainer objectContainer,
+        ScenarioContext scenarioContext
+    )
     {
-        private readonly IObjectContainer _objectContainer;
-        private readonly ScenarioContext _scenarioContext;
+        _objectContainer = objectContainer;
+        _scenarioContext = scenarioContext;
+    }
 
-        public ServerInitializer(
-            IObjectContainer objectContainer,
-            ScenarioContext scenarioContext
-        )
-        {
-            _objectContainer = objectContainer;
-            _scenarioContext = scenarioContext;
-        }
+    private static NaheulbookApiServer _naheulbookApiServer;
+    private static LaPageAMelkorStub _laPageAMelkorStub;
+    private static FakeSmtpServer _fakeSmtpServer;
+    private static string _mapImageOutputDirectory;
 
-        private static NaheulbookApiServer _naheulbookApiServer;
-        private static LaPageAMelkorStub _laPageAMelkorStub;
-        private static FakeSmtpServer _fakeSmtpServer;
-        private static string _mapImageOutputDirectory;
+    [BeforeTestRun]
+    public static void InitializeServices()
+    {
+        using var _ = InitializersProfiler.Profile(nameof(InitializeServices));
 
-        [BeforeTestRun]
-        public static void InitializeServices()
-        {
-            using var _ = InitializersProfiler.Profile(nameof(InitializeServices));
+        _fakeSmtpServer = new FakeSmtpServer();
+        var mailConfig = _fakeSmtpServer.Start();
+        _mapImageOutputDirectory = Path.Combine(Path.GetTempPath(), "map-" + Guid.NewGuid());
+        Directory.CreateDirectory(_mapImageOutputDirectory);
 
-            _fakeSmtpServer = new FakeSmtpServer();
-            var mailConfig = _fakeSmtpServer.Start();
-            _mapImageOutputDirectory = Path.Combine(Path.GetTempPath(), "map-" + Guid.NewGuid());
-            Directory.CreateDirectory(_mapImageOutputDirectory);
+        _laPageAMelkorStub = new LaPageAMelkorStub();
+        _laPageAMelkorStub.Start();
+        _naheulbookApiServer = new NaheulbookApiServer(
+            mailConfig,
+            _laPageAMelkorStub.ListenUrls.First(),
+            _mapImageOutputDirectory
+        );
+        _naheulbookApiServer.Start();
+    }
 
-            _laPageAMelkorStub = new LaPageAMelkorStub();
-            _laPageAMelkorStub.Start();
-            _naheulbookApiServer = new NaheulbookApiServer(
-                mailConfig,
-                _laPageAMelkorStub.ListenUrls.First(),
-                _mapImageOutputDirectory
-            );
-            _naheulbookApiServer.Start();
-        }
+    [AfterTestRun]
+    public static void AfterTestRun()
+    {
+        _laPageAMelkorStub?.Stop();
+        _naheulbookApiServer?.Stop();
+        _fakeSmtpServer?.Stop();
+        _fakeSmtpServer?.Dispose();
+        if (_mapImageOutputDirectory != null)
+            Directory.Delete(_mapImageOutputDirectory, true);
+    }
 
-        [AfterTestRun]
-        public static void AfterTestRun()
-        {
-            _laPageAMelkorStub?.Stop();
-            _naheulbookApiServer?.Stop();
-            _fakeSmtpServer?.Stop();
-            _fakeSmtpServer?.Dispose();
-            if (_mapImageOutputDirectory != null)
-                Directory.Delete(_mapImageOutputDirectory, true);
-        }
-
-        [BeforeScenario(Order = 0)]
-        public void InitializeIoc()
-        {
-            _objectContainer.RegisterInstanceAs(_fakeSmtpServer, typeof(IMailReceiver));
-            _objectContainer.RegisterInstanceAs(_naheulbookApiServer, typeof(NaheulbookApiServer));
-            _objectContainer.RegisterInstanceAs(new NaheulbookHttpClient(_naheulbookApiServer.ListenUrls.First()));
-            _scenarioContext.SetMapImageOutputDirectory(_mapImageOutputDirectory);
-        }
+    [BeforeScenario(Order = 0)]
+    public void InitializeIoc()
+    {
+        _objectContainer.RegisterInstanceAs(_fakeSmtpServer, typeof(IMailReceiver));
+        _objectContainer.RegisterInstanceAs(_naheulbookApiServer, typeof(NaheulbookApiServer));
+        _objectContainer.RegisterInstanceAs(new NaheulbookHttpClient(_naheulbookApiServer.ListenUrls.First()));
+        _scenarioContext.SetMapImageOutputDirectory(_mapImageOutputDirectory);
     }
 }

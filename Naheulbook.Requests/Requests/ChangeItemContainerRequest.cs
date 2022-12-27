@@ -1,7 +1,6 @@
-namespace Naheulbook.Requests.Requests
+namespace Naheulbook.Requests.Requests;
+
+public class ChangeItemContainerRequest
 {
-    public class ChangeItemContainerRequest
-    {
-        public int? ContainerId { get; set; }
-    }
+    public int? ContainerId { get; set; }
 }

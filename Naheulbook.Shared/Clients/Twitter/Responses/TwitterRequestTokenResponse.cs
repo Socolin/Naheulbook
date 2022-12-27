@@ -1,10 +1,9 @@
 using Newtonsoft.Json;
 
-namespace Naheulbook.Shared.Clients.Twitter.Responses
+namespace Naheulbook.Shared.Clients.Twitter.Responses;
+
+public class TwitterRequestTokenResponse
 {
-    public class TwitterRequestTokenResponse
-    {
-        [JsonProperty("oauth_token")]
-        public string OAuthToken { get; set; } = null!;
-    }
+    [JsonProperty("oauth_token")]
+    public string OAuthToken { get; set; } = null!;
 }

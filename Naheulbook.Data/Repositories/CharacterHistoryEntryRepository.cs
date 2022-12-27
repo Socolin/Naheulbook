@@ -1,17 +1,16 @@
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Data.Repositories
-{
-    public interface ICharacterHistoryEntryRepository : IRepository<CharacterHistoryEntryEntity>
-    {
-    }
+namespace Naheulbook.Data.Repositories;
 
-    public class CharacterHistoryEntryRepository : Repository<CharacterHistoryEntryEntity, NaheulbookDbContext>, ICharacterHistoryEntryRepository
+public interface ICharacterHistoryEntryRepository : IRepository<CharacterHistoryEntryEntity>
+{
+}
+
+public class CharacterHistoryEntryRepository : Repository<CharacterHistoryEntryEntity, NaheulbookDbContext>, ICharacterHistoryEntryRepository
+{
+    public CharacterHistoryEntryRepository(NaheulbookDbContext context)
+        : base(context)
     {
-        public CharacterHistoryEntryRepository(NaheulbookDbContext context)
-            : base(context)
-        {
-        }
     }
 }

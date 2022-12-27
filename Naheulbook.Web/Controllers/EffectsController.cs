@@ -10,68 +10,67 @@ using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
-namespace Naheulbook.Web.Controllers
+namespace Naheulbook.Web.Controllers;
+
+[ApiController]
+[Route("api/v2/effects")]
+public class EffectsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/v2/effects")]
-    public class EffectsController : ControllerBase
+    private readonly IEffectService _effectService;
+    private readonly IMapper _mapper;
+
+    public EffectsController(IEffectService effectService, IMapper mapper)
     {
-        private readonly IEffectService _effectService;
-        private readonly IMapper _mapper;
+        _effectService = effectService;
+        _mapper = mapper;
+    }
 
-        public EffectsController(IEffectService effectService, IMapper mapper)
+    [HttpPut("{effectId:int:min(1)}")]
+    public async Task<ActionResult<EffectResponse>> PutEditEffectAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int effectId,
+        EditEffectRequest request
+    )
+    {
+        try
         {
-            _effectService = effectService;
-            _mapper = mapper;
+            var effect = await _effectService.EditEffectAsync(executionContext, effectId, request);
+            var effectResponse = _mapper.Map<EffectResponse>(effect);
+            return effectResponse;
         }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (EffectNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
 
-        [HttpPut("{effectId:int:min(1)}")]
-        public async Task<ActionResult<EffectResponse>> PutEditEffectAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int effectId,
-            EditEffectRequest request
-        )
+    [HttpGet("{effectId:int:min(1)}")]
+    public async Task<ActionResult<EffectResponse>> GetEffectAsync(
+        [FromRoute] int effectId
+    )
+    {
+        try
         {
-            try
-            {
-                var effect = await _effectService.EditEffectAsync(executionContext, effectId, request);
-                var effectResponse = _mapper.Map<EffectResponse>(effect);
-                return effectResponse;
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (EffectNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            var effect = await _effectService.GetEffectAsync(effectId);
+            var effectResponse = _mapper.Map<EffectResponse>(effect);
+            return effectResponse;
         }
+        catch (EffectNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
 
-        [HttpGet("{effectId:int:min(1)}")]
-        public async Task<ActionResult<EffectResponse>> GetEffectAsync(
-            [FromRoute] int effectId
-        )
-        {
-            try
-            {
-                var effect = await _effectService.GetEffectAsync(effectId);
-                var effectResponse = _mapper.Map<EffectResponse>(effect);
-                return effectResponse;
-            }
-            catch (EffectNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
-        }
-
-        [HttpGet("search")]
-        public async Task<ActionResult<List<EffectResponse>>> GetSearchEffectAsync(
-            [FromQuery] string filter
-        )
-        {
-            var effects = await _effectService.SearchEffectsAsync(filter);
-            return _mapper.Map<List<EffectResponse>>(effects);
-        }
+    [HttpGet("search")]
+    public async Task<ActionResult<List<EffectResponse>>> GetSearchEffectAsync(
+        [FromQuery] string filter
+    )
+    {
+        var effects = await _effectService.SearchEffectsAsync(filter);
+        return _mapper.Map<List<EffectResponse>>(effects);
     }
 }

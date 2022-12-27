@@ -8,169 +8,168 @@ using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface IEffectService
 {
-    public interface IEffectService
+    Task<EffectEntity> GetEffectAsync(int effectId);
+    Task<ICollection<EffectTypeEntity>> GetEffectSubCategoriesAsync();
+    Task<ICollection<EffectEntity>> GetEffectsBySubCategoryAsync(long subCategoryId);
+    Task<EffectTypeEntity> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request);
+    Task<EffectSubCategoryEntity> CreateEffectSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectSubCategoryRequest request);
+    Task<EffectEntity> CreateEffectAsync(NaheulbookExecutionContext executionContext, int subCategoryId, CreateEffectRequest request);
+    Task<EffectEntity> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request);
+    Task<List<EffectEntity>> SearchEffectsAsync(string filter);
+}
+
+public class EffectService : IEffectService
+{
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    private readonly IAuthorizationUtil _authorizationUtil;
+
+    public EffectService(IUnitOfWorkFactory unitOfWorkFactory, IAuthorizationUtil authorizationUtil)
     {
-        Task<EffectEntity> GetEffectAsync(int effectId);
-        Task<ICollection<EffectTypeEntity>> GetEffectSubCategoriesAsync();
-        Task<ICollection<EffectEntity>> GetEffectsBySubCategoryAsync(long subCategoryId);
-        Task<EffectTypeEntity> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request);
-        Task<EffectSubCategoryEntity> CreateEffectSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectSubCategoryRequest request);
-        Task<EffectEntity> CreateEffectAsync(NaheulbookExecutionContext executionContext, int subCategoryId, CreateEffectRequest request);
-        Task<EffectEntity> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request);
-        Task<List<EffectEntity>> SearchEffectsAsync(string filter);
+        _unitOfWorkFactory = unitOfWorkFactory;
+        _authorizationUtil = authorizationUtil;
     }
 
-    public class EffectService : IEffectService
+    public async Task<EffectEntity> GetEffectAsync(int effectId)
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IAuthorizationUtil _authorizationUtil;
-
-        public EffectService(IUnitOfWorkFactory unitOfWorkFactory, IAuthorizationUtil authorizationUtil)
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _authorizationUtil = authorizationUtil;
-        }
-
-        public async Task<EffectEntity> GetEffectAsync(int effectId)
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var effect = await uow.Effects.GetWithModifiersAsync(effectId);
-                if (effect == null)
-                    throw new EffectNotFoundException();
-
-                return effect;
-            }
-        }
-
-        public async Task<ICollection<EffectTypeEntity>> GetEffectSubCategoriesAsync()
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                return await uow.Effects.GetCategoriesAsync();
-            }
-        }
-
-        public async Task<ICollection<EffectEntity>> GetEffectsBySubCategoryAsync(long subCategoryId)
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                return await uow.Effects.GetBySubCategoryWithModifiersAsync(subCategoryId);
-            }
-        }
-
-        public async Task<EffectTypeEntity> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request)
-        {
-            await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-
-            var effectType = new EffectTypeEntity
-            {
-                Name = request.Name,
-                SubCategories = new List<EffectSubCategoryEntity>()
-            };
-
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                uow.EffectTypes.Add(effectType);
-                await uow.SaveChangesAsync();
-            }
-
-            return effectType;
-        }
-
-        public async Task<EffectSubCategoryEntity> CreateEffectSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectSubCategoryRequest request)
-        {
-            await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-
-            var effectSubCategory = new EffectSubCategoryEntity
-            {
-                Name = request.Name,
-                TypeId = request.TypeId,
-                DiceSize = request.DiceSize,
-                DiceCount = request.DiceCount,
-                Note = request.Note,
-                Effects = new List<EffectEntity>()
-            };
-
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                uow.EffectSubCategories.Add(effectSubCategory);
-                await uow.SaveChangesAsync();
-            }
-
-            return effectSubCategory;
-        }
-
-        public async Task<EffectEntity> CreateEffectAsync(NaheulbookExecutionContext executionContext, int subCategoryId, CreateEffectRequest request)
-        {
-            await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-
-            var effect = new EffectEntity
-            {
-                Name = request.Name,
-                SubCategoryId = subCategoryId,
-                Description = request.Description,
-                Dice = request.Dice,
-                TimeDuration = request.TimeDuration,
-                CombatCount = request.CombatCount,
-                Duration = request.Duration,
-                LapCount = request.LapCount,
-                DurationType = request.DurationType,
-                Modifiers = request.Modifiers.Select(s => new EffectModifierEntity
-                {
-                    StatName = s.Stat, Type = s.Type, Value = s.Value
-                }).ToList()
-            };
-
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                uow.Effects.Add(effect);
-                await uow.SaveChangesAsync();
-            }
+            var effect = await uow.Effects.GetWithModifiersAsync(effectId);
+            if (effect == null)
+                throw new EffectNotFoundException();
 
             return effect;
         }
+    }
 
-        public async Task<EffectEntity> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request)
+    public async Task<ICollection<EffectTypeEntity>> GetEffectSubCategoriesAsync()
+    {
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+            return await uow.Effects.GetCategoriesAsync();
+        }
+    }
 
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var effect = await uow.Effects.GetWithModifiersAsync(effectId);
-                if (effect == null)
-                    throw new EffectNotFoundException();
+    public async Task<ICollection<EffectEntity>> GetEffectsBySubCategoryAsync(long subCategoryId)
+    {
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        {
+            return await uow.Effects.GetBySubCategoryWithModifiersAsync(subCategoryId);
+        }
+    }
 
-                effect.Name = request.Name;
-                effect.SubCategoryId = request.SubCategoryId;
-                effect.Description = request.Description;
-                effect.Dice = request.Dice;
-                effect.TimeDuration = request.TimeDuration;
-                effect.CombatCount = request.CombatCount;
-                effect.Duration = request.Duration;
-                effect.LapCount = request.LapCount;
-                effect.DurationType = request.DurationType;
-                effect.Modifiers = request.Modifiers.Select(s => new EffectModifierEntity
-                {
-                    StatName = s.Stat, Type = s.Type, Value = s.Value
-                }).ToList();
+    public async Task<EffectTypeEntity> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request)
+    {
+        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-                await uow.SaveChangesAsync();
+        var effectType = new EffectTypeEntity
+        {
+            Name = request.Name,
+            SubCategories = new List<EffectSubCategoryEntity>()
+        };
 
-                return effect;
-            }
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        {
+            uow.EffectTypes.Add(effectType);
+            await uow.SaveChangesAsync();
         }
 
-        public async Task<List<EffectEntity>> SearchEffectsAsync(string filter)
+        return effectType;
+    }
+
+    public async Task<EffectSubCategoryEntity> CreateEffectSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectSubCategoryRequest request)
+    {
+        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+
+        var effectSubCategory = new EffectSubCategoryEntity
         {
-            if (string.IsNullOrEmpty(filter))
-                return new List<EffectEntity>();
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            Name = request.Name,
+            TypeId = request.TypeId,
+            DiceSize = request.DiceSize,
+            DiceCount = request.DiceCount,
+            Note = request.Note,
+            Effects = new List<EffectEntity>()
+        };
+
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        {
+            uow.EffectSubCategories.Add(effectSubCategory);
+            await uow.SaveChangesAsync();
+        }
+
+        return effectSubCategory;
+    }
+
+    public async Task<EffectEntity> CreateEffectAsync(NaheulbookExecutionContext executionContext, int subCategoryId, CreateEffectRequest request)
+    {
+        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+
+        var effect = new EffectEntity
+        {
+            Name = request.Name,
+            SubCategoryId = subCategoryId,
+            Description = request.Description,
+            Dice = request.Dice,
+            TimeDuration = request.TimeDuration,
+            CombatCount = request.CombatCount,
+            Duration = request.Duration,
+            LapCount = request.LapCount,
+            DurationType = request.DurationType,
+            Modifiers = request.Modifiers.Select(s => new EffectModifierEntity
             {
-                return await uow.Effects.SearchByNameAsync(filter, 10);
-            }
+                StatName = s.Stat, Type = s.Type, Value = s.Value
+            }).ToList()
+        };
+
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        {
+            uow.Effects.Add(effect);
+            await uow.SaveChangesAsync();
+        }
+
+        return effect;
+    }
+
+    public async Task<EffectEntity> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request)
+    {
+        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        {
+            var effect = await uow.Effects.GetWithModifiersAsync(effectId);
+            if (effect == null)
+                throw new EffectNotFoundException();
+
+            effect.Name = request.Name;
+            effect.SubCategoryId = request.SubCategoryId;
+            effect.Description = request.Description;
+            effect.Dice = request.Dice;
+            effect.TimeDuration = request.TimeDuration;
+            effect.CombatCount = request.CombatCount;
+            effect.Duration = request.Duration;
+            effect.LapCount = request.LapCount;
+            effect.DurationType = request.DurationType;
+            effect.Modifiers = request.Modifiers.Select(s => new EffectModifierEntity
+            {
+                StatName = s.Stat, Type = s.Type, Value = s.Value
+            }).ToList();
+
+            await uow.SaveChangesAsync();
+
+            return effect;
+        }
+    }
+
+    public async Task<List<EffectEntity>> SearchEffectsAsync(string filter)
+    {
+        if (string.IsNullOrEmpty(filter))
+            return new List<EffectEntity>();
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        {
+            return await uow.Effects.SearchByNameAsync(filter, 10);
         }
     }
 }

@@ -9,35 +9,34 @@ using Naheulbook.Data.Repositories;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Naheulbook.Core.Tests.Unit.Services
+namespace Naheulbook.Core.Tests.Unit.Services;
+
+public class OriginServiceTests
 {
-    public class OriginServiceTests
+    private IOriginRepository _originRepository;
+    private OriginService _originService;
+
+    [SetUp]
+    public void SetUp()
     {
-        private IOriginRepository _originRepository;
-        private OriginService _originService;
+        var unitOfWorkFactory = Substitute.For<IUnitOfWorkFactory>();
+        var unitOfWork = Substitute.For<IUnitOfWork>();
+        unitOfWorkFactory.CreateUnitOfWork().Returns(unitOfWork);
+        _originRepository = Substitute.For<IOriginRepository>();
+        unitOfWork.Origins.Returns(_originRepository);
+        _originService = new OriginService(unitOfWorkFactory);
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            var unitOfWorkFactory = Substitute.For<IUnitOfWorkFactory>();
-            var unitOfWork = Substitute.For<IUnitOfWork>();
-            unitOfWorkFactory.CreateUnitOfWork().Returns(unitOfWork);
-            _originRepository = Substitute.For<IOriginRepository>();
-            unitOfWork.Origins.Returns(_originRepository);
-            _originService = new OriginService(unitOfWorkFactory);
-        }
+    [Test]
+    public async Task CanGetOrigins()
+    {
+        var expectedOrigins = new List<OriginEntity>();
 
-        [Test]
-        public async Task CanGetOrigins()
-        {
-            var expectedOrigins = new List<OriginEntity>();
+        _originRepository.GetAllWithAllDataAsync()
+            .Returns(expectedOrigins);
 
-            _originRepository.GetAllWithAllDataAsync()
-                .Returns(expectedOrigins);
+        var origins = await _originService.GetOriginsAsync();
 
-            var origins = await _originService.GetOriginsAsync();
-
-            origins.Should().BeSameAs(expectedOrigins);
-        }
+        origins.Should().BeSameAs(expectedOrigins);
     }
 }

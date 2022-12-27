@@ -2,11 +2,10 @@
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
-namespace Naheulbook.Web.Responses
+namespace Naheulbook.Web.Responses;
+
+public class DescribedFlagResponse
 {
-    public class DescribedFlagResponse
-    {
-        public string Description { get; set; } = null!;
-        public List<FlagResponse> Flags { get; set; } = null!;
-    }
+    public string Description { get; set; } = null!;
+    public List<FlagResponse> Flags { get; set; } = null!;
 }

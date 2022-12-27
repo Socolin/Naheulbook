@@ -5,51 +5,50 @@ using Naheulbook.Core.Models;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Shared.TransientModels;
 
-namespace Naheulbook.Core.Actions.Executor
+namespace Naheulbook.Core.Actions.Executor;
+
+public interface IAddItemExecutor : IActionExecutor
 {
-    public interface IAddItemExecutor : IActionExecutor
+}
+
+public class AddItemExecutor : IAddItemExecutor
+{
+    private const string ActionType = "addItem";
+    private readonly IItemFactory _itemFactory;
+
+    public AddItemExecutor(
+        IItemFactory itemFactory
+    )
     {
+        _itemFactory = itemFactory;
     }
 
-    public class AddItemExecutor : IAddItemExecutor
+    public async Task ExecuteAsync(
+        NhbkAction action,
+        ActionContext context,
+        INotificationSession notificationSession
+    )
     {
-        private const string ActionType = "addItem";
-        private readonly IItemFactory _itemFactory;
+        if (action.Type != ActionType)
+            throw new InvalidActionTypeException(action.Type, ActionType);
+        if (action.Data == null)
+            throw new InvalidActionDataException(action.Type);
+        if (!action.Data.TemplateId.HasValue)
+            throw new InvalidActionDataException(action.Type);
 
-        public AddItemExecutor(
-            IItemFactory itemFactory
-        )
-        {
-            _itemFactory = itemFactory;
-        }
+        var itemTemplate = await context.UnitOfWork.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(action.Data.TemplateId.Value);
+        if (itemTemplate == null)
+            throw new ItemTemplateNotFoundException(action.Data.TemplateId.Value);
 
-        public async Task ExecuteAsync(
-            NhbkAction action,
-            ActionContext context,
-            INotificationSession notificationSession
-        )
-        {
-            if (action.Type != ActionType)
-                throw new InvalidActionTypeException(action.Type, ActionType);
-            if (action.Data == null)
-                throw new InvalidActionDataException(action.Type);
-            if (!action.Data.TemplateId.HasValue)
-                throw new InvalidActionDataException(action.Type);
+        var itemData = new ItemData();
+        if (!string.IsNullOrEmpty(action.Data.ItemName))
+            itemData.Name = action.Data.ItemName;
+        if (action.Data.Quantity.HasValue)
+            itemData.Quantity = action.Data.Quantity.Value;
 
-            var itemTemplate = await context.UnitOfWork.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(action.Data.TemplateId.Value);
-            if (itemTemplate == null)
-                throw new ItemTemplateNotFoundException(action.Data.TemplateId.Value);
+        var item = _itemFactory.CreateItem(ItemOwnerType.Character, context.SourceCharacter.Id, itemTemplate, itemData);
+        context.UnitOfWork.Items.Add(item);
 
-            var itemData = new ItemData();
-            if (!string.IsNullOrEmpty(action.Data.ItemName))
-                itemData.Name = action.Data.ItemName;
-            if (action.Data.Quantity.HasValue)
-                itemData.Quantity = action.Data.Quantity.Value;
-
-            var item = _itemFactory.CreateItem(ItemOwnerType.Character, context.SourceCharacter.Id, itemTemplate, itemData);
-            context.UnitOfWork.Items.Add(item);
-
-            notificationSession.NotifyCharacterAddItem(context.SourceCharacter.Id, item, true);
-        }
+        notificationSession.NotifyCharacterAddItem(context.SourceCharacter.Id, item, true);
     }
 }

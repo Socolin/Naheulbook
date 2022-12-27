@@ -1,11 +1,10 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace Naheulbook.Requests.Requests
+namespace Naheulbook.Requests.Requests;
+
+public class PatchGroupConfigRequest
 {
-    public class PatchGroupConfigRequest
-    {
-        public bool? AllowPlayersToSeeSkillGmDetails { get; set; }
-        public bool? AllowPlayersToAddObject { get; set; }
-        public bool? AllowPlayersToSeeGemPriceWhenIdentified { get; set; }
-    }
+    public bool? AllowPlayersToSeeSkillGmDetails { get; set; }
+    public bool? AllowPlayersToAddObject { get; set; }
+    public bool? AllowPlayersToSeeGemPriceWhenIdentified { get; set; }
 }

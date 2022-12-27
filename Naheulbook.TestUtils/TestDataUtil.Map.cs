@@ -1,13 +1,12 @@
 using System;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.TestUtils
+namespace Naheulbook.TestUtils;
+
+public partial class TestDataUtil
 {
-    public partial class TestDataUtil
+    public TestDataUtil AddMap(Action<MapEntity> customizer = null)
     {
-        public TestDataUtil AddMap(Action<MapEntity> customizer = null)
-        {
-            return SaveEntity(_defaultEntityCreator.CreateMap(), customizer);
-        }
+        return SaveEntity(_defaultEntityCreator.CreateMap(), customizer);
     }
 }

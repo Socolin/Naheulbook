@@ -4,40 +4,39 @@ using Naheulbook.Core.Notifications;
 using Naheulbook.Core.Utils;
 using Naheulbook.Shared.TransientModels;
 
-namespace Naheulbook.Core.Actions.Executor
+namespace Naheulbook.Core.Actions.Executor;
+
+public interface IRemoveItemExecutor : IActionExecutor
 {
-    public interface IRemoveItemExecutor : IActionExecutor
+}
+
+public class RemoveItemExecutor : IRemoveItemExecutor
+{
+    private readonly IItemUtil _itemUtil;
+    private const string ActionType = "removeItem";
+
+    public RemoveItemExecutor(
+        IItemUtil itemUtil
+    )
     {
+        _itemUtil = itemUtil;
     }
 
-    public class RemoveItemExecutor : IRemoveItemExecutor
+    public Task ExecuteAsync(
+        NhbkAction action,
+        ActionContext context,
+        INotificationSession notificationSession
+    )
     {
-        private readonly IItemUtil _itemUtil;
-        private const string ActionType = "removeItem";
+        if (action.Type != ActionType)
+            throw new InvalidActionTypeException(action.Type, ActionType);
 
-        public RemoveItemExecutor(
-            IItemUtil itemUtil
-        )
+        if (_itemUtil.DecrementQuantityOrDeleteItem(context.UsedItem))
         {
-            _itemUtil = itemUtil;
+            context.UnitOfWork.Items.Remove(context.UsedItem);
+            notificationSession.NotifyItemDeleteItem(context.UsedItem);
         }
 
-        public Task ExecuteAsync(
-            NhbkAction action,
-            ActionContext context,
-            INotificationSession notificationSession
-        )
-        {
-            if (action.Type != ActionType)
-                throw new InvalidActionTypeException(action.Type, ActionType);
-
-            if (_itemUtil.DecrementQuantityOrDeleteItem(context.UsedItem))
-            {
-                context.UnitOfWork.Items.Remove(context.UsedItem);
-                notificationSession.NotifyItemDeleteItem(context.UsedItem);
-            }
-
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }

@@ -9,134 +9,133 @@ using Naheulbook.Shared.Utils;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
-namespace Naheulbook.Shared.Clients.Oauth1
+namespace Naheulbook.Shared.Clients.Oauth1;
+
+public class Oauth
 {
-    public class Oauth
+    public string Method { get; set; } = "POST";
+    public string RequestUrl { get; }
+    public string? AccessSecret { get; set; }
+    public string SignatureMethod { get; set; } = "HMAC-SHA1";
+    public string Version { get; set; } = "1.0";
+    private readonly string _consumerSecret;
+    private readonly string _consumerKey;
+    private IDictionary<string, string> Parameters { get; } = new Dictionary<string, string>();
+    private IDictionary<string, string> OauthParameters { get; } = new Dictionary<string, string>();
+
+    public Oauth(string consumerKey, string consumerSecret, string requestUrl)
     {
-        public string Method { get; set; } = "POST";
-        public string RequestUrl { get; }
-        public string? AccessSecret { get; set; }
-        public string SignatureMethod { get; set; } = "HMAC-SHA1";
-        public string Version { get; set; } = "1.0";
-        private readonly string _consumerSecret;
-        private readonly string _consumerKey;
-        private IDictionary<string, string> Parameters { get; } = new Dictionary<string, string>();
-        private IDictionary<string, string> OauthParameters { get; } = new Dictionary<string, string>();
+        _consumerKey = consumerKey;
+        _consumerSecret = consumerSecret;
+        RequestUrl = requestUrl;
+    }
 
-        public Oauth(string consumerKey, string consumerSecret, string requestUrl)
+    private void UpdateDefaultOauthParameters()
+    {
+        OauthParameters["nonce"] = RngHelper.GetRandomHexString(10);
+        OauthParameters["timestamp"] = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
+        OauthParameters["consumer_key"] = _consumerKey;
+        OauthParameters["signature_method"] = SignatureMethod;
+        OauthParameters["version"] = Version;
+    }
+
+    public void AddOauthParameter(string key, string value)
+    {
+        OauthParameters[key] = value;
+    }
+
+    public void AddParameter(string key, string value)
+    {
+        Parameters[key] = value;
+    }
+
+    private string ParametersAsString()
+    {
+        IDictionary<string, string> allParams = new Dictionary<string, string>();
+        foreach (var p in OauthParameters)
         {
-            _consumerKey = consumerKey;
-            _consumerSecret = consumerSecret;
-            RequestUrl = requestUrl;
+            allParams[$"oauth_{p.Key}"] = p.Value;
         }
 
-        private void UpdateDefaultOauthParameters()
+        foreach (var p in Parameters)
         {
-            OauthParameters["nonce"] = RngHelper.GetRandomHexString(10);
-            OauthParameters["timestamp"] = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
-            OauthParameters["consumer_key"] = _consumerKey;
-            OauthParameters["signature_method"] = SignatureMethod;
-            OauthParameters["version"] = Version;
+            allParams[p.Key] = p.Value;
         }
 
-        public void AddOauthParameter(string key, string value)
+        var paramsAsString = string.Join("&", allParams
+            .OrderBy(k => k.Key)
+            .Select(s => Uri.EscapeDataString(s.Key) + "=" + Uri.EscapeDataString(s.Value)));
+
+        return paramsAsString;
+    }
+
+
+    private string SignatureBaseString()
+    {
+        var paramString = ParametersAsString();
+        var signatureBaseString = $"{Method}&{Uri.EscapeDataString(RequestUrl)}&{Uri.EscapeDataString(paramString)}";
+
+        return signatureBaseString;
+    }
+
+    private string SignatureKey()
+    {
+        var signatureKey = Uri.EscapeDataString(_consumerSecret) + "&";
+        if (!string.IsNullOrEmpty(AccessSecret))
         {
-            OauthParameters[key] = value;
+            signatureKey += Uri.EscapeDataString(AccessSecret);
         }
 
-        public void AddParameter(string key, string value)
-        {
-            Parameters[key] = value;
-        }
+        return signatureKey;
+    }
 
-        private string ParametersAsString()
+    private string GenerateSignature()
+    {
+        using (var algorithm = new HMACSHA1())
         {
-            IDictionary<string, string> allParams = new Dictionary<string, string>();
-            foreach (var p in OauthParameters)
+            var signatureKey = SignatureKey();
+            algorithm.Key = Encoding.ASCII.GetBytes(signatureKey);
+            var signatureBaseString = SignatureBaseString();
+            var hash = algorithm.ComputeHash(Encoding.ASCII.GetBytes(signatureBaseString));
+            return Convert.ToBase64String(hash);
+        }
+    }
+
+    public string AuthorizationHeader()
+    {
+        UpdateDefaultOauthParameters();
+
+        OauthParameters["signature"] = GenerateSignature();
+
+        var oauthParams = string.Join(", ", OauthParameters
+            .OrderBy(k => k.Key)
+            .Select(s => Uri.EscapeDataString($"oauth_{s.Key}") + "=\"" + Uri.EscapeDataString(s.Value) + "\""));
+
+        OauthParameters.Remove("signature");
+
+        return $"OAuth {oauthParams}";
+    }
+
+    public async Task<IDictionary<string, string>> DoRequest()
+    {
+        using (var httpClient = new HttpClient())
+        {
+            var authorizationHeader = AuthorizationHeader();
+            httpClient.DefaultRequestHeaders.Add("Authorization", authorizationHeader);
+
+            // `!` is added because this issue https://github.com/dotnet/runtime/issues/54367
+            using (var response = await httpClient.PostAsync(RequestUrl, new FormUrlEncodedContent(Parameters)))
+            using (var content = response.Content)
             {
-                allParams[$"oauth_{p.Key}"] = p.Value;
-            }
-
-            foreach (var p in Parameters)
-            {
-                allParams[p.Key] = p.Value;
-            }
-
-            var paramsAsString = string.Join("&", allParams
-                .OrderBy(k => k.Key)
-                .Select(s => Uri.EscapeDataString(s.Key) + "=" + Uri.EscapeDataString(s.Value)));
-
-            return paramsAsString;
-        }
-
-
-        private string SignatureBaseString()
-        {
-            var paramString = ParametersAsString();
-            var signatureBaseString = $"{Method}&{Uri.EscapeDataString(RequestUrl)}&{Uri.EscapeDataString(paramString)}";
-
-            return signatureBaseString;
-        }
-
-        private string SignatureKey()
-        {
-            var signatureKey = Uri.EscapeDataString(_consumerSecret) + "&";
-            if (!string.IsNullOrEmpty(AccessSecret))
-            {
-                signatureKey += Uri.EscapeDataString(AccessSecret);
-            }
-
-            return signatureKey;
-        }
-
-        private string GenerateSignature()
-        {
-            using (var algorithm = new HMACSHA1())
-            {
-                var signatureKey = SignatureKey();
-                algorithm.Key = Encoding.ASCII.GetBytes(signatureKey);
-                var signatureBaseString = SignatureBaseString();
-                var hash = algorithm.ComputeHash(Encoding.ASCII.GetBytes(signatureBaseString));
-                return Convert.ToBase64String(hash);
-            }
-        }
-
-        public string AuthorizationHeader()
-        {
-            UpdateDefaultOauthParameters();
-
-            OauthParameters["signature"] = GenerateSignature();
-
-            var oauthParams = string.Join(", ", OauthParameters
-                .OrderBy(k => k.Key)
-                .Select(s => Uri.EscapeDataString($"oauth_{s.Key}") + "=\"" + Uri.EscapeDataString(s.Value) + "\""));
-
-            OauthParameters.Remove("signature");
-
-            return $"OAuth {oauthParams}";
-        }
-
-        public async Task<IDictionary<string, string>> DoRequest()
-        {
-            using (var httpClient = new HttpClient())
-            {
-                var authorizationHeader = AuthorizationHeader();
-                httpClient.DefaultRequestHeaders.Add("Authorization", authorizationHeader);
-
-                // `!` is added because this issue https://github.com/dotnet/runtime/issues/54367
-                using (var response = await httpClient.PostAsync(RequestUrl, new FormUrlEncodedContent(Parameters)))
-                using (var content = response.Content)
+                var result = await content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
                 {
-                    var result = await content.ReadAsStringAsync();
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return result.Split('&')
-                            .Select(s => s.Split(new[] {'='}, 2))
-                            .ToDictionary(s => s[0], s => s[1]);
-                    }
-
-                    throw new OAuthException(RequestUrl, (int) response.StatusCode, result);
+                    return result.Split('&')
+                        .Select(s => s.Split(new[] {'='}, 2))
+                        .ToDictionary(s => s[0], s => s[1]);
                 }
+
+                throw new OAuthException(RequestUrl, (int) response.StatusCode, result);
             }
         }
     }

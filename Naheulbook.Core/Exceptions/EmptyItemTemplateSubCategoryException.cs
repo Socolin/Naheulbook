@@ -3,15 +3,14 @@
 
 using System;
 
-namespace Naheulbook.Core.Exceptions
-{
-    public class EmptyItemTemplateSubCategoryException : Exception
-    {
-        public int ItemTemplateSubCategoryId { get; }
+namespace Naheulbook.Core.Exceptions;
 
-        public EmptyItemTemplateSubCategoryException(int itemTemplateSubCategoryId)
-        {
-            ItemTemplateSubCategoryId = itemTemplateSubCategoryId;
-        }
+public class EmptyItemTemplateSubCategoryException : Exception
+{
+    public int ItemTemplateSubCategoryId { get; }
+
+    public EmptyItemTemplateSubCategoryException(int itemTemplateSubCategoryId)
+    {
+        ItemTemplateSubCategoryId = itemTemplateSubCategoryId;
     }
 }

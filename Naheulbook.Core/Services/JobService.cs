@@ -3,28 +3,27 @@ using System.Threading.Tasks;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface IJobService
 {
-    public interface IJobService
+    Task<ICollection<JobEntity>> GetJobsAsync();
+}
+
+public class JobService : IJobService
+{
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+
+    public JobService(IUnitOfWorkFactory unitOfWorkFactory)
     {
-        Task<ICollection<JobEntity>> GetJobsAsync();
+        _unitOfWorkFactory = unitOfWorkFactory;
     }
 
-    public class JobService : IJobService
+    public async Task<ICollection<JobEntity>> GetJobsAsync()
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-        public JobService(IUnitOfWorkFactory unitOfWorkFactory)
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-        }
-
-        public async Task<ICollection<JobEntity>> GetJobsAsync()
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                return await uow.Jobs.GetAllWithAllDataAsync();
-            }
+            return await uow.Jobs.GetAllWithAllDataAsync();
         }
     }
 }

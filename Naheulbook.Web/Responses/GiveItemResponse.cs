@@ -1,7 +1,6 @@
-namespace Naheulbook.Web.Responses
+namespace Naheulbook.Web.Responses;
+
+public class GiveItemResponse
 {
-    public class GiveItemResponse
-    {
-        public int RemainingQuantity { get; set; }
-    }
+    public int RemainingQuantity { get; set; }
 }

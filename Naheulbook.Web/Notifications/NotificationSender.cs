@@ -5,29 +5,28 @@ using Naheulbook.Core.Notifications;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Hubs;
 
-namespace Naheulbook.Web.Notifications
+namespace Naheulbook.Web.Notifications;
+
+public class NotificationSender : INotificationSender
 {
-    public class NotificationSender : INotificationSender
+    private readonly IHubContext<ChangeNotifierHub> _hubContext;
+    private readonly IJsonUtil _jsonUtil;
+
+    public NotificationSender(
+        IHubContext<ChangeNotifierHub> hubContext,
+        IJsonUtil jsonUtil
+    )
     {
-        private readonly IHubContext<ChangeNotifierHub> _hubContext;
-        private readonly IJsonUtil _jsonUtil;
+        _hubContext = hubContext;
+        _jsonUtil = jsonUtil;
+    }
 
-        public NotificationSender(
-            IHubContext<ChangeNotifierHub> hubContext,
-            IJsonUtil jsonUtil
-        )
+    public async Task SendPacketsAsync(IEnumerable<INotificationPacket> packets)
+    {
+        foreach (var notificationPacket in packets)
         {
-            _hubContext = hubContext;
-            _jsonUtil = jsonUtil;
-        }
-
-        public async Task SendPacketsAsync(IEnumerable<INotificationPacket> packets)
-        {
-            foreach (var notificationPacket in packets)
-            {
-                await _hubContext.Clients.Group(notificationPacket.GroupName)
-                    .SendAsync("event", _jsonUtil.Serialize(notificationPacket.Payload));
-            }
+            await _hubContext.Clients.Group(notificationPacket.GroupName)
+                .SendAsync("event", _jsonUtil.Serialize(notificationPacket.Payload));
         }
     }
 }

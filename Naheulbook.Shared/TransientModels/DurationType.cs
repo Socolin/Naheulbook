@@ -1,12 +1,11 @@
-namespace Naheulbook.Shared.TransientModels
+namespace Naheulbook.Shared.TransientModels;
+
+public enum DurationType
 {
-    public enum DurationType
-    {
-        None,
-        Custom,
-        Time,
-        Combat,
-        Lap,
-        Forever
-    }
+    None,
+    Custom,
+    Time,
+    Combat,
+    Lap,
+    Forever
 }

@@ -6,61 +6,60 @@ using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Data.Repositories
+namespace Naheulbook.Data.Repositories;
+
+public interface IEffectRepository : IRepository<EffectEntity>
 {
-    public interface IEffectRepository : IRepository<EffectEntity>
+    Task<ICollection<EffectTypeEntity>> GetCategoriesAsync();
+    Task<ICollection<EffectEntity>> GetBySubCategoryWithModifiersAsync(long subCategoryId);
+    Task<EffectEntity?> GetWithModifiersAsync(int effectId);
+    Task<List<EffectEntity>> SearchByNameAsync(string partialName, int maxResult);
+    Task<EffectEntity?> GetWithEffectWithModifiersAsync(int effectId);
+}
+
+public class EffectRepository : Repository<EffectEntity, NaheulbookDbContext>, IEffectRepository
+{
+    public EffectRepository(NaheulbookDbContext naheulbookDbContext)
+        : base(naheulbookDbContext)
     {
-        Task<ICollection<EffectTypeEntity>> GetCategoriesAsync();
-        Task<ICollection<EffectEntity>> GetBySubCategoryWithModifiersAsync(long subCategoryId);
-        Task<EffectEntity?> GetWithModifiersAsync(int effectId);
-        Task<List<EffectEntity>> SearchByNameAsync(string partialName, int maxResult);
-        Task<EffectEntity?> GetWithEffectWithModifiersAsync(int effectId);
     }
 
-    public class EffectRepository : Repository<EffectEntity, NaheulbookDbContext>, IEffectRepository
+    public async Task<ICollection<EffectTypeEntity>> GetCategoriesAsync()
     {
-        public EffectRepository(NaheulbookDbContext naheulbookDbContext)
-            : base(naheulbookDbContext)
-        {
-        }
+        return await Context.EffectTypes
+            .Include(e => e.SubCategories)
+            .ToListAsync();
+    }
 
-        public async Task<ICollection<EffectTypeEntity>> GetCategoriesAsync()
-        {
-            return await Context.EffectTypes
-                .Include(e => e.SubCategories)
-                .ToListAsync();
-        }
+    public async Task<ICollection<EffectEntity>> GetBySubCategoryWithModifiersAsync(long subCategoryId)
+    {
+        return await Context.Effects
+            .Where(e => e.SubCategoryId == subCategoryId)
+            .Include(e => e.Modifiers)
+            .ToListAsync();
+    }
 
-        public async Task<ICollection<EffectEntity>> GetBySubCategoryWithModifiersAsync(long subCategoryId)
-        {
-            return await Context.Effects
-                .Where(e => e.SubCategoryId == subCategoryId)
-                .Include(e => e.Modifiers)
-                .ToListAsync();
-        }
+    public Task<EffectEntity?> GetWithModifiersAsync(int effectId)
+    {
+        return Context.Effects
+            .Include(e => e.Modifiers)
+            .FirstAsync(e => e.Id == effectId);
+    }
 
-        public Task<EffectEntity?> GetWithModifiersAsync(int effectId)
-        {
-            return Context.Effects
-                .Include(e => e.Modifiers)
-                .FirstAsync(e => e.Id == effectId);
-        }
+    public Task<List<EffectEntity>> SearchByNameAsync(string partialName, int maxResult)
+    {
+        return Context.Effects
+            .Include(e => e.Modifiers)
+            .Where(e => e.Name.ToUpper().Contains(partialName.ToUpper()))
+            .Take(maxResult)
+            .ToListAsync();
+    }
 
-        public Task<List<EffectEntity>> SearchByNameAsync(string partialName, int maxResult)
-        {
-            return Context.Effects
-                .Include(e => e.Modifiers)
-                .Where(e => e.Name.ToUpper().Contains(partialName.ToUpper()))
-                .Take(maxResult)
-                .ToListAsync();
-        }
-
-        public Task<EffectEntity?> GetWithEffectWithModifiersAsync(int effectId)
-        {
-            return Context.Effects
-                .Include(e => e.SubCategory)
-                .Include(e => e.Modifiers)
-                .FirstAsync(e => e.Id == effectId);
-        }
+    public Task<EffectEntity?> GetWithEffectWithModifiersAsync(int effectId)
+    {
+        return Context.Effects
+            .Include(e => e.SubCategory)
+            .Include(e => e.Modifiers)
+            .FirstAsync(e => e.Id == effectId);
     }
 }

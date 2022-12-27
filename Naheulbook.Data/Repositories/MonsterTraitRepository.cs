@@ -1,17 +1,16 @@
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Data.Repositories
-{
-    public interface IMonsterTraitRepository : IRepository<MonsterTraitEntity>
-    {
-    }
+namespace Naheulbook.Data.Repositories;
 
-    public class MonsterTraitRepository : Repository<MonsterTraitEntity, NaheulbookDbContext>, IMonsterTraitRepository
+public interface IMonsterTraitRepository : IRepository<MonsterTraitEntity>
+{
+}
+
+public class MonsterTraitRepository : Repository<MonsterTraitEntity, NaheulbookDbContext>, IMonsterTraitRepository
+{
+    public MonsterTraitRepository(NaheulbookDbContext context)
+        : base(context)
     {
-        public MonsterTraitRepository(NaheulbookDbContext context)
-            : base(context)
-        {
-        }
     }
 }

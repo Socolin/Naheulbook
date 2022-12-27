@@ -1,7 +1,6 @@
-namespace Naheulbook.Web.Responses
+namespace Naheulbook.Web.Responses;
+
+public class IdResponse
 {
-    public class IdResponse
-    {
-        public int Id { get; set; }
-    }
+    public int Id { get; set; }
 }

@@ -1,21 +1,20 @@
-namespace Naheulbook.Core.Models
+namespace Naheulbook.Core.Models;
+
+public class OptionalNaheulbookExecutionContext
 {
-    public class OptionalNaheulbookExecutionContext
+    public OptionalNaheulbookExecutionContext()
     {
-        public OptionalNaheulbookExecutionContext()
-        {
-        }
-
-        public OptionalNaheulbookExecutionContext(NaheulbookExecutionContext? executionContext)
-        {
-            ExecutionExecutionContext = executionContext;
-        }
-
-        public NaheulbookExecutionContext? ExecutionExecutionContext { get; set; }
     }
 
-    public class NaheulbookExecutionContext
+    public OptionalNaheulbookExecutionContext(NaheulbookExecutionContext? executionContext)
     {
-        public int UserId { get; set; }
+        ExecutionExecutionContext = executionContext;
     }
+
+    public NaheulbookExecutionContext? ExecutionExecutionContext { get; set; }
+}
+
+public class NaheulbookExecutionContext
+{
+    public int UserId { get; set; }
 }

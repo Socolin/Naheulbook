@@ -1,9 +1,8 @@
-namespace Naheulbook.Web.Responses
+namespace Naheulbook.Web.Responses;
+
+public class DeleteInviteResponse
 {
-    public class DeleteInviteResponse
-    {
-        public int GroupId { get; set; }
-        public int CharacterId { get; set; }
-        public bool FromGroup { get; set; }
-    }
+    public int GroupId { get; set; }
+    public int CharacterId { get; set; }
+    public bool FromGroup { get; set; }
 }

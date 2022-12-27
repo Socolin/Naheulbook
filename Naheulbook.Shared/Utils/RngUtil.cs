@@ -1,33 +1,32 @@
-namespace Naheulbook.Shared.Utils
+namespace Naheulbook.Shared.Utils;
+
+public interface IRngUtil
 {
-    public interface IRngUtil
+    string GetRandomHexString(int byteCount);
+    string GetRandomString(string prefix);
+    int GetRandomInt();
+    int GetRandomInt(int min, int max);
+}
+
+public class RngUtil : IRngUtil
+{
+    public string GetRandomHexString(int byteCount)
     {
-        string GetRandomHexString(int byteCount);
-        string GetRandomString(string prefix);
-        int GetRandomInt();
-        int GetRandomInt(int min, int max);
+        return RngHelper.GetRandomHexString(byteCount);
     }
 
-    public class RngUtil : IRngUtil
+    public string GetRandomString(string prefix)
     {
-        public string GetRandomHexString(int byteCount)
-        {
-            return RngHelper.GetRandomHexString(byteCount);
-        }
+        return RngHelper.GetRandomString(prefix);
+    }
 
-        public string GetRandomString(string prefix)
-        {
-            return RngHelper.GetRandomString(prefix);
-        }
+    public int GetRandomInt()
+    {
+        return RngHelper.GetRandomInt();
+    }
 
-        public int GetRandomInt()
-        {
-            return RngHelper.GetRandomInt();
-        }
-
-        public int GetRandomInt(int min, int max)
-        {
-            return RngHelper.GetRandomInt(min, max);
-        }
+    public int GetRandomInt(int min, int max)
+    {
+        return RngHelper.GetRandomInt(min, max);
     }
 }

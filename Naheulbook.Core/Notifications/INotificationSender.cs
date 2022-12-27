@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Naheulbook.Core.Notifications
+namespace Naheulbook.Core.Notifications;
+
+public interface INotificationSender
 {
-    public interface INotificationSender
-    {
-        Task SendPacketsAsync(IEnumerable<INotificationPacket> packets);
-    }
+    Task SendPacketsAsync(IEnumerable<INotificationPacket> packets);
 }

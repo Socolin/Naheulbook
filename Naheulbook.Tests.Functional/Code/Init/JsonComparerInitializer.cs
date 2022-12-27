@@ -5,56 +5,55 @@ using Socolin.TestUtils.JsonComparer;
 using Socolin.TestUtils.JsonComparer.Color;
 using TechTalk.SpecFlow;
 
-namespace Naheulbook.Tests.Functional.Code.Init
+namespace Naheulbook.Tests.Functional.Code.Init;
+
+[Binding]
+public class JsonComparerInitializer
 {
-    [Binding]
-    public class JsonComparerInitializer
+    private readonly IObjectContainer _objectContainer;
+    private readonly ScenarioContext _scenarioContext;
+
+    public JsonComparerInitializer(IObjectContainer objectContainer, ScenarioContext scenarioContext)
     {
-        private readonly IObjectContainer _objectContainer;
-        private readonly ScenarioContext _scenarioContext;
+        _objectContainer = objectContainer;
+        _scenarioContext = scenarioContext;
+    }
 
-        public JsonComparerInitializer(IObjectContainer objectContainer, ScenarioContext scenarioContext)
+    [BeforeScenario]
+    public void InitializeJsonComparer()
+    {
+        var jsonColorOptions = new JsonComparerColorOptions
         {
-            _objectContainer = objectContainer;
-            _scenarioContext = scenarioContext;
-        }
-
-        [BeforeScenario]
-        public void InitializeJsonComparer()
+            ColorizeDiff = true,
+            ColorizeJson = true,
+            Theme = new JsonComparerColorTheme
+            {
+                DiffAddition = AnsiColor.Background(TerminalRgbColor.FromHex("21541A")),
+                DiffDeletion = AnsiColor.Background(TerminalRgbColor.FromHex("542822")),
+            }
+        };
+        _objectContainer.RegisterInstanceAs(jsonColorOptions, typeof(JsonComparerColorOptions));
+        var jsonComparer = JsonComparer.GetDefault((name, value) =>
         {
-            var jsonColorOptions = new JsonComparerColorOptions
+            switch (value.Type)
             {
-                ColorizeDiff = true,
-                ColorizeJson = true,
-                Theme = new JsonComparerColorTheme
-                {
-                    DiffAddition = AnsiColor.Background(TerminalRgbColor.FromHex("21541A")),
-                    DiffDeletion = AnsiColor.Background(TerminalRgbColor.FromHex("542822")),
-                }
-            };
-            _objectContainer.RegisterInstanceAs(jsonColorOptions, typeof(JsonComparerColorOptions));
-            var jsonComparer = JsonComparer.GetDefault((name, value) =>
-            {
-                switch (value.Type)
-                {
-                    case JTokenType.Integer:
-                        _scenarioContext[name] = value.ToObject<int>();
-                        break;
-                    case JTokenType.Float:
-                        _scenarioContext[name] = value.ToObject<float>();
-                        break;
-                    case JTokenType.String:
-                        _scenarioContext[name] = value.ToObject<string>();
-                        break;
-                    case JTokenType.Boolean:
-                        _scenarioContext[name] = value.ToObject<bool>();
-                        break;
-                    default:
-                        _scenarioContext[name] = value;
-                        break;
-                }
-            }, colorOptions: jsonColorOptions);
-            _objectContainer.RegisterInstanceAs(jsonComparer, typeof(IJsonComparer));
-        }
+                case JTokenType.Integer:
+                    _scenarioContext[name] = value.ToObject<int>();
+                    break;
+                case JTokenType.Float:
+                    _scenarioContext[name] = value.ToObject<float>();
+                    break;
+                case JTokenType.String:
+                    _scenarioContext[name] = value.ToObject<string>();
+                    break;
+                case JTokenType.Boolean:
+                    _scenarioContext[name] = value.ToObject<bool>();
+                    break;
+                default:
+                    _scenarioContext[name] = value;
+                    break;
+            }
+        }, colorOptions: jsonColorOptions);
+        _objectContainer.RegisterInstanceAs(jsonComparer, typeof(IJsonComparer));
     }
 }

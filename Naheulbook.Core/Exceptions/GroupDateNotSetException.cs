@@ -1,9 +1,8 @@
 using System;
 
-namespace Naheulbook.Core.Exceptions
-{
-    public class GroupDateNotSetException : Exception
-    {
+namespace Naheulbook.Core.Exceptions;
 
-    }
+public class GroupDateNotSetException : Exception
+{
+
 }

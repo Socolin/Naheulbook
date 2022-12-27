@@ -11,255 +11,254 @@ using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
-namespace Naheulbook.Web.Controllers
+namespace Naheulbook.Web.Controllers;
+
+[ApiController]
+[Route("api/v2/monsters")]
+public class MonsterController : ControllerBase
 {
-    [ApiController]
-    [Route("api/v2/monsters")]
-    public class MonsterController : ControllerBase
+    private readonly IMonsterService _monsterService;
+    private readonly IMapper _mapper;
+
+    public MonsterController(
+        IMonsterService monsterService,
+        IMapper mapper
+    )
     {
-        private readonly IMonsterService _monsterService;
-        private readonly IMapper _mapper;
+        _monsterService = monsterService;
+        _mapper = mapper;
+    }
 
-        public MonsterController(
-            IMonsterService monsterService,
-            IMapper mapper
-        )
+    [HttpGet("{MonsterId}")]
+    public async Task<ActionResult<MonsterResponse>> GetMonsterAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterId
+    )
+    {
+        try
         {
-            _monsterService = monsterService;
-            _mapper = mapper;
+            var monster = await _monsterService.GetMonsterAsync(executionContext, monsterId);
+            return _mapper.Map<MonsterResponse>(monster);
         }
-
-        [HttpGet("{MonsterId}")]
-        public async Task<ActionResult<MonsterResponse>> GetMonsterAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int monsterId
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                var monster = await _monsterService.GetMonsterAsync(executionContext, monsterId);
-                return _mapper.Map<MonsterResponse>(monster);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (MonsterNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
-
-        [HttpDelete("{MonsterId}")]
-        public async Task<CreatedActionResult<ActiveStatsModifier>> DeleteMonsterAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int monsterId
-        )
+        catch (MonsterNotFoundException ex)
         {
-            try
-            {
-                await _monsterService.DeleteMonsterAsync(executionContext, monsterId);
-                return NoContent();
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (MonsterNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }
+    }
 
-        [HttpPost("{MonsterId}/kill")]
-        public async Task<CreatedActionResult<ActiveStatsModifier>> PostKillMonsterAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int monsterId
-        )
+    [HttpDelete("{MonsterId}")]
+    public async Task<CreatedActionResult<ActiveStatsModifier>> DeleteMonsterAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterId
+    )
+    {
+        try
         {
-            try
-            {
-                await _monsterService.KillMonsterAsync(executionContext, monsterId);
-                return NoContent();
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (MonsterNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            await _monsterService.DeleteMonsterAsync(executionContext, monsterId);
+            return NoContent();
         }
-
-        [HttpPost("{MonsterId}/modifiers")]
-        public async Task<CreatedActionResult<ActiveStatsModifier>> PostAddModifierAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int monsterId,
-            ActiveStatsModifier statsModifier
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                var modifier = await _monsterService.AddModifierAsync(executionContext, monsterId, statsModifier);
-                return modifier;
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (MonsterNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
-
-        [HttpDelete("{MonsterId}/modifiers/{ModifierId}")]
-        public async Task<CreatedActionResult<ActiveStatsModifier>> DeleteModifierAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int monsterId,
-            [FromRoute] int modifierId
-        )
+        catch (MonsterNotFoundException ex)
         {
-            try
-            {
-                await _monsterService.RemoveModifierAsync(executionContext, monsterId, modifierId);
-                return NoContent();
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (MonsterModifierNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
-            catch (MonsterNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }
+    }
 
-        [HttpPut("{MonsterId:int:min(1)}/data")]
-        public async Task<CreatedActionResult<ItemResponse>> PutMonsterDataAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int monsterId,
-            MonsterData request
-        )
+    [HttpPost("{MonsterId}/kill")]
+    public async Task<CreatedActionResult<ActiveStatsModifier>> PostKillMonsterAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterId
+    )
+    {
+        try
         {
-            try
-            {
-                await _monsterService.UpdateMonsterDataAsync(executionContext, monsterId, request);
-                return NoContent();
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (MonsterNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            await _monsterService.KillMonsterAsync(executionContext, monsterId);
+            return NoContent();
         }
-
-        [HttpPut("{MonsterId:int:min(1)}/target")]
-        public async Task<CreatedActionResult<ItemResponse>> PutMonsterTargetAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int monsterId,
-            TargetRequest request
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                await _monsterService.UpdateMonsterTargetAsync(executionContext, monsterId, request);
-                return NoContent();
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (MonsterNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
-            catch (TargetNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
-
-        [HttpPatch("{MonsterId:int:min(1)}")]
-        public async Task<CreatedActionResult<ItemResponse>> PatchMonsterAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int monsterId,
-            PatchMonsterRequest request
-        )
+        catch (MonsterNotFoundException ex)
         {
-            try
-            {
-                await _monsterService.UpdateMonsterAsync(executionContext, monsterId, request);
-                return NoContent();
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (MonsterNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }
+    }
 
-        [HttpPost("{MonsterId:int:min(1)}/items")]
-        public async Task<CreatedActionResult<ItemResponse>> PostAddItemToMonsterInventoryAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int monsterId,
-            CreateItemRequest request
-        )
+    [HttpPost("{MonsterId}/modifiers")]
+    public async Task<CreatedActionResult<ActiveStatsModifier>> PostAddModifierAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterId,
+        ActiveStatsModifier statsModifier
+    )
+    {
+        try
         {
-            try
-            {
-                var item = await _monsterService.AddItemToMonsterAsync(executionContext, monsterId, request);
-                return _mapper.Map<ItemResponse>(item);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (MonsterNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
-            catch (ItemTemplateNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
-            }
+            var modifier = await _monsterService.AddModifierAsync(executionContext, monsterId, statsModifier);
+            return modifier;
         }
-
-        [HttpPost("{MonsterId:int:min(1)}/addRandomItem")]
-        public async Task<CreatedActionResult<ItemResponse>> PostAddRandomItemToMonsterInventoryAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int monsterId,
-            CreateRandomItemRequest request
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                var item = await _monsterService.AddRandomItemToMonsterAsync(executionContext, monsterId, request);
-                return _mapper.Map<ItemResponse>(item);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (MonsterNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
-            catch (ItemTemplateSubCategoryNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (MonsterNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpDelete("{MonsterId}/modifiers/{ModifierId}")]
+    public async Task<CreatedActionResult<ActiveStatsModifier>> DeleteModifierAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterId,
+        [FromRoute] int modifierId
+    )
+    {
+        try
+        {
+            await _monsterService.RemoveModifierAsync(executionContext, monsterId, modifierId);
+            return NoContent();
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (MonsterModifierNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+        catch (MonsterNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpPut("{MonsterId:int:min(1)}/data")]
+    public async Task<CreatedActionResult<ItemResponse>> PutMonsterDataAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterId,
+        MonsterData request
+    )
+    {
+        try
+        {
+            await _monsterService.UpdateMonsterDataAsync(executionContext, monsterId, request);
+            return NoContent();
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (MonsterNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpPut("{MonsterId:int:min(1)}/target")]
+    public async Task<CreatedActionResult<ItemResponse>> PutMonsterTargetAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterId,
+        TargetRequest request
+    )
+    {
+        try
+        {
+            await _monsterService.UpdateMonsterTargetAsync(executionContext, monsterId, request);
+            return NoContent();
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (MonsterNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+        catch (TargetNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+        }
+    }
+
+    [HttpPatch("{MonsterId:int:min(1)}")]
+    public async Task<CreatedActionResult<ItemResponse>> PatchMonsterAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterId,
+        PatchMonsterRequest request
+    )
+    {
+        try
+        {
+            await _monsterService.UpdateMonsterAsync(executionContext, monsterId, request);
+            return NoContent();
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (MonsterNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpPost("{MonsterId:int:min(1)}/items")]
+    public async Task<CreatedActionResult<ItemResponse>> PostAddItemToMonsterInventoryAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterId,
+        CreateItemRequest request
+    )
+    {
+        try
+        {
+            var item = await _monsterService.AddItemToMonsterAsync(executionContext, monsterId, request);
+            return _mapper.Map<ItemResponse>(item);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (MonsterNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+        catch (ItemTemplateNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+        }
+    }
+
+    [HttpPost("{MonsterId:int:min(1)}/addRandomItem")]
+    public async Task<CreatedActionResult<ItemResponse>> PostAddRandomItemToMonsterInventoryAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterId,
+        CreateRandomItemRequest request
+    )
+    {
+        try
+        {
+            var item = await _monsterService.AddRandomItemToMonsterAsync(executionContext, monsterId, request);
+            return _mapper.Map<ItemResponse>(item);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (MonsterNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+        catch (ItemTemplateSubCategoryNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
         }
     }
 }

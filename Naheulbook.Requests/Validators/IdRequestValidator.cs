@@ -1,13 +1,12 @@
 using FluentValidation;
 using Naheulbook.Requests.Requests;
 
-namespace Naheulbook.Requests.Validators
+namespace Naheulbook.Requests.Validators;
+
+public class IdRequestValidator : AbstractValidator<IdRequest>
 {
-    public class IdRequestValidator : AbstractValidator<IdRequest>
+    public IdRequestValidator()
     {
-        public IdRequestValidator()
-        {
-            RuleFor(r => r.Id).GreaterThan(0);
-        }
+        RuleFor(r => r.Id).GreaterThan(0);
     }
 }

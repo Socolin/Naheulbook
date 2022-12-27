@@ -1,7 +1,6 @@
-namespace Naheulbook.Requests.Requests
+namespace Naheulbook.Requests.Requests;
+
+public class GenerateJwtRequest
 {
-    public class GenerateJwtRequest
-    {
-        public string Password { get; set; } = null!;
-    }
+    public string Password { get; set; } = null!;
 }

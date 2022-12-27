@@ -1,9 +1,8 @@
-namespace Naheulbook.Web.Responses
+namespace Naheulbook.Web.Responses;
+
+public class ItemTypeResponse
 {
-    public class ItemTypeResponse
-    {
-        public int Id { get; set; }
-        public string DisplayName { get; set; } = null!;
-        public string TechName { get; set; } = null!;
-    }
+    public int Id { get; set; }
+    public string DisplayName { get; set; } = null!;
+    public string TechName { get; set; } = null!;
 }

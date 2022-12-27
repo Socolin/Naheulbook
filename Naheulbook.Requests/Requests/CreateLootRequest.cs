@@ -1,7 +1,6 @@
-namespace Naheulbook.Requests.Requests
+namespace Naheulbook.Requests.Requests;
+
+public class CreateLootRequest
 {
-    public class CreateLootRequest
-    {
-        public string Name { get; set; } = null!;
-    }
+    public string Name { get; set; } = null!;
 }

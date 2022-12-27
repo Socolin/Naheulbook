@@ -1,10 +1,9 @@
 using Newtonsoft.Json;
 
-namespace Naheulbook.Shared.Clients.Facebook.Responses
+namespace Naheulbook.Shared.Clients.Facebook.Responses;
+
+public class FacebookAccessTokenResponse
 {
-    public class FacebookAccessTokenResponse
-    {
-        [JsonProperty("access_token")]
-        public string AccessToken { get; set; } = null!;
-    }
+    [JsonProperty("access_token")]
+    public string AccessToken { get; set; } = null!;
 }

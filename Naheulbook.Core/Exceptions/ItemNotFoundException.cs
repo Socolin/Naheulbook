@@ -3,15 +3,14 @@ using System;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace Naheulbook.Core.Exceptions
-{
-    public class ItemNotFoundException : Exception
-    {
-        public int ItemId { get; }
+namespace Naheulbook.Core.Exceptions;
 
-        public ItemNotFoundException(int itemId)
-        {
-            ItemId = itemId;
-        }
+public class ItemNotFoundException : Exception
+{
+    public int ItemId { get; }
+
+    public ItemNotFoundException(int itemId)
+    {
+        ItemId = itemId;
     }
 }

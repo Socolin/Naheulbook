@@ -2,27 +2,26 @@ using FluentAssertions;
 using Naheulbook.Core.Services;
 using NUnit.Framework;
 
-namespace Naheulbook.Core.Tests.Unit.Services
+namespace Naheulbook.Core.Tests.Unit.Services;
+
+public class PasswordHashingServiceTests
 {
-    public class PasswordHashingServiceTests
+    private PasswordHashingService _passwordHashingService;
+
+    [SetUp]
+    public void SetUp()
     {
-        private PasswordHashingService _passwordHashingService;
+        _passwordHashingService = new PasswordHashingService();
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _passwordHashingService = new PasswordHashingService();
-        }
+    [Test]
+    public void CanHashPassword_ThenVerifyIt()
+    {
+        const string password = "some-password";
 
-        [Test]
-        public void CanHashPassword_ThenVerifyIt()
-        {
-            const string password = "some-password";
+        var hashedPassword = _passwordHashingService.HashPassword(password);
+        var passwordsMatches = _passwordHashingService.VerifyPassword(hashedPassword, password);
 
-            var hashedPassword = _passwordHashingService.HashPassword(password);
-            var passwordsMatches = _passwordHashingService.VerifyPassword(hashedPassword, password);
-
-            passwordsMatches.Should().BeTrue();
-        }
+        passwordsMatches.Should().BeTrue();
     }
 }

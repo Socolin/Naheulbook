@@ -1,9 +1,8 @@
 // ReSharper disable UnusedMember.Global
 
-namespace Naheulbook.Requests.Requests
+namespace Naheulbook.Requests.Requests;
+
+public class SearchUserRequest
 {
-    public class SearchUserRequest
-    {
-        public string Filter { get; set; } = null!;
-    }
+    public string Filter { get; set; } = null!;
 }

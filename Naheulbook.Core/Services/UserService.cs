@@ -10,141 +10,140 @@ using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface IUserService
 {
-    public interface IUserService
+    Task CreateUserAsync(string username, string password);
+    Task ValidateUserAsync(string username, string activationCode);
+    Task<UserEntity> CheckPasswordAsync(string username, string password);
+    Task<UserEntity> GetUserInfoAsync(int userId);
+    Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request);
+    Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter);
+}
+
+public class UserService : IUserService
+{
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    private readonly IPasswordHashingService _passwordHashingService;
+    private readonly IMailService _mailService;
+    private readonly IAuthorizationUtil _authorizationUtil;
+
+    public UserService(
+        IUnitOfWorkFactory unitOfWorkFactory,
+        IPasswordHashingService passwordHashingService,
+        IMailService mailService,
+        IAuthorizationUtil authorizationUtil
+    )
     {
-        Task CreateUserAsync(string username, string password);
-        Task ValidateUserAsync(string username, string activationCode);
-        Task<UserEntity> CheckPasswordAsync(string username, string password);
-        Task<UserEntity> GetUserInfoAsync(int userId);
-        Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request);
-        Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter);
+        _unitOfWorkFactory = unitOfWorkFactory;
+        _passwordHashingService = passwordHashingService;
+        _mailService = mailService;
+        _authorizationUtil = authorizationUtil;
     }
 
-    public class UserService : IUserService
+    public async Task CreateUserAsync(string username, string password)
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IPasswordHashingService _passwordHashingService;
-        private readonly IMailService _mailService;
-        private readonly IAuthorizationUtil _authorizationUtil;
+        string activationCode;
 
-        public UserService(
-            IUnitOfWorkFactory unitOfWorkFactory,
-            IPasswordHashingService passwordHashingService,
-            IMailService mailService,
-            IAuthorizationUtil authorizationUtil
-        )
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _passwordHashingService = passwordHashingService;
-            _mailService = mailService;
-            _authorizationUtil = authorizationUtil;
-        }
+            var alreadyExistingUser = await uow.Users.GetByUsernameAsync(username);
+            if (alreadyExistingUser != null)
+                throw new UserAlreadyExistsException();
 
-        public async Task CreateUserAsync(string username, string password)
-        {
-            string activationCode;
-
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            var bytes = new byte[64];
+            using (var rng = RandomNumberGenerator.Create())
             {
-                var alreadyExistingUser = await uow.Users.GetByUsernameAsync(username);
-                if (alreadyExistingUser != null)
-                    throw new UserAlreadyExistsException();
-
-                var bytes = new byte[64];
-                using (var rng = RandomNumberGenerator.Create())
-                {
-                    rng.GetBytes(bytes);
-                }
-
-                activationCode = string.Join("", bytes.Select(b => b.ToString("x2")));
-                var user = new UserEntity()
-                {
-                    Username = username,
-                    HashedPassword = _passwordHashingService.HashPassword(password),
-                    ActivationCode = activationCode
-                };
-
-                uow.Users.Add(user);
-                await uow.SaveChangesAsync();
+                rng.GetBytes(bytes);
             }
 
-            await _mailService.SendCreateUserMailAsync(username, activationCode);
+            activationCode = string.Join("", bytes.Select(b => b.ToString("x2")));
+            var user = new UserEntity()
+            {
+                Username = username,
+                HashedPassword = _passwordHashingService.HashPassword(password),
+                ActivationCode = activationCode
+            };
+
+            uow.Users.Add(user);
+            await uow.SaveChangesAsync();
         }
 
-        public async Task ValidateUserAsync(string username, string activationCode)
+        await _mailService.SendCreateUserMailAsync(username, activationCode);
+    }
+
+    public async Task ValidateUserAsync(string username, string activationCode)
+    {
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var user = await uow.Users.GetByUsernameAsync(username);
-                if (user == null)
-                    throw new UserNotFoundException();
-                if (user.ActivationCode != activationCode)
-                    throw new InvalidUserActivationCodeException();
-                user.ActivationCode = null;
-                await uow.SaveChangesAsync();
-            }
+            var user = await uow.Users.GetByUsernameAsync(username);
+            if (user == null)
+                throw new UserNotFoundException();
+            if (user.ActivationCode != activationCode)
+                throw new InvalidUserActivationCodeException();
+            user.ActivationCode = null;
+            await uow.SaveChangesAsync();
         }
+    }
 
-        public async Task<UserEntity> CheckPasswordAsync(string username, string password)
+    public async Task<UserEntity> CheckPasswordAsync(string username, string password)
+    {
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var user = await uow.Users.GetByUsernameAsync(username);
-                if (user == null)
-                    throw new UserNotFoundException();
-                if (user.HashedPassword == null)
-                    throw new InvalidPasswordException();
-                var success = _passwordHashingService.VerifyPassword(user.HashedPassword, password);
-                if (!success)
-                    throw new InvalidPasswordException();
-                return user;
-            }
+            var user = await uow.Users.GetByUsernameAsync(username);
+            if (user == null)
+                throw new UserNotFoundException();
+            if (user.HashedPassword == null)
+                throw new InvalidPasswordException();
+            var success = _passwordHashingService.VerifyPassword(user.HashedPassword, password);
+            if (!success)
+                throw new InvalidPasswordException();
+            return user;
         }
+    }
 
-        public async Task<UserEntity> GetUserInfoAsync(int userId)
+    public async Task<UserEntity> GetUserInfoAsync(int userId)
+    {
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var user = await uow.Users.GetAsync(userId);
-                if (user == null)
-                    throw new UserNotFoundException(userId);
-                return user;
-            }
+            var user = await uow.Users.GetAsync(userId);
+            if (user == null)
+                throw new UserNotFoundException(userId);
+            return user;
         }
+    }
 
-        public async Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request)
+    public async Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request)
+    {
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            var user = await uow.Users.GetAsync(userId);
+            if (user == null)
+                throw new UserNotFoundException();
+
+            _authorizationUtil.EnsureCanEditUser(executionContext, user);
+
+            if (!string.IsNullOrEmpty(request.DisplayName))
+                user.DisplayName = request.DisplayName;
+            if (request.ShowInSearchFor.HasValue)
             {
-                var user = await uow.Users.GetAsync(userId);
-                if (user == null)
-                    throw new UserNotFoundException();
-
-                _authorizationUtil.EnsureCanEditUser(executionContext, user);
-
-                if (!string.IsNullOrEmpty(request.DisplayName))
-                    user.DisplayName = request.DisplayName;
-                if (request.ShowInSearchFor.HasValue)
-                {
-                    if (request.ShowInSearchFor.Value == 0)
-                        user.ShowInSearchUntil = null;
-                    else
-                        user.ShowInSearchUntil = DateTime.UtcNow.AddSeconds(request.ShowInSearchFor.Value);
-                }
-
-
-                await uow.SaveChangesAsync();
+                if (request.ShowInSearchFor.Value == 0)
+                    user.ShowInSearchUntil = null;
+                else
+                    user.ShowInSearchUntil = DateTime.UtcNow.AddSeconds(request.ShowInSearchFor.Value);
             }
+
+
+            await uow.SaveChangesAsync();
         }
+    }
 
-        public async Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter)
+    public async Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter)
+    {
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                return await uow.Users.SearchUsersAsync(filter);
-            }
+            return await uow.Users.SearchUsersAsync(filter);
         }
     }
 }

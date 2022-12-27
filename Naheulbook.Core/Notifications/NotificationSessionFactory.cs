@@ -1,27 +1,26 @@
-namespace Naheulbook.Core.Notifications
+namespace Naheulbook.Core.Notifications;
+
+public interface INotificationSessionFactory
 {
-    public interface INotificationSessionFactory
+    INotificationSession CreateSession();
+}
+
+public class NotificationSessionFactory : INotificationSessionFactory
+{
+    private readonly INotificationPacketBuilder _packetBuilder;
+    private readonly INotificationSender _notificationSender;
+
+    public NotificationSessionFactory(
+        INotificationPacketBuilder packetBuilder,
+        INotificationSender notificationSender
+    )
     {
-        INotificationSession CreateSession();
+        _packetBuilder = packetBuilder;
+        _notificationSender = notificationSender;
     }
 
-    public class NotificationSessionFactory : INotificationSessionFactory
+    public INotificationSession CreateSession()
     {
-        private readonly INotificationPacketBuilder _packetBuilder;
-        private readonly INotificationSender _notificationSender;
-
-        public NotificationSessionFactory(
-            INotificationPacketBuilder packetBuilder,
-            INotificationSender notificationSender
-        )
-        {
-            _packetBuilder = packetBuilder;
-            _notificationSender = notificationSender;
-        }
-
-        public INotificationSession CreateSession()
-        {
-            return new NotificationSession(_packetBuilder, _notificationSender);
-        }
+        return new NotificationSession(_packetBuilder, _notificationSender);
     }
 }

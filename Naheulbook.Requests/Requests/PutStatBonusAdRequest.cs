@@ -1,7 +1,6 @@
-namespace Naheulbook.Requests.Requests
+namespace Naheulbook.Requests.Requests;
+
+public class PutStatBonusAdRequest
 {
-    public class PutStatBonusAdRequest
-    {
-        public string Stat { get; set; } = null!;
-    }
+    public string Stat { get; set; } = null!;
 }

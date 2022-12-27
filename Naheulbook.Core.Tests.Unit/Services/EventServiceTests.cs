@@ -12,75 +12,74 @@ using Naheulbook.Data.Models;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Naheulbook.Core.Tests.Unit.Services
+namespace Naheulbook.Core.Tests.Unit.Services;
+
+public class EventServiceTests
 {
-    public class EventServiceTests
+    private FakeUnitOfWorkFactory _unitOfWorkFactory;
+    private IAuthorizationUtil _authorizationUtil;
+    private EventService _service;
+
+
+    [SetUp]
+    public void SetUp()
     {
-        private FakeUnitOfWorkFactory _unitOfWorkFactory;
-        private IAuthorizationUtil _authorizationUtil;
-        private EventService _service;
+        _unitOfWorkFactory = new FakeUnitOfWorkFactory();
+        _authorizationUtil = Substitute.For<IAuthorizationUtil>();
 
+        _service = new EventService(
+            _unitOfWorkFactory,
+            _authorizationUtil
+        );
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _unitOfWorkFactory = new FakeUnitOfWorkFactory();
-            _authorizationUtil = Substitute.For<IAuthorizationUtil>();
+    [Test]
+    public async Task GetEventsForGroupAsync_ShouldLoadEventsListAndReturnIt()
+    {
+        const int groupId = 42;
+        var executionContext = new NaheulbookExecutionContext();
+        var group = new GroupEntity {Id = groupId};
+        var expectedEvents = new List<EventEntity>();
 
-            _service = new EventService(
-                _unitOfWorkFactory,
-                _authorizationUtil
-            );
-        }
+        _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+            .Returns(group);
+        _unitOfWorkFactory.GetUnitOfWork().Events.GetByGroupIdAsync(groupId)
+            .Returns(expectedEvents);
 
-        [Test]
-        public async Task GetEventsForGroupAsync_ShouldLoadEventsListAndReturnIt()
-        {
-            const int groupId = 42;
-            var executionContext = new NaheulbookExecutionContext();
-            var group = new GroupEntity {Id = groupId};
-            var expectedEvents = new List<EventEntity>();
+        var events = await _service.GetEventsForGroupAsync(executionContext, groupId);
 
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns(group);
-            _unitOfWorkFactory.GetUnitOfWork().Events.GetByGroupIdAsync(groupId)
-                .Returns(expectedEvents);
+        events.Should().BeSameAs(expectedEvents);
+    }
 
-            var events = await _service.GetEventsForGroupAsync(executionContext, groupId);
+    [Test]
+    public async Task GetEventsForGroupAsync_ShouldThrowWhenGroupNotFound()
+    {
+        const int groupId = 42;
+        var executionContext = new NaheulbookExecutionContext();
 
-            events.Should().BeSameAs(expectedEvents);
-        }
+        _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+            .Returns((GroupEntity) null);
 
-        [Test]
-        public async Task GetEventsForGroupAsync_ShouldThrowWhenGroupNotFound()
-        {
-            const int groupId = 42;
-            var executionContext = new NaheulbookExecutionContext();
+        Func<Task> act = () => _service.GetEventsForGroupAsync(executionContext, groupId);
 
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns((GroupEntity) null);
+        await act.Should().ThrowAsync<GroupNotFoundException>();
+    }
 
-            Func<Task> act = () => _service.GetEventsForGroupAsync(executionContext, groupId);
+    [Test]
+    public async Task GetEventsForGroupAsync_ShouldEnsureGroupAccess()
+    {
+        const int groupId = 42;
+        var naheulbookExecutionContext = new NaheulbookExecutionContext();
+        var group = new GroupEntity {Id = groupId};
 
-            await act.Should().ThrowAsync<GroupNotFoundException>();
-        }
+        _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+            .Returns(group);
 
-        [Test]
-        public async Task GetEventsForGroupAsync_ShouldEnsureGroupAccess()
-        {
-            const int groupId = 42;
-            var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var group = new GroupEntity {Id = groupId};
+        _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
+            .Throw(new TestException());
 
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns(group);
+        Func<Task> act = () => _service.GetEventsForGroupAsync(naheulbookExecutionContext, groupId);
 
-            _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
-                .Throw(new TestException());
-
-            Func<Task> act = () => _service.GetEventsForGroupAsync(naheulbookExecutionContext, groupId);
-
-            await act.Should().ThrowAsync<TestException>();
-        }
+        await act.Should().ThrowAsync<TestException>();
     }
 }

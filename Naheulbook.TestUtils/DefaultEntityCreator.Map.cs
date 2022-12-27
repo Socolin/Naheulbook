@@ -6,44 +6,43 @@ using Newtonsoft.Json.Serialization;
 
 // ReSharper disable MemberCanBeMadeStatic.Global
 
-namespace Naheulbook.TestUtils
-{
-    public partial class DefaultEntityCreator
-    {
-        public MapEntity CreateMap(string suffix = null)
-        {
-            if (suffix == null)
-                suffix = RngUtil.GetRandomHexString(8);
+namespace Naheulbook.TestUtils;
 
-            return new MapEntity
+public partial class DefaultEntityCreator
+{
+    public MapEntity CreateMap(string suffix = null)
+    {
+        if (suffix == null)
+            suffix = RngUtil.GetRandomHexString(8);
+
+        return new MapEntity
+        {
+            Name = $"some-map-name-{suffix}",
+            ImageData = JsonConvert.SerializeObject(new MapImageData
             {
-                Name = $"some-map-name-{suffix}",
-                ImageData = JsonConvert.SerializeObject(new MapImageData
+                Width = 40,
+                Height = 20,
+                ZoomCount = 5,
+                ExtraZoomCount = 1
+            }, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            }),
+            Data = JsonConvert.SerializeObject(new MapData
+            {
+                IsGm = true,
+                Attribution = new List<MapData.MapAttribution>()
                 {
-                    Width = 40,
-                    Height = 20,
-                    ZoomCount = 5,
-                    ExtraZoomCount = 1
-                }, new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                }),
-                Data = JsonConvert.SerializeObject(new MapData
-                {
-                    IsGm = true,
-                    Attribution = new List<MapData.MapAttribution>()
+                    new MapData.MapAttribution
                     {
-                        new MapData.MapAttribution
-                        {
-                            Name = "some-attribution-name",
-                            Url = "some-attribution-url"
-                        }
+                        Name = "some-attribution-name",
+                        Url = "some-attribution-url"
                     }
-                }, new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                })
-            };
-        }
+                }
+            }, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            })
+        };
     }
 }

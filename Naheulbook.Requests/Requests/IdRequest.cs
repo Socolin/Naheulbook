@@ -1,7 +1,6 @@
-namespace Naheulbook.Requests.Requests
+namespace Naheulbook.Requests.Requests;
+
+public class IdRequest
 {
-    public class IdRequest
-    {
-        public int Id { get; set; }
-    }
+    public int Id { get; set; }
 }

@@ -5,49 +5,48 @@ using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Models;
 
-namespace Naheulbook.Web.Services
-{
-    public interface IJwtService
-    {
-        string GenerateJwtToken(int userId);
+namespace Naheulbook.Web.Services;
 
-        JwtTokenPayload? DecodeJwt(string jwt);
+public interface IJwtService
+{
+    string GenerateJwtToken(int userId);
+
+    JwtTokenPayload? DecodeJwt(string jwt);
+}
+
+public class JwtService : IJwtService
+{
+    private readonly IAuthenticationConfiguration _configuration;
+    private readonly ITimeService _timeService;
+
+    public JwtService(IAuthenticationConfiguration configuration, ITimeService timeService)
+    {
+        _configuration = configuration;
+        _timeService = timeService;
     }
 
-    public class JwtService : IJwtService
+    public string GenerateJwtToken(int userId)
     {
-        private readonly IAuthenticationConfiguration _configuration;
-        private readonly ITimeService _timeService;
+        var expiration = _timeService.UtcNow.AddMinutes(_configuration.JwtExpirationDelayInMinutes).ToUnixTimeSeconds();
 
-        public JwtService(IAuthenticationConfiguration configuration, ITimeService timeService)
+        var payload = new Dictionary<string, object>()
         {
-            _configuration = configuration;
-            _timeService = timeService;
+            {"sub", userId},
+            {"exp", expiration}
+        };
+
+        return JWT.Encode(payload, Convert.FromBase64String(_configuration.JwtSigningKey), JwsAlgorithm.HS256);
+    }
+
+    public JwtTokenPayload? DecodeJwt(string jwt)
+    {
+        try
+        {
+            return JWT.Decode<JwtTokenPayload>(jwt, Convert.FromBase64String(_configuration.JwtSigningKey));
         }
-
-        public string GenerateJwtToken(int userId)
+        catch (Exception)
         {
-            var expiration = _timeService.UtcNow.AddMinutes(_configuration.JwtExpirationDelayInMinutes).ToUnixTimeSeconds();
-
-            var payload = new Dictionary<string, object>()
-            {
-                {"sub", userId},
-                {"exp", expiration}
-            };
-
-            return JWT.Encode(payload, Convert.FromBase64String(_configuration.JwtSigningKey), JwsAlgorithm.HS256);
-        }
-
-        public JwtTokenPayload? DecodeJwt(string jwt)
-        {
-            try
-            {
-                return JWT.Decode<JwtTokenPayload>(jwt, Convert.FromBase64String(_configuration.JwtSigningKey));
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            return null;
         }
     }
 }

@@ -16,120 +16,119 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 
-namespace Naheulbook.Web.Tests.Unit.Controllers
+namespace Naheulbook.Web.Tests.Unit.Controllers;
+
+public class ItemTemplatesControllerTests
 {
-    public class ItemTemplatesControllerTests
+    private IItemTemplateService _itemTemplateService;
+    private IMapper _mapper;
+    private ItemTemplatesController _itemTemplatesController;
+    private NaheulbookExecutionContext _executionContext;
+
+    [SetUp]
+    public void SetUp()
     {
-        private IItemTemplateService _itemTemplateService;
-        private IMapper _mapper;
-        private ItemTemplatesController _itemTemplatesController;
-        private NaheulbookExecutionContext _executionContext;
+        _itemTemplateService = Substitute.For<IItemTemplateService>();
+        _mapper = Substitute.For<IMapper>();
+        _itemTemplatesController = new ItemTemplatesController(_itemTemplateService, _mapper);
+        _executionContext = new NaheulbookExecutionContext();
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _itemTemplateService = Substitute.For<IItemTemplateService>();
-            _mapper = Substitute.For<IMapper>();
-            _itemTemplatesController = new ItemTemplatesController(_itemTemplateService, _mapper);
-            _executionContext = new NaheulbookExecutionContext();
-        }
+    [Test]
+    public async Task GetItemTemplateAsync_RetrieveItemInfroFromItemService_AndMapItIntoResponse()
+    {
+        var itemTemplateId = Guid.NewGuid();
+        var itemTemplate = new ItemTemplateEntity();
+        var itemTemplateResponse = new ItemTemplateResponse();
 
-        [Test]
-        public async Task GetItemTemplateAsync_RetrieveItemInfroFromItemService_AndMapItIntoResponse()
-        {
-            var itemTemplateId = Guid.NewGuid();
-            var itemTemplate = new ItemTemplateEntity();
-            var itemTemplateResponse = new ItemTemplateResponse();
+        _itemTemplateService.GetItemTemplateAsync(itemTemplateId)
+            .Returns(itemTemplate);
+        _mapper.Map<ItemTemplateResponse>(itemTemplate)
+            .Returns(itemTemplateResponse);
 
-            _itemTemplateService.GetItemTemplateAsync(itemTemplateId)
-                .Returns(itemTemplate);
-            _mapper.Map<ItemTemplateResponse>(itemTemplate)
-                .Returns(itemTemplateResponse);
+        var result = await _itemTemplatesController.GetItemTemplateAsync(itemTemplateId);
 
-            var result = await _itemTemplatesController.GetItemTemplateAsync(itemTemplateId);
+        result.Value.Should().Be(itemTemplateResponse);
+    }
 
-            result.Value.Should().Be(itemTemplateResponse);
-        }
+    [Test]
+    public async Task GetItemTemplateAsync_Return404_WhenItemTemplateNotFoundIsThrow()
+    {
+        var itemTemplateId = Guid.NewGuid();
+        _itemTemplateService.GetItemTemplateAsync(Arg.Any<Guid>())
+            .Throws(new ItemTemplateNotFoundException(itemTemplateId));
 
-        [Test]
-        public async Task GetItemTemplateAsync_Return404_WhenItemTemplateNotFoundIsThrow()
-        {
-            var itemTemplateId = Guid.NewGuid();
-            _itemTemplateService.GetItemTemplateAsync(Arg.Any<Guid>())
-                .Throws(new ItemTemplateNotFoundException(itemTemplateId));
+        Func<Task> act = () => _itemTemplatesController.GetItemTemplateAsync(itemTemplateId);
 
-            Func<Task> act = () => _itemTemplatesController.GetItemTemplateAsync(itemTemplateId);
+        (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+    }
+    [Test]
+    public async Task PutItemTemplateAsync_CallServiceToEditItem_AndMapEditedItemIntoResponse()
+    {
+        var itemTemplateId = Guid.NewGuid();
+        var itemTemplate = new ItemTemplateEntity();
+        var itemTemplateRequest = new ItemTemplateRequest();
+        var itemTemplateResponse = new ItemTemplateResponse();
 
-            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        }
-        [Test]
-        public async Task PutItemTemplateAsync_CallServiceToEditItem_AndMapEditedItemIntoResponse()
-        {
-            var itemTemplateId = Guid.NewGuid();
-            var itemTemplate = new ItemTemplateEntity();
-            var itemTemplateRequest = new ItemTemplateRequest();
-            var itemTemplateResponse = new ItemTemplateResponse();
+        _itemTemplateService.EditItemTemplateAsync(_executionContext, itemTemplateId, itemTemplateRequest)
+            .Returns(itemTemplate);
+        _mapper.Map<ItemTemplateResponse>(itemTemplate)
+            .Returns(itemTemplateResponse);
 
-            _itemTemplateService.EditItemTemplateAsync(_executionContext, itemTemplateId, itemTemplateRequest)
-                .Returns(itemTemplate);
-            _mapper.Map<ItemTemplateResponse>(itemTemplate)
-                .Returns(itemTemplateResponse);
+        var result = await _itemTemplatesController.PutItemTemplateAsync(_executionContext, itemTemplateId, itemTemplateRequest);
 
-            var result = await _itemTemplatesController.PutItemTemplateAsync(_executionContext, itemTemplateId, itemTemplateRequest);
+        result.Value.Should().Be(itemTemplateResponse);
+    }
 
-            result.Value.Should().Be(itemTemplateResponse);
-        }
+    [Test]
+    public async Task PutItemTemplateAsync_Return404_WhenItemTemplateNotFoundIsThrow()
+    {
+        var itemTemplateId = Guid.NewGuid();
+        _itemTemplateService.EditItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<Guid>(), Arg.Any<ItemTemplateRequest>())
+            .Throws(new ItemTemplateNotFoundException(itemTemplateId));
 
-        [Test]
-        public async Task PutItemTemplateAsync_Return404_WhenItemTemplateNotFoundIsThrow()
-        {
-            var itemTemplateId = Guid.NewGuid();
-            _itemTemplateService.EditItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<Guid>(), Arg.Any<ItemTemplateRequest>())
-                .Throws(new ItemTemplateNotFoundException(itemTemplateId));
+        Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, itemTemplateId, new ItemTemplateRequest());
 
-            Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, itemTemplateId, new ItemTemplateRequest());
+        (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+    }
 
-            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        }
+    [Test]
+    public async Task PutItemTemplateAsync_Return403_WhenNotAllowed()
+    {
+        _itemTemplateService.EditItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<Guid>(), Arg.Any<ItemTemplateRequest>())
+            .Throws(new ForbiddenAccessException());
 
-        [Test]
-        public async Task PutItemTemplateAsync_Return403_WhenNotAllowed()
-        {
-            _itemTemplateService.EditItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<Guid>(), Arg.Any<ItemTemplateRequest>())
-                .Throws(new ForbiddenAccessException());
+        Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, Guid.NewGuid(), new ItemTemplateRequest());
 
-            Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, Guid.NewGuid(), new ItemTemplateRequest());
+        (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+    }
 
-            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-        }
+    [Test]
+    public async Task PostCreateItemTemplate_CallItemService()
+    {
+        var itemTemplateRequest = new ItemTemplateRequest();
+        var itemTemplate = new ItemTemplateEntity();
+        var itemTemplateResponse = new ItemTemplateResponse();
 
-        [Test]
-        public async Task PostCreateItemTemplate_CallItemService()
-        {
-            var itemTemplateRequest = new ItemTemplateRequest();
-            var itemTemplate = new ItemTemplateEntity();
-            var itemTemplateResponse = new ItemTemplateResponse();
+        _itemTemplateService.CreateItemTemplateAsync(_executionContext, itemTemplateRequest)
+            .Returns(itemTemplate);
+        _mapper.Map<ItemTemplateResponse>(itemTemplate)
+            .Returns(itemTemplateResponse);
 
-            _itemTemplateService.CreateItemTemplateAsync(_executionContext, itemTemplateRequest)
-                .Returns(itemTemplate);
-            _mapper.Map<ItemTemplateResponse>(itemTemplate)
-                .Returns(itemTemplateResponse);
+        var result = await _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, itemTemplateRequest);
 
-            var result = await _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, itemTemplateRequest);
+        result.StatusCode.Should().Be(201);
+        result.Value.Should().Be(itemTemplateResponse);
+    }
 
-            result.StatusCode.Should().Be(201);
-            result.Value.Should().Be(itemTemplateResponse);
-        }
+    [Test]
+    public async Task PostCreateItemTemplate_WhenCatchForbiddenAccessException_Return403()
+    {
+        _itemTemplateService.CreateItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<ItemTemplateRequest>())
+            .Returns(Task.FromException<ItemTemplateEntity>(new ForbiddenAccessException()));
 
-        [Test]
-        public async Task PostCreateItemTemplate_WhenCatchForbiddenAccessException_Return403()
-        {
-            _itemTemplateService.CreateItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<ItemTemplateRequest>())
-                .Returns(Task.FromException<ItemTemplateEntity>(new ForbiddenAccessException()));
+        Func<Task<JsonResult>> act = () => _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, new ItemTemplateRequest());
 
-            Func<Task<JsonResult>> act = () => _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, new ItemTemplateRequest());
-
-            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-        }
+        (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }
 }

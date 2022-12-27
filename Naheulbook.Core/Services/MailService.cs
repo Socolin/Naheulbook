@@ -3,40 +3,39 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Naheulbook.Core.Configurations;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface IMailService
 {
-    public interface IMailService
+    Task SendCreateUserMailAsync(string email, string activationCode);
+}
+
+public class MailService : IMailService
+{
+    private readonly IMailConfiguration _mailConfiguration;
+
+    public MailService(IMailConfiguration mailConfiguration)
     {
-        Task SendCreateUserMailAsync(string email, string activationCode);
+        _mailConfiguration = mailConfiguration;
     }
 
-    public class MailService : IMailService
+    public async Task SendCreateUserMailAsync(string email, string activationCode)
     {
-        private readonly IMailConfiguration _mailConfiguration;
-
-        public MailService(IMailConfiguration mailConfiguration)
+        var client = new SmtpClient(_mailConfiguration.Smtp.Host, _mailConfiguration.Smtp.Port)
         {
-            _mailConfiguration = mailConfiguration;
-        }
+            UseDefaultCredentials = false,
+            EnableSsl = _mailConfiguration.Smtp.Ssl,
+            Credentials = new NetworkCredential(_mailConfiguration.Smtp.Username, _mailConfiguration.Smtp.Password)
+        };
 
-        public async Task SendCreateUserMailAsync(string email, string activationCode)
+        var mailMessage = new MailMessage
         {
-            var client = new SmtpClient(_mailConfiguration.Smtp.Host, _mailConfiguration.Smtp.Port)
-            {
-                UseDefaultCredentials = false,
-                EnableSsl = _mailConfiguration.Smtp.Ssl,
-                Credentials = new NetworkCredential(_mailConfiguration.Smtp.Username, _mailConfiguration.Smtp.Password)
-            };
+            From = new MailAddress(_mailConfiguration.FromAddress),
+            Body = $"ActivationCode: {activationCode}",
+            Subject = "Activate naheulbook account"
+        };
+        mailMessage.To.Add(email);
 
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(_mailConfiguration.FromAddress),
-                Body = $"ActivationCode: {activationCode}",
-                Subject = "Activate naheulbook account"
-            };
-            mailMessage.To.Add(email);
-
-            await client.SendMailAsync(mailMessage);
-        }
+        await client.SendMailAsync(mailMessage);
     }
 }

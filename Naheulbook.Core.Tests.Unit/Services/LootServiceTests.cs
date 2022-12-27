@@ -14,134 +14,133 @@ using Naheulbook.Requests.Requests;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Naheulbook.Core.Tests.Unit.Services
+namespace Naheulbook.Core.Tests.Unit.Services;
+
+public class LootServiceTests
 {
-    public class LootServiceTests
+    private FakeUnitOfWorkFactory _unitOfWorkFactory;
+    private IAuthorizationUtil _authorizationUtil;
+    private INotificationSessionFactory _notificationSessionFactory;
+    private IItemService _itemService;
+    private LootService _service;
+
+    [SetUp]
+    public void SetUp()
     {
-        private FakeUnitOfWorkFactory _unitOfWorkFactory;
-        private IAuthorizationUtil _authorizationUtil;
-        private INotificationSessionFactory _notificationSessionFactory;
-        private IItemService _itemService;
-        private LootService _service;
+        _unitOfWorkFactory = new FakeUnitOfWorkFactory();
+        _authorizationUtil = Substitute.For<IAuthorizationUtil>();
+        _notificationSessionFactory = Substitute.For<INotificationSessionFactory>();
+        _itemService = Substitute.For<IItemService>();
 
-        [SetUp]
-        public void SetUp()
+        _service = new LootService(
+            _unitOfWorkFactory,
+            _authorizationUtil,
+            _notificationSessionFactory,
+            _itemService
+        );
+    }
+
+    [Test]
+    public async Task CreateLootAsync_CreateALootInDb_AndReturnIt()
+    {
+        const int groupId = 42;
+        var createLootRequest = new CreateLootRequest {Name = "some-name"};
+        var naheulbookExecutionContext = new NaheulbookExecutionContext();
+        var group = new GroupEntity {Id = groupId};
+
+        _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+            .Returns(group);
+
+        var actualLoot = await _service.CreateLootAsync(naheulbookExecutionContext, groupId, createLootRequest);
+
+        Received.InOrder(() =>
         {
-            _unitOfWorkFactory = new FakeUnitOfWorkFactory();
-            _authorizationUtil = Substitute.For<IAuthorizationUtil>();
-            _notificationSessionFactory = Substitute.For<INotificationSessionFactory>();
-            _itemService = Substitute.For<IItemService>();
+            _unitOfWorkFactory.GetUnitOfWork().Loots.Add(actualLoot);
+            _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
+        });
 
-            _service = new LootService(
-                _unitOfWorkFactory,
-                _authorizationUtil,
-                _notificationSessionFactory,
-                _itemService
-            );
-        }
+        actualLoot.Name.Should().Be("some-name");
+        actualLoot.Group.Should().BeSameAs(group);
+    }
 
-        [Test]
-        public async Task CreateLootAsync_CreateALootInDb_AndReturnIt()
-        {
-            const int groupId = 42;
-            var createLootRequest = new CreateLootRequest {Name = "some-name"};
-            var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var group = new GroupEntity {Id = groupId};
+    [Test]
+    public async Task CreateLootAsync_WhenGroupDoesNotExists_ShouldThrow()
+    {
+        var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
 
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns(group);
+        _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(42)
+            .Returns((GroupEntity) null);
 
-            var actualLoot = await _service.CreateLootAsync(naheulbookExecutionContext, groupId, createLootRequest);
+        Func<Task> act = () => _service.CreateLootAsync(naheulbookExecutionContext, 42, new CreateLootRequest());
 
-            Received.InOrder(() =>
-            {
-                _unitOfWorkFactory.GetUnitOfWork().Loots.Add(actualLoot);
-                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
-            });
+        await act.Should().ThrowAsync<GroupNotFoundException>();
+    }
 
-            actualLoot.Name.Should().Be("some-name");
-            actualLoot.Group.Should().BeSameAs(group);
-        }
+    [Test]
+    public async Task CreateLootAsync_EnsureUserAccessToLoot()
+    {
+        const int groupId = 42;
+        var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
+        var group = new GroupEntity {Id = groupId};
 
-        [Test]
-        public async Task CreateLootAsync_WhenGroupDoesNotExists_ShouldThrow()
-        {
-            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
+        _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+            .Returns(group);
 
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(42)
-                .Returns((GroupEntity) null);
+        _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
+            .Throw(new TestException());
 
-            Func<Task> act = () => _service.CreateLootAsync(naheulbookExecutionContext, 42, new CreateLootRequest());
+        Func<Task> act = () => _service.CreateLootAsync(naheulbookExecutionContext, groupId, new CreateLootRequest());
 
-            await act.Should().ThrowAsync<GroupNotFoundException>();
-        }
+        await act.Should().ThrowAsync<TestException>();
+    }
 
-        [Test]
-        public async Task CreateLootAsync_EnsureUserAccessToLoot()
-        {
-            const int groupId = 42;
-            var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
-            var group = new GroupEntity {Id = groupId};
+    [Test]
+    public async Task GetLootsForGroupAsync_ShouldLoadLootsListAndReturnIt()
+    {
+        const int groupId = 42;
+        var executionContext = new NaheulbookExecutionContext();
+        var group = new GroupEntity {Id = groupId};
+        var expectedLoots = new List<LootEntity>();
 
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns(group);
+        _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+            .Returns(group);
+        _unitOfWorkFactory.GetUnitOfWork().Loots.GetByGroupIdAsync(groupId)
+            .Returns(expectedLoots);
 
-            _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
-                .Throw(new TestException());
+        var loots = await _service.GetLootsForGroupAsync(executionContext, groupId);
 
-            Func<Task> act = () => _service.CreateLootAsync(naheulbookExecutionContext, groupId, new CreateLootRequest());
+        loots.Should().BeSameAs(expectedLoots);
+    }
 
-            await act.Should().ThrowAsync<TestException>();
-        }
+    [Test]
+    public async Task GetLootsForGroupAsync_ShouldThrowWhenGroupNotFound()
+    {
+        const int groupId = 42;
+        var executionContext = new NaheulbookExecutionContext();
 
-        [Test]
-        public async Task GetLootsForGroupAsync_ShouldLoadLootsListAndReturnIt()
-        {
-            const int groupId = 42;
-            var executionContext = new NaheulbookExecutionContext();
-            var group = new GroupEntity {Id = groupId};
-            var expectedLoots = new List<LootEntity>();
+        _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+            .Returns((GroupEntity) null);
 
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns(group);
-            _unitOfWorkFactory.GetUnitOfWork().Loots.GetByGroupIdAsync(groupId)
-                .Returns(expectedLoots);
+        Func<Task> act = () => _service.GetLootsForGroupAsync(executionContext, groupId);
 
-            var loots = await _service.GetLootsForGroupAsync(executionContext, groupId);
+        await act.Should().ThrowAsync<GroupNotFoundException>();
+    }
 
-            loots.Should().BeSameAs(expectedLoots);
-        }
+    [Test]
+    public async Task GetLootsForGroupAsync_ShouldEnsureGroupAccess()
+    {
+        const int groupId = 42;
+        var naheulbookExecutionContext = new NaheulbookExecutionContext();
+        var group = new GroupEntity {Id = groupId};
 
-        [Test]
-        public async Task GetLootsForGroupAsync_ShouldThrowWhenGroupNotFound()
-        {
-            const int groupId = 42;
-            var executionContext = new NaheulbookExecutionContext();
+        _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
+            .Returns(group);
 
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns((GroupEntity) null);
+        _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
+            .Throw(new TestException());
 
-            Func<Task> act = () => _service.GetLootsForGroupAsync(executionContext, groupId);
+        Func<Task> act = () => _service.GetLootsForGroupAsync(naheulbookExecutionContext, groupId);
 
-            await act.Should().ThrowAsync<GroupNotFoundException>();
-        }
-
-        [Test]
-        public async Task GetLootsForGroupAsync_ShouldEnsureGroupAccess()
-        {
-            const int groupId = 42;
-            var naheulbookExecutionContext = new NaheulbookExecutionContext();
-            var group = new GroupEntity {Id = groupId};
-
-            _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-                .Returns(group);
-
-            _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
-                .Throw(new TestException());
-
-            Func<Task> act = () => _service.GetLootsForGroupAsync(naheulbookExecutionContext, groupId);
-
-            await act.Should().ThrowAsync<TestException>();
-        }
+        await act.Should().ThrowAsync<TestException>();
     }
 }

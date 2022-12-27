@@ -7,60 +7,59 @@ using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface IItemTemplateSubCategoryService
 {
-    public interface IItemTemplateSubCategoryService
+    Task<ItemTemplateSubCategoryEntity> CreateItemTemplateSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSubCategoryRequest request);
+    Task<List<ItemTemplateEntity>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems);
+}
+
+public class ItemTemplateSubCategoryService : IItemTemplateSubCategoryService
+{
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    private readonly IAuthorizationUtil _authorizationUtil;
+
+    public ItemTemplateSubCategoryService(
+        IUnitOfWorkFactory unitOfWorkFactory,
+        IAuthorizationUtil authorizationUtil
+    )
     {
-        Task<ItemTemplateSubCategoryEntity> CreateItemTemplateSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSubCategoryRequest request);
-        Task<List<ItemTemplateEntity>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems);
+        _unitOfWorkFactory = unitOfWorkFactory;
+        _authorizationUtil = authorizationUtil;
     }
 
-    public class ItemTemplateSubCategoryService : IItemTemplateSubCategoryService
+    public async Task<ItemTemplateSubCategoryEntity> CreateItemTemplateSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSubCategoryRequest request)
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IAuthorizationUtil _authorizationUtil;
+        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-        public ItemTemplateSubCategoryService(
-            IUnitOfWorkFactory unitOfWorkFactory,
-            IAuthorizationUtil authorizationUtil
-        )
+        var itemTemplateSubCategory = new ItemTemplateSubCategoryEntity()
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _authorizationUtil = authorizationUtil;
+            SectionId = request.SectionId,
+            Name = request.Name,
+            Note = request.Note,
+            Description = request.Description,
+            TechName = request.TechName
+        };
+
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        {
+            uow.ItemTemplateSubCategories.Add(itemTemplateSubCategory);
+            await uow.SaveChangesAsync();
         }
 
-        public async Task<ItemTemplateSubCategoryEntity> CreateItemTemplateSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSubCategoryRequest request)
+        return itemTemplateSubCategory;
+    }
+
+    public async Task<List<ItemTemplateEntity>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems)
+    {
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+            var itemTemplateSubCategory = await uow.ItemTemplateSubCategories.GetByTechNameAsync(subCategoryTechName);
+            if (itemTemplateSubCategory == null)
+                throw new ItemTemplateSubCategoryNotFoundException(subCategoryTechName);
 
-            var itemTemplateSubCategory = new ItemTemplateSubCategoryEntity()
-            {
-                SectionId = request.SectionId,
-                Name = request.Name,
-                Note = request.Note,
-                Description = request.Description,
-                TechName = request.TechName
-            };
-
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                uow.ItemTemplateSubCategories.Add(itemTemplateSubCategory);
-                await uow.SaveChangesAsync();
-            }
-
-            return itemTemplateSubCategory;
-        }
-
-        public async Task<List<ItemTemplateEntity>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems)
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var itemTemplateSubCategory = await uow.ItemTemplateSubCategories.GetByTechNameAsync(subCategoryTechName);
-                if (itemTemplateSubCategory == null)
-                    throw new ItemTemplateSubCategoryNotFoundException(subCategoryTechName);
-
-                return await uow.ItemTemplates.GetWithAllDataByCategoryIdAsync(itemTemplateSubCategory.Id, currentUserId, includeCommunityItems);
-            }
+            return await uow.ItemTemplates.GetWithAllDataByCategoryIdAsync(itemTemplateSubCategory.Id, currentUserId, includeCommunityItems);
         }
     }
 }

@@ -1,7 +1,6 @@
-namespace Naheulbook.Requests.Requests
+namespace Naheulbook.Requests.Requests;
+
+public class ValidateUserRequest
 {
-    public class ValidateUserRequest
-    {
-        public string ActivationCode { get; set; } = null!;
-    }
+    public string ActivationCode { get; set; } = null!;
 }

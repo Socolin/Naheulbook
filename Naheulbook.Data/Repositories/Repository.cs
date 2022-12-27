@@ -4,50 +4,49 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Naheulbook.Data.Repositories
+namespace Naheulbook.Data.Repositories;
+
+public class Repository<TEntity, TContext> : IRepository<TEntity> where TEntity : class where TContext : DbContext
 {
-    public class Repository<TEntity, TContext> : IRepository<TEntity> where TEntity : class where TContext : DbContext
+    protected readonly TContext Context;
+
+    protected Repository(TContext context)
     {
-        protected readonly TContext Context;
+        Context = context;
+    }
 
-        protected Repository(TContext context)
-        {
-            Context = context;
-        }
+    public ValueTask<TEntity?> GetAsync(int id)
+    {
+        return Context.Set<TEntity>().FindAsync(id);
+    }
 
-        public ValueTask<TEntity?> GetAsync(int id)
-        {
-            return Context.Set<TEntity>().FindAsync(id);
-        }
+    public ValueTask<TEntity?> GetAsync(Guid id)
+    {
+        return Context.Set<TEntity>().FindAsync(id);
+    }
 
-        public ValueTask<TEntity?> GetAsync(Guid id)
-        {
-            return Context.Set<TEntity>().FindAsync(id);
-        }
+    public Task<List<TEntity>> GetAllAsync()
+    {
+        return Context.Set<TEntity>().ToListAsync();
+    }
 
-        public Task<List<TEntity>> GetAllAsync()
-        {
-            return Context.Set<TEntity>().ToListAsync();
-        }
+    public void Add(TEntity entity)
+    {
+        Context.Add(entity);
+    }
 
-        public void Add(TEntity entity)
-        {
-            Context.Add(entity);
-        }
+    public void AddRange(IEnumerable<TEntity> entities)
+    {
+        Context.AddRange(entities);
+    }
 
-        public void AddRange(IEnumerable<TEntity> entities)
-        {
-            Context.AddRange(entities);
-        }
+    public void Remove(TEntity entity)
+    {
+        Context.Remove(entity);
+    }
 
-        public void Remove(TEntity entity)
-        {
-            Context.Remove(entity);
-        }
-
-        public void RemoveRange(IEnumerable<TEntity> entities)
-        {
-            Context.RemoveRange(entities);
-        }
+    public void RemoveRange(IEnumerable<TEntity> entities)
+    {
+        Context.RemoveRange(entities);
     }
 }

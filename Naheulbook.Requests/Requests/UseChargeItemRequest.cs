@@ -1,7 +1,6 @@
-namespace Naheulbook.Requests.Requests
+namespace Naheulbook.Requests.Requests;
+
+public class UseChargeItemRequest
 {
-    public class UseChargeItemRequest
-    {
         
-    }
 }

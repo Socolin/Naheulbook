@@ -1,13 +1,12 @@
 using FluentValidation;
 using Naheulbook.Requests.Requests;
 
-namespace Naheulbook.Requests.Validators
+namespace Naheulbook.Requests.Validators;
+
+public class CreateItemSectionRequestValidator : AbstractValidator<CreateItemTemplateSectionRequest>
 {
-    public class CreateItemSectionRequestValidator : AbstractValidator<CreateItemTemplateSectionRequest>
+    public CreateItemSectionRequestValidator()
     {
-        public CreateItemSectionRequestValidator()
-        {
-            RuleFor(e => e.Name).NotNull().Length(1, 255);
-        }
+        RuleFor(e => e.Name).NotNull().Length(1, 255);
     }
 }

@@ -1,11 +1,10 @@
-namespace Naheulbook.Web.Responses
+namespace Naheulbook.Web.Responses;
+
+public class CalendarResponse
 {
-    public class CalendarResponse
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public int StartDay { get; set; }
-        public int EndDay { get; set; }
-        public string? Note { get; set; }
-    }
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+    public int StartDay { get; set; }
+    public int EndDay { get; set; }
+    public string? Note { get; set; }
 }

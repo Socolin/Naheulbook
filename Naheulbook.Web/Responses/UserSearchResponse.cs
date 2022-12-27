@@ -1,11 +1,10 @@
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace Naheulbook.Web.Responses
+namespace Naheulbook.Web.Responses;
+
+public class UserSearchResponse
 {
-    public class UserSearchResponse
-    {
-        public int Id { get; set; }
-        public string? DisplayName { get; set; }
-    }
+    public int Id { get; set; }
+    public string? DisplayName { get; set; }
 }

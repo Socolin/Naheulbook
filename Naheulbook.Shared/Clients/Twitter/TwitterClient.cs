@@ -4,69 +4,68 @@ using Naheulbook.Shared.Clients.Oauth1;
 using Naheulbook.Shared.Clients.Twitter.Exceptions;
 using Naheulbook.Shared.Clients.Twitter.Responses;
 
-namespace Naheulbook.Shared.Clients.Twitter
+namespace Naheulbook.Shared.Clients.Twitter;
+
+public interface ITwitterClient
 {
-    public interface ITwitterClient
+    Task<TwitterRequestTokenResponse> GetRequestTokenAsync();
+    Task<TwitterAccessTokenResponse> GetAccessTokenAsync(string loginToken, string oauthToken, string oauthVerifier);
+}
+
+public class TwitterClient : ITwitterClient
+{
+    private const string RequestTokenUri = "https://api.twitter.com/oauth/request_token";
+    private const string AccessTokenUri = "https://api.twitter.com/oauth/access_token";
+
+    private readonly TwitterConfiguration _configuration;
+
+    public TwitterClient(TwitterConfiguration configuration)
     {
-        Task<TwitterRequestTokenResponse> GetRequestTokenAsync();
-        Task<TwitterAccessTokenResponse> GetAccessTokenAsync(string loginToken, string oauthToken, string oauthVerifier);
+        _configuration = configuration;
     }
 
-    public class TwitterClient : ITwitterClient
+    public async Task<TwitterRequestTokenResponse> GetRequestTokenAsync()
     {
-        private const string RequestTokenUri = "https://api.twitter.com/oauth/request_token";
-        private const string AccessTokenUri = "https://api.twitter.com/oauth/access_token";
+        var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret, RequestTokenUri);
+        oauth.AddOauthParameter("callback", _configuration.Callback);
 
-        private readonly TwitterConfiguration _configuration;
-
-        public TwitterClient(TwitterConfiguration configuration)
+        try
         {
-            _configuration = configuration;
-        }
+            var oauthResult = await oauth.DoRequest();
 
-        public async Task<TwitterRequestTokenResponse> GetRequestTokenAsync()
-        {
-            var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret, RequestTokenUri);
-            oauth.AddOauthParameter("callback", _configuration.Callback);
-
-            try
+            return new TwitterRequestTokenResponse
             {
-                var oauthResult = await oauth.DoRequest();
-
-                return new TwitterRequestTokenResponse
-                {
-                    OAuthToken = oauthResult["oauth_token"]
-                };
-            }
-            catch (Exception ex)
-            {
-                throw new TwitterClientException(ex);
-            }
-        }
-
-        public async Task<TwitterAccessTokenResponse> GetAccessTokenAsync(string loginToken, string oauthToken, string oauthVerifier)
-        {
-            var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret, AccessTokenUri)
-            {
-                AccessSecret = loginToken
+                OAuthToken = oauthResult["oauth_token"]
             };
-            oauth.AddOauthParameter("token", oauthToken);
-            oauth.AddParameter("oauth_verifier", oauthVerifier);
+        }
+        catch (Exception ex)
+        {
+            throw new TwitterClientException(ex);
+        }
+    }
 
-            try
-            {
-                var oauthResult = await oauth.DoRequest();
+    public async Task<TwitterAccessTokenResponse> GetAccessTokenAsync(string loginToken, string oauthToken, string oauthVerifier)
+    {
+        var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret, AccessTokenUri)
+        {
+            AccessSecret = loginToken
+        };
+        oauth.AddOauthParameter("token", oauthToken);
+        oauth.AddParameter("oauth_verifier", oauthVerifier);
 
-                return new TwitterAccessTokenResponse
-                {
-                    ScreenName = oauthResult["screen_name"],
-                    UserId = oauthResult["user_id"]
-                };
-            }
-            catch (Exception ex)
+        try
+        {
+            var oauthResult = await oauth.DoRequest();
+
+            return new TwitterAccessTokenResponse
             {
-                throw new TwitterClientException(ex);
-            }
+                ScreenName = oauthResult["screen_name"],
+                UserId = oauthResult["user_id"]
+            };
+        }
+        catch (Exception ex)
+        {
+            throw new TwitterClientException(ex);
         }
     }
 }

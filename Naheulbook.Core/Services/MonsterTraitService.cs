@@ -3,28 +3,27 @@ using System.Threading.Tasks;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface IMonsterTraitService
 {
-    public interface IMonsterTraitService
+    Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync();
+}
+
+public class MonsterTraitService : IMonsterTraitService
+{
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+
+    public MonsterTraitService(IUnitOfWorkFactory unitOfWorkFactory)
     {
-        Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync();
+        _unitOfWorkFactory = unitOfWorkFactory;
     }
 
-    public class MonsterTraitService : IMonsterTraitService
+    public async Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync()
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-        public MonsterTraitService(IUnitOfWorkFactory unitOfWorkFactory)
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-        }
-
-        public async Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync()
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                return await uow.MonsterTraits.GetAllAsync();
-            }
+            return await uow.MonsterTraits.GetAllAsync();
         }
     }
 }

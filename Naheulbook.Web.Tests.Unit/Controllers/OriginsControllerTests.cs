@@ -9,40 +9,39 @@ using Naheulbook.Web.Responses;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Naheulbook.Web.Tests.Unit.Controllers
+namespace Naheulbook.Web.Tests.Unit.Controllers;
+
+public class OriginsControllerTests
 {
-    public class OriginsControllerTests
+    private IOriginService _originService;
+    private IMapper _mapper;
+    private ICharacterRandomNameService _characterRandomNameService;
+
+    private OriginsController _originsController;
+
+    [SetUp]
+    public void SetUp()
     {
-        private IOriginService _originService;
-        private IMapper _mapper;
-        private ICharacterRandomNameService _characterRandomNameService;
+        _originService = Substitute.For<IOriginService>();
+        _mapper = Substitute.For<IMapper>();
+        _characterRandomNameService = Substitute.For<ICharacterRandomNameService>();
 
-        private OriginsController _originsController;
+        _originsController = new OriginsController(_originService, _mapper, _characterRandomNameService);
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _originService = Substitute.For<IOriginService>();
-            _mapper = Substitute.For<IMapper>();
-            _characterRandomNameService = Substitute.For<ICharacterRandomNameService>();
+    [Test]
+    public async Task CanGetOrigins()
+    {
+        var origins = new List<OriginEntity>();
+        var expectedResponse = new List<OriginResponse>();
 
-            _originsController = new OriginsController(_originService, _mapper, _characterRandomNameService);
-        }
+        _originService.GetOriginsAsync()
+            .Returns(origins);
+        _mapper.Map<List<OriginResponse>>(origins)
+            .Returns(expectedResponse);
 
-        [Test]
-        public async Task CanGetOrigins()
-        {
-            var origins = new List<OriginEntity>();
-            var expectedResponse = new List<OriginResponse>();
+        var result = await _originsController.GetAsync();
 
-            _originService.GetOriginsAsync()
-                .Returns(origins);
-            _mapper.Map<List<OriginResponse>>(origins)
-                .Returns(expectedResponse);
-
-            var result = await _originsController.GetAsync();
-
-            result.Value.Should().BeSameAs(expectedResponse);
-        }
+        result.Value.Should().BeSameAs(expectedResponse);
     }
 }

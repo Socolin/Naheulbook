@@ -4,25 +4,24 @@ using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Data.Repositories
+namespace Naheulbook.Data.Repositories;
+
+public interface IItemTemplateSectionRepository : IRepository<ItemTemplateSectionEntity>
 {
-    public interface IItemTemplateSectionRepository : IRepository<ItemTemplateSectionEntity>
+    Task<List<ItemTemplateSectionEntity>> GetAllWithCategoriesAsync();
+}
+
+public class ItemTemplateSectionRepository : Repository<ItemTemplateSectionEntity, NaheulbookDbContext>, IItemTemplateSectionRepository
+{
+    public ItemTemplateSectionRepository(NaheulbookDbContext context)
+        : base(context)
     {
-        Task<List<ItemTemplateSectionEntity>> GetAllWithCategoriesAsync();
     }
 
-    public class ItemTemplateSectionRepository : Repository<ItemTemplateSectionEntity, NaheulbookDbContext>, IItemTemplateSectionRepository
+    public Task<List<ItemTemplateSectionEntity>> GetAllWithCategoriesAsync()
     {
-        public ItemTemplateSectionRepository(NaheulbookDbContext context)
-            : base(context)
-        {
-        }
-
-        public Task<List<ItemTemplateSectionEntity>> GetAllWithCategoriesAsync()
-        {
-            return Context.ItemTemplateSections
-                .Include(s => s.SubCategories)
-                .ToListAsync();
-        }
+        return Context.ItemTemplateSections
+            .Include(s => s.SubCategories)
+            .ToListAsync();
     }
 }

@@ -11,89 +11,88 @@ using NSubstitute;
 using NUnit.Framework;
 using Socolin.TestUtils.AutoFillTestObjects;
 
-namespace Naheulbook.Core.Tests.Unit.Services
+namespace Naheulbook.Core.Tests.Unit.Services;
+
+public class ItemTemplateSectionServiceTests
 {
-    public class ItemTemplateSectionServiceTests
+    private FakeUnitOfWorkFactory _unitOfWorkFactory;
+    private IAuthorizationUtil _authorizationUtil;
+    private IItemTemplateUtil _itemTemplateUtil;
+
+    private ItemTemplateSectionService _service;
+
+    [SetUp]
+    public void SetUp()
     {
-        private FakeUnitOfWorkFactory _unitOfWorkFactory;
-        private IAuthorizationUtil _authorizationUtil;
-        private IItemTemplateUtil _itemTemplateUtil;
+        _unitOfWorkFactory = new FakeUnitOfWorkFactory();
+        _authorizationUtil = Substitute.For<IAuthorizationUtil>();
+        _itemTemplateUtil = Substitute.For<IItemTemplateUtil>();
 
-        private ItemTemplateSectionService _service;
+        _service = new ItemTemplateSectionService(
+            _unitOfWorkFactory,
+            _authorizationUtil,
+            _itemTemplateUtil
+        );
+    }
 
-        [SetUp]
-        public void SetUp()
+    [Test]
+    public async Task CreateItemTemplateSection_AddANewItemTemplateSectionInDatabase()
+    {
+        var expectedItemTemplateSection = CreateItemTemplateSection();
+        var createItemTemplateSectionRequest = AutoFill<CreateItemTemplateSectionRequest>.One(settings: new AutoFillSettings {MaxDepth = 0});
+
+        var itemTemplateSection = await _service.CreateItemTemplateSectionAsync(new NaheulbookExecutionContext(), createItemTemplateSectionRequest);
+
+        var itemTemplateSectionRepository = _unitOfWorkFactory.GetUnitOfWork().ItemTemplateSections;
+        Received.InOrder(() =>
         {
-            _unitOfWorkFactory = new FakeUnitOfWorkFactory();
-            _authorizationUtil = Substitute.For<IAuthorizationUtil>();
-            _itemTemplateUtil = Substitute.For<IItemTemplateUtil>();
+            itemTemplateSectionRepository.Add(itemTemplateSection);
+            _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
+        });
+        itemTemplateSection.Should().BeEquivalentTo(expectedItemTemplateSection);
+    }
 
-            _service = new ItemTemplateSectionService(
-                _unitOfWorkFactory,
-                _authorizationUtil,
-                _itemTemplateUtil
-            );
-        }
+    [Test]
+    public async Task CreateItemTemplateSection_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
+    {
+        var executionContext = new NaheulbookExecutionContext();
 
-        [Test]
-        public async Task CreateItemTemplateSection_AddANewItemTemplateSectionInDatabase()
+        await _service.CreateItemTemplateSectionAsync(executionContext, new CreateItemTemplateSectionRequest());
+
+        Received.InOrder(() =>
         {
-            var expectedItemTemplateSection = CreateItemTemplateSection();
-            var createItemTemplateSectionRequest = AutoFill<CreateItemTemplateSectionRequest>.One(settings: new AutoFillSettings {MaxDepth = 0});
+            _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+            _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
+        });
+    }
 
-            var itemTemplateSection = await _service.CreateItemTemplateSectionAsync(new NaheulbookExecutionContext(), createItemTemplateSectionRequest);
+    [Test]
+    public async Task GetItemTemplatesBySectionAsync_ShouldFilterItemTemplatesBasedOnSource()
+    {
+        const int sectionId = 8;
+        const int userId = 12;
+        var allSectionItemTemplates = new List<ItemTemplateEntity> {new ItemTemplateEntity(), new ItemTemplateEntity()};
+        var filteredItemTemplate = new List<ItemTemplateEntity> {new ItemTemplateEntity()};
 
-            var itemTemplateSectionRepository = _unitOfWorkFactory.GetUnitOfWork().ItemTemplateSections;
-            Received.InOrder(() =>
-            {
-                itemTemplateSectionRepository.Add(itemTemplateSection);
-                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
-            });
-            itemTemplateSection.Should().BeEquivalentTo(expectedItemTemplateSection);
-        }
+        _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(sectionId)
+            .Returns(allSectionItemTemplates);
+        _itemTemplateUtil.FilterItemTemplatesBySource(allSectionItemTemplates, userId, true)
+            .Returns(filteredItemTemplate);
 
-        [Test]
-        public async Task CreateItemTemplateSection_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
+        var actualItemTemplates = await _service.GetItemTemplatesBySectionAsync(sectionId, userId);
+
+        actualItemTemplates.Should().BeEquivalentTo(filteredItemTemplate);
+    }
+
+    private ItemTemplateSectionEntity CreateItemTemplateSection()
+    {
+        return new ItemTemplateSectionEntity
         {
-            var executionContext = new NaheulbookExecutionContext();
-
-            await _service.CreateItemTemplateSectionAsync(executionContext, new CreateItemTemplateSectionRequest());
-
-            Received.InOrder(() =>
-            {
-                _authorizationUtil.EnsureAdminAccessAsync(executionContext);
-                _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
-            });
-        }
-
-        [Test]
-        public async Task GetItemTemplatesBySectionAsync_ShouldFilterItemTemplatesBasedOnSource()
-        {
-            const int sectionId = 8;
-            const int userId = 12;
-            var allSectionItemTemplates = new List<ItemTemplateEntity> {new ItemTemplateEntity(), new ItemTemplateEntity()};
-            var filteredItemTemplate = new List<ItemTemplateEntity> {new ItemTemplateEntity()};
-
-            _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(sectionId)
-                .Returns(allSectionItemTemplates);
-            _itemTemplateUtil.FilterItemTemplatesBySource(allSectionItemTemplates, userId, true)
-                .Returns(filteredItemTemplate);
-
-            var actualItemTemplates = await _service.GetItemTemplatesBySectionAsync(sectionId, userId);
-
-            actualItemTemplates.Should().BeEquivalentTo(filteredItemTemplate);
-        }
-
-        private ItemTemplateSectionEntity CreateItemTemplateSection()
-        {
-            return new ItemTemplateSectionEntity
-            {
-                Name = "some-name",
-                Special = "some-specials0,some-specials1,some-specials2",
-                Note = "some-note",
-                Icon = "some-icon",
-                SubCategories = new List<ItemTemplateSubCategoryEntity>()
-            };
-        }
+            Name = "some-name",
+            Special = "some-specials0,some-specials1,some-specials2",
+            Note = "some-note",
+            Icon = "some-icon",
+            SubCategories = new List<ItemTemplateSubCategoryEntity>()
+        };
     }
 }

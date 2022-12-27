@@ -11,208 +11,207 @@ using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
-namespace Naheulbook.Web.Controllers
+namespace Naheulbook.Web.Controllers;
+
+[Route("api/v2/items")]
+[ApiController]
+public class ItemsController : ControllerBase
 {
-    [Route("api/v2/items")]
-    [ApiController]
-    public class ItemsController : ControllerBase
+    private readonly IItemService _itemService;
+    private readonly IMapper _mapper;
+
+    public ItemsController(IItemService itemTemplate, IMapper mapper)
     {
-        private readonly IItemService _itemService;
-        private readonly IMapper _mapper;
+        _itemService = itemTemplate;
+        _mapper = mapper;
+    }
 
-        public ItemsController(IItemService itemTemplate, IMapper mapper)
+    [HttpPut("{ItemId}/data")]
+    public async Task<ActionResult<ItemPartialResponse>> PutEditItemDataAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int itemId,
+        ItemData itemData
+    )
+    {
+        try
         {
-            _itemService = itemTemplate;
-            _mapper = mapper;
+            var item = await _itemService.UpdateItemDataAsync(executionContext, itemId, itemData);
+
+            return _mapper.Map<ItemPartialResponse>(item);
         }
-
-        [HttpPut("{ItemId}/data")]
-        public async Task<ActionResult<ItemPartialResponse>> PutEditItemDataAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int itemId,
-            ItemData itemData
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                var item = await _itemService.UpdateItemDataAsync(executionContext, itemId, itemData);
-
-                return _mapper.Map<ItemPartialResponse>(item);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (ItemNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
-
-        [HttpDelete("{ItemId}")]
-        public async Task<ActionResult<ItemPartialResponse>> DeleteItemAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int itemId
-        )
+        catch (ItemNotFoundException ex)
         {
-            try
-            {
-                await _itemService.DeleteItemAsync(executionContext, itemId);
-                return NoContent();
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (ItemNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }
+    }
 
-        [HttpPost("{ItemId}/useCharge")]
-        public async Task<ActionResult<ItemPartialResponse>> PostUseChargeAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int itemId,
-            [FromBody] UseChargeItemRequest request
-        )
+    [HttpDelete("{ItemId}")]
+    public async Task<ActionResult<ItemPartialResponse>> DeleteItemAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int itemId
+    )
+    {
+        try
         {
-            try
-            {
-                var item = await _itemService.UseChargeAsync(executionContext, itemId, request);
-                return _mapper.Map<ItemPartialResponse>(item);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (ItemNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            await _itemService.DeleteItemAsync(executionContext, itemId);
+            return NoContent();
         }
-
-        [HttpPut("{ItemId}/modifiers")]
-        public async Task<ActionResult<ItemPartialResponse>> PutEditItemModifiersAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int itemId,
-            IList<ActiveStatsModifier> itemModifiers
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                var item = await _itemService.UpdateItemModifiersAsync(executionContext, itemId, itemModifiers);
-
-                return _mapper.Map<ItemPartialResponse>(item);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (ItemNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
-
-        [HttpPost("{ItemId}/equip")]
-        public async Task<ActionResult<ItemPartialResponse>> PostEquipItemAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int itemId,
-            EquipItemRequest request
-        )
+        catch (ItemNotFoundException ex)
         {
-            try
-            {
-                var item = await _itemService.EquipItemAsync(executionContext, itemId, request);
-
-                return _mapper.Map<ItemPartialResponse>(item);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (ItemNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }
+    }
 
-        [HttpPut("{ItemId}/container")]
-        public async Task<ActionResult<ItemPartialResponse>> PutChangeItemContainerAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int itemId,
-            ChangeItemContainerRequest request
-        )
+    [HttpPost("{ItemId}/useCharge")]
+    public async Task<ActionResult<ItemPartialResponse>> PostUseChargeAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int itemId,
+        [FromBody] UseChargeItemRequest request
+    )
+    {
+        try
         {
-            try
-            {
-                var item = await _itemService.ChangeItemContainerAsync(executionContext, itemId, request);
-
-                return _mapper.Map<ItemPartialResponse>(item);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (ItemNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            var item = await _itemService.UseChargeAsync(executionContext, itemId, request);
+            return _mapper.Map<ItemPartialResponse>(item);
         }
-
-        [HttpPost("{ItemId}/take")]
-        public async Task<ActionResult<TakeItemResponse>> PostTakeItemAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int itemId,
-            TakeItemRequest request
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                var (takenItem, remainingQuantity) = await _itemService.TakeItemAsync(executionContext, itemId, request);
-
-                return new TakeItemResponse
-                {
-                    RemainingQuantity = remainingQuantity,
-                    TakenItem = _mapper.Map<ItemResponse>(takenItem)
-                };
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (ItemNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
-
-
-        [HttpPost("{ItemId}/give")]
-        public async Task<ActionResult<GiveItemResponse>> PostGiveItemAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int itemId,
-            GiveItemRequest request
-        )
+        catch (ItemNotFoundException ex)
         {
-            try
-            {
-                var remainingQuantity = await _itemService.GiveItemAsync(executionContext, itemId, request);
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
 
-                return new GiveItemResponse
-                {
-                    RemainingQuantity = remainingQuantity
-                };
-            }
-            catch (ForbiddenAccessException ex)
+    [HttpPut("{ItemId}/modifiers")]
+    public async Task<ActionResult<ItemPartialResponse>> PutEditItemModifiersAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int itemId,
+        IList<ActiveStatsModifier> itemModifiers
+    )
+    {
+        try
+        {
+            var item = await _itemService.UpdateItemModifiersAsync(executionContext, itemId, itemModifiers);
+
+            return _mapper.Map<ItemPartialResponse>(item);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (ItemNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpPost("{ItemId}/equip")]
+    public async Task<ActionResult<ItemPartialResponse>> PostEquipItemAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int itemId,
+        EquipItemRequest request
+    )
+    {
+        try
+        {
+            var item = await _itemService.EquipItemAsync(executionContext, itemId, request);
+
+            return _mapper.Map<ItemPartialResponse>(item);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (ItemNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpPut("{ItemId}/container")]
+    public async Task<ActionResult<ItemPartialResponse>> PutChangeItemContainerAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int itemId,
+        ChangeItemContainerRequest request
+    )
+    {
+        try
+        {
+            var item = await _itemService.ChangeItemContainerAsync(executionContext, itemId, request);
+
+            return _mapper.Map<ItemPartialResponse>(item);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (ItemNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpPost("{ItemId}/take")]
+    public async Task<ActionResult<TakeItemResponse>> PostTakeItemAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int itemId,
+        TakeItemRequest request
+    )
+    {
+        try
+        {
+            var (takenItem, remainingQuantity) = await _itemService.TakeItemAsync(executionContext, itemId, request);
+
+            return new TakeItemResponse
             {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (ItemNotFoundException ex)
+                RemainingQuantity = remainingQuantity,
+                TakenItem = _mapper.Map<ItemResponse>(takenItem)
+            };
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (ItemNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+
+    [HttpPost("{ItemId}/give")]
+    public async Task<ActionResult<GiveItemResponse>> PostGiveItemAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int itemId,
+        GiveItemRequest request
+    )
+    {
+        try
+        {
+            var remainingQuantity = await _itemService.GiveItemAsync(executionContext, itemId, request);
+
+            return new GiveItemResponse
             {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
+                RemainingQuantity = remainingQuantity
+            };
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (ItemNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }
     }
 }

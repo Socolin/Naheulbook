@@ -1,16 +1,15 @@
 using System;
 using Naheulbook.Data.Extensions;
 
-namespace Naheulbook.Data.Models
-{
-    public class ItemTemplateUnSkillEntity
-    {
-        public Guid ItemTemplateId { get; set; }
-        private ItemTemplateEntity? _itemTemplate;
-        public ItemTemplateEntity ItemTemplate { get => _itemTemplate.ThrowIfNotLoaded(); set => _itemTemplate = value; }
+namespace Naheulbook.Data.Models;
 
-        public Guid SkillId { get; set; }
-        private SkillEntity? _skill;
-        public SkillEntity Skill { get => _skill.ThrowIfNotLoaded(); set => _skill = value; }
-    }
+public class ItemTemplateUnSkillEntity
+{
+    public Guid ItemTemplateId { get; set; }
+    private ItemTemplateEntity? _itemTemplate;
+    public ItemTemplateEntity ItemTemplate { get => _itemTemplate.ThrowIfNotLoaded(); set => _itemTemplate = value; }
+
+    public Guid SkillId { get; set; }
+    private SkillEntity? _skill;
+    public SkillEntity Skill { get => _skill.ThrowIfNotLoaded(); set => _skill = value; }
 }

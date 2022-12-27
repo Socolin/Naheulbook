@@ -15,51 +15,50 @@ using Naheulbook.Web.Responses;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Naheulbook.Web.Tests.Unit.Controllers
+namespace Naheulbook.Web.Tests.Unit.Controllers;
+
+public class EffectTypesControllerTests
 {
-    public class EffectTypesControllerTests
+    private IEffectService _effectService;
+    private IMapper _mapper;
+    private EffectTypesController _effectTypesController;
+    private NaheulbookExecutionContext _executionContext;
+
+    [SetUp]
+    public void SetUp()
     {
-        private IEffectService _effectService;
-        private IMapper _mapper;
-        private EffectTypesController _effectTypesController;
-        private NaheulbookExecutionContext _executionContext;
+        _effectService = Substitute.For<IEffectService>();
+        _mapper = Substitute.For<IMapper>();
+        _effectTypesController = new EffectTypesController(_effectService, _mapper);
+        _executionContext = new NaheulbookExecutionContext();
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _effectService = Substitute.For<IEffectService>();
-            _mapper = Substitute.For<IMapper>();
-            _effectTypesController = new EffectTypesController(_effectService, _mapper);
-            _executionContext = new NaheulbookExecutionContext();
-        }
+    [Test]
+    public async Task PostCreateType_CallEffectService()
+    {
+        var createEffectTypeRequest = new CreateEffectTypeRequest();
+        var effectType = new EffectTypeEntity();
+        var effectTypeResponse = new EffectTypeResponse();
 
-        [Test]
-        public async Task PostCreateType_CallEffectService()
-        {
-            var createEffectTypeRequest = new CreateEffectTypeRequest();
-            var effectType = new EffectTypeEntity();
-            var effectTypeResponse = new EffectTypeResponse();
+        _effectService.CreateEffectTypeAsync(_executionContext, createEffectTypeRequest)
+            .Returns(effectType);
+        _mapper.Map<EffectTypeResponse>(effectType)
+            .Returns(effectTypeResponse);
 
-            _effectService.CreateEffectTypeAsync(_executionContext, createEffectTypeRequest)
-                .Returns(effectType);
-            _mapper.Map<EffectTypeResponse>(effectType)
-                .Returns(effectTypeResponse);
+        var result = await _effectTypesController.PostCreateTypeAsync(_executionContext, createEffectTypeRequest);
 
-            var result = await _effectTypesController.PostCreateTypeAsync(_executionContext, createEffectTypeRequest);
+        result.StatusCode.Should().Be(201);
+        result.Value.Should().Be(effectTypeResponse);
+    }
 
-            result.StatusCode.Should().Be(201);
-            result.Value.Should().Be(effectTypeResponse);
-        }
+    [Test]
+    public async Task PostCreateType_WhenCatchForbiddenAccessException_Return403()
+    {
+        _effectService.CreateEffectTypeAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectTypeRequest>())
+            .Returns(Task.FromException<EffectTypeEntity>(new ForbiddenAccessException()));
 
-        [Test]
-        public async Task PostCreateType_WhenCatchForbiddenAccessException_Return403()
-        {
-            _effectService.CreateEffectTypeAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectTypeRequest>())
-                .Returns(Task.FromException<EffectTypeEntity>(new ForbiddenAccessException()));
+        Func<Task<JsonResult>> act = () =>  _effectTypesController.PostCreateTypeAsync(_executionContext, new CreateEffectTypeRequest());
 
-            Func<Task<JsonResult>> act = () =>  _effectTypesController.PostCreateTypeAsync(_executionContext, new CreateEffectTypeRequest());
-
-            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-        }
+        (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }
 }

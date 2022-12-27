@@ -1,10 +1,9 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace Naheulbook.Requests.Requests
+namespace Naheulbook.Requests.Requests;
+
+public class TakeItemRequest
 {
-    public class TakeItemRequest
-    {
-        public int? Quantity { get; set; }
-        public int CharacterId { get; set; }
-    }
+    public int? Quantity { get; set; }
+    public int CharacterId { get; set; }
 }

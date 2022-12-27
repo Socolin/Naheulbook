@@ -8,57 +8,56 @@ using Microsoft.Extensions.Logging;
 using Naheulbook.Web.Exceptions;
 using Newtonsoft.Json;
 
-namespace Naheulbook.Web.Middlewares
+namespace Naheulbook.Web.Middlewares;
+
+public class HttpExceptionMiddleware
 {
-    public class HttpExceptionMiddleware
+    private static readonly string[] ExcludedExceptionFields = {"TargetSite", "StackTrace", "Message", "Data", "InnerException", "HelpLink", "Source", "HResult"};
+    private readonly RequestDelegate _next;
+    private readonly ILogger _logger;
+    private readonly bool _displayExceptionFields;
+
+    public HttpExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IConfiguration configuration)
     {
-        private static readonly string[] ExcludedExceptionFields = {"TargetSite", "StackTrace", "Message", "Data", "InnerException", "HelpLink", "Source", "HResult"};
-        private readonly RequestDelegate _next;
-        private readonly ILogger _logger;
-        private readonly bool _displayExceptionFields;
+        _next = next;
+        _logger = loggerFactory.CreateLogger(nameof(HttpExceptionMiddleware));
+        _displayExceptionFields = configuration.GetValue<bool>("DisplayExceptionFields");
+    }
 
-        public HttpExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IConfiguration configuration)
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
         {
-            _next = next;
-            _logger = loggerFactory.CreateLogger(nameof(HttpExceptionMiddleware));
-            _displayExceptionFields = configuration.GetValue<bool>("DisplayExceptionFields");
+            // FIXME: logger context
+            await _next(context);
         }
-
-        public async Task InvokeAsync(HttpContext context)
+        catch (HttpErrorException ex)
         {
-            try
+            context.Response.StatusCode = ex.StatusCode;
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(new
             {
-                // FIXME: logger context
-                await _next(context);
-            }
-            catch (HttpErrorException ex)
+                ex.Message
+            }));
+        }
+        catch (Exception ex)
+        {
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            context.Response.ContentType = "application/json";
+            _logger.LogError(ex, "An unexpected error occured: " + ex.Message);
+            if (_displayExceptionFields)
             {
-                context.Response.StatusCode = ex.StatusCode;
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(new
+                foreach (var propertyInfo in ex.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(f => !ExcludedExceptionFields.Contains(f.Name)))
                 {
-                    ex.Message
-                }));
-            }
-            catch (Exception ex)
-            {
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                context.Response.ContentType = "application/json";
-                _logger.LogError(ex, "An unexpected error occured: " + ex.Message);
-                if (_displayExceptionFields)
-                {
-                    foreach (var propertyInfo in ex.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(f => !ExcludedExceptionFields.Contains(f.Name)))
-                    {
-                        _logger.LogError("ERROR_DETAIL:" + propertyInfo.Name + "=" + propertyInfo.GetValue(ex));
-                    }
+                    _logger.LogError("ERROR_DETAIL:" + propertyInfo.Name + "=" + propertyInfo.GetValue(ex));
                 }
-
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(new
-                {
-                    Message = $"An unexpected error occured, and was logged with reference id: {context.TraceIdentifier}"
-                }));
-
             }
+
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(new
+            {
+                Message = $"An unexpected error occured, and was logged with reference id: {context.TraceIdentifier}"
+            }));
+
         }
     }
 }

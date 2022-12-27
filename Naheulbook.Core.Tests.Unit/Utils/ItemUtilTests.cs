@@ -8,65 +8,64 @@ using Naheulbook.Shared.Utils;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Naheulbook.Core.Tests.Unit.Utils
+namespace Naheulbook.Core.Tests.Unit.Utils;
+
+public class ItemUtilTests
 {
-    public class ItemUtilTests
+    private ICharacterHistoryUtil _characterHistoryUtil;
+    private IItemDataUtil _itemDataUtil;
+    private IJsonUtil _jsonUtil;
+    private IItemFactory _itemFactory;
+    private IItemUtil _util;
+
+    [SetUp]
+    public void SetUp()
     {
-        private ICharacterHistoryUtil _characterHistoryUtil;
-        private IItemDataUtil _itemDataUtil;
-        private IJsonUtil _jsonUtil;
-        private IItemFactory _itemFactory;
-        private IItemUtil _util;
+        _characterHistoryUtil = Substitute.For<ICharacterHistoryUtil>();
+        _itemDataUtil = Substitute.For<IItemDataUtil>();
+        _jsonUtil = Substitute.For<IJsonUtil>();
+        _itemFactory = Substitute.For<IItemFactory>();
 
-        [SetUp]
-        public void SetUp()
-        {
-            _characterHistoryUtil = Substitute.For<ICharacterHistoryUtil>();
-            _itemDataUtil = Substitute.For<IItemDataUtil>();
-            _jsonUtil = Substitute.For<IJsonUtil>();
-            _itemFactory = Substitute.For<IItemFactory>();
+        _util = new ItemUtil(
+            _characterHistoryUtil,
+            _itemDataUtil,
+            _jsonUtil,
+            new FakeUnitOfWorkFactory(),
+            new FakeNotificationSessionFactory(),
+            _itemFactory
+        );
+    }
 
-            _util = new ItemUtil(
-                _characterHistoryUtil,
-                _itemDataUtil,
-                _jsonUtil,
-                new FakeUnitOfWorkFactory(),
-                new FakeNotificationSessionFactory(),
-                _itemFactory
-            );
-        }
+    [Test]
+    public void EquipItem_ShouldUpdateItemData()
+    {
+        var item = new ItemEntity();
 
-        [Test]
-        public void EquipItem_ShouldUpdateItemData()
-        {
-            var item = new ItemEntity();
+        _util.EquipItem(item, 8);
 
-            _util.EquipItem(item, 8);
+        _itemDataUtil.UpdateEquipItem(item, 8);
+    }
 
-            _itemDataUtil.UpdateEquipItem(item, 8);
-        }
+    [Test]
+    [TestCase(true, true, null)]
+    [TestCase(false, false, null)]
+    [TestCase(false, true, "equip")]
+    [TestCase(true, false, "unEquip")]
+    public void EquipItem_ShouldAddACharacterLogWhenItemIsOwnedToACharacterAndStateChange(bool wasEquipped, bool isNowEquipped, string expectedAction)
+    {
+        const int characterId = 8;
+        const int itemId = 12;
+        var item = new ItemEntity {Id = itemId, CharacterId = characterId, Character = new CharacterEntity()};
 
-        [Test]
-        [TestCase(true, true, null)]
-        [TestCase(false, false, null)]
-        [TestCase(false, true, "equip")]
-        [TestCase(true, false, "unEquip")]
-        public void EquipItem_ShouldAddACharacterLogWhenItemIsOwnedToACharacterAndStateChange(bool wasEquipped, bool isNowEquipped, string expectedAction)
-        {
-            const int characterId = 8;
-            const int itemId = 12;
-            var item = new ItemEntity {Id = itemId, CharacterId = characterId, Character = new CharacterEntity()};
+        _characterHistoryUtil.CreateLogEquipItem(characterId, itemId)
+            .Returns(new CharacterHistoryEntryEntity {Action = "equip"});
+        _characterHistoryUtil.CreateLogUnEquipItem(characterId, itemId)
+            .Returns(new CharacterHistoryEntryEntity {Action = "unEquip"});
+        _itemDataUtil.IsItemEquipped(item)
+            .Returns(wasEquipped, isNowEquipped);
 
-            _characterHistoryUtil.CreateLogEquipItem(characterId, itemId)
-                .Returns(new CharacterHistoryEntryEntity {Action = "equip"});
-            _characterHistoryUtil.CreateLogUnEquipItem(characterId, itemId)
-                .Returns(new CharacterHistoryEntryEntity {Action = "unEquip"});
-            _itemDataUtil.IsItemEquipped(item)
-                .Returns(wasEquipped, isNowEquipped);
+        _util.EquipItem(item, 8);
 
-            _util.EquipItem(item, 8);
-
-            item.Character.HistoryEntries?.Last()?.Action.Should().BeEquivalentTo(expectedAction);
-        }
+        item.Character.HistoryEntries?.Last()?.Action.Should().BeEquivalentTo(expectedAction);
     }
 }

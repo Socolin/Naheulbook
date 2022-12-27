@@ -1,13 +1,12 @@
 using FluentValidation;
 using Naheulbook.Requests.Requests;
 
-namespace Naheulbook.Requests.Validators
+namespace Naheulbook.Requests.Validators;
+
+public class ValidateUserRequestValidator : AbstractValidator<ValidateUserRequest>
 {
-    public class ValidateUserRequestValidator : AbstractValidator<ValidateUserRequest>
+    public ValidateUserRequestValidator()
     {
-        public ValidateUserRequestValidator()
-        {
-            RuleFor(request => request.ActivationCode).NotNull().NotEmpty();
-        }
+        RuleFor(request => request.ActivationCode).NotNull().NotEmpty();
     }
 }

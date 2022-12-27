@@ -1,23 +1,22 @@
 using System.Collections.Generic;
 using Naheulbook.Data.Extensions;
 
-namespace Naheulbook.Data.Models
+namespace Naheulbook.Data.Models;
+
+public class MapLayerEntity
 {
-    public class MapLayerEntity
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public string Source { get; set; } = null!;
-        public bool IsGm { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+    public string Source { get; set; } = null!;
+    public bool IsGm { get; set; }
 
-        public int MapId { get; set; }
-        private MapEntity? _map;
-        public MapEntity Map { get => _map.ThrowIfNotLoaded(); set => _map = value; }
+    public int MapId { get; set; }
+    private MapEntity? _map;
+    public MapEntity Map { get => _map.ThrowIfNotLoaded(); set => _map = value; }
 
-        public int? UserId { get; set; }
-        private UserEntity? _user;
-        public UserEntity? User { get => _user.ThrowIfNotLoadedAndNotNull(UserId); set => _user = value; }
+    public int? UserId { get; set; }
+    private UserEntity? _user;
+    public UserEntity? User { get => _user.ThrowIfNotLoadedAndNotNull(UserId); set => _user = value; }
 
-        public ICollection<MapMarkerEntity> Markers { get; set; } = null!;
-    }
+    public ICollection<MapMarkerEntity> Markers { get; set; } = null!;
 }

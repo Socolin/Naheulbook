@@ -1,10 +1,9 @@
-namespace Naheulbook.Data.Models
+namespace Naheulbook.Data.Models;
+
+public class GodEntity
 {
-    public class GodEntity
-    {
-        public int Id { get; set; }
-        public string DisplayName { get; set; } = null!;
-        public string? Description { get; set; }
-        public string TechName { get; set; } = null!;
-    }
+    public int Id { get; set; }
+    public string DisplayName { get; set; } = null!;
+    public string? Description { get; set; }
+    public string TechName { get; set; } = null!;
 }

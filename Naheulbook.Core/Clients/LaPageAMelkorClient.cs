@@ -3,32 +3,31 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Naheulbook.Core.Clients
+namespace Naheulbook.Core.Clients;
+
+public interface ILaPageAMelkorClient
 {
-    public interface ILaPageAMelkorClient
+    Task<ICollection<string>> GetRandomNameAsync(string url);
+}
+
+public class LaPageAMelkorClient : ILaPageAMelkorClient
+{
+    private readonly HttpClient _client;
+
+    public LaPageAMelkorClient(HttpClient client)
     {
-        Task<ICollection<string>> GetRandomNameAsync(string url);
+        _client = client;
     }
 
-    public class LaPageAMelkorClient : ILaPageAMelkorClient
+    public async Task<ICollection<string>> GetRandomNameAsync(string url)
     {
-        private readonly HttpClient _client;
-
-        public LaPageAMelkorClient(HttpClient client)
+        var response = await _client.GetAsync(url);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
         {
-            _client = client;
+            throw new GenericHttpClientException(url, (int) response.StatusCode, responseContent);
         }
 
-        public async Task<ICollection<string>> GetRandomNameAsync(string url)
-        {
-            var response = await _client.GetAsync(url);
-            var responseContent = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new GenericHttpClientException(url, (int) response.StatusCode, responseContent);
-            }
-
-            return JsonConvert.DeserializeObject<List<string>>(responseContent);
-        }
+        return JsonConvert.DeserializeObject<List<string>>(responseContent);
     }
 }

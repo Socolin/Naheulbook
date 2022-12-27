@@ -3,28 +3,27 @@ using System.Threading.Tasks;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface IStatService
 {
-    public interface IStatService
+    Task<List<StatEntity>> GetAllStatsAsync();
+}
+
+public class StatService : IStatService
+{
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+
+    public StatService(IUnitOfWorkFactory unitOfWorkFactory)
     {
-        Task<List<StatEntity>> GetAllStatsAsync();
+        _unitOfWorkFactory = unitOfWorkFactory;
     }
 
-    public class StatService : IStatService
+    public async Task<List<StatEntity>> GetAllStatsAsync()
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-        public StatService(IUnitOfWorkFactory unitOfWorkFactory)
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-        }
-
-        public async Task<List<StatEntity>> GetAllStatsAsync()
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                return await uow.Stats.GetAllAsync();
-            }
+            return await uow.Stats.GetAllAsync();
         }
     }
 }

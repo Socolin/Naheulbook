@@ -3,28 +3,27 @@ using System.Threading.Tasks;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface IOriginService
 {
-    public interface IOriginService
+    Task<ICollection<OriginEntity>> GetOriginsAsync();
+}
+
+public class OriginService : IOriginService
+{
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+
+    public OriginService(IUnitOfWorkFactory unitOfWorkFactory)
     {
-        Task<ICollection<OriginEntity>> GetOriginsAsync();
+        _unitOfWorkFactory = unitOfWorkFactory;
     }
 
-    public class OriginService : IOriginService
+    public async Task<ICollection<OriginEntity>> GetOriginsAsync()
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-        public OriginService(IUnitOfWorkFactory unitOfWorkFactory)
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-        }
-
-        public async Task<ICollection<OriginEntity>> GetOriginsAsync()
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                return await uow.Origins.GetAllWithAllDataAsync();
-            }
+            return await uow.Origins.GetAllWithAllDataAsync();
         }
     }
 }

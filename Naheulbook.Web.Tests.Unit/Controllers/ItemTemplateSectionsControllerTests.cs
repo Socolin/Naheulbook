@@ -15,51 +15,50 @@ using Naheulbook.Web.Responses;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Naheulbook.Web.Tests.Unit.Controllers
+namespace Naheulbook.Web.Tests.Unit.Controllers;
+
+public class ItemTemplateSectionsControllerTests
 {
-    public class ItemTemplateSectionsControllerTests
+    private IItemTemplateSectionService _itemTemplateSectionService;
+    private IMapper _mapper;
+    private ItemTemplateSectionsController _itemTemplateSectionsController;
+    private NaheulbookExecutionContext _executionContext;
+
+    [SetUp]
+    public void SetUp()
     {
-        private IItemTemplateSectionService _itemTemplateSectionService;
-        private IMapper _mapper;
-        private ItemTemplateSectionsController _itemTemplateSectionsController;
-        private NaheulbookExecutionContext _executionContext;
+        _itemTemplateSectionService = Substitute.For<IItemTemplateSectionService>();
+        _mapper = Substitute.For<IMapper>();
+        _itemTemplateSectionsController = new ItemTemplateSectionsController(_itemTemplateSectionService, _mapper);
+        _executionContext = new NaheulbookExecutionContext();
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _itemTemplateSectionService = Substitute.For<IItemTemplateSectionService>();
-            _mapper = Substitute.For<IMapper>();
-            _itemTemplateSectionsController = new ItemTemplateSectionsController(_itemTemplateSectionService, _mapper);
-            _executionContext = new NaheulbookExecutionContext();
-        }
+    [Test]
+    public async Task PostCreateSection_CallItemSectionService()
+    {
+        var createItemTemplateSectionRequest = new CreateItemTemplateSectionRequest();
+        var itemTemplateSection = new ItemTemplateSectionEntity();
+        var itemTemplateSectionResponse = new ItemTemplateSectionResponse();
 
-        [Test]
-        public async Task PostCreateSection_CallItemSectionService()
-        {
-            var createItemTemplateSectionRequest = new CreateItemTemplateSectionRequest();
-            var itemTemplateSection = new ItemTemplateSectionEntity();
-            var itemTemplateSectionResponse = new ItemTemplateSectionResponse();
+        _itemTemplateSectionService.CreateItemTemplateSectionAsync(_executionContext, createItemTemplateSectionRequest)
+            .Returns(itemTemplateSection);
+        _mapper.Map<ItemTemplateSectionResponse>(itemTemplateSection)
+            .Returns(itemTemplateSectionResponse);
 
-            _itemTemplateSectionService.CreateItemTemplateSectionAsync(_executionContext, createItemTemplateSectionRequest)
-                .Returns(itemTemplateSection);
-            _mapper.Map<ItemTemplateSectionResponse>(itemTemplateSection)
-                .Returns(itemTemplateSectionResponse);
+        var result = await _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, createItemTemplateSectionRequest);
 
-            var result = await _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, createItemTemplateSectionRequest);
+        result.StatusCode.Should().Be(201);
+        result.Value.Should().Be(itemTemplateSectionResponse);
+    }
 
-            result.StatusCode.Should().Be(201);
-            result.Value.Should().Be(itemTemplateSectionResponse);
-        }
+    [Test]
+    public async Task PostCreateSection_WhenCatchForbiddenAccessException_Return403()
+    {
+        _itemTemplateSectionService.CreateItemTemplateSectionAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateSectionRequest>())
+            .Returns(Task.FromException<ItemTemplateSectionEntity>(new ForbiddenAccessException()));
 
-        [Test]
-        public async Task PostCreateSection_WhenCatchForbiddenAccessException_Return403()
-        {
-            _itemTemplateSectionService.CreateItemTemplateSectionAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateSectionRequest>())
-                .Returns(Task.FromException<ItemTemplateSectionEntity>(new ForbiddenAccessException()));
+        Func<Task<JsonResult>> act = () => _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, new CreateItemTemplateSectionRequest());
 
-            Func<Task<JsonResult>> act = () => _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, new CreateItemTemplateSectionRequest());
-
-            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-        }
+        (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }
 }

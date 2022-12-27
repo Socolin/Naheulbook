@@ -9,55 +9,54 @@ using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
-namespace Naheulbook.Web.Controllers
+namespace Naheulbook.Web.Controllers;
+
+[Route("/api/v2/mapMarkerLinks")]
+[ApiController]
+public class MapMarkerLinksController : ControllerBase
 {
-    [Route("/api/v2/mapMarkerLinks")]
-    [ApiController]
-    public class MapMarkerLinksController : ControllerBase
+    private readonly IMapper _mapper;
+    private readonly IMapService _mapService;
+
+    public MapMarkerLinksController(IMapService mapService, IMapper mapper)
     {
-        private readonly IMapper _mapper;
-        private readonly IMapService _mapService;
+        _mapService = mapService;
+        _mapper = mapper;
+    }
 
-        public MapMarkerLinksController(IMapService mapService, IMapper mapper)
+    [HttpPut("{MapMarkerLinkId}")]
+    public async Task<ActionResult<MapMarkerLinkResponse>> PutEditMapMarkerLinkAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int mapMarkerLinkId,
+        MapMarkerLinkRequest request
+    )
+    {
+        try
         {
-            _mapService = mapService;
-            _mapper = mapper;
+            var mapMarkerLink = await _mapService.EditMapMarkerLinkAsync(executionContext, mapMarkerLinkId, request);
+            return _mapper.Map<MapMarkerLinkResponse>(mapMarkerLink);
+        }
+        catch (MapMarkerNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpDelete("{MapMarkerLinkId}")]
+    public async Task<IActionResult> DeleteMarkerLinkAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int mapMarkerLinkId
+    )
+    {
+        try
+        {
+            await _mapService.DeleteMapMarkerLinkAsync(executionContext, mapMarkerLinkId);
+        }
+        catch (MapMarkerNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }
 
-        [HttpPut("{MapMarkerLinkId}")]
-        public async Task<ActionResult<MapMarkerLinkResponse>> PutEditMapMarkerLinkAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int mapMarkerLinkId,
-            MapMarkerLinkRequest request
-        )
-        {
-            try
-            {
-                var mapMarkerLink = await _mapService.EditMapMarkerLinkAsync(executionContext, mapMarkerLinkId, request);
-                return _mapper.Map<MapMarkerLinkResponse>(mapMarkerLink);
-            }
-            catch (MapMarkerNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
-        }
-
-        [HttpDelete("{MapMarkerLinkId}")]
-        public async Task<IActionResult> DeleteMarkerLinkAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int mapMarkerLinkId
-        )
-        {
-            try
-            {
-                await _mapService.DeleteMapMarkerLinkAsync(executionContext, mapMarkerLinkId);
-            }
-            catch (MapMarkerNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
-
-            return NoContent();
-        }
+        return NoContent();
     }
 }

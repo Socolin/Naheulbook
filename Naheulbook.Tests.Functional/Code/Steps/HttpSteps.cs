@@ -16,194 +16,193 @@ using Socolin.TestUtils.JsonComparer.Color;
 using Socolin.TestUtils.JsonComparer.NUnitExtensions;
 using TechTalk.SpecFlow;
 
-namespace Naheulbook.Tests.Functional.Code.Steps
+namespace Naheulbook.Tests.Functional.Code.Steps;
+
+[Binding]
+public class HttpSteps
 {
-    [Binding]
-    public class HttpSteps
+    private readonly ScenarioContext _scenarioContext;
+    private readonly NaheulbookHttpClient _naheulbookHttpClient;
+    private readonly IJsonComparer _jsonComparer;
+    private readonly JsonComparerColorOptions _jsonComparerColorOptions;
+
+    public HttpSteps(
+        ScenarioContext scenarioContext,
+        NaheulbookHttpClient naheulbookHttpClient,
+        IJsonComparer jsonComparer,
+        JsonComparerColorOptions jsonComparerColorOptions
+    )
     {
-        private readonly ScenarioContext _scenarioContext;
-        private readonly NaheulbookHttpClient _naheulbookHttpClient;
-        private readonly IJsonComparer _jsonComparer;
-        private readonly JsonComparerColorOptions _jsonComparerColorOptions;
+        _scenarioContext = scenarioContext;
+        _naheulbookHttpClient = naheulbookHttpClient;
+        _jsonComparer = jsonComparer;
+        _jsonComparerColorOptions = jsonComparerColorOptions;
+    }
 
-        public HttpSteps(
-            ScenarioContext scenarioContext,
-            NaheulbookHttpClient naheulbookHttpClient,
-            IJsonComparer jsonComparer,
-            JsonComparerColorOptions jsonComparerColorOptions
-        )
+    [When(@"performing a (GET|DELETE) to the url ""(.*)""( with the current jwt| with "".+"" as access token)?")]
+    public async Task WhenPerformingAGetToTheUrl(string method, string url, string useCurrentJwt)
+    {
+        var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url);
+        if (!string.IsNullOrEmpty(useCurrentJwt))
         {
-            _scenarioContext = scenarioContext;
-            _naheulbookHttpClient = naheulbookHttpClient;
-            _jsonComparer = jsonComparer;
-            _jsonComparerColorOptions = jsonComparerColorOptions;
+            if (useCurrentJwt.StartsWith(" with the current jwt"))
+                httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt());
+            else if (useCurrentJwt.EndsWith("as access token"))
+                httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "userAccessToken:" + useCurrentJwt.Split('"')[1]);
         }
 
-        [When(@"performing a (GET|DELETE) to the url ""(.*)""( with the current jwt| with "".+"" as access token)?")]
-        public async Task WhenPerformingAGetToTheUrl(string method, string url, string useCurrentJwt)
+        var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
+        var content = await response.Content.ReadAsStringAsync();
+        _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
+        _scenarioContext.SetLastHttpResponseContent(content);
+    }
+
+    [When(@"performing a (GET|DELETE) to the url ""(.*)"" with the current session")]
+    public async Task WhenPerformingAGetToTheUrlWithTheCurrentSession(string method, string url)
+    {
+        using var httpClient = new HttpClient(new HttpClientHandler {CookieContainer = _scenarioContext.GetHttpCookiesContainer()});
+        httpClient.BaseAddress = _naheulbookHttpClient.BaseAddress;
+
+        foreach (var (name, value) in _naheulbookHttpClient.DefaultRequestHeaders)
+            httpClient.DefaultRequestHeaders.Add(name, value);
+
+        var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url);
+        var response = await httpClient.SendAsync(httpRequestMessage);
+        var content = await response.Content.ReadAsStringAsync();
+
+        _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
+        _scenarioContext.SetLastHttpResponseContent(content);
+    }
+
+    [When(@"performing a POST to the url ""(.*)"" with the following json content")]
+    public async Task WhenPerformingAPostToTheUrlWithContent(string url, string contentData)
+    {
+        var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
+        var response = await _naheulbookHttpClient.PostAsync(url, requestContent);
+        var content = await response.Content.ReadAsStringAsync();
+        _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
+        _scenarioContext.SetLastHttpResponseContent(content);
+    }
+
+    [When(@"performing a POST to the url ""(.*)"" with the following json content and the current session")]
+    public async Task WhenPerformingAPostToTheUrlWithContentAndTheCurrentSession(string url, string contentData)
+    {
+        var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
+        using var httpClient = new HttpClient(new HttpClientHandler {CookieContainer = _scenarioContext.GetHttpCookiesContainer()});
+        httpClient.BaseAddress = _naheulbookHttpClient.BaseAddress;
+
+        foreach (var (name, value) in _naheulbookHttpClient.DefaultRequestHeaders)
+            httpClient.DefaultRequestHeaders.Add(name, value);
+
+        var response = await httpClient.PostAsync(url, requestContent);
+        var content = await response.Content.ReadAsStringAsync();
+
+        _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
+        _scenarioContext.SetLastHttpResponseContent(content);
+    }
+
+    [When(@"performing a ([A-Z]+) to the url ""(.*)"" with the following json content and the current jwt")]
+    public async Task WhenPerformingAPostToTheUrlWithContentAndJwt(string method, string url, string contentData)
+    {
+        var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url)
         {
-            var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url);
-            if (!string.IsNullOrEmpty(useCurrentJwt))
+            Content = new StringContent(contentData, Encoding.UTF8, "application/json"),
+            Headers =
             {
-                if (useCurrentJwt.StartsWith(" with the current jwt"))
-                    httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt());
-                else if (useCurrentJwt.EndsWith("as access token"))
-                    httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "userAccessToken:" + useCurrentJwt.Split('"')[1]);
+                Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt())
             }
+        };
+        var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
+        var content = await response.Content.ReadAsStringAsync();
+        _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
+        _scenarioContext.SetLastHttpResponseContent(content);
+    }
 
-            var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
-            var content = await response.Content.ReadAsStringAsync();
-            _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
-            _scenarioContext.SetLastHttpResponseContent(content);
-        }
+    [When(@"performing a multipart POST to the url ""(.*)"" with the following json content as ""(.+)"" and an image as ""(.+)"" and the current jwt")]
+    public async Task WhenPerformingAMultipartPostToTheUrlWithContentAndJwt(string url, string contentPartName, string imagePartName, string contentData)
+    {
+        using var image = new MagickImage(new MagickColor("#ff00ff"), 1024, 512);
+        using var memoryStream = new MemoryStream();
+        new Drawables().Line(0, 0, 1024, 512).Draw(image);
+        image.Write(memoryStream, MagickFormat.Png);
 
-        [When(@"performing a (GET|DELETE) to the url ""(.*)"" with the current session")]
-        public async Task WhenPerformingAGetToTheUrlWithTheCurrentSession(string method, string url)
+        var imageContent = new ByteArrayContent(memoryStream.GetBuffer())
         {
-            using var httpClient = new HttpClient(new HttpClientHandler {CookieContainer = _scenarioContext.GetHttpCookiesContainer()});
-            httpClient.BaseAddress = _naheulbookHttpClient.BaseAddress;
-
-            foreach (var (name, value) in _naheulbookHttpClient.DefaultRequestHeaders)
-                httpClient.DefaultRequestHeaders.Add(name, value);
-
-            var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url);
-            var response = await httpClient.SendAsync(httpRequestMessage);
-            var content = await response.Content.ReadAsStringAsync();
-
-            _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
-            _scenarioContext.SetLastHttpResponseContent(content);
-        }
-
-        [When(@"performing a POST to the url ""(.*)"" with the following json content")]
-        public async Task WhenPerformingAPostToTheUrlWithContent(string url, string contentData)
-        {
-            var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
-            var response = await _naheulbookHttpClient.PostAsync(url, requestContent);
-            var content = await response.Content.ReadAsStringAsync();
-            _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
-            _scenarioContext.SetLastHttpResponseContent(content);
-        }
-
-        [When(@"performing a POST to the url ""(.*)"" with the following json content and the current session")]
-        public async Task WhenPerformingAPostToTheUrlWithContentAndTheCurrentSession(string url, string contentData)
-        {
-            var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
-            using var httpClient = new HttpClient(new HttpClientHandler {CookieContainer = _scenarioContext.GetHttpCookiesContainer()});
-            httpClient.BaseAddress = _naheulbookHttpClient.BaseAddress;
-
-            foreach (var (name, value) in _naheulbookHttpClient.DefaultRequestHeaders)
-                httpClient.DefaultRequestHeaders.Add(name, value);
-
-            var response = await httpClient.PostAsync(url, requestContent);
-            var content = await response.Content.ReadAsStringAsync();
-
-            _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
-            _scenarioContext.SetLastHttpResponseContent(content);
-        }
-
-        [When(@"performing a ([A-Z]+) to the url ""(.*)"" with the following json content and the current jwt")]
-        public async Task WhenPerformingAPostToTheUrlWithContentAndJwt(string method, string url, string contentData)
-        {
-            var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url)
+            Headers =
             {
-                Content = new StringContent(contentData, Encoding.UTF8, "application/json"),
-                Headers =
-                {
-                    Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt())
-                }
-            };
-            var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
-            var content = await response.Content.ReadAsStringAsync();
-            _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
-            _scenarioContext.SetLastHttpResponseContent(content);
-        }
-
-        [When(@"performing a multipart POST to the url ""(.*)"" with the following json content as ""(.+)"" and an image as ""(.+)"" and the current jwt")]
-        public async Task WhenPerformingAMultipartPostToTheUrlWithContentAndJwt(string url, string contentPartName, string imagePartName, string contentData)
-        {
-            using var image = new MagickImage(new MagickColor("#ff00ff"), 1024, 512);
-            using var memoryStream = new MemoryStream();
-            new Drawables().Line(0, 0, 1024, 512).Draw(image);
-            image.Write(memoryStream, MagickFormat.Png);
-
-            var imageContent = new ByteArrayContent(memoryStream.GetBuffer())
-            {
-                Headers =
-                {
-                    ContentType = new MediaTypeHeaderValue("image/png")
-                }
-            };
-
-            var multipartContent = new MultipartFormDataContent();
-            multipartContent.Add(new StringContent(contentData, Encoding.UTF8, "application/json"), contentPartName);
-            multipartContent.Add(imageContent, imagePartName, "some-image.png");
-
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url)
-            {
-                Content = multipartContent,
-                Headers =
-                {
-                    Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt())
-                }
-            };
-            var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
-            var content = await response.Content.ReadAsStringAsync();
-            _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
-            _scenarioContext.SetLastHttpResponseContent(content);
-        }
-
-        [Then(@"the response status code is (.*)")]
-        public void ThenTheResponseStatusCodeBe(int expectedStatusCode)
-        {
-            var lastStatusCode = _scenarioContext.GetLastHttpResponseStatusCode();
-            if (lastStatusCode != expectedStatusCode)
-            {
-                if (string.IsNullOrEmpty(_scenarioContext.GetLastHttpResponseContent()))
-                    Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with no content");
-                else
-                    Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with content:\n{_scenarioContext.GetLastHttpResponseContent()}\n");
+                ContentType = new MediaTypeHeaderValue("image/png")
             }
-        }
+        };
 
-        [Then(@"the response should contains the following json")]
-        public void TheResponseShouldContainsTheFollowingJson(JToken expectedJson)
+        var multipartContent = new MultipartFormDataContent();
+        multipartContent.Add(new StringContent(contentData, Encoding.UTF8, "application/json"), contentPartName);
+        multipartContent.Add(imageContent, imagePartName, "some-image.png");
+
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url)
         {
-            var jsonContent = _scenarioContext.GetLastJsonHttpResponseContent();
+            Content = multipartContent,
+            Headers =
+            {
+                Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt())
+            }
+        };
+        var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
+        var content = await response.Content.ReadAsStringAsync();
+        _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
+        _scenarioContext.SetLastHttpResponseContent(content);
+    }
 
-            Assert.That(jsonContent, IsJson.EquivalentTo(expectedJson).WithComparer(_jsonComparer).WithColorOptions(_jsonComparerColorOptions));
-        }
-
-        [Then(@"the response should contains a json array containing the following element identified by (.+)")]
-        public void TheResponseShouldContainsAJsonArrayContainingTheFollowingElementIdentifiedBy(string identityField, string expectedJson)
+    [Then(@"the response status code is (.*)")]
+    public void ThenTheResponseStatusCodeBe(int expectedStatusCode)
+    {
+        var lastStatusCode = _scenarioContext.GetLastHttpResponseStatusCode();
+        if (lastStatusCode != expectedStatusCode)
         {
-            var content = _scenarioContext.GetLastHttpResponseContent();
-
-            JObject expectedObject;
-            try
-            {
-                expectedObject = JObject.Parse(expectedJson);
-            }
-            catch (JsonReaderException ex)
-            {
-                throw new Exception($"Invalid expected JSON: {ex.Message} Line:\n '{expectedJson.Split('\n')[ex.LineNumber - 1]}'", ex);
-            }
-
-            var identityValue = (JValue)expectedObject.Property(identityField)?.Value;
-            var array = JArray.Parse(content);
-
-            foreach (var element in array)
-            {
-                if (element.Type != JTokenType.Object || !(element is JObject actualObject))
-                    continue;
-
-                if (identityValue?.Equals((JValue)actualObject.Property(identityField)?.Value) == false)
-                    continue;
-
-                Assert.That(element, IsJson.EquivalentTo(expectedObject).WithComparer(_jsonComparer).WithColorOptions(_jsonComparerColorOptions));
-                return;
-            }
-
-            Assert.Fail($"Failed to find expected element using `{identityField}`.\nExpected identifier value: `{identityValue}` but found values: {string.Join(",", array.Select(s => s[identityField]))}\nResponse:\n{content}");
+            if (string.IsNullOrEmpty(_scenarioContext.GetLastHttpResponseContent()))
+                Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with no content");
+            else
+                Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with content:\n{_scenarioContext.GetLastHttpResponseContent()}\n");
         }
+    }
+
+    [Then(@"the response should contains the following json")]
+    public void TheResponseShouldContainsTheFollowingJson(JToken expectedJson)
+    {
+        var jsonContent = _scenarioContext.GetLastJsonHttpResponseContent();
+
+        Assert.That(jsonContent, IsJson.EquivalentTo(expectedJson).WithComparer(_jsonComparer).WithColorOptions(_jsonComparerColorOptions));
+    }
+
+    [Then(@"the response should contains a json array containing the following element identified by (.+)")]
+    public void TheResponseShouldContainsAJsonArrayContainingTheFollowingElementIdentifiedBy(string identityField, string expectedJson)
+    {
+        var content = _scenarioContext.GetLastHttpResponseContent();
+
+        JObject expectedObject;
+        try
+        {
+            expectedObject = JObject.Parse(expectedJson);
+        }
+        catch (JsonReaderException ex)
+        {
+            throw new Exception($"Invalid expected JSON: {ex.Message} Line:\n '{expectedJson.Split('\n')[ex.LineNumber - 1]}'", ex);
+        }
+
+        var identityValue = (JValue)expectedObject.Property(identityField)?.Value;
+        var array = JArray.Parse(content);
+
+        foreach (var element in array)
+        {
+            if (element.Type != JTokenType.Object || !(element is JObject actualObject))
+                continue;
+
+            if (identityValue?.Equals((JValue)actualObject.Property(identityField)?.Value) == false)
+                continue;
+
+            Assert.That(element, IsJson.EquivalentTo(expectedObject).WithComparer(_jsonComparer).WithColorOptions(_jsonComparerColorOptions));
+            return;
+        }
+
+        Assert.Fail($"Failed to find expected element using `{identityField}`.\nExpected identifier value: `{identityValue}` but found values: {string.Join(",", array.Select(s => s[identityField]))}\nResponse:\n{content}");
     }
 }

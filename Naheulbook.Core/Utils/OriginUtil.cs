@@ -4,43 +4,42 @@ using Naheulbook.Data.Models;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
 
-namespace Naheulbook.Core.Utils
+namespace Naheulbook.Core.Utils;
+
+public interface IOriginUtil
 {
-    public interface IOriginUtil
+    bool HasFlag(OriginEntity origin, string chaLvl2Lvl3);
+}
+
+public class OriginUtil : IOriginUtil
+{
+    private readonly IJsonUtil _jsonUtil;
+
+    public OriginUtil(IJsonUtil jsonUtil)
     {
-        bool HasFlag(OriginEntity origin, string chaLvl2Lvl3);
+        _jsonUtil = jsonUtil;
     }
 
-    public class OriginUtil : IOriginUtil
+    public bool HasFlag(OriginEntity origin, string flagName)
     {
-        private readonly IJsonUtil _jsonUtil;
+        var originFlags = _jsonUtil.Deserialize<IList<NhbkFlag>>(origin.Flags) ?? new List<NhbkFlag>();
+        if (originFlags.Any(f => f.Type == flagName))
+            return true;
 
-        public OriginUtil(IJsonUtil jsonUtil)
+        foreach (var bonus in origin.Bonuses)
         {
-            _jsonUtil = jsonUtil;
-        }
-
-        public bool HasFlag(OriginEntity origin, string flagName)
-        {
-            var originFlags = _jsonUtil.Deserialize<IList<NhbkFlag>>(origin.Flags) ?? new List<NhbkFlag>();
-            if (originFlags.Any(f => f.Type == flagName))
+            var flags = _jsonUtil.Deserialize<IList<NhbkFlag>>(bonus.Flags) ?? new List<NhbkFlag>();
+            if (flags.Any(f => f.Type == flagName))
                 return true;
-
-            foreach (var bonus in origin.Bonuses)
-            {
-                var flags = _jsonUtil.Deserialize<IList<NhbkFlag>>(bonus.Flags) ?? new List<NhbkFlag>();
-                if (flags.Any(f => f.Type == flagName))
-                    return true;
-            }
-
-            foreach (var restrict in origin.Restrictions)
-            {
-                var flags = _jsonUtil.Deserialize<IList<NhbkFlag>>(restrict.Flags) ?? new List<NhbkFlag>();
-                if (flags.Any(f => f.Type == flagName))
-                    return true;
-            }
-
-            return false;
         }
+
+        foreach (var restrict in origin.Restrictions)
+        {
+            var flags = _jsonUtil.Deserialize<IList<NhbkFlag>>(restrict.Flags) ?? new List<NhbkFlag>();
+            if (flags.Any(f => f.Type == flagName))
+                return true;
+        }
+
+        return false;
     }
 }

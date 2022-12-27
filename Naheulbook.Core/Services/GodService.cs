@@ -3,28 +3,27 @@ using System.Threading.Tasks;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface IGodService
 {
-    public interface IGodService
+    Task<List<GodEntity>> GetAllGodsAsync();
+}
+
+public class GodService : IGodService
+{
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+
+    public GodService(IUnitOfWorkFactory unitOfWorkFactory)
     {
-        Task<List<GodEntity>> GetAllGodsAsync();
+        _unitOfWorkFactory = unitOfWorkFactory;
     }
 
-    public class GodService : IGodService
+    public async Task<List<GodEntity>> GetAllGodsAsync()
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-        public GodService(IUnitOfWorkFactory unitOfWorkFactory)
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-        }
-
-        public async Task<List<GodEntity>> GetAllGodsAsync()
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                return await uow.Gods.GetAllAsync();
-            }
+            return await uow.Gods.GetAllAsync();
         }
     }
 }

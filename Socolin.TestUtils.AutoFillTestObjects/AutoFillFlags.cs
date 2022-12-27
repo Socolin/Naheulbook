@@ -1,12 +1,11 @@
 using System;
 
-namespace Socolin.TestUtils.AutoFillTestObjects
+namespace Socolin.TestUtils.AutoFillTestObjects;
+
+[Flags]
+public enum AutoFillFlags
 {
-    [Flags]
-    public enum AutoFillFlags
-    {
-        None = 0,
-        RandomizeString = 0x1,
-        RandomInt = 0x2,
-    }
+    None = 0,
+    RandomizeString = 0x1,
+    RandomInt = 0x2,
 }

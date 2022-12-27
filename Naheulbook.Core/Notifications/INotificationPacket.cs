@@ -1,12 +1,11 @@
-namespace Naheulbook.Core.Notifications
-{
-    public interface INotificationPacket
-    {
-        string GroupName { get; }
-        INotificationPacketPayload Payload { get; }
-    }
+namespace Naheulbook.Core.Notifications;
 
-    public interface INotificationPacketPayload
-    {
-    }
+public interface INotificationPacket
+{
+    string GroupName { get; }
+    INotificationPacketPayload Payload { get; }
+}
+
+public interface INotificationPacketPayload
+{
 }

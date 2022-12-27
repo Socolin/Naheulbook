@@ -1,16 +1,15 @@
 using System;
 using Naheulbook.Data.Extensions;
 
-namespace Naheulbook.Data.Models
-{
-    public class JobBonusEntity
-    {
-        public int Id { get; set; }
-        public string Description { get; set; } = null!;
-        public string? Flags { get; set; }
+namespace Naheulbook.Data.Models;
 
-        public Guid JobId { get; set; }
-        private JobEntity? _job;
-        public JobEntity Job { get => _job.ThrowIfNotLoaded(); set => _job = value; }
-    }
+public class JobBonusEntity
+{
+    public int Id { get; set; }
+    public string Description { get; set; } = null!;
+    public string? Flags { get; set; }
+
+    public Guid JobId { get; set; }
+    private JobEntity? _job;
+    public JobEntity Job { get => _job.ThrowIfNotLoaded(); set => _job = value; }
 }

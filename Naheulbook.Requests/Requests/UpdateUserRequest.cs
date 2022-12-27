@@ -1,10 +1,9 @@
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
-namespace Naheulbook.Requests.Requests
+namespace Naheulbook.Requests.Requests;
+
+public class UpdateUserRequest
 {
-    public class UpdateUserRequest
-    {
-        public string? DisplayName { get; set; }
-        public int? ShowInSearchFor { get; set; }
-    }
+    public string? DisplayName { get; set; }
+    public int? ShowInSearchFor { get; set; }
 }

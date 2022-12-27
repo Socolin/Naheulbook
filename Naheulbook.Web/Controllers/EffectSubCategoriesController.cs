@@ -11,68 +11,67 @@ using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
-namespace Naheulbook.Web.Controllers
+namespace Naheulbook.Web.Controllers;
+
+[Route("api/v2/effectSubCategories")]
+[ApiController]
+public class EffectSubCategoriesController : ControllerBase
 {
-    [Route("api/v2/effectSubCategories")]
-    [ApiController]
-    public class EffectSubCategoriesController : ControllerBase
+    private readonly IEffectService _effectService;
+    private readonly IMapper _mapper;
+
+    public EffectSubCategoriesController(IEffectService effectService, IMapper mapper)
     {
-        private readonly IEffectService _effectService;
-        private readonly IMapper _mapper;
+        _effectService = effectService;
+        _mapper = mapper;
+    }
 
-        public EffectSubCategoriesController(IEffectService effectService, IMapper mapper)
+    [HttpGet]
+    public async Task<ActionResult<List<EffectTypeResponse>>> GetEffectSubCategoriesAsync()
+    {
+        var effectSubCategories = await _effectService.GetEffectSubCategoriesAsync();
+        return _mapper.Map<List<EffectTypeResponse>>(effectSubCategories);
+    }
+
+    [HttpGet("{subCategoryId:int:min(1)}/effects")]
+    public async Task<ActionResult<List<EffectResponse>>> GetEffectsAsync(long subCategoryId)
+    {
+        var effects = await _effectService.GetEffectsBySubCategoryAsync(subCategoryId);
+        return _mapper.Map<List<EffectResponse>>(effects);
+    }
+
+    [HttpPost("{subCategoryId:int:min(1)}/effects")]
+    public async Task<CreatedActionResult<EffectResponse>> PostCreateEffectAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int subCategoryId,
+        CreateEffectRequest request
+    )
+    {
+        try
         {
-            _effectService = effectService;
-            _mapper = mapper;
+            var effect = await _effectService.CreateEffectAsync(executionContext, subCategoryId, request);
+            return _mapper.Map<EffectResponse>(effect);
         }
-
-        [HttpGet]
-        public async Task<ActionResult<List<EffectTypeResponse>>> GetEffectSubCategoriesAsync()
+        catch (ForbiddenAccessException ex)
         {
-            var effectSubCategories = await _effectService.GetEffectSubCategoriesAsync();
-            return _mapper.Map<List<EffectTypeResponse>>(effectSubCategories);
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
+    }
 
-        [HttpGet("{subCategoryId:int:min(1)}/effects")]
-        public async Task<ActionResult<List<EffectResponse>>> GetEffectsAsync(long subCategoryId)
+    [HttpPost]
+    public async Task<CreatedActionResult<EffectSubCategoryResponse>> PostCreateEffectSubCategoryAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        CreateEffectSubCategoryRequest request
+    )
+    {
+        try
         {
-            var effects = await _effectService.GetEffectsBySubCategoryAsync(subCategoryId);
-            return _mapper.Map<List<EffectResponse>>(effects);
+            var effectSubCategory = await _effectService.CreateEffectSubCategoryAsync(executionContext, request);
+            return _mapper.Map<EffectSubCategoryResponse>(effectSubCategory);
         }
-
-        [HttpPost("{subCategoryId:int:min(1)}/effects")]
-        public async Task<CreatedActionResult<EffectResponse>> PostCreateEffectAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int subCategoryId,
-            CreateEffectRequest request
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                var effect = await _effectService.CreateEffectAsync(executionContext, subCategoryId, request);
-                return _mapper.Map<EffectResponse>(effect);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-        }
-
-        [HttpPost]
-        public async Task<CreatedActionResult<EffectSubCategoryResponse>> PostCreateEffectSubCategoryAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            CreateEffectSubCategoryRequest request
-        )
-        {
-            try
-            {
-                var effectSubCategory = await _effectService.CreateEffectSubCategoryAsync(executionContext, request);
-                return _mapper.Map<EffectSubCategoryResponse>(effectSubCategory);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
     }
 }

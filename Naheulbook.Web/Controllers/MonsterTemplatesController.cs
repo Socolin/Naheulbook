@@ -10,88 +10,87 @@ using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
-namespace Naheulbook.Web.Controllers
+namespace Naheulbook.Web.Controllers;
+
+[Route("api/v2/monsterTemplates")]
+[ApiController]
+public class MonsterTemplatesController
 {
-    [Route("api/v2/monsterTemplates")]
-    [ApiController]
-    public class MonsterTemplatesController
+    private readonly IMonsterTemplateService _monsterTemplateService;
+    private readonly IMapper _mapper;
+
+    public MonsterTemplatesController(IMapper mapper, IMonsterTemplateService monsterTemplateService)
     {
-        private readonly IMonsterTemplateService _monsterTemplateService;
-        private readonly IMapper _mapper;
+        _mapper = mapper;
+        _monsterTemplateService = monsterTemplateService;
+    }
 
-        public MonsterTemplatesController(IMapper mapper, IMonsterTemplateService monsterTemplateService)
+    [HttpGet]
+    public async Task<ActionResult<List<MonsterTemplateResponse>>> GetMonsterListAsync()
+    {
+        var monsters = await _monsterTemplateService.GetAllMonstersAsync();
+        return _mapper.Map<List<MonsterTemplateResponse>>(monsters);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<MonsterTemplateResponse>> PostAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        MonsterTemplateRequest request
+    )
+    {
+        try
         {
-            _mapper = mapper;
-            _monsterTemplateService = monsterTemplateService;
-        }
+            var createdMonster = await _monsterTemplateService.CreateMonsterTemplateAsync(executionContext, request);
 
-        [HttpGet]
-        public async Task<ActionResult<List<MonsterTemplateResponse>>> GetMonsterListAsync()
+            var result = _mapper.Map<MonsterTemplateResponse>(createdMonster);
+            return new JsonResult(result) {StatusCode = StatusCodes.Status201Created};
+        }
+        catch (MonsterSubCategoryNotFoundException ex)
         {
-            var monsters = await _monsterTemplateService.GetAllMonstersAsync();
-            return _mapper.Map<List<MonsterTemplateResponse>>(monsters);
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
         }
-
-        [HttpPost]
-        public async Task<ActionResult<MonsterTemplateResponse>> PostAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            MonsterTemplateRequest request
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                var createdMonster = await _monsterTemplateService.CreateMonsterTemplateAsync(executionContext, request);
-
-                var result = _mapper.Map<MonsterTemplateResponse>(createdMonster);
-                return new JsonResult(result) {StatusCode = StatusCodes.Status201Created};
-            }
-            catch (MonsterSubCategoryNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
+    }
 
-        [HttpPut("{MonsterTemplateId}")]
-        public async Task<ActionResult<MonsterTemplateResponse>> PutAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int monsterTemplateId,
-            MonsterTemplateRequest request
-        )
+    [HttpPut("{MonsterTemplateId}")]
+    public async Task<ActionResult<MonsterTemplateResponse>> PutAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterTemplateId,
+        MonsterTemplateRequest request
+    )
+    {
+        try
         {
-            try
-            {
-                var monster = await _monsterTemplateService.EditMonsterTemplateAsync(executionContext, monsterTemplateId, request);
+            var monster = await _monsterTemplateService.EditMonsterTemplateAsync(executionContext, monsterTemplateId, request);
 
-                var result = _mapper.Map<MonsterTemplateResponse>(monster);
-                return new JsonResult(result);
-            }
-            catch (MonsterSubCategoryNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
-            }
-            catch (MonsterTemplateNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
+            var result = _mapper.Map<MonsterTemplateResponse>(monster);
+            return new JsonResult(result);
         }
-
-        [HttpGet("search")]
-        public async Task<ActionResult<List<MonsterTemplateResponse>>> GetSearchMonsterTemplateAsync(
-            [FromQuery] string filter,
-            [FromQuery] int? monsterTypeId,
-            [FromQuery] int? monsterSubCategoryId
-        )
+        catch (MonsterSubCategoryNotFoundException ex)
         {
-            var monsterTemplates = await _monsterTemplateService.SearchMonsterAsync(filter, monsterTypeId, monsterSubCategoryId);
-            return _mapper.Map<List<MonsterTemplateResponse>>(monsterTemplates);
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
         }
+        catch (MonsterTemplateNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+    }
+
+    [HttpGet("search")]
+    public async Task<ActionResult<List<MonsterTemplateResponse>>> GetSearchMonsterTemplateAsync(
+        [FromQuery] string filter,
+        [FromQuery] int? monsterTypeId,
+        [FromQuery] int? monsterSubCategoryId
+    )
+    {
+        var monsterTemplates = await _monsterTemplateService.SearchMonsterAsync(filter, monsterTypeId, monsterSubCategoryId);
+        return _mapper.Map<List<MonsterTemplateResponse>>(monsterTemplates);
     }
 }

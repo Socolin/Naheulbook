@@ -11,62 +11,61 @@ using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
-namespace Naheulbook.Web.Controllers
+namespace Naheulbook.Web.Controllers;
+
+[Route("api/v2/monsterTypes")]
+[ApiController]
+public class MonsterTypesController
 {
-    [Route("api/v2/monsterTypes")]
-    [ApiController]
-    public class MonsterTypesController
+    private readonly IMonsterTypeService _monsterTypeService;
+    private readonly IMapper _mapper;
+
+    public MonsterTypesController(IMapper mapper, IMonsterTypeService monsterTypeService)
     {
-        private readonly IMonsterTypeService _monsterTypeService;
-        private readonly IMapper _mapper;
+        _mapper = mapper;
+        _monsterTypeService = monsterTypeService;
+    }
 
-        public MonsterTypesController(IMapper mapper, IMonsterTypeService monsterTypeService)
+    [HttpGet]
+    public async Task<ActionResult<List<MonsterTypeResponse>>> GetMonsterTypesAsync()
+    {
+        var monsterTypes = await _monsterTypeService.GetMonsterTypesWithCategoriesAsync();
+        return _mapper.Map<List<MonsterTypeResponse>>(monsterTypes);
+    }
+
+
+    [HttpPost]
+    public async Task<CreatedActionResult<MonsterTypeResponse>> PostCreateMonsterTypeAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        CreateMonsterTypeRequest request
+    )
+    {
+        try
         {
-            _mapper = mapper;
-            _monsterTypeService = monsterTypeService;
+            var monsterType = await _monsterTypeService.CreateMonsterTypeAsync(executionContext, request);
+            return _mapper.Map<MonsterTypeResponse>(monsterType);
         }
-
-        [HttpGet]
-        public async Task<ActionResult<List<MonsterTypeResponse>>> GetMonsterTypesAsync()
+        catch (ForbiddenAccessException ex)
         {
-            var monsterTypes = await _monsterTypeService.GetMonsterTypesWithCategoriesAsync();
-            return _mapper.Map<List<MonsterTypeResponse>>(monsterTypes);
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
+    }
 
-
-        [HttpPost]
-        public async Task<CreatedActionResult<MonsterTypeResponse>> PostCreateMonsterTypeAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            CreateMonsterTypeRequest request
-        )
+    [HttpPost("{MonsterTypeId}/subcategories")]
+    public async Task<CreatedActionResult<MonsterSubCategoryResponse>> PostCreateMonsterSubCategoryAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterTypeId,
+        CreateMonsterSubCategoryRequest request
+    )
+    {
+        try
         {
-            try
-            {
-                var monsterType = await _monsterTypeService.CreateMonsterTypeAsync(executionContext, request);
-                return _mapper.Map<MonsterTypeResponse>(monsterType);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
+            var monsterSubCategory = await _monsterTypeService.CreateMonsterSubCategoryAsync(executionContext, monsterTypeId, request);
+            return _mapper.Map<MonsterSubCategoryResponse>(monsterSubCategory);
         }
-
-        [HttpPost("{MonsterTypeId}/subcategories")]
-        public async Task<CreatedActionResult<MonsterSubCategoryResponse>> PostCreateMonsterSubCategoryAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int monsterTypeId,
-            CreateMonsterSubCategoryRequest request
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                var monsterSubCategory = await _monsterTypeService.CreateMonsterSubCategoryAsync(executionContext, monsterTypeId, request);
-                return _mapper.Map<MonsterSubCategoryResponse>(monsterSubCategory);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
     }
 }

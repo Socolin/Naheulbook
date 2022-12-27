@@ -1,21 +1,20 @@
 using System;
 using Naheulbook.Data.Extensions;
 
-namespace Naheulbook.Data.Models
+namespace Naheulbook.Data.Models;
+
+public class JobRequirementEntity
 {
-    public class JobRequirementEntity
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public long? MinValue { get; set; }
-        public long? MaxValue { get; set; }
+    public long? MinValue { get; set; }
+    public long? MaxValue { get; set; }
 
-        public string StatName { get; set; } = null!;
-        private StatEntity? _stat;
-        public StatEntity Stat { get => _stat.ThrowIfNotLoaded(); set => _stat = value; }
+    public string StatName { get; set; } = null!;
+    private StatEntity? _stat;
+    public StatEntity Stat { get => _stat.ThrowIfNotLoaded(); set => _stat = value; }
 
-        public Guid JobId { get; set; }
-        private JobEntity? _job;
-        public JobEntity Job { get => _job.ThrowIfNotLoaded(); set => _job = value; }
-    }
+    public Guid JobId { get; set; }
+    private JobEntity? _job;
+    public JobEntity Job { get => _job.ThrowIfNotLoaded(); set => _job = value; }
 }

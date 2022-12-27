@@ -1,36 +1,35 @@
 using System.Collections.Generic;
 
-namespace Naheulbook.Web.Responses
+namespace Naheulbook.Web.Responses;
+
+public class EffectResponse
 {
-    public class EffectResponse
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public string? Description { get; set; }
-        public string DurationType { get; set; } = null!;
-        public string? Duration { get; set; }
-        public int? CombatCount { get; set; }
-        public int? LapCount { get; set; }
-        public int? TimeDuration { get; set; }
-        public int? Dice { get; set; }
-        public int SubCategoryId { get; set; }
-        public IList<StatModifierResponse> Modifiers { get; set; } = null!;
-    }
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+    public string? Description { get; set; }
+    public string DurationType { get; set; } = null!;
+    public string? Duration { get; set; }
+    public int? CombatCount { get; set; }
+    public int? LapCount { get; set; }
+    public int? TimeDuration { get; set; }
+    public int? Dice { get; set; }
+    public int SubCategoryId { get; set; }
+    public IList<StatModifierResponse> Modifiers { get; set; } = null!;
+}
 
-    public class EffectTypeResponse
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public IList<EffectSubCategoryResponse> SubCategories { get; set; } = null!;
-    }
+public class EffectTypeResponse
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+    public IList<EffectSubCategoryResponse> SubCategories { get; set; } = null!;
+}
 
-    public class EffectSubCategoryResponse
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public short DiceCount { get; set; }
-        public short DiceSize { get; set; }
-        public string? Note { get; set; }
-        public int TypeId { get; set; }
-    }
+public class EffectSubCategoryResponse
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+    public short DiceCount { get; set; }
+    public short DiceSize { get; set; }
+    public string? Note { get; set; }
+    public int TypeId { get; set; }
 }

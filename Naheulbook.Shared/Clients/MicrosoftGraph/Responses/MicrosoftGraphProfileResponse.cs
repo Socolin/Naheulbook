@@ -1,10 +1,9 @@
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
-namespace Naheulbook.Shared.Clients.MicrosoftGraph.Responses
+namespace Naheulbook.Shared.Clients.MicrosoftGraph.Responses;
+
+public class MicrosoftGraphProfileResponse
 {
-    public class MicrosoftGraphProfileResponse
-    {
-        public string Id { get; set; } = null!;
-        public string Name { get; set; } = null!;
-    }
+    public string Id { get; set; } = null!;
+    public string Name { get; set; } = null!;
 }

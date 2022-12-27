@@ -1,14 +1,13 @@
 using System;
 
-namespace Naheulbook.Core.Exceptions
-{
-    public class CharacterModifierNotFoundException : Exception
-    {
-        public int CharacterModifierId { get; }
+namespace Naheulbook.Core.Exceptions;
 
-        public CharacterModifierNotFoundException(int characterModifierId)
-        {
-            CharacterModifierId = characterModifierId;
-        }
+public class CharacterModifierNotFoundException : Exception
+{
+    public int CharacterModifierId { get; }
+
+    public CharacterModifierNotFoundException(int characterModifierId)
+    {
+        CharacterModifierId = characterModifierId;
     }
 }

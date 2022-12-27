@@ -2,30 +2,29 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Data.Configurations
+namespace Naheulbook.Data.Configurations;
+
+public class CalendarConfiguration : IEntityTypeConfiguration<CalendarEntity>
 {
-    public class CalendarConfiguration : IEntityTypeConfiguration<CalendarEntity>
+    public void Configure(EntityTypeBuilder<CalendarEntity> builder)
     {
-        public void Configure(EntityTypeBuilder<CalendarEntity> builder)
-        {
-            builder.ToTable("calendars");
+        builder.ToTable("calendars");
 
-            builder.HasKey(e => e.Id);
+        builder.HasKey(e => e.Id);
 
-            builder.Property(e => e.Id)
-                .HasColumnName("id");
+        builder.Property(e => e.Id)
+            .HasColumnName("id");
 
-            builder.Property(e => e.StartDay)
-                .HasColumnName("startday");
+        builder.Property(e => e.StartDay)
+            .HasColumnName("startday");
 
-            builder.Property(e => e.EndDay)
-                .HasColumnName("endday");
+        builder.Property(e => e.EndDay)
+            .HasColumnName("endday");
 
-            builder.Property(e => e.Name)
-                .HasColumnName("name");
+        builder.Property(e => e.Name)
+            .HasColumnName("name");
 
-            builder.Property(e => e.Note)
-                .HasColumnName("note");
-        }
+        builder.Property(e => e.Note)
+            .HasColumnName("note");
     }
 }

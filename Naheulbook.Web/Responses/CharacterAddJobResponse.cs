@@ -3,10 +3,9 @@ using System;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace Naheulbook.Web.Responses
+namespace Naheulbook.Web.Responses;
+
+public class CharacterAddJobResponse
 {
-    public class CharacterAddJobResponse
-    {
-        public Guid JobId { get; set; }
-    }
+    public Guid JobId { get; set; }
 }

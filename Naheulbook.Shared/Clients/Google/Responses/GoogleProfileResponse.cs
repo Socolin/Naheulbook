@@ -1,10 +1,9 @@
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
-namespace Naheulbook.Shared.Clients.Google.Responses
+namespace Naheulbook.Shared.Clients.Google.Responses;
+
+public class GoogleProfileResponse
 {
-    public class GoogleProfileResponse
-    {
-        public string Id { get; set; } = null!;
-        public string DisplayName { get; set; } = null!;
-    }
+    public string Id { get; set; } = null!;
+    public string DisplayName { get; set; } = null!;
 }

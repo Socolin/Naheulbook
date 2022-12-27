@@ -9,39 +9,38 @@ using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
-namespace Naheulbook.Web.Controllers
+namespace Naheulbook.Web.Controllers;
+
+[Route("api/v2/effectTypes")]
+[ApiController]
+public class EffectTypesController : ControllerBase
 {
-    [Route("api/v2/effectTypes")]
-    [ApiController]
-    public class EffectTypesController : ControllerBase
+    private readonly IEffectService _effectService;
+    private readonly IMapper _mapper;
+
+    public EffectTypesController(IEffectService effectService, IMapper mapper)
     {
-        private readonly IEffectService _effectService;
-        private readonly IMapper _mapper;
+        _effectService = effectService;
+        _mapper = mapper;
+    }
 
-        public EffectTypesController(IEffectService effectService, IMapper mapper)
+    [HttpPost]
+    public async Task<JsonResult> PostCreateTypeAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        CreateEffectTypeRequest request
+    )
+    {
+        try
         {
-            _effectService = effectService;
-            _mapper = mapper;
+            var effectType = await _effectService.CreateEffectTypeAsync(executionContext, request);
+            return new JsonResult(_mapper.Map<EffectTypeResponse>(effectType))
+            {
+                StatusCode = 201
+            };
         }
-
-        [HttpPost]
-        public async Task<JsonResult> PostCreateTypeAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            CreateEffectTypeRequest request
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                var effectType = await _effectService.CreateEffectTypeAsync(executionContext, request);
-                return new JsonResult(_mapper.Map<EffectTypeResponse>(effectType))
-                {
-                    StatusCode = 201
-                };
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
     }
 }

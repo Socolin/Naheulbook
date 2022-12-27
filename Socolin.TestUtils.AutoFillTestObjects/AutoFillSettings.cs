@@ -1,8 +1,7 @@
-namespace Socolin.TestUtils.AutoFillTestObjects
+namespace Socolin.TestUtils.AutoFillTestObjects;
+
+public class AutoFillSettings
 {
-    public class AutoFillSettings
-    {
-        public int MaxDepth { get; set; } = 5;
-        public int StartIntValue { get; set; } = 1;
-    }
+    public int MaxDepth { get; set; } = 5;
+    public int StartIntValue { get; set; } = 1;
 }

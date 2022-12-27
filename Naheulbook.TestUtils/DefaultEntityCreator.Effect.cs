@@ -2,50 +2,49 @@ using Naheulbook.Data.Models;
 
 // ReSharper disable MemberCanBeMadeStatic.Global
 
-namespace Naheulbook.TestUtils
+namespace Naheulbook.TestUtils;
+
+public partial class DefaultEntityCreator
 {
-    public partial class DefaultEntityCreator
+    public EffectTypeEntity CreateEffectType(string suffix = null)
     {
-        public EffectTypeEntity CreateEffectType(string suffix = null)
+        if (suffix == null)
+            suffix = RngUtil.GetRandomHexString(8);
+
+        return new EffectTypeEntity
         {
-            if (suffix == null)
-                suffix = RngUtil.GetRandomHexString(8);
+            Name = $"some-effect-type-name-{suffix}"
+        };
+    }
 
-            return new EffectTypeEntity
-            {
-                Name = $"some-effect-type-name-{suffix}"
-            };
-        }
+    public EffectSubCategoryEntity CreateEffectSubCategory(EffectTypeEntity effectType, string suffix = null)
+    {
+        if (suffix == null)
+            suffix = RngUtil.GetRandomHexString(8);
 
-        public EffectSubCategoryEntity CreateEffectSubCategory(EffectTypeEntity effectType, string suffix = null)
+        return new EffectSubCategoryEntity
         {
-            if (suffix == null)
-                suffix = RngUtil.GetRandomHexString(8);
+            Name = $"some-effect-sub-category-name-{suffix}",
+            Note = $"some-effect-name-{suffix}",
+            DiceCount = 1,
+            DiceSize = 20,
+            Type = effectType
+        };
+    }
 
-            return new EffectSubCategoryEntity
-            {
-                Name = $"some-effect-sub-category-name-{suffix}",
-                Note = $"some-effect-name-{suffix}",
-                DiceCount = 1,
-                DiceSize = 20,
-                Type = effectType
-            };
-        }
+    public EffectEntity CreateEffect(EffectSubCategoryEntity subCategory, string suffix = null)
+    {
+        if (suffix == null)
+            suffix = RngUtil.GetRandomHexString(8);
 
-        public EffectEntity CreateEffect(EffectSubCategoryEntity subCategory, string suffix = null)
+        return new EffectEntity
         {
-            if (suffix == null)
-                suffix = RngUtil.GetRandomHexString(8);
-
-            return new EffectEntity
-            {
-                SubCategory = subCategory,
-                Description = $"some-description-{suffix}",
-                Dice = 4,
-                Name = $"some-effect-name-{suffix}",
-                DurationType = "combat",
-                CombatCount = 2
-            };
-        }
+            SubCategory = subCategory,
+            Description = $"some-description-{suffix}",
+            Dice = 4,
+            Name = $"some-effect-name-{suffix}",
+            DurationType = "combat",
+            CombatCount = 2
+        };
     }
 }

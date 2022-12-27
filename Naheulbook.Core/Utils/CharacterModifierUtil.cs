@@ -1,40 +1,39 @@
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Core.Utils
+namespace Naheulbook.Core.Utils;
+
+public interface ICharacterModifierUtil
 {
-    public interface ICharacterModifierUtil
+    void ToggleModifier(CharacterEntity character, CharacterModifierEntity modifier);
+}
+
+public class CharacterModifierUtil : ICharacterModifierUtil
+{
+    private readonly ICharacterHistoryUtil _characterHistoryUtil;
+
+    public CharacterModifierUtil(ICharacterHistoryUtil characterHistoryUtil)
     {
-        void ToggleModifier(CharacterEntity character, CharacterModifierEntity modifier);
+        _characterHistoryUtil = characterHistoryUtil;
     }
 
-    public class CharacterModifierUtil : ICharacterModifierUtil
+    public void ToggleModifier(CharacterEntity character, CharacterModifierEntity modifier)
     {
-        private readonly ICharacterHistoryUtil _characterHistoryUtil;
+        if (!modifier.Reusable)
+            throw new CharacterModifierNotReusableException(modifier.Id);
 
-        public CharacterModifierUtil(ICharacterHistoryUtil characterHistoryUtil)
+        modifier.IsActive = !modifier.IsActive;
+        if (modifier.IsActive)
         {
-            _characterHistoryUtil = characterHistoryUtil;
+            modifier.CurrentCombatCount = modifier.CombatCount;
+            modifier.CurrentLapCount = modifier.LapCount;
+            modifier.CurrentTimeDuration = modifier.TimeDuration;
+
+            character.AddHistoryEntry(_characterHistoryUtil.CreateLogActiveModifier(character.Id, modifier.Id));
         }
-
-        public void ToggleModifier(CharacterEntity character, CharacterModifierEntity modifier)
+        else
         {
-            if (!modifier.Reusable)
-                throw new CharacterModifierNotReusableException(modifier.Id);
-
-            modifier.IsActive = !modifier.IsActive;
-            if (modifier.IsActive)
-            {
-                modifier.CurrentCombatCount = modifier.CombatCount;
-                modifier.CurrentLapCount = modifier.LapCount;
-                modifier.CurrentTimeDuration = modifier.TimeDuration;
-
-                character.AddHistoryEntry(_characterHistoryUtil.CreateLogActiveModifier(character.Id, modifier.Id));
-            }
-            else
-            {
-                character.AddHistoryEntry(_characterHistoryUtil.CreateLogDisableModifier(character.Id, modifier.Id));
-            }
+            character.AddHistoryEntry(_characterHistoryUtil.CreateLogDisableModifier(character.Id, modifier.Id));
         }
     }
 }

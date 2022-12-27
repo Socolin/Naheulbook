@@ -3,28 +3,27 @@ using System.Threading.Tasks;
 using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface ISkillService
 {
-    public interface ISkillService
+    Task<ICollection<SkillEntity>> GetSkillsAsync();
+}
+
+public class SkillService : ISkillService
+{
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+
+    public SkillService(IUnitOfWorkFactory unitOfWorkFactory)
     {
-        Task<ICollection<SkillEntity>> GetSkillsAsync();
+        _unitOfWorkFactory = unitOfWorkFactory;
     }
 
-    public class SkillService : ISkillService
+    public async Task<ICollection<SkillEntity>> GetSkillsAsync()
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-        public SkillService(IUnitOfWorkFactory unitOfWorkFactory)
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-        }
-
-        public async Task<ICollection<SkillEntity>> GetSkillsAsync()
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                return await uow.Skills.GetAllWithEffectsAsync();
-            }
+            return await uow.Skills.GetAllWithEffectsAsync();
         }
     }
 }

@@ -14,201 +14,200 @@ using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Responses;
 using Naheulbook.Web.Services;
 
-namespace Naheulbook.Web.Controllers
+namespace Naheulbook.Web.Controllers;
+
+[Route("api/v2/users")]
+[ApiController]
+public class UsersController : ControllerBase
 {
-    [Route("api/v2/users")]
-    [ApiController]
-    public class UsersController : ControllerBase
+    private readonly IUserService _userService;
+    private readonly IJwtService _jwtService;
+    private readonly IMapper _mapper;
+    private readonly IUserAccessTokenService _userAccessTokenService;
+
+    public UsersController(IUserService userService, IJwtService jwtService, IMapper mapper, IUserAccessTokenService userAccessTokenService)
     {
-        private readonly IUserService _userService;
-        private readonly IJwtService _jwtService;
-        private readonly IMapper _mapper;
-        private readonly IUserAccessTokenService _userAccessTokenService;
+        _userService = userService;
+        _jwtService = jwtService;
+        _mapper = mapper;
+        _userAccessTokenService = userAccessTokenService;
+    }
 
-        public UsersController(IUserService userService, IJwtService jwtService, IMapper mapper, IUserAccessTokenService userAccessTokenService)
+    [HttpPost]
+    public async Task<StatusCodeResult> PostAsync(CreateUserRequest request)
+    {
+        try
         {
-            _userService = userService;
-            _jwtService = jwtService;
-            _mapper = mapper;
-            _userAccessTokenService = userAccessTokenService;
+            await _userService.CreateUserAsync(request.Username, request.Password);
+        }
+        catch (UserAlreadyExistsException)
+        {
+            return Conflict();
         }
 
-        [HttpPost]
-        public async Task<StatusCodeResult> PostAsync(CreateUserRequest request)
-        {
-            try
-            {
-                await _userService.CreateUserAsync(request.Username, request.Password);
-            }
-            catch (UserAlreadyExistsException)
-            {
-                return Conflict();
-            }
+        return StatusCode(StatusCodes.Status201Created);
+    }
 
-            return StatusCode(StatusCodes.Status201Created);
+    [HttpPost("{Username}/validate")]
+    public async Task<StatusCodeResult> PostValidateUserAsync(string username, ValidateUserRequest request)
+    {
+        try
+        {
+            await _userService.ValidateUserAsync(username, request.ActivationCode);
+        }
+        catch (UserNotFoundException)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden);
+        }
+        catch (InvalidUserActivationCodeException)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden);
         }
 
-        [HttpPost("{Username}/validate")]
-        public async Task<StatusCodeResult> PostValidateUserAsync(string username, ValidateUserRequest request)
-        {
-            try
-            {
-                await _userService.ValidateUserAsync(username, request.ActivationCode);
-            }
-            catch (UserNotFoundException)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden);
-            }
-            catch (InvalidUserActivationCodeException)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden);
-            }
+        return StatusCode(StatusCodes.Status204NoContent);
+    }
 
-            return StatusCode(StatusCodes.Status204NoContent);
+    [HttpPost("{Username}/jwt")]
+    public async Task<ActionResult<UserJwtResponse>> PostGenerateJwtAsync(string username, GenerateJwtRequest request)
+    {
+        try
+        {
+            var user = await _userService.CheckPasswordAsync(username, request.Password);
+            HttpContext.Session.SetCurrentUserId(user.Id);
+            var token = _jwtService.GenerateJwtToken(user.Id);
+            return new UserJwtResponse {Token = token};
         }
-
-        [HttpPost("{Username}/jwt")]
-        public async Task<ActionResult<UserJwtResponse>> PostGenerateJwtAsync(string username, GenerateJwtRequest request)
+        catch (UserNotFoundException)
         {
-            try
-            {
-                var user = await _userService.CheckPasswordAsync(username, request.Password);
-                HttpContext.Session.SetCurrentUserId(user.Id);
-                var token = _jwtService.GenerateJwtToken(user.Id);
-                return new UserJwtResponse {Token = token};
-            }
-            catch (UserNotFoundException)
-            {
-                return StatusCode(StatusCodes.Status401Unauthorized);
-            }
-            catch (InvalidPasswordException)
-            {
-                return StatusCode(StatusCodes.Status401Unauthorized);
-            }
+            return StatusCode(StatusCodes.Status401Unauthorized);
         }
-
-        [HttpGet("me")]
-        public async Task<ActionResult<UserInfoResponse>> GetCurrentUserInfoAsync()
+        catch (InvalidPasswordException)
         {
-            // FIXME: userSession if userId is not found, check in db if long duration session still valid
-            var userId = HttpContext.Session.GetCurrentUserId();
-            if (!userId.HasValue)
-                return StatusCode(StatusCodes.Status401Unauthorized);
-
-            var user = await _userService.GetUserInfoAsync(userId.Value);
-            return _mapper.Map<UserInfoResponse>(user);
+            return StatusCode(StatusCodes.Status401Unauthorized);
         }
+    }
 
-        [HttpGet("me/jwt")]
-        public async Task<ActionResult<UserJwtResponse>> GetAJwtAsync()
+    [HttpGet("me")]
+    public async Task<ActionResult<UserInfoResponse>> GetCurrentUserInfoAsync()
+    {
+        // FIXME: userSession if userId is not found, check in db if long duration session still valid
+        var userId = HttpContext.Session.GetCurrentUserId();
+        if (!userId.HasValue)
+            return StatusCode(StatusCodes.Status401Unauthorized);
+
+        var user = await _userService.GetUserInfoAsync(userId.Value);
+        return _mapper.Map<UserInfoResponse>(user);
+    }
+
+    [HttpGet("me/jwt")]
+    public async Task<ActionResult<UserJwtResponse>> GetAJwtAsync()
+    {
+        // FIXME: userSession if userId is not found, check in db if long duration session still valid
+        var userId = HttpContext.Session.GetCurrentUserId();
+        if (!userId.HasValue)
+            return StatusCode(StatusCodes.Status401Unauthorized);
+
+        var userInfo = await _userService.GetUserInfoAsync(userId.Value);
+        var token = _jwtService.GenerateJwtToken(userId.Value);
+
+        return new UserJwtResponse
         {
-            // FIXME: userSession if userId is not found, check in db if long duration session still valid
-            var userId = HttpContext.Session.GetCurrentUserId();
-            if (!userId.HasValue)
-                return StatusCode(StatusCodes.Status401Unauthorized);
+            Token = token,
+            UserInfo = _mapper.Map<UserInfoResponse>(userInfo)
+        };
+    }
 
-            var userInfo = await _userService.GetUserInfoAsync(userId.Value);
-            var token = _jwtService.GenerateJwtToken(userId.Value);
+    [HttpGet("me/accessTokens")]
+    public async Task<ActionResult<List<UserAccessTokenResponse>>> GetUserAccessTokens()
+    {
+        // FIXME: userSession if userId is not found, check in db if long duration session still valid
+        var userId = HttpContext.Session.GetCurrentUserId();
+        if (!userId.HasValue)
+            return StatusCode(StatusCodes.Status401Unauthorized);
 
-            return new UserJwtResponse
-            {
-                Token = token,
-                UserInfo = _mapper.Map<UserInfoResponse>(userInfo)
-            };
-        }
+        var accessTokens = await _userAccessTokenService.GetUserAccessTokensAsync(userId.Value);
+        return _mapper.Map<List<UserAccessTokenResponse>>(accessTokens);
+    }
 
-        [HttpGet("me/accessTokens")]
-        public async Task<ActionResult<List<UserAccessTokenResponse>>> GetUserAccessTokens()
+    [HttpPost("me/accessTokens")]
+    public async Task<CreatedActionResult<UserAccessTokenResponseWithKey>> PostCreateUserAccessToken(
+        [FromBody] CreateAccessTokenRequest request
+    )
+    {
+        // FIXME: userSession if userId is not found, check in db if long duration session still valid
+        var userId = HttpContext.Session.GetCurrentUserId();
+        if (!userId.HasValue)
+            return StatusCode(StatusCodes.Status401Unauthorized);
+
+        var accessToken= await _userAccessTokenService.CreateUserAccessTokenAsync(userId.Value, request);
+
+        return _mapper.Map<UserAccessTokenResponseWithKey>(accessToken);
+    }
+
+    [HttpDelete("me/accessTokens/{UserAccessTokenId}")]
+    public async Task<ActionResult<List<UserAccessTokenResponse>>> DeleteUserAccessToken(
+        [FromRoute] Guid userAccessTokenId
+    )
+    {
+        // FIXME: userSession if userId is not found, check in db if long duration session still valid
+        var userId = HttpContext.Session.GetCurrentUserId();
+        if (!userId.HasValue)
+            return StatusCode(StatusCodes.Status401Unauthorized);
+
+        try
         {
-            // FIXME: userSession if userId is not found, check in db if long duration session still valid
-            var userId = HttpContext.Session.GetCurrentUserId();
-            if (!userId.HasValue)
-                return StatusCode(StatusCodes.Status401Unauthorized);
-
-            var accessTokens = await _userAccessTokenService.GetUserAccessTokensAsync(userId.Value);
-            return _mapper.Map<List<UserAccessTokenResponse>>(accessTokens);
-        }
-
-        [HttpPost("me/accessTokens")]
-        public async Task<CreatedActionResult<UserAccessTokenResponseWithKey>> PostCreateUserAccessToken(
-            [FromBody] CreateAccessTokenRequest request
-        )
-        {
-            // FIXME: userSession if userId is not found, check in db if long duration session still valid
-            var userId = HttpContext.Session.GetCurrentUserId();
-            if (!userId.HasValue)
-                return StatusCode(StatusCodes.Status401Unauthorized);
-
-            var accessToken= await _userAccessTokenService.CreateUserAccessTokenAsync(userId.Value, request);
-
-            return _mapper.Map<UserAccessTokenResponseWithKey>(accessToken);
-        }
-
-        [HttpDelete("me/accessTokens/{UserAccessTokenId}")]
-        public async Task<ActionResult<List<UserAccessTokenResponse>>> DeleteUserAccessToken(
-            [FromRoute] Guid userAccessTokenId
-        )
-        {
-            // FIXME: userSession if userId is not found, check in db if long duration session still valid
-            var userId = HttpContext.Session.GetCurrentUserId();
-            if (!userId.HasValue)
-                return StatusCode(StatusCodes.Status401Unauthorized);
-
-            try
-            {
-                await _userAccessTokenService.DeleteUserAccessTokensAsync(userId.Value, userAccessTokenId);
-                return NoContent();
-            }
-            catch (UserAccessTokenNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
-        }
-
-        [HttpGet("me/logout")]
-        public IActionResult GetLogout()
-        {
-            HttpContext.Session.Clear();
+            await _userAccessTokenService.DeleteUserAccessTokensAsync(userId.Value, userAccessTokenId);
             return NoContent();
         }
-
-        [HttpPost("search")]
-        public async Task<ActionResult<List<UserSearchResponse>>> PostSearchAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            SearchUserRequest request
-        )
+        catch (UserAccessTokenNotFoundException ex)
         {
-            try
-            {
-                var users = await _userService.SearchUserAsync(executionContext, request.Filter);
-                return _mapper.Map<List<UserSearchResponse>>(users);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }
+    }
 
-        [HttpPatch("{UserId:int:min(1)}")]
-        public async Task<IActionResult> PatchUserIdAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int userId,
-            UpdateUserRequest request
-        )
+    [HttpGet("me/logout")]
+    public IActionResult GetLogout()
+    {
+        HttpContext.Session.Clear();
+        return NoContent();
+    }
+
+    [HttpPost("search")]
+    public async Task<ActionResult<List<UserSearchResponse>>> PostSearchAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        SearchUserRequest request
+    )
+    {
+        try
         {
-            try
-            {
-                await _userService.UpdateUserAsync(executionContext, userId, request);
-                return NoContent();
-            }
-            catch (UserNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
+            var users = await _userService.SearchUserAsync(executionContext, request.Filter);
+            return _mapper.Map<List<UserSearchResponse>>(users);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+    }
+
+    [HttpPatch("{UserId:int:min(1)}")]
+    public async Task<IActionResult> PatchUserIdAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int userId,
+        UpdateUserRequest request
+    )
+    {
+        try
+        {
+            await _userService.UpdateUserAsync(executionContext, userId, request);
+            return NoContent();
+        }
+        catch (UserNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
         }
     }
 }

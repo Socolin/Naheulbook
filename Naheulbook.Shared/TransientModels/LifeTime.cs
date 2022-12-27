@@ -1,13 +1,12 @@
 // ReSharper disable UnusedMember.Global
 
-namespace Naheulbook.Shared.TransientModels
+namespace Naheulbook.Shared.TransientModels;
+
+public class LifeTime
 {
-    public class LifeTime
-    {
-        public DurationType DurationType { get; set; }
-        public int? CombatCount { get; set; }
-        public int? LapCount { get; set; }
-        public string? Duration { get; set; }
-        public int? TimeDuration { get; set; }
-    }
+    public DurationType DurationType { get; set; }
+    public int? CombatCount { get; set; }
+    public int? LapCount { get; set; }
+    public string? Duration { get; set; }
+    public int? TimeDuration { get; set; }
 }

@@ -4,36 +4,35 @@ using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
 
-namespace Naheulbook.Core.Utils
+namespace Naheulbook.Core.Utils;
+
+public interface IGroupConfigUtil
 {
-    public interface IGroupConfigUtil
+    void ApplyChangesAndNotify(GroupEntity group, PatchGroupConfigRequest request, INotificationSession notificationSession);
+}
+
+public class GroupConfigUtil : IGroupConfigUtil
+{
+    private readonly IJsonUtil _jsonUtil;
+
+    public GroupConfigUtil(IJsonUtil jsonUtil)
     {
-        void ApplyChangesAndNotify(GroupEntity group, PatchGroupConfigRequest request, INotificationSession notificationSession);
+        _jsonUtil = jsonUtil;
     }
 
-    public class GroupConfigUtil : IGroupConfigUtil
+    public void ApplyChangesAndNotify(GroupEntity group, PatchGroupConfigRequest request, INotificationSession notificationSession)
     {
-        private readonly IJsonUtil _jsonUtil;
+        var config = _jsonUtil.DeserializeOrCreate<GroupConfig>(group.Config);
 
-        public GroupConfigUtil(IJsonUtil jsonUtil)
-        {
-            _jsonUtil = jsonUtil;
-        }
+        if (request.AllowPlayersToAddObject.HasValue)
+            config.AllowPlayersToAddObject = request.AllowPlayersToAddObject.Value;
+        if (request.AllowPlayersToSeeSkillGmDetails.HasValue)
+            config.AllowPlayersToSeeSkillGmDetails = request.AllowPlayersToSeeSkillGmDetails.Value;
+        if (request.AllowPlayersToSeeGemPriceWhenIdentified.HasValue)
+            config.AllowPlayersToSeeGemPriceWhenIdentified = request.AllowPlayersToSeeGemPriceWhenIdentified.Value;
 
-        public void ApplyChangesAndNotify(GroupEntity group, PatchGroupConfigRequest request, INotificationSession notificationSession)
-        {
-            var config = _jsonUtil.DeserializeOrCreate<GroupConfig>(group.Config);
+        group.Config = _jsonUtil.SerializeNonNull(config);
 
-            if (request.AllowPlayersToAddObject.HasValue)
-                config.AllowPlayersToAddObject = request.AllowPlayersToAddObject.Value;
-            if (request.AllowPlayersToSeeSkillGmDetails.HasValue)
-                config.AllowPlayersToSeeSkillGmDetails = request.AllowPlayersToSeeSkillGmDetails.Value;
-            if (request.AllowPlayersToSeeGemPriceWhenIdentified.HasValue)
-                config.AllowPlayersToSeeGemPriceWhenIdentified = request.AllowPlayersToSeeGemPriceWhenIdentified.Value;
-
-            group.Config = _jsonUtil.SerializeNonNull(config);
-
-            notificationSession.NotifyGroupChangeConfig(group.Id, config);
-        }
+        notificationSession.NotifyGroupChangeConfig(group.Id, config);
     }
 }

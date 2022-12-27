@@ -1,7 +1,6 @@
-namespace Naheulbook.Requests.Requests
+namespace Naheulbook.Requests.Requests;
+
+public class EquipItemRequest
 {
-    public class EquipItemRequest
-    {
-        public int? Level { get; set; }
-    }
+    public int? Level { get; set; }
 }

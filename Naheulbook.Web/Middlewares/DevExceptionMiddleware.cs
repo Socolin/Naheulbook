@@ -7,45 +7,44 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Naheulbook.Web.Exceptions;
 
-namespace Naheulbook.Web.Middlewares
+namespace Naheulbook.Web.Middlewares;
+
+public class DevExceptionMiddleware
 {
-    public class DevExceptionMiddleware
+    private static readonly string[] ExcludedExceptionFields = {"TargetSite", "StackTrace", "Message", "Data", "InnerException", "HelpLink", "Source", "HResult"};
+    private readonly RequestDelegate _next;
+    private readonly ILogger _logger;
+    private readonly bool _displayExceptionFields;
+
+    public DevExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IConfiguration configuration)
     {
-        private static readonly string[] ExcludedExceptionFields = {"TargetSite", "StackTrace", "Message", "Data", "InnerException", "HelpLink", "Source", "HResult"};
-        private readonly RequestDelegate _next;
-        private readonly ILogger _logger;
-        private readonly bool _displayExceptionFields;
+        _next = next;
+        _logger = loggerFactory.CreateLogger(nameof(DevExceptionMiddleware));
+        _displayExceptionFields = configuration.GetValue<bool>("DisplayExceptionFields");
+    }
 
-        public DevExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IConfiguration configuration)
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
         {
-            _next = next;
-            _logger = loggerFactory.CreateLogger(nameof(DevExceptionMiddleware));
-            _displayExceptionFields = configuration.GetValue<bool>("DisplayExceptionFields");
+            await _next(context);
         }
-
-        public async Task InvokeAsync(HttpContext context)
+        catch (HttpErrorException)
         {
-            try
-            {
-                await _next(context);
-            }
-            catch (HttpErrorException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An unexpected error occured: " + ex.Message);
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                context.Response.ContentType = "text/plain";
-                await context.Response.WriteAsync(ex.ToString());
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error occured: " + ex.Message);
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            context.Response.ContentType = "text/plain";
+            await context.Response.WriteAsync(ex.ToString());
 
-                if (_displayExceptionFields)
+            if (_displayExceptionFields)
+            {
+                foreach (var propertyInfo in ex.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(f => !ExcludedExceptionFields.Contains(f.Name)))
                 {
-                    foreach (var propertyInfo in ex.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(f => !ExcludedExceptionFields.Contains(f.Name)))
-                    {
-                        await context.Response.WriteAsync("\n" + propertyInfo.Name + "=" + propertyInfo.GetValue(ex));
-                    }
+                    await context.Response.WriteAsync("\n" + propertyInfo.Name + "=" + propertyInfo.GetValue(ex));
                 }
             }
         }

@@ -1,22 +1,21 @@
 using Naheulbook.TestUtils;
 using TechTalk.SpecFlow;
 
-namespace Naheulbook.Tests.Functional.Code.SpecificSteps
+namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
+
+[Binding]
+public class GodSteps
 {
-    [Binding]
-    public class GodSteps
+    private readonly TestDataUtil _testDataUtil;
+
+    public GodSteps(TestDataUtil testDataUtil)
     {
-        private readonly TestDataUtil _testDataUtil;
+        _testDataUtil = testDataUtil;
+    }
 
-        public GodSteps(TestDataUtil testDataUtil)
-        {
-            _testDataUtil = testDataUtil;
-        }
-
-        [Given("a god")]
-        public void GivenAGod()
-        {
-            _testDataUtil.AddGod();
-        }
+    [Given("a god")]
+    public void GivenAGod()
+    {
+        _testDataUtil.AddGod();
     }
 }

@@ -9,44 +9,43 @@ using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
-namespace Naheulbook.Web.Controllers
+namespace Naheulbook.Web.Controllers;
+
+[ApiController]
+[Route("/api/v2/npcs")]
+public class NpcController : ControllerBase
 {
-    [ApiController]
-    [Route("/api/v2/npcs")]
-    public class NpcController : ControllerBase
+    private readonly INpcService _npcService;
+    private readonly IMapper _mapper;
+
+    public NpcController(
+        INpcService npcService,
+        IMapper mapper
+    )
     {
-        private readonly INpcService _npcService;
-        private readonly IMapper _mapper;
+        _npcService = npcService;
+        _mapper = mapper;
+    }
 
-        public NpcController(
-            INpcService npcService,
-            IMapper mapper
-        )
+    [HttpPut("{NpcId:int:min(1)}")]
+    public async Task<ActionResult<NpcResponse>> PutEditNpcAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int npcId,
+        NpcRequest request
+    )
+    {
+        try
         {
-            _npcService = npcService;
-            _mapper = mapper;
+            var npc = await _npcService.EditNpcAsync(executionContext, npcId, request);
+            return _mapper.Map<NpcResponse>(npc);
         }
-
-        [HttpPut("{NpcId:int:min(1)}")]
-        public async Task<ActionResult<NpcResponse>> PutEditNpcAsync(
-            [FromServices] NaheulbookExecutionContext executionContext,
-            [FromRoute] int npcId,
-            NpcRequest request
-        )
+        catch (ForbiddenAccessException ex)
         {
-            try
-            {
-                var npc = await _npcService.EditNpcAsync(executionContext, npcId, request);
-                return _mapper.Map<NpcResponse>(npc);
-            }
-            catch (ForbiddenAccessException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
-            }
-            catch (NpcNotFoundException ex)
-            {
-                throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
-            }
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (NpcNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
         }
     }
 }

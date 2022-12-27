@@ -6,34 +6,33 @@ using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.Data.Repositories
+namespace Naheulbook.Data.Repositories;
+
+public interface IGroupInviteRepository : IRepository<GroupInviteEntity>
 {
-    public interface IGroupInviteRepository : IRepository<GroupInviteEntity>
+    Task<GroupInviteEntity?> GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(int groupId, int characterId);
+    Task<List<GroupInviteEntity>> GetInvitesByCharacterIdAsync(int characterId);
+}
+
+public class GroupInviteRepository : Repository<GroupInviteEntity, NaheulbookDbContext>, IGroupInviteRepository
+{
+    public GroupInviteRepository(NaheulbookDbContext context)
+        : base(context)
     {
-        Task<GroupInviteEntity?> GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(int groupId, int characterId);
-        Task<List<GroupInviteEntity>> GetInvitesByCharacterIdAsync(int characterId);
     }
 
-    public class GroupInviteRepository : Repository<GroupInviteEntity, NaheulbookDbContext>, IGroupInviteRepository
+    public Task<GroupInviteEntity?> GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(int groupId, int characterId)
     {
-        public GroupInviteRepository(NaheulbookDbContext context)
-            : base(context)
-        {
-        }
+        return Context.GroupInvites
+            .Include(x => x.Group)
+            .Include(x => x.Character)
+            .FirstOrDefaultAsync(x => x.GroupId == groupId && x.CharacterId == characterId);
+    }
 
-        public Task<GroupInviteEntity?> GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(int groupId, int characterId)
-        {
-            return Context.GroupInvites
-                .Include(x => x.Group)
-                .Include(x => x.Character)
-                .FirstOrDefaultAsync(x => x.GroupId == groupId && x.CharacterId == characterId);
-        }
-
-        public Task<List<GroupInviteEntity>> GetInvitesByCharacterIdAsync(int characterId)
-        {
-            return Context.GroupInvites
-                .Where(x => x.CharacterId == characterId)
-                .ToListAsync();
-        }
+    public Task<List<GroupInviteEntity>> GetInvitesByCharacterIdAsync(int characterId)
+    {
+        return Context.GroupInvites
+            .Where(x => x.CharacterId == characterId)
+            .ToListAsync();
     }
 }

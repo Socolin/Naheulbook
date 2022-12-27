@@ -1,10 +1,9 @@
-namespace Naheulbook.Core.Services
-{
-    public interface IMonsterSubCategoryService
-    {
-    }
+namespace Naheulbook.Core.Services;
 
-    public class MonsterSubCategoryService : IMonsterSubCategoryService
-    {
-    }
+public interface IMonsterSubCategoryService
+{
+}
+
+public class MonsterSubCategoryService : IMonsterSubCategoryService
+{
 }

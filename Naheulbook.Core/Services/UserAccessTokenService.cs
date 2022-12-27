@@ -7,72 +7,71 @@ using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Utils;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface IUserAccessTokenService
 {
-    public interface IUserAccessTokenService
+    Task<IList<UserAccessTokenEntity>> GetUserAccessTokensAsync(int userId);
+    Task<UserAccessTokenEntity> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request);
+    Task<UserAccessTokenEntity?> ValidateTokenAsync(string token);
+    Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId);
+}
+
+public class UserAccessTokenService : IUserAccessTokenService
+{
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    private readonly ITimeService _timeService;
+
+    public UserAccessTokenService(IUnitOfWorkFactory unitOfWorkFactory, ITimeService timeService)
     {
-        Task<IList<UserAccessTokenEntity>> GetUserAccessTokensAsync(int userId);
-        Task<UserAccessTokenEntity> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request);
-        Task<UserAccessTokenEntity?> ValidateTokenAsync(string token);
-        Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId);
+        _unitOfWorkFactory = unitOfWorkFactory;
+        _timeService = timeService;
     }
 
-    public class UserAccessTokenService : IUserAccessTokenService
+    public async Task<IList<UserAccessTokenEntity>> GetUserAccessTokensAsync(int userId)
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly ITimeService _timeService;
-
-        public UserAccessTokenService(IUnitOfWorkFactory unitOfWorkFactory, ITimeService timeService)
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _timeService = timeService;
+            return await uow.UserAccessTokenRepository.GetUserAccessTokensForUser(userId);
         }
+    }
 
-        public async Task<IList<UserAccessTokenEntity>> GetUserAccessTokensAsync(int userId)
+    public async Task<UserAccessTokenEntity> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request)
+    {
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+            var token = new UserAccessTokenEntity
             {
-                return await uow.UserAccessTokenRepository.GetUserAccessTokensForUser(userId);
-            }
+                Id = Guid.NewGuid(),
+                Key = RngHelper.GetRandomHexString(64),
+                Name = request.Name,
+                UserId = userId,
+                DateCreated = _timeService.UtcNow
+            };
+            uow.UserAccessTokenRepository.Add(token);
+            await uow.SaveChangesAsync();
+            return token;
         }
+    }
 
-        public async Task<UserAccessTokenEntity> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request)
+    public async Task<UserAccessTokenEntity?> ValidateTokenAsync(string accessKey)
+    {
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var token = new UserAccessTokenEntity
-                {
-                    Id = Guid.NewGuid(),
-                    Key = RngHelper.GetRandomHexString(64),
-                    Name = request.Name,
-                    UserId = userId,
-                    DateCreated = _timeService.UtcNow
-                };
-                uow.UserAccessTokenRepository.Add(token);
-                await uow.SaveChangesAsync();
-                return token;
-            }
+            var token = await uow.UserAccessTokenRepository.GetByKeyAsync(accessKey);
+            return token;
         }
+    }
 
-        public async Task<UserAccessTokenEntity?> ValidateTokenAsync(string accessKey)
+    public async Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId)
+    {
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var token = await uow.UserAccessTokenRepository.GetByKeyAsync(accessKey);
-                return token;
-            }
-        }
-
-        public async Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId)
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var token = await uow.UserAccessTokenRepository.GetByUserIdAndTokenIdAsync(userId, userAccessTokenId);
-                if (token == null)
-                    throw new UserAccessTokenNotFoundException(userId, userAccessTokenId);
-                uow.UserAccessTokenRepository.Remove(token);
-                await uow.SaveChangesAsync();
-            }
+            var token = await uow.UserAccessTokenRepository.GetByUserIdAndTokenIdAsync(userId, userAccessTokenId);
+            if (token == null)
+                throw new UserAccessTokenNotFoundException(userId, userAccessTokenId);
+            uow.UserAccessTokenRepository.Remove(token);
+            await uow.SaveChangesAsync();
         }
     }
 }

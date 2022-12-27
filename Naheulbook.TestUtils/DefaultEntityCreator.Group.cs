@@ -1,65 +1,64 @@
 using System;
 using Naheulbook.Data.Models;
 
-namespace Naheulbook.TestUtils
+namespace Naheulbook.TestUtils;
+
+public partial class DefaultEntityCreator
 {
-    public partial class DefaultEntityCreator
+    public GroupEntity CreateGroup(int masterId, string suffix = null)
     {
-        public GroupEntity CreateGroup(int masterId, string suffix = null)
+        if (suffix == null)
+            suffix = RngUtil.GetRandomHexString(8);
+
+        return new GroupEntity
         {
-            if (suffix == null)
-                suffix = RngUtil.GetRandomHexString(8);
+            Name = $"some-name-{suffix}",
+            Data = "{}",
+            MasterId = masterId
+        };
+    }
 
-            return new GroupEntity
-            {
-                Name = $"some-name-{suffix}",
-                Data = "{}",
-                MasterId = masterId
-            };
-        }
+    public LootEntity CreateLoot(GroupEntity group, string suffix = null)
+    {
+        if (suffix == null)
+            suffix = RngUtil.GetRandomHexString(8);
 
-        public LootEntity CreateLoot(GroupEntity group, string suffix = null)
+        return new LootEntity
         {
-            if (suffix == null)
-                suffix = RngUtil.GetRandomHexString(8);
+            Name = $"some-name-{suffix}",
+            Group = group,
+            GroupId = group.Id,
+            IsVisibleForPlayer = false
+        };
+    }
 
-            return new LootEntity
-            {
-                Name = $"some-name-{suffix}",
-                Group = group,
-                GroupId = group.Id,
-                IsVisibleForPlayer = false
-            };
-        }
+    public EventEntity CreateEvent(GroupEntity group, string suffix = null)
+    {
+        if (suffix == null)
+            suffix = RngUtil.GetRandomHexString(8);
 
-        public EventEntity CreateEvent(GroupEntity group, string suffix = null)
+        return new EventEntity
         {
-            if (suffix == null)
-                suffix = RngUtil.GetRandomHexString(8);
+            Name = $"some-event-name-{suffix}",
+            Description = $"some-event-description-{suffix}",
+            GroupId = group.Id,
+            Timestamp = 721487
+        };
+    }
 
-            return new EventEntity
-            {
-                Name = $"some-event-name-{suffix}",
-                Description = $"some-event-description-{suffix}",
-                GroupId = group.Id,
-                Timestamp = 721487
-            };
-        }
+    public GroupHistoryEntryEntity CreateGroupHistory(GroupEntity group, string suffix = null)
+    {
+        if (suffix == null)
+            suffix = RngUtil.GetRandomHexString(8);
 
-        public GroupHistoryEntryEntity CreateGroupHistory(GroupEntity group, string suffix = null)
+        return new GroupHistoryEntryEntity
         {
-            if (suffix == null)
-                suffix = RngUtil.GetRandomHexString(8);
-
-            return new GroupHistoryEntryEntity
-            {
-                Data = "{}",
-                Gm = true,
-                Date = new DateTime(2020, 10, 5, 5, 7, 8, DateTimeKind.Utc),
-                GroupId = group.Id,
-                Action = $"some-group-history-action-{suffix}",
-                Info = $"some-info-{suffix}"
-            };
-        }
+            Data = "{}",
+            Gm = true,
+            Date = new DateTime(2020, 10, 5, 5, 7, 8, DateTimeKind.Utc),
+            GroupId = group.Id,
+            Action = $"some-group-history-action-{suffix}",
+            Info = $"some-info-{suffix}"
+        };
     }
 }

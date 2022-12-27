@@ -5,43 +5,42 @@ using Naheulbook.Core.Clients;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Data.Factories;
 
-namespace Naheulbook.Core.Services
+namespace Naheulbook.Core.Services;
+
+public interface ICharacterRandomNameService
 {
-    public interface ICharacterRandomNameService
+    Task<string> GenerateRandomCharacterNameAsync(Guid originId, string sex);
+}
+
+public class CharacterRandomNameService : ICharacterRandomNameService
+{
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    private readonly ILaPageAMelkorClient _httpClient;
+
+    public CharacterRandomNameService(
+        IUnitOfWorkFactory unitOfWorkFactory,
+        ILaPageAMelkorClient httpClient
+    )
     {
-        Task<string> GenerateRandomCharacterNameAsync(Guid originId, string sex);
+        _unitOfWorkFactory = unitOfWorkFactory;
+        _httpClient = httpClient;
     }
 
-    public class CharacterRandomNameService : ICharacterRandomNameService
+    public async Task<string> GenerateRandomCharacterNameAsync(Guid originId, string sex)
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly ILaPageAMelkorClient _httpClient;
-
-        public CharacterRandomNameService(
-            IUnitOfWorkFactory unitOfWorkFactory,
-            ILaPageAMelkorClient httpClient
-        )
+        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _httpClient = httpClient;
-        }
+            var origin = await uow.Origins.GetAsync(originId);
+            if (origin == null)
+                throw new OriginNotFoundException(originId);
 
-        public async Task<string> GenerateRandomCharacterNameAsync(Guid originId, string sex)
-        {
-            using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                var origin = await uow.Origins.GetAsync(originId);
-                if (origin == null)
-                    throw new OriginNotFoundException(originId);
+            var originRandomNameUrl = await uow.OriginRandomNameUrls.GetByOriginIdAndSexAsync(sex, originId);
+            if (originRandomNameUrl == null)
+                throw new RandomNameGeneratorNotFound(sex, originId);
 
-                var originRandomNameUrl = await uow.OriginRandomNameUrls.GetByOriginIdAndSexAsync(sex, originId);
-                if (originRandomNameUrl == null)
-                    throw new RandomNameGeneratorNotFound(sex, originId);
+            var result = await _httpClient.GetRandomNameAsync(originRandomNameUrl.Url);
 
-                var result = await _httpClient.GetRandomNameAsync(originRandomNameUrl.Url);
-
-                return result.First();
-            }
+            return result.First();
         }
     }
 }

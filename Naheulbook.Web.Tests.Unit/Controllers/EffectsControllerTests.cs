@@ -15,90 +15,89 @@ using Naheulbook.Web.Responses;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Naheulbook.Web.Tests.Unit.Controllers
+namespace Naheulbook.Web.Tests.Unit.Controllers;
+
+public class EffectsControllerTests
 {
-    public class EffectsControllerTests
+    private IEffectService _effectService;
+    private IMapper _mapper;
+    private EffectsController _effectsController;
+    private NaheulbookExecutionContext _executionContext;
+
+    [SetUp]
+    public void SetUp()
     {
-        private IEffectService _effectService;
-        private IMapper _mapper;
-        private EffectsController _effectsController;
-        private NaheulbookExecutionContext _executionContext;
+        _effectService = Substitute.For<IEffectService>();
+        _mapper = Substitute.For<IMapper>();
+        _effectsController = new EffectsController(_effectService, _mapper);
+        _executionContext = new NaheulbookExecutionContext();
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _effectService = Substitute.For<IEffectService>();
-            _mapper = Substitute.For<IMapper>();
-            _effectsController = new EffectsController(_effectService, _mapper);
-            _executionContext = new NaheulbookExecutionContext();
-        }
+    [Test]
+    public async Task PutEditEffect_CallEffectService()
+    {
+        var editEffectRequest = new EditEffectRequest();
+        var expectedEffectResponse = new EffectResponse();
+        var effect = new EffectEntity {Id = 42};
 
-        [Test]
-        public async Task PutEditEffect_CallEffectService()
-        {
-            var editEffectRequest = new EditEffectRequest();
-            var expectedEffectResponse = new EffectResponse();
-            var effect = new EffectEntity {Id = 42};
+        _effectService.EditEffectAsync(_executionContext, 42, editEffectRequest)
+            .Returns(effect);
+        _mapper.Map<EffectResponse>(effect)
+            .Returns(expectedEffectResponse);
 
-            _effectService.EditEffectAsync(_executionContext, 42, editEffectRequest)
-                .Returns(effect);
-            _mapper.Map<EffectResponse>(effect)
-                .Returns(expectedEffectResponse);
+        var result = await _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest);
 
-            var result = await _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest);
+        result.Value.Should().Be(expectedEffectResponse);
+        await _effectService.Received(1)
+            .EditEffectAsync(_executionContext, 42, editEffectRequest);
+    }
 
-            result.Value.Should().Be(expectedEffectResponse);
-            await _effectService.Received(1)
-                .EditEffectAsync(_executionContext, 42, editEffectRequest);
-        }
+    [Test]
+    public async Task PutEditEffect_WhenCatchForbiddenAccessException_Return403()
+    {
+        _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
+            .Returns(Task.FromException<EffectEntity>(new ForbiddenAccessException()));
 
-        [Test]
-        public async Task PutEditEffect_WhenCatchForbiddenAccessException_Return403()
-        {
-            _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
-                .Returns(Task.FromException<EffectEntity>(new ForbiddenAccessException()));
+        Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
 
-            Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
+        (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+    }
 
-            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-        }
+    [Test]
+    public async Task PutEditEffect_WhenCatchEffectNotFoundException_Return404()
+    {
+        _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
+            .Returns(Task.FromException<EffectEntity>(new EffectNotFoundException()));
 
-        [Test]
-        public async Task PutEditEffect_WhenCatchEffectNotFoundException_Return404()
-        {
-            _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
-                .Returns(Task.FromException<EffectEntity>(new EffectNotFoundException()));
+        Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
 
-            Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
+        (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+    }
 
-            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        }
+    [Test]
+    public async Task GetEffect_CallEffectService()
+    {
+        var expectedEffectResponse = new EffectResponse();
+        var effect = new EffectEntity {Id = 42};
 
-        [Test]
-        public async Task GetEffect_CallEffectService()
-        {
-            var expectedEffectResponse = new EffectResponse();
-            var effect = new EffectEntity {Id = 42};
+        _effectService.GetEffectAsync(42)
+            .Returns(effect);
+        _mapper.Map<EffectResponse>(effect)
+            .Returns(expectedEffectResponse);
 
-            _effectService.GetEffectAsync(42)
-                .Returns(effect);
-            _mapper.Map<EffectResponse>(effect)
-                .Returns(expectedEffectResponse);
+        var result = await _effectsController.GetEffectAsync(42);
 
-            var result = await _effectsController.GetEffectAsync(42);
+        result.Value.Should().Be(expectedEffectResponse);
+    }
 
-            result.Value.Should().Be(expectedEffectResponse);
-        }
+    [Test]
+    public async Task GetEffect_WhenCatchEffectNotFoundException_Return404()
+    {
+        _effectService.GetEffectAsync(Arg.Any<int>())
+            .Returns(Task.FromException<EffectEntity>(new EffectNotFoundException()));
 
-        [Test]
-        public async Task GetEffect_WhenCatchEffectNotFoundException_Return404()
-        {
-            _effectService.GetEffectAsync(Arg.Any<int>())
-                .Returns(Task.FromException<EffectEntity>(new EffectNotFoundException()));
+        Func<Task<ActionResult<EffectResponse>>> act = () => _effectsController.GetEffectAsync(42);
 
-            Func<Task<ActionResult<EffectResponse>>> act = () => _effectsController.GetEffectAsync(42);
-
-            (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        }
+        (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
     }
 }

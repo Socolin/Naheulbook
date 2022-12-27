@@ -13,77 +13,76 @@ using Serilog.Formatting.Compact;
 using Serilog.Sinks.SystemConsole.Themes;
 using Socolin.TestUtils.FakeSmtp;
 
-namespace Naheulbook.Tests.Functional.Code.Servers
+namespace Naheulbook.Tests.Functional.Code.Servers;
+
+public class NaheulbookApiServer
 {
-    public class NaheulbookApiServer
+    private readonly FakeSmtpConfig _mailConfig;
+    private readonly string _laPageAMelkorUrl;
+    private readonly string _mapImageOutputDirectory;
+    public const string JwtSigningKey = "jUPS+BG/+FxexuNitsuiIHWXOLTZb3yQSxyLpOfTo2/BB8MNUZcNP+13cvAlPP5O";
+    public IEnumerable<string> ListenUrls => _server.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>().Addresses;
+    private IHost _server;
+
+    public NaheulbookApiServer(
+        FakeSmtpConfig mailConfig,
+        string laPageAMelkorUrl,
+        string mapImageOutputDirectory
+    )
     {
-        private readonly FakeSmtpConfig _mailConfig;
-        private readonly string _laPageAMelkorUrl;
-        private readonly string _mapImageOutputDirectory;
-        public const string JwtSigningKey = "jUPS+BG/+FxexuNitsuiIHWXOLTZb3yQSxyLpOfTo2/BB8MNUZcNP+13cvAlPP5O";
-        public IEnumerable<string> ListenUrls => _server.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>().Addresses;
-        private IHost _server;
+        _mailConfig = mailConfig;
+        _laPageAMelkorUrl = laPageAMelkorUrl;
+        _mapImageOutputDirectory = mapImageOutputDirectory;
+    }
 
-        public NaheulbookApiServer(
-            FakeSmtpConfig mailConfig,
-            string laPageAMelkorUrl,
-            string mapImageOutputDirectory
-        )
+    public void Start()
+    {
+        var testConfiguration = new Dictionary<string, string>
         {
-            _mailConfig = mailConfig;
-            _laPageAMelkorUrl = laPageAMelkorUrl;
-            _mapImageOutputDirectory = mapImageOutputDirectory;
-        }
+            ["Authentication:JwtSigningKey"] = JwtSigningKey,
+            ["ConnectionStrings:DefaultConnection"] = DefaultTestConfigurations.NaheulbookTestConnectionString,
+            ["Mail:Smtp:Host"] = _mailConfig.Host.ToString(),
+            ["Mail:Smtp:Port"] = _mailConfig.Port.ToString(),
+            ["Mail:Smtp:Username"] = _mailConfig.Username,
+            ["Mail:Smtp:Password"] = _mailConfig.Password,
+            ["Mail:Smtp:Ssl"] = false.ToString(),
+            ["Mail:FromAddress"] = "some-address@some-domain.aa",
+            ["LaPageAMelkor:Url"] = _laPageAMelkorUrl,
+            ["MapImage:OutputDirectory"] = _mapImageOutputDirectory,
+        };
 
-        public void Start()
-        {
-            var testConfiguration = new Dictionary<string, string>
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(testConfiguration)
+            .AddEnvironmentVariables()
+            .Build();
+
+        var logger = new LoggerConfiguration()
+            .WriteTo.Console(theme: ConsoleTheme.None)
+            .WriteTo.File(new CompactJsonFormatter(), "logs/naheulbook.api.json")
+            .CreateLogger();
+
+        _server = new HostBuilder()
+            .ConfigureWebHost(builder =>
             {
-                ["Authentication:JwtSigningKey"] = JwtSigningKey,
-                ["ConnectionStrings:DefaultConnection"] = DefaultTestConfigurations.NaheulbookTestConnectionString,
-                ["Mail:Smtp:Host"] = _mailConfig.Host.ToString(),
-                ["Mail:Smtp:Port"] = _mailConfig.Port.ToString(),
-                ["Mail:Smtp:Username"] = _mailConfig.Username,
-                ["Mail:Smtp:Password"] = _mailConfig.Password,
-                ["Mail:Smtp:Ssl"] = false.ToString(),
-                ["Mail:FromAddress"] = "some-address@some-domain.aa",
-                ["LaPageAMelkor:Url"] = _laPageAMelkorUrl,
-                ["MapImage:OutputDirectory"] = _mapImageOutputDirectory,
-            };
+                builder
+                    .UseUrls("http://[::1]:0")
+                    .UseStartup<Startup>()
+                    .UseConfiguration(configuration)
+                    .UseKestrel();
+            })
+            .UseContentRoot(Directory.GetCurrentDirectory())
+            .UseEnvironment(Environments.Development)
+            .UseSerilog(logger)
+            .Build();
 
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(testConfiguration)
-                .AddEnvironmentVariables()
-                .Build();
+        _server.Start();
+    }
 
-            var logger = new LoggerConfiguration()
-                .WriteTo.Console(theme: ConsoleTheme.None)
-                .WriteTo.File(new CompactJsonFormatter(), "logs/naheulbook.api.json")
-                .CreateLogger();
-
-            _server = new HostBuilder()
-                .ConfigureWebHost(builder =>
-                {
-                    builder
-                        .UseUrls("http://[::1]:0")
-                        .UseStartup<Startup>()
-                        .UseConfiguration(configuration)
-                        .UseKestrel();
-                })
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseEnvironment(Environments.Development)
-                .UseSerilog(logger)
-                .Build();
-
-            _server.Start();
-        }
-
-        public void Stop()
-        {
-            _server?.StopAsync().GetAwaiter().GetResult();
-            _server?.WaitForShutdownAsync().GetAwaiter().GetResult();
-            _server?.Dispose();
-            _server = null;
-        }
+    public void Stop()
+    {
+        _server?.StopAsync().GetAwaiter().GetResult();
+        _server?.WaitForShutdownAsync().GetAwaiter().GetResult();
+        _server?.Dispose();
+        _server = null;
     }
 }

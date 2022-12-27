@@ -1,9 +1,8 @@
-namespace Naheulbook.Core.Models
+namespace Naheulbook.Core.Models;
+
+public enum ItemOwnerType
 {
-    public enum ItemOwnerType
-    {
-        Character,
-        Loot,
-        Monster
-    }
+    Character,
+    Loot,
+    Monster
 }
