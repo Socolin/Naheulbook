@@ -1,7 +1,7 @@
 # Naheulbook
 
 <p align="center">
-![Logo](doc/logo.png)
+  <img alt="Logo" src="doc/logo.png">
 </p>
 
 ## Introduction
