@@ -49,4 +49,17 @@ public static class CertificateAuthorityInstaller
             throw new NotSupportedException("Automatic installation of current os is not supported yet");
         }
     }
+    public static async Task<bool> IsCetificateAuthorityInstalledAsync(string certPath)
+    {
+        if (OperatingSystem.IsLinux())
+        {
+            var result = await Cli.Wrap("openssl")
+                .WithArguments(builder => { builder.Add("verify").Add(certPath); })
+                .WithValidation(CommandResultValidation.None)
+                .ExecuteBufferedAsync();
+            return result.ExitCode == 0;
+        }
+
+        throw new NotSupportedException("Automatic installation of current os is not supported yet");
+    }
 }

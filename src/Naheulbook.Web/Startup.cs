@@ -56,7 +56,7 @@ public class Startup
             naheulbookDbContextOptionsBuilder.EnableSensitiveDataLogging();
         }
 
-        services.AddStackExchangeRedisCache(options => { options.Configuration = "localhost"; });
+        services.AddStackExchangeRedisCache(options => { options.Configuration = _configuration.GetConnectionString("Redis"); });
         services.AddSession(options =>
         {
             options.IdleTimeout = TimeSpan.FromHours(4);
@@ -79,7 +79,7 @@ public class Startup
         services.AddHttpContextAccessor();
         services.AddHealthChecks()
             .AddMySql(_configuration.GetConnectionString("DefaultConnection"))
-            .AddRedis("localhost");
+            .AddRedis(_configuration.GetConnectionString("Redis"));
         services.AddAutoMapper(typeof(RequestToEntityProfile).Assembly, typeof(Startup).Assembly);
 
         services.AddScoped(servicesProvider => servicesProvider.GetRequiredService<IHttpContextAccessor>().HttpContext!.GetExecutionContext());

@@ -42,6 +42,8 @@ public static class Program
                         {
                             options.Limits.MaxRequestBodySize = 60000000;
                             var unixSocketPath = context.Configuration.GetValue<string>("socket");
+                            if (File.Exists(unixSocketPath))
+                                File.Delete(unixSocketPath);
                             if (!string.IsNullOrEmpty(unixSocketPath))
                                 options.ListenUnixSocket(unixSocketPath);
                         })

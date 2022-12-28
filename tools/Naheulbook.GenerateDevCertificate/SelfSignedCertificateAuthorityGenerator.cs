@@ -19,12 +19,12 @@ public static class SelfSignedCertificateAuthorityGenerator
 
         var generateCertificate = true;
         if (File.Exists(caPath))
-            generateCertificate = AnsiConsole.Confirm($"A certificate already exists: [green]{caPath}[/]. Do you want to overwrite it ?");
+            generateCertificate = AnsiConsole.Confirm($"A certificate already exists: [green]{caPath}[/]. Do you want to overwrite it ?", false);
         if (generateCertificate)
         {
             AnsiConsole.Status()
                 .Start("Generating...",
-                    ctx =>
+                    _ =>
                     {
                         var rootCert = GenerateSelfSignedCertificateAuthorityRootCert(name);
                         var (certificate, certificateKey) = GenerateCertificate(name, certHostnames, rootCert);

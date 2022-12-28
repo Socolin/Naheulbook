@@ -5,6 +5,7 @@ var certHostnames = new[]
 {
     "127.0.0.1",
     "localhost",
+    "local.naheulbook.fr",
     "*.local.naheulbook.fr",
     "*.localhost",
 };
@@ -18,8 +19,9 @@ var (caPath, certPath, certPrivateKeyPath, certPfxPath) = SelfSignedCertificateA
     certHostnames
 );
 
-if (AnsiConsole.Confirm("Do you want to install the Certificate Authority (will require administrator / root permission) ?"))
-    await CertificateAuthorityInstaller.InstallCertificateAuthorityAsync(caPath);
+if (!await CertificateAuthorityInstaller.IsCetificateAuthorityInstalledAsync(certPath))
+    if (AnsiConsole.Confirm("Do you want to install the Certificate Authority (will require administrator / root permission) ?"))
+        await CertificateAuthorityInstaller.InstallCertificateAuthorityAsync(caPath);
 
 AnsiConsole.WriteLine();
 AnsiConsole.MarkupLine($"Certificate Authority: [cyan]{caPath}[/]");

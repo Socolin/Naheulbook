@@ -1,13 +1,12 @@
 # For data
 
-La pluspart des données présentent dans la base de données, proviennent du site
-https://www.naheulbeuk.com/, elle ne sont pas libre de droits et appartiennent
-à leurs auteurs réspectifs.
-
+La plupart des données présentent dans la base de données, proviennent du site
+https://www.naheulbeuk.com/, elle ne sont pas libres de droits et appartiennent
+à leurs auteurs respectifs.
 
 # For database structure and code
 
-Copyright 2018 Bertrand Provost
+Copyright 2022 Bertrand Provost
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
