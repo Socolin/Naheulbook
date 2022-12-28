@@ -149,7 +149,8 @@ public class MapperProfile : Profile
             .ForMember(m => m.SkillIds, opt => opt.MapFrom(i => i.Skills.Select(s => s.SkillId)))
             .ForMember(m => m.UnSkillIds, opt => opt.MapFrom(i => i.UnSkills.Select(s => s.SkillId)))
             .ForMember(m => m.Data, opt => opt.MapFrom(i => MapperHelpers.FromJson<JObject>(i.Data) ?? new JObject()))
-            .ForMember(m => m.Slots, opt => opt.MapFrom(i => i.Slots.Select(x => x.Slot)));
+            .ForMember(m => m.Slots, opt => opt.MapFrom(i => i.Slots.Select(x => x.Slot)))
+            .ForMember(m => m.SourceUser, opt => opt.MapFrom(i => i.SourceUserNameCache));
         CreateMap<ItemTemplateModifierEntity, ItemTemplateModifierResponse>()
             .ForMember(m => m.JobId, opt => opt.MapFrom(im => im.RequiredJobId))
             .ForMember(m => m.OriginId, opt => opt.MapFrom(im => im.RequiredOriginId))
