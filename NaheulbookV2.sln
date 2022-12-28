@@ -39,6 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_", "_", "{56DD5D36-52E1-41
 		nuget.config = nuget.config
 		.gitlab-ci.yml = .gitlab-ci.yml
 		README.md = README.md
+		.gitignore = .gitignore
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{69C945D0-44E1-4C89-BE30-18CB2A6F2FCC}"

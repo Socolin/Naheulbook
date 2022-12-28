@@ -69,7 +69,7 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action@v1.19
       if: always()
       with:
-        files: "*/TestResults/TestResults.xml"
+        files: "*/*/TestResults/TestResults.xml"
     - name: Publish
       run: dotnet publish --no-restore --no-build -c Release ./src/Naheulbook.Web/Naheulbook.Web.csproj
     - name: Log in to the Container registry

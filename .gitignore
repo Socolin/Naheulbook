@@ -6,3 +6,4 @@ obj
 *.feature.cs
 appsettings.local.json
 tls
+TestResults.xml
