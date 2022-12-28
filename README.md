@@ -42,10 +42,12 @@ Install `nginx`, `mysql`, `redis`.
 Add configuration file `src/Naheulbook.Web/appsettings.local.json`, with appropriate value like in the following
 example:
 
-```
-"ConnectionStrings": {
+```json
+{
+  "ConnectionStrings": {
     "DefaultConnection": "Server=localhost;Database=naheulbook;Uid=naheulbook;Pwd=naheulbook;SslMode=None;CharSet=utf8;AllowPublicKeyRetrieval=True;Port=3306",
     "Redis": "localhost:6379,abortConnect=false"
+  }
 }
 ```
 
