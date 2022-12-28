@@ -28,8 +28,9 @@ You can put all your local configuration in `src/Naheulbook.Web/appsettings.loca
     - `jq`
     - `docker` your use should be able to use it
     - `dotnet` https://dotnet.microsoft.com/en-us/download/dotnet/7.0
-3. Run the setup script: `sudo ./tools/scripts/setup-dev.sh -u ${USER}`
-4. You can start the server:
+3. Add in the `/etc/hosts` file this line: `127.0.0.1 local.naheulbook.fr`
+4. Run the setup script: `sudo ./tools/scripts/setup-dev.sh -u ${USER}`
+5. You can start the server:
     - In Rider, by executing the configuration `API - Linux`
     - In command line with `dotnet run --project src/Naheulbook.Web --socket=/var/run/naheulbook/api.sock`
 
