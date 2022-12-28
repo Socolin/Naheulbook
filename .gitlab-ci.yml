@@ -39,12 +39,12 @@ publish:
   script:
     - "dotnet restore --packages ./.nuget"
     - "dotnet publish --no-restore -c Release src/Naheulbook.Web"
-    - "dotnet publish --no-restore -c Release src/Naheulbook.DatabaseMigrator.Cli"
+    - "dotnet publish --no-restore -c Release tools/Naheulbook.DatabaseMigrator.Cli"
   artifacts:
     name: "Build"
     paths:
       - src/Naheulbook.Web/bin/Release/publish/
-      - src/Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/
+      - tools/Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/
 
 deploy_staging:
   image: socolin/naheulbook-deploy
@@ -56,7 +56,7 @@ deploy_staging:
     - cp $SSH_KNOWN_HOSTS ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - chmod 600 $SSH_RSYNC_DBMIGRATOR_KEY $SSH_RSYNC_WEB_KEY $SSH_DEPLOY_KEY
-    - rsync -e "ssh -i $SSH_RSYNC_DBMIGRATOR_KEY" -a src/Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod_migrator
+    - rsync -e "ssh -i $SSH_RSYNC_DBMIGRATOR_KEY" -a tools/Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod_migrator
     - rsync -e "ssh -i $SSH_RSYNC_WEB_KEY" -a src/Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/preprod
     - ssh -i $SSH_DEPLOY_KEY naheulbook@naheulbook.fr deploy
   environment:
@@ -77,7 +77,7 @@ deploy_prod:
     - cp $SSH_KNOWN_HOSTS ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - chmod 600 $SSH_RSYNC_DBMIGRATOR_KEY $SSH_RSYNC_WEB_KEY $SSH_DEPLOY_KEY
-    - rsync -e "ssh -i $SSH_RSYNC_DBMIGRATOR_KEY" -a src/Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/prod_migrator
+    - rsync -e "ssh -i $SSH_RSYNC_DBMIGRATOR_KEY" -a tools/Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/ naheulbook@naheulbook.fr:/prod_migrator
     - rsync -e "ssh -i $SSH_RSYNC_WEB_KEY" -a src/Naheulbook.Web/bin/Release/publish/ naheulbook@naheulbook.fr:/prod
     - ssh -i $SSH_DEPLOY_KEY naheulbook@naheulbook.fr deploy
   environment:
