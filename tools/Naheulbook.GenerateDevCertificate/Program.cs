@@ -1,4 +1,5 @@
 ﻿using Naheulbook.GenerateDevCertificate;
+using Naheulbook.Tools.Shared;
 using Spectre.Console;
 
 var certHostnames = new[]

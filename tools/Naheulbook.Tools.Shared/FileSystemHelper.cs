@@ -1,4 +1,4 @@
-namespace Naheulbook.GenerateDevCertificate;
+namespace Naheulbook.Tools.Shared;
 
 public static class FileSystemHelper
 {

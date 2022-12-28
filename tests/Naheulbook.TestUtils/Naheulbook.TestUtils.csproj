@@ -11,7 +11,9 @@
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" />
+      <PackageReference Include="CliWrap" />
       <PackageReference Include="FluentAssertions" />
+      <PackageReference Include="JetBrains.Annotations" />
       <PackageReference Include="JUnitTestLogger4GitHub" />
     </ItemGroup>
 </Project>

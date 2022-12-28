@@ -47,6 +47,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        var redisConnectionString = _configuration.GetConnectionString("Redis");
         RegisterConfigurations(services);
 
         var naheulbookDbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
@@ -56,7 +57,6 @@ public class Startup
             naheulbookDbContextOptionsBuilder.EnableSensitiveDataLogging();
         }
 
-        services.AddStackExchangeRedisCache(options => { options.Configuration = _configuration.GetConnectionString("Redis"); });
         services.AddSession(options =>
         {
             options.IdleTimeout = TimeSpan.FromHours(4);
@@ -78,8 +78,18 @@ public class Startup
 
         services.AddHttpContextAccessor();
         services.AddHealthChecks()
-            .AddMySql(_configuration.GetConnectionString("DefaultConnection"))
-            .AddRedis(_configuration.GetConnectionString("Redis"));
+            .AddMySql(_configuration.GetConnectionString("DefaultConnection"));
+
+        if (redisConnectionString != null)
+        {
+            services.AddHealthChecks().AddRedis(redisConnectionString);
+            services.AddStackExchangeRedisCache(options => { options.Configuration = redisConnectionString; });
+        }
+        else
+        {
+            services.AddDistributedMemoryCache();
+        }
+
         services.AddAutoMapper(typeof(RequestToEntityProfile).Assembly, typeof(Startup).Assembly);
 
         services.AddScoped(servicesProvider => servicesProvider.GetRequiredService<IHttpContextAccessor>().HttpContext!.GetExecutionContext());

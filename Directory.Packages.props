@@ -14,6 +14,7 @@
     <PackageVersion Include="FluentMigrator.Runner.MySql" Version="3.3.2" />
     <PackageVersion Include="FluentValidation" Version="11.4.0" />
     <PackageVersion Include="FluentValidation.AspNetCore" Version="11.2.2" />
+    <PackageVersion Include="JetBrains.Annotations" Version="2022.3.1" />
     <PackageVersion Include="JUnitTestLogger4GitHub" Version="1.1.1" />
     <PackageVersion Include="JsonModelBinder" Version="2.1.1" />
     <PackageVersion Include="Magick.NET-Q8-x64" Version="12.2.2" />
