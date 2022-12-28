@@ -1,11 +1,10 @@
 using Naheulbook.Shared.TransientModels;
 
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class NpcRequest
 {
-    public string Name { get; set; } = null!;
-    public NpcData Data { get; set; } = null!;
+    public required string Name { get; set; }
+    public required NpcData Data { get; set; }
 }

@@ -63,7 +63,7 @@ public class ItemTemplateUtilTests
     public void ApplyChangesFromRequest_UpdateCleanName()
     {
         var itemTemplate = new ItemTemplateEntity {Name = "some-name"};
-        var request = new ItemTemplateRequest {Name = "some-new-name"};
+        var request = new ItemTemplateRequest {Name = "some-new-name", Source = string.Empty, Data = new JObject()};
 
         _stringCleanupUtil.RemoveAccents("some-new-name")
             .Returns("some-new-clean-name");
@@ -98,6 +98,9 @@ public class ItemTemplateUtilTests
 
         var request = new ItemTemplateRequest
         {
+            Name = string.Empty,
+            Source = string.Empty,
+            Data = new JObject(),
             Slots = new List<IdRequest>
             {
                 new IdRequest {Id = 2},
@@ -107,7 +110,8 @@ public class ItemTemplateUtilTests
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
 
-        itemTemplate.Slots.Should().BeEquivalentTo(new [] {
+        itemTemplate.Slots.Should().BeEquivalentTo(new[]
+        {
             new ItemTemplateSlotEntity
             {
                 SlotId = 2,
@@ -145,6 +149,9 @@ public class ItemTemplateUtilTests
 
         var request = new ItemTemplateRequest
         {
+            Name = string.Empty,
+            Source = string.Empty,
+            Data = new JObject(),
             Requirements = new List<ItemTemplateRequirementRequest>
             {
                 new ItemTemplateRequirementRequest
@@ -164,7 +171,8 @@ public class ItemTemplateUtilTests
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
 
-        itemTemplate.Requirements.Should().BeEquivalentTo(new [] {
+        itemTemplate.Requirements.Should().BeEquivalentTo(new[]
+        {
             new ItemTemplateRequirementEntity
             {
                 StatName = "some-stat-name-2",
@@ -182,7 +190,7 @@ public class ItemTemplateUtilTests
 
 
     [Test]
-    public void ApplyChangesFromRequest_UpdateModiifers()
+    public void ApplyChangesFromRequest_UpdateModifiers()
     {
         var itemTemplate = new ItemTemplateEntity
         {
@@ -207,6 +215,9 @@ public class ItemTemplateUtilTests
 
         var request = new ItemTemplateRequest
         {
+            Name = string.Empty,
+            Source = string.Empty,
+            Data = new JObject(),
             Modifiers = new List<ItemTemplateModifierRequest>
             {
                 new ItemTemplateModifierRequest
@@ -229,7 +240,8 @@ public class ItemTemplateUtilTests
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
 
-        itemTemplate.Modifiers.Should().BeEquivalentTo(new [] {
+        itemTemplate.Modifiers.Should().BeEquivalentTo(new[]
+        {
             new ItemTemplateModifierEntity
             {
                 StatName = "some-stat-name-2",
@@ -268,6 +280,9 @@ public class ItemTemplateUtilTests
 
         var request = new ItemTemplateRequest
         {
+            Name = string.Empty,
+            Source = string.Empty,
+            Data = new JObject(),
             SkillIds = new List<Guid>
             {
                 new Guid("00000000-0000-0000-0000-000000000004"),
@@ -282,11 +297,13 @@ public class ItemTemplateUtilTests
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
 
-        itemTemplate.Skills.Should().BeEquivalentTo(new [] {
+        itemTemplate.Skills.Should().BeEquivalentTo(new[]
+        {
             new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000004")},
             new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000005")},
         });
-        itemTemplate.UnSkills.Should().BeEquivalentTo(new [] {
+        itemTemplate.UnSkills.Should().BeEquivalentTo(new[]
+        {
             new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000006")},
             new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000007")},
         });
@@ -300,23 +317,27 @@ public class ItemTemplateUtilTests
         {
             SkillModifiers = new List<ItemTemplateSkillModifierEntity>
             {
-                new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000001"), Value = 1},
-                new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000002"), Value = 2},
+                new() {SkillId = new Guid("00000000-0000-0000-0000-000000000001"), Value = 1},
+                new() {SkillId = new Guid("00000000-0000-0000-0000-000000000002"), Value = 2},
             },
         };
 
         var request = new ItemTemplateRequest
         {
+            Name = string.Empty,
+            Source = string.Empty,
+            Data = new JObject(),
             SkillModifiers = new List<ItemTemplateSkillModifierRequest>
             {
-                new ItemTemplateSkillModifierRequest {SkillId = new Guid("00000000-0000-0000-0000-000000000004"), Value = 3},
-                new ItemTemplateSkillModifierRequest {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4},
+                new() {SkillId = new Guid("00000000-0000-0000-0000-000000000004"), Value = 3},
+                new() {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4},
             },
         };
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
 
-        itemTemplate.SkillModifiers.Should().BeEquivalentTo(new [] {
+        itemTemplate.SkillModifiers.Should().BeEquivalentTo(new[]
+        {
             new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000004"), Value = 3},
             new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4},
         });

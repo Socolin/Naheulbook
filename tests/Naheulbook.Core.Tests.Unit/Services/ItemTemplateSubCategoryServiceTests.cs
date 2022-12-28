@@ -10,7 +10,6 @@ using Naheulbook.Data.Repositories;
 using Naheulbook.Requests.Requests;
 using NSubstitute;
 using NUnit.Framework;
-using Socolin.TestUtils.AutoFillTestObjects;
 
 namespace Naheulbook.Core.Tests.Unit.Services;
 
@@ -37,9 +36,16 @@ public class ItemTemplateSubCategoryServiceTests
     public async Task CreateItemTemplateSubCategory_AddANewItemTemplateSubCategoryInDatabase()
     {
         var expectedItemTemplateSubCategory = CreateItemTemplateSubCategoryAsync();
-        var createItemTemplateSubCategoryRequest = AutoFill<CreateItemTemplateSubCategoryRequest>.One(settings: new AutoFillSettings {MaxDepth = 0});
+        var request = new CreateItemTemplateSubCategoryRequest
+        {
+            Name = "some-name",
+            TechName = "some-tech-name",
+            Description = "some-description",
+            Note = "some-note",
+            SectionId = 1,
+        };
 
-        var itemTemplateSubCategory = await _itemTemplateSubCategoryService.CreateItemTemplateSubCategoryAsync(new NaheulbookExecutionContext(), createItemTemplateSubCategoryRequest);
+        var itemTemplateSubCategory = await _itemTemplateSubCategoryService.CreateItemTemplateSubCategoryAsync(new NaheulbookExecutionContext(), request);
 
         Received.InOrder(() =>
         {
@@ -52,9 +58,10 @@ public class ItemTemplateSubCategoryServiceTests
     [Test]
     public async Task CreateItemTemplateSubCategoryAsync_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
     {
+        var request = new CreateItemTemplateSubCategoryRequest {Name = string.Empty};
         var executionContext = new NaheulbookExecutionContext();
 
-        await _itemTemplateSubCategoryService.CreateItemTemplateSubCategoryAsync(executionContext, new CreateItemTemplateSubCategoryRequest());
+        await _itemTemplateSubCategoryService.CreateItemTemplateSubCategoryAsync(executionContext, request);
 
         Received.InOrder(() =>
         {
@@ -68,7 +75,7 @@ public class ItemTemplateSubCategoryServiceTests
         return new ItemTemplateSubCategoryEntity
         {
             Name = "some-name",
-            TechName= "some-tech-name",
+            TechName = "some-tech-name",
             Description = "some-description",
             Note = "some-note",
             SectionId = 1,

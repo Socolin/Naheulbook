@@ -66,12 +66,13 @@ public class LootServiceTests
     [Test]
     public async Task CreateLootAsync_WhenGroupDoesNotExists_ShouldThrow()
     {
+        var request = new CreateLootRequest {Name = string.Empty};
         var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
 
         _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(42)
-            .Returns((GroupEntity) null);
+            .Returns((GroupEntity)null);
 
-        Func<Task> act = () => _service.CreateLootAsync(naheulbookExecutionContext, 42, new CreateLootRequest());
+        Func<Task> act = () => _service.CreateLootAsync(naheulbookExecutionContext, 42, request);
 
         await act.Should().ThrowAsync<GroupNotFoundException>();
     }
@@ -82,6 +83,7 @@ public class LootServiceTests
         const int groupId = 42;
         var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
         var group = new GroupEntity {Id = groupId};
+        var request = new CreateLootRequest {Name = string.Empty};
 
         _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
             .Returns(group);
@@ -89,7 +91,7 @@ public class LootServiceTests
         _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
             .Throw(new TestException());
 
-        Func<Task> act = () => _service.CreateLootAsync(naheulbookExecutionContext, groupId, new CreateLootRequest());
+        Func<Task> act = () => _service.CreateLootAsync(naheulbookExecutionContext, groupId, request);
 
         await act.Should().ThrowAsync<TestException>();
     }
@@ -119,7 +121,7 @@ public class LootServiceTests
         var executionContext = new NaheulbookExecutionContext();
 
         _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
-            .Returns((GroupEntity) null);
+            .Returns((GroupEntity)null);
 
         Func<Task> act = () => _service.GetLootsForGroupAsync(executionContext, groupId);
 

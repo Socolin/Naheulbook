@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -9,6 +10,7 @@ using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
@@ -36,7 +38,7 @@ public class EffectsControllerTests
     [Test]
     public async Task PutEditEffect_CallEffectService()
     {
-        var editEffectRequest = new EditEffectRequest();
+        var editEffectRequest = new EditEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = new List<StatModifierRequest>()};
         var expectedEffectResponse = new EffectResponse();
         var effect = new EffectEntity {Id = 42};
 
@@ -55,10 +57,12 @@ public class EffectsControllerTests
     [Test]
     public async Task PutEditEffect_WhenCatchForbiddenAccessException_Return403()
     {
+        var editEffectRequest = new EditEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = new List<StatModifierRequest>()};
+
         _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
             .Returns(Task.FromException<EffectEntity>(new ForbiddenAccessException()));
 
-        Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
+        Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }
@@ -66,10 +70,12 @@ public class EffectsControllerTests
     [Test]
     public async Task PutEditEffect_WhenCatchEffectNotFoundException_Return404()
     {
+        var editEffectRequest = new EditEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = new List<StatModifierRequest>()};
+
         _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
             .Returns(Task.FromException<EffectEntity>(new EffectNotFoundException()));
 
-        Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, new EditEffectRequest());
+        Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
     }

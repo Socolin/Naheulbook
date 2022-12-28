@@ -1,8 +1,7 @@
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CreateMonsterTypeRequest
 {
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 }

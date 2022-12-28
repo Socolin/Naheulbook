@@ -1,9 +1,8 @@
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
@@ -36,7 +35,7 @@ public class ItemTemplateSectionsControllerTests
     [Test]
     public async Task PostCreateSection_CallItemSectionService()
     {
-        var createItemTemplateSectionRequest = new CreateItemTemplateSectionRequest();
+        var createItemTemplateSectionRequest = new CreateItemTemplateSectionRequest {Name = string.Empty, Icon = string.Empty, Note = string.Empty, Specials = new List<string>()};
         var itemTemplateSection = new ItemTemplateSectionEntity();
         var itemTemplateSectionResponse = new ItemTemplateSectionResponse();
 
@@ -54,10 +53,12 @@ public class ItemTemplateSectionsControllerTests
     [Test]
     public async Task PostCreateSection_WhenCatchForbiddenAccessException_Return403()
     {
+        var createItemTemplateSectionRequest = new CreateItemTemplateSectionRequest {Name = string.Empty, Icon = string.Empty, Note = string.Empty, Specials = new List<string>()};
+
         _itemTemplateSectionService.CreateItemTemplateSectionAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateSectionRequest>())
             .Returns(Task.FromException<ItemTemplateSectionEntity>(new ForbiddenAccessException()));
 
-        Func<Task<JsonResult>> act = () => _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, new CreateItemTemplateSectionRequest());
+        var act = () => _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, createItemTemplateSectionRequest);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }

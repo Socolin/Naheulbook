@@ -54,7 +54,7 @@ public class GroupsControllerTests
     [Test]
     public async Task PostCreateGroupAsync_ShouldCreateGroupWithGroupService_ThenReturnGroupResponse()
     {
-        var createGroupRequest = new CreateGroupRequest();
+        var createGroupRequest = new CreateGroupRequest {Name = string.Empty};
         var createdGroup = new GroupEntity();
         var groupResponse = new GroupResponse();
 
@@ -73,7 +73,7 @@ public class GroupsControllerTests
     public async Task PostCreateLootAsync_ShouldCreateLoot_ThenReturnLootResponse()
     {
         const int groupId = 8;
-        var createLootRequest = new CreateLootRequest();
+        var createLootRequest = new CreateLootRequest {Name = string.Empty};
         var createdLoot = new LootEntity();
         var lootResponse = new LootResponse();
 
@@ -93,7 +93,7 @@ public class GroupsControllerTests
     public async Task PostCreateLootAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
     {
         const int groupId = 8;
-        var createLootRequest = new CreateLootRequest();
+        var createLootRequest = new CreateLootRequest {Name = string.Empty};
 
         _lootService.CreateLootAsync(_executionContext, groupId, createLootRequest)
             .Returns(Task.FromException<LootEntity>(exception));
@@ -107,7 +107,7 @@ public class GroupsControllerTests
     public async Task PostCreateMonsterAsync_ShouldCreateMonster_ThenReturnMonsterResponse()
     {
         const int groupId = 8;
-        var createMonsterRequest = new CreateMonsterRequest();
+        var createMonsterRequest = new CreateMonsterRequest {Name = string.Empty, Items = new List<CreateItemRequest>()};
         var createdMonster = new MonsterEntity();
         var monsterResponse = new MonsterResponse();
 
@@ -127,7 +127,7 @@ public class GroupsControllerTests
     public async Task PostCreateMonsterAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
     {
         const int groupId = 8;
-        var createMonsterRequest = new CreateMonsterRequest();
+        var createMonsterRequest = new CreateMonsterRequest {Name = string.Empty, Items = new List<CreateItemRequest>()};
 
         _monsterService.CreateMonsterAsync(_executionContext, groupId, createMonsterRequest)
             .Returns(Task.FromException<MonsterEntity>(exception));

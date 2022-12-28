@@ -1,7 +1,6 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class PatchGroupRequest
 {
     public string? Name { get; set; }
@@ -11,6 +10,7 @@ public class PatchGroupRequest
     public int? FighterIndex { get; set; }
 }
 
+[PublicAPI]
 public class NhbkDateRequest
 {
     public int Year { get; set; }

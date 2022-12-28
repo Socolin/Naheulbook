@@ -235,10 +235,12 @@ public class CharactersControllerTest
     [TestCaseSource(nameof(GetCommonCharacterExceptionsAndExpectedStatusCode))]
     public async Task PostAddModifiersAsync_ShouldReturnExpectedHttpStatusCodeOnKnownErrors(Exception exception, int expectedStatusCode)
     {
+        var request = new AddCharacterModifierRequest {Name = string.Empty, DurationType = string.Empty};
+
         _characterService.AddModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<AddCharacterModifierRequest>())
             .Returns(Task.FromException<CharacterModifierEntity>(exception));
 
-        Func<Task> act = () => _controller.PostAddModifiersAsync(_executionContext, 2, new AddCharacterModifierRequest());
+        Func<Task> act = () => _controller.PostAddModifiersAsync(_executionContext, 2, request);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -316,7 +318,7 @@ public class CharactersControllerTest
         _characterService.SetCharacterAdBonusStatAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<PutStatBonusAdRequest>())
             .Returns(Task.FromException<List<LootEntity>>(exception));
 
-        Func<Task> act = () => _controller.PutStatBonusAdAsync(_executionContext, 2, new PutStatBonusAdRequest());
+        Func<Task> act = () => _controller.PutStatBonusAdAsync(_executionContext, 2, new PutStatBonusAdRequest {Stat = string.Empty});
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }

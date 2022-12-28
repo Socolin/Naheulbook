@@ -1,8 +1,7 @@
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CreateRandomItemRequest
 {
-    public string SubCategoryTechName { get; set; } = null!;
+    public required string SubCategoryTechName { get; set; }
 }

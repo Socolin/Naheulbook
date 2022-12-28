@@ -4,7 +4,7 @@ using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Requests.Validators;
 
-public class StatModifierValidator : AbstractValidator<StatModifier>
+public class StatModifierValidator : AbstractValidator<StatModifierRequest>
 {
     private static readonly List<string> ValidTypeValues = new List<string> {"ADD", "MUL", "DIV", "SET", "PERCENTAGE"};
 

@@ -1,6 +1,7 @@
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CreateLootRequest
 {
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 }

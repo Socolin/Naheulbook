@@ -9,6 +9,7 @@ using Naheulbook.Core.Models;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
@@ -37,7 +38,7 @@ public class EffectControllerTests
     public async Task PostCreateEffect_CallEffectService()
     {
         const int subCategoryId = 12;
-        var createEffectRequest = new CreateEffectRequest();
+        var createEffectRequest = new CreateEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = new List<StatModifierRequest>()};
         var expectedEffectResponse = new EffectResponse();
         var effect = new EffectEntity {Id = 42};
 
@@ -55,10 +56,12 @@ public class EffectControllerTests
     [Test]
     public async Task PostCreateEffect_WhenCatchForbiddenAccessException_Return403()
     {
+        var createEffectRequest = new CreateEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = new List<StatModifierRequest>()};
+
         _effectService.CreateEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateEffectRequest>())
             .Returns(Task.FromException<EffectEntity>(new ForbiddenAccessException()));
 
-        Func<Task> act = () => _effectSubCategoriesController.PostCreateEffectAsync(_executionContext, 12, new CreateEffectRequest());
+        Func<Task> act = () => _effectSubCategoriesController.PostCreateEffectAsync(_executionContext, 12, createEffectRequest);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }

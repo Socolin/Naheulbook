@@ -1,10 +1,8 @@
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 using System;
 
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class MonsterTemplateInventoryElementRequest
 {
     public int? Id { get; set; }

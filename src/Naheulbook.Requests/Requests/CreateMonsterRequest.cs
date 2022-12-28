@@ -3,10 +3,11 @@ using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CreateMonsterRequest
 {
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
     public MonsterData? Data { get; set; }
     public IList<ActiveStatsModifier>? Modifiers { get; set; }
-    public IList<CreateItemRequest> Items { get; set; } = null!;
+    public required IList<CreateItemRequest> Items { get; set; }
 }

@@ -1,6 +1,7 @@
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class GenerateJwtRequest
 {
-    public string Password { get; set; } = null!;
+    public required string Password { get; set; }
 }

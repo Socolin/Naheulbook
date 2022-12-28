@@ -80,7 +80,10 @@ public class EffectService : IEffectService
         return effectType;
     }
 
-    public async Task<EffectSubCategoryEntity> CreateEffectSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateEffectSubCategoryRequest request)
+    public async Task<EffectSubCategoryEntity> CreateEffectSubCategoryAsync(
+        NaheulbookExecutionContext executionContext,
+        CreateEffectSubCategoryRequest request
+    )
     {
         await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
 

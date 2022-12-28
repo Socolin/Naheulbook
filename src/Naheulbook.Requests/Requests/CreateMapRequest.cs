@@ -1,27 +1,26 @@
 using System.Collections.Generic;
 
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable CollectionNeverUpdated.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CreateMapRequest
 {
+    [PublicAPI]
     public class CreateMapRequestData
     {
-        public class MapAttribution
+        [PublicAPI]
+        public class MapAttributionRequest
         {
-            public string Name { get; set; } = null!;
-            public string Url { get; set; } = null!;
+            public required string Name { get; set; }
+            public required string Url { get; set; }
         }
 
         public bool IsGm { get; set; }
         public string UnitName { get; set; } = "m";
         public double PixelPerUnit { get; set; } = 5;
-        public List<MapAttribution> Attribution { get; set; } = new List<MapAttribution>();
+        public required List<MapAttributionRequest> Attribution { get; set; } = new();
     }
 
-    public string Name { get; set; } = null!;
-    public CreateMapRequestData Data { get; set; } = null!;
+    public required string Name { get; set; }
+    public required CreateMapRequestData Data { get; set; }
 }

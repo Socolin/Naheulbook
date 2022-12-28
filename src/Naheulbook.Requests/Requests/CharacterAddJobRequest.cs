@@ -1,9 +1,8 @@
 using System;
 
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CharacterAddJobRequest
 {
     public Guid JobId { get; set; }

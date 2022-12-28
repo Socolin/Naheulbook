@@ -1,11 +1,9 @@
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class MapLayerRequest
 {
-    public string Name { get; set; } = null!;
-    public string Source { get; set; } = null!;
+    public required string Name { get; set; }
+    public required string Source { get; set; }
     public bool IsGm { get; set; }
 }

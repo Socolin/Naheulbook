@@ -65,7 +65,7 @@ public class MonsterTemplateServiceTests
     [Test]
     public async Task CreateMonsterTemplate_EnsureAdminAccess()
     {
-        var request = new MonsterTemplateRequest();
+        var request = new MonsterTemplateRequest {Name = string.Empty, Data = new JObject()};
         var executionContext = new NaheulbookExecutionContext();
 
         _authorizationUtil.EnsureAdminAccessAsync(executionContext)
@@ -81,6 +81,8 @@ public class MonsterTemplateServiceTests
     {
         var request = new MonsterTemplateRequest
         {
+            Name = string.Empty,
+            Data = new JObject(),
             SubCategoryId = 42,
         };
         var executionContext = new NaheulbookExecutionContext();

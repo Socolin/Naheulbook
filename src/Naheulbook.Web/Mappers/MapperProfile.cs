@@ -38,7 +38,7 @@ public class MapperProfile : Profile
         CreateMap<CharacterModifierEntity, ActiveStatsModifier>()
             .ForMember(x => x.Active, opt => opt.MapFrom(x => x.IsActive))
             .ForMember(x => x.Values, opt => opt.MapFrom(x => x.Values.OrderBy(v => v.Id)));
-        CreateMap<CharacterModifierValueEntity, StatModifier>()
+        CreateMap<CharacterModifierValueEntity, StatModifierRequest>()
             .ForMember(x => x.Stat, opt => opt.MapFrom(c => c.StatName))
             .ForMember(x => x.Special, opt => opt.Ignore());
         CreateMap<AddCharacterModifierRequest, CharacterModifierEntity>()
@@ -51,7 +51,7 @@ public class MapperProfile : Profile
             .ForMember(x => x.CurrentTimeDuration, opt => opt.MapFrom(x => x.TimeDuration))
             .ForMember(x => x.CurrentLapCount, opt => opt.MapFrom(x => x.LapCount))
             .ForMember(x => x.LapCountDecrement, opt => opt.MapFrom(x => MapperHelpers.ToJson(x.LapCountDecrement)));
-        CreateMap<StatModifier, CharacterModifierValueEntity>()
+        CreateMap<StatModifierRequest, CharacterModifierValueEntity>()
             .ForMember(x => x.StatName, opt => opt.MapFrom(c => c.Stat))
             .ForMember(x => x.Id, opt => opt.Ignore())
             .ForMember(x => x.CharacterModifierId, opt => opt.Ignore());

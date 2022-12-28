@@ -9,7 +9,6 @@ using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using NSubstitute;
 using NUnit.Framework;
-using Socolin.TestUtils.AutoFillTestObjects;
 
 namespace Naheulbook.Core.Tests.Unit.Services;
 
@@ -39,7 +38,18 @@ public class ItemTemplateSectionServiceTests
     public async Task CreateItemTemplateSection_AddANewItemTemplateSectionInDatabase()
     {
         var expectedItemTemplateSection = CreateItemTemplateSection();
-        var createItemTemplateSectionRequest = AutoFill<CreateItemTemplateSectionRequest>.One(settings: new AutoFillSettings {MaxDepth = 0});
+        var createItemTemplateSectionRequest = new CreateItemTemplateSectionRequest
+        {
+            Name = "some-name",
+            Icon = "some-icon",
+            Note = "some-note",
+            Specials = new List<string>
+            {
+                "some-specials0",
+                "some-specials1",
+                "some-specials2",
+            },
+        };
 
         var itemTemplateSection = await _service.CreateItemTemplateSectionAsync(new NaheulbookExecutionContext(), createItemTemplateSectionRequest);
 
@@ -55,9 +65,10 @@ public class ItemTemplateSectionServiceTests
     [Test]
     public async Task CreateItemTemplateSection_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
     {
+        var request = new CreateItemTemplateSectionRequest {Name = string.Empty, Icon = string.Empty, Specials = new List<string>()};
         var executionContext = new NaheulbookExecutionContext();
 
-        await _service.CreateItemTemplateSectionAsync(executionContext, new CreateItemTemplateSectionRequest());
+        await _service.CreateItemTemplateSectionAsync(executionContext, request);
 
         Received.InOrder(() =>
         {

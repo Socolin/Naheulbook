@@ -1,18 +1,15 @@
 using System;
 using System.Collections.Generic;
 
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CharacterLevelUpRequest
 {
-    public string EvOrEa { get; set; } = null!;
+    public required string EvOrEa { get; set; }
     public short EvOrEaValue { get; set; }
     public int TargetLevelUp { get; set; }
-    public string StatToUp { get; set; } = null!;
+    public required string StatToUp { get; set; }
     public Guid? SkillId { get; set; }
-    public List<Guid> SpecialityIds { get; set; } = null!;
+    public required  List<Guid> SpecialityIds { get; set; }
 }

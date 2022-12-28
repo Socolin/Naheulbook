@@ -1,9 +1,8 @@
 using Newtonsoft.Json;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class PatchCharacterRequest
 {
     public int? Ev { get; set; }

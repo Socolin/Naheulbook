@@ -1,10 +1,8 @@
 using System;
 
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CharacterRemoveJobRequest
 {
     public Guid JobId { get; set; }

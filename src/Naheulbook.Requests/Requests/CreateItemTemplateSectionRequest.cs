@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 
-// ReSharper disable CollectionNeverUpdated.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CreateItemTemplateSectionRequest
 {
-    public string Name { get; set; } = null!;
-    public string Note { get; set; } = null!;
-    public string Icon { get; set; } = null!;
-    public List<string> Specials { get; set; } = new List<string>();
+    public required string Name { get; set; }
+    public string? Note { get; set; }
+    public required string Icon { get; set; }
+    public required List<string> Specials { get; set; }
 }

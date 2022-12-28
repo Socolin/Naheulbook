@@ -19,5 +19,5 @@ public class StatsModifier
     public string? Description { get; set; }
     public string? Type { get; set; }
 
-    public List<StatModifier> Values { get; set; } = null!;
+    public List<StatModifierRequest> Values { get; set; } = null!;
 }

@@ -35,7 +35,7 @@ public class ItemTemplateSubCategoriesControllerTests
     [Test]
     public async Task PostCreateItemTemplateSubCategoryAsync_CallItemSubCategoryService()
     {
-        var createItemTemplateSubCategoryRequest = new CreateItemTemplateSubCategoryRequest();
+        var createItemTemplateSubCategoryRequest = new CreateItemTemplateSubCategoryRequest {Name = string.Empty};
         var itemTemplateSubCategory = new ItemTemplateSubCategoryEntity();
         var itemTemplateSubCategoryResponse = new ItemTemplateSubCategoryResponse();
 
@@ -53,10 +53,12 @@ public class ItemTemplateSubCategoriesControllerTests
     [Test]
     public async Task PostCreateItemTemplateSubCategoryAsync_WhenCatchForbiddenAccessException_Return403()
     {
+        var createItemTemplateSubCategoryRequest = new CreateItemTemplateSubCategoryRequest {Name = string.Empty};
+
         _itemTemplateSubCategoryService.CreateItemTemplateSubCategoryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateSubCategoryRequest>())
             .Returns(Task.FromException<ItemTemplateSubCategoryEntity>(new ForbiddenAccessException()));
 
-        Func<Task> act = () => _itemTemplateSubCategoriesController.PostCreateItemTemplateSubCategoryAsync(_executionContext, new CreateItemTemplateSubCategoryRequest());
+        Func<Task> act = () => _itemTemplateSubCategoriesController.PostCreateItemTemplateSubCategoryAsync(_executionContext, createItemTemplateSubCategoryRequest);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }

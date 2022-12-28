@@ -11,6 +11,7 @@ using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
 using NSubstitute;
 using NUnit.Framework;
 using Socolin.TestUtils.AutoFillTestObjects;
@@ -84,7 +85,7 @@ public class EffectServiceTests
     [Test]
     public async Task CreateEffectType_AddANewEffectTypeInDatabase()
     {
-        var createEffectTypeRequest = AutoFill<CreateEffectTypeRequest>.One();
+        var createEffectTypeRequest = new CreateEffectTypeRequest {Name = "some-name"};
         var effectType = await _effectService.CreateEffectTypeAsync(new NaheulbookExecutionContext(), createEffectTypeRequest);
 
         Received.InOrder(() =>
@@ -98,9 +99,10 @@ public class EffectServiceTests
     [Test]
     public async Task CreateEffectType_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
     {
+        var createEffectTypeRequest = new CreateEffectTypeRequest {Name = string.Empty};
         var executionContext = new NaheulbookExecutionContext();
 
-        await _effectService.CreateEffectTypeAsync(executionContext, new CreateEffectTypeRequest());
+        await _effectService.CreateEffectTypeAsync(executionContext, createEffectTypeRequest);
 
         Received.InOrder(() =>
         {
@@ -113,8 +115,14 @@ public class EffectServiceTests
     public async Task CreateEffectSubCategory_AddANewEffectSubCategoryInDatabase()
     {
         var expectedEffectSubCategory = CreateEffectSubCategory();
-        expectedEffectSubCategory.Effects = new List<EffectEntity>();
-        var createEffectSubCategoryRequest = AutoFill<CreateEffectSubCategoryRequest>.One();
+        var createEffectSubCategoryRequest = new CreateEffectSubCategoryRequest
+        {
+            Name = "some-name",
+            Note = "some-note",
+            DiceCount = 1,
+            DiceSize = 2,
+            TypeId = 3,
+        };
 
         var effectSubCategory = await _effectService.CreateEffectSubCategoryAsync(new NaheulbookExecutionContext(), createEffectSubCategoryRequest);
 
@@ -130,7 +138,7 @@ public class EffectServiceTests
     public async Task CreateEffectSubCategory_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
     {
         var executionContext = new NaheulbookExecutionContext();
-        var createEffectSubCategoryRequest = AutoFill<CreateEffectSubCategoryRequest>.One();
+        var createEffectSubCategoryRequest = new CreateEffectSubCategoryRequest {Name = string.Empty};
 
         await _effectService.CreateEffectSubCategoryAsync(executionContext, createEffectSubCategoryRequest);
 
@@ -145,7 +153,38 @@ public class EffectServiceTests
     public async Task CreateEffect_AddANewEffectInDatabase()
     {
         var expectedEffect = CreateEffect(subCategoryId: 2);
-        var createEffectRequest = AutoFill<CreateEffectRequest>.One();
+        var createEffectRequest = new CreateEffectRequest
+        {
+            Name = "some-name",
+            Description = "some-description",
+            DurationType = "some-duration-type",
+            Duration = "some-duration",
+            CombatCount = 1,
+            Dice = (short?)2,
+            LapCount = 3,
+            TimeDuration = 4,
+            Modifiers = new List<StatModifierRequest>
+            {
+                new()
+                {
+                    Stat = "some-stat",
+                    Type = "some-type",
+                    Value = 5,
+                },
+                new()
+                {
+                    Stat = "some-stat",
+                    Type = "some-type",
+                    Value = 6,
+                },
+                new()
+                {
+                    Stat = "some-stat",
+                    Type = "some-type",
+                    Value = 7,
+                },
+            },
+        };
         var executionContext = new NaheulbookExecutionContext();
 
         var effect = await _effectService.CreateEffectAsync(executionContext, 2, createEffectRequest);
@@ -162,7 +201,7 @@ public class EffectServiceTests
     public async Task CreateEffect_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
     {
         var executionContext = new NaheulbookExecutionContext();
-        var createEffectRequest = AutoFill<CreateEffectRequest>.One();
+        var createEffectRequest = new CreateEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = new List<StatModifierRequest>()};
 
         await _effectService.CreateEffectAsync(executionContext, 2, createEffectRequest);
 
@@ -179,7 +218,39 @@ public class EffectServiceTests
         var expectedEffect = CreateEffect(42, subCategoryId: 1, offset: 1);
         var executionContext = new NaheulbookExecutionContext();
         var previousEffect = AutoFill<EffectEntity>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt, new AutoFillSettings {MaxDepth = 1}, (i) => new {Category = i.SubCategory});
-        var editEffectRequest = AutoFill<EditEffectRequest>.One();
+        var editEffectRequest = new EditEffectRequest
+        {
+            Name = "some-name",
+            Description = "some-description",
+            DurationType = "some-duration-type",
+            Duration = "some-duration",
+            CombatCount = 2,
+            Dice = (short?)3,
+            LapCount = 4,
+            TimeDuration = 5,
+            Modifiers = new List<StatModifierRequest>
+            {
+                new()
+                {
+                    Stat = "some-stat",
+                    Type = "some-type",
+                    Value = 6,
+                },
+                new()
+                {
+                    Stat = "some-stat",
+                    Type = "some-type",
+                    Value = 7,
+                },
+                new()
+                {
+                    Stat = "some-stat",
+                    Type = "some-type",
+                    Value = 8,
+                },
+            },
+            SubCategoryId = 1,
+        };
 
         previousEffect.Id = 42;
 
@@ -198,7 +269,7 @@ public class EffectServiceTests
     {
         var executionContext = new NaheulbookExecutionContext();
         var previousEffect = AutoFill<EffectEntity>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt);
-        var editEffectRequest = AutoFill<EditEffectRequest>.One();
+        var editEffectRequest = new EditEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = new List<StatModifierRequest>()};
         previousEffect.Id = 42;
 
         _effectRepository.GetWithModifiersAsync(42)
@@ -217,10 +288,10 @@ public class EffectServiceTests
     public async Task EditEffect_WhenEffectDoesNotExists_Throw()
     {
         var executionContext = new NaheulbookExecutionContext();
-        var editEffectRequest = AutoFill<EditEffectRequest>.One();
+        var editEffectRequest = new EditEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = new List<StatModifierRequest>()};
 
         _effectRepository.GetWithModifiersAsync(Arg.Any<int>())
-            .Returns((EffectEntity) null);
+            .Returns((EffectEntity)null);
 
         Func<Task> act = () => _effectService.EditEffectAsync(executionContext, 42, editEffectRequest);
 
@@ -250,28 +321,28 @@ public class EffectServiceTests
             DurationType = "some-duration-type",
             Duration = "some-duration",
             CombatCount = 1 + offset,
-            Dice = (short?) (2 + offset),
+            Dice = (short?)(2 + offset),
             LapCount = 3 + offset,
             TimeDuration = 4 + offset,
             Modifiers = new List<EffectModifierEntity>
             {
-                new EffectModifierEntity
+                new()
                 {
                     StatName = "some-stat",
                     Type = "some-type",
-                    Value = (short) (5 + offset),
+                    Value = (short)(5 + offset),
                 },
-                new EffectModifierEntity
+                new()
                 {
                     StatName = "some-stat",
                     Type = "some-type",
-                    Value = (short) (6 + offset),
+                    Value = (short)(6 + offset),
                 },
-                new EffectModifierEntity
+                new()
                 {
                     StatName = "some-stat",
                     Type = "some-type",
-                    Value = (short) (7 + offset),
+                    Value = (short)(7 + offset),
                 },
             },
             SubCategoryId = subCategoryId,

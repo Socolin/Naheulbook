@@ -1,10 +1,8 @@
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class PostCreateGroupHistoryEntryRequest
 {
     public bool IsGm { get; set; }
-    public string Info { get; set; } = null!;
+    public required string Info { get; set; }
 }

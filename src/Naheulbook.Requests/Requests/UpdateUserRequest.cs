@@ -1,7 +1,6 @@
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class UpdateUserRequest
 {
     public string? DisplayName { get; set; }

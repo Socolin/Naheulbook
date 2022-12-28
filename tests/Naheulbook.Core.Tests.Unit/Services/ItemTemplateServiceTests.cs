@@ -12,6 +12,7 @@ using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
+using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
@@ -63,7 +64,7 @@ public class ItemTemplateServiceTests
     {
         var itemTemplateId = Guid.NewGuid();
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
-            .Returns((ItemTemplateEntity) null);
+            .Returns((ItemTemplateEntity)null);
 
         Func<Task> act = () => _service.GetItemTemplateAsync(itemTemplateId);
 
@@ -76,7 +77,7 @@ public class ItemTemplateServiceTests
         var itemTemplateId = Guid.NewGuid();
         var newItemTemplateEntity = new ItemTemplateEntity {Id = itemTemplateId};
         var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId};
-        var createItemTemplateRequest = new ItemTemplateRequest();
+        var createItemTemplateRequest = new ItemTemplateRequest {Name = string.Empty, Source = string.Empty, Data = new JObject()};
 
         _mapper.Map<ItemTemplateEntity>(createItemTemplateRequest)
             .Returns(newItemTemplateEntity);
@@ -98,7 +99,7 @@ public class ItemTemplateServiceTests
     public async Task CreateItemTemplate_EnsureThatUserIsAdmin_IfSourceIsOfficial_BeforeAddingInDatabase()
     {
         var executionContext = new NaheulbookExecutionContext();
-        var createItemTemplateRequest = new ItemTemplateRequest {Source = "official"};
+        var createItemTemplateRequest = new ItemTemplateRequest {Source = "official", Name = string.Empty, Data = new JObject()};
 
         _authorizationUtil.EnsureAdminAccessAsync(executionContext)
             .Throws(new TestException());
@@ -114,7 +115,7 @@ public class ItemTemplateServiceTests
     {
         var itemTemplateId = Guid.NewGuid();
         var executionContext = new NaheulbookExecutionContext {UserId = 42};
-        var createItemTemplateRequest = new ItemTemplateRequest {Source = "non-official"};
+        var createItemTemplateRequest = new ItemTemplateRequest {Source = "non-official", Name = string.Empty, Data = new JObject()};
         var newItemTemplateEntity = new ItemTemplateEntity {Id = itemTemplateId};
 
         _mapper.Map<ItemTemplateEntity>(createItemTemplateRequest)
@@ -131,7 +132,7 @@ public class ItemTemplateServiceTests
     public async Task EditItemTemplateAsync_LoadEntityWithRelatedStuff_ThenApplyChangesFromRequest_ThenSave()
     {
         var itemTemplateId = Guid.NewGuid();
-        var itemTemplateRequest = new ItemTemplateRequest();
+        var itemTemplateRequest = new ItemTemplateRequest {Name = string.Empty, Source = string.Empty, Data = new JObject()};
         var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId};
 
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
@@ -151,7 +152,7 @@ public class ItemTemplateServiceTests
     {
         const int userId = 17;
         var itemTemplateId = Guid.NewGuid();
-        var itemTemplateRequest = new ItemTemplateRequest {Source = "private"};
+        var itemTemplateRequest = new ItemTemplateRequest {Source = "private", Name = string.Empty, Data = new JObject()};
         var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId};
         var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = userId};
 
@@ -169,7 +170,7 @@ public class ItemTemplateServiceTests
     public async Task EditItemTemplateAsync_ShouldSetNullSourceUserId_IfSourceIsOfficial()
     {
         var itemTemplateId = Guid.NewGuid();
-        var itemTemplateRequest = new ItemTemplateRequest {Source = "official"};
+        var itemTemplateRequest = new ItemTemplateRequest {Source = "official", Name = string.Empty, Data = new JObject()};
         var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId};
         var naheulbookExecutionContext = new NaheulbookExecutionContext();
 
@@ -189,13 +190,14 @@ public class ItemTemplateServiceTests
         var itemTemplateId = Guid.NewGuid();
         var executionContext = new NaheulbookExecutionContext();
         var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId};
+        var request = new ItemTemplateRequest {Name = string.Empty, Source = string.Empty, Data = new JObject()};
 
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
             .Returns(fullyLoadedItemTemplate);
         _authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, fullyLoadedItemTemplate)
             .Returns(Task.FromException(new TestException()));
 
-        Func<Task<ItemTemplateEntity>> act = () => _service.EditItemTemplateAsync(executionContext, itemTemplateId, new ItemTemplateRequest());
+        Func<Task<ItemTemplateEntity>> act = () => _service.EditItemTemplateAsync(executionContext, itemTemplateId, request);
 
         using (new AssertionScope())
         {
@@ -210,7 +212,7 @@ public class ItemTemplateServiceTests
     {
         var itemTemplateId = Guid.NewGuid();
         var executionContext = new NaheulbookExecutionContext();
-        var request = new ItemTemplateRequest {Source = "official"};
+        var request = new ItemTemplateRequest {Source = "official", Name = string.Empty, Data = new JObject()};
         var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId, Source = "private"};
 
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
@@ -254,7 +256,7 @@ public class ItemTemplateServiceTests
 
         var actualItemTemplates = await _service.SearchItemTemplateAsync(filter, 40, null);
 
-        actualItemTemplates.Should().BeEquivalentTo(new [] {item1, item2, item3});
+        actualItemTemplates.Should().BeEquivalentTo(new[] {item1, item2, item3});
     }
 
     [Test]

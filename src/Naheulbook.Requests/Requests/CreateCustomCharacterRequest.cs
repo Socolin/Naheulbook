@@ -1,32 +1,30 @@
 using System;
 using System.Collections.Generic;
 
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CreateCustomCharacterRequest
 {
-    public string Name { get; set; } = null!;
-    public string Sex { get; set; } = null!;
+    public required string Name { get; set; }
+    public required string Sex { get; set; }
     public short FatePoint { get; set; }
     public int Level { get; set; }
     public int Experience { get; set; }
 
-    public BasicStats Stats { get; set; } = null!;
-    public StatsOverrides BasicStatsOverrides { get; set; } = null!;
+    public required BasicStatsRequest Stats { get; set; }
+    public required StatsOverridesRequest BasicStatsOverrides { get; set; }
 
     public Guid OriginId { get; set; }
-    public IList<Guid> JobIds { get; set; } = null!;
-    public IList<Guid> SkillIds { get; set; } = null!;
-    public IDictionary<Guid, IList<Guid>> SpecialityIds { get; set; } = null!;
+    public required IList<Guid> JobIds { get; set; }
+    public required IList<Guid> SkillIds { get; set; }
+    public required IDictionary<Guid, IList<Guid>> SpecialityIds { get; set; }
 
     public bool IsNpc { get; set; }
     public int? GroupId { get; set; }
 
-    public class BasicStats
+    [PublicAPI]
+    public class BasicStatsRequest
     {
         public int Ad { get; set; }
         public int Cou { get; set; }
@@ -35,7 +33,8 @@ public class CreateCustomCharacterRequest
         public int Int { get; set; }
     }
 
-    public class StatsOverrides
+    [PublicAPI]
+    public class StatsOverridesRequest
     {
         public int? Ad { get; set; }
         public int? Prd { get; set; }

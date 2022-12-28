@@ -1,11 +1,9 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CreateEventRequest
 {
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
     public string? Description { get; set; }
     public long Timestamp { get; set; }
 }

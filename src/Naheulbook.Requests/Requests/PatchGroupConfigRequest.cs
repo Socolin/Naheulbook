@@ -1,7 +1,6 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class PatchGroupConfigRequest
 {
     public bool? AllowPlayersToSeeSkillGmDetails { get; set; }

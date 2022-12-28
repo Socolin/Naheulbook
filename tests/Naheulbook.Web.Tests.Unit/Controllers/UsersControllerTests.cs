@@ -47,7 +47,7 @@ public class UsersControllerTests
     [Test]
     public async Task WhenCreatingUser_Return201Created()
     {
-        var response = await _usersController.PostAsync(new CreateUserRequest());
+        var response = await _usersController.PostAsync(new CreateUserRequest {Password = string.Empty, Username = string.Empty});
 
         response.StatusCode.Should().Be(StatusCodes.Status201Created);
     }

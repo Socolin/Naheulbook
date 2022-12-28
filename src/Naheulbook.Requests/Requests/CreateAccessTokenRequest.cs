@@ -1,6 +1,7 @@
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CreateAccessTokenRequest
 {
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 }

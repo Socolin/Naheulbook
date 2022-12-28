@@ -134,6 +134,7 @@ public class MonsterServiceTests
         const int groupId = 42;
         var naheulbookExecutionContext = new NaheulbookExecutionContext {UserId = 10};
         var group = new GroupEntity {Id = groupId};
+        var request = new CreateMonsterRequest {Name = string.Empty, Items = new List<CreateItemRequest>()};
 
         _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
             .Returns(group);
@@ -141,7 +142,7 @@ public class MonsterServiceTests
         _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
             .Throw(new TestException());
 
-        Func<Task> act = () => _service.CreateMonsterAsync(naheulbookExecutionContext, groupId, new CreateMonsterRequest());
+        Func<Task> act = () => _service.CreateMonsterAsync(naheulbookExecutionContext, groupId, request);
 
         await act.Should().ThrowAsync<TestException>();
     }

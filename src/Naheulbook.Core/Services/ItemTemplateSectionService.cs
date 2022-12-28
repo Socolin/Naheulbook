@@ -49,7 +49,7 @@ public class ItemTemplateSectionService : IItemTemplateSectionService
         {
             Name = request.Name,
             Special = string.Join(",", request.Specials),
-            Note = request.Note,
+            Note = request.Note ?? string.Empty,
             Icon = request.Icon,
             SubCategories = new List<ItemTemplateSubCategoryEntity>(),
         };

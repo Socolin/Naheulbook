@@ -1,10 +1,8 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class AuthenticateWithPasswordRequest
 {
-    public string Username { get; set; } = null!;
-    public string Password { get; set; } = null!;
+    public required string Username { get; set; }
+    public required string Password { get; set; }
 }

@@ -1,6 +1,7 @@
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class PutStatBonusAdRequest
 {
-    public string Stat { get; set; } = null!;
+    public required string Stat { get; set; }
 }

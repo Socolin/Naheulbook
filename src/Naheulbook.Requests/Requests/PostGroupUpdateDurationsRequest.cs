@@ -1,21 +1,20 @@
 using System.Collections.Generic;
 using Naheulbook.Shared.TransientModels;
 
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class PostGroupUpdateDurationsRequest
 {
     public int? MonsterId { get; set; }
     public int? CharacterId { get; set; }
-    public IList<DurationChangeRequest> Changes { get; set; } = null!;
+    public required IList<DurationChangeRequest> Changes { get; set; }
 }
 
+[PublicAPI]
 public class DurationChangeRequest
 {
-    public string Type { get; set; } = null!;
+    public required string Type { get; set; }
     public int? ItemId { get; set; }
     public NewModifierDurationValue? Modifier { get; set; }
     public LifeTime? LifeTime { get; set; }

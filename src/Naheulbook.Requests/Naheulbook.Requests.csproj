@@ -6,7 +6,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="JetBrains.Annotations" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="FluentValidation" />
+      <PackageReference Include="JetBrains.Annotations" />
       <PackageReference Include="Newtonsoft.Json" />
     </ItemGroup>
 

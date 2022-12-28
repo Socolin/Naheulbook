@@ -37,9 +37,9 @@ public class ItemTemplateSubCategoryService : IItemTemplateSubCategoryService
         {
             SectionId = request.SectionId,
             Name = request.Name,
-            Note = request.Note,
-            Description = request.Description,
-            TechName = request.TechName,
+            Note = request.Note ?? string.Empty,
+            Description = request.Description ?? string.Empty,
+            TechName = request.TechName ?? string.Empty,
         };
 
         using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
