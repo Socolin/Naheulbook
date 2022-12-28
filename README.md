@@ -51,7 +51,7 @@ example:
 
 #### Mysql
 
-```sql
+```mysql
 CREATE DATABASE `naheulbook` CHARACTER SET UTF8 COLLATE utf8_general_ci;
 CREATE DATABASE `naheulbook_test` CHARACTER SET UTF8 COLLATE utf8_general_ci;
 CREATE DATABASE `naheulbook_integration` CHARACTER SET UTF8 COLLATE utf8_general_ci;
