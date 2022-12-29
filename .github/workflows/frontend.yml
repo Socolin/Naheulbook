@@ -11,19 +11,18 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+     defaults:
+      run:
+        working-directory: 'frontend' # Here the path to the folder where package-lock.json is located.
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js 18.x
-      working-directory: frontend
       uses: actions/setup-node@v3
       with:
         node-version: 18.x
         cache: 'npm'
     - run: npm ci
-      working-directory: frontend
     - run: npm run build
-      working-directory: frontend
     - uses: actions/upload-artifact@v3
       with:
         name: frontend
