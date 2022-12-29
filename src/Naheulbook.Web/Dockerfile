@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
 COPY . /app
 WORKDIR /app
 ENV ASPNETCORE_ENVIRONMENT=Production
