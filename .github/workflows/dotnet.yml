@@ -87,12 +87,17 @@ jobs:
         registry: ${{ env.REGISTRY }}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Extract metadata (tags, labels) for Docker
+    - name: Extract metadata (tags, labels) for Docker - Web
       id: meta
       uses: docker/metadata-action@v4
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-    - name: Build and push
+    - name: Extract metadata (tags, labels) for Docker - Db migrator
+      id: meta-db-migrator
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-db-migrator
+    - name: Build and push Docker - Web
       id: docker_build
       uses: docker/build-push-action@v3
       with:
@@ -101,18 +106,13 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-    - name: Extract metadata (tags, labels) for Docker - Db migrator
-      id: meta
-      uses: docker/metadata-action@v4
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-db-migrator
-    - name: Build and push - Db migrator
+    - name: Build and push Docker - Db migrator
       id: docker_build
       uses: docker/build-push-action@v3
       with:
         context: backend/tools/Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/
         file: backend/tools/Naheulbook.DatabaseMigrator.Cli/Dockerfile
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        tags: ${{ steps.meta-db-migrator.outputs.tags }}
+        labels: ${{ steps.meta-db-migrator.outputs.labels }}
 
