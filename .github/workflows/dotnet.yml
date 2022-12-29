@@ -77,8 +77,10 @@ jobs:
       with:
         files: "backend/tests/*/TestResults/TestResults.xml"
       continue-on-error: true
-    - name: Publish
+    - name: Publish Naheulbook.Web
       run: dotnet publish --no-restore --no-build -c Release ./backend/src/Naheulbook.Web/Naheulbook.Web.csproj
+    - name: Publish Naheulbook.DatabaseMigrator.Cli
+      run: dotnet publish --no-restore --no-build -c Release ./backend/tools/Naheulbook.DatabaseMigrator.Cli/Naheulbook.Web.csproj
     - name: Log in to the Container registry
       uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
       with:
@@ -87,15 +89,30 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Extract metadata (tags, labels) for Docker
       id: meta
-      uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+      uses: docker/metadata-action@v4
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
     - name: Build and push
       id: docker_build
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v3
       with:
         context: backend/src/Naheulbook.Web/bin/Release/publish/
         file: backend/src/Naheulbook.Web/Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+    - name: Extract metadata (tags, labels) for Docker - Db migrator
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-db-migrator
+    - name: Build and push - Db migrator
+      id: docker_build
+      uses: docker/build-push-action@v3
+      with:
+        context: backend/tools/Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/
+        file: backend/tools/Naheulbook.DatabaseMigrator.Cli/Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+
