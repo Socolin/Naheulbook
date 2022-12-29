@@ -42,7 +42,8 @@ jobs:
     steps:
     - name: Set up MySQL
       run: |
-       mysql --port ${{ job.services.mysql.ports['3306'] }} --host 127.0.0.1 -u root --password=naheulbook <<'EOF'
+       MYSQL_PWD=naheulbook
+       mysql --port ${{ job.services.mysql.ports['3306'] }} --host 127.0.0.1 -u root <<'EOF'
        CREATE DATABASE `naheulbook_test` CHARACTER SET UTF8 COLLATE utf8_general_ci;
        CREATE USER 'naheulbook_test'@'%' IDENTIFIED BY 'naheulbook';
        GRANT  ALL PRIVILEGES ON `naheulbook_test`.* TO 'naheulbook_test'@'%';
