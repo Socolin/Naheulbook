@@ -43,7 +43,7 @@ jobs:
     - name: Set up MySQL
       run: |
        MYSQL_PWD=naheulbook
-       mysql --port ${{ job.services.mysql.ports['3306'] }} --host 127.0.0.1 -u root <<'EOF'
+       mysql --port ${{ job.services.mysql.ports['3306'] }} --host 127.0.0.1 -u root -p <<'EOF'
        CREATE DATABASE `naheulbook_test` CHARACTER SET UTF8 COLLATE utf8_general_ci;
        CREATE USER 'naheulbook_test'@'%' IDENTIFIED BY 'naheulbook';
        GRANT  ALL PRIVILEGES ON `naheulbook_test`.* TO 'naheulbook_test'@'%';
