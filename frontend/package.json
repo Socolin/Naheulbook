@@ -8,7 +8,7 @@
     "start": "ng serve",
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
-    "build": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --prod",
+    "build": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --configuration production",
     "pree2e": "webdriver-manager update --standalone false --gecko false",
     "e2e": "protractor",
     "postinstall": "ngcc --tsconfig \"./src/tsconfig.json\""
