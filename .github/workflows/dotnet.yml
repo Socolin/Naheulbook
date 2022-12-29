@@ -76,6 +76,7 @@ jobs:
       if: always()
       with:
         files: "backend/tests/*/TestResults/TestResults.xml"
+      continue-on-error: true
     - name: Publish
       run: dotnet publish --no-restore --no-build -c Release ./backend/src/Naheulbook.Web/Naheulbook.Web.csproj
     - name: Log in to the Container registry
