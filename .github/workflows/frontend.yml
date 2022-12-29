@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
      defaults:
       run:
-        working-directory: 'frontend' # Here the path to the folder where package-lock.json is located.
+        working-directory: 'frontend'
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js 18.x
