@@ -1,0 +1,17 @@
+:host {
+    display: grid;
+    grid-template-columns: minmax(120px, 1fr) minmax(0px, auto);
+    align-items: center;
+    grid-gap: 16px;
+
+    mat-form-field {
+        width: 100%;
+    }
+
+    .lap-count-input,
+    .combat-count-input {
+        width: 80px;
+    }
+
+}
+

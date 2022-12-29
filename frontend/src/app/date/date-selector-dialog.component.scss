@@ -1,0 +1,31 @@
+@import "~app/style/responsive-utils";
+
+:host {
+    .date-selector {
+        display: grid;
+        column-gap: 8px;
+        grid-template-columns: 52px 52px minmax(30px, 1fr) 60px;
+        grid-template-areas: "hour minute . ." "day decade decade year";
+
+        @include for-phone-only {
+            grid-template-columns: minmax(30px, 1fr) minmax(30px, 1fr);
+            grid-template-areas: "hour minute" "day year" "decade decade";
+        }
+
+        .hour {
+            grid-area: hour;
+        }
+        .minute {
+            grid-area: minute;
+        }
+        .year {
+            grid-area: year;
+        }
+        .day {
+            grid-area: day;
+        }
+        .decade {
+            grid-area: decade;
+        }
+    }
+}

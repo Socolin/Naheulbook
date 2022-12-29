@@ -1,0 +1,168 @@
+.ve-value {
+    position: relative;
+    border-radius: 6px;
+    padding: 2px;
+    cursor: pointer;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+$ve-button-width: 70px;
+$ve-button-height: 45px;
+$ve-summary-height: 25px;
+$ve-valid-button-width: 64px;
+
+.ve-container {
+    position: absolute;
+}
+
+.ve-mobile-container {
+    display: grid;
+    align-items: stretch;
+    justify-items: stretch;
+    grid-template-columns: 40px $ve-button-width $ve-button-width $ve-button-width $ve-valid-button-width;
+    grid-template-rows: 16px $ve-button-height $ve-button-height $ve-button-height 30px 15px $ve-summary-height;
+    grid-template-areas:
+        ".        label   label   label   valid"
+        ".        s500    reset   a500    valid"
+        ".        s50     max     a50     valid"
+        ".        s5      zero    a5      valid"
+        ".        s1      delta   a1      valid"
+        "settings s1      delta   a1      valid"
+        "settings summary summary summary valid";
+
+    .ve-button {
+        border: 0;
+    }
+
+    .ve-settings {
+        grid-area: settings;
+    }
+
+    .ve-button-s500 {
+        grid-area: s500;
+    }
+
+    .ve-button-s50 {
+        grid-area: s50;
+    }
+
+    .ve-button-s5 {
+        grid-area: s5;
+    }
+
+    .ve-button-s1 {
+        grid-area: s1;
+    }
+
+    .ve-button-reset {
+        grid-area: reset;
+    }
+
+    .ve-button-max {
+        grid-area: max;
+    }
+
+    .ve-button-zero {
+        grid-area: zero;
+    }
+
+    .ve-button-a500 {
+        grid-area: a500;
+    }
+
+    .ve-button-a50 {
+        grid-area: a50;
+    }
+
+    .ve-button-a5 {
+        grid-area: a5;
+    }
+
+    .ve-button-a1 {
+        grid-area: a1;
+    }
+
+    .ve-button-valid {
+        grid-area: valid;
+        -webkit-box-shadow: 3px 4px 5px -1px rgba(0, 0, 0, 0.6);
+        -moz-box-shadow: 3px 4px 5px -1px rgba(0, 0, 0, 0.6);
+        box-shadow: 3px 4px 5px -1px rgba(0, 0, 0, 0.6);
+    }
+
+    .ve-delta-value {
+        grid-area: delta;
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        font-size: 24px;
+    }
+
+    .ve-summary {
+        grid-area: summary;
+        display: flex;
+        flex-direction: column;
+        -webkit-box-shadow: 3px 4px 5px -1px rgba(0, 0, 0, 0.6);
+        -moz-box-shadow: 3px 4px 5px -1px rgba(0, 0, 0, 0.6);
+        box-shadow: 3px 4px 5px -1px rgba(0, 0, 0, 0.6);
+
+        div {
+            padding-top: 5px;
+            padding-bottom: 4px;
+            width: $ve-button-width * 3;
+            font-size: 14px;
+            text-align: center;
+        }
+    }
+
+    .ve-title {
+        grid-area: label;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    button {
+        line-height: 36px;
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 20px;
+        outline: none !important;
+    }
+}
+
+.ve-keyboard-container {
+    display: grid;
+    grid-template-columns: 160px auto auto;
+    grid-template-areas:
+        "label . ."
+        "input valid settings";
+
+    .ve-title {
+        grid-area: label;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+    }
+    .ve-input {
+        grid-area: input;
+        width: 160px;
+        font-size: 32px;
+        outline: none !important;
+        border: 0;
+    }
+    .ve-valid {
+        grid-area: valid;
+    }
+    .ve-settings {
+        grid-area: settings;
+    }
+
+    button {
+        outline: none !important;
+    }
+}

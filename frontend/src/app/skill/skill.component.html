@@ -1,0 +1,13 @@
+<mat-card-title>
+    {{skill.name}} <span *ngIf="skill.stat?.length">({{skill.stat.join(',')}}<span *ngIf=skill.test> + {{skill.test}}</span>)</span>
+</mat-card-title>
+<mat-card-content>
+    <div *ngIf=skill.description class="infos">
+        <b>Description: </b>
+        {{skill.description}}
+    </div>
+    <div *ngIf=skill.using class="infos"><b>Utilisation: </b>{{skill.using}}</div>
+    <div *ngIf=skill.resist class="infos"><b>Resistance: </b>{{skill.resist}}</div>
+    <div *ngIf=skill.roleplay class="infos"><b>Roleplay: </b>{{skill.roleplay}}</div>
+    <div *ngIf=skill.require class="infos"><b>Prerequis: </b>{{skill.require}}</div>
+</mat-card-content>

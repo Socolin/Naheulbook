@@ -1,0 +1,106 @@
+@use '@angular/material' as mat;
+
+@mixin character-theme($theme) {
+    // Extract whichever individual palettes you need from the theme.
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    .stat-details {
+        .stat-detail-reason {
+            color: mat.get-color-from-palette($foreground, secondary-text);
+        }
+        .stat-element {
+            color: mat.get-color-from-palette($foreground, hint-text);
+        }
+        .detail-row {
+            border-color: mat.get-color-from-palette($foreground, hint-text);
+        }
+    }
+
+    .stat-label {
+        color: mat.get-color-from-palette($foreground, hint-text);
+    }
+
+    .item-line {
+        mat-icon {
+            color: mat.get-color-from-palette($foreground, text);
+        }
+        border-bottom-color: mat.get-color-from-palette($foreground, hint-text);
+    }
+
+    .item-bag-line {
+        border-bottom-color: mat.get-color-from-palette($foreground, hint-text);
+    }
+
+    .item-icon-container {
+        border-left-color: mat.get-color-from-palette($foreground, hint-text);
+    }
+
+    .inventory-content {
+        .items-list {
+            .items-list-element {
+                border-bottom-color: mat.get-color-from-palette($foreground, hint-text);
+            }
+        }
+    }
+
+    app-combat-tab {
+        mat-card {
+
+            &.life-mana {
+                .life-danger {
+                    color: mat.get-color-from-palette($warn);
+                }
+
+                span {
+                    &.game-icon-hearts {
+                        @if (map_get($theme, is-dark)) {
+                            color: #a01219;
+                        } @else {
+                            color: #ff0d26;
+                        }
+                    }
+                    &.game-icon-abstract-061 {
+                        @if (map_get($theme, is-dark)) {
+                            color: #400a71;
+                        } @else {
+                            color: blueviolet;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .effect-list {
+        border-top-color: mat.get-color-from-palette($foreground, hint-text);;
+    }
+
+    .effect-element .info:hover {
+        background-color: mat.get-color-from-palette($background, hover);
+    }
+
+    .loot-tab {
+        .loot-list {
+            .active {
+                background-color: mat.get-color-from-palette($background, selected-button);
+            }
+
+            ul {
+                > li {
+                    > icon {
+                        color: mat.get-color-from-palette($foreground, text);
+                    }
+                }
+            }
+            .loot-monsters {
+                .monster-item {
+                    border-left-color: mat.get-color-from-palette($foreground, hint-text);
+                }
+            }
+        }
+    }
+}

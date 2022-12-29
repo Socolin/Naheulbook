@@ -1,0 +1,74 @@
+<div class="stat-requirements">
+    <div *ngIf="requirements && requirements.length > 0" class="delete_all_button">
+        <button mat-icon-button
+                (click)="clear()"
+                color="warn">
+            <mat-icon>delete_forever</mat-icon>
+        </button>
+    </div>
+
+    <div class="requirements-list">
+        <div *ngFor="let requirement of requirements; let i=index" class="requirement-line">
+            <button mat-icon-button
+                    (click)="removeRequirement(i)"
+                    color="accent">
+                <mat-icon>delete_forever</mat-icon>
+            </button>
+            <div *ngIf="requirement.min">
+                Min {{requirement.stat}}: {{requirement.min}}
+            </div>
+            <div *ngIf="requirement.max">
+                Max {{requirement.stat}}: {{requirement.max}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="new-requirement">
+    <div class="min">
+        <mat-form-field>
+            <input matInput
+                   [(ngModel)]="minValue"
+                   type="number"
+                   min="0"
+                   placeholder="min"/>
+        </mat-form-field>
+    </div>
+    <div class="max">
+        <mat-form-field>
+            <input matInput
+                   [(ngModel)]="maxValue"
+                   type="number"
+                   min="0"
+                   placeholder="max"/>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-select placeholder="Stat" [(ngModel)]="selectedStat">
+            <mat-option *ngFor="let stat of basicStats" [value]="stat">
+                {{stat}}
+            </mat-option>
+            <mat-divider></mat-divider>
+            <mat-option *ngFor="let stat of lifeStats" [value]="stat">
+                {{stat}}
+            </mat-option>
+            <mat-divider></mat-divider>
+            <mat-option *ngFor="let stat of combatStats" [value]="stat">
+                {{stat}}
+            </mat-option>
+            <mat-divider></mat-divider>
+            <mat-option *ngFor="let stat of magicStats" [value]="stat">
+                {{stat}}
+            </mat-option>
+            <mat-divider></mat-divider>
+            <mat-option *ngFor="let stat of stats" [value]="stat">
+                {{stat}}
+            </mat-option>
+        </mat-select>
+    </div>
+    <div class="action">
+        <button mat-button (click)="addRequirement()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>

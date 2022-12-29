@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>Options avancé sur le modificateur</h2>
+
+<mat-dialog-content>
+    <mat-form-field>
+        <mat-select #jobSelector [ngModel]="data.selectedJobId" placeholder="Métier applicable">
+            <mat-option [value]="undefined"></mat-option>
+            <mat-option *ngFor="let job of jobs" [value]="job.id">
+                {{job.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-select #originSelector [ngModel]="data.selectedOriginId" placeholder="Origine applicable">
+            <mat-option [value]="undefined"></mat-option>
+            <mat-option *ngFor="let origin of origins" [value]="origin.id">
+                {{origin.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-selection-list>
+        <mat-list-option *ngFor="let special of specialValues" [value]="special.value" [selected]="data.specials && data.specials.indexOf(special.value) !== -1">
+            <span class="special-description">
+                {{special.description}}
+            </span>
+        </mat-list-option>
+    </mat-selection-list>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">ANNULER</button>
+    <button mat-button color="primary" (click)="saveChanges()">VALIDER</button>
+</mat-dialog-actions>

@@ -1,0 +1,471 @@
+<mat-tab-group #mainTabGroup (selectedTabChange)=selectTab($event)>
+    <mat-tab label="Info">
+        <!-- Start of info tab -->
+        <div class="info-tab">
+            <mat-card *ngFor="let invite of character.invites">
+                <mat-card-title>Invitation</mat-card-title>
+                <mat-card-content>
+                    Rejoindre le groupe <em>{{invite.groupName}}</em> ?
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button color="primary" (click)="cancelInvite(invite)">REFUSER</button>
+                    <button mat-button color="primary" (click)="acceptInvite(invite)">ACCEPTER</button>
+                </mat-card-actions>
+            </mat-card>
+
+            <mat-card>
+                <mat-card-title style="display: flex; justify-content: space-between; align-items: center">
+                    {{character.name}}
+                    <button mat-icon-button [matMenuTriggerFor]="characterBasicChange" aria-label="Menu edition du joueur">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </mat-card-title>
+
+                <mat-menu xPosition="before" #characterBasicChange="matMenu">
+                    <button mat-menu-item (click)="openChangeNameDialog()">
+                        <mat-icon>edit</mat-icon>
+                        Changer le nom
+                    </button>
+                    <button mat-menu-item (click)="openChangeSexDialog()">
+                        <mat-icon fontSet="game-icon" [fontIcon]="character.sex === 'Homme' ? 'game-icon-male' : 'game-icon-female'" class="ra-mat-button-icon-24"></mat-icon>
+                        Changer de sexe
+                    </button>
+                    <button mat-menu-item (click)="openChangeJobDialog()">
+                        <mat-icon fontSet="game-icon" fontIcon="game-icon-gear-hammer" class="ra-mat-button-icon-24"></mat-icon>
+                        Changer de métier
+                    </button>
+                </mat-menu>
+                <mat-card-content>
+                    <dl>
+                        <dt>Origine</dt>
+                        <dd style="display: flex; align-items: center">
+                            {{character.origin.name}}
+                            <button mat-icon-button (click)="openOriginInfoDialog()" aria-label="Afficher les informations de l'origine">
+                                <mat-icon>info</mat-icon>
+                            </button>
+                        </dd>
+
+                        <dt>Metier</dt>
+                        <dd *ngFor="let job of character.jobs" style="display: flex; align-items: center">
+                            {{job.name}}
+                            <button mat-icon-button (click)="openJobInfoDialog(job)" aria-label="Afficher les informations du métier">
+                                <mat-icon>info</mat-icon>
+                            </button>
+                        </dd>
+                        <dd *ngIf="!character.jobs.length">aucun</dd>
+
+                        <ng-template [ngIf]="character.specialities?.length">
+                            <dt>Specialité</dt>
+                            <dd *ngFor="let speciality of character.specialities">
+                                {{speciality.name}}
+                            </dd>
+                        </ng-template>
+
+                        <dt>Groupe</dt>
+                        <dd *ngIf="character.group">{{character.group.name}}</dd>
+                        <dd *ngIf="!character.group">aucun</dd>
+
+
+                        <dt>Sexe</dt>
+                        <dd>{{character.sex}}</dd>
+
+                        <dt>Point de destins</dt>
+                        <dd>
+                            <value-editor [title]="'Point de destin'"
+                                          [value]=character.fatePoint
+                                          (onChange)="changeStat('fatePoint', $event)">
+                            </value-editor>
+                        </dd>
+
+                        <dt>Niveau</dt>
+                        <dd>{{character.level}}
+                            <button class="level-up-button"
+                                    mat-raised-button
+                                    *ngIf="canLevelUp()"
+                                    color="primary"
+                                    (click)="openLevelUpDialog()">
+                                Ding !
+                            </button>
+                        </dd>
+
+                        <dt>Experience</dt>
+                        <dd>
+                            <value-editor [title]="'Experience'"
+                                          [value]=character.experience
+                                          (onChange)="changeStat('experience', $event)">
+                            </value-editor> / {{character.computedData.xpToNextLevel}}
+                        </dd>
+
+                        <dt>Fortune</dt>
+                        <dd class="fortune">
+                            <div class="money">
+                                {{character.computedData.totalMoney | itemPrice}} (Lingot & Pièces)
+                            </div>
+                            <div class="gem" *ngIf="character.computedData.totalGemValue > 0 && character.group?.config.allowPlayersToSeeGemPriceWhenIdentified">
+                                {{character.computedData.totalGemValue | itemPrice}} (Gemmes & Pierres précieuses)
+                            </div>
+                            <div class="action">
+                                <button mat-button color="primary" (click)="viewMoneyDetails()">Détails</button>
+                            </div>
+                        </dd>
+
+                        <dt *ngIf="inGroupTab">Debilibeuk</dt>
+                        <dd *ngIf="inGroupTab">
+                            <value-editor [title]="'Debilibeuk du joueur'" [value]=character.gmData.debilibeuk
+                                          (onChange)="changeGmData('debilibeuk', $event)"></value-editor>
+                        </dd>
+
+                        <dt *ngIf="inGroupTab">Mankdebol</dt>
+                        <dd *ngIf="inGroupTab">
+                            <value-editor [title]="'Mankdebol du joueur'" [value]=character.gmData.mankdebol
+                                          (onChange)="changeGmData('mankdebol', $event)"></value-editor>
+                        </dd>
+                    </dl>
+                </mat-card-content>
+            </mat-card>
+            <mat-card>
+                <mat-card-title>Notes</mat-card-title>
+                <mat-card-content>
+                    <p *ngIf="editingNotes">Vous pouvez utilisez du <a target="_blank" href="https://fr.wikipedia.org/wiki/Markdown">Markdown</a> pour formatter le texte</p>
+                    <mat-form-field [style.display]="editingNotes ? 'block' : 'none'">
+                        <textarea #notesEditor matInput
+                                  cdkTextareaAutosize
+                                  cdkAutosizeMinRows="1"
+                                  cdkAutosizeMaxRows="20"
+                                  autocomplete="off">
+
+                        </textarea>
+                    </mat-form-field>
+                    <div *ngIf="!editingNotes" [innerHTML]="character.notes | markdown"></div>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-button color="primary" *ngIf="!editingNotes" (click)="startEditNotes()">Éditer</button>
+                    <button mat-button color="primary" *ngIf="editingNotes" (click)="cancelEditNotes()">Annuler</button>
+                    <button mat-button color="primary" *ngIf="editingNotes" (click)="saveNotes()">Sauvegarder</button>
+                </mat-card-actions>
+            </mat-card>
+            <mat-card *ngIf="character.computedData.stats['AD'] > 12">
+                <mat-card-title>Adresse exceptionnelle</mat-card-title>
+                <mat-card-content>
+                    <p>
+                        Un score d'adresse (AD) exceptionnelle confère un point <em>bonus</em> en attaque (AT) ou en parade (PRD)
+                    </p>
+                    <mat-button-toggle-group [(ngModel)]="character.statBonusAD">
+                        <mat-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</mat-button-toggle>
+                        <mat-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="character.computedData.stats['AD'] < 9" class="row">
+                <mat-card-title>Adresse pourri</mat-card-title>
+                <mat-card-content>
+                    <p>
+                        Un score d'adresse (AD) inférieur ou égale à 8 induit un point <em>malus</em> en attaque (AT) ou en parade (PRD)
+                    </p>
+                    <mat-button-toggle-group [(ngModel)]="character.statBonusAD">
+                        <mat-button-toggle value="AT" (click)="setStatBonusAD(character.id, 'AT')">AT</mat-button-toggle>
+                        <mat-button-toggle value="PRD" (click)="setStatBonusAD(character.id, 'PRD')">PRD</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="character.computedData.stats['INT'] > 12">
+                <mat-card-title>Intelligence exceptionnelle</mat-card-title>
+                <mat-card-content>
+                    <p>
+                        Un score d'inteligence (INT) exceptionnelle confère un point de dégâts des sorts
+                        (selon sortilège) pour chaque point d'inteligence supérieur à 12.
+                    </p>
+                    <div>Bonus dégâts des sorts: {{(character.computedData.stats['INT'] - 12)}}</div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="character.computedData.stats['FO'] > 12">
+                <mat-card-title>Force exceptionnelle</mat-card-title>
+                <mat-card-content>
+                    <p>
+                        Un score exceptionnel offre forcément des avantages dans ce monde violent...
+                    </p>
+                    <p>
+                        Pour chaque point de force (FO) supérieur à 12 : +1 point d’impact (dégâts des armes améliorés au corps à corps ou à distance)
+                    </p>
+                    <div>Bonus point d'impact: {{(character.computedData.stats['FO'] - 12)}}</div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="character.computedData.stats['FO'] <= 8">
+                <mat-card-title>Force de mauviette</mat-card-title>
+                <mat-card-content>
+                    <p>
+                        Un score exceptionnel offre forcément des avantages dans ce monde violent...
+                        Et au contraire sur une carac. de force (FO) de 8 ou inférieure : -1 point d’impact (dégâts des armes diminués, car mauviette)
+                    </p>
+                    <div>Malus point d'impact: 1</div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card>
+                <mat-card-title>
+                    Compétences
+                </mat-card-title>
+                <mat-card-content class="skill-list">
+                    <div *ngFor="let skill of character.computedData.skills" class="skill">
+                        <span class="name" [class.canceled]="skill.canceled">
+                            {{skill.skillDef?.name}}
+                        </span>
+                        <span class="cancel-reason" *ngIf="skill.canceled">
+                            {{skill.canceled}}
+                        </span>
+                        <button class="info" mat-icon-button (click)="openSkillInfoDialog(skill.skillDef)" aria-label="Afficher les informations de la compétence">
+                            <mat-icon>info</mat-icon>
+                        </button>
+                        <div class="source secondary-text">
+                            <span *ngFor="let from of skill.from; let lastFrom=last">{{from}}<span *ngIf="!lastFrom">, </span></span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <!-- End of infos tab -->
+    </mat-tab>
+
+    <mat-tab label="Combat">
+        <!-- Start of combat tab -->
+        <app-combat-tab [character]="character" (onChangeStat)="changeStat($event.stat, $event.value)" [inGroupTab]="inGroupTab"></app-combat-tab>
+        <!-- End of combat tab -->
+    </mat-tab>
+    <mat-tab label="Stat">
+        <!-- Start of stats tab -->
+        <div class="stat-tab">
+            <mat-card>
+                <mat-card-content>
+                    <div class="stat-header">
+                        <div class="stat-element">EV</div>
+                        <div class="stat-element" *ngIf="character.hasMagic()">EA</div>
+                    </div>
+                    <div class="stat-values">
+                        <div class="stat-row">
+                            <div class="stat-element">{{character.computedData.stats['EV']}}</div>
+                            <div *ngIf="character.hasMagic()" class="stat-element">{{character.computedData.stats['EA']}}</div>
+                        </div>
+                        <div class="stat-details" *ngIf="character.computedData.details.show.evea">
+                            <div class="detail-row" *ngFor="let detail of character.computedData.details.evea">
+                                <div class="stat-detail-reason">
+                                    {{detail.name}}
+                                </div>
+                                <div class="stat-row">
+                                    <div class="stat-element">{{detail.data.EV}}</div>
+                                    <div *ngIf="character.hasMagic()" class="stat-element">{{detail.data.EA}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-button [color]="'primary'" (click)="character.computedData.details.show.evea = !character.computedData.details.show.evea">
+                        <span *ngIf="!character.computedData.details.show.evea">Voir details</span>
+                        <span *ngIf="character.computedData.details.show.evea">Cacher details</span>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+            <mat-card>
+                <mat-card-content>
+                    <div class="stat-header">
+                        <div class="stat-element">AT</div>
+                        <div class="stat-element">PRD</div>
+                        <div class="stat-element">PR</div>
+                        <div class="stat-element" *ngIf="character.computedData.stats['PR_MAGIC']">PR_MAGIC</div>
+                    </div>
+                    <div class="stat-values">
+                        <div class="stat-row">
+                            <div class="stat-element">{{character.computedData.stats['AT']}}</div>
+                            <div class="stat-element">{{character.computedData.stats['PRD']}}</div>
+                            <div class="stat-element">{{character.computedData.stats['PR']}}</div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['PR_MAGIC']">{{character.computedData.stats['PR_MAGIC']}}</div>
+                        </div>
+                        <div class="stat-details" *ngIf="character.computedData.details.show.atprd">
+                            <div class="detail-row" *ngFor="let detail of character.computedData.details.atprd">
+                                <div class="stat-detail-reason">
+                                    {{detail.name}}
+                                </div>
+                                <div class="stat-row">
+                                    <div class="stat-element">{{detail.data.AT}}</div>
+                                    <div class="stat-element">{{detail.data.PRD}}</div>
+                                    <div class="stat-element">{{detail.data.PR}}</div>
+                                    <div class="stat-element" *ngIf="character.computedData.stats['PR_MAGIC']">{{detail.data.PR_MAGIC}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-button [color]="'primary'" (click)="character.computedData.details.show.atprd = !character.computedData.details.show.atprd">
+                        <span *ngIf="!character.computedData.details.show.atprd">Voir details</span>
+                        <span *ngIf="character.computedData.details.show.atprd">Cacher details</span>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+            <mat-card>
+                <mat-card-content>
+                    <div class="stat-header">
+                        <div class="stat-element-small">COU</div>
+                        <div class="stat-element-small">INT</div>
+                        <div class="stat-element-small">CHA</div>
+                        <div class="stat-element-small">AD</div>
+                        <div class="stat-element-small">FO</div>
+                    </div>
+                    <div class="stat-values">
+                        <div class="stat-row">
+                            <div class="stat-element-small">{{character.computedData.stats['COU']}}</div>
+                            <div class="stat-element-small">{{character.computedData.stats['INT']}}</div>
+                            <div class="stat-element-small">{{character.computedData.stats['CHA']}}</div>
+                            <div class="stat-element-small">{{character.computedData.stats['AD']}}</div>
+                            <div class="stat-element-small">{{character.computedData.stats['FO']}}</div>
+                        </div>
+                        <div class="stat-details" *ngIf="character.computedData.details.show.stat">
+                            <div class="detail-row" *ngFor="let detail of character.computedData.details.stat">
+                                <div class="stat-detail-reason">
+                                    {{detail.name}}
+                                </div>
+                                <div class="stat-row">
+                                    <div class="stat-element-small">{{detail.data.COU}}</div>
+                                    <div class="stat-element-small">{{detail.data.INT}}</div>
+                                    <div class="stat-element-small">{{detail.data.CHA}}</div>
+                                    <div class="stat-element-small">{{detail.data.AD}}</div>
+                                    <div class="stat-element-small">{{detail.data.FO}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-button [color]="'primary'" (click)="character.computedData.details.show.stat = !character.computedData.details.show.stat">
+                        <span *ngIf="!character.computedData.details.show.stat">Voir details</span>
+                        <span *ngIf="character.computedData.details.show.stat">Cacher details</span>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+
+            <mat-card>
+                <mat-card-content>
+                    <div class="stat-header">
+                        <div class="stat-element-large" *ngIf="character.hasMagic()">MagiePhys</div>
+                        <div class="stat-element-large" *ngIf="character.hasMagic()">MagiePsy</div>
+                        <div class="stat-element-large">RESM</div>
+                    </div>
+                    <div class="stat-values">
+                        <div class="stat-row">
+                            <div class="stat-element-large" *ngIf="character.hasMagic()">{{character.computedData.stats['MPHYS']}}</div>
+                            <div class="stat-element-large" *ngIf="character.hasMagic()">{{character.computedData.stats['MPSY']}}</div>
+                            <div class="stat-element-large">{{character.computedData.stats['RESM']}}</div>
+                        </div>
+                        <div class="stat-details" *ngIf="character.computedData.details.show.magic">
+                            <div class="detail-row" *ngFor="let detail of character.computedData.details.magic">
+                                <div class="stat-detail-reason">
+                                    {{detail.name}}
+                                </div>
+                                <div class="stat-row">
+                                    <div class="stat-element-large" *ngIf="character.hasMagic()" [innerHTML]="detail.data.MPHYS || ''"></div>
+                                    <div class="stat-element-large" *ngIf="character.hasMagic()" [innerHTML]="detail.data.MPSY || ''"></div>
+                                    <div class="stat-element-large" [innerHTML]="detail.data.RESM || ''"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-button [color]="'primary'" (click)="character.computedData.details.show.magic = !character.computedData.details.show.magic">
+                        <span *ngIf="!character.computedData.details.show.magic">Voir details</span>
+                        <span *ngIf="character.computedData.details.show.magic">Cacher details</span>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+
+            <mat-card *ngIf="character.computedData.stats['MV'] != 100
+                                || character.computedData.stats['THROW_MODIFIER']
+                                || character.computedData.stats['DISCRETION_MODIFIER']
+                                || character.computedData.stats['DANSE_MODIFIER']
+                                || character.computedData.stats['PI']">
+                <mat-card-content>
+                    <div class="stat-header">
+                        <div class="stat-element" *ngIf="character.computedData.stats['MV'] !== 100">MV</div>
+                        <div class="stat-element" *ngIf="character.computedData.stats['THROW_MODIFIER']">Lancer</div>
+                        <div class="stat-element" *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">Discretion</div>
+                        <div class="stat-element" *ngIf="character.computedData.stats['DANSE_MODIFIER']">Danse</div>
+                        <div class="stat-element" *ngIf="character.computedData.stats['PI']">PI</div>
+                    </div>
+                    <div class="stat-values">
+                        <div class="stat-row">
+                            <div class="stat-element" *ngIf="character.computedData.stats['MV'] !== 100">
+                                {{character.computedData.stats['MV']}}%
+                            </div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['THROW_MODIFIER']">
+                                {{character.computedData.stats['THROW_MODIFIER'] | plusminus}}
+                            </div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">
+                                {{character.computedData.stats['DISCRETION_MODIFIER'] | plusminus}}
+                            </div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['DANSE_MODIFIER']">
+                                {{character.computedData.stats['DANSE_MODIFIER'] | plusminus}}
+                            </div>
+                            <div class="stat-element" *ngIf="character.computedData.stats['PI']">
+                                {{character.computedData.stats['PI']}}
+                            </div>
+                        </div>
+                        <div class="stat-details" *ngIf="character.computedData.details.show.other">
+                            <div class="detail-row" *ngFor="let detail of character.computedData.details.other">
+                                <div class="stat-detail-reason">
+                                    {{detail.name}}
+                                </div>
+                                <div class="stat-row">
+                                    <div class="stat-element" *ngIf="character.computedData.stats['MV'] !== 100">
+                                        {{detail.data.MV}}
+                                    </div>
+                                    <div class="stat-element" *ngIf="character.computedData.stats['THROW_MODIFIER']">
+                                        {{detail.data.THROW_MODIFIER}}
+                                    </div>
+                                    <div class="stat-element" *ngIf="character.computedData.stats['DISCRETION_MODIFIER']">
+                                        {{detail.data.DISCRETION_MODIFIER}}
+                                    </div>
+                                    <div class="stat-element" *ngIf="character.computedData.stats['DANSE_MODIFIER']">
+                                        {{detail.data.DANSE_MODIFIER}}
+                                    </div>
+                                    <div class="stat-element" *ngIf="character.computedData.stats['PI']">
+                                        {{detail.data.PI}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-button [color]="'primary'" (click)="character.computedData.details.show.other = !character.computedData.details.show.other">
+                        <span *ngIf="!character.computedData.details.show.other">Voir details</span>
+                        <span *ngIf="character.computedData.details.show.other">Cacher details</span>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+        <effect-panel #effectPanel [character]="character"></effect-panel>
+        <!-- End of stats tab -->
+    </mat-tab>
+    <mat-tab label="Inventaire">
+        <!-- Start of inventory tab -->
+        <inventory-panel #inventoryPanel [inGroupTab]="inGroupTab" [character]="character"></inventory-panel>
+        <!-- End of inventory tab -->
+    </mat-tab>
+    <mat-tab>
+        <ng-template matTabLabel>
+            <span [matBadgeOverlap]="false" [matBadge]="character?.loots?.length ? character.loots.length.toString() : undefined" >Loot</span>
+        </ng-template>
+        <!-- Start of effects tab -->
+        <character-loot-panel #lootPanel [character]="character" [inGroupTab]="inGroupTab"></character-loot-panel>
+        <!-- End of effects tab -->
+    </mat-tab>
+    <mat-tab label="Historique">
+        <character-history [character]="character"></character-history>
+    </mat-tab>
+</mat-tab-group>
+
+<div class="add-button" *ngIf="currentTab === 'inventory' && (inGroupTab || character.group === undefined || character.group.config.allowPlayersToAddObject)">
+    <button class="extended-fab-button" mat-fab color="primary" (click)="inventoryPanel.openAddItemModal()" aria-label="Ajouter un objet">
+        <mat-icon>add</mat-icon>
+        <span class="extended-fab-button__text">Ajouter un objet</span>
+    </button>
+</div>

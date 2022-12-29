@@ -1,0 +1,49 @@
+<mat-card *ngFor="let loot of character.loots">
+    <mat-card-title>{{loot.name}}</mat-card-title>
+    <mat-card-content>
+        <div class="loot-items">
+            <div *ngFor="let item of loot.items" class="item separator">
+                <app-item-line [item]="item"
+                               [itemMenu]="itemLootMenu"
+                               [itemInLoot]="true"
+                               [hideEquippedMarker]="true"
+                               [hideShouldPutIntoContainerMarker]="true"
+                               [gmView]="inGroupTab">
+                </app-item-line>
+
+                <mat-menu xPosition="before" #itemLootMenu="matMenu">
+                    <ng-template matMenuContent let-item="item">
+                        <button mat-menu-item (click)="openTakeItemLootDialog(loot, item)">
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-mat-button-icon-24"></mat-icon>
+                            Prendre
+                        </button>
+                    </ng-template>
+                </mat-menu>
+            </div>
+        </div>
+        <div class="loot-monster" *ngFor="let monster of loot.monsters">
+            <div>
+                <span class="mat-title">{{monster.name}}</span>
+            </div>
+            <div class="monster-item item separator" *ngFor="let item of monster.items">
+                <app-item-line [item]="item"
+                               [itemMenu]="itemMonsterMenu"
+                               [hideEquippedMarker]="true"
+                               [itemInLoot]="true"
+                               [hideShouldPutIntoContainerMarker]="true"
+                               [gmView]="inGroupTab">
+                </app-item-line>
+            </div>
+
+            <mat-menu xPosition="before" #itemMonsterMenu="matMenu">
+                <ng-template matMenuContent let-item="item">
+                    <button mat-menu-item (click)="openTakeItemMonsterDialog(monster, item)">
+                        <mat-icon fontSet="game-icon" fontIcon="game-icon-snatch" class="ra-mat-button-icon-24"></mat-icon>
+                        Prendre
+                    </button>
+                </ng-template>
+            </mat-menu>
+        </div>
+
+    </mat-card-content>
+</mat-card>

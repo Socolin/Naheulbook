@@ -1,0 +1,12 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        {{job.name}}
+    </mat-expansion-panel-header>
+
+    <div *ngIf="!(gmModeService.gmMode | async)">
+        <app-job-player-info [job]="job"></app-job-player-info>
+    </div>
+    <div *ngIf="gmModeService.gmMode | async">
+        <app-job-gm-info [job]="job"></app-job-gm-info>
+    </div>
+</mat-expansion-panel>

@@ -1,0 +1,14 @@
+<span class="game-icon icon"
+      [class.not-identified]="notIdentified"
+      [style.font-size]="size"
+      [class.enchanted-item]="enchanted"
+      [ngClass]="['game-icon-' + displayedIcon.name, 'rotate' + displayedIcon.rotation]"
+      [style.color]="displayedIcon.color">
+</span>
+<span class="not-identified-layer mat-typography" *ngIf="notIdentified"
+      [style.font-size]="size">
+    ?
+</span>
+<mat-icon class="show-to-gm-layer" *ngIf="shownToGm">
+    visibility_on
+</mat-icon>

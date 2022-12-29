@@ -1,0 +1,288 @@
+<mat-card>
+    <mat-card-header>
+        <icon matRipple matCardAvatar [icon]="item.data.icon" [size]="'40px'" (click)="openSelectIconDialog()"></icon>
+        <div>
+            <mat-card-title>
+                <span *ngIf="item.template.data.quantifiable || item.data.quantity">
+                    {{item.data.quantity}}
+                </span>
+                <span style="vertical-align: top;">
+                    {{item.data.name}}
+                </span>
+            </mat-card-title>
+            <mat-card-subtitle>
+                <div *ngIf="itemCategoriesById">
+                    <span class="label label-default">{{itemCategoriesById[item.template.subCategoryId].section.name}}</span>
+                    -
+                    <span>{{itemCategoriesById[item.template.subCategoryId].name}}</span>
+                </div>
+
+                <span *ngIf="item.data.notIdentified">
+                    Non identifié
+                </span>
+            </mat-card-subtitle>
+        </div>
+    </mat-card-header>
+    <mat-card-content class="item-detail-content">
+        <div>
+            <div>
+                <span *ngIf="item.template.name !== item.data.name">Nom reel: {{item.template.name}}</span>
+            </div>
+
+            <div class="icon-label" *ngIf="data.item.data.description || data.item.template.data.description">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-quill" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    Description: {{data.item.data.description || data.item.template.data.description}}
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="data.item.template.data.requireLevel">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-level-two" class="ra-mat-button-icon-24"></mat-icon>
+                <span>
+                    Niveau requis: {{data.item.template.data.requireLevel}}
+                </span>
+            </div>
+
+            <div>
+                <span *ngIf="item.template.data.relic" class="label label-primary">Relique</span>
+                <span *ngIf="item.template.data.sex === 'h'">Homme uniq.</span>
+                <span *ngIf="item.template.data.sex === 'f'">Femme uniq.</span>
+                <span *ngIf="item.template.data.throwable" class="label label-info">Prévue pour le jet</span>
+            </div>
+
+            <div class="icon-label" *ngIf="data.item.template.slots?.length > 0">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <mat-chip-list [selectable]="false">
+                        <mat-chip *ngFor="let slot of data.item.template.slots">{{slot.name}}</mat-chip>
+                    </mat-chip-list>
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="data.item.template.data.note">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-scroll-unfurled" class="ra-mat-button-icon-24"></mat-icon>
+                Note: {{data.item.template.data.note}}
+            </div>
+
+            <!-- Dieu -->
+            <div class="icon-label" *ngIf="data.item.template.data.god && godsByTechName">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-prayer" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <span>Dieu:</span>
+                    {{godsByTechName[data.item.template.data.god].displayName}}
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="data.item.template.data.quantifiable">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-stack" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    Quantité:
+                    <value-editor [value]="data.item.data.quantity"
+                                  [title]="'Quantité'"
+                                  (onChange)="updateItemQuantity($event)">
+                    </value-editor>
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">
+                <mat-icon fontSet="ra" fontIcon="ra-broadsword" class="ra-mat-button-icon-24"></mat-icon>
+                <div class="damage">
+                    <span *ngIf="data.item.template.data.damageDice">{{data.item.template.data.damageDice}}
+                        <span class="ra ra-perspective-dice-random ra-mat-button-icon-24"></span>
+                    </span>
+                    <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
+                    <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
+                    <span *ngIf="item.template.data.damageType">({{item.template.data.damageType}})</span>
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="item.template.data.protection
+                        || item.template.data.magicProtection
+                        || item.template.data.protectionAgainstMagic">
+                <mat-icon fontSet="ra" fontIcon="ra-shield" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <span *ngIf="item.template.data.protection">{{item.template.data.protection}}</span>
+                    <span *ngIf="item.template.data.protection && item.template.data.magicProtection">+</span>
+                    <span *ngIf="item.template.data.magicProtection">{{item.template.data.magicProtection}}(magique)</span>
+                    <span *ngIf="(item.template.data.protection || item.template.data.magicProtection) && item.template.data.protectionAgainstMagic">/</span>
+                    <span *ngIf="item.template.data.protectionAgainstMagic">{{item.template.data.protectionAgainstMagic}}
+                        <span *ngIf="item.template.data.protectionAgainstType">(contre {{item.template.data.protectionAgainstType}})</span>
+                        <span *ngIf="!item.template.data.protectionAgainstType">(contre mag./myst.)</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="item.template.data.charge">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-magic-swirl" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <div>
+                        <span>Nombre d'utilisations:</span>
+                        {{item.data.charge}} / {{item.template.data.charge}}
+                    </div>
+                    <div *ngIf="item.template.data?.actions?.length">
+                        Lors de l'utilisation:
+                        <div *ngFor="let action of item.template.data.actions" style="3margin-left: 20px">
+                            <nhbk-action *ngIf="!action.hidden" [action]="action"></nhbk-action>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="item.template.data.weight && !item.template.data.useUG">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-weight" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    Poids:
+                    <span *ngIf="item.template.data.weight < 1">{{(item.template.data.weight * 1000) | number:'1.0-3'}} g</span>
+                    <span *ngIf="item.template.data.weight >= 1">{{(item.template.data.weight)  | number:'1.0-3'}} Kg</span>
+                    <span *ngIf="item.data.quantity">Total: {{item.data.quantity * item.template.data.weight | number:'1.0-3'}} Kg</span>
+                </div>
+            </div>
+            <div class="icon-label" *ngIf="item.template.data.useUG">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-scales" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <div>U.G: {{item.data.ug}}</div>
+                    <div>Poids: {{item.data.ug * item.template.data.weight * 1000  | number:'1.0-3' }} g</div>
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="item.template.data.space">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    Encombrement: {{item.template.data.space}}
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="item.template.data.rupture">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-cracked-shield" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <div *ngIf="item.template.data.rupture">
+                        Rupture:
+                        1 à {{item.template.data.rupture}}
+                    </div>
+                    <div *ngIf="item.template.data.rupture === 0">
+                        Rupture: Incassable
+                    </div>
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="item.price">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <span>Prix:</span>
+                    {{item.price}} P.O.
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="item.template.modifiers && item.template.modifiers.length">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <div *ngFor="let modifier of item.template.modifiers">
+                        <div>
+                            <span *ngIf="jobsName && modifier.jobId">{{jobsName[modifier.jobId]}}:</span>
+                            <span *ngIf="originsName && modifier.originId">{{originsName[modifier.originId]}}:</span>
+                            {{modifier | modifier}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="data.item.template.skills?.length || data.item.template.unSkills?.length || data.item.template.skillModifiers?.length">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <div *ngFor="let skill of data.item.template.skills">Donne la compétence "{{skill.name}}"</div>
+                    <div *ngFor="let skill of data.item.template.unSkills">Annule "{{skill.name}}"</div>
+                    <div *ngFor="let modifier of data.item.template.skillModifiers">{{modifier.skill.name}}
+                        <span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="icon-label" *ngIf="data.item.template.requirements?.length">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-thumb-up" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <div *ngFor="let requirement of data.item.template.requirements">
+                    <span *ngIf="requirement.min">
+                        Min {{requirement.stat}}: {{requirement.min}}
+                    </span>
+                        <span *ngIf="requirement.max">
+                        Max {{requirement.stat}}: {{requirement.max}}
+                    </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Origine -->
+            <div *ngIf="item.template.data.origin">
+                Origine: {{item.template.data.origin}}
+            </div>
+
+            <!-- Gun -->
+            <div class="icon-label" *ngIf="item.template.data.gun">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-revolver" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    Arme à poudre:
+                    <dl>
+                        <dt>Portée utile:</dt>
+                        <dd>{{item.template.data.gun.range}}</dd>
+                        <dt>Dégâts:</dt>
+                        <dd>{{item.template.data.gun.damages}}</dd>
+                        <dt>+Spécial:</dt>
+                        <dd>{{item.template.data.gun.special}}</dd>
+                        <dt>Cadence de tir:</dt>
+                        <dd>{{item.template.data.gun.rateOfFire}}</dd>
+                        <dt>Délai de rechargement:</dt>
+                        <dd>{{item.template.data.gun.reloadDelay}}</dd>
+                        <dt>Épreuve de tir:</dt>
+                        <dd>{{item.template.data.gun.shootTest}}</dd>
+                    </dl>
+                    <mat-divider></mat-divider>
+                    Munitions
+                    <dl>
+                        <dt>Combustion par coup:</dt>
+                        <dd>{{item.template.data.gun.fuelPerShot}}</dd>
+                        <dt>Munitions par coup:</dt>
+                        <dd>{{item.template.data.gun.ammunitionPerShot}}</dd>
+                    </dl>
+                    <mat-divider></mat-divider>
+                    <dl>
+                        <dt>Chances de fonctionnement:</dt>
+                        <dd>{{item.template.data.gun.workLuck}}</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Instrument -->
+            <div class="icon-label" *ngIf="item.template.data.instrument">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-musical-notes" class="ra-mat-button-icon-24"></mat-icon>
+                <div>
+                    <div *ngIf="item.template.data.instrument.specialMove">
+                        Coup spécial: {{item.template.data.instrument.specialMove | plusminus}}
+                    </div>
+                    <div *ngIf="item.template.data.instrument.speechTheater">
+                        Discours - Théâtre: {{item.template.data.instrument.speechTheater | plusminus}}
+                    </div>
+                    <div *ngIf="item.template.data.instrument.jugglingDance">
+                        Jonglage - Danse: {{item.template.data.instrument.jugglingDance | plusminus}}
+                    </div>
+                    <div *ngIf="item.template.data.instrument.musicSinging">
+                        Musique - Chant: {{item.template.data.instrument.musicSinging | plusminus}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Indice de rareté -->
+            <div *ngIf="item.template.data.rarityIndicator">
+                Indice de rareté: {{item.template.data.rarityIndicator}}
+            </div>
+
+        </div>
+
+        <div *ngIf="item.data.lifetime?.durationType === 'time'">
+            <span class="game-icon game-icon-stopwatch"></span>Temps de conservation:
+            <span
+                *ngIf="item.data.lifetime.timeDuration > 0">{{item.data.lifetime.timeDuration | nhbkDuration}}</span>
+            <span *ngIf="item.data.lifetime.timeDuration === 0" class="invalid-level">expiré</span>
+        </div>
+
+    </mat-card-content>
+</mat-card>

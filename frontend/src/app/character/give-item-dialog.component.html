@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>Donner un objet</h2>
+<mat-dialog-content>
+    <div class="item-name">
+        <icon [icon]="data.item.data.icon"></icon>
+        <div>
+            <span *ngIf="data.item.template.data.quantifiable || data.item.data.quantity">
+                <value-editor [value]="giveQuantity"
+                              [minValue]="1"
+                              [maxValue]="data.item.data.quantity"
+                              [hideMaxValue]="true"
+                              (onChange)="giveQuantity = $event"
+                              [title]="'Quantité à donner'">
+                </value-editor>
+            </span>
+            {{data.item.data.name}}
+        </div>
+    </div>
+
+    <div class="destinations-loading">
+        <span *ngIf="giveDestination === undefined"><mat-spinner></mat-spinner></span>
+    </div>
+    <span *ngIf="giveDestination?.length === 0">Aucun personnage disponible</span>
+
+    <mat-radio-group [(ngModel)]="giveTarget">
+        <ng-container *ngFor="let destination of giveDestination">
+            <mat-radio-button [value]="destination">
+                <span *ngIf="destination.isNpc">[NPC]</span>
+                {{destination.name}}
+            </mat-radio-button>
+        </ng-container>
+    </mat-radio-group>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button
+            mat-dialog-close
+            color="primary">
+        ANNULER
+    </button>
+    <button mat-button
+            color="primary"
+            [disabled]="!giveTarget"
+            (click)="giveItem()">
+        DONNER
+    </button>
+</mat-dialog-actions>

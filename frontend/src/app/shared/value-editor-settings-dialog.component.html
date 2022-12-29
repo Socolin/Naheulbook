@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>Configuration editeur de valeur</h2>
+<mat-dialog-content>
+    <mat-radio-group class="modes" [(ngModel)]="mode">
+        <mat-radio-button value="mobile">Mobile</mat-radio-button>
+        <p (click)="mode = modes.mobile">
+            Une interface pour mobile
+        </p>
+        <mat-radio-button value="keyboard">Clavier</mat-radio-button>
+        <p (click)="mode = modes.keyboard">
+            Utilise une boite de texte, qui permet de définir la valeur en écrivant un nombre, ou de modifier la valeur avec
+            une valeur relative commençant par + ou -.
+        </p>
+    </mat-radio-group>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button
+            color="primary"
+            mat-dialog-close>
+        ANNULER
+    </button>
+    <button mat-button
+            color="primary"
+            (click)="save()">
+        SAUVEGARDER
+    </button>
+</mat-dialog-actions>

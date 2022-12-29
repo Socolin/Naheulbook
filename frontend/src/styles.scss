@@ -1,0 +1,40 @@
+/* You can add global styles to this file, and also import other style files */
+@import '../libs/rpg-awesome/css/rpg-awesome.min.css';
+@import '../libs/game-icons/game-icons.css';
+@import "~leaflet/dist/leaflet.css";
+
+body {
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+    margin: 0;
+}
+
+.font-20px {
+    font-size: 20px;
+}
+.font-40px {
+    font-size: 40px;
+}
+.font-32px {
+    font-size: 32px;
+}
+.font-48px {
+    font-size: 48px;
+}
+
+.ra-mat-button-icon-40 {
+    font-size: 40px;
+    padding-right: 15px !important;
+}
+
+.ra-mat-button-icon-32 {
+    font-size: 32px;
+    padding-right: 8px !important;
+}
+
+.ra-mat-button-icon-24 {
+    font-size: 24px;
+    padding-right: 2px !important;
+}
+.app-dialog-no-padding .mat-dialog-container {
+    padding: 0;
+}

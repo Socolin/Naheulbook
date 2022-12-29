@@ -1,0 +1,6 @@
+<mat-selection-list (selectionChange)="selectionChange($event)">
+    <mat-list-option *ngFor="let skill of skills" [value]="skill">
+        <h4 mat-line>{{skill.name}}</h4>
+        <p mat-line>{{skill.playerDescription}}</p>
+    </mat-list-option>
+</mat-selection-list>

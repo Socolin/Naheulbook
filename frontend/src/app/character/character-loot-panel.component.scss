@@ -1,0 +1,14 @@
+:host {
+    .loot-monster {
+        .monster-item {
+            margin-left: 24px;
+            padding-left: 8px;
+            border-left-style: solid;
+            border-left-width: 1px;
+        }
+    }
+    .item:nth-child(4n+5) {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+    }
+}

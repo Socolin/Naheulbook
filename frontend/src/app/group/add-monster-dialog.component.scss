@@ -1,0 +1,35 @@
+@import "~app/style/responsive-utils";
+
+:host {
+    .content {
+        display: grid;
+        align-items: center;
+        grid-template-columns: auto;
+
+        .search-input {
+            width: 100%;
+        }
+
+        .category {
+            display: grid;
+            align-items: center;
+            gap: 8px;
+            grid-template-columns: 1fr 1fr;
+            @include for-phone-only {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .customize-button {
+            float: right;
+        }
+
+        .inventory {
+            .mat-h2 {
+                display: flex;
+                justify-content: space-between;
+                justify-items: center;
+            }
+        }
+    }
+}

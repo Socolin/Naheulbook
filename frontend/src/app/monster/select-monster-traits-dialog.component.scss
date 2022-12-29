@@ -1,0 +1,14 @@
+:host {
+    .trait-line {
+        display: grid;
+        grid-template-columns: 1fr 40px;
+        align-items: center;
+    }
+
+    .power-trait {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 40px 30px;
+        align-items: center;
+    }
+}

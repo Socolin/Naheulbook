@@ -1,0 +1,10 @@
+:host {
+    .types-selector {
+        display: flex;
+        flex-direction: column;
+        margin: 4px 0;
+        > mat-radio-button {
+            margin: 8px;
+        }
+    }
+}

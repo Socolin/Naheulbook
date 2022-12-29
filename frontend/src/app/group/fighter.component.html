@@ -1,0 +1,196 @@
+<div class="fighter" [class.combat-row-selected]="selected && !expandedView">
+    <div class="icon">
+        <monster-color-selector *ngIf="fighter.isMonster"
+                                [monster]="fighter.monster"
+                                (onNumberChange)='changeNumber(fighter, $event)'
+                                (onColorChange)='changeColor(fighter, $event)'>
+        </monster-color-selector>
+        <character-color-selector *ngIf="!fighter.isMonster"
+                                  [character]="fighter.character"
+                                  (onColorChange)='changeColor(fighter, $event)'>
+        </character-color-selector>
+    </div>
+
+    <div class="name">
+        <span>{{fighter.name}}</span>
+        <ng-template [ngIf]="fighter.isCharacter">
+            <button mat-icon-button [matMenuTriggerFor]="menuCharacter" aria-label="Ouvrir le menu du personnage">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menuCharacter="matMenu">
+                <button mat-menu-item
+                        (click)="displayCharacterSheet()">
+                    <mat-icon>pageview</mat-icon>
+                    Voir la fiche
+                </button>
+                <button mat-menu-item
+                        (click)=openAddItemDialog()>
+                    <mat-icon>add</mat-icon>
+                    Objet
+                </button>
+                <button mat-menu-item
+                        (click)=openAddGemDialog()>
+                    <mat-icon>add</mat-icon>Pierre précieuse
+                </button>
+            </mat-menu>
+        </ng-template>
+        <ng-template [ngIf]="fighter.isMonster">
+            <button mat-icon-button [matMenuTriggerFor]="menuMonster" aria-label="Open basic menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #menuMonster="matMenu">
+                <button mat-menu-item
+                        (click)=openEditMonsterDialog()>
+                    <mat-icon>edit</mat-icon>
+                    Modifier
+                </button>
+                <button mat-menu-item
+                        (click)=openAddItemDialog()>
+                    <mat-icon>add</mat-icon>
+                    Objet
+                </button>
+                <button mat-menu-item
+                        (click)=openAddGemDialog()>
+                    <mat-icon>add</mat-icon>Pierre précieuse
+                </button>
+                <button mat-menu-item
+                        (click)=openAddEffectDialog()>
+                    <mat-icon>add</mat-icon>Modificateur
+                </button>
+                <button mat-menu-item
+                        (click)=openInventoryDialog()>
+                    <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
+                    <span>Inventaire<span *ngIf="fighter.monster?.items?.length"> ({{fighter.monster?.items?.length}})</span></span>
+                </button>
+                <button mat-menu-item
+                        (click)=killMonster(fighter.monster)>
+                    <mat-icon fontSet="game-icon" fontIcon="game-icon-tombstone" class="ra-mat-button-icon-24"></mat-icon>
+                    Tuer le monstre
+                </button>
+                <button mat-menu-item
+                        (click)=duplicateMonster(fighter.monster)>
+                    <mat-icon>content_copy</mat-icon>
+                    Dupliquer le monstre
+                </button>
+                <button mat-menu-item [matMenuTriggerFor]="deleteMonsterConfirm">
+                    <mat-icon>delete</mat-icon>
+                    Supprimer le monstre
+                </button>
+            </mat-menu>
+
+            <mat-menu #deleteMonsterConfirm="matMenu">
+                <button mat-menu-item
+                        (click)=deleteMonster(fighter.monster)>
+                    Confirmer
+                </button>
+            </mat-menu>
+        </ng-template>
+    </div>
+
+    <div class="field-with-label at">
+        <span class="label" matTooltip="Attaque">AT</span>
+        <span>{{fighter.stats.at}}</span>
+    </div>
+    <div class="field-with-label prd">
+        <span class="label" matTooltip="Parade">PRD</span>
+        <span>{{fighter.stats.prd}}</span>
+    </div>
+    <div class="field-with-label esq">
+        <span class="label" matTooltip="Esquive">ESQ</span>
+        <span>{{fighter.stats.esq}}</span>
+    </div>
+    <div class="field-with-label ev" [class.text-danger]="fighter.stats.ev < 4">
+        <span class="label" matTooltip="Énergie vitale">EV</span>
+        <value-editor [title]="'Energie vitale'"
+                      [value]="fighter.stats.ev"
+                      [maxValue]="fighter.stats.maxEv"
+                      (onChange)="changeStat('ev', $event)">
+        </value-editor>
+    </div>
+    <div class="field-with-label ea">
+        <span class="label" matTooltip="Énergie astrale">EA</span>
+        <span *ngIf="fighter.stats.maxEa">
+            <value-editor [title]="'Energie astrale'"
+                          [value]="fighter.stats.ea"
+                          [maxValue]="fighter.stats.maxEa"
+                          (onChange)="changeStat('ea', $event)">
+            </value-editor>
+        </span>
+        <span *ngIf="!fighter.stats.maxEa">-</span>
+    </div>
+    <div class="field-with-label pr">
+        <span class="label" matTooltip="Armure (Armure magique)">PR</span>
+        {{fighter.stats.pr}}({{fighter.stats.pr_magic}})
+    </div>
+    <div class="field-with-label resm">
+        <span class="label" matTooltip="Resistance magique">RESM</span>
+        {{fighter.stats.resm}}
+    </div>
+    <div class="field-with-label cou">
+        <span class="label" matTooltip="Courage">COU</span>
+        <span *ngIf="fighter.chercheNoise" matTooltip="Chercher des noise">
+            {{fighter.stats.cou}}+
+        </span>
+        <span *ngIf="!fighter.chercheNoise">
+            {{fighter.stats.cou}}
+        </span>
+    </div>
+
+    <div class="dmg" matTooltip="Dégats" *ngIf="(expandedView || moreInfo)">
+        <div *ngFor="let dmg of fighter.stats.dmg" class="equiped-weapons-damages">
+            <mat-icon *ngIf="dmg.incompatible" color="warn">warning</mat-icon>
+            <span>
+                    <div [class.incompatible-item]="dmg.incompatible">
+                        {{dmg.damage}}
+                    </div>
+                    <div class="secondary-text damage-weapon-name"  [class.incompatible-item]="dmg.incompatible">
+                        {{dmg.name}}
+                    </div>
+                </span>
+        </div>
+    </div>
+    <div class="effects" *ngIf="(expandedView || moreInfo) && fighter.isMonster && fighter.monster.modifiers?.length">
+        Effets:
+        <div *ngFor="let modifier of fighter.monster.modifiers" class="effect">
+            <span class="effect-name">
+                {{modifier.name}}
+            </span>
+            <span *ngIf="modifier.currentCombatCount" class="effect-time">
+                <span class="ra ra-sword duration-icon"></span> {{modifier.currentCombatCount}}
+            </span>
+            <span *ngIf="modifier.currentTimeDuration" class="effect-time">
+                <span class="ra ra-clockwork duration-icon"></span> {{modifier.currentTimeDuration | nhbkShortDuration}}
+            </span>
+            <span *ngIf="modifier.currentLapCount" class="effect-time">
+                <span class="game-icon game-icon-clockwise-rotation duration-icon"></span> {{modifier.currentLapCount}}
+            </span>
+            <span class="effect-actions">
+               <button mat-icon-button [matMenuTriggerFor]="menuCharacter"
+                       aria-label="Ouvrir le menu de l'effet">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menuCharacter="matMenu">
+                    <button mat-menu-item
+                            (click)="openModifierDetails(modifier)">
+                        <mat-icon>info</mat-icon>
+                        Details
+                    </button>
+                    <button mat-menu-item
+                            (click)="removeModifier(modifier)">
+                        <mat-icon>delete</mat-icon>
+                        Supprimer
+                    </button>
+                </mat-menu>
+            </span>
+        </div>
+    </div>
+    <div class="note" *ngIf="(expandedView || moreInfo) && fighter.isMonster && fighter.monster.data.note">
+        <span>Note:</span>
+        <span [innerHTML]="fighter.monster.data.note | markdown"></span>
+    </div>
+    <div *ngIf="!expandedView" class="expd" matRipple (click)="toggleMoreInfo()">
+        <mat-icon *ngIf="!moreInfo">keyboard_arrow_down</mat-icon>
+        <mat-icon *ngIf="moreInfo">keyboard_arrow_up</mat-icon>
+    </div>
+</div>

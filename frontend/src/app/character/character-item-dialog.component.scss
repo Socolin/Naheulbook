@@ -1,0 +1,82 @@
+:host {
+    .item-header {
+        min-height: 40px;
+        margin-bottom: 8px;
+
+        > icon {
+            float: left;
+            margin-right: 16px;
+        }
+
+        .item-name {
+            font-size: 20px;
+        }
+    }
+
+    .icon-label {
+        margin: 8px 0;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 8px;
+        align-items: center;
+
+        .stats {
+            > * {
+                white-space: nowrap;
+            }
+        }
+
+        mat-divider {
+            position: relative;
+        }
+    }
+
+    .usage-actions {
+        .usage-action {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            grid-gap: 8px;
+            padding-left: 8px;
+        }
+    }
+
+    .item-modifier {
+        align-items: center;
+        grid-column-gap: 8px;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-template-areas: "active name actions" ". stats actions" ". duration duration";
+
+        .modifier-active {
+            grid-area: active;
+        }
+
+        .modifier-name {
+            grid-area: name;
+        }
+
+        .modifier-actions {
+            grid-area: actions;
+        }
+
+        .modifier-duration {
+            grid-area: duration;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .modifier-stats {
+            grid-area: stats;
+        }
+    }
+
+    .damage {
+        >span {
+            display: flex;
+            align-items: center;
+        }
+        display: flex;
+        align-items: center;
+    }
+}

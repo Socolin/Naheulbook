@@ -1,0 +1,73 @@
+@use '@angular/material' as mat;
+
+@mixin group-theme($theme) {
+    // Extract whichever individual palettes you need from the theme.
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    @if (map_get($theme, is-dark)) {
+        .text-attack {
+            color: #bf3737;
+        }
+        .text-prd {
+            color: #9e643e;
+        }
+        .text-esq {
+            color: #2d732f;
+        }
+    } @else {
+        .text-attack {
+            color: #c72b2b;
+        }
+        .text-prd {
+            color: #633110;
+        }
+        .text-esq {
+            color: #33a736;
+        }
+    }
+    .combat-row-selected {
+        background: linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12));
+    }
+    .fighter-container {
+        border-bottom-color: mat.get-color-from-palette($foreground, hint-text);
+    }
+
+    .incompatible-item {
+        color: mat.get-color-from-palette($warn);
+    }
+
+    .loot-list {
+        .active {
+            background-color: mat.get-color-from-palette($background, selected-button);
+        }
+
+        ul {
+            > li {
+                > icon {
+                    color: mat.get-color-from-palette($foreground, text);
+                }
+            }
+        }
+        .loot-monsters {
+            .monster-item {
+                border-left-color: mat.get-color-from-palette($foreground, hint-text);
+            }
+        }
+    }
+
+    .event-list {
+        @if (map_get($theme, is-dark)) {
+            .past-event {
+                background-color: #2c3e30;
+            }
+        } @else {
+            .past-event {
+                background-color: #d7fde4;
+            }
+        }
+    }
+}

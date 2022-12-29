@@ -1,0 +1,27 @@
+.module-list {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+.module-button {
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    grid-template-areas: "icon title" "icon description";
+    align-items: center;
+    padding: 8px 0;
+
+    > mat-icon {
+        grid-area: icon;
+        font-size: 40px;
+        height: 40px;
+    }
+
+    .title {
+        grid-area: title;
+    }
+
+    .description {
+        font-size: 14px;
+        grid-area: description;
+    }
+}

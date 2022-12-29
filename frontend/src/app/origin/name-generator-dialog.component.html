@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Générer un nom</h2>
+<mat-dialog-content [formGroup]="form">
+    <mat-form-field>
+        <mat-select formControlName="originId" placeholder="Origine">
+            <mat-option *ngFor="let origin of origins" [value]="origin.id">
+                {{origin.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-radio-group formControlName="sex" class="sex-selector">
+        <mat-radio-button name="sexe" [value]="'Homme'">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-male" class="ra-mat-button-icon-24"></mat-icon>
+            Homme
+        </mat-radio-button>
+        <mat-radio-button name="sexe" [value]="'Femme'">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-female" class="ra-mat-button-icon-24"></mat-icon>
+            Femme
+        </mat-radio-button>
+    </mat-radio-group>
+    <mat-form-field>
+        <input matInput formControlName="name" placeholder="Nom"/>
+    </mat-form-field>
+    <button mat-stroked-button (click)="randomName()">Générer</button>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">
+        FERMER
+    </button>
+    <button mat-button color="primary" (click)="valid()">
+        VALIDER
+    </button>
+</mat-dialog-actions>
+

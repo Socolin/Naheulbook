@@ -1,0 +1,24 @@
+<div class="info" mat-ripple (click)="openCharacterItemDialog(item)">
+    <icon [icon]="item.data.icon"
+          [shownToGm]="item.data.shownToGm"
+          [enchanted]="(!item.data.notIdentified || gmView) &&  item.template.data.enchantment !== undefined"
+          [notIdentified]="item.data.notIdentified"></icon>
+    <span class="name">
+        <span *ngIf="character?.checkItemIncompatibilities(item) && !item.data.ignoreRestrictions" class="restrictions text-warning">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-interdiction" class="ra-mat-button-icon-32"></mat-icon>
+        </span>
+        <span *ngIf="!hideEquippedMarker && item.data.equiped" class="equiped">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-confirmed" class="ra-mat-button-icon-32"></mat-icon>
+        </span>
+        <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
+        {{item.data.name}}
+    </span>
+</div>
+<button class="action"
+        mat-icon-button
+        aria-label="Ouvre le menu d'action de l'objet"
+        [matMenuTriggerFor]="itemMenu"
+        [matMenuTriggerData]="{item: item}"
+        (click)="$event.stopPropagation()">
+    <mat-icon matBadgeSize="small" [matBadge]="!hideShouldPutIntoContainerMarker && item.shouldBePutInAContainer  && character?.computedData.containers?.length ? '1' : undefined">more_vert</mat-icon>
+</button>

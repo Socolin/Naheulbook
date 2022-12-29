@@ -1,0 +1,19 @@
+:host {
+
+    .item-name {
+        grid-template-columns: 32px 1fr;
+        grid-column-gap: 8px;
+        padding-bottom: 16px;
+        display: grid;
+        align-items: center;
+    }
+
+    .destinations-loading {
+        display: grid;
+        justify-items: center;
+    }
+
+    mat-radio-button {
+        display: block;
+    }
+}

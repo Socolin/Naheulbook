@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>
+    {{data.skill.name}} <span *ngIf="viewGmSkillInfo && data.skill.stat?.length">({{data.skill.stat.join(',')}}<span *ngIf=data.skill.test> + {{data.skill.test}}</span>)</span>
+</h2>
+<mat-dialog-content class="mat-typography">
+    <div *ngIf="viewGmSkillInfo; else playerView" class="skill-data">
+        <div *ngIf=data.skill.description>
+            <h2>Description</h2>
+            <div>{{data.skill.description}}</div>
+        </div>
+        <div *ngIf=data.skill.using>
+            <h2>Utilisation</h2>
+            <div>{{data.skill.using}}</div>
+        </div>
+        <div *ngIf=data.skill.resist>
+            <h2>Resistance</h2>
+            <div>{{data.skill.resist}}</div>
+        </div>
+        <div *ngIf=data.skill.roleplay>
+            <h2>Roleplay</h2>
+            <div>{{data.skill.roleplay}}</div>
+        </div>
+        <div *ngIf=data.skill.require>
+            <h2>Prerequis</h2>
+            <div>{{data.skill.require}}</div>
+        </div>
+    </div>
+    <ng-template #playerView>
+        {{data.skill.playerDescription}}
+    </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <ng-container *ngIf="canViewGmSkillInfo">
+        <button *ngIf="!viewGmSkillInfo" mat-button color="primary" (click)="viewGmSkillInfo = true">
+            INFO GM
+        </button>
+        <button *ngIf="viewGmSkillInfo" mat-button color="primary" (click)="viewGmSkillInfo = false">
+            INFO JOUEUR
+        </button>
+    </ng-container>
+    <button mat-button mat-dialog-close color="primary">
+        FERMER
+    </button>
+</mat-dialog-actions>

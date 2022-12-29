@@ -1,0 +1,11 @@
+@import "~app/style/responsive-utils";
+
+.content {
+    @include for-phone-only {
+        padding: 0!important;
+    }
+
+    character {
+        width: 100%;
+    }
+}

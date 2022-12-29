@@ -1,0 +1,62 @@
+<h2 mat-dialog-title>Choisir une icône</h2>
+
+<mat-dialog-content>
+    <p>Nom principalement en anglais, vous pouvez chercher plus facilement sur <a target=_blank href="https://game-icons.net/">https://game-icons.net/</a></p>
+    <div class="icon-filter">
+        <mat-form-field align="end">
+            <input matInput
+                   placeholder="Nom de l'icône"
+                   type="text"
+                   autocapitalize="off"
+                   autocomplete="off"
+                   [(ngModel)]="filter"
+                   (ngModelChange)="updateFiltered()">
+            <mat-hint align="end">
+                Icône actuelle: {{data.icon?.name || 'Non défini'}}
+            </mat-hint>
+        </mat-form-field>
+        <button mat-icon-button (click)="selectRandom()"><span class="ra ra-perspective-dice-random ra-2x"></span></button>
+    </div>
+    <div class="icon-list">
+        <button mat-icon-button *ngFor="let iconName of filteredIcons" (click)="selectIcon(iconName)">
+            <span class="game-icon" [ngClass]="'game-icon-' + iconName"></span>
+        </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <h3 class="mat-h3">Couleur</h3>
+    <div class="icon-list">
+        <button mat-icon-button *ngFor="let color of colors" (click)="selectColor(color)">
+            <span class="game-icon"
+                  [ngClass]="'game-icon-' + newIcon.name"
+                  [style.color]="color">
+            </span>
+        </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <h3 class="mat-h3">Orientation</h3>
+    <div class="icon-list">
+        <button mat-icon-button *ngFor="let rotatedIcon of rotationIcons" (click)="selectRotation(rotatedIcon.rotation)">
+            <icon size="40px" [icon]="rotatedIcon"></icon>
+        </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <h3 class="mat-h3">Changement</h3>
+    <div class="summary">
+        <icon [size]="'40px'" [icon]="data.icon" (click)="resetNewIcon()"></icon>
+        ->
+        <icon [size]="'40px'" [icon]="newIcon"></icon>
+
+        <button mat-button color="primary" [disabled]="isNewIconTheSame()" (click)="resetNewIcon()">RESET</button>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">ANNULER</button>
+    <button mat-button color="primary" (click)="saveChange()">VALIDER</button>
+</mat-dialog-actions>

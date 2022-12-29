@@ -1,0 +1,90 @@
+<div class="buttons-header">
+    <button mat-raised-button (click)="openAddLootDialog()" color="primary">NOUVEAU LOOT</button>
+</div>
+
+<div class="loot-list">
+    <div *ngFor="let loot of loots" class="loot">
+        <mat-toolbar color="primary">
+            <span class="name">{{loot.name}}</span>
+
+            <span class="xp" *ngIf="loot.computedXp">XP: {{loot.computedXp}}</span>
+
+            <mat-icon class="visibility-indicator" *ngIf="loot.visibleForPlayer" matTooltip="Loot visible par les joueurs">visibility_on</mat-icon>
+            <mat-icon class="visibility-indicator" *ngIf="!loot.visibleForPlayer" matTooltip="Loot non visible par les joueurs">visibility_off</mat-icon>
+
+            <span class="actions">
+                <button mat-icon-button [matMenuTriggerFor]="menuLoot" aria-label="Ouvre le menu du loot">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu xPosition="before" #menuLoot="matMenu">
+                    <button mat-menu-item *ngIf="!loot.visibleForPlayer" (click)="openLoot(loot)">
+                        <mat-icon>visibility_on</mat-icon> Afficher
+                    </button>
+                    <button mat-menu-item *ngIf="loot.visibleForPlayer" (click)="closeLoot(loot)">
+                        <mat-icon>visibility_off</mat-icon> Cacher
+                    </button>
+
+                    <button mat-menu-item (click)="openAddItemDialog(loot)">
+                        <mat-icon>add</mat-icon>Objet
+                    </button>
+                    <button mat-menu-item (click)="openAddGemDialog(loot)">
+                        <mat-icon>add</mat-icon>Pierre précieuse
+                    </button>
+                    <button mat-menu-item (click)="addRandomItemFromSubCategoryToLoot(loot, 'USELESS_ITEM')">
+                        <mat-icon>add</mat-icon>Objet inutile
+                    </button>
+                    <button mat-menu-item (click)="addRandomItemFromSubCategoryToLoot(loot, 'MAGICAL_INGREDIENT')">
+                        <mat-icon>add</mat-icon>Ingrédient magique
+                    </button>
+                    <button mat-menu-item [matMenuTriggerFor]="delete">
+                        <mat-icon>delete</mat-icon> Supprimer
+                    </button>
+                </mat-menu>
+
+                <mat-menu #delete="matMenu">
+                    <button mat-menu-item
+                        (click)=deleteLoot(loot)>
+                        Confirmer
+                    </button>
+                </mat-menu>
+            </span>
+        </mat-toolbar>
+        <mat-card>
+            <mat-card-content>
+                <app-item-list
+                    [items]="loot.items"
+                    (deleteItems)="removeItemsFromLoot(loot, $event)"
+                    (selectItem)="openItemDialog($event)">
+                </app-item-list>
+
+                <div class="loot-monsters" *ngFor="let monster of loot.monsters">
+                    <div class="monster-header">
+                        <span class="monster-name">{{monster.name}}</span>
+                        <button mat-icon-button [matMenuTriggerFor]="menuMonster" aria-label="Ouvre le menu du loot">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu xPosition="before" #menuMonster="matMenu">
+                            <button mat-menu-item (click)="openAddItemDialog(monster)">
+                                <mat-icon>add</mat-icon>Objet
+                            </button>
+                            <button mat-menu-item (click)="openAddGemDialog(monster)">
+                                <mat-icon>add</mat-icon>Pierre précieuse
+                            </button>
+                            <button mat-menu-item (click)="addRandomItemFromSubCategoryToMonster(monster, 'USELESS_ITEM')">
+                                <mat-icon>add</mat-icon>Objet inutile
+                            </button>
+                            <button mat-menu-item (click)="addRandomItemFromSubCategoryToMonster(monster, 'MAGICAL_INGREDIENT')">
+                                <mat-icon>add</mat-icon>Ingrédient magique
+                            </button>
+                        </mat-menu>
+                    </div>
+                    <app-item-list
+                        [items]="monster.items"
+                        (deleteItems)="removeItemsFromMonster(monster, $event)"
+                        (selectItem)="openItemDialog($event)">
+                    </app-item-list>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

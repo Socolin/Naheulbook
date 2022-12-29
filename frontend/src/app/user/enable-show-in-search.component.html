@@ -1,0 +1,15 @@
+<mat-dialog-content>
+    <p>Pendant combien de temps vos personnages et votre profile resteront visible dans les recherches ?</p>
+    <mat-form-field>
+        <mat-select [(ngModel)]="duration">
+            <mat-option [value]="10*60">10 minutes</mat-option>
+            <mat-option [value]="3600">1 heure</mat-option>
+            <mat-option [value]="3600*24">1 jour</mat-option>
+            <mat-option [value]="3600*24*30">1 mois</mat-option>
+        </mat-select>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button color="primary" mat-dialog-close>ANNULER</button>
+    <button mat-button color="primary" (click)="confirm()">VALIDER</button>
+</mat-dialog-actions>

@@ -1,0 +1,85 @@
+@import "~app/style/responsive-utils";
+
+:host {
+    .data,
+    .header {
+        display: grid;
+        align-items: center;
+        grid-template-columns: auto auto auto;
+
+        @include for-phone-only {
+            grid-gap: 0;
+            grid-template-columns: 1fr;
+        }
+
+        .dice {
+            @include for-phone-only {
+                padding-top: 8px;
+            }
+            @include for-tablet-portrait-up {
+                padding-top: 8px;
+                padding-bottom: 8px;
+                border-bottom-style: solid;
+                border-bottom-width: 1px;
+            }
+        }
+
+        .effect {
+            @include for-phone-only {
+                padding-left: 16px;
+            }
+            @include for-tablet-portrait-up {
+                padding: 8px;
+                border-bottom-style: solid;
+                border-bottom-width: 1px;
+            }
+        }
+
+        .effect2 {
+            @include for-phone-only {
+                padding-left: 16px;
+                padding-bottom: 8px;
+                border-bottom-style: solid;
+                border-bottom-width: 1px;
+            }
+            @include for-tablet-portrait-up {
+                padding-top: 8px;
+                padding-bottom: 8px;
+                border-bottom-style: solid;
+                border-bottom-width: 1px;
+            }
+        }
+
+        .label-effect {
+            @include for-tablet-portrait-up {
+                display: none;
+            }
+        }
+
+        .label-effect::after {
+            content: ':';
+        }
+
+        .label-effect2 {
+            @include for-tablet-portrait-up {
+                display: none;
+            }
+        }
+
+        .label-effect2::after {
+            content: ':';
+        }
+    }
+
+
+    .header {
+        font-weight: bold;
+        @include for-phone-only {
+            display: none;
+        }
+    }
+
+    .data {
+        align-items: stretch;
+    }
+}

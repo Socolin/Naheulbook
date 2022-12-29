@@ -1,0 +1,47 @@
+:host {
+    .availability-title {
+        margin-top: 8px;
+        margin-left: 8px;
+    }
+
+    .origin-title {
+        display: flex;
+        align-items: center;
+
+        .icon-available {
+            display: flex;
+            padding-right: 8px;
+        }
+    }
+
+    mat-expansion-panel {
+        text-align: justify;
+
+        .description {
+            margin-bottom: 14px;
+        }
+
+        .skill-name {
+            text-transform: uppercase;
+        }
+    }
+
+    .prereq {
+        .invalid-stat {
+            color: #d43f3a;
+        }
+
+        .valid-stat {
+            color: #3c763d;
+        }
+    }
+
+    .swap-button {
+        text-transform: uppercase;
+    }
+
+    .swap-buttons {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}

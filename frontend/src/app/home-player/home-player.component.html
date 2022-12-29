@@ -1,0 +1,40 @@
+<mat-sidenav-container style="min-height: 100vh">
+    <mat-sidenav #start>
+        <h2 class="mat-h2">Vos personnages</h2>
+        <mat-nav-list>
+            <ng-template ngFor [ngForOf]="characters" let-character>
+                <a mat-list-item [routerLink]="['character/detail/', character.id]">
+                    <mat-icon matListIcon>person</mat-icon> {{character.name}}
+                </a>
+            </ng-template>
+            <a mat-list-item [routerLink]="['character/list']">
+                <mat-icon matListIcon>list</mat-icon> Tous vos personnages
+            </a>
+            <a mat-list-item [routerLink]="['character/create']">
+                <mat-icon matListIcon>add</mat-icon> Créer un personnage
+            </a>
+        </mat-nav-list>
+        <common-nav></common-nav>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <mat-toolbar-row>
+                <button mat-icon-button (click)="start.open()" aria-label="Afficher le menu">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <div class="app-toolbar">
+                    <h1>
+                        Naheulbook
+                    </h1>
+                    <a class="home-link" aria-label="Page d'accueil" [routerLink]="['/']"><mat-icon>home</mat-icon></a>
+                </div>
+            </mat-toolbar-row>
+        </mat-toolbar>
+
+        <div class="app-content">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+

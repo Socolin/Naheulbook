@@ -1,0 +1,10 @@
+mat-card {
+    margin: 5px;
+    mat-card-header {
+        display: flex;
+        .padding {
+            flex: 1 auto;
+        }
+        padding-bottom: 8px;
+    }
+}

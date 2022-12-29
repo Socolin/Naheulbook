@@ -1,0 +1,47 @@
+<button mat-fab color="accent" [matMenuTriggerFor]="appMenu" aria-label="Informations utiles">
+    <mat-icon>list</mat-icon>
+</button>
+
+<mat-menu #appMenu="matMenu" [hasBackdrop]="true" [overlapTrigger]="true" [backdropClass]="'cdk-overlay-dark-backdrop'">
+    <button mat-menu-item [matMenuTriggerFor]="criticalSuccessMenu">
+        <mat-icon [fontSet]="'game-icon'" class="ra-mat-button-icon-24" [fontIcon]="'game-icon-spiky-eclipse'"></mat-icon>
+        Succès critique
+    </button>
+
+    <button mat-menu-item [matMenuTriggerFor]="epicFailsMenu">
+        <mat-icon [fontSet]="'game-icon'" class="ra-mat-button-icon-24" [fontIcon]="'game-icon-dripping-blade'"></mat-icon>
+        Échec critique
+    </button>
+
+    <button *ngFor="let info of basesInfoDefinitions" mat-menu-item (click)="openPanel(info.panel, info.tab)">
+        <mat-icon [fontSet]="info.fontSet" class="ra-mat-button-icon-24" [fontIcon]="info.icon"></mat-icon>
+        {{info.displayName}}
+    </button>
+
+    <button mat-menu-item [matMenuTriggerFor]="databaseSubMenu">
+        <mat-icon>add</mat-icon>
+        Database
+    </button>
+
+</mat-menu>
+
+<mat-menu #databaseSubMenu="matMenu">
+    <button *ngFor="let info of databaseInfoDefinitions" mat-menu-item (click)="openPanel(info.panel, info.tab)">
+        <mat-icon [fontSet]="info.fontSet" class="ra-mat-button-icon-24" [fontIcon]="info.icon"></mat-icon>
+        {{info.displayName}}
+    </button>
+</mat-menu>
+
+<mat-menu #criticalSuccessMenu="matMenu">
+    <button *ngFor="let info of criticalSuccessInfoDefinitions" mat-menu-item (click)="openPanel(info.panel, info.tab)">
+        <mat-icon [fontSet]="info.fontSet" class="ra-mat-button-icon-24" [fontIcon]="info.icon"></mat-icon>
+        {{info.displayName}}
+    </button>
+</mat-menu>
+
+<mat-menu #epicFailsMenu="matMenu">
+    <button *ngFor="let info of epicFailsInfoDefinitions" mat-menu-item (click)="openPanel(info.panel, info.tab)">
+        <mat-icon [fontSet]="info.fontSet" class="ra-mat-button-icon-24" [fontIcon]="info.icon"></mat-icon>
+        {{info.displayName}}
+    </button>
+</mat-menu>

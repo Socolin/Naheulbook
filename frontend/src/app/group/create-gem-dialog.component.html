@@ -1,0 +1,93 @@
+<h2 mat-dialog-title>Ajouter une pierre précieuse</h2>
+<mat-dialog-content>
+    <div class="ug">
+        <mat-form-field>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="gemUg"
+                   (ngModelChange)="updateGem()"
+                   class="form-control"
+                   placeholder="U.G."/>
+        </mat-form-field>
+
+        <span class="max-ug-selector">
+            <mat-form-field>
+                <mat-select placeholder="Maximum U.G." [ngModel]="maxUg" (selectionChange)="setGemRandomUg($event.value)">
+                    <mat-option [value]="2">2</mat-option>
+                    <mat-option [value]="4">4</mat-option>
+                    <mat-option [value]="6">6</mat-option>
+                    <mat-option [value]="8">8</mat-option>
+                    <mat-option [value]="10">10</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </span>
+    </div>
+    <div class="type-dice">
+        <mat-button-toggle-group [ngModel]="gemType">
+            <mat-button-toggle [value]="'raw'" (click)="setGemType('raw')">
+                Brut
+            </mat-button-toggle>
+            <mat-button-toggle [value]="'cut'" (click)="setGemType('cut')">
+                Taillé
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-form-field>
+            <input matInput
+                   type="number"
+                   min="1"
+                   [(ngModel)]="randomDiceNumber"
+                   (ngModelChange)="updateGem()"
+                   class="form-control"
+                   placeholder="D20"/>
+        </mat-form-field>
+
+        <button mat-icon-button
+                color="primary"
+                (click)="randomGem()">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-cubes" class="ra-mat-button-icon-24"></mat-icon>
+        </button>
+    </div>
+
+    <div class="new-item-data" *ngIf="newItem.template">
+        <h2 class="mat-h2">Personnalisation</h2>
+        <div class="identifiable-quantifiable">
+            <mat-checkbox [(ngModel)]="newItem.data.notIdentified"
+                          (change)="updateItemIdentified()">
+                Non-identifié
+            </mat-checkbox>
+            <span>Prix: {{newItem.price}} P.O.</span>
+        </div>
+        <div class="name-icon">
+            <icon (click)="openSelectIconDialog()" [icon]="newItem.data.icon"></icon>
+            <mat-form-field>
+                <input matInput
+                       #newItemName
+                       placeholder="Nom"
+                       [(ngModel)]="newItem.data.name"/>
+                <mat-hint *ngIf="newItem.data.notIdentified" align="end">
+                    {{newItem.template?.name}}
+                </mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button
+            color="primary"
+            [disabled]="!newItem.template"
+            (click)=addItem(true)>
+        AJOUTER
+    </button>
+    <button mat-button
+            color="primary"
+            [disabled]="!newItem.template"
+            (click)=addItem(false)>
+        AJOUTER+
+    </button>
+    <button mat-button
+            mat-dialog-close
+            color="primary">
+        ANNULER
+    </button>
+</mat-dialog-actions>

@@ -1,0 +1,17 @@
+<mat-card style="margin: 5px">
+    <mat-card-title>Créer un groupe</mat-card-title>
+    <mat-card-content>
+        <mat-form-field style="width: 100%">
+            <input matInput
+                   [(ngModel)]="groupName"
+                   placeholder="Nom du groupe"/>
+        </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-button
+                color="primary"
+                (click)="create()">
+            CREER
+        </button>
+    </mat-card-actions>
+</mat-card>

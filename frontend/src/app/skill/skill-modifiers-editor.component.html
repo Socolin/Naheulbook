@@ -1,0 +1,40 @@
+<div class="stat-modifiers">
+    <div *ngIf="modifiers && modifiers.length > 0" class="delete_all_button">
+        <button mat-icon-button
+                (click)="clear()"
+                color="warn">
+            <mat-icon>delete_forever</mat-icon>
+        </button>
+    </div>
+
+    <div class="modifiers-list">
+        <div *ngFor="let modifier of modifiers; let i=index" class="modifier-line">
+            <button mat-icon-button
+                    (click)="removeModifier(i)"
+                    color="accent">
+                <mat-icon>delete_forever</mat-icon>
+            </button>
+
+            <div *ngIf="modifier.value > 0">{{modifier.skill.name}} +{{modifier.value}}</div>
+            <div *ngIf="modifier.value < 0">{{modifier.skill.name}} {{modifier.value}}</div>
+        </div>
+    </div>
+</div>
+
+<div>
+    Modifie la competence
+    <mat-form-field style="min-width: 250px">
+        <mat-select [(ngModel)] ="selectedSkillId">
+            <mat-option *ngFor="let skill of skills" [value]="skill.id">{{skill.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    de
+    <mat-form-field>
+        <input matInput
+               type="number"
+               [(ngModel)]="value"/>
+    </mat-form-field>
+    <button mat-button color="primary" [disabled]="!value || !selectedSkillId" (click)="addModifier()">
+        AJOUTER
+    </button>
+</div>

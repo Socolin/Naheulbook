@@ -1,0 +1,10 @@
+:host {
+    mat-dialog-content {
+        display: grid;
+        grid-template-columns: minmax(50px, 100px) 52px minmax(45px, 100px);
+        grid-gap: 16px;
+        > * {
+            width: 100%;
+        }
+    }
+}

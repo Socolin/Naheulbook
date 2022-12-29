@@ -1,0 +1,34 @@
+@import "~app/style/responsive-utils";
+
+:host {
+    .action-button {
+        display: grid;
+        align-items: center;
+        grid-template-columns: auto auto;
+    }
+    .content {
+        max-width: 960px;
+
+        .category {
+            display: grid;
+            grid-gap: 8px;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+
+            @include for-phone-only {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .name-dice {
+            display: grid;
+            gap: 8px;
+            grid-template-columns: minmax(40px, 1fr) minmax(40px, 90px);
+        }
+
+        .description {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+    }
+}

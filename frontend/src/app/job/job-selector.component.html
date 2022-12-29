@@ -1,0 +1,77 @@
+<div *ngFor="let availability of availabilities">
+    <ng-template [ngIf]="availability.jobs?.length">
+        <h3 class="mat-h3 availability-title">{{availability.title}}</h3>
+        <mat-accordion [multi]="false">
+            <mat-expansion-panel *ngIf="displayNoJobOption && availability.state === 'ok'">
+                <mat-expansion-panel-header>
+                    <div class="job-title">
+                    <span class="icon-available">
+                        <mat-icon>check</mat-icon>
+                    </span>
+                        <span>
+                        Aucun
+                    </span>
+                    </div>
+                </mat-expansion-panel-header>
+                <mat-action-row align="end">
+                    <button color="primary" mat-button (click)="selectJob(undefined)">CHOISIR</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+            <mat-expansion-panel *ngFor="let job of availability.jobs">
+                <mat-expansion-panel-header>
+                    <div class="job-title">
+                    <span class="icon-available">
+                        <mat-icon>{{availability.icon}}</mat-icon>
+                    </span>
+                        <span>
+                        {{job.name}}
+                    </span>
+                    </div>
+                </mat-expansion-panel-header>
+
+                <p class="prereq">
+                    Prérequis:
+                    <ng-template ngFor [ngForOf]="job.requirements" let-req let-last="last">
+                    <span class="invalid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
+                        {{req.stat|uppercase}} &ge; {{req.min}}
+                    </span>
+                        <span class="invalid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max">
+                        {{req.stat|uppercase}} &le; {{req.max}}
+                    </span>
+                        <span class="valid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min">
+                        {{req.stat|uppercase}} &ge; {{req.min}}
+                    </span>
+                        <span class="valid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max">
+                        {{req.stat|uppercase}} &le; {{req.max}}
+                    </span>
+                        <span *ngIf="!last">,</span>
+                    </ng-template>
+                    <span *ngIf="!job.requirements.length">aucun</span>
+                </p>
+                <p class="summary" [innerHTML]="job.playerSummary | textFormatter"></p>
+                <p class="description" [innerHTML]="job.playerDescription | textFormatter"></p>
+                <div class="skills" *ngIf="job.skills.length">
+                    Je suis né avec les compétences suivantes :
+                    <ul>
+                        <li *ngFor="let skill of job.skills">
+                            <div class="skill-name">{{skill.name}}</div>
+                            <span *ngIf="skill.playerDescription"> {{skill.playerDescription}}</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <mat-action-row *ngIf="availabilityOk.state === 'ok'" align="end">
+                    <button color="primary" mat-button (click)="selectJob(job)">CHOISIR</button>
+                </mat-action-row>
+                <mat-action-row *ngIf="availabilityOk.state === 'ko'" align="end">
+                    <button color="warn" mat-button (click)="selectJob(job)">CHOISIR (Prérequis non rempli)</button>
+                </mat-action-row>
+                <mat-action-row *ngIf="availabilityOk.state === 'swap'" align="end" class="swap-buttons">
+                    <ng-template ngFor [ngForOf]="jobsStates[job.id].changes" let-change>
+                        <button class="swap-button" color="primary" mat-button (click)="doSwapStats(change)">INVERSER {{change[0]}} avec {{change[1]}}</button>
+                    </ng-template>
+                </mat-action-row>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </ng-template>
+</div>

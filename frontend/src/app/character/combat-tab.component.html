@@ -1,0 +1,297 @@
+<mat-card class="life-mana stats-card">
+    <mat-card-content>
+        <div class="stat">
+            <div class="stat-icon">
+                <span class="game-icon game-icon-hearts"></span>
+            </div>
+            <div class="stat-value">
+                <div [class.life-danger]="character.ev > character.computedData.stats['EV']">
+                    <value-editor [title]="'Energie vitale'"
+                                  [value]="character.ev"
+                                  [maxValue]="character.computedData.stats['EV']"
+                                  (onChange)="changeStat('ev', $event)">
+                    </value-editor>
+                </div>
+                <div class="stat-label">E.Vitale</div>
+            </div>
+        </div>
+        <div *ngIf="character.computedData.stats['EA']" class="stat">
+            <div class="stat-icon">
+                <span class="game-icon game-icon-abstract-061"></span>
+            </div>
+            <div class="stat-value">
+                <div [class.bg-danger]="character.ea > character.computedData.stats['EA']">
+                    <value-editor [title]="'Energie astrale'"
+                                  [value]="character.ea"
+                                  [maxValue]="character.computedData.stats['EA']"
+                                  (onChange)="changeStat('ea', $event)">
+                    </value-editor>
+                </div>
+                <div class="stat-label">E.Astrale</div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<mat-card class="combat-stats stats-card">
+    <mat-card-content>
+        <div class="stat-row">
+            <div class="stat">
+                <div class="stat-icon">
+                    <span class="ra ra-sword"></span>
+                </div>
+                <div class="stat-value">
+                    <div>{{character.computedData.stats['AT']}}</div>
+                    <div class="stat-label">Attaque</div>
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-icon">
+                    <span class="ra ra-shield"></span>
+                </div>
+                <div class="stat-value">
+                    <div>{{character.computedData.stats['PRD']}}</div>
+                    <div class="stat-label">Parade</div>
+                </div>
+            </div>
+        </div>
+        <div class="stat-row">
+            <div class="stat">
+                <div class="stat-icon">
+                    <span class="ra ra-vest"></span>
+                </div>
+                <div class="stat-value">
+                    <div>{{character.computedData.stats['PR']}}</div>
+                    <div class="stat-label">Protection</div>
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-icon">
+                    <span class="ra ra-aura"></span>
+                </div>
+                <div class="stat-value">
+                    <div>{{character.computedData.stats['PR_MAGIC']}}</div>
+                    <div class="stat-label">Pr magique</div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="character.computedData.weaponsDamages.length" class="equiped-weapons-stats stats-card">
+    <mat-card-subtitle>Dégât des armes (bonus compris)</mat-card-subtitle>
+    <mat-card-content>
+        <div *ngFor="let dmg of character.computedData.weaponsDamages" class="equiped-weapons-damages">
+            <mat-icon *ngIf="dmg.incompatible" color="warn">warning</mat-icon>
+            <span>
+                                <span>
+                                    {{dmg.damage}}
+                                </span>
+                                <span class="damage-weapon-name secondary-text">
+                                    {{dmg.name}}
+                                </span>
+                            </span>
+        </div>
+    </mat-card-content>
+</mat-card>
+<mat-card class="basic-stats stats-card">
+    <mat-card-content>
+        <div class="stat-row">
+            <div class="stat">
+                <div class="stat-name">
+                    COU
+                </div>
+                <div class="stat-value">
+                    {{character.computedData.stats['COU']}}
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-name">
+                    FO
+                </div>
+                <div class="stat-value">
+                    {{character.computedData.stats['FO']}}
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat">
+                <div class="stat-name">
+                    AD
+                </div>
+                <div class="stat-value">
+                    {{character.computedData.stats['AD']}}
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-name">
+                    CHA
+                </div>
+                <div class="stat-value">
+                    {{character.computedData.stats['CHA']}}
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-row" *ngIf="character.computedData.stats['THROW_MODIFIER']">
+            <div class="stat">
+                <div class="stat-name">
+                    Lancer
+                </div>
+                <div class="stat-value">
+                    {{character.computedData.stats['AD'] + character.computedData.stats['THROW_MODIFIER']}}
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-name">
+                </div>
+                <div class="stat-value">
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+<mat-card class="stats-card" *ngIf="character.computedData.stats['INT'] > 12">
+    <mat-card-content>
+        <div class="stat-row" *ngIf="character.computedData.stats['INT'] > 12">
+            <div *ngIf="character.computedData.stats['INT'] > 12" class="stat large-stat">
+                <div class="stat-name">
+                    Bonus dégâts des sorts
+                </div>
+                <div class="stat-value small-stat-value">
+                    {{(character.computedData.stats['INT'] - 12)}}
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+<mat-card class="magic-stat stats-card">
+    <mat-card-content>
+        <div class="stat-row">
+            <div class="stat">
+                <div class="stat-name">
+                    RESM
+                </div>
+                <div class="stat-value">
+                    {{character.computedData.stats['RESM']}}
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-name">
+                    INT
+                </div>
+                <div class="stat-value">
+                    {{character.computedData.stats['INT']}}
+                </div>
+            </div>
+        </div>
+        <div class="stat-row" *ngIf="character.hasMagic()">
+            <div class="stat">
+                <div class="stat-name">
+                    MPHYS
+                </div>
+                <div class="stat-value">
+                    {{character.computedData.stats['MPHYS']}}
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-name">
+                    MPSY
+                </div>
+                <div class="stat-value">
+                    {{character.computedData.stats['MPSY']}}
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<mat-card class="stats-card movement-card">
+    <mat-card-title>Déplacement tactique</mat-card-title>
+    <mat-card-subtitle>1 tour = 2 secondes</mat-card-subtitle>
+    <mat-card-content>
+        <ul>
+            <li>
+                <strong>Normal</strong>
+                {{character.computedData?.tacticalMovement?.distance?.toPrecision(2)}} m/s pendant
+                {{character.computedData?.tacticalMovement?.maxDuration?.toFixed(0)}} secondes
+            </li>
+            <li>
+                <strong>Sprint</strong> (Après un déplacement normal):
+                {{character.computedData?.tacticalMovement?.sprintDistance?.toPrecision(2)}} m/s pendant
+                {{character.computedData?.tacticalMovement?.sprintMaxDuration?.toFixed(0)}} secondes
+            </li>
+        </ul>
+    </mat-card-content>
+</mat-card>
+<mat-card class="stats-card weapons-card">
+    <mat-card-title>Armes</mat-card-title>
+    <mat-card-content>
+        <div *ngIf="character.computedData.itemsBySlotsAll[1]" class="weapons-list">
+            <div class="separator weapon"
+                 *ngFor="let item of character.computedData.itemsBySlotsAll[1]">
+                <app-item-line [gmView]="inGroupTab"
+                               [item]="item"
+                               [itemMenu]="itemMenu"
+                               [hideShouldPutIntoContainerMarker]="true"
+                               [character]="character">
+                </app-item-line>
+            </div>
+        </div>
+    </mat-card-content>
+    <mat-menu #itemMenu="matMenu">
+        <ng-template matMenuContent let-item="item">
+            <button mat-menu-item (click)="itemActionService.onAction('show_to_gm', item)" *ngIf="!item.data.shownToGm">
+                <mat-icon>visibility</mat-icon>
+                Montrer l'objet au MJ
+            </button>
+            <button mat-menu-item
+                    *ngIf="!item.data.equiped"
+                    (click)="itemActionService.onAction('equip', item)">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon"
+                          class="ra-mat-button-icon-24"></mat-icon>
+                Équiper
+            </button>
+            <button mat-menu-item
+                    *ngIf="!item.data.equiped"
+                    (click)="unEquipAllAndEquip(item)">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon"
+                          class="ra-mat-button-icon-24"></mat-icon>
+                Équiper à la place des autres
+            </button>
+            <button mat-menu-item
+                    *ngIf="item.data.equiped"
+                    (click)="itemActionService.onAction('unequip', item)">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon"
+                          class="ra-mat-button-icon-24"></mat-icon>
+                Déséquipé
+            </button>
+            <button mat-menu-item (click)="sharpenWeapon(item)" *ngIf="isItemWeapon(item.template)">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-sword-smithing"
+                          class="ra-mat-button-icon-24"></mat-icon>
+                Aiguiser (+1 PI / 3 combats)
+            </button>
+        </ng-template>
+    </mat-menu>
+</mat-card>
+<mat-card class="equipment">
+    <mat-card-title>Équipement</mat-card-title>
+    <mat-card-content>
+        <div *ngFor="let slot of character.computedData.itemSlots">
+            {{slot.name}}:
+            <div class="items-list equiped-items">
+                <div *ngFor="let item of character.computedData.itemsBySlots[slot.id]; let i = index">
+                    <div class="items-list-element">
+                        <app-item-line [character]="character"
+                                       [itemMenu]="itemMenu"
+                                       [item]="item"
+                                       [hideEquippedMarker]="true"
+                                       [gmView]="inGroupTab">
+                        </app-item-line>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

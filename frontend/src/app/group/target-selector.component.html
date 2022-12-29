@@ -1,0 +1,82 @@
+<div class="target-selector">
+    <span cdk-overlay-origin #targetSelectorOrigin="cdkOverlayOrigin"></span>
+    <mat-icon *ngIf="!fighter.target"
+             fontSet="game-icon"
+             matRipple
+             fontIcon="game-icon-targeted"
+             class="selector-icon"
+             (click)="displaySelector($event)">
+    </mat-icon>
+    <div *ngIf="fighter.target" class="selected-fighter" (click)="displaySelector($event)">
+        <div class="targeted-icon">
+            <i [style.color]="'#' + fighter.target.color"
+               [class.ra-player]="!fighter.target.isMonster"
+               [class.ra-monster-skull]="fighter.target.isMonster"
+               style="position: absolute"
+               class="ra ra-lg"></i>
+            <span *ngIf="fighter.target.number"
+                  class="targeted-number">
+                {{fighter.target.number}}
+            </span>
+        </div>
+        <div class="targeted-name secondary-text">
+            {{fighter.target.name}}
+        </div>
+    </div>
+</div>
+
+<ng-template cdk-connected-overlay
+             [cdkConnectedOverlayPositions]="positions"
+             [cdkConnectedOverlayOrigin]="targetSelectorOrigin"
+             [cdkConnectedOverlayOpen]="showSelector"
+             [cdkConnectedOverlayHeight]="selectorHeight"
+             [cdkConnectedOverlayMinHeight]="selectorMinHeight"
+             cdkConnectedOverlayHasBackdrop
+             (backdropClick)="hideSelector()">
+    <mat-card style="padding: 0">
+        <mat-tab-group [selectedIndex]="selectedTabIndex">
+            <mat-tab label="Monstres">
+                <div class="target-list">
+                    <ng-template ngFor let-target [ngForOf]="targets">
+                        <div *ngIf="target.isMonster" class=target-element (click)="selectTarget(target)">
+                            <div class="target-icon">
+                                <i [style.color]="'#' + target.color"
+                                   [class.ra-player]="!target.isMonster"
+                                   [class.ra-monster-skull]="target.isMonster"
+                                   style="position: absolute"
+                                   class="ra ra-3x"></i>
+                                <span *ngIf="target.number" class="target-number">
+                                {{target.number}}
+                            </span>
+                            </div>
+                            <div *ngIf="target.name" class="target-name">
+                                {{target.name}}
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+            </mat-tab>
+            <mat-tab label="Joueurs">
+                <div class="target-list">
+                    <ng-template ngFor let-target [ngForOf]="targets">
+                        <div *ngIf="!target.isMonster" class=target-element (click)="selectTarget(target)">
+                            <div class="target-icon">
+                                <i [style.color]="'#' + target.color"
+                                   [class.ra-player]="!target.isMonster"
+                                   [class.ra-monster-skull]="target.isMonster"
+                                   style="position: absolute"
+                                   class="ra ra-3x"></i>
+                                <span *ngIf="target.number" class="target-number">
+                            {{target.number}}
+                        </span>
+                            </div>
+                            <div *ngIf="target.name" class="target-name">
+                                {{target.name}}
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card>
+</ng-template>

@@ -1,0 +1,20 @@
+mat-card {
+    margin: 5px;
+
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+mat-card.clickable {
+    cursor: pointer;
+}
+
+.create-group {
+    display: flex;
+    align-items: center;
+}
+
+.loading-groups {
+    display: flex;
+    justify-content: space-around;
+}

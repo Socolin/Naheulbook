@@ -1,0 +1,33 @@
+:host {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 400px;
+    max-width: 600px;
+
+    form {
+        > mat-form-field {
+            width: 100%;
+        }
+        .unit {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 8px;
+            align-items: center;
+        }
+        .is-gm {
+            padding-top: 8px;
+        }
+    }
+
+    .attribution {
+        display: grid;
+        grid-template-columns: 200px 200px auto;
+        grid-column-gap: 8px;
+        align-items: center;
+    }
+    .add-button,
+    .add-attribution {
+        text-align: right;
+    }
+}

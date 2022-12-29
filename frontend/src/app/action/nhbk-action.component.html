@@ -1,0 +1,38 @@
+<div [ngSwitch]="action.type">
+    <ng-template [ngSwitchCase]="'addEv'">
+        Redonne {{asNhbkAddEvAction(action).data.ev}} E.V.
+    </ng-template>
+    <ng-template [ngSwitchCase]="'addEa'">
+        Redonne {{asNhbkAddEaAction(action).data.ea}} E.A.
+    </ng-template>
+    <ng-template [ngSwitchCase]="'removeItem'">
+        Supprime l'objet
+    </ng-template>
+    <ng-template [ngSwitchCase]="'addItem'">
+        Ajoute l'objet {{asNhbkAddItemAction(action).data.itemName}} <span *ngIf="asNhbkAddItemAction(action).data.quantity > 1">en {{asNhbkAddItemAction(action).data.quantity}} exemplaire</span>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'addCustomModifier'">
+        Applique le modificateur <em>{{asNhbkAddCustomModifierAction(action).data.modifier.name}}</em> pour <em>{{effectDuration}}</em>
+        <span *ngIf="asNhbkAddCustomModifierAction(action).data.modifier?.values?.length">
+            avec les effets suivants:
+            <span *ngFor="let modifier of asNhbkAddCustomModifierAction(action).data.modifier.values">
+                {{modifier | modifier}}
+            </span>
+        </span>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'addEffect'">
+        <span *ngIf="effectInfo">Applique l'effet {{effectInfo.name}} pour {{effectDuration}}</span>
+        <span *ngIf="effectInfo?.modifiers?.length">
+            avec les effets suivants:
+            <span *ngFor="let modifier of effectInfo?.modifiers">
+                {{modifier | modifier}}
+            </span>
+        </span>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'custom'">
+        [RP] {{asNhbkCustomAction(action).data.text}}
+    </ng-template>
+    <ng-template ngSwitchDefault>
+        No data for {{action.type}}
+    </ng-template>
+</div>

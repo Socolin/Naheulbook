@@ -1,0 +1,42 @@
+<mat-form-field>
+    <mat-select placeholder="Type de durée" [ngModel]="durable.durationType" (selectionChange)="updateDuration($event)" (closed)="focusSelector()">
+        <mat-option *ngIf="hiddenType.indexOf('combat') === -1" value="combat">Nombre de combat</mat-option>
+        <mat-option *ngIf="hiddenType.indexOf('lap') === -1" value="lap" >Nombre de tour</mat-option>
+        <mat-option *ngIf="hiddenType.indexOf('time') === -1" value="time">Temps</mat-option>
+        <mat-option *ngIf="hiddenType.indexOf('custom') === -1" value="custom">Autre</mat-option>
+        <mat-option *ngIf="hiddenType.indexOf('forever') === -1" value="forever">Permanent</mat-option>
+    </mat-select>
+</mat-form-field>
+
+<div class="duration-value">
+    <div [hidden]="durable.durationType !== 'custom'">
+        <mat-form-field>
+            <input #customDurationInput matInput placeholder="Durée" [(ngModel)]="durable.duration">
+        </mat-form-field>
+    </div>
+
+    <div [hidden]="durable.durationType !== 'time'">
+        <div>
+            <span>
+                {{durable.timeDuration | nhbkDuration}}
+            </span>
+            <span>
+            <button mat-icon-button (click)="openDurationSelector()">
+                <mat-icon>update</mat-icon>
+            </button>
+        </span>
+        </div>
+    </div>
+
+    <div [hidden]="durable.durationType !== 'combat'">
+        <mat-form-field class="combat-count-input">
+            <input #combatCountInput matInput [(ngModel)]="durable.combatCount" placeholder="Combat(s)" type="number" min="0" step="1">
+        </mat-form-field>
+    </div>
+    <div [hidden]="durable.durationType !== 'lap'">
+        <mat-form-field class="lap-count-input">
+            <input #lapCountInput matInput [(ngModel)]="durable.lapCount" placeholder="Tour(s)" type="number" min="0" step="1">
+        </mat-form-field>
+    </div>
+</div>
+

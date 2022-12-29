@@ -1,0 +1,22 @@
+:host {
+    display: block;
+    .child {
+        margin-left: 24px;
+        padding-left: 15px;
+        border-left-style: solid;
+        border-left-width: 1px;
+    }
+    .top-level-items:nth-child(4n+5) {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+    }
+    .item {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        > app-item-line {
+            flex: 1 auto;
+        }
+    }
+}

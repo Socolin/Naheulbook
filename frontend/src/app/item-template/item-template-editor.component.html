@@ -1,0 +1,113 @@
+<mat-card>
+    <div class="name-line">
+        <mat-form-field>
+            <!-- placeholder start with an invisible character so chrome autocomplete this field with user name -->
+            <input matInput
+                   cdkFocusInitial
+                   placeholder="&#x2063;Nom de l'objet"
+                   autocomplete="off"
+                   required
+                   [(ngModel)]="itemTemplate.name"/>
+        </mat-form-field>
+        <icon [icon]="itemTemplate.data.icon" (click)="openSelectIconDialog()"></icon>
+    </div>
+    <div class="not-identified-name-line">
+        <mat-form-field>
+            <!-- placeholder start with an invisible character so chrome autocomplete this field with user name -->
+            <input matInput
+                   placeholder="&#x2063;Nom quand non identifié"
+                   autocomplete="off"
+                   [(ngModel)]="itemTemplate.data.notIdentifiedName"/>
+        </mat-form-field>
+        <button mat-icon-button
+                [disabled]="!itemTemplate.name"
+                (click)="itemTemplate.data.notIdentifiedName = itemTemplate.name"
+                matTooltip="Copier le nom de l'objet">
+            <mat-icon>content_copy</mat-icon>
+        </button>
+        <button mat-icon-button
+                [disabled]="!itemTemplate.name"
+                (click)="automaticNotIdentifiedName()"
+                matTooltip="Mettre un nom générique">
+            <mat-icon>refresh</mat-icon>
+        </button>
+    </div>
+    <div class="source-line">
+        <mat-form-field>
+            <mat-select placeholder="Source" [(ngModel)]="itemTemplate.source" (selectionChange)="changeSource($event.value)" required>
+                <mat-option value="official" *ngIf="loginService.currentLoggedUser?.admin">Officiel</mat-option>
+                <mat-option value="community">Communautaire</mat-option>
+                <mat-option value="private">Privé</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="price-line">
+        <mat-form-field>
+            <input matInput
+                   autocomplete="off"
+                   placeholder="Prix"
+                   [(ngModel)]="itemTemplate.data.price"
+                   type="number"/>
+            <span matSuffix>P.O.</span>
+        </mat-form-field>
+        <mat-form-field style="flex: 1 auto; margin-left: 10px">
+            <input matInput
+                   autocomplete="off"
+                   placeholder="Description"
+                   [(ngModel)]="itemTemplate.data.description"/>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field style="width: 100%">
+            <input matInput
+                   autocomplete="off"
+                   placeholder="Note"
+                   [(ngModel)]="itemTemplate.data.note"/>
+        </mat-form-field>
+    </div>
+</mat-card>
+
+<mat-card>
+    <mat-card-title>Section</mat-card-title>
+    <mat-card-content class="section-list">
+        <mat-form-field *ngIf="sections">
+            <mat-select [(ngModel)]="selectedSection" placeholder="Section" required>
+                <mat-option *ngFor="let section of sections" [value]="section">
+                    {{section.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="selectedSection">
+            <mat-select [(ngModel)]="itemTemplate.subCategoryId" placeholder="Sous section" required>
+                <mat-option *ngFor="let subCategory of selectedSection.subCategories" [value]="subCategory.id">
+                    {{subCategory.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-card-content>
+</mat-card>
+
+<item-template-editor-module
+    *ngFor="let moduleName of modules"
+    [itemTemplate]="itemTemplate"
+    [slots]="slots"
+    [gods]="gods"
+    [itemTypes]="itemTypes"
+    [skills]="skills"
+    [skillsById]="skillsById"
+    (onDelete)="removeModule(moduleName)"
+    [moduleName]="moduleName">
+</item-template-editor-module>
+
+<button mat-raised-button (click)="openAddModuleDialog()">
+    <mat-icon>add</mat-icon> Ajouter un module
+</button>
+
+<h3 class="mat-h3">Aperçu</h3>
+
+<item-template [jobsName]="jobsName"
+               [originsName]="originsName"
+               [godsByTechName]="godsByTechName"
+               [itemTemplate]="itemTemplate">
+</item-template>
+

@@ -1,0 +1,26 @@
+<h2 matDialogTitle>Paramètres</h2>
+<mat-dialog-content>
+    Permettre aux joueurs de:
+    <div class="configs">
+        <mat-checkbox [(ngModel)]="config.allowPlayersToAddObject">Ajouter des objets</mat-checkbox>
+        <mat-checkbox [(ngModel)]="config.allowPlayersToSeeSkillGmDetails">Voir les détails MJ sur les compétences</mat-checkbox>
+        <mat-checkbox [(ngModel)]="config.allowPlayersToSeeGemPriceWhenIdentified">Voir le prix des gemmes identifiées</mat-checkbox>
+    </div>
+    Lors de la création d'un monstre
+    <div class="configs">
+        <mat-checkbox [(ngModel)]="config.autoIncrementMonsterNumber">Incrémenter le numéro du monstre</mat-checkbox>
+        <mat-checkbox [(ngModel)]="config.autoIncrementMonsterColor">Changer la couleur du monstre</mat-checkbox>
+    </div>
+</mat-dialog-content>
+<mat-card-actions align="end">
+    <button mat-button
+            mat-dialog-close
+            color="primary">
+        FERMER
+    </button>
+    <button mat-button
+            (click)="save()"
+            color="primary">
+        SAUVEGARDER
+    </button>
+</mat-card-actions>

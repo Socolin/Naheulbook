@@ -1,0 +1,54 @@
+@import "~app/style/responsive-utils";
+
+:host {
+    mat-card {
+        margin: 8px 5px;
+    }
+
+    .prev-next-buttons {
+        gap: 8px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        @include for-phone-only {
+            grid-template-columns: 1fr;
+        }
+
+        > button {
+            width: 100%;
+        }
+    }
+
+    .filters {
+        display: grid;
+        gap: 8px;
+        align-items: center;
+        grid-template-columns: 1fr 32px 1fr 32px;
+        grid-template-areas:
+            "search search search search-loader"
+            "table-view table-view display-community display-community";
+        .search {
+            grid-area: search;
+        }
+        .search-loader {
+            grid-area: search-loader;
+        }
+        .table-view {
+            grid-area: table-view;
+        }
+        .display-community {
+            grid-area: display-community;
+        }
+    }
+
+    .section-selector {
+        padding-top: 20px;
+        mat-form-field {
+            width: 100%;
+        }
+    }
+
+    .items-table {
+        margin: 5px;
+    }
+
+}

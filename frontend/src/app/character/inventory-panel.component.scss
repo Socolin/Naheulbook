@@ -1,0 +1,57 @@
+@import "~app/style/responsive-utils";
+
+:host {
+    display: block;
+    $padding-create-button: 72px;
+
+    padding-bottom: $padding-create-button;
+
+    /* For safari.. fab button is hidden if component is too small. */
+    /* So compute viewport height - toolbar - padding */
+    min-height: calc(100vh - 64px - 32px - #{$padding-create-button});
+    @include for-phone-only {
+        min-height: calc(100vh - 16px - 56px - #{$padding-create-button});
+    }
+
+    .item:nth-child(4n+0) {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+    }
+
+    .inventory-header {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-template-areas: "view filter sort";
+        align-items: center;
+        grid-column-gap: 8px;
+
+        .filter {
+            grid-area: filter;
+            min-width: 120px;
+        }
+
+        .view {
+            grid-area: view;
+            min-width: 120px;
+        }
+
+        .sort {
+            grid-area: sort;
+        }
+    }
+
+    .selected-view-option {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        column-gap: 8px;
+    }
+}
+
+.menu-button-with-item-icon {
+    display: flex;
+    align-items: center;
+    icon {
+        margin-right: 16px;
+    }
+}

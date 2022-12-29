@@ -1,0 +1,58 @@
+<ng-template [ngIf]="!(gmModeService.gmMode | async)">
+    <p class="mat-body">
+        Cette section permet d'accéder à un certains nombres d'informations utiles pour les <strong>Maître de jeu</strong>.
+    </p>
+    <p class="mat-body">
+        Si vous êtes un joueur vous ne devriez pas avoir besoin de venir ici.
+    </p>
+    <p class="mat-body">
+        Si vous êtes un <strong>Maître de jeu</strong> vous pouvez activer le mode <strong>Maître de jeu</strong> dans le menu
+        accessible via le bouton <mat-icon>menu_vert</mat-icon> en haut à gauche de cette page, afin d'avoir
+        accès à toutes les informations.
+    </p>
+</ng-template>
+
+<div class="database-menu">
+    <a [routerLink]="['/database/origins']">
+        <mat-card matRipple>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-ogre" class="ra-mat-button-icon-32"></mat-icon>
+            Origines
+        </mat-card>
+    </a>
+    <a [routerLink]="['/database/jobs']">
+        <mat-card matRipple>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-diploma" class="ra-mat-button-icon-32"></mat-icon>
+            Metiers
+        </mat-card>
+    </a>
+    <a [routerLink]="['/database/skills']" *ngIf="gmModeService.gmMode | async">
+        <mat-card matRipple>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-32"></mat-icon>
+            Compétences
+        </mat-card>
+    </a>
+    <a [routerLink]="['/database/items']" *ngIf="gmModeService.gmMode | async">
+        <mat-card matRipple>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-32"></mat-icon>
+            Objets
+        </mat-card>
+    </a>
+    <a [routerLink]="['/database/effects']" *ngIf="gmModeService.gmMode | async">
+        <mat-card matRipple>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-broken-bone" class="ra-mat-button-icon-32"></mat-icon>
+            Effets
+        </mat-card>
+    </a>
+    <a [routerLink]="['/database/monsters']" *ngIf="gmModeService.gmMode | async">
+        <mat-card matRipple>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-dragon-head" class="ra-mat-button-icon-32"></mat-icon>
+            Bestiaire
+        </mat-card>
+    </a>
+    <a [routerLink]="['/map']">
+        <mat-card matRipple>
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-compass" class="ra-mat-button-icon-32"></mat-icon>
+            Cartographie
+        </mat-card>
+    </a>
+</div>

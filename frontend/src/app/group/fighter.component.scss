@@ -1,0 +1,178 @@
+@import "~app/style/responsive-utils";
+:host {
+    .fighter {
+        padding-bottom: 4px;
+
+        @include for-tablet-portrait-up {
+            padding-right: 8px;
+            padding-left: 8px;
+        }
+
+        display: grid;
+        align-items: center;
+        grid-column-gap: 8px;
+
+        grid-template-columns: 48px 1fr
+            minmax(48px, 100px) minmax(48px, 100px)
+            minmax(48px, 100px) minmax(48px, 100px)
+            minmax(48px, 100px) minmax(48px, 100px)
+            minmax(48px, 100px) minmax(48px, 100px)
+            8px;
+        grid-template-areas:
+            "icon name name name name name name name name name name"
+            "icon . at   ev   prd  esq  pr   cou  resm ea ."
+            ". dmg dmg  dmg  dmg  dmg  dmg    .    .    .    . "
+            ". effects effects effects effects effects effects effects effects effects effects"
+            ". note note note note note note note note note note"
+            ". expd expd expd expd expd expd expd expd expd expd";
+
+        @include for-phone-only {
+            grid-template-columns: 48px minmax(20px, 1fr) minmax(64px, 85px) minmax(76px, 92px) 8px;
+            grid-template-areas: "icon name name name name"
+            "icon . at ev ."
+            ". . prd esq ."
+            "dmg dmg pr cou ."
+            "dmg dmg resm ea ."
+            "dmg dmg . . ."
+            "effects effects effects effects effects"
+            "note note note note note";
+        }
+
+        @include for-tablet-landscape-up {
+            grid-template-areas:
+                "icon name name name name name    name     name   name    name    name"
+                "icon .    at   ev   prd  esq     pr       cou    resm    ea      ."
+                ".    dmg  dmg  dmg  dmg  effects effects effects effects effects ."
+                ".    note note note note note    note    note    note    note    ."
+                ".    expd expd expd expd expd    expd    expd    expd    expd    .";
+        }
+
+        .field-with-label {
+            padding: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            flex-wrap: nowrap;
+
+            @include for-phone-only {
+                flex-direction: row;
+            }
+
+            .label {
+                opacity: 0.54;
+                font-size: 14px;
+            }
+
+            .label::after {
+                @include for-phone-only {
+                    content: ':';
+                }
+            }
+        }
+
+        .target {
+            grid-area: target;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .icon {
+            grid-area: icon;
+            cursor: pointer;
+        }
+
+        .name {
+            grid-area: name;
+            display: grid;
+            grid-template-columns: 1fr 40px;
+            align-items: center;
+            > span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        .at {
+            grid-area: at;
+        }
+
+        .prd {
+            grid-area: prd;
+        }
+
+        .esq {
+            grid-area: esq;
+        }
+
+        .ev {
+            grid-area: ev;
+        }
+
+        .ea {
+            grid-area: ea;
+        }
+
+        .pr {
+            grid-area: pr;
+        }
+
+        .resm {
+            grid-area: resm;
+        }
+
+        .dmg {
+            text-align: center;
+            grid-area: dmg;
+            .damage-weapon-name {
+                font-size: 14px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .cou {
+            grid-area: cou;
+        }
+
+        .cdn {
+            text-align: center;
+            grid-area: cdn;
+        }
+
+        .note {
+            grid-area: note;
+        }
+
+        .expd {
+            text-align: center;
+            grid-area: expd;
+            align-items: center;
+        }
+
+        .effects {
+            grid-area: effects;
+            .effect {
+                padding-left: 32px;
+                align-items: center;
+                display: grid;
+                grid-template-columns: 1fr auto 40px;
+                grid-template-areas: "name duration actions";
+                grid-gap: 8px;
+
+                .effect-name {
+                    grid-area: name;
+                }
+                .effect-duration {
+                    grid-area: duration;
+                }
+                .effect-actions {
+                    grid-area: actions;
+                }
+            }
+        }
+    }
+
+}

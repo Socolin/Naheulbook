@@ -1,0 +1,28 @@
+:host {
+    .content {
+        padding: 0 !important;
+
+        mat-form-field {
+            width: 100%;
+        }
+
+        .filter-result {
+            display: grid;
+            align-items: center;
+            padding: 4px 16px;
+        }
+
+        .customize-button {
+            float: right;
+        }
+/*
+        .edit-effect-button {
+            padding: 0 16px;
+            min-height: 48px;
+            display: grid;
+            grid-template-columns: 24px 1fr;
+            grid-gap: 8px;
+            align-items: center;
+        }*/
+    }
+}

@@ -1,0 +1,41 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>Changer de métier</span>
+    <button mat-button (click)="saveJobChange()">
+        CONFIRMER
+    </button>
+</mat-toolbar>
+
+<div class="content mat-typography">
+    <p *ngIf="data.character.hasFlag('CAN_CHANGE_JOB')" class="text-warning">
+        Ne peux pas changer de métier
+    </p>
+
+    <mat-list>
+        <mat-list-item *ngFor="let job of jobs">
+            <span matLine>{{ job.name }}</span>
+            <button mat-icon-button [matMenuTriggerFor]="confirmDelete">
+                <mat-icon>delete</mat-icon>
+            </button>
+            <mat-menu #confirmDelete="matMenu">
+                <button mat-menu-item (click)="removeJob(job)">
+                    Supprimer
+                </button>
+            </mat-menu>
+        </mat-list-item>
+    </mat-list>
+
+    <job-selector [ad]="data.character.computedData.baseStat['AD']"
+                  [fo]="data.character.computedData.baseStat['FO']"
+                  [int]="data.character.computedData.baseStat['INT']"
+                  [cha]="data.character.computedData.baseStat['CHA']"
+                  [cou]="data.character.computedData.baseStat['COU']"
+                  [displayNoJobOption]="false"
+                  [selectedOrigin]="data.character.origin"
+                  [selectedJobs]="jobs"
+                  [allowSwapStats]="false"
+                  (jobChange)="addJob($event)">
+    </job-selector>
+</div>

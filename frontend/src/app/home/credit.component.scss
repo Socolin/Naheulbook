@@ -1,0 +1,31 @@
+.credit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.credits {
+    text-align: justify;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+
+mat-toolbar {
+    mat-icon {
+        cursor: pointer;
+    }
+
+    .app-toolbar {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+        > a {
+            padding-right: 10px;
+        }
+    }
+
+    .home-link {
+        color: inherit;
+    }
+}

@@ -1,0 +1,10 @@
+<ng-container *ngIf="!initialized">
+    <div class="initializing">
+        <div style="display: flex; align-items: center; flex-direction: column">
+            <div class="lds-ripple"><div></div><div></div></div>
+            <div>Initialisation</div>
+        </div>
+    </div>
+</ng-container>
+<router-outlet (activate)="initialized = true"></router-outlet>
+<app-quick-command></app-quick-command>

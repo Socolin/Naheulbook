@@ -1,0 +1,104 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            {{monsterTemplate.name}}
+        </mat-card-title>
+        <button *ngIf="isAdmin" mat-icon-button [matMenuTriggerFor]="menuMonster" aria-label="Ouvrir le menu d'édition du monstre">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+    </mat-card-header>
+    <mat-menu #menuMonster="matMenu">
+        <button mat-menu-item
+                (click)="openEditMonsterDialog()">
+            <mat-icon>edit</mat-icon>
+            Éditer
+        </button>
+    </mat-menu>
+    <mat-card-content>
+        <div *ngIf="monsterTemplate.data.special">{{monsterTemplate.data.note}}</div>
+        <ng-container *ngIf="!monsterTemplate.data.special">
+            <div class="section-title">
+                Caractéristiques
+            </div>
+            <div class="section-content monster-stats-row">
+                <div class="field at">
+                    <span class="label">AT</span>
+                    <span class="value">{{monsterTemplate.data.at}}</span>
+                </div>
+                <div class="field prd" *ngIf="monsterTemplate.data.prd">
+                    <span class="label">PRD</span>
+                    <span class="value">{{monsterTemplate.data.prd}}</span>
+                </div>
+                <div class="field esq" *ngIf="monsterTemplate.data.esq">
+                    <span class="label">ESQ</span>
+                    <span class="value">{{monsterTemplate.data.esq}}</span>
+                </div>
+                <div class="field ev">
+                    <span class="label">EV</span>
+                    <span class="value">{{monsterTemplate.data.ev}}</span>
+                </div>
+                <div class="field ea" *ngIf="monsterTemplate.data.ea">
+                    <span class="label">EA</span>
+                    <span class="value">{{monsterTemplate.data.ea}}</span>
+                </div>
+                <div class="field pr">
+                    <span class="label">PR</span>
+                    <span class="value">
+                    {{monsterTemplate.data.pr}} <span *ngIf="monsterTemplate.data.pr_magic">({{monsterTemplate.data.pr_magic}})</span>
+                </span>
+                </div>
+                <div class="field cou">
+                    <span class="label">COU</span>
+                    <span class="value">{{monsterTemplate.data.cou}}</span>
+                </div>
+                <div class="field xp">
+                    <span class="label">XP</span>
+                    <span class="value">{{monsterTemplate.data.xp}}</span>
+                </div>
+            </div>
+            <ng-container *ngIf="monsterTemplate.data.dmg">
+                <div class="section-title">
+                    Dégât
+                </div>
+                <div class="section-content">{{monsterTemplate.data.dmg}}</div>
+            </ng-container>
+            <ng-container *ngIf="monsterTemplate.data.note">
+                <div class="section-title">
+                    Note
+                </div>
+                <div class="section-content" [innerHTML]="monsterTemplate.data.note | markdown"></div>
+            </ng-container>
+        </ng-container>
+
+        <ng-template *ngIf="traisById && monsterTemplate.data.traits && monsterTemplate.data.traits.length">
+            <div class="section-title">
+                Traits
+            </div>
+            <div class="section-content monster-traits-row">
+                <div *ngFor="let trait of monsterTemplate.data.traits">
+                    <monster-trait [trait]="traisById[trait.traitId]" [traitInfo]="trait"></monster-trait>
+                </div>
+            </div>
+        </ng-template>
+
+        <div *ngIf="monsterTemplate.inventory && monsterTemplate.inventory.length">
+            <div class="section-title">
+                Inventaire
+            </div>
+            <div class="section-content">
+                <div *ngFor="let inventoryElement of monsterTemplate.inventory" class="inventory-element" mat-ripple (click)="openItemInfo(inventoryElement.itemTemplate)">
+                    <icon [icon]="inventoryElement.itemTemplate.data.icon"></icon>
+                    <span>
+                        <span *ngIf="inventoryElement.minCount === inventoryElement.maxCount && inventoryElement.minCount !== 1">{{inventoryElement.minCount}}</span>
+                        <span *ngIf="inventoryElement.minCount !== inventoryElement.maxCount">{{inventoryElement.minCount}} - {{inventoryElement.maxCount}}</span>
+                                {{inventoryElement.itemTemplate.name}}
+                                <span *ngIf="inventoryElement.minUg !== undefined && inventoryElement.minUg !== inventoryElement.maxUg">({{inventoryElement.minUg}} - {{inventoryElement.maxUg}} U.G.)</span>
+                        <span *ngIf="inventoryElement.minUg !== undefined && inventoryElement.minUg === inventoryElement.maxUg">({{inventoryElement.minUg}} U.G.)</span>
+                    </span>
+                    <span>{{inventoryElement.chance * 100 | number:'1.0-2'}}%</span>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+

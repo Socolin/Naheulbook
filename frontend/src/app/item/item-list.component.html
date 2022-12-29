@@ -1,0 +1,88 @@
+<div *ngIf="items?.length" class="multi-select-header separator">
+    <mat-checkbox #selectAllCheckbox (change)="toggleSelectAll($event.checked)"></mat-checkbox>
+    <ng-container *ngIf="selectAllCheckbox.checked">
+        <button mat-icon-button matTooltip="Changer l'icône" (click)="openSelectIconDialog()" *ngIf="actionEnabled('changeIcon')">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-card-exchange" class="ra-mat-button-icon-24">
+            </mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Renommer" (click)="openRenameItemsDialog()" *ngIf="actionEnabled('rename')">
+            <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="hideSelectedItems()" *ngIf="actionEnabled('hide')">
+            <mat-icon>done</mat-icon>
+        </button>
+        <button mat-icon-button [matMenuTriggerFor]="headerMenu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #headerMenu>
+            <button mat-menu-item (click)="identifyItems()" *ngIf="actionEnabled('identify')">
+                <mat-icon>visibility_on</mat-icon>
+                Identifié
+            </button>
+            <button mat-menu-item (click)="markItemsAsNotIdentified()" *ngIf="actionEnabled('identify')">
+                <mat-icon>visibility_off</mat-icon>
+                Non identifié
+            </button>
+            <button mat-menu-item [matMenuTriggerFor]="confirmDelete" *ngIf="actionEnabled('delete')">
+                <mat-icon>delete</mat-icon>
+                Supprimer
+            </button>
+        </mat-menu>
+        <mat-menu #confirmDelete>
+            <button mat-menu-item (click)="deleteSelectedItems()">
+                <mat-icon>check</mat-icon>
+                Confirmer
+            </button>
+        </mat-menu>
+    </ng-container>
+</div>
+<div *ngFor="let item of items" class="item separator with-selector">
+    <mat-checkbox [checked]="selectedItems.indexOf(item) !== -1" (change)="toggleSelectItem(item, $event.checked)"></mat-checkbox>
+    <div class="info" (click)="selectItem.emit(item)" mat-ripple>
+        <icon [notIdentified]="item.data.notIdentified" [enchanted]="!!item.template.data.enchantment" [icon]="item.data.icon"></icon>
+        <span class="name">
+            <span *ngIf="item.template.data.quantifiable">{{item.data.quantity}}&nbsp;</span>
+            {{item.data.name}}
+            <span *ngIf="item.data.notIdentified && item.data.name !== item.template.name">({{item.template.name}})</span>
+        </span>
+        <span>
+            <span *ngIf="item.price">&nbsp;{{item.price}}&nbsp;P.O.</span>
+        </span>
+    </div>
+    <button class="action"
+            mat-icon-button
+            [matMenuTriggerFor]="actionMenu"
+            [matMenuTriggerData]="{item: item}"
+            aria-label="Actions lié à l'objet">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #actionMenu>
+        <ng-template matMenuContent let-item="item">
+            <button mat-menu-item (click)="openSelectIconDialog([item])" *ngIf="actionEnabled('changeIcon')">
+                <mat-icon fontSet="game-icon" fontIcon="game-icon-card-exchange" class="ra-mat-button-icon-24">
+                </mat-icon>
+                Changer l'icône
+            </button>
+            <button mat-menu-item (click)="openRenameItemsDialog([item])" *ngIf="actionEnabled('rename')">
+                <mat-icon>edit</mat-icon>
+                Renommer
+            </button>
+            <button *ngIf="actionEnabled('identify') && item.data.notIdentified" mat-menu-item (click)="identifyItems([item])">
+                <mat-icon>visibility_on</mat-icon>
+                Identifié
+            </button>
+            <button *ngIf="actionEnabled('identify') && !item.data.notIdentified" mat-menu-item (click)="markItemsAsNotIdentified([item])">
+                <mat-icon>visibility_off</mat-icon>
+                Non identifié
+            </button>
+            <button mat-menu-item (click)="deleteSelectedItems([item])" *ngIf="actionEnabled('delete')">
+                <mat-icon>delete</mat-icon>
+                Supprimer
+            </button>
+            <button mat-menu-item (click)="hideSelectedItems([item])" *ngIf="actionEnabled('hide')">
+                <mat-icon>done</mat-icon>
+                Retirer de la liste
+            </button>
+        </ng-template>
+    </mat-menu>
+</div>

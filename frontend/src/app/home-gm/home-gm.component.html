@@ -1,0 +1,40 @@
+<mat-sidenav-container style="min-height: 100vh">
+    <mat-sidenav #start>
+        <h2 class="mat-h2" >Maître du Jeu</h2>
+        <mat-nav-list>
+            <ng-container *ngFor="let group of groups">
+                <a mat-list-item [routerLink]="['/gm/group/', group.id]">
+                    <mat-icon matListIcon>group</mat-icon> {{group.name}}
+                </a>
+            </ng-container>
+            <a mat-list-item [routerLink]="['/gm/group/list']">
+                <mat-icon matListIcon>list</mat-icon> Tous vos groupes
+            </a>
+            <a mat-list-item [routerLink]="['/gm/group/create']">
+                <mat-icon matListIcon>add</mat-icon>Créer un groupe
+            </a>
+        </mat-nav-list>
+        <common-nav></common-nav>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <mat-toolbar-row>
+                <button mat-icon-button (click)="start.open()" aria-label="Afficher le menu">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <div class="app-toolbar">
+                    <h1>
+                        Naheulbook
+                    </h1>
+                    <a class="home-link" aria-label="Page d'accueil" [routerLink]="['/']"><mat-icon>home</mat-icon></a>
+                </div>
+            </mat-toolbar-row>
+        </mat-toolbar>
+
+        <div class="app-content">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+

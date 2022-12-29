@@ -1,0 +1,55 @@
+:host {
+    >mat-card {
+        margin: 5px;
+    }
+    mat-card-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .effect-list {
+        .effect-element {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            grid-template-areas: "toggle info actions";
+            cursor: pointer;
+
+            -webkit-user-drag: none;
+            -webkit-tap-highlight-color: transparent;
+
+            .toggle {
+                grid-area: toggle;
+                padding-right: 16px;
+                padding-left: 8px;
+            }
+
+            .info {
+                padding: 4px 8px;
+                grid-area: info;
+                display: grid;
+                min-height: 48px;
+                grid-template-columns: 1fr auto;
+                align-items: center;
+                grid-template-areas: "name duration";
+
+                -webkit-user-drag: none;
+                -webkit-tap-highlight-color: transparent;
+
+                .name {
+                    grid-area: name;
+                }
+
+                .duration {
+                    grid-area: duration;
+                }
+            }
+
+            .actions {
+                grid-area: actions;
+            }
+
+        }
+    }
+}

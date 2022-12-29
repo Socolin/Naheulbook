@@ -1,0 +1,19 @@
+<div class="header">
+    <h1 class="mat-h1">
+        Cartes
+    </h1>
+    <button (click)="addMap()" mat-stroked-button color="primary">
+        <mat-icon>add</mat-icon>
+        Ajouter une carte
+    </button>
+</div>
+
+<mat-form-field>
+    <input matInput placeholder="&#x2063;Filtre" [formControl]="filterControl" autocomplete="off"  autocapitalize="off"/>
+</mat-form-field>
+
+<mat-nav-list>
+    <div *ngFor="let map of maps">
+        <a  mat-list-item [routerLink]="['/map', map.id]">{{map.name}}</a>
+    </div>
+</mat-nav-list>

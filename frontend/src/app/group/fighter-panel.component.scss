@@ -1,0 +1,39 @@
+:host {
+    .fighter-card {
+        > h2 {
+            display: flex;
+            justify-content: space-between;
+            margin-left: 8px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-left: 8px;
+            align-items: baseline;
+        }
+        padding: 8px 8px 8px;
+        margin: 8px;
+    }
+    .next-button {
+        display: flex;
+        flex-direction: row-reverse;
+        margin: 8px;
+    }
+    .fighters {
+        mat-panel-title {
+            display: grid;
+            grid-template-columns: 32px 1fr;
+            align-items: center;
+            grid-gap: 8px;
+            > span {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+}
+
+fighter {
+    width: 100%;
+}

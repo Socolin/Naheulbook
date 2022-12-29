@@ -1,0 +1,17 @@
+:host {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: "icon";
+    align-items: center;
+    justify-items: center;
+
+    > i {
+        grid-area: icon;
+    }
+    .number {
+        grid-area: icon;
+        opacity: 0.75;
+        color: rgba(255, 255, 255, 1);
+        text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+    }
+}

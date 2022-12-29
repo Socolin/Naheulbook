@@ -1,0 +1,16 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>
+        Modification du monstre: {{data.monster.name}}
+    </span>
+    <button mat-button
+            (click)="edit()">
+        SAUVEGARDER
+    </button>
+</mat-toolbar>
+
+<div class="content">
+    <app-monster-editor [form]="form"></app-monster-editor>
+</div>

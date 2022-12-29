@@ -1,0 +1,9 @@
+:host {
+    .sex-selector {
+        display: flex;
+        flex-direction: column;
+        mat-radio-button {
+            margin: 8px 0;
+        }
+    }
+}

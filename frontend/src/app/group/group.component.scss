@@ -1,0 +1,180 @@
+@import "~app/style/responsive-utils";
+
+:host {
+    display: block;
+    $padding-useful-data-button: 72px;
+
+    padding-bottom: $padding-useful-data-button;
+
+    /* For safari.. useful-data button is hidden if component is too small. */
+    /* So compute viewport height - toolbar - padding */
+    min-height: calc(100vh - 64px - 32px - #{$padding-useful-data-button});
+    @include for-phone-only {
+        min-height: calc(100vh - 16px - 56px - #{$padding-useful-data-button});
+    }
+
+    mat-card {
+        margin: 2px;
+    }
+
+    .loading {
+        height: 90vh;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .useful-data-fab {
+        z-index: 1;
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+    }
+
+    .group-container {
+        flex: 1 auto;
+
+        .character-summary-card {
+            mat-card-header {
+                button {
+                    margin-left: auto;
+                }
+            }
+
+            margin-bottom: 5px;
+            white-space: nowrap;
+        }
+    }
+
+    .info-tab {
+        mat-card {
+            margin-bottom: 5px;
+
+            mat-card-header {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                align-items: center;
+                gap: 8px;
+            }
+        }
+    }
+
+    .characters-tab {
+        mat-card-title {
+            display: grid;
+            grid-template-columns: 1fr 40px;
+            align-items: center;
+        }
+    }
+
+    .characters-cards {
+        mat-list {
+            width: 100%;
+        }
+
+        .name {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+
+            span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+
+    .npcs {
+        .npc {
+            display: grid;
+            grid-template-areas: "name name" "location origin" "note note";
+            grid-template-columns: 1fr 1fr;
+            padding: 8px 24px;
+            cursor: pointer;
+            margin-left: -16px;
+            margin-right: -16px;
+
+            -webkit-user-drag: none;
+            -webkit-tap-highlight-color: transparent;
+
+            @include for-phone-only {
+                grid-template-areas: "name" "location" "origin" "note";
+                grid-template-columns: 1fr;
+            }
+
+            .name {
+                grid-area: name;
+
+                display: grid;
+                grid-template-columns: 1fr auto;
+                align-items: center;
+                grid-column-gap: 8px;
+
+                font-weight: 500;
+            }
+
+            .location {
+                grid-area: location;
+
+                display: grid;
+                grid-template-columns: auto 1fr;
+                align-items: center;
+                grid-column-gap: 8px;
+            }
+
+            .origin {
+                grid-area: origin;
+
+                display: grid;
+                grid-template-columns: auto 1fr;
+                align-items: center;
+                grid-column-gap: 8px;
+            }
+
+            .note {
+                grid-area: note;
+                overflow: hidden;
+            }
+        }
+    }
+}
+
+
+
+.change-ownership-dialog {
+    mat-radio-button {
+        display: block;
+    }
+
+    mat-card-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+
+.invite-character-modal {
+    max-width: 85vw;
+
+    mat-radio-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    mat-radio-button {
+        overflow: hidden;
+        height: 32px;
+
+        .mat-radio-label-content {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    mat-card-content {
+        display: flex;
+        flex-direction: column;
+    }
+}

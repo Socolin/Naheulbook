@@ -1,0 +1,33 @@
+<h2 mat-dialog-title *ngIf="!data.layer">Ajout d'un calque</h2>
+<h2 mat-dialog-title *ngIf="data.layer">Édition d'un calque</h2>
+<mat-dialog-content [formGroup]="form">
+    <div>
+        <mat-form-field>
+            <input matInput placeholder="Nom" formControlName="name">
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-select formControlName="source" placeholder="Source">
+                <mat-option value="official">Officiel</mat-option>
+                <mat-option value="private">Privé</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div *ngIf="form.value.source === 'official'" class="is-gm">
+        <mat-checkbox formControlName="isGm">Maitre du jeu</mat-checkbox>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button
+            mat-dialog-close
+            color="primary">
+        FERMER
+    </button>
+    <button mat-button
+            (click)="validate()"
+            color="primary">
+        <ng-template [ngIf]="!data.layer">AJOUTER</ng-template>
+        <ng-template [ngIf]="data.layer">ÉDITER</ng-template>
+    </button>
+</mat-dialog-actions>

@@ -1,0 +1,10 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>{{data.job.name}}</span>
+</mat-toolbar>
+
+<div class="content">
+    <app-job-player-info [job]="data.job"></app-job-player-info>
+</div>

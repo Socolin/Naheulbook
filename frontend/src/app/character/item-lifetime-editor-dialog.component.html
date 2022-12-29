@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Temps de conservation</h2>
+<mat-dialog-content>
+    <duration-selector [hiddenType]="['combat','lap']" [durable]="lifetime"></duration-selector>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button color="primary" mat-dialog-close>
+        ANNULER
+    </button>
+    <button mat-button color="primary" [mat-dialog-close]=lifetime>
+        VALIDER
+    </button>
+</mat-dialog-actions>

@@ -1,0 +1,28 @@
+<mat-card-header>
+    <icon *ngIf="data.icon" mat-card-avatar [icon]="data.icon" size="40px"></icon>
+    <mat-card-title></mat-card-title>
+    <mat-card-subtitle>{{data.subtitle}}</mat-card-subtitle>
+</mat-card-header>
+
+<mat-dialog-content>
+    <mat-selection-list>
+        <mat-list-option *ngFor="let fighter of data.group.fighters" [value]="fighter">
+                <span class="line">
+                    <fighter-icon [fighter]="fighter"></fighter-icon>
+                    <span class="fighter-name">{{fighter.name}}</span>
+                </span>
+        </mat-list-option>
+    </mat-selection-list>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close
+            color="primary">
+        ANNULER
+    </button>
+    <button mat-button
+            color="primary"
+            (click)="valid()">
+        VALIDER
+    </button>
+</mat-dialog-actions>

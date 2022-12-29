@@ -1,0 +1,198 @@
+@import "~app/style/responsive-utils";
+
+:host {
+    padding: -32px;
+
+    .skill-list {
+        .skill {
+            display: grid;
+            align-items: center;
+            grid-template-areas: "name info" "cancel info" "source info";
+            grid-template-columns: 1fr auto;
+            grid-template-rows: 1fr auto 1fr;
+            padding-bottom: 8px;
+            padding-top: 8px;
+
+            .name {
+                grid-area: name;
+            }
+
+            .cancel-reason {
+                grid-area: cancel;
+            }
+
+            .source {
+                grid-area: source;
+            }
+
+            .info {
+                grid-area: info;
+            }
+
+            .canceled {
+                text-decoration: line-through;
+            }
+        }
+    }
+
+
+    .add-button {
+        z-index: 1;
+        position: fixed;
+
+        bottom: 16px;
+        right: 16px;
+
+        .extended-fab-button {
+            @include for-tablet-portrait-up {
+                width: unset;
+                padding: 0 26px;
+                border-radius: 29px;
+
+                .mat-icon {
+                    margin-right: 10px;
+                }
+            }
+
+            .extended-fab-button__text {
+                font-weight: 400;
+                letter-spacing: .1em;
+                text-transform: uppercase;
+
+                @include for-phone-only {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+mat-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    mat-card-header {
+        justify-content: space-between;
+
+        div.mat-card-header-text {
+            margin: 0;
+        }
+    }
+}
+
+.info-tab {
+    font-size: large;
+    display: flex;
+    flex-direction: column;
+    mat-card {
+        margin: 5px;
+    }
+
+    .fortune {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-areas: "money action" "gem action";
+        align-items: center;
+        column-gap: 8px;
+        .money {
+            grid-area: money;
+        }
+        .gem {
+            grid-area: gem;
+        }
+        .action {
+            grid-area: action;
+        }
+    }
+}
+
+.stat-tab {
+    display: flex;
+    flex-wrap: wrap;
+
+    mat-card {
+        margin: 5px;
+        flex: 1 auto;
+    }
+
+    .stat-header {
+        font-weight: bold;
+        flex-direction: row;
+        display: flex;
+    }
+
+    .stat-row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .stat-element {
+        width: 60px;
+        flex: 1 auto;
+        text-align: center;
+    }
+
+    .stat-element-large {
+        width: 75px;
+        flex: 1 auto;
+        text-align: center;
+    }
+
+    .stat-element-small {
+        width: 48px;
+        flex: 1 1 auto;
+        text-align: center;
+    }
+
+    .stat-details {
+        font-size: smaller;
+        .detail-row {
+            border-top-width: 1px;
+            border-top-style: solid;
+        }
+    }
+
+    .table-stats > td {
+        line-height: 1;
+    }
+    .stats-detail-name > td {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .stats-detail-values > td {
+        padding-top: 0;
+        border-top: 0;
+    }
+}
+
+
+.weapons-card {
+    mat-card-content {
+        display: flex;
+        flex-wrap: wrap;
+        .weapons-list {
+            flex: 1 0 auto;
+        }
+        .weapon:nth-child(4n+0) {
+            border-bottom-width: 1px;
+            border-bottom-style: solid;
+        }
+    }
+}
+.weapons-detail {
+    width: 100%;
+}
+
+.level-up-button {
+    margin-left: 32px;
+}
+
+.modal-max-height {
+    mat-card-content {
+        max-width: 90vw;
+        max-height: calc(100vh - 150px);
+        padding-bottom: 15px;
+        overflow: auto;
+    }
+}

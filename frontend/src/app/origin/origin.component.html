@@ -1,0 +1,12 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>{{origin.name}}</mat-expansion-panel-header>
+
+    <div *ngIf="!(gmModeService.gmMode | async)">
+        <app-origin-player-info [origin]="origin"></app-origin-player-info>
+    </div>
+    <div *ngIf="gmModeService.gmMode | async">
+        <app-origin-gm-info [origin]="origin"></app-origin-gm-info>
+    </div>
+</mat-expansion-panel>
+
+

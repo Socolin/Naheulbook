@@ -1,0 +1,43 @@
+@import "~app/style/responsive-utils";
+
+:host {
+    display: block;
+    $padding-create-button: 72px;
+
+    padding-bottom: $padding-create-button;
+
+    /* For safari.. fab button is hidden if component is too small. */
+    /* So compute viewport height - toolbar - padding */
+    min-height: calc(100vh - 64px - 32px - #{$padding-create-button});
+    @include for-phone-only {
+        min-height: calc(100vh - 16px - 56px - #{$padding-create-button});
+    }
+
+    .monster-category-selector {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+
+        @include for-phone-only {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .monster-templates {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+
+        > mat-form-field {
+            width: 100%;
+        }
+    }
+
+    .add-button {
+        z-index: 1;
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+    }
+
+}

@@ -1,0 +1,54 @@
+<div class="login-form">
+    <mat-card>
+        <mat-card-title>
+            Connexion <mat-spinner *ngIf="loading" [diameter]="24"></mat-spinner>
+        </mat-card-title>
+        <mat-card-subtitle>
+            Choisissez quelle méthode utiliser pour vous authentifier.
+        </mat-card-subtitle>
+        <mat-card-content>
+            <p>
+                Un compte sera créer automatiquement lors de la première connexion avec l'une des méthodes suivantes.
+                Aucune permissions additionnel n'est demander, l'application ne postera pas de message ou autre interaction.
+            </p>
+            <p>
+                Vous pourrez changer le pseudo du compte dans le profile une fois le compte créer.
+            </p>
+            <div class="auth-buttons">
+                <button mat-raised-button color="primary" [disabled]="loading" (click)="login('facebook')">Facebook</button>
+                <button mat-raised-button color="primary" [disabled]="loading" (click)="login('google')">Google</button>
+                <button mat-raised-button color="primary" [disabled]="loading" (click)="login('twitter')">Twitter</button>
+                <button mat-raised-button color="primary" [disabled]="loading" (click)="login('microsoft')">Microsoft</button>
+            </div>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color=primary (click)="moreInfo = !moreInfo">Plus d'infos</button>
+            <button mat-button color=primary (click)="goToHomePage()">Retour</button>
+        </mat-card-actions>
+        <mat-card-content *ngIf="moreInfo">
+            <p>
+                Avec les méthode d'authentification disponible la seul informations stocké en base non relative à
+                vos personnage sera un id (un grand nombre) et un pseudo.
+            </p>
+            <p>
+                Si vous vous demandez pourquoi il n'y a pas d'option "mot de passe": Je ne souhaite pas stocker
+                la moindre informations sensible des utilisateurs du site ne pouvant garantir a 100% la sécurité du
+                serveur. Je ne souhaite pas non plus gérer l'envoie de mail pour les création de compte et mots de
+                passes oubliés et faire le support si vous perdez l'accès à votre mail, les méthode ci-dessus ont déjà
+                implémenter tout ça très bien.
+            </p>
+            <p>
+                <a href="https://www.youtube.com/watch?v=8ZtInClXe1Q">Voir cette vidéo pour plus d'informations</a>
+            </p>
+            <p>
+                Il est prévue d'ajouter une autre méthode pour vous permettre de crée un compte avec un mot de passe,
+                sans passer par Google/Twitter. Mais ceci n'est pas encore prêt.
+            </p>
+            <p>
+                Si vous ne souhaitez pas utiliser une des méthode d'authentifications ci-dessus et que vous en
+                souhaitez une autres (qui fonctionne sur le même principe OAuth2), vous pouvez en faire la demande
+                (discord ou sur le gestionnaire de ticket).
+            </p>
+        </mat-card-content>
+    </mat-card>
+</div>

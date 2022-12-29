@@ -1,0 +1,44 @@
+mat-card {
+    position: relative;
+    .delete-button {
+        position: absolute;
+        right: 16px;
+        top: 8px;
+    }
+
+    mat-card-title {
+        display: grid;
+        grid-template-columns: 24px 1fr;
+        grid-gap: 8px;
+    }
+}
+
+.slots-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: space-between;
+    mat-checkbox {
+        flex: 0 0 120px;
+        min-width: 200px;
+    }
+}
+
+.input-center-align {
+    text-align: center;
+}
+
+.damage-line {
+    display: grid;
+    grid-template-columns: 60px minmax(50px, 90px) minmax(90px, 1fr);
+    grid-gap: 16px;
+    > mat-form-field {
+        width: 100%;
+    }
+}
+
+.instrument-stats {
+    display: grid;
+    grid-template-columns: minmax(60px, 1fr) minmax(60px, 1fr) minmax(60px, 1fr) minmax(60px, 1fr);
+    grid-gap: 8px;
+}

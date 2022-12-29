@@ -1,0 +1,136 @@
+<mat-card *ngIf="!inTab">
+    <mat-card-content>
+        <p>
+            Les joueurs n'achètent JAMAIS le matériel en piochant eux-mêmes dans les tableaux (<a href="https://www.naheulbeuk.com/jdr-docs/guide-equipement-naheulbeuk-jdr.pdf" target="_blank">Voir guide</a>).
+        </p>
+        <p *ngIf="showHeaderInfo">
+            Vous pouvez créer vos propres objets grace à l'éditeur. Ce dernier pouvant être complexe il est conseillé de
+            copier un autre objet,
+            à l'aide du bouton
+            <mat-icon>content_copy</mat-icon>
+            , puis de le modifier. Si vous souhaitez seulement changer
+            le nom, cette option est déjà disponible lors de l'ajout d'un objet sur un personnage.
+        </p>
+        <p *ngIf="showHeaderInfo">
+            Les icônes sur les objets sont là a titre indicatif pour identifier plus facilement les objets lors des
+            recherches
+            et dans l'inventaire. Elles ne sont pas à utiliser pour savoir à quoi ressemble vraiment l'objet, n'ayant
+            pas forcément
+            une icône parfait pour chaque objet. Les icônes utilisées proviennent principalement du site <a
+            href="https://game-icons.net/">https://game-icons.net/</a>
+        </p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button color="primary" mat-button (click)="showHeaderInfo =! showHeaderInfo">INFOS</button>
+        <button color="primary" mat-button (click)="openCreateItemTemplateDialog()">CREER UN OBJET</button>
+    </mat-card-actions>
+</mat-card>
+<mat-card class="section-selector">
+    <mat-form-field class="category">
+        <input type="text"
+               matInput
+               [formControl]="categoryNameControl"
+               placeholder="Catégorie"
+               required
+               [matAutocomplete]="autoCompleteCategory">
+
+        <mat-autocomplete #autoCompleteCategory="matAutocomplete" [displayWith]="getSubCategoryName"
+                          (optionSelected)="selectSubCategory($event.option.value, false)">
+            <mat-optgroup *ngFor="let category of filteredItemCategories | async">
+                <div>
+                    <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + category.icon"
+                              class="ra-mat-button-icon-24"></mat-icon>
+                    {{category.name}}
+                </div>
+
+                <mat-option *ngFor="let subCategory of category.subCategories" [value]="subCategory">
+                    {{subCategory.name}}
+                </mat-option>
+            </mat-optgroup>
+        </mat-autocomplete>
+    </mat-form-field>
+</mat-card>
+
+<mat-card *ngIf="selectedSection && selectedSection.note" class="panel panel-default">
+    <mat-card-subtitle>Note</mat-card-subtitle>
+    <mat-card-content>
+        <div class="panel-body" [innerHTML]="selectedSection.note|textFormatter">
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<mat-card>
+    <mat-card-content class="filters">
+        <mat-form-field class="search">
+            <input matInput #searchInput placeholder="Chercher un objet" (keyup)="updateAutocompleteItem(searchInput.value)"/>
+            <button matSuffix mat-icon-button *ngIf="searchInput.value !== ''" (click)="searchInput.value = ''; updateAutocompleteItem(searchInput.value)">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <div class="search-loader">
+            <mat-spinner *ngIf="searching" diameter="24" color="accent"></mat-spinner>
+        </div>
+
+        <mat-checkbox class="table-view" [(ngModel)]="tableView">Vue tableau</mat-checkbox>
+        <mat-checkbox class="display-community" (change)="updateViewCommunityItems($event.checked)">Objets communautaires</mat-checkbox>
+    </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="selectedItemSubCategory && searchItems === undefined" class="panel panel-default">
+    <mat-card-title>
+        {{selectedItemSubCategory.name}}
+    </mat-card-title>
+    <mat-card-content *ngIf="selectedItemSubCategory.note">
+        <div class="panel-body" [innerHTML]="selectedItemSubCategory.note|textFormatter">
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<span id="first-item"></span>
+<div class="items-table mat-elevation-z2">
+    <app-item-templates-table-view
+        *ngIf="tableView"
+        [itemTemplates]="visibleItems"
+        [godsByTechName]="godsByTechName"
+        [jobsName]="jobsName"
+        [originsName]="originsName"
+        [itemTemplateSection]="selectedSection"
+        (onStartEdit)="openEditItemTemplateDialog($event);"
+        (onStartCreateCopy)="openCreateCopyItemTemplateDialog($event);"
+        [actions]="inTab ? ['addItem'] : []"
+        (onAction)="emitAction($event.action, $event.data)"
+    >
+    </app-item-templates-table-view>
+</div>
+
+<ng-container *ngIf="!tableView">
+    <ng-container *ngFor="let item of  visibleItems; trackBy: trackById">
+        <div class="item-element" [id]="'item-'+item.id" (click)="navigateToItem(item.id)">
+            <item-template class="item-element"
+                           [originsName]="originsName"
+                           [jobsName]="jobsName"
+                           [godsByTechName]="godsByTechName"
+                           [editable]="isEditable(item) && !inTab"
+                           [copyable]="loginService.currentLoggedUser != undefined"
+                           [actions]="inTab ? ['addItem'] : []"
+                           (onAction)="emitAction($event.action, $event.data)"
+                           (onEdit)="reloadSectionForItem($event); reloadSectionForItem(item)"
+                           (onCreateCopy)="reloadSectionForItem($event)"
+                           [itemTemplate]="item">
+            </item-template>
+        </div>
+    </ng-container>
+</ng-container>
+<div *ngIf="nextSubCategory && previousSubCategory" class="prev-next-buttons">
+    <button mat-raised-button
+            (click)="selectSubCategory(previousSubCategory)">
+        <mat-icon>navigate_before</mat-icon>
+        {{previousSubCategory.name}}
+    </button>
+    <button mat-raised-button
+            (click)="selectSubCategory(nextSubCategory)">
+        {{nextSubCategory.name}}
+        <mat-icon>navigate_next</mat-icon>
+    </button>
+</div>

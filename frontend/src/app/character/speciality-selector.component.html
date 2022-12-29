@@ -1,0 +1,13 @@
+<mat-accordion>
+    <ng-template ngFor [ngForOf]="specialities" let-speciality>
+        <mat-expansion-panel *ngIf="isAvailable(speciality)">
+            <mat-expansion-panel-header>
+                {{speciality.name}}
+            </mat-expansion-panel-header>
+            {{speciality.description}}
+            <mat-action-row>
+                <button mat-button type="button" color="primary" (click)="selectSpeciality(speciality)">Choisir</button>
+            </mat-action-row>
+        </mat-expansion-panel>
+    </ng-template>
+</mat-accordion>

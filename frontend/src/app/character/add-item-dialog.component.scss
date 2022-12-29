@@ -1,0 +1,59 @@
+:host {
+    .content {
+
+        .filter-field {
+            width: 100%;
+        }
+
+        > * {
+            width: 100%;
+        }
+
+        .filter-result {
+            padding: 8px 0;
+            display: grid;
+            width: 100%;
+            grid-template-columns: 32px 1fr;
+            grid-template-areas: "icon name" "icon category";
+            grid-template-rows: auto;
+            grid-gap: 0 8px;
+            align-items: center;
+
+            icon {
+                grid-area: icon;
+            }
+
+            .name {
+                grid-area: name;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .category {
+                grid-area: category;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .name-line {
+            display: grid;
+            grid-gap: 8px;
+            grid-template-columns: 32px 1fr;
+            align-items: center;
+        }
+
+        .customize-step {
+            > * {
+                width: 100%;
+            }
+        }
+
+        .add-button {
+            display: grid;
+            justify-content: right;
+        }
+    }
+}

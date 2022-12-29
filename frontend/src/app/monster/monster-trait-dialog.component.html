@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>{{data.trait.name}}</h2>
+<mat-dialog-content>
+    <div class="description">
+        {{data.trait.description}}
+    </div>
+    <ng-container *ngIf="data.trait.levels">
+        <ul *ngFor="let level of data.trait.levels">
+            <li>{{level}}</li>
+        </ul>
+    </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close
+            color="primary">
+        FERMER
+    </button>
+</mat-dialog-actions>

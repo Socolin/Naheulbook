@@ -1,0 +1,54 @@
+<div>
+    <div>
+        <legend>Quete</legend>
+    </div>
+
+    <div>
+        <label for="questName">Nom</label>
+        <div>
+            <input type="text" [(ngModel)]="quest.name" id="questName" placeholder="Nom">
+        </div>
+    </div>
+
+    <div>
+        <label for="inputDescription">Description<br>
+            <button *ngIf="!previewDescription" (click)="previewDescription=true">Preview
+            </button>
+            <button *ngIf="previewDescription" (click)="previewDescription=false">Edit</button>
+        </label>
+        <div>
+            <textarea *ngIf="!previewDescription" autosize id="inputDescription"
+                      [(ngModel)]="quest.data.description"></textarea>
+            <div *ngIf="previewDescription" [innerHTML]="quest.data.description | textFormatter">
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <label for="npcGiver">Donneur de quete</label>
+        <div>
+            <input type="text" id="npcGiver" placeholder="">
+        </div>
+    </div>
+
+    <div>
+        <label for="npcHandler">Donneur de recompense</label>
+        <div>
+            <input type="text" id="npcHandler" placeholder="">
+        </div>
+    </div>
+
+    <div>
+        <label>Recompense</label>
+        <div>
+            <textarea *ngIf="!previewDescription" autosize class="form-control"
+                      [(ngModel)]="quest.data.reward"></textarea>
+        </div>
+    </div>
+
+    <div>
+        <div>
+            <button (click)="onValid.emit(quest)" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div>

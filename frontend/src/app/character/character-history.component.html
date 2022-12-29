@@ -1,0 +1,116 @@
+<div *ngFor="let loggroup of history">
+    {{loggroup.date | date:'mediumDate'}}
+    <div style="padding-bottom: 5px; margin-left: 10px; padding-left: 10px; padding-top: 5px; border-left: 1px solid #E2D7D7">
+        <div *ngFor="let log of loggroup.logs" [class.bg-success]=log.isGroup>
+            {{log.date | date:'shortTime'}}:
+            <ng-template [ngIf]="log.isGroup">
+					<span [ngSwitch]="log.action">
+						<ng-template [ngSwitchCase]="'EVENT_RP'">
+							{{log.info}}
+						</ng-template>
+                        <ng-template [ngSwitchCase]="'MANKDEBOL'">
+							Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'DEBILIBEUK'">
+							Debilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'END_COMBAT'">
+							Fin de combat
+						</ng-template>
+						<ng-template [ngSwitchCase]="'START_COMBAT'">
+							Debut d'un combat
+						</ng-template>
+                        <ng-template [ngSwitchCase]="'ADD_TIME'">
+                            Modification du temps: {{log.data.offset | nhbkDuration}}
+                        </ng-template>
+                        <ng-template [ngSwitchCase]="'CHANGE_DATE'">
+                            Modification de la date
+                            <div *ngIf="log.data.oldValue" style="padding-left: 20px">Ancienne date: <date [date]="log.data.oldValue"></date></div>
+                            <div style="padding-left: 20px">Nouvelle date: <date [date]="log.data.newValue"></date></div>
+                        </ng-template>
+						<ng-template ngSwitchDefault>{{log.action}}: {{log.info}}</ng-template>
+					</span>
+            </ng-template>
+            <ng-template [ngIf]="!log.isGroup">
+					<span [ngSwitch]="log.action">
+						<ng-template [ngSwitchCase]="'EQUIP'">
+							Equipe: {{log.item.data.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'UNEQUIP'">
+							Désquipe: {{log.item.data.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'ADD_ITEM'">
+							Ajout de l'objet: {{log.item?.data?.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'READ_BOOK'">
+							Lecture du livre: {{log.item?.data?.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'DELETE_ITEM'">
+							Suppression de l'objet: {{log.item?.data?.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'APPLY_EFFECT'">
+							Ajout de l'effet: {{log.effect.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'ACTIVE_EFFECT'">
+							Activation de l'effet: {{log.effect.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'DISABLE_EFFECT'">
+							Desactivation de l'effet: {{log.effect.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'ACTIVE_MODIFIER'">
+							Activation du modificateur: {{log.modifier.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'DISABLE_MODIFIER'">
+							Desactivation du modificateur: {{log.modifier.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'APPLY_MODIFIER'">
+							Ajout du modificateur: {{log.modifier.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'REMOVE_MODIFIER'">
+							Suppression du modificateur: {{log.modifier.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'CHANGE_QUANTITY'">
+							Modification quantité: {{log.item?.data?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
+  						</ng-template>
+						<ng-template [ngSwitchCase]="'USE_CHARGE'">
+							Utilisation de charge: {{log.item?.data?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'REMOVE_EFFECT'">
+							Suppression de l'effet: {{log.effect?.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'ADD_XP'">
+							Ajout d'experience: {{log.info}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'LEVEL_UP'">
+							Level Up: {{log.info}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'USE_FATE_POINT'">
+							Utilisation d'un point de destin
+						</ng-template>
+						<ng-template [ngSwitchCase]="'MODIFY_EV'">
+							Modification EV: {{log.data.oldValue}} -> {{log.data.newValue}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'MODIFY_EA'">
+							Modification EA: {{log.data.oldValue}} -> {{log.data.newValue}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'MANKDEBOL'">
+							Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'DEBILIBEUK'">
+							Debilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'IDENTIFY'">
+							Identification de l'objet: {{log.item?.data?.name}}
+						</ng-template>
+						<ng-template [ngSwitchCase]="'LOOT_ITEM'">
+							Loot de l'objet: {{log.item?.data?.name}}
+						</ng-template>
+						<ng-template ngSwitchDefault>{{log.action}}</ng-template>
+					</span>
+            </ng-template>
+        </div>
+    </div>
+</div>
+<div *ngIf="loadMore">
+    <button mat-button color="primary" (click)="loadHistory(true)" [disabled]="loading">CHARGER PLUS</button>
+</div>

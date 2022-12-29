@@ -1,0 +1,53 @@
+@import "~app/style/responsive-utils";
+
+:host {
+    > mat-sidenav-container {
+        min-height: 100vh;
+    }
+
+    mat-sidenav {
+        width: 240px;
+
+        h2 {
+            margin-left: 16px;
+        }
+
+        [mat-button] {
+            width: 100%;
+            position: relative;
+            bottom: 0;
+            margin: 24px 0;
+        }
+    }
+
+    .app-content {
+        padding: 8px 8px 8px;
+        @include for-tablet-portrait-up {
+            padding: 8px 32px 32px;
+            max-width: 960px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+
+    mat-toolbar {
+        mat-icon {
+            cursor: pointer;
+        }
+
+        .app-toolbar {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+
+            > a {
+                padding-right: 10px;
+            }
+        }
+
+        .home-link {
+            color: inherit;
+        }
+    }
+}

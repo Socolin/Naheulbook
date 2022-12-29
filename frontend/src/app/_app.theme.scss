@@ -1,0 +1,35 @@
+@use '@angular/material' as mat;
+
+@mixin global-theme($theme) {
+    // Extract whichever individual palettes you need from the theme.
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    a {
+        color: mat.get-color-from-palette($primary, 500);
+        text-decoration: none;
+    }
+
+    hr {
+        color: mat.get-color-from-palette($foreground, secondary-text);
+    }
+
+    .secondary-text {
+        color: mat.get-color-from-palette($foreground, secondary-text);
+    }
+
+    .text-warning {
+        color:  mat.get-color-from-palette($warn, 1);
+    }
+
+    .text-info {
+        color:  mat.get-color-from-palette($primary, 500);
+    }
+
+    .separator {
+        border-color: mat.get-color-from-palette($foreground, divider);
+    }
+}

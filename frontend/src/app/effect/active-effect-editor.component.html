@@ -1,0 +1,79 @@
+<div *ngIf="!preSelectedEffect">
+    <autocomplete-input [value]="effectFilterName"
+                        [placeholder]="'Effet'"
+                        (onSelect)="selectEffectInAutocompleteList($event)"
+                        [callback]="autocompleteEffectListCallback">
+    </autocomplete-input>
+</div>
+
+<mat-card *ngIf="preSelectedEffect" class="effect-selected">
+    <mat-card-title class="effect-name">
+        {{preSelectedEffect.name}}
+        <button mat-icon-button (click)="unselectEffect()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-card-title>
+    <mat-card-subtitle>
+        {{preSelectedEffect.subCategory.name}}
+    </mat-card-subtitle>
+    <mat-card-content>
+        <div class="effect-description">
+            {{preSelectedEffect.description}}
+        </div>
+        <div class="effect-duration">
+            Durée:
+            <span [ngSwitch]="preSelectedEffect.durationType">
+            <ng-template [ngSwitchCase]="'lap'">
+                {{preSelectedEffect.lapCount}}
+            </ng-template>
+            <ng-template [ngSwitchCase]="'combat'">
+                {{preSelectedEffect.combatCount}}
+            </ng-template>
+            <ng-template [ngSwitchCase]="'custom'">
+                {{preSelectedEffect.duration}}
+            </ng-template>
+            <ng-template [ngSwitchCase]="'time'">
+                {{preSelectedEffect.timeDuration | nhbkDuration}}
+            </ng-template>
+            <ng-template [ngSwitchCase]="'forever'">
+                permanent
+            </ng-template>
+        </span>
+        </div>
+        <div>
+            <span *ngFor="let modifier of preSelectedEffect.modifiers">
+                {{modifier | modifier}}
+            </span>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="preSelectedEffect">
+    <mat-card-subtitle>Customisation</mat-card-subtitle>
+    <div class="effect-reusable">
+        <mat-slide-toggle color="primary"
+                         *ngIf="reusableToggle"
+                         [(ngModel)]="newEffectReusable">
+            Ré-utilisable
+        </mat-slide-toggle>
+    </div>
+    <div class="effect-custom-duration">
+        <button mat-button *ngIf="!newEffectCustomDuration"
+                (click)="newEffectCustomDuration = true"
+                color="primary">
+            Durée personnalisée
+        </button>
+    </div>
+</mat-card>
+
+<mat-card *ngIf="preSelectedEffect && newEffectCustomDuration">
+    <mat-card-header class="custom-duration-header">
+        <mat-card-subtitle>Durée personnalisée</mat-card-subtitle>
+        <button mat-icon-button (click)="newEffectCustomDuration = false">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-card-header>
+    <mat-card-content>
+        <duration-selector [durable]="customDuration"></duration-selector>
+    </mat-card-content>
+</mat-card>

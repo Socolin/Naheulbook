@@ -1,0 +1,48 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>
+        Ajouter un effet
+    </span>
+    <button mat-button
+            *ngIf="newStatsModifier?.name"
+            (click)="addNewModifier()">
+        AJOUTER
+    </button>
+</mat-toolbar>
+
+<div class="content">
+    <mat-vertical-stepper linear="true" #stepper [selectedIndex]="selectedStep">
+        <mat-step completed="false" #searchStep>
+            <ng-template matStepLabel>Chercher un effet pré-existant</ng-template>
+            <mat-form-field>
+                <input matInput
+                       placeholder="Effet"
+                       #filter
+                       (keyup)="updateFilter(filter.value)">
+            </mat-form-field>
+            <mat-action-list>
+                <div mat-ripple *ngFor="let effect of filteredEffects" (click)="selectEffect(effect)">
+                    <div class="filter-result">
+                        <div class="name">{{effect.name}}</div>
+                        <div class="mat-caption">{{effect.subCategory.type.name}} - {{effect.subCategory.name}}</div>
+                    </div>
+                </div>
+            </mat-action-list>
+            <div class="customize-button">
+                <button mat-button color=primary (click)="customize()">
+                    EFFET PERSONNALISÉ
+                </button>
+            </div>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Personnalisation</ng-template>
+            <stats-modifier-editor [options]="{noType: !fromEffect}"
+                                   [reusableToggle]="!data?.options?.hideReusable"
+                                   [modifier]="newStatsModifier">
+            </stats-modifier-editor>
+        </mat-step>
+    </mat-vertical-stepper>
+</div>
+

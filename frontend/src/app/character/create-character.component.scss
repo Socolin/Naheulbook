@@ -1,0 +1,98 @@
+mat-card {
+    padding: 0;
+    margin-bottom: 10px;
+
+    mat-form-field {
+        margin-right: 5px;
+    }
+
+    & mat-toolbar {
+        margin: 0;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    & mat-card-content {
+        padding: 24px;
+    }
+
+    & mat-card-actions {
+        margin-top: -56px;
+        padding-right: 24px;
+        padding-bottom: 8px;
+    }
+}
+
+mat-card.stats-card {
+    margin-top: 10px;
+    mat-card-content {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        mat-form-field {
+            margin: 0 8px;
+            width: 80px;
+            flex: 1 1 auto;
+        }
+    }
+}
+
+.move-stat-point-selector {
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    align-content: center;
+    * {
+        width: 100%;
+    }
+}
+
+.move-stat-point-values {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    mat-form-field {
+        width: 30px;
+        flex: 1 1 auto;
+    }
+}
+
+mat-card.speciality {
+    margin-bottom: 22px;
+    padding: 16px;
+
+    & mat-card-content {
+        text-align: justify;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    mat-card-actions {
+        margin-top: -48px;
+        padding-right: 24px;
+        padding-bottom: 8px;
+    }
+}
+
+.no-card-padding {
+    padding: 0 !important;
+    .mat-body {
+        padding: 24px 24px 0;
+    }
+}
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+.sex-name-step {
+    .name-selector {
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        grid-template-columns: 1fr 48px;
+        mat-form-field {
+            width: 100%;
+        }
+    }
+}

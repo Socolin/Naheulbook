@@ -1,0 +1,127 @@
+:host {
+    .content {
+        padding-bottom: 24px;
+        justify-content: center;
+        grid-template-columns: auto;
+    }
+
+    .add-button-with-loader {
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-gap: 8px;
+        align-items: center;
+    }
+
+    .category-selection {
+        display: grid;
+        grid-gap: 8px;
+        grid-template-columns: minmax(70px, 274px) minmax(70px, 274px);
+    }
+    form {
+        display: grid;
+        grid-template-columns: minmax(70px, 180px) minmax(70px, 180px) minmax(70px, 180px);
+        align-items: center;
+        grid-gap: 8px;
+        grid-template-areas: "name name name"
+        "at prd esq"
+        "ev ea xp"
+        "pr pr_magic resm"
+        "dmg dmg dmg"
+        "cou chercheNoise page"
+        "note note note";
+
+        mat-form-field {
+            width: 100%;
+        }
+    }
+
+    .name {
+        grid-area: name;
+    }
+
+    .at {
+        grid-area: at;
+    }
+
+    .prd {
+        grid-area: prd;
+    }
+
+    .esq {
+        grid-area: esq;
+    }
+
+    .ev {
+        grid-area: ev;
+    }
+
+    .maxEv {
+        grid-area: maxEv;
+    }
+
+    .ea {
+        grid-area: ea;
+    }
+
+    .maxEa {
+        grid-area: maxEa;
+    }
+
+    .pr {
+        grid-area: pr;
+    }
+
+    .pr_magic {
+        grid-area: pr_magic;
+    }
+
+    .dmg {
+        grid-area: dmg;
+    }
+
+    .cou {
+        grid-area: cou;
+    }
+
+    .page {
+        grid-area: page;
+    }
+
+    .chercheNoise {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        grid-area: chercheNoise;
+    }
+
+    .resm {
+        grid-area: resm;
+    }
+
+    .xp {
+        grid-area: xp;
+    }
+
+    .note {
+        grid-area: note;
+    }
+
+    .locations,
+    .inventory,
+    .traits {
+        display: grid;
+        grid-template-columns: auto;
+        button {
+            justify-self: end;
+        }
+    }
+
+    .inventory {
+        .inventory-element {
+            align-items: center;
+            display: grid;
+            grid-template-columns: 32px 1fr auto 40px;
+            grid-gap: 8px;
+        }
+    }
+}
