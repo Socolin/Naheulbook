@@ -71,7 +71,7 @@ jobs:
       with:
         files: "*/*/TestResults/TestResults.xml"
     - name: Publish
-      run: dotnet publish --no-restore --no-build -c Release ./src/Naheulbook.Web/Naheulbook.Web.csproj
+      run: dotnet publish --no-restore --no-build -c Release ./backend/src/Naheulbook.Web/Naheulbook.Web.csproj
     - name: Log in to the Container registry
       uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
       with:
@@ -87,8 +87,8 @@ jobs:
       id: docker_build
       uses: docker/build-push-action@v2
       with:
-        context: src/Naheulbook.Web/bin/Release/publish/
-        file: src/Naheulbook.Web/Dockerfile
+        context: backend/src/Naheulbook.Web/bin/Release/publish/
+        file: backend/src/Naheulbook.Web/Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
