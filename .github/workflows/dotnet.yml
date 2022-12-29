@@ -3,10 +3,17 @@ name: .NET
 on:
   push:
     branches: [ master ]
+    paths:
+      - backend/**
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+
+defaults:
+  run:
+    shell: bash
+    working-directory: backend
 
 jobs:
   build:
