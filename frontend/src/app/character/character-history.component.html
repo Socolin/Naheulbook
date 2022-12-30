@@ -39,13 +39,13 @@
                     Désquipe: {{log.item.data.name}}
                 </ng-template>
                 <ng-template [ngSwitchCase]="'ADD_ITEM'">
-                    Ajout de l'objet: {{log.item?.data?.name}}
+                    Ajout de l'objet: {{log.item?.name}}
                 </ng-template>
                 <ng-template [ngSwitchCase]="'READ_BOOK'">
-                    Lecture du livre: {{log.item?.data?.name}}
+                    Lecture du livre: {{log.item?.name}}
                 </ng-template>
                 <ng-template [ngSwitchCase]="'DELETE_ITEM'">
-                    Suppression de l'objet: {{log.item?.data?.name}}
+                    Suppression de l'objet: {{log.item?.name}}
                 </ng-template>
                 <ng-template [ngSwitchCase]="'APPLY_EFFECT'">
                     Ajout de l'effet: {{log.effect.name}}
@@ -69,10 +69,10 @@
                     Suppression du modificateur: {{log.modifier.name}}
                 </ng-template>
                 <ng-template [ngSwitchCase]="'CHANGE_QUANTITY'">
-                    Modification quantité: {{log.item?.data?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
+                    Modification quantité: {{log.item?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
                 </ng-template>
                 <ng-template [ngSwitchCase]="'USE_CHARGE'">
-                    Utilisation de charge: {{log.item?.data?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
+                    Utilisation de charge: {{log.item?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
                 </ng-template>
                 <ng-template [ngSwitchCase]="'REMOVE_EFFECT'">
                     Suppression de l'effet: {{log.effect?.name}}
@@ -99,10 +99,10 @@
                     Debilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
                 </ng-template>
                 <ng-template [ngSwitchCase]="'IDENTIFY'">
-                    Identification de l'objet: {{log.item?.data?.name}}
+                    Identification de l'objet: {{log.item?.name}}
                 </ng-template>
                 <ng-template [ngSwitchCase]="'LOOT_ITEM'">
-                    Loot de l'objet: {{log.item?.data?.name}}
+                    Loot de l'objet: {{log.item?.name}}
                 </ng-template>
                 <ng-template ngSwitchDefault>{{log.action}}</ng-template>
             </span>
