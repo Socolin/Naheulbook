@@ -13,7 +13,7 @@ export class CharacterHistoryComponent implements OnInit {
 
     public historyPage = 0;
     public currentDay: string | undefined;
-    public history: {logs: HistoryEntry[]; date: string}[] = [];
+    public history: {logs: any[]; date: string}[] = [];
     public loadMore: boolean;
     public loading: boolean;
 

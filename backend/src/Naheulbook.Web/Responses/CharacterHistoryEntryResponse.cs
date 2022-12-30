@@ -1,5 +1,4 @@
 using JetBrains.Annotations;
-using Naheulbook.Shared.TransientModels;
 using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Web.Responses;
@@ -16,6 +15,7 @@ public class CharacterHistoryEntryResponse : IHistoryEntryResponse
     public bool IsGroup => false;
     public ItemHistoryResponse? Item { get; set; }
     public ModifierHistoryResponse? Modifier { get; set; }
+    public EffectHistoryResponse? Effect { get; set; }
 
     public class ItemHistoryResponse
     {
@@ -23,6 +23,11 @@ public class CharacterHistoryEntryResponse : IHistoryEntryResponse
     }
 
     public class ModifierHistoryResponse
+    {
+        public required string Name { get; set; }
+    }
+
+    public class EffectHistoryResponse
     {
         public required string Name { get; set; }
     }
