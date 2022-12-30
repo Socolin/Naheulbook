@@ -1,7 +1,24 @@
-export interface HistoryEntry {
+export type HistoryEntry = GroupHistoryEntryResponse | CharacterHistoryEntryResponse;
+
+export interface GroupHistoryEntryResponse {
+    isGroup: true;
+
     id: number;
-    date: any;
-    info: string;
     action: string;
-    isGroup: number;
+    date: any;
+    info?: string;
+    data: any;
+}
+
+export interface CharacterHistoryEntryResponse {
+    isGroup: false;
+
+    id: number;
+    action: string;
+    date: any;
+
+    info?: string;
+    data: any;
+    item?: { name?: string };
+    modifier?: { name: string };
 }

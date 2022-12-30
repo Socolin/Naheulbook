@@ -1,11 +1,9 @@
+using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
-
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class GroupHistoryEntryResponse : IHistoryEntryResponse
 {
     public int Id { get; set; }

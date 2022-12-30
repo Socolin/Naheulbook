@@ -1,8 +1,8 @@
-import {Input, Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
-import {HistoryEntry} from '../shared/history-entry.model';
+import {HistoryEntry} from '../shared';
 
 @Component({
     selector: 'character-history',
@@ -13,7 +13,7 @@ export class CharacterHistoryComponent implements OnInit {
 
     public historyPage = 0;
     public currentDay: string | undefined;
-    public history: any[];
+    public history: {logs: HistoryEntry[]; date: string}[] = [];
     public loadMore: boolean;
     public loading: boolean;
 

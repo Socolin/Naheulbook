@@ -64,6 +64,12 @@ public class MapperProfile : Profile
             .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
             .ForMember(m => m.Date, opt => opt.MapFrom(b => b.Date.ToString("s")));
 
+        CreateMap<CharacterHistoryEntryEntity, CharacterHistoryEntryResponse.ItemHistoryResponse>()
+            .ForMember(m => m.Name,
+                opt => { opt.MapFrom(im => MapperHelpers.ItemNameFromData<ItemData>(im.Data)); });
+        CreateMap<ActiveStatsModifier, CharacterHistoryEntryResponse.ModifierHistoryResponse>()
+            .ForMember(m => m.Name, opt => opt.MapFrom(im => im.Name));
+
         CreateMap<EffectEntity, EffectResponse>()
             .ForMember(m => m.Modifiers, opt => opt.MapFrom(e => e.Modifiers.OrderBy(m => m.StatName)));
         CreateMap<EffectTypeEntity, EffectTypeResponse>()
@@ -96,7 +102,7 @@ public class MapperProfile : Profile
         CreateMap<GroupEntity, GroupResponse>()
             .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
             .ForMember(m => m.Config, opt => opt.MapFrom(im => MapperHelpers.FromJsonNotNull<GroupConfig>(im.Config)))
-            .ForMember(m => m.CharacterIds , opt => opt.MapFrom(g => g.Characters.Select(c => c.Id)));
+            .ForMember(m => m.CharacterIds, opt => opt.MapFrom(g => g.Characters.Select(c => c.Id)));
         CreateMap<GroupEntity, CharacterGroupResponse>()
             .ForMember(m => m.Config, opt => opt.MapFrom(g => MapperHelpers.FromJsonNotNull<GroupConfig>(g.Config)));
         CreateMap<GroupEntity, NamedIdResponse>();
@@ -120,7 +126,8 @@ public class MapperProfile : Profile
                 throw new NotSupportedException("Either MonsterId or CharacterId should be set");
             });
         CreateMap<DurationChangeRequest, IDurationChange>()
-            .ConstructUsing((request, _) => {
+            .ConstructUsing((request, _) =>
+            {
                 switch (request.Type)
                 {
                     case ItemModifierDurationChange.TypeValue:

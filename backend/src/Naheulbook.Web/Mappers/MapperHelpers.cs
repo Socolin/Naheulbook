@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Naheulbook.Shared.TransientModels;
 using Newtonsoft.Json;
 
 namespace Naheulbook.Web.Mappers;
@@ -16,6 +17,15 @@ public class MapperHelpers
     public static string[] FromCommaSeparatedStringArray(string? str)
     {
         return str?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
+    }
+
+    public static string? ItemNameFromData<T>(string? json)
+        where T : class
+    {
+        if (string.IsNullOrEmpty(json))
+            return default;
+
+        return JsonConvert.DeserializeObject<ItemData>(json, JsonSerializerSettings)?.Name;
     }
 
     public static T? FromJson<T>(string? json)

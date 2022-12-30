@@ -1,12 +1,10 @@
+using JetBrains.Annotations;
 using Naheulbook.Shared.TransientModels;
 using Newtonsoft.Json.Linq;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class CharacterHistoryEntryResponse : IHistoryEntryResponse
 {
     public int Id { get; set; }
@@ -16,6 +14,16 @@ public class CharacterHistoryEntryResponse : IHistoryEntryResponse
     public bool Gm { get; set; }
     public string? Info { get; set; }
     public bool IsGroup => false;
-    public ItemResponse? Item { get; set; }
-    public ActiveStatsModifier? Modifier { get; set; }
+    public ItemHistoryResponse? Item { get; set; }
+    public ModifierHistoryResponse? Modifier { get; set; }
+
+    public class ItemHistoryResponse
+    {
+        public required string? Name { get; set; }
+    }
+
+    public class ModifierHistoryResponse
+    {
+        public required string Name { get; set; }
+    }
 }
