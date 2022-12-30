@@ -33,10 +33,10 @@
             <!-- Character -->
             <span [ngSwitch]="log.action">
                 <ng-template [ngSwitchCase]="'EQUIP'">
-                    Equipe: {{log.item.data.name}}
+                    Equipe: {{log.item?.name}}
                 </ng-template>
                 <ng-template [ngSwitchCase]="'UNEQUIP'">
-                    Désquipe: {{log.item.data.name}}
+                    Désquipe: {{log.item?.name}}
                 </ng-template>
                 <ng-template [ngSwitchCase]="'ADD_ITEM'">
                     Ajout de l'objet: {{log.item?.name}}
