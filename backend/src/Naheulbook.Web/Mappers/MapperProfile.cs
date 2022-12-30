@@ -61,13 +61,14 @@ public class MapperProfile : Profile
 
         CreateMap<CharacterHistoryEntryEntity, CharacterHistoryEntryResponse>()
             .ForMember(m => m.Modifier, opt => opt.MapFrom(im => im.CharacterModifier))
+            .ForMember(m => m.Item, opt => opt.MapFrom(im => im.Item))
             .ForMember(m => m.Data, opt => opt.MapFrom(im => MapperHelpers.FromJson<JObject>(im.Data)))
             .ForMember(m => m.Date, opt => opt.MapFrom(b => b.Date.ToString("s")));
 
-        CreateMap<CharacterHistoryEntryEntity, CharacterHistoryEntryResponse.ItemHistoryResponse>()
+        CreateMap<ItemEntity, CharacterHistoryEntryResponse.ItemHistoryResponse>()
             .ForMember(m => m.Name,
                 opt => { opt.MapFrom(im => MapperHelpers.ItemNameFromData<ItemData>(im.Data)); });
-        CreateMap<ActiveStatsModifier, CharacterHistoryEntryResponse.ModifierHistoryResponse>()
+        CreateMap<CharacterModifierEntity, CharacterHistoryEntryResponse.ModifierHistoryResponse>()
             .ForMember(m => m.Name, opt => opt.MapFrom(im => im.Name));
         CreateMap<EffectEntity, CharacterHistoryEntryResponse.EffectHistoryResponse>()
             .ForMember(m => m.Name, opt => opt.MapFrom(im => im.Name));
