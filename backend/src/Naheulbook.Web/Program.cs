@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -12,18 +14,18 @@ namespace Naheulbook.Web;
 
 public static class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
-        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
         if (string.IsNullOrEmpty(environment))
-            throw new Exception("ASPNETCORE_ENVIRONMENT environment variable should be set");
+            throw new Exception("ASPNETCORE_ENVIRONMENT or DOTNET_ENVIRONMENT environment variable should be set");
 
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddEnvironmentVariables()
             .AddJsonFile("appsettings.json")
             .AddJsonFile($"appsettings.{environment}.json")
-            .AddJsonFile($"appsettings.local.json", true)
+            .AddJsonFile("appsettings.local.json", true)
             .AddCommandLine(args)
             .Build();
 
@@ -57,7 +59,26 @@ public static class Program
                 .UseSerilog(logger)
                 .Build();
 
-            server.Run();
+            await server.StartAsync();
+            logger.Information("Server started.");
+
+            var unixSocketPath = configuration.GetValue<string>("socket");
+            var unixSocketPermission = configuration.GetValue<string>("socketPermission");
+
+            if (OperatingSystem.IsLinux() && !string.IsNullOrEmpty(unixSocketPath) && !string.IsNullOrEmpty(unixSocketPermission))
+            {
+                logger.Information("Changing socket permission {Socket} to {Permission}.", unixSocketPath, unixSocketPermission);
+                var fileMode = Convert.ToInt32(unixSocketPermission, 8);
+                File.SetUnixFileMode(unixSocketPath, (UnixFileMode)fileMode);
+            }
+
+            await server.WaitForShutdownAsync();
+
+            if (OperatingSystem.IsLinux() && !string.IsNullOrEmpty(unixSocketPath))
+            {
+                logger.Information("Server started.");
+                File.Delete(unixSocketPath);
+            }
         }
     }
 }
