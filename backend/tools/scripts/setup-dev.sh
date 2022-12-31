@@ -57,13 +57,18 @@ echo "Naheulbook root: ${NAHEULBOOK_ROOT_PATH}"
 # Add script to create /var/run/naheulbook at startup
 cat >/etc/init.d/naheulbook-dev <<EOF
 #!/bin/sh
+### BEGIN INIT INFO
+# Provides: naheulbook-dev
+# Default-Start:  2 3 4 5
+# Default-Stop: 0 1 6
+### END INIT INFO
 mkdir -p /var/run/naheulbook
 chown -R "${user}":www-data /var/run/naheulbook
 chmod -R g+s /var/run/naheulbook
 EOF
 chmod +x /etc/init.d/naheulbook-dev
 sudo update-rc.d naheulbook-dev defaults
-/etc/init.d/naheulbook-dev
+systemctl start naheulbook-dev
 
 # Setup mysql/redis dependencies
 sudo -H -u "${user}" -i bash -c "cd ${NAHEULBOOK_ROOT_PATH}/tools/scripts; docker compose up -d"
@@ -123,6 +128,11 @@ fi
 systemctl reload nginx
 sleep 0.5
 curl -qsS https://local.naheulbook.fr >/dev/null
+
+TEMP_CRONTAB=$(sudo -H -u "${user}" -i bash -c "mktemp")
+sudo -H -u "${user}" -i bash -c "cd ${NAHEULBOOK_ROOT_PATH}; crontab -l | grep -v '#nahelbook-dev$' > ${TEMP_CRONTAB}"
+echo '@reboot '"${NAHEULBOOK_ROOT_PATH}"'/tools/scripts/update-config.sh #nahelbook-dev' | sudo -H -u "${user}" -i bash -c "cat >> ${TEMP_CRONTAB}"
+sudo -H -u "${user}" -i bash -c "crontab - <${TEMP_CRONTAB}"
 
 ./update-config.sh
 

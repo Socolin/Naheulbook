@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-NAHEULBOOK_ROOT_PATH=$(pwd)
-while [ ! -f ${NAHEULBOOK_ROOT_PATH}/Naheulbook.sln ]; do
+NAHEULBOOK_ROOT_PATH=$(dirname "${BASH_SOURCE[0]}")
+while [ ! -f "${NAHEULBOOK_ROOT_PATH}"/Naheulbook.sln ]; do
   NAHEULBOOK_ROOT_PATH=${NAHEULBOOK_ROOT_PATH}/..
   if [ "$(realpath "$NAHEULBOOK_ROOT_PATH")" == '/' ]; then
     echo "File 'Naheulbook.sln' was not found in the current directory or in a parent"
