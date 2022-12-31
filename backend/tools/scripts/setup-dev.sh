@@ -44,10 +44,10 @@ if ! which docker >/dev/null; then
 fi
 
 NAHEULBOOK_ROOT_PATH=$(pwd)
-while [ ! -f ${NAHEULBOOK_ROOT_PATH}/NaheulbookV2.sln ]; do
+while [ ! -f ${NAHEULBOOK_ROOT_PATH}/Naheulbook.sln ]; do
   NAHEULBOOK_ROOT_PATH=${NAHEULBOOK_ROOT_PATH}/..
   if [ "$(realpath "$NAHEULBOOK_ROOT_PATH")" == '/' ]; then
-    echo "File 'NaheulbookV2.sln' was not found in the current directory or in a parent"
+    echo "File 'Naheulbook.sln' was not found in the current directory or in a parent"
     exit 1
   fi
 done
