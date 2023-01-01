@@ -38,3 +38,10 @@ server {
         proxy_cache_bypass  $http_upgrade;
     }
 }
+
+server {
+    listen 80;
+    server_name local.naheulbook.fr;
+
+    return 301 https://$host$request_uri;
+}
