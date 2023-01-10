@@ -8,12 +8,7 @@ import {Portal} from '@angular/cdk/portal';
 import {LapCountDecrement, NhbkDialogService, PromptDialogComponent} from '../shared';
 import {NotificationsService} from '../notifications';
 import {dateOffset2TimeDuration} from '../date/util';
-import {
-    DurationSelectorDialogComponent,
-    DurationSelectorDialogData,
-    DurationSelectorDialogResult,
-    NhbkDateOffset
-} from '../date';
+import {DurationSelectorDialogComponent, DurationSelectorDialogData, DurationSelectorDialogResult, NhbkDateOffset} from '../date';
 
 import {GroupService} from './group.service';
 import {WebSocketService} from '../websocket';
@@ -32,26 +27,14 @@ import {FighterSelectorComponent, FighterSelectorDialogData} from './fighter-sel
 import {Fighter, Group, GroupConfig, GroupInvite, Npc} from './group.model';
 import {CharacterSheetDialogComponent} from './character-sheet-dialog.component';
 import {openCreateItemDialog} from './create-item-dialog.component';
-import {
-    GroupAddEffectDialogComponent,
-    GroupAddEffectDialogData,
-    GroupAddEffectDialogResult
-} from './group-add-effect-dialog.component';
+import {GroupAddEffectDialogComponent, GroupAddEffectDialogData, GroupAddEffectDialogResult} from './group-add-effect-dialog.component';
 import {CharacterSearchResponse, UserSearchResponse} from '../api/responses';
-import {
-    DateSelectorDialogComponent,
-    DateSelectorDialogData,
-    DateSelectorDialogResult
-} from '../date/date-selector-dialog.component';
+import {DateSelectorDialogComponent, DateSelectorDialogData, DateSelectorDialogResult} from '../date/date-selector-dialog.component';
 import {EditNpcDialogComponent, EditNpcDialogData, EditNpcDialogResult} from './edit-npc-dialog.component';
 import {filter, map} from 'rxjs/operators';
 import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
 import {ItemDialogComponent} from '../item/item-dialog.component';
-import {
-    GroupConfigDialogComponent,
-    GroupConfigDialogData,
-    GroupConfigDialogResult
-} from './group-config-dialog.component';
+import {GroupConfigDialogComponent, GroupConfigDialogData, GroupConfigDialogResult} from './group-config-dialog.component';
 
 @Component({
     templateUrl: './group.component.html',
@@ -220,8 +203,8 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
 
     kickCharacter(character: Character) {
-        this.characterService.quitGroup(character.id).subscribe((characterId) => {
-            this.group.removeCharacter(characterId);
+        this.characterService.quitGroup(character.id).subscribe(_ => {
+            this.group.removeCharacter(character.id);
         });
     }
 
@@ -288,7 +271,7 @@ export class GroupComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    inviteCharacter(character: {id: number}) {
+    inviteCharacter(character: { id: number }) {
         this.closeInviteCharacterModal();
         this.groupService.inviteCharacter(this.group.id, character.id).subscribe(
             res => {
