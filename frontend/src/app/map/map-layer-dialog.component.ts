@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MapLayer} from './map.model';
 
@@ -19,10 +19,10 @@ export interface MapLayerDialogResult {
 })
 export class MapLayerDialogComponent {
 
-    form: FormGroup = new FormGroup({
-        'name': new FormControl(undefined, [Validators.required]),
-        'source': new FormControl('private', [Validators.required]),
-        'isGm': new FormControl(false, [Validators.required]),
+    form: UntypedFormGroup = new UntypedFormGroup({
+        'name': new UntypedFormControl(undefined, [Validators.required]),
+        'source': new UntypedFormControl('private', [Validators.required]),
+        'isGm': new UntypedFormControl(false, [Validators.required]),
     });
 
     constructor(

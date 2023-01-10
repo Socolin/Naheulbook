@@ -4,7 +4,7 @@ import {MapService} from './map.service';
 import {MapSummaryResponse} from '../api/responses';
 import {GmModeService, removeDiacritics} from '../shared';
 import {combineLatest, Subscription} from 'rxjs';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import {startWith} from 'rxjs/operators';
 
 @Component({
@@ -13,7 +13,7 @@ import {startWith} from 'rxjs/operators';
 })
 export class MapListComponent implements OnInit, OnDestroy {
     public maps?: MapSummaryResponse[];
-    public filterControl: FormControl = new FormControl('');
+    public filterControl: UntypedFormControl = new UntypedFormControl('');
     private subscription: Subscription = new Subscription();
 
     constructor(

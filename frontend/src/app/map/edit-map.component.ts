@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MapService} from './map.service';
 
@@ -10,11 +10,11 @@ import {MapService} from './map.service';
 export class EditMapComponent implements OnInit {
     public saving = false;
     public loading = true;
-    public form = new FormGroup({
-        name: new FormControl(undefined, Validators.required),
-        isGm: new FormControl(undefined, Validators.required),
-        unitName: new FormControl(undefined, Validators.required),
-        pixelPerUnit: new FormControl(undefined, Validators.required),
+    public form = new UntypedFormGroup({
+        name: new UntypedFormControl(undefined, Validators.required),
+        isGm: new UntypedFormControl(undefined, Validators.required),
+        unitName: new UntypedFormControl(undefined, Validators.required),
+        pixelPerUnit: new UntypedFormControl(undefined, Validators.required),
     });
 
     public attributions: {

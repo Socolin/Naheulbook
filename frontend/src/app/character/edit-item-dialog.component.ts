@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Item} from '../item';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {IconDescription} from '../shared/icon.model';
 
 export interface EditItemDialogData {
@@ -20,9 +20,9 @@ export interface EditItemDialogResult {
     styleUrls: ['./edit-item-dialog.component.scss']
 })
 export class EditItemDialogComponent implements OnInit {
-    public form = new FormGroup({
-        name: new FormControl(),
-        description: new FormControl(),
+    public form = new UntypedFormGroup({
+        name: new UntypedFormControl(),
+        description: new UntypedFormControl(),
     });
     public icon?: IconDescription;
 

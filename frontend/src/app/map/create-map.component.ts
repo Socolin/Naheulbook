@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 
 import {requiredFileType} from '../utils/required-file-type.validator';
 import {MapService} from './map.service';
@@ -11,12 +11,12 @@ import {Map} from './map.model';
     styleUrls: ['./create-map.component.scss']
 })
 export class CreateMapComponent {
-    public form = new FormGroup({
-        name: new FormControl(undefined, Validators.required),
-        isGm: new FormControl(false, Validators.required),
-        unitName: new FormControl(undefined, Validators.required),
-        pixelPerUnit: new FormControl(undefined, Validators.required),
-        image: new FormControl(undefined, [Validators.required, requiredFileType(['png', 'jpg', 'jpeg', 'svg', 'bmp'])])
+    public form = new UntypedFormGroup({
+        name: new UntypedFormControl(undefined, Validators.required),
+        isGm: new UntypedFormControl(false, Validators.required),
+        unitName: new UntypedFormControl(undefined, Validators.required),
+        pixelPerUnit: new UntypedFormControl(undefined, Validators.required),
+        image: new UntypedFormControl(undefined, [Validators.required, requiredFileType(['png', 'jpg', 'jpeg', 'svg', 'bmp'])])
     });
     public attributions: {
         name: string,

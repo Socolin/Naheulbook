@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {OriginService} from './origin.service';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Origin} from './origin.model';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {BehaviorSubject, combineLatest, of, Subscription} from 'rxjs';
 import {catchError, distinctUntilChanged, filter, map, switchMap} from 'rxjs/operators';
 import {CharacterSex} from '../api/shared/enums';
@@ -21,10 +21,10 @@ export class NameGeneratorDialogComponent implements OnInit, OnDestroy {
     private onClick = new BehaviorSubject<boolean>(true);
     private subscription = new Subscription();
     public origins: Origin[] = [];
-    public form = new FormGroup({
-        originId: new FormControl(undefined, Validators.required),
-        sex: new FormControl('Homme', Validators.required),
-        name: new FormControl(undefined, Validators.required),
+    public form = new UntypedFormGroup({
+        originId: new UntypedFormControl(undefined, Validators.required),
+        sex: new UntypedFormControl('Homme', Validators.required),
+        name: new UntypedFormControl(undefined, Validators.required),
     });
 
     constructor(

@@ -1,7 +1,7 @@
 import {forkJoin} from 'rxjs';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 
 import {Job, JobService, Speciality} from '../job';
 import {Origin, OriginService} from '../origin';
@@ -15,24 +15,24 @@ import {Guid} from '../api/shared/util';
     styleUrls: ['./create-custom-character.component.scss'],
 })
 export class CreateCustomCharacterComponent implements OnInit {
-    public form = new FormGroup({
-        name: new FormControl(undefined, Validators.required),
-        experience: new FormControl(undefined, Validators.required),
-        level: new FormControl(undefined, Validators.required),
-        fatePoint: new FormControl(undefined, Validators.required),
-        sex: new FormControl('Homme', Validators.required),
-        stats: new FormGroup({
-            cou: new FormControl(undefined, Validators.required),
-            int: new FormControl(undefined, Validators.required),
-            cha: new FormControl(undefined, Validators.required),
-            ad: new FormControl(undefined, Validators.required),
-            fo: new FormControl(undefined, Validators.required)
+    public form = new UntypedFormGroup({
+        name: new UntypedFormControl(undefined, Validators.required),
+        experience: new UntypedFormControl(undefined, Validators.required),
+        level: new UntypedFormControl(undefined, Validators.required),
+        fatePoint: new UntypedFormControl(undefined, Validators.required),
+        sex: new UntypedFormControl('Homme', Validators.required),
+        stats: new UntypedFormGroup({
+            cou: new UntypedFormControl(undefined, Validators.required),
+            int: new UntypedFormControl(undefined, Validators.required),
+            cha: new UntypedFormControl(undefined, Validators.required),
+            ad: new UntypedFormControl(undefined, Validators.required),
+            fo: new UntypedFormControl(undefined, Validators.required)
         }),
-        basicStatsOverrides: new FormGroup({
-            at: new FormControl(undefined, Validators.required),
-            prd: new FormControl(undefined, Validators.required),
-            ev: new FormControl(undefined, Validators.required),
-            ea: new FormControl(undefined, Validators.required)
+        basicStatsOverrides: new UntypedFormGroup({
+            at: new UntypedFormControl(undefined, Validators.required),
+            prd: new UntypedFormControl(undefined, Validators.required),
+            ev: new UntypedFormControl(undefined, Validators.required),
+            ea: new UntypedFormControl(undefined, Validators.required)
         }),
     });
 
@@ -59,7 +59,7 @@ export class CreateCustomCharacterComponent implements OnInit {
     }
 
     updateBaseStats(): void {
-        if (!(this.form.controls.basicStatsOverrides instanceof FormGroup)) {
+        if (!(this.form.controls.basicStatsOverrides instanceof UntypedFormGroup)) {
             return;
         }
         let at = 8;

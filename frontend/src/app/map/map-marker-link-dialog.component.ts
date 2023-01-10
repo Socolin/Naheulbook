@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MapService} from './map.service';
 import {MapSummaryResponse} from '../api/responses';
-import {FormControl, Validators} from '@angular/forms';
+import {UntypedFormControl, Validators} from '@angular/forms';
 import {Observable, Subscription} from 'rxjs';
 import {filter, map, startWith, tap} from 'rxjs/operators';
 import {removeDiacritics} from '../shared';
@@ -29,9 +29,9 @@ export class MapMarkerLinkDialogComponent implements OnInit {
     filteredMapMarkers: Observable<MapMarker[]>;
     selectedMapDetails?: Map;
 
-    targetMapFormControl = new FormControl(undefined, Validators.required);
-    nameFormControl = new FormControl();
-    targetMarkerFormControl = new FormControl();
+    targetMapFormControl = new UntypedFormControl(undefined, Validators.required);
+    nameFormControl = new UntypedFormControl();
+    targetMarkerFormControl = new UntypedFormControl();
 
     private mapDetailSubscription?: Subscription;
 

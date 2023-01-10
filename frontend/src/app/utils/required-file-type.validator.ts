@@ -1,7 +1,7 @@
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 
 export function requiredFileType(types: string[]) {
-    return function (control: FormControl) {
+    return function (control: UntypedFormControl) {
         const file = control.value as File | undefined;
         if (file) {
             const extension = file.name.split('.')[1].toLowerCase();

@@ -10,7 +10,7 @@ import {Skill} from '../skill';
 import {CharacterService} from './character.service';
 import {SkillSelectorComponent} from './skill-selector.component';
 import {HttpErrorResponse} from '@angular/common/http';
-import {FormControl, Validators} from '@angular/forms';
+import {UntypedFormControl, Validators} from '@angular/forms';
 import {CreateCharacterRequest} from '../api/requests';
 import {CharacterSex} from '../api/shared/enums';
 import {Guid} from '../api/shared/util';
@@ -26,11 +26,11 @@ export class CreateCharacterComponent implements OnInit {
 
     // Step 0: Statistics
 
-    public couStatControl = new FormControl('', [Validators.max(13), Validators.min(8)]);
-    public intStatControl = new FormControl('', [Validators.max(13), Validators.min(8)]);
-    public chaStatControl = new FormControl('', [Validators.max(13), Validators.min(8)]);
-    public adStatControl = new FormControl('', [Validators.max(13), Validators.min(8)]);
-    public foStatControl = new FormControl('', [Validators.max(13), Validators.min(8)]);
+    public couStatControl = new UntypedFormControl('', [Validators.max(13), Validators.min(8)]);
+    public intStatControl = new UntypedFormControl('', [Validators.max(13), Validators.min(8)]);
+    public chaStatControl = new UntypedFormControl('', [Validators.max(13), Validators.min(8)]);
+    public adStatControl = new UntypedFormControl('', [Validators.max(13), Validators.min(8)]);
+    public foStatControl = new UntypedFormControl('', [Validators.max(13), Validators.min(8)]);
     public cou: number;
     public int: number;
     public cha: number;
@@ -61,8 +61,8 @@ export class CreateCharacterComponent implements OnInit {
     // Step 4: Select fortune
 
 
-    public fortuneControl = new FormControl('', [Validators.max(13), Validators.min(8)]);
-    public fortune2Control = new FormControl('', [Validators.max(13), Validators.min(8)]);
+    public fortuneControl = new UntypedFormControl('', [Validators.max(13), Validators.min(8)]);
+    public fortune2Control = new UntypedFormControl('', [Validators.max(13), Validators.min(8)]);
     public money = 0;
     public money2 = 0;
 

@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Effect, EffectSubCategory, EffectType} from './effect.model';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {PromptDialogComponent, StatModifier} from '../shared';
 import {IDurable} from '../api/shared';
 import {EffectService} from './effect.service';
@@ -23,7 +23,7 @@ export class EditEffectDialogComponent implements OnInit {
 
     public selectedType?: EffectType;
     public selectedSubCategory?: EffectSubCategory;
-    public form: FormGroup;
+    public form: UntypedFormGroup;
     public statModifiers: StatModifier[] = [];
     public duration: IDurable = {
         durationType: 'forever'
@@ -35,10 +35,10 @@ export class EditEffectDialogComponent implements OnInit {
         public dialogRef: MatDialogRef<EditEffectDialogComponent, Effect>,
         @Inject(MAT_DIALOG_DATA) public readonly data: EditEffectDialogData
     ) {
-        this.form = new FormGroup({
-            name: new FormControl(undefined, Validators.required),
-            description: new FormControl(),
-            dice: new FormControl()
+        this.form = new UntypedFormGroup({
+            name: new UntypedFormControl(undefined, Validators.required),
+            description: new UntypedFormControl(),
+            dice: new UntypedFormControl()
         });
 
         if (data.effect) {

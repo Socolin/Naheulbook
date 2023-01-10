@@ -17,7 +17,7 @@ import {NhbkMatDialog} from '../material-workaround';
 import {Guid} from '../api/shared/util';
 import {EditItemTemplateDialogComponent, EditItemTemplateDialogData} from './edit-item-template-dialog.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {FormBuilder, FormControl} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormControl} from '@angular/forms';
 import {debounceTime, map, startWith, switchMap, tap} from 'rxjs/operators';
 
 @Component({
@@ -60,7 +60,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     public tableView: boolean;
     public showCommunityItems: boolean;
 
-    public categoryNameControl = new FormControl();
+    public categoryNameControl = new UntypedFormControl();
     public filteredItemCategories: Observable<ItemTemplateSection[]>;
 
     public searching: boolean;
@@ -72,7 +72,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     constructor(
         public readonly loginService: LoginService,
         private readonly dialog: NhbkMatDialog,
-        private readonly formBuilder: FormBuilder,
+        private readonly formBuilder: UntypedFormBuilder,
         private readonly itemTemplateService: ItemTemplateService,
         private readonly jobService: JobService,
         private readonly miscService: MiscService,

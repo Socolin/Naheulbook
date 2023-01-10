@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 
 export interface CreateEffectTypeDialogResult {
     name: string;
@@ -15,11 +15,11 @@ export interface CreateEffectTypeDialogResult {
     styleUrls: ['./create-effect-type-dialog.component.scss']
 })
 export class CreateEffectTypeDialogComponent implements OnInit {
-    form: FormGroup = new FormGroup({
-        name: new FormControl(),
-        diceSize: new FormControl(),
-        diceCount: new FormControl(),
-        note: new FormControl(undefined, Validators.required)
+    form: UntypedFormGroup = new UntypedFormGroup({
+        name: new UntypedFormControl(),
+        diceSize: new UntypedFormControl(),
+        diceCount: new UntypedFormControl(),
+        note: new UntypedFormControl(undefined, Validators.required)
     });
 
     constructor(

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {getRandomInt} from '../shared';
 import {Item, ItemData} from '../item';
 import {MonsterTemplate, MonsterTemplateSubCategory, MonsterTemplateService, MonsterTemplateType} from '../monster';
@@ -45,24 +45,24 @@ export class AddMonsterDialogComponent implements OnInit {
     public filter?: string;
     public items: Item[] = [];
 
-    public form = new FormGroup({
-        name: new FormControl(),
-        at: new FormControl(),
-        prd: new FormControl(),
-        esq: new FormControl(),
-        ev: new FormControl(),
-        maxEv: new FormControl(),
-        ea: new FormControl(),
-        maxEa: new FormControl(),
-        pr: new FormControl(),
-        pr_magic: new FormControl(),
-        dmg: new FormControl(),
-        cou: new FormControl(),
-        chercheNoise: new FormControl(),
-        resm: new FormControl(),
-        xp: new FormControl(),
-        note: new FormControl(),
-        sex: new FormControl(),
+    public form = new UntypedFormGroup({
+        name: new UntypedFormControl(),
+        at: new UntypedFormControl(),
+        prd: new UntypedFormControl(),
+        esq: new UntypedFormControl(),
+        ev: new UntypedFormControl(),
+        maxEv: new UntypedFormControl(),
+        ea: new UntypedFormControl(),
+        maxEa: new UntypedFormControl(),
+        pr: new UntypedFormControl(),
+        pr_magic: new UntypedFormControl(),
+        dmg: new UntypedFormControl(),
+        cou: new UntypedFormControl(),
+        chercheNoise: new UntypedFormControl(),
+        resm: new UntypedFormControl(),
+        xp: new UntypedFormControl(),
+        note: new UntypedFormControl(),
+        sex: new UntypedFormControl(),
     });
 
     constructor(

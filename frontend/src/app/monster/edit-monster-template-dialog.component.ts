@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {
     MonsterInventoryElement,
     MonsterTemplate,
@@ -33,24 +33,24 @@ export interface EditMonsterTemplateDialogData {
 })
 export class EditMonsterTemplateDialogComponent implements OnInit {
     public saving = false;
-    public form = new FormGroup({
-        name: new FormControl(undefined, [Validators.required]),
-        data: new FormGroup({
-            at: new FormControl(),
-            prd: new FormControl(),
-            esq: new FormControl(),
-            ev: new FormControl(),
-            ea: new FormControl(),
-            pr: new FormControl(),
-            pr_magic: new FormControl(),
-            dmg: new FormControl(),
-            cou: new FormControl(),
-            chercheNoise: new FormControl(),
-            resm: new FormControl(),
-            xp: new FormControl(),
-            note: new FormControl(),
-            sex: new FormControl(),
-            page: new FormControl()
+    public form = new UntypedFormGroup({
+        name: new UntypedFormControl(undefined, [Validators.required]),
+        data: new UntypedFormGroup({
+            at: new UntypedFormControl(),
+            prd: new UntypedFormControl(),
+            esq: new UntypedFormControl(),
+            ev: new UntypedFormControl(),
+            ea: new UntypedFormControl(),
+            pr: new UntypedFormControl(),
+            pr_magic: new UntypedFormControl(),
+            dmg: new UntypedFormControl(),
+            cou: new UntypedFormControl(),
+            chercheNoise: new UntypedFormControl(),
+            resm: new UntypedFormControl(),
+            xp: new UntypedFormControl(),
+            note: new UntypedFormControl(),
+            sex: new UntypedFormControl(),
+            page: new UntypedFormControl()
         })
     });
 

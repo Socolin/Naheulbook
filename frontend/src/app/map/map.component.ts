@@ -1,6 +1,6 @@
 import {Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import { MatSidenav } from '@angular/material/sidenav';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
@@ -82,10 +82,10 @@ export class MapComponent implements OnInit, OnDestroy {
     public selectedMarker$: ReplaySubject<MapMarker | undefined> = new ReplaySubject<MapMarker | undefined>();
     public selectedLayer?: MapLayer;
     public selectedLayer$: ReplaySubject<MapLayer | undefined> = new ReplaySubject<MapLayer | undefined>();
-    public markerForm = new FormGroup({
-        name: new FormControl(),
-        description: new FormControl(),
-        markerIcon: new FormControl()
+    public markerForm = new UntypedFormGroup({
+        name: new UntypedFormControl(),
+        description: new UntypedFormControl(),
+        markerIcon: new UntypedFormControl()
     });
     public markerIconSubscription?: Subscription;
     public expandedLayerList: { [mapLayerId: number]: boolean } = {};

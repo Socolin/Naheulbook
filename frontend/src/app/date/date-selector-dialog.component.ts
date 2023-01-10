@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {DateService} from './date.service';
 import {CalendarDate, NhbkDate} from './date.model';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -23,12 +23,12 @@ export class DateSelectorDialogComponent implements OnInit {
     public calendarEntries: CalendarDate[] = [];
     public calendarPerRealMonth: { monthName: string, calendarEntries: CalendarDate[] }[] = [];
 
-    public form = new FormGroup({
-        hour: new FormControl('', [Validators.required, Validators.min(0), Validators.max(23)]),
-        minute: new FormControl('', [Validators.required, Validators.min(0), Validators.max(59)]),
-        relativeDay: new FormControl('', [Validators.required, Validators.min(0), Validators.max(250)]),
-        currentCalendarDate: new FormControl('', Validators.required),
-        year: new FormControl('', [Validators.required, Validators.min(0), Validators.max(10000)]),
+    public form = new UntypedFormGroup({
+        hour: new UntypedFormControl('', [Validators.required, Validators.min(0), Validators.max(23)]),
+        minute: new UntypedFormControl('', [Validators.required, Validators.min(0), Validators.max(59)]),
+        relativeDay: new UntypedFormControl('', [Validators.required, Validators.min(0), Validators.max(250)]),
+        currentCalendarDate: new UntypedFormControl('', Validators.required),
+        year: new UntypedFormControl('', [Validators.required, Validators.min(0), Validators.max(10000)]),
     });
 
     constructor(

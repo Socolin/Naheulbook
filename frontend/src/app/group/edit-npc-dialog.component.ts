@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NhbkMatDialog} from '../material-workaround';
 import {NameGeneratorDialogComponent, NameGeneratorDialogResult} from '../origin/name-generator-dialog.component';
@@ -20,13 +20,13 @@ export interface EditNpcDialogResult {
     styleUrls: ['../shared/full-screen-dialog.scss', './edit-npc-dialog.component.scss']
 })
 export class EditNpcDialogComponent {
-    public form = new FormGroup({
-        name: new FormControl(undefined, Validators.required),
-        data: new FormGroup({
-            location: new FormControl(undefined),
-            note: new FormControl(undefined),
-            sex: new FormControl(undefined),
-            originName: new FormControl(undefined)
+    public form = new UntypedFormGroup({
+        name: new UntypedFormControl(undefined, Validators.required),
+        data: new UntypedFormGroup({
+            location: new UntypedFormControl(undefined),
+            note: new UntypedFormControl(undefined),
+            sex: new UntypedFormControl(undefined),
+            originName: new UntypedFormControl(undefined)
         })
     });
 
