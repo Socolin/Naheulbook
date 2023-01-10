@@ -437,22 +437,20 @@ public class CharacterService : ICharacterService
             await uow.SaveChangesAsync();
             await notificationSession.CommitAsync();
         }
-
     }
 
     public async Task QuitGroupAsync(NaheulbookExecutionContext executionContext, int characterId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var character = await uow.Characters.GetWithOriginWithJobsAsync(characterId);
-            if (character == null)
-                throw new CharacterNotFoundException(characterId);
+        using var uow = _unitOfWorkFactory.CreateUnitOfWork();
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+        var character = await uow.Characters.GetWithGroupAsync(characterId);
+        if (character == null)
+            throw new CharacterNotFoundException(characterId);
 
-            character.GroupId = null;
+        _authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-            await uow.SaveChangesAsync();
-        }
+        character.GroupId = null;
+
+        await uow.SaveChangesAsync();
     }
 }
