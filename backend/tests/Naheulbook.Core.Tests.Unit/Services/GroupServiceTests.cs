@@ -180,7 +180,7 @@ public class GroupServiceTests
 
         _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
             .Returns(group);
-        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupWithJobsWithOriginAsync(characterId)
             .Returns(character);
 
         await _service.CreateInviteAsync(new NaheulbookExecutionContext(), groupId, request);
@@ -203,7 +203,7 @@ public class GroupServiceTests
 
         _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
             .Returns(group);
-        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupWithJobsWithOriginAsync(characterId)
             .Returns(character);
 
         var groupInvite = await _service.CreateInviteAsync(new NaheulbookExecutionContext(), groupId, request);
@@ -241,7 +241,7 @@ public class GroupServiceTests
 
         _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
             .Returns(new GroupEntity());
-        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupWithJobsWithOriginAsync(characterId)
             .Returns((CharacterEntity) null);
 
         Func<Task> act = () => _service.CreateInviteAsync(executionContext, groupId, request);
@@ -261,7 +261,7 @@ public class GroupServiceTests
 
         _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
             .Returns(group);
-        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupWithJobsWithOriginAsync(characterId)
             .Returns(character);
         _authorizationUtil.When(x => x.EnsureIsGroupOwner(naheulbookExecutionContext, group))
             .Throw(new TestException());
@@ -284,7 +284,7 @@ public class GroupServiceTests
 
         _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
             .Returns(group);
-        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupWithJobsWithOriginAsync(characterId)
             .Returns(character);
         _authorizationUtil.When(x => x.EnsureIsCharacterOwner(naheulbookExecutionContext, character))
             .Throw(new TestException());

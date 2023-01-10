@@ -102,7 +102,7 @@ public class CharacterRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
 
         var actualEntities = await _characterRepository.GetHistoryByCharacterIdAsync(character.Id, null, 0, false);
 
-        AssertEntitiesAreLoadedWithSameOrder(actualEntities.Cast<CharacterHistoryEntryEntity>(), new [] {characterHistoryEntry2, characterHistoryEntry1});
+        AssertEntitiesAreLoadedWithSameOrder(actualEntities.Cast<CharacterHistoryEntryEntity>(), new[] {characterHistoryEntry2, characterHistoryEntry1});
     }
 
     [Test]
@@ -124,7 +124,8 @@ public class CharacterRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
                 characterHistoryEntry2.Action,
                 groupHistoryEntry1.Action,
                 characterHistoryEntry1.Action,
-            }, opt => opt.WithStrictOrdering()
+            },
+            opt => opt.WithStrictOrdering()
         );
     }
 
@@ -291,7 +292,30 @@ public class CharacterRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
 
     #endregion
 
-    #region GetWithOriginWithJobsAsync
+    #region GetWithGroupWithJobsWithOriginAsync
+
+    [Test]
+    public async Task GetWithGroupWithJobsWithOriginAsync_ShouldIncludeRelatedEntities()
+    {
+        TestDataUtil
+            .AddJob(out var job1)
+            .AddJob(out var job2)
+            .AddOrigin(out var origin)
+            .AddUser()
+            .AddGroup(out var group)
+            .AddCharacter(out var character)
+            .AddCharacterJob(out var characterJob1, job1)
+            .AddCharacterJob(out var characterJob2, job2);
+
+        var actualCharacter = await _characterRepository.GetWithGroupWithJobsWithOriginAsync(character.Id);
+
+        AssertEntityIsLoaded(actualCharacter, character);
+        AssertEntitiesAreLoaded(actualCharacter.Jobs, new [] {characterJob1, characterJob2});
+        AssertEntityIsLoaded(actualCharacter.Jobs.Single(x => x.JobId == job1.Id).Job, job1);
+        AssertEntityIsLoaded(actualCharacter.Jobs.Single(x => x.JobId == job2.Id).Job, job2);
+        AssertEntityIsLoaded(actualCharacter.Origin, origin);
+        AssertEntityIsLoaded(actualCharacter.Group, group);
+    }
 
     #endregion
 

@@ -701,7 +701,7 @@ public class CharacterServiceTests
         var character = new CharacterEntity {Jobs = new List<CharacterJobEntity>(), Id = characterId};
         var job = new JobEntity {Id = jobId};
 
-        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupWithJobsWithOriginAsync(characterId)
             .Returns(character);
         _unitOfWorkFactory.GetUnitOfWork().Jobs.GetAsync(jobId)
             .Returns(job);
@@ -730,7 +730,7 @@ public class CharacterServiceTests
         var executionContext = new NaheulbookExecutionContext();
         var request = new CharacterAddJobRequest {JobId = jobId};
 
-        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupWithJobsWithOriginAsync(characterId)
             .Returns((CharacterEntity)null);
 
         Func<Task> act = () => _service.AddJobAsync(executionContext, characterId, request);
@@ -747,7 +747,7 @@ public class CharacterServiceTests
         var request = new CharacterAddJobRequest {JobId = jobId};
         var character = new CharacterEntity {Jobs = new List<CharacterJobEntity>(), Id = characterId};
 
-        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupWithJobsWithOriginAsync(characterId)
             .Returns(character);
 
         _authorizationUtil.When(x => x.EnsureCharacterAccess(executionContext, character))
@@ -767,7 +767,7 @@ public class CharacterServiceTests
         var request = new CharacterAddJobRequest {JobId = jobId};
         var character = new CharacterEntity {Jobs = new List<CharacterJobEntity> {new() {JobId = jobId}}, Id = characterId};
 
-        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupWithJobsWithOriginAsync(characterId)
             .Returns(character);
 
         Func<Task> act = () => _service.AddJobAsync(executionContext, characterId, request);
@@ -784,7 +784,7 @@ public class CharacterServiceTests
         var request = new CharacterAddJobRequest {JobId = jobId};
         var character = new CharacterEntity {Jobs = new List<CharacterJobEntity>(), Id = characterId};
 
-        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithOriginWithJobsAsync(characterId)
+        _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupWithJobsWithOriginAsync(characterId)
             .Returns(character);
         _unitOfWorkFactory.GetUnitOfWork().Jobs.GetAsync(jobId)
             .Returns((JobEntity)null);

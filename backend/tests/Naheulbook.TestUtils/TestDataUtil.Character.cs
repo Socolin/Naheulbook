@@ -122,9 +122,14 @@ public partial class TestDataUtil
 
     public TestDataUtil AddCharacterJob(out CharacterJobEntity characterJob, Action<CharacterJobEntity> customizer = null)
     {
+        return AddCharacterJob(out characterJob, GetLast<JobEntity>(), customizer);
+    }
+
+    public TestDataUtil AddCharacterJob(out CharacterJobEntity characterJob, JobEntity job, Action<CharacterJobEntity> customizer = null)
+    {
         characterJob = new CharacterJobEntity
         {
-            JobId = GetLast<JobEntity>().Id,
+            JobId = job.Id,
             CharacterId = GetLast<CharacterEntity>().Id,
         };
         return SaveEntity(characterJob, customizer);

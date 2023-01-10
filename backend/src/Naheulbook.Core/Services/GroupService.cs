@@ -165,7 +165,7 @@ public class GroupService : IGroupService
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            var character = await uow.Characters.GetWithOriginWithJobsAsync(request.CharacterId);
+            var character = await uow.Characters.GetWithGroupWithJobsWithOriginAsync(request.CharacterId);
             if (character == null)
                 throw new CharacterNotFoundException(request.CharacterId);
 

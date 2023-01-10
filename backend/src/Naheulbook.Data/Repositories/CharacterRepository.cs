@@ -17,7 +17,7 @@ public interface ICharacterRepository : IRepository<CharacterEntity>
     Task<List<CharacterEntity>> GetForSummaryByOwnerIdAsync(int ownerId);
     Task<List<IHistoryEntry>> GetHistoryByCharacterIdAsync(int characterId, int? groupId, int page, bool isGm);
     Task<List<CharacterEntity>> SearchCharacterWithNoGroupByNameWithOriginWithOwner(string filter, int maxCount);
-    Task<CharacterEntity?> GetWithOriginWithJobsAsync(int requestCharacterId);
+    Task<CharacterEntity?> GetWithGroupWithJobsWithOriginAsync(int requestCharacterId);
     Task<List<CharacterEntity>> GetWithItemsWithModifiersByGroupAndByIdAsync(int groupId, IEnumerable<int> characterIds);
 }
 
@@ -119,9 +119,10 @@ public class CharacterRepository : Repository<CharacterEntity, NaheulbookDbConte
             .ToListAsync();
     }
 
-    public Task<CharacterEntity?> GetWithOriginWithJobsAsync(int characterId)
+    public Task<CharacterEntity?> GetWithGroupWithJobsWithOriginAsync(int characterId)
     {
         return Context.Characters
+            .Include(x => x.Group)
             .Include(x => x.Jobs)
             .ThenInclude(x => x.Job)
             .Include(x => x.Origin)

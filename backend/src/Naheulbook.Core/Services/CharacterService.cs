@@ -389,7 +389,7 @@ public class CharacterService : ICharacterService
     {
         using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            var character = await uow.Characters.GetWithOriginWithJobsAsync(characterId);
+            var character = await uow.Characters.GetWithGroupWithJobsWithOriginAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
@@ -419,7 +419,7 @@ public class CharacterService : ICharacterService
     {
         using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            var character = await uow.Characters.GetWithOriginWithJobsAsync(characterId);
+            var character = await uow.Characters.GetWithGroupWithJobsWithOriginAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
