@@ -31,8 +31,8 @@
                 "output": "/"
               },
               {
-                "glob": "favicon",
-                "input": "src/assets",
+                "glob": "favicon/*",
+                "input": "src/assets/",
                 "output": "/"
               }
             ],
