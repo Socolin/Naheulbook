@@ -2,12 +2,7 @@ import {ItemStatModifier} from '../shared';
 import {Skill, SkillDictionary} from '../skill';
 import {IconDescription} from '../shared/icon.model';
 import {IDurable, IItemTemplateData, IItemTemplateGunData, IItemTemplateInstrumentData} from '../api/shared';
-import {
-    ItemTemplateResponse,
-    ItemTemplateSectionResponse,
-    ItemTemplateSubCategoryResponse,
-    ItemTypeResponse
-} from '../api/responses';
+import {ItemTemplateResponse, ItemTemplateSectionResponse, ItemTemplateSubCategoryResponse, ItemTypeResponse} from '../api/responses';
 import {Guid} from '../api/shared/util';
 
 export class ItemTemplateSection {
@@ -262,7 +257,7 @@ export class ItemTemplate {
         }
 
         for (let skillModifier of response.skillModifiers) {
-            itemTemplate.skillModifiers.push(new ItemSkillModifier(skillsById[+skillModifier.skillId], skillModifier.value));
+            itemTemplate.skillModifiers.push(new ItemSkillModifier(skillsById[skillModifier.skillId], skillModifier.value));
         }
 
         return itemTemplate;
