@@ -105,4 +105,22 @@ public class MonsterSteps
         _testDataUtil.AddMonster();
         _testDataUtil.AddItem(_testDataUtil.GetLast<MonsterEntity>());
     }
+
+    [Given(@"a monster with an item in its inventory and a modifier")]
+    public void GivenAMonsterWithAnItemInItsInventoryAndAModifier()
+    {
+        _testDataUtil.AddMonster(m => m.Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>
+        {
+            new ActiveStatsModifier
+            {
+                Active = true,
+                Id = 8,
+                Name = "some-name",
+                DurationType = "combat",
+                CombatCount = 2,
+                CurrentCombatCount = 2
+            },
+        }));
+        _testDataUtil.AddItem(_testDataUtil.GetLast<MonsterEntity>());
+    }
 }

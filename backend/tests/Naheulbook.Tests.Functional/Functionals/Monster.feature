@@ -408,3 +408,75 @@ Feature: Monster
     }
     """
     Then the response status code is 204
+
+Scenario: Load a monster info
+    Given a JWT for a user
+    Given a group
+    Given a stat
+
+    And an item template
+    And a monster with an item in its inventory and a modifier
+
+    When performing a GET to the url "/api/v2/monsters/${Monster.Id}" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+    """
+    {
+      "id": ${Monster.Id},
+      "name": "${Monster.Name}",
+      "data": {
+        "key": "value"
+      },
+      "modifiers": [
+        {
+          "active": true,
+          "combatCount": 2,
+          "currentCombatCount": 2,
+          "durationType": "combat",
+          "id": 8,
+          "name": "some-name",
+          "permanent": false,
+          "reusable": false
+        }
+      ],
+      "items": [
+        {
+          "id": ${Item.Id},
+          "data": {
+            "key": "value"
+          },
+          "modifiers": [
+            {
+              "active": true,
+              "description": "some-description",
+              "id": 0,
+              "permanent": false,
+              "reusable": false
+            }
+          ],
+          "template": {
+            "id": "${ItemTemplate.Id}",
+            "name": "${ItemTemplate.Name}",
+            "techName": "${ItemTemplate.TechName}",
+            "source": "official",
+            "subCategoryId": ${ItemTemplateSubCategory.Id},
+            "data": {
+              "key": "value"
+            },
+            "slots": [
+            ],
+            "modifiers": [
+            ],
+            "requirements": [
+            ],
+            "skillModifiers": [
+            ],
+            "skillIds": [
+            ],
+            "unSkillIds": [
+            ]
+          }
+        }
+      ]
+    }
+    """

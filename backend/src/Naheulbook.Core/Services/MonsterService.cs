@@ -64,7 +64,7 @@ public class MonsterService : IMonsterService
     {
         using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
-            var monster = await uow.Monsters.GetWithGroupAsync(monsterId);
+            var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId);
             if (monster == null)
                 throw new MonsterNotFoundException(monsterId);
 
