@@ -106,6 +106,9 @@ public class ItemTemplateService : IItemTemplateService
 
     public async Task<List<ItemTemplateEntity>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId)
     {
+        if (string.IsNullOrWhiteSpace(filter))
+            return new List<ItemTemplateEntity>();
+
         var matchingItemTemplates = new List<ItemTemplateEntity>();
         using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {

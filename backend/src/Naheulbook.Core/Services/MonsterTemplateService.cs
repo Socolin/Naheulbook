@@ -115,9 +115,10 @@ public class MonsterTemplateService : IMonsterTemplateService
 
     public async Task<List<MonsterTemplateEntity>> SearchMonsterAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.MonsterTemplates.SearchByNameAndSubCategoryAsync(filter, monsterTypeId, monsterSubCategoryId, 10);
-        }
+        if (string.IsNullOrWhiteSpace(filter))
+            return new List<MonsterTemplateEntity>();
+
+        using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.MonsterTemplates.SearchByNameAndSubCategoryAsync(filter, monsterTypeId, monsterSubCategoryId, 10);
     }
 }

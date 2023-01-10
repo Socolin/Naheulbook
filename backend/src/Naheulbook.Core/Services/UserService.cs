@@ -141,6 +141,9 @@ public class UserService : IUserService
 
     public async Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter)
     {
+        if (string.IsNullOrWhiteSpace(filter))
+            return new List<UserEntity>();
+
         using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Users.SearchUsersAsync(filter);

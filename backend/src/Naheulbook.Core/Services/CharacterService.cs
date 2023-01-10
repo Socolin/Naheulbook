@@ -340,7 +340,7 @@ public class CharacterService : ICharacterService
 
     public async Task<List<CharacterEntity>> SearchCharactersAsync(string filter)
     {
-        if (string.IsNullOrEmpty(filter))
+        if (string.IsNullOrWhiteSpace(filter))
             return new List<CharacterEntity>();
 
         using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
