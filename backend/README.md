@@ -77,4 +77,20 @@ Then you need to configure `nginx`  you can follow the example in `tools/script/
 
 ### Windows
 
-Not done yet, contact me on Discord if you are interested
+- Install [NodeJs](https://nodejs.org/en/) (18.0+)
+- Install [Dotnet 7 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
+- Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- Install [Powershell Core](https://github.com/PowerShell/PowerShell)
+- Run in admin powershell console: `Set-ExecutionPolicy RemoteSigned`
+
+#### Frontend
+- Open a terminal in `frontend`
+- Run `npm install`
+- Run `npm start`
+
+#### Backend
+- Open Powershell console in `backend` and execute 
+- Run `.\tools\scripts\windows\Setup-Dev.ps1`
+- Then you can open with your IDE the solution and run with the Windows configuration
+
+**IMPORTANT**: After a reboot, you might need to run the script `.\tools\scripts\windows\Udpate-config.ps1` if the connection to MySQL does not works anymore  

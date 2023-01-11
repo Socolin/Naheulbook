@@ -20,7 +20,7 @@ var (caPath, certPath, certPrivateKeyPath, certPfxPath) = SelfSignedCertificateA
     certHostnames
 );
 
-if (!await CertificateAuthorityInstaller.IsCetificateAuthorityInstalledAsync(certPath))
+if (!await CertificateAuthorityInstaller.IsCertificateAuthorityInstalledAsync(certPath, caPath))
     if (AnsiConsole.Confirm("Do you want to install the Certificate Authority (will require administrator / root permission) ?"))
         await CertificateAuthorityInstaller.InstallCertificateAuthorityAsync(caPath);
 

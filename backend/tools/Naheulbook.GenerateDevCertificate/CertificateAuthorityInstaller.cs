@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using CliWrap;
 using CliWrap.Buffered;
 using Spectre.Console;
@@ -39,17 +41,38 @@ public static class CertificateAuthorityInstaller
                 .ExecuteBufferedAsync();
             AnsiConsole.Write(new Rows(new Text("Certificate Authority was successfully installed", new Style(Color.Green))));
         }
-        else
+        else if (OperatingSystem.IsWindows())
         {
-            // Windows (powershell):
-            // Import-Certificate -FilePath root.crt -CertStoreLocation cert:\LocalMachine\Root
-            // And to make it available in IIS:
+            var proc = new ProcessStartInfo
+            {
+                UseShellExecute = true,
+                WorkingDirectory = Environment.CurrentDirectory,
+                FileName = "pwsh",
+            };
+
+            var fileName = Path.GetTempFileName().Replace(".tmp", ".ps1");
+            // If we need to make it available in IIS:
             // $Pfx = Import-PfxCertificate -FilePath cert.pfx -CertStoreLocation cert:\LocalMachine\My
             // (Get-ChildItem -Path "Cert:\LocalMachine\My\$($Pfx.Thumbprint)").FriendlyName = 'Naheulbook Tls Certificate'
+            await File.WriteAllTextAsync(fileName,
+                $"""
+                Import-Certificate -FilePath {caPath} -CertStoreLocation cert:\LocalMachine\Root;
+                """);
+
+            proc.Arguments = $"-NoProfile -ExecutionPolicy Bypass -File {fileName}";
+            proc.Verb = "runas";
+
+            var process = Process.Start(proc);
+            if (process == null)
+                throw new Exception("Failed to start process to install certificate");
+            await process.WaitForExitAsync();
+        }
+        else
+        {
             throw new NotSupportedException("Automatic installation of current os is not supported yet");
         }
     }
-    public static async Task<bool> IsCetificateAuthorityInstalledAsync(string certPath)
+    public static async Task<bool> IsCertificateAuthorityInstalledAsync(string certPath, string caPath)
     {
         if (OperatingSystem.IsLinux())
         {
@@ -58,6 +81,21 @@ public static class CertificateAuthorityInstaller
                 .WithValidation(CommandResultValidation.None)
                 .ExecuteBufferedAsync();
             return result.ExitCode == 0;
+        }
+
+        if (OperatingSystem.IsWindows())
+        {
+            var caCert = X509Certificate.CreateFromCertFile(caPath);
+            using var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
+            store.Open(OpenFlags.ReadOnly);
+
+            foreach (var cert in store.Certificates)
+            {
+                if (cert.GetSerialNumberString() == caCert.GetSerialNumberString())
+                    return true;
+            }
+
+            return false;
         }
 
         throw new NotSupportedException("Automatic installation of current os is not supported yet");

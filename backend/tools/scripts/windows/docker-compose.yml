@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  naheulbook_dev_env_nginx:
+    image: nginx:latest
+    volumes:
+      - ./conf.nginx:/etc/nginx/conf.d/default.conf
+      - ../../../tls:/tls/
+    ports:
+      - "80:80"
+      - "443:443"
+  naheulbook_dev_env_mysql:
+    image: mariadb:10.9
+    environment:
+      MYSQL_ROOT_PASSWORD: naheulbook
+    ports:
+      - "0:3306"
+    restart: unless-stopped
+    volumes:
+      - mariadb_data:/var/lib/mysql
+  naheulbook_dev_env_redis:
+    image: redis:latest
+    ports:
+      - "0:6379"
+    restart: unless-stopped
+
+volumes:
+  mariadb_data:

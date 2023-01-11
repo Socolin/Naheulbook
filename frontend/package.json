@@ -6,6 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:windows": "ng serve --host 0.0.0.0",
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
     "build": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --configuration production",

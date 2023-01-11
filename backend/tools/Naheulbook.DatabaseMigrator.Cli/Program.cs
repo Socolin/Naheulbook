@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using FluentMigrator.Runner;
+using FluentMigrator.Runner.Initialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Naheulbook.DatabaseMigrator.Migrations;
@@ -23,15 +24,15 @@ internal class Program
             throw new Exception("Missing configuration ConnectionStrings:DefaultConnection");
         var operation = config["operation"];
         if (operation == null)
-            throw new Exception("Missing operation");
+            throw new Exception("Missing --operation");
 
-        var serviceProvider = CreateServices(connectionString);
+        var serviceProvider = CreateServices(connectionString, operation);
 
         using var scope = serviceProvider.CreateScope();
         UpdateDatabase(scope.ServiceProvider, operation);
     }
 
-    private static IServiceProvider CreateServices(string connectionString)
+    private static IServiceProvider CreateServices(string connectionString, string operation)
     {
         var asm = typeof(Mig0001Init).Assembly;
         foreach (var n in asm.GetManifestResourceNames())
@@ -45,6 +46,12 @@ internal class Program
                     opt.ShowElapsedTime = true;
                     opt.ShowSql = true;
                 })
+            .Configure<RunnerOptions>(
+                opt =>
+                {
+                    if (operation == "init")
+                        opt.Profile = "InitialData";
+                })
             .ConfigureRunner(rb => rb
                 .AddMySql5()
                 .WithGlobalConnectionString(connectionString + ";Allow User Variables=True")
@@ -57,13 +64,17 @@ internal class Program
     {
         var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
 
-        if (operation == "rollback")
+        switch (operation)
         {
-            runner.Rollback(1);
-        }
-        else
-        {
-            runner.MigrateUp();
+            case "rollback":
+                runner.Rollback(1);
+                break;
+            case "init":
+                runner.MigrateUp();
+                break;
+            default:
+                runner.MigrateUp();
+                break;
         }
     }
 }
