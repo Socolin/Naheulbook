@@ -18,10 +18,10 @@ public partial class DefaultEntityCreator
             DisplayName = $"some-display-name-{suffix}",
             HashedPassword = $"some-hashed-password-{suffix}",
             ActivationCode = "some-activation-code",
-            FbId = "some-fb-id",
-            GoogleId = "some-google-id",
-            TwitterId = "some-twitter-id",
-            MicrosoftId = "some-microsoft-id",
+            FbId = $"some-fb-id-{suffix}",
+            GoogleId = $"some-google-id-{suffix}",
+            TwitterId = $"some-twitter-id-{suffix}",
+            MicrosoftId = $"some-microsoft-id-{suffix}",
         };
     }
 
