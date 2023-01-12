@@ -86,7 +86,7 @@ Then you need to configure `nginx`  you can follow the example in `tools/script/
 #### Frontend
 - Open a terminal in `frontend`
 - Run `npm install`
-- Run `npm start`
+- Run `npm start:windows`
 
 #### Backend
 - Open Powershell console in `backend` and execute 
