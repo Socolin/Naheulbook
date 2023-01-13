@@ -5439,7 +5439,7 @@ INSERT INTO `origin_random_name_urls` (`id`, `originId`, `sex`, `url`) VALUES
 (13,	'3447b1c8-0b20-11ea-bd72-4c72b9310a53',	'Femme',	'/generateurs/noms/fantastiques/fr/feminins/demi-elfes'),
 (14,	'3447b371-0b20-11ea-bd72-4c72b9310a53',	'Homme',	'/generateurs/noms/fantastiques/fr/masculins/demi-orques'),
 (15,	'3447b371-0b20-11ea-bd72-4c72b9310a53',	'Femme',	'/generateurs/noms/fantastiques/fr/feminins/demi-orques'),
-(16,	'3447b2fa-0b20-11ea-bd72-4c72b9310a53',	'Homme',	'/generateurs/noms/fantastiques/masculins/orques'),
+(16,	'3447b2fa-0b20-11ea-bd72-4c72b9310a53',	'Femme',	'/generateurs/noms/fantastiques/feminins/orques'),
 (17,	'3447b2fa-0b20-11ea-bd72-4c72b9310a53',	'Homme',	'/generateurs/noms/fantastiques/masculins/orques'),
 (18,	'3447b0f1-0b20-11ea-bd72-4c72b9310a53',	'Femme',	'/generateurs/noms/fantastiques/fr/feminins/nains'),
 (19,	'3447af0c-0b20-11ea-bd72-4c72b9310a53',	'Femme',	'/generateurs/noms/fantastiques/fr/feminins/humains'),
