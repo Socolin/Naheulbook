@@ -14,7 +14,6 @@
         de votre personnage en détails.
     </p>
 </mat-card>
-
 <mat-card>
     <mat-card-title>
         Caractéristiques
@@ -133,7 +132,7 @@
             <span class="skill-description mat-hint">{{skill.playerDescription}}</span>
         </ng-template>
         <ng-template ngFor [ngForOf]="availableSkills" let-skill>
-            <mat-checkbox>
+            <mat-checkbox (change)="toggleSkill(skill, $event.checked)">
                 {{skill.name}}
             </mat-checkbox>
             <span class="skill-description mat-hint">{{skill.playerDescription}}</span>

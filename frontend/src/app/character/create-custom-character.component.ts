@@ -44,7 +44,7 @@ export class CreateCustomCharacterComponent implements OnInit {
     public availableSkills: Skill[] = [];
     public selectedOrigin?: Origin;
     public selectedJobs: Job[] = [];
-    public selectedSkills: Skill[] = [];
+    public selectedSkills: Set<Skill> = new Set<Skill>();
     public specialities: { [jobId: string]: Speciality[] } = {};
 
     public creating = false;
@@ -232,9 +232,10 @@ export class CreateCustomCharacterComponent implements OnInit {
             ...this.form.value,
             originId: this.selectedOrigin.id,
             jobIds: this.selectedJobs.map(job => job.id),
-            skillIds: this.selectedSkills.map(skill => skill.id),
+            skillIds: [...this.selectedSkills].map(skill => skill.id),
             specialityIds: specialitiesIds,
         };
+        console.warn(creationData)
 
         if (this.router.routerState.snapshot.root.queryParams.hasOwnProperty('isNpc')) {
             creationData.isNpc = this.router.routerState.snapshot.root.queryParams['isNpc'];
@@ -256,5 +257,13 @@ export class CreateCustomCharacterComponent implements OnInit {
                 this.creating = false;
             }
         );
+    }
+
+    toggleSkill(skill: Skill, selected: boolean) {
+        if (selected) {
+            this.selectedSkills.add(skill);
+        } else {
+            this.selectedSkills.delete(skill);
+        }
     }
 }
