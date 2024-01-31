@@ -11,6 +11,7 @@ using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
+using Serilog;
 
 namespace Naheulbook.Core.Services;
 
@@ -37,18 +38,21 @@ public class MapService : IMapService
     private readonly IJsonUtil _jsonUtil;
     private readonly IAuthorizationUtil _authorizationUtil;
     private readonly IMapImageUtil _mapImageUtil;
+    private readonly ILogger _logger;
 
     public MapService(
         IUnitOfWorkFactory unitOfWorkFactory,
         IJsonUtil jsonUtil,
         IAuthorizationUtil authorizationUtil,
-        IMapImageUtil mapImageUtil
+        IMapImageUtil mapImageUtil,
+        ILogger logger
     )
     {
         _unitOfWorkFactory = unitOfWorkFactory;
         _jsonUtil = jsonUtil;
         _authorizationUtil = authorizationUtil;
         _mapImageUtil = mapImageUtil;
+        _logger = logger;
     }
 
     public async Task<MapEntity> GetMapAsync(int mapId, int? userId)
@@ -95,8 +99,9 @@ public class MapService : IMapService
                 var mapImageData = _mapImageUtil.SplitMapImage(imageStream, map.Id);
                 map.ImageData = _jsonUtil.SerializeNonNull(mapImageData);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.Warning(ex, "Failed to process map image");
                 uow.Maps.Remove(map);
             }
 
