@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {Character} from './character.model';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {Skill} from '../skill';
 import {Job, Speciality} from '../job';
 import {Guid} from '../api/shared/util';

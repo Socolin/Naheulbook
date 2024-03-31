@@ -6,7 +6,7 @@ import {Observable, Subscription} from 'rxjs';
 import {filter, map, startWith, tap} from 'rxjs/operators';
 import {removeDiacritics} from '../shared';
 import {Map, MapMarker, MapMarkerLink} from './map.model';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 
 export interface MapMarkerLinkDialogData {
     link?: MapMarkerLink;

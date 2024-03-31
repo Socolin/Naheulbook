@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MonsterTrait, TraitInfo} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {MonsterTraitDialogComponent} from './monster-trait-dialog.component';
-import {MatSelectionList} from '@angular/material/list';
+import {MatLegacySelectionList as MatSelectionList} from '@angular/material/legacy-list';
 import {NhbkMatDialog} from '../material-workaround';
 
 export interface SelectMonsterTraitsDialogData {

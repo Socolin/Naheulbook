@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {Effect, EffectSubCategory, EffectType} from './effect.model';
 import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {PromptDialogComponent, StatModifier} from '../shared';

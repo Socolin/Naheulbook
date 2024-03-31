@@ -3,13 +3,13 @@ import {Component, OnInit} from '@angular/core';
 import {NotificationsService} from '../notifications';
 import {LoginService} from './login.service';
 import {UserInfoResponse} from '../api/responses';
-import {MatCheckboxChange} from '@angular/material/checkbox';
+import {MatLegacyCheckboxChange as MatCheckboxChange} from '@angular/material/legacy-checkbox';
 import {NhbkMatDialog} from '../material-workaround';
 import {EnableShowInSearchComponent, EnableShowInSearchResult} from './enable-show-in-search.component';
 import {UserService} from './user.service';
 import {UserAccessTokenResponse} from '../api/responses';
 import {PromptDialogComponent, PromptDialogData, PromptDialogResult} from '../shared';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {Clipboard} from '@angular/cdk/clipboard';
 
 @Component({

@@ -12,7 +12,7 @@ import {Observable} from 'rxjs';
 import {ActiveStatsModifier, AutocompleteValue, MiscService} from '../shared';
 
 import {ItemTemplate} from '../item-template';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {Effect} from '../effect';
 
 export interface NhbkActionEditorDialogData {

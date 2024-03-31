@@ -1,6 +1,6 @@
 import {Component, Inject, ViewChild} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSelectionList } from '@angular/material/list';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatLegacySelectionList as MatSelectionList } from '@angular/material/legacy-list';
 
 import {Group} from './group.model';
 import {IconDescription} from '../shared/icon.model';

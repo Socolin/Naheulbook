@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {forkJoin} from 'rxjs';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';

@@ -1,7 +1,7 @@
 import {forkJoin, Subscription} from 'rxjs';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+import {MatLegacyTabChangeEvent as MatTabChangeEvent} from '@angular/material/legacy-tabs';
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 

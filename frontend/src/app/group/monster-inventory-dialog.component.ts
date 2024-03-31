@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import {Monster} from '../monster';
 import {Item, ItemService} from '../item';
 import {ItemDialogComponent} from '../item/item-dialog.component';

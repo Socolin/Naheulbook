@@ -1,12 +1,12 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import {MatStep, MatStepper} from '@angular/material/stepper';
 
 import {ActiveStatsModifier} from '../shared';
 
 import {Fighter} from '../group';
 import {Effect, EffectService} from '../effect';
-import {MatSelectionList} from '@angular/material/list';
+import {MatLegacySelectionList as MatSelectionList} from '@angular/material/legacy-list';
 
 export interface GroupAddEffectDialogData {
     effect?: Effect,

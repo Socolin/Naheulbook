@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Notification} from './notification.model';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarConfig as MatSnackBarConfig } from '@angular/material/legacy-snack-bar';
 import {ErrorReportService} from '../error-report.service';
 import {ErrorDetailsDialogComponent} from './error-details-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';

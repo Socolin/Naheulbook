@@ -5,7 +5,7 @@ import {Item, ItemData} from '../item';
 import {MonsterTemplate, MonsterTemplateSubCategory, MonsterTemplateService, MonsterTemplateType} from '../monster';
 import {ItemTemplate} from '../item-template';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {NhbkMatDialog} from '../material-workaround';
 
 

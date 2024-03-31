@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {Item, ItemData} from './item.model';
-import {MatCheckbox} from '@angular/material/checkbox';
+import {MatLegacyCheckbox as MatCheckbox} from '@angular/material/legacy-checkbox';
 import {IconDescription} from '../shared/icon.model';
 import {
     IconSelectorComponent,

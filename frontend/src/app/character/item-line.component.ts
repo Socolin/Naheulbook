@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {MatMenuPanel} from '@angular/material/menu';
+import {MatLegacyMenuPanel as MatMenuPanel} from '@angular/material/legacy-menu';
 
 import {Item} from '../item';
 import {Character} from './character.model';
