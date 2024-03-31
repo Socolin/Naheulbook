@@ -30,14 +30,12 @@ jobs:
         ports:
           - 6379:6379
       mysql:
-        # Bug with latest version, rollback to oldest until it's fixed
-        # https://stackoverflow.com/questions/74060289/mysqlconnection-open-system-invalidcastexception-object-cannot-be-cast-from-d
-        image: mariadb:10.9
+        image: mariadb:11.3.2
         env:
           MYSQL_ROOT_PASSWORD: naheulbook
         ports:
           - 3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --health-cmd="healthcheck.sh --innodb_initialized" --health-interval=5s --health-timeout=2s --health-retries=3
 
     steps:
     - name: Set up MySQL
