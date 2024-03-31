@@ -90,7 +90,7 @@ public class Startup
             services.AddDistributedMemoryCache();
         }
 
-        services.AddAutoMapper(typeof(RequestToEntityProfile).Assembly, typeof(Startup).Assembly);
+        services.AddAutoMapper(typeof(RequestToEntityProfile), typeof(Startup));
 
         services.AddScoped(servicesProvider => servicesProvider.GetRequiredService<IHttpContextAccessor>().HttpContext!.GetExecutionContext());
         services.AddScoped(servicesProvider => servicesProvider.GetRequiredService<IHttpContextAccessor>().HttpContext!.GetIfExistsExecutionContext());

@@ -49,7 +49,7 @@ public static class Program
                                 options.ListenUnixSocket(unixSocketPath);
                         })
                         .UseKestrel()
-                        .UseSentry(o => o.BeforeSend = DefaultSentryEventExceptionProcessor.BeforeSend)
+                        .UseSentry(o => o.AddExceptionProcessorProvider(() => [new DefaultSentryEventExceptionProcessor()]))
                         .UseConfiguration(configuration)
                         .UseStartup<Startup>();
                 })

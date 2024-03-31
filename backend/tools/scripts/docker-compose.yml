@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   naheulbook_dev_env_mysql:
-    image: mariadb:10.9
+    image: mariadb:11.3.2
     environment:
       MYSQL_ROOT_PASSWORD: naheulbook
     ports:

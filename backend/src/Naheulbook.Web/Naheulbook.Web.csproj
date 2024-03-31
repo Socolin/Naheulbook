@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <Nullable>enable</Nullable>
     </PropertyGroup>
@@ -9,7 +9,6 @@
     <ItemGroup>
         <PackageReference Include="AspNetCore.HealthChecks.MySql" />
         <PackageReference Include="AspNetCore.HealthChecks.Redis" />
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
         <PackageReference Include="FluentValidation.AspNetCore" />
         <PackageReference Include="jose-jwt" />
         <PackageReference Include="JsonModelBinder" />

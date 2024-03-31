@@ -3,19 +3,18 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Sentry;
+using Sentry.Extensibility;
 
 namespace Naheulbook.Web.Sentry;
 
-public static class DefaultSentryEventExceptionProcessor
+public class DefaultSentryEventExceptionProcessor : ISentryEventExceptionProcessor
 {
-    public static SentryEvent BeforeSend(SentryEvent sentryEvent)
+    public void Process(Exception exception, SentryEvent sentryEvent)
     {
         if (sentryEvent.Exception != null)
         {
             FlattenException(sentryEvent.Exception, sentryEvent, "__exceptionData");
         }
-
-        return sentryEvent;
     }
 
     private static void FlattenException(Exception exception, SentryEvent sentryEvent, string key)
