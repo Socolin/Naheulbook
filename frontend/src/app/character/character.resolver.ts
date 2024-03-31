@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import {Observable} from 'rxjs';
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
 
 @Injectable()
-export class CharacterResolve implements Resolve<Character> {
+export class CharacterResolve  {
 
     constructor(
         private readonly characterService: CharacterService
