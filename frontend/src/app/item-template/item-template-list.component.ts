@@ -94,11 +94,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
                 })
             )
             .subscribe({
-                next: items => {
-                    if (items === undefined) {
-                        this.searchItems = undefined;
-                        this.updateVisibleItems();
-                    }
+                next: (items: ItemTemplate[] | undefined) => {
                     this.searchItems = items;
                     this.updateVisibleItems();
                     this.searching = false;

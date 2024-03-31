@@ -114,7 +114,7 @@ export class ItemTemplateService {
         });
     }
 
-    searchItem(filter): Observable<ItemTemplate[]> {
+    searchItem(filter: string): Observable<ItemTemplate[]> {
         if (!filter) {
             return observableFrom([]);
         }

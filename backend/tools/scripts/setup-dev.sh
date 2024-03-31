@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 # Uncomment this for debug
-# set -x
+set -x
 
 OPTIND=1
 user=""
@@ -75,6 +75,11 @@ sudo -H -u "${user}" -i bash -c "cd ${NAHEULBOOK_ROOT_PATH}/tools/scripts; docke
 
 # Create MySQL users and databases
 MYSQL_PORT=$(docker inspect  scripts-naheulbook_dev_env_mysql-1 | jq '.[0].NetworkSettings.Ports."3306/tcp"[0].HostPort | fromjson')
+
+mysql -u root --password=naheulbook --host localhost --protocol=TCP --port "${MYSQL_PORT}"<<-'EOF'
+ALTER USER 'root'@'%' IDENTIFIED VIA mysql_native_password USING PASSWORD('naheulbook');
+FLUSH PRIVILEGES;
+EOF
 
 mysql -u root --password=naheulbook --host localhost --protocol=TCP --port "${MYSQL_PORT}"<<-'EOF'
 DROP DATABASE IF EXISTS `naheulbook`;
