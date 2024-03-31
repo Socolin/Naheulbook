@@ -4,10 +4,7 @@ import {NotificationsService} from '../notifications';
 
 import {MonsterTemplate, MonsterTraitDictionary} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
-import {
-    EditMonsterTemplateDialogComponent,
-    EditMonsterTemplateDialogData
-} from './edit-monster-template-dialog.component';
+import {EditMonsterTemplateDialogComponent, EditMonsterTemplateDialogData} from './edit-monster-template-dialog.component';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
 import {ItemTemplate} from '../item-template';
 import {NhbkMatDialog} from '../material-workaround';
@@ -56,7 +53,6 @@ export class MonsterTemplateComponent implements OnInit {
 
     openItemInfo(itemTemplate: ItemTemplate) {
         this.dialog.open(ItemTemplateDialogComponent, {
-            panelClass: 'app-dialog-no-padding',
             data: {itemTemplate},
             autoFocus: false
         });

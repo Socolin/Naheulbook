@@ -11,7 +11,9 @@
     </mat-toolbar>
 
     <mat-card>
-        <mat-card-title>Profile</mat-card-title>
+        <mat-card-header>
+            <mat-card-title>Profile</mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <div *ngIf="profile">
                 <mat-form-field style="width: 100%">
@@ -35,9 +37,11 @@
     </mat-card>
 
     <mat-card>
-        <mat-card-title>
-            Service de connexion
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                Service de connexion
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <p>
                 Il est recommandé de vous lié au minimum avec 2 services pour vous garantir un accès a votre
@@ -63,9 +67,11 @@
     </mat-card>
 
     <mat-card>
-        <mat-card-title>
-            Token d'accès
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                Token d'accès
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <div *ngIf="accessTokens !== undefined; else loading">
                 <p>

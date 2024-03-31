@@ -4,14 +4,14 @@
         <mat-nav-list>
             <ng-container *ngFor="let group of groups">
                 <a mat-list-item [routerLink]="['/gm/group/', group.id]">
-                    <mat-icon matListIcon>group</mat-icon> {{group.name}}
+                    <mat-icon matListItemIcon>group</mat-icon> {{group.name}}
                 </a>
             </ng-container>
             <a mat-list-item [routerLink]="['/gm/group/list']">
-                <mat-icon matListIcon>list</mat-icon> Tous vos groupes
+                <mat-icon matListItemIcon>list</mat-icon> Tous vos groupes
             </a>
             <a mat-list-item [routerLink]="['/gm/group/create']">
-                <mat-icon matListIcon>add</mat-icon>Créer un groupe
+                <mat-icon matListItemIcon>add</mat-icon>Créer un groupe
             </a>
         </mat-nav-list>
         <common-nav></common-nav>

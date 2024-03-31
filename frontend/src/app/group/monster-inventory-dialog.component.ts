@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Monster} from '../monster';
 import {Item, ItemService} from '../item';
 import {ItemDialogComponent} from '../item/item-dialog.component';
@@ -35,7 +35,6 @@ export class MonsterInventoryDialogComponent {
 
     openItemDialog(item: Item) {
         this.dialog.open(ItemDialogComponent, {
-            panelClass: 'app-dialog-no-padding',
             data: {item},
             autoFocus: false
         });

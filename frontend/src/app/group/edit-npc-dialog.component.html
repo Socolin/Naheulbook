@@ -12,7 +12,8 @@
 <div class="content mat-typography" [formGroup]="form">
     <div class="name">
         <mat-form-field>
-            <input matInput placeholder="Nom" formControlName="name" required/>
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="name" required/>
         </mat-form-field>
         <button matSuffix mat-stroked-button (click)="openRandomNameGeneratorDialog()">
             Générer
@@ -20,10 +21,12 @@
     </div>
     <ng-container formGroupName="data">
         <mat-form-field>
-            <input matInput placeholder="Lieu" formControlName="location"/>
+            <mat-label>Lieu</mat-label>
+            <input matInput formControlName="location"/>
         </mat-form-field>
         <mat-form-field>
-            <input matInput placeholder="Origine" formControlName="originName"/>
+            <mat-label>Origine</mat-label>
+            <input matInput formControlName="originName"/>
         </mat-form-field>
         <mat-radio-group formControlName="sex" class="sex-selector">
             <mat-radio-button name="sexe" [value]="undefined">
@@ -39,7 +42,8 @@
             </mat-radio-button>
         </mat-radio-group>
         <mat-form-field>
-            <textarea matInput placeholder="Note" formControlName="note" cdkTextareaAutosize cdkAutosizeMinRows="1">
+            <mat-label>Note</mat-label>
+            <textarea matInput formControlName="note" cdkTextareaAutosize cdkAutosizeMinRows="1">
             </textarea>
         </mat-form-field>
     </ng-container>

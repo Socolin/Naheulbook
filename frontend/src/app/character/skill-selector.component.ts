@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 import {FlagData, getRandomInt} from '../shared';
 
@@ -6,7 +6,7 @@ import {Job} from '../job';
 import {Origin} from '../origin';
 
 import {Skill, SkillService} from '../skill';
-import { MatLegacySelectionListChange as MatSelectionListChange } from '@angular/material/legacy-list';
+import {MatSelectionListChange} from '@angular/material/list';
 import {Guid} from '../api/shared/util';
 
 @Component({

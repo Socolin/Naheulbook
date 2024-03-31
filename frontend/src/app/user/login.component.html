@@ -1,11 +1,13 @@
 <div class="login-form">
     <mat-card>
-        <mat-card-title>
-            Connexion <mat-spinner *ngIf="loading" [diameter]="24"></mat-spinner>
-        </mat-card-title>
-        <mat-card-subtitle>
-            Choisissez quelle méthode utiliser pour vous authentifier.
-        </mat-card-subtitle>
+        <mat-card-header>
+            <mat-card-title>
+                Connexion <mat-spinner *ngIf="loading" [diameter]="24"></mat-spinner>
+            </mat-card-title>
+            <mat-card-subtitle>
+                Choisissez quelle méthode utiliser pour vous authentifier.
+            </mat-card-subtitle>
+        </mat-card-header>
         <mat-card-content>
             <p>
                 Un compte sera créer automatiquement lors de la première connexion avec l'une des méthodes suivantes.

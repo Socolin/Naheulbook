@@ -3,16 +3,18 @@ import {Component, Inject} from '@angular/core';
 import {
     NhbkAction,
     NhbkActionFactory,
-    NhbkActionType, NhbkAddCustomModifierAction, NhbkAddEaAction, NhbkAddEffectAction, NhbkAddEvAction,
-    NhbkAddItemAction, NhbkCustomAction,
-    NhbkRemoveItemAction
+    NhbkActionType,
+    NhbkAddEaAction,
+    NhbkAddEvAction,
+    NhbkAddItemAction,
+    NhbkCustomAction
 } from './nhbk-action.model';
 import {Observable} from 'rxjs';
 
 import {ActiveStatsModifier, AutocompleteValue, MiscService} from '../shared';
 
 import {ItemTemplate} from '../item-template';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Effect} from '../effect';
 
 export interface NhbkActionEditorDialogData {

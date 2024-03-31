@@ -1,8 +1,8 @@
 import {Component, ViewChild} from '@angular/core';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {ItemData} from '../item';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
-import { MatStep } from '@angular/material/stepper';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MatStep} from '@angular/material/stepper';
 import {forkJoin} from 'rxjs';
 import {IconDescription} from '../shared/icon.model';
 import {Guid} from '../api/shared/util';

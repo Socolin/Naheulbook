@@ -1,4 +1,4 @@
-<ng-template #portal="cdkPortal" cdk-portal>
+<ng-template #portal="cdkPortal" cdkPortal>
     <div class="container">
         <input #inputElement class="command-input" autofocus (keyup)="updateFilter(inputElement.value)">
         <div *ngFor="let action of actions"

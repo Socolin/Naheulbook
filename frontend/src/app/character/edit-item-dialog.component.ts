@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Item} from '../item';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {IconDescription} from '../shared/icon.model';
 

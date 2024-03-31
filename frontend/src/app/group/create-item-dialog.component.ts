@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {forkJoin, Observer, Subject} from 'rxjs';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Item} from '../item';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
@@ -141,7 +141,6 @@ export class CreateItemDialogComponent implements OnInit {
         $event.preventDefault();
 
         this.dialog.open(ItemTemplateDialogComponent, {
-            panelClass: 'app-dialog-no-padding',
             data: {itemTemplate},
             autoFocus: false
         });

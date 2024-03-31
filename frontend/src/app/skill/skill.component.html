@@ -1,5 +1,7 @@
 <mat-card-title>
-    {{skill.name}} <span *ngIf="skill.stat?.length">({{skill.stat.join(',')}}<span *ngIf=skill.test> + {{skill.test}}</span>)</span>
+    <mat-card-header>
+        {{skill.name}} <span *ngIf="skill.stat?.length">({{skill.stat.join(',')}}<span *ngIf=skill.test> + {{skill.test}}</span>)</span>
+    </mat-card-header>
 </mat-card-title>
 <mat-card-content>
     <div *ngIf=skill.description class="infos">

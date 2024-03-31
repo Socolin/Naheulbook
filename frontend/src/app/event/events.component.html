@@ -6,12 +6,14 @@
             <ng-template ngFor let-event [ngForOf]="group.events">
                 <ng-template [ngIf]="event.timestamp <= group.data.timestamp">
                     <mat-card class="past-event">
-                        <mat-card-title-group>
-                            <mat-card-title>{{event.name}}</mat-card-title>
-                            <mat-card-subtitle>
-                                Il y a : {{group.data.timestamp - event.timestamp | nhbkDuration}}
-                            </mat-card-subtitle>
-                        </mat-card-title-group>
+                        <mat-card-header>
+                            <mat-card-title-group>
+                                <mat-card-title>{{event.name}}</mat-card-title>
+                                <mat-card-subtitle>
+                                    Il y a : {{group.data.timestamp - event.timestamp | nhbkDuration}}
+                                </mat-card-subtitle>
+                            </mat-card-title-group>
+                        </mat-card-header>
                         <mat-card-content>
                             {{event.description}}
                         </mat-card-content>

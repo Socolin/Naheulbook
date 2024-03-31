@@ -4,7 +4,8 @@
         {{data.text}}
     </p>
     <mat-form-field>
-        <input [placeholder]="data.placeholder" [ngModel]="data.initialValue" matInput #input (keydown.enter)="confirm(input.value)"/>
+        <mat-label>{{data.placeholder}}</mat-label>
+        <input [ngModel]="data.initialValue" matInput #input (keydown.enter)="confirm(input.value)"/>
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

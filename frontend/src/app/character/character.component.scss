@@ -53,16 +53,6 @@
                     margin-right: 10px;
                 }
             }
-
-            .extended-fab-button__text {
-                font-weight: 400;
-                letter-spacing: .1em;
-                text-transform: uppercase;
-
-                @include for-phone-only {
-                    display: none;
-                }
-            }
         }
     }
 }

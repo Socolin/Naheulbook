@@ -1,5 +1,7 @@
 <mat-card>
-    <mat-card-title>Ajouter une entrée</mat-card-title>
+    <mat-card-header>
+        <mat-card-title>Ajouter une entrée</mat-card-title>
+    </mat-card-header>
     <mat-card-content style="display: flex">
         <mat-form-field style="flex: 1 auto">
             <input matInput
@@ -20,7 +22,9 @@
     </mat-card-actions>
 </mat-card>
 <mat-card>
-    <mat-card-title>Historique</mat-card-title>
+    <mat-card-header>
+        <mat-card-title>Historique</mat-card-title>
+    </mat-card-header>
     <mat-card-content>
         <div *ngFor="let loggroup of history">
             {{loggroup.date | date:'mediumDate'}}

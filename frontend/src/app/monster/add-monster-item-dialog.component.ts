@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {forkJoin} from 'rxjs';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
@@ -87,7 +87,6 @@ export class AddMonsterItemDialogComponent implements OnInit {
         $event.preventDefault();
 
         this.dialog.open(ItemTemplateDialogComponent, {
-            panelClass: 'app-dialog-no-padding',
             data: {itemTemplate},
             autoFocus: false
         });

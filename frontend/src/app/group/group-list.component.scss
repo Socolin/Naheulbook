@@ -1,17 +1,11 @@
-mat-card {
-    margin: 5px;
-
-    -webkit-user-drag: none;
-    -webkit-tap-highlight-color: transparent;
-}
-
 mat-card.clickable {
     cursor: pointer;
 }
 
-.create-group {
+.groups {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .loading-groups {

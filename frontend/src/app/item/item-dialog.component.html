@@ -1,27 +1,25 @@
-<mat-card>
+<mat-dialog-content>
     <mat-card-header>
         <icon matRipple matCardAvatar [icon]="item.data.icon" [size]="'40px'" (click)="openSelectIconDialog()"></icon>
-        <div>
-            <mat-card-title>
-                <span *ngIf="item.template.data.quantifiable || item.data.quantity">
-                    {{item.data.quantity}}
-                </span>
-                <span style="vertical-align: top;">
-                    {{item.data.name}}
-                </span>
-            </mat-card-title>
-            <mat-card-subtitle>
-                <div *ngIf="itemCategoriesById">
-                    <span class="label label-default">{{itemCategoriesById[item.template.subCategoryId].section.name}}</span>
-                    -
-                    <span>{{itemCategoriesById[item.template.subCategoryId].name}}</span>
-                </div>
+        <mat-card-title>
+        <span *ngIf="item.template.data.quantifiable || item.data.quantity">
+            {{item.data.quantity}}
+        </span>
+            <span style="vertical-align: top;">
+            {{item.data.name}}
+        </span>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <div *ngIf="itemCategoriesById">
+                <span class="label label-default">{{itemCategoriesById[item.template.subCategoryId].section.name}}</span>
+                -
+                <span>{{itemCategoriesById[item.template.subCategoryId].name}}</span>
+            </div>
 
-                <span *ngIf="item.data.notIdentified">
-                    Non identifié
-                </span>
-            </mat-card-subtitle>
-        </div>
+            <span *ngIf="item.data.notIdentified">
+        Non identifié
+    </span>
+        </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content class="item-detail-content">
         <div>
@@ -39,8 +37,8 @@
             <div class="icon-label" *ngIf="data.item.template.data.requireLevel">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-level-two" class="ra-mat-button-icon-24"></mat-icon>
                 <span>
-                    Niveau requis: {{data.item.template.data.requireLevel}}
-                </span>
+                Niveau requis: {{data.item.template.data.requireLevel}}
+            </span>
             </div>
 
             <div>
@@ -53,9 +51,9 @@
             <div class="icon-label" *ngIf="data.item.template.slots?.length > 0">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
-                    <mat-chip-list [selectable]="false">
+                    <mat-chip-set>
                         <mat-chip *ngFor="let slot of data.item.template.slots">{{slot.name}}</mat-chip>
-                    </mat-chip-list>
+                    </mat-chip-set>
                 </div>
             </div>
 
@@ -87,9 +85,9 @@
             <div class="icon-label" *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">
                 <mat-icon fontSet="ra" fontIcon="ra-broadsword" class="ra-mat-button-icon-24"></mat-icon>
                 <div class="damage">
-                    <span *ngIf="data.item.template.data.damageDice">{{data.item.template.data.damageDice}}
-                        <span class="ra ra-perspective-dice-random ra-mat-button-icon-24"></span>
-                    </span>
+                <span *ngIf="data.item.template.data.damageDice">{{data.item.template.data.damageDice}}
+                    <span class="ra ra-perspective-dice-random ra-mat-button-icon-24"></span>
+                </span>
                     <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
                     <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
                     <span *ngIf="item.template.data.damageType">({{item.template.data.damageType}})</span>
@@ -97,8 +95,8 @@
             </div>
 
             <div class="icon-label" *ngIf="item.template.data.protection
-                        || item.template.data.magicProtection
-                        || item.template.data.protectionAgainstMagic">
+                    || item.template.data.magicProtection
+                    || item.template.data.protectionAgainstMagic">
                 <mat-icon fontSet="ra" fontIcon="ra-shield" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
                     <span *ngIf="item.template.data.protection">{{item.template.data.protection}}</span>
@@ -107,8 +105,8 @@
                     <span *ngIf="(item.template.data.protection || item.template.data.magicProtection) && item.template.data.protectionAgainstMagic">/</span>
                     <span *ngIf="item.template.data.protectionAgainstMagic">{{item.template.data.protectionAgainstMagic}}
                         <span *ngIf="item.template.data.protectionAgainstType">(contre {{item.template.data.protectionAgainstType}})</span>
-                        <span *ngIf="!item.template.data.protectionAgainstType">(contre mag./myst.)</span>
-                    </span>
+                    <span *ngIf="!item.template.data.protectionAgainstType">(contre mag./myst.)</span>
+                </span>
                 </div>
             </div>
 
@@ -201,12 +199,12 @@
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-thumb-up" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
                     <div *ngFor="let requirement of data.item.template.requirements">
-                    <span *ngIf="requirement.min">
-                        Min {{requirement.stat}}: {{requirement.min}}
-                    </span>
+                <span *ngIf="requirement.min">
+                    Min {{requirement.stat}}: {{requirement.min}}
+                </span>
                         <span *ngIf="requirement.max">
-                        Max {{requirement.stat}}: {{requirement.max}}
-                    </span>
+                    Max {{requirement.stat}}: {{requirement.max}}
+                </span>
                     </div>
                 </div>
             </div>
@@ -285,4 +283,4 @@
         </div>
 
     </mat-card-content>
-</mat-card>
+</mat-dialog-content>

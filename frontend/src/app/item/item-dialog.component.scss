@@ -1,51 +1,45 @@
-:host {
-    mat-card {
-        margin: 0 !important;
-    }
+mat-card-header {
+    overflow: hidden;
+    text-overflow: ellipsis;
 
-    mat-card-header {
+    icon {
+        cursor: pointer;
+    }
+    mat-card-title {
+        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+    mat-card-subtitle {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
 
-        icon {
-            cursor: pointer;
-        }
-        mat-card-title {
+.icon-label {
+    margin: 8px 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px;
+    align-items: center;
+
+    .stats {
+        > * {
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        mat-card-subtitle {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
     }
 
-    .icon-label {
-        margin: 8px 0;
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 8px;
-        align-items: center;
-
-        .stats {
-            > * {
-                white-space: nowrap;
-            }
-        }
-
-        mat-divider {
-            position: relative;
-        }
+    mat-divider {
+        position: relative;
     }
+}
 
-    .damage {
-        >span {
-            display: flex;
-            align-items: center;
-        }
+.damage {
+    >span {
         display: flex;
         align-items: center;
     }
+    display: flex;
+    align-items: center;
 }

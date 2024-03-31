@@ -25,6 +25,7 @@ import {
 } from './';
 import {ValueEditorSettingsDialogComponent} from './value-editor-settings-dialog.component';
 import {CommonNavComponent} from './common-nav.component';
+import { ThemeSelectorDialogComponent } from './theme-selector-dialog.component';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import {CommonNavComponent} from './common-nav.component';
         ValueEditorComponent,
         PromptDialogComponent,
         ValueEditorSettingsDialogComponent,
+        ThemeSelectorDialogComponent,
     ],
     exports: [
         MaterialWorkaroundModule,

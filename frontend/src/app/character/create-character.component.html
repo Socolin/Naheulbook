@@ -478,9 +478,11 @@
         <div *ngIf="step == 6">
             <ng-template ngFor let-speciality [ngForOf]="selectedJobs[0].specialities">
                 <mat-card class="speciality">
-                    <mat-card-title>
-                        {{speciality.name}}
-                    </mat-card-title>
+                    <mat-card-header>
+                        <mat-card-title>
+                            {{speciality.name}}
+                        </mat-card-title>
+                    </mat-card-header>
                     <mat-card-content>
                         <p>{{speciality.description}}</p>
                     </mat-card-content>

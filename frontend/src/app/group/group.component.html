@@ -6,14 +6,15 @@
         <mat-tab label="Infos">
             <div class="info-tab">
                 <mat-card>
-                    <mat-card-header>
+                    <mat-toolbar>
                         <mat-card-title>
                             {{group.name}}
                         </mat-card-title>
+                        <span class="toolbar-spacer"></span>
                         <button mat-icon-button [matMenuTriggerFor]="groupMenu" aria-label="Afficher le menu du groupe">
                             <mat-icon>more_vert</mat-icon>
                         </button>
-                    </mat-card-header>
+                    </mat-toolbar>
                     <mat-menu #groupMenu>
                         <button mat-menu-item (click)="openEditGroupNameDialog()">
                             <mat-icon>edit</mat-icon>Changer le nom
@@ -22,37 +23,41 @@
                             <mat-icon>settings</mat-icon>Paramètres
                         </button>
                     </mat-menu>
-                    <dl>
-                        <dt>Mankdebol</dt>
-                        <dd>
-                            <value-editor [value]="group.data.mankdebol"
-                                          [title]="'Mankdebol du groupe'"
-                                          (onChange)="changeGroupValue('mankdebol', $event)">
-                            </value-editor>
-                        </dd>
+                    <mat-card-content>
+                        <dl>
+                            <dt>Mankdebol</dt>
+                            <dd>
+                                <value-editor [value]="group.data.mankdebol"
+                                              [title]="'Mankdebol du groupe'"
+                                              (onChange)="changeGroupValue('mankdebol', $event)">
+                                </value-editor>
+                            </dd>
 
-                        <dt>Débilibeuk</dt>
-                        <dd>
-                            <value-editor [value]="group.data.debilibeuk"
-                                          [title]="'Débilibeuk du groupe'"
-                                          (onChange)="changeGroupValue('debilibeuk', $event)">
-                            </value-editor>
-                        </dd>
+                            <dt>Débilibeuk</dt>
+                            <dd>
+                                <value-editor [value]="group.data.debilibeuk"
+                                              [title]="'Débilibeuk du groupe'"
+                                              (onChange)="changeGroupValue('debilibeuk', $event)">
+                                </value-editor>
+                            </dd>
 
-                        <dt>Date</dt>
-                        <dd>
-                            <button mat-icon-button (click)="openDateSelectorDialog()">
-                                <mat-icon>date_range</mat-icon>
-                            </button>
-                            <button *ngIf="group.data.date" mat-icon-button (click)="openDurationSelector()">
-                                <mat-icon>update</mat-icon>
-                            </button>
-                            <date [date]="group.data.date"></date>
-                        </dd>
-                    </dl>
+                            <dt>Date</dt>
+                            <dd>
+                                <button mat-icon-button (click)="openDateSelectorDialog()">
+                                    <mat-icon>date_range</mat-icon>
+                                </button>
+                                <button *ngIf="group.data.date" mat-icon-button (click)="openDurationSelector()">
+                                    <mat-icon>update</mat-icon>
+                                </button>
+                                <date [date]="group.data.date"></date>
+                            </dd>
+                        </dl>
+                    </mat-card-content>
                 </mat-card>
                 <mat-card>
-                    <mat-card-title>Évènements</mat-card-title>
+                    <mat-toolbar>
+                        Évènements
+                    </mat-toolbar>
                     <mat-card-content>
                         <events #events [group]="group"></events>
                     </mat-card-content>
@@ -71,9 +76,11 @@
         <mat-tab label="Personnages">
             <div class="characters-tab">
                 <mat-card *ngIf="group.characterIdWithShownItem?.size">
-                    <mat-card-title>
-                        Objets montrés par les joueurs
-                    </mat-card-title>
+                    <mat-card-header>
+                        <mat-card-title>
+                            Objets montrés par les joueurs
+                        </mat-card-title>
+                    </mat-card-header>
                     <mat-card-content>
                         <div *ngFor="let characterId of group.characterIdWithShownItem">
                             <h3 class="mat-h3">{{group.charactersById[characterId].name}}</h3>
@@ -87,11 +94,14 @@
                     </mat-card-content>
                 </mat-card>
                 <mat-card>
-                    <mat-card-title>
+                    <mat-toolbar>
                         Joueurs
+                        <span class="toolbar-spacer"></span>
                         <button mat-icon-button [matMenuTriggerFor]="charactersActions" aria-label="Afficher le menu des joueurs">
                             <mat-icon>more_vert</mat-icon>
                         </button>
+                    </mat-toolbar>
+                    <mat-card-header>
                         <mat-menu xPosition="before" #charactersActions="matMenu">
                             <button mat-menu-item
                                     (click)="openInviteCharacterModal()">
@@ -114,77 +124,80 @@
                                 Activer tous les personnages
                             </button>
                         </mat-menu>
-                    </mat-card-title>
+                    </mat-card-header>
                     <mat-card-content class="characters-cards">
-                        <mat-list>
-                            <mat-list-item *ngFor="let character of group.characters">
-                                <mat-icon *ngIf="character.active" matListIcon>visibility_on</mat-icon>
-                                <mat-icon *ngIf="!character.active" matListIcon>visibility_off</mat-icon>
-                                <h3 matLine class="name">
+                        <div *ngFor="let character of group.characters" class="character-line">
+                            <mat-icon *ngIf="character.active" >visibility_on</mat-icon>
+                            <mat-icon *ngIf="!character.active" matListItemIcon>visibility_off</mat-icon>
+                            <span class="name-and-job">
+                                <div class="name">
                                     <span>
-                                        {{character.name}}
+                                        {{ character.name }}
                                     </span>
-                                    <mat-chip-list>
+                                    <mat-chip-set>
                                         <mat-chip *ngIf="character.isNpc">PNJ</mat-chip>
-                                    </mat-chip-list>
-                                </h3>
-                                <p matLine>
-                                    <span> {{character.origin.name}} </span>
+                                    </mat-chip-set>
+                                </div>
+                                <div class="job">
+                                    <span> {{ character.origin.name }} </span>
                                     <span *ngIf="character.jobs && character.jobs.length"> -</span>
                                     <span *ngFor="let job of character.jobs">
-                                        &nbsp;{{job.name}}
+                                            &nbsp;{{ job.name }}
                                     </span>
-                                </p>
-                                <button mat-icon-button [matMenuTriggerFor]="characterActions" [attr.aria-label]="'Afficher le menu pour le joueur ' + character.name">
-                                    <mat-icon>more_vert</mat-icon>
+                                </div>
+                            </span>
+                            <span class="toolbar-spacer"></span>
+                            <button mat-icon-button [matMenuTriggerFor]="characterActions" [attr.aria-label]="'Afficher le menu pour le joueur ' + character.name">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu xPosition="before" #characterActions="matMenu">
+                                <button mat-menu-item
+                                        (click)="displayCharacterSheet(character)">
+                                    <mat-icon>pageview</mat-icon>
+                                    Voir la fiche
                                 </button>
-                                <mat-menu xPosition="before" #characterActions="matMenu">
-                                    <button mat-menu-item
-                                            (click)="displayCharacterSheet(character)">
-                                        <mat-icon>pageview</mat-icon>
-                                        Voir la fiche
-                                    </button>
-                                    <button mat-menu-item
-                                            *ngIf="character.user && character.user !== loginService.currentLoggedUser.id"
-                                            (click)="takeOwnership(character)">
-                                        <mat-icon>supervisor_account</mat-icon>
-                                        Devenir propriétaire
-                                    </button>
-                                    <button mat-menu-item
-                                            *ngIf="!character.user || character.user === loginService.currentLoggedUser.id"
-                                            (click)="openChangeOwnershipDialog(character)">
-                                        <mat-icon>supervisor_account</mat-icon>
-                                        Définir le propriétaire
-                                    </button>
-                                    <button mat-menu-item
-                                            (click)="kickCharacter(character)">
-                                        <mat-icon>delete</mat-icon>
-                                        Retirer du groupe
-                                    </button>
-                                    <button
-                                        mat-menu-item
-                                        color="primary"
-                                        *ngIf="!character.active"
-                                        (click)="toggleActiveCharacter(character)">
-                                        <mat-icon>power_settings_new</mat-icon>
-                                        Activer
-                                    </button>
-                                    <button
-                                        mat-menu-item
-                                        *ngIf="character.active"
-                                        color="accent"
-                                        (click)="toggleActiveCharacter(character)">
-                                        <mat-icon>power_settings_new</mat-icon>
-                                        Désactiver
-                                    </button>
-                                </mat-menu>
-                            </mat-list-item>
-                        </mat-list>
+                                <button mat-menu-item
+                                        *ngIf="character.user && character.user !== loginService.currentLoggedUser.id"
+                                        (click)="takeOwnership(character)">
+                                    <mat-icon>supervisor_account</mat-icon>
+                                    Devenir propriétaire
+                                </button>
+                                <button mat-menu-item
+                                        *ngIf="!character.user || character.user === loginService.currentLoggedUser.id"
+                                        (click)="openChangeOwnershipDialog(character)">
+                                    <mat-icon>supervisor_account</mat-icon>
+                                    Définir le propriétaire
+                                </button>
+                                <button mat-menu-item
+                                        (click)="kickCharacter(character)">
+                                    <mat-icon>delete</mat-icon>
+                                    Retirer du groupe
+                                </button>
+                                <button
+                                    mat-menu-item
+                                    color="primary"
+                                    *ngIf="!character.active"
+                                    (click)="toggleActiveCharacter(character)">
+                                    <mat-icon>power_settings_new</mat-icon>
+                                    Activer
+                                </button>
+                                <button
+                                    mat-menu-item
+                                    *ngIf="character.active"
+                                    color="accent"
+                                    (click)="toggleActiveCharacter(character)">
+                                    <mat-icon>power_settings_new</mat-icon>
+                                    Désactiver
+                                </button>
+                            </mat-menu>
+                        </div>
                     </mat-card-content>
                 </mat-card>
 
                 <mat-card *ngIf="group.invites.length || group.invited.length">
-                    <mat-card-title>Invitations</mat-card-title>
+                    <mat-card-header>
+                        <mat-card-title>Invitations</mat-card-title>
+                    </mat-card-header>
                     <mat-card-content>
                         <div *ngIf="group.invites.length">
                             <div>Invitations à valider:</div>
@@ -227,20 +240,19 @@
                 </mat-card>
 
                 <mat-card>
-                    <mat-card-title>
+                    <mat-toolbar>
                         PNJs
+                        <span class="toolbar-spacer"></span>
                         <button mat-icon-button [matMenuTriggerFor]="npcActions" aria-label="Afficher le menu des PNJ">
                             <mat-icon>more_vert</mat-icon>
                         </button>
-
                         <mat-menu xPosition="before" #npcActions="matMenu">
                             <button mat-menu-item (click)="openCreateNpcDialog()">
                                 <mat-icon>add</mat-icon>
                                 Ajouter un PNJ
                             </button>
                         </mat-menu>
-
-                    </mat-card-title>
+                    </mat-toolbar>
                     <mat-card-content class="mat-typography">
                         <div class="npcs">
                             <ng-container *ngFor="let npc of npcs; let last=last">
@@ -289,10 +301,12 @@
 </div>
 
 <!-- Modal -->
-<ng-template #changeOwnershipDialog="cdkPortal" cdk-portal>
+<ng-template #changeOwnershipDialog="cdkPortal" cdkPortal>
     <mat-card class="change-ownership-dialog">
-        <mat-card-title>Définir le propriétaire</mat-card-title>
-        <mat-card-subtitle>{{selectedCharacter?.name}}</mat-card-subtitle>
+        <mat-card-header>
+            <mat-card-title>Définir le propriétaire</mat-card-title>
+            <mat-card-subtitle>{{selectedCharacter?.name}}</mat-card-subtitle>
+        </mat-card-header>
         <mat-card-content>
             <div class="modal-body">
                 <mat-form-field>
@@ -329,14 +343,16 @@
     </mat-card>
 </ng-template>
 
-<ng-template #inviteCharacterModal="cdkPortal" cdk-portal>
+<ng-template #inviteCharacterModal="cdkPortal" cdkPortal>
     <mat-card class="invite-character-modal">
-        <mat-card-title>Inviter un personnage</mat-card-title>
+        <mat-card-header>
+            <mat-card-title>Inviter un personnage</mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <p>
                 Cette recherche affiche seulement les personnage des joueurs ayant accepté d'être listé dans les recherche.
                 Si vous ne trouvez pas un personnage, assurez vous que le joueur a activé temporairement cette fonctionnalité dans son
-                <mat-icon matListIcon>account_box</mat-icon> profile.
+                <mat-icon matListItemIcon>account_box</mat-icon> profile.
             </p>
             <mat-form-field>
                 <input matInput

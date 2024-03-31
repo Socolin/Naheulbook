@@ -45,7 +45,7 @@ import {
     SpecialitySelectorComponent,
     TakeLootDialogComponent,
 } from './';
-import { CombatTabComponent } from './combat-tab.component';
+import {CombatTabComponent} from './combat-tab.component';
 import {MarkdownModule} from '../markdown/markdown.module';
 
 @NgModule({
@@ -64,7 +64,7 @@ import {MarkdownModule} from '../markdown/markdown.module';
         ItemModule,
         WebsocketModule,
         ReactiveFormsModule,
-        MarkdownModule
+        MarkdownModule,
     ],
     declarations: [
         AddItemDialogComponent,

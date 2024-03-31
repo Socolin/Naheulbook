@@ -1,5 +1,7 @@
 <mat-card *ngFor="let loot of character.loots">
-    <mat-card-title>{{loot.name}}</mat-card-title>
+    <mat-card-header>
+        <mat-card-title>{{loot.name}}</mat-card-title>
+    </mat-card-header>
     <mat-card-content>
         <div class="loot-items">
             <div *ngFor="let item of loot.items" class="item separator">

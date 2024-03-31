@@ -1,9 +1,16 @@
 @import "app/style/responsive-utils";
 
 :host {
-    mat-card {
-        margin: 8px 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .items {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
     }
+
 
     .prev-next-buttons {
         gap: 8px;
@@ -46,9 +53,4 @@
             width: 100%;
         }
     }
-
-    .items-table {
-        margin: 5px;
-    }
-
 }

@@ -41,11 +41,11 @@
             </ng-template>
         </mat-menu>
     </mat-card-header>
-
-    <app-item-template-details [itemTemplate]="itemTemplate"
-                               [jobsName]="jobsName"
-                               [godsByTechName]="godsByTechName"
-                               [originsName]="originsName">
-    </app-item-template-details>
-
+    <mat-card-content>
+        <app-item-template-details [itemTemplate]="itemTemplate"
+                                   [jobsName]="jobsName"
+                                   [godsByTechName]="godsByTechName"
+                                   [originsName]="originsName">
+        </app-item-template-details>
+    </mat-card-content>
 </mat-card>

@@ -15,9 +15,11 @@
     </p>
 </mat-card>
 <mat-card>
-    <mat-card-title>
-        Caractéristiques
-    </mat-card-title>
+    <mat-card-header>
+        <mat-card-title>
+            Caractéristiques
+        </mat-card-title>
+    </mat-card-header>
     <div [formGroup]="form">
         <mat-card-content class="basic-stats" formGroupName="stats">
             <mat-form-field class="cou">
@@ -64,9 +66,11 @@
     </div>
 </mat-card>
 <mat-card class="origin-card">
-    <mat-card-title>
-        Origine
-    </mat-card-title>
+    <mat-card-header>
+        <mat-card-title>
+            Origine
+        </mat-card-title>
+    </mat-card-header>
     <mat-card-content>
         <mat-form-field>
             <mat-select placeholder="Origine" [(ngModel)]="selectedOrigin" (selectionChange)="updateAvailableJobs()">
@@ -78,9 +82,11 @@
     </mat-card-content>
 </mat-card>
 <mat-card *ngIf="selectedOrigin" class="job-card">
-    <mat-card-title>
-        Métier(s)
-    </mat-card-title>
+    <mat-card-header>
+        <mat-card-title>
+            Métier(s)
+        </mat-card-title>
+    </mat-card-header>
     <mat-card-content>
         <div *ngIf="selectedJobs.length === 0">Aucun</div>
         <div *ngFor="let job of selectedJobs" class="job">
@@ -121,9 +127,11 @@
     </mat-card-content>
 </mat-card>
 <mat-card *ngIf="selectedOrigin">
-    <mat-card-title>
-        Compétences
-    </mat-card-title>
+    <mat-card-header>
+        <mat-card-title>
+            Compétences
+        </mat-card-title>
+    </mat-card-header>
     <mat-card-content class="skill-list">
         <ng-template ngFor [ngForOf]="knownSkills" let-skill>
             <mat-checkbox [checked]="true" [disabled]="true">
@@ -140,9 +148,11 @@
     </mat-card-content>
 </mat-card>
 <mat-card [formGroup]="form">
-    <mat-card-title>
-        Divers
-    </mat-card-title>
+    <mat-card-header>
+        <mat-card-title>
+            Divers
+        </mat-card-title>
+    </mat-card-header>
     <mat-card-content>
         <div class="name-sex">
             <mat-form-field class="name">

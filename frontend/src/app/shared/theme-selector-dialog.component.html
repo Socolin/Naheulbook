@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>
+    Choix du theme
+</h2>
+<mat-dialog-content>
+    <button mat-raised-button color="primary" (click)="changeTheme('nhbk-dark-theme')">Sombre 1</button>
+    <button mat-raised-button color="primary" (click)="changeTheme('nhbk-dark2-theme')">Sombre 2</button>
+    <button mat-raised-button color="primary" (click)="changeTheme('nhbk-light-theme')">Clair 1</button>
+    <button mat-raised-button color="primary" (click)="changeTheme('nhbk-light2-theme')">Clair 2</button>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button
+            color="primary"
+            matDialogClose>
+        FERMER
+    </button>
+</mat-dialog-actions>

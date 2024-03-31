@@ -1,7 +1,7 @@
 import {forkJoin, Subscription} from 'rxjs';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatLegacyTabChangeEvent as MatTabChangeEvent} from '@angular/material/legacy-tabs';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
@@ -602,7 +602,6 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     openItemDialog(item: Item) {
         this.dialog.open(ItemDialogComponent, {
-            panelClass: 'app-dialog-no-padding',
             data: {item},
             autoFocus: false
         });

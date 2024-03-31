@@ -1,16 +1,20 @@
 <div class="groups">
+    <h2>Groupes</h2>
     <mat-card class="loading-groups" *ngIf="loading">
         <mat-spinner></mat-spinner>
     </mat-card>
     <mat-card *ngIf="!loading && (!groups || groups.length === 0)">
-        Vous ne possédez aucun group.
+        <mat-card-content>
+            Vous ne possédez aucun group.
+        </mat-card-content>
     </mat-card>
     <mat-card matRipple *ngFor="let group of groups" (click)="selectGroup(group)" class="clickable">
-        <mat-card-title>{{group.name}}</mat-card-title>
-        <mat-card-subtitle>{{group.characterCount}} joueurs</mat-card-subtitle>
-        <mat-card-footer></mat-card-footer>
+        <mat-card-header>
+            <mat-card-title>{{group.name}}</mat-card-title>
+            <mat-card-subtitle>{{group.characterCount}} joueurs</mat-card-subtitle>
+        </mat-card-header>
     </mat-card>
-    <mat-card matRipple  (click)="createGroup()" class="create-group clickable">
+    <button mat-raised-button (click)="createGroup()">
         <mat-icon>add</mat-icon>Créer un groupe
-    </mat-card>
+    </button>
 </div>

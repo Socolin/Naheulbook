@@ -1,6 +1,6 @@
 @use '@angular/material' as mat;
 
-$config: mat.define-legacy-typography-config();
+$config: mat.define-typography-config();
 
 @mixin map-theme($theme) {
     $background: map-get($theme, background);

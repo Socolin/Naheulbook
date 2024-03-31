@@ -1,7 +1,9 @@
 :host {
-    mat-card {
-        margin: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
+    mat-card {
         -webkit-user-drag: none;
         -webkit-tap-highlight-color: transparent;
     }

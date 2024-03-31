@@ -12,70 +12,64 @@
     @include for-phone-only {
         min-height: calc(100vh - 16px - 56px - #{$padding-useful-data-button});
     }
+}
 
-    mat-card {
-        margin: 2px;
+.loading {
+    height: 90vh;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.useful-data-fab {
+    z-index: 1;
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+}
+
+.group-container {
+    flex: 1 auto;
+
+    .character-summary-card {
+        mat-card-header {
+            button {
+                margin-left: auto;
+            }
+        }
+
+        margin-bottom: 5px;
+        white-space: nowrap;
+    }
+}
+
+.info-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.characters-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.characters-cards {
+    mat-list {
+        width: 100%;
     }
 
-    .loading {
-        height: 90vh;
-        display: grid;
-        justify-content: center;
+    .character-line {
+        display: flex;
+        flex-direction: row;
         align-items: center;
-    }
-
-    .useful-data-fab {
-        z-index: 1;
-        position: fixed;
-        right: 16px;
-        bottom: 16px;
-    }
-
-    .group-container {
-        flex: 1 auto;
-
-        .character-summary-card {
-            mat-card-header {
-                button {
-                    margin-left: auto;
-                }
-            }
-
-            margin-bottom: 5px;
-            white-space: nowrap;
-        }
-    }
-
-    .info-tab {
-        mat-card {
-            margin-bottom: 5px;
-
-            mat-card-header {
-                display: grid;
-                grid-template-columns: 1fr auto;
-                align-items: center;
-                gap: 8px;
-            }
-        }
-    }
-
-    .characters-tab {
-        mat-card-title {
-            display: grid;
-            grid-template-columns: 1fr 40px;
-            align-items: center;
-        }
-    }
-
-    .characters-cards {
-        mat-list {
-            width: 100%;
-        }
-
+        gap: 16px;
         .name {
             display: grid;
             grid-template-columns: 1fr auto;
             align-items: center;
+            gap: 8px;
 
             span {
                 overflow: hidden;
@@ -83,59 +77,62 @@
                 white-space: nowrap;
             }
         }
+        .job {
+            font-weight: 300;
+        }
     }
+}
 
-    .npcs {
-        .npc {
+.npcs {
+    .npc {
+        display: grid;
+        grid-template-areas: "name name" "location origin" "note note";
+        grid-template-columns: 1fr 1fr;
+        padding: 8px 24px;
+        cursor: pointer;
+        margin-left: -16px;
+        margin-right: -16px;
+
+        -webkit-user-drag: none;
+        -webkit-tap-highlight-color: transparent;
+
+        @include for-phone-only {
+            grid-template-areas: "name" "location" "origin" "note";
+            grid-template-columns: 1fr;
+        }
+
+        .name {
+            grid-area: name;
+
             display: grid;
-            grid-template-areas: "name name" "location origin" "note note";
-            grid-template-columns: 1fr 1fr;
-            padding: 8px 24px;
-            cursor: pointer;
-            margin-left: -16px;
-            margin-right: -16px;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            grid-column-gap: 8px;
 
-            -webkit-user-drag: none;
-            -webkit-tap-highlight-color: transparent;
+            font-weight: 500;
+        }
 
-            @include for-phone-only {
-                grid-template-areas: "name" "location" "origin" "note";
-                grid-template-columns: 1fr;
-            }
+        .location {
+            grid-area: location;
 
-            .name {
-                grid-area: name;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            grid-column-gap: 8px;
+        }
 
-                display: grid;
-                grid-template-columns: 1fr auto;
-                align-items: center;
-                grid-column-gap: 8px;
+        .origin {
+            grid-area: origin;
 
-                font-weight: 500;
-            }
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            grid-column-gap: 8px;
+        }
 
-            .location {
-                grid-area: location;
-
-                display: grid;
-                grid-template-columns: auto 1fr;
-                align-items: center;
-                grid-column-gap: 8px;
-            }
-
-            .origin {
-                grid-area: origin;
-
-                display: grid;
-                grid-template-columns: auto 1fr;
-                align-items: center;
-                grid-column-gap: 8px;
-            }
-
-            .note {
-                grid-area: note;
-                overflow: hidden;
-            }
+        .note {
+            grid-area: note;
+            overflow: hidden;
         }
     }
 }

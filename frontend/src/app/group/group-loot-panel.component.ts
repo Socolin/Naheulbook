@@ -154,7 +154,6 @@ export class GroupLootPanelComponent extends LootPanelComponent implements OnIni
 
     openItemDialog(item: Item) {
         this.dialog.open(ItemDialogComponent, {
-            panelClass: 'app-dialog-no-padding',
             data: {item},
             autoFocus: false
         });

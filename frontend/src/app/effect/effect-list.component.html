@@ -1,3 +1,4 @@
+<h2>Effets</h2>
 <mat-card>
     <mat-card-content class="effect-sub-category-selector">
         <div class="selector">
@@ -25,7 +26,9 @@
 </mat-card>
 
 <mat-card *ngIf="selectedSubCategory && (editable || selectedSubCategory.note)">
-    <mat-card-subtitle>Note</mat-card-subtitle>
+    <mat-card-header>
+        <mat-card-subtitle>Note</mat-card-subtitle>
+    </mat-card-header>
     <mat-card-content [innerHTML]="selectedSubCategory.note | markdown">
     </mat-card-content>
 </mat-card>

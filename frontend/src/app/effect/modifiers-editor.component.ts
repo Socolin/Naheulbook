@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 
 import {ItemStatModifier} from '../shared';
 import {Origin, OriginService} from '../origin';
@@ -7,10 +7,7 @@ import {Job, JobService} from '../job';
 
 
 import {statModifierSpecialsValues} from './stat-modifier-specials.constants';
-import {
-    StatModifierAdvancedDialogComponent,
-    StatModifierAdvancedDialogData
-} from './stat-modifier-advanced-dialog.component';
+import {StatModifierAdvancedDialogComponent, StatModifierAdvancedDialogData} from './stat-modifier-advanced-dialog.component';
 import {AddStatModifierDialogComponent} from './add-stat-modifier-dialog.component';
 
 @Component({

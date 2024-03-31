@@ -18,56 +18,58 @@
 </mat-toolbar>
 
 <div class="content mat-typography">
-    <h2>Catégorie</h2>
+    <mat-card>
+        <mat-card-content>
+            <h2>Catégorie</h2>
 
-    <div *ngIf="effectTypes" class="category">
-        <mat-form-field class="category-selector">
-            <mat-select [ngModel]="selectedType"
-                        (selectionChange)="selectType($event.value)"
-                        placeholder="Catégorie">
-                <mat-option *ngFor="let type of effectTypes" [value]="type">{{type.name}}</mat-option>
-                <mat-option [value]="'new'">
+            <div *ngIf="effectTypes" class="category">
+                <mat-form-field class="category-selector">
+                    <mat-select [ngModel]="selectedType"
+                                (selectionChange)="selectType($event.value)"
+                                placeholder="Catégorie">
+                        <mat-option *ngFor="let type of effectTypes" [value]="type">{{type.name}}</mat-option>
+                        <mat-option [value]="'new'">
                     <span class="secondary-text">
                         Ajouter...
                     </span>
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field *ngIf="selectedType" class="sub-category-selector">
-            <mat-select [ngModel]="selectedSubCategory"
-                        (selectionChange)="selectSubCategory($event.value)"
-                        placeholder="Sous-catégorie">
-                <mat-option *ngFor="let subCategory of selectedType.subCategories" [value]="subCategory">
-                    {{subCategory.name}}
-                </mat-option>
-                <mat-option [value]="'new'">
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngIf="selectedType" class="sub-category-selector">
+                    <mat-select [ngModel]="selectedSubCategory"
+                                (selectionChange)="selectSubCategory($event.value)"
+                                placeholder="Sous-catégorie">
+                        <mat-option *ngFor="let subCategory of selectedType.subCategories" [value]="subCategory">
+                            {{subCategory.name}}
+                        </mat-option>
+                        <mat-option [value]="'new'">
                     <span class="secondary-text">
                         Ajouter...
                     </span>
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-    <ng-container [formGroup]="form">
-        <h2>Informations de base</h2>
-        <div class="name-dice">
-            <mat-form-field>
-                <input matInput
-                       autocomplete="off"
-                       formControlName="name"
-                       placeholder="Nom">
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput
-                       autocomplete="off"
-                       inputmode="number"
-                       type="number"
-                       formControlName="dice"
-                       placeholder="Dé">
-            </mat-form-field>
-        </div>
-        <div class="description">
-            <mat-form-field>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <ng-container [formGroup]="form">
+                <h2>Informations de base</h2>
+                <div class="name-dice">
+                    <mat-form-field>
+                        <input matInput
+                               autocomplete="off"
+                               formControlName="name"
+                               placeholder="Nom">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput
+                               autocomplete="off"
+                               inputmode="number"
+                               type="number"
+                               formControlName="dice"
+                               placeholder="Dé">
+                    </mat-form-field>
+                </div>
+                <div class="description">
+                    <mat-form-field>
                 <textarea matInput
                           cdkTextareaAutosize
                           cdkAutosizeMinRows="1"
@@ -76,11 +78,13 @@
                           formControlName="description"
                           placeholder="Description">
                 </textarea>
-            </mat-form-field>
-        </div>
-    </ng-container>
-    <h2>Durée</h2>
-    <duration-selector [durable]="duration"></duration-selector>
-    <h2>Modificateurs</h2>
-    <modifiers-editor [modifiers]="statModifiers"></modifiers-editor>
+                    </mat-form-field>
+                </div>
+            </ng-container>
+            <h2>Durée</h2>
+            <duration-selector [durable]="duration"></duration-selector>
+            <h2>Modificateurs</h2>
+            <modifiers-editor [modifiers]="statModifiers"></modifiers-editor>
+        </mat-card-content>
+    </mat-card>
 </div>

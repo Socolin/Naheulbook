@@ -30,9 +30,9 @@
 <div class="icon-label" *ngIf="itemTemplate.slots?.length > 0">
     <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
     <div>
-        <mat-chip-list [selectable]="false">
+        <mat-chip-set>
             <mat-chip *ngFor="let slot of itemTemplate.slots">{{slot.name}}</mat-chip>
-        </mat-chip-list>
+        </mat-chip-set>
     </div>
 </div>
 

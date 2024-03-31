@@ -1,7 +1,7 @@
 :host {
     .ug {
         display: grid;
-        grid-template-columns: 60px 140px;
+        grid-template-columns: 80px 140px;
         grid-gap: 8px;
         align-items: center;
         justify-content: space-between;
@@ -16,7 +16,7 @@
 
     .type-dice {
         display: grid;
-        grid-template-columns: auto 40px auto;
+        grid-template-columns: auto 80px auto;
         align-items: center;
         grid-gap: 8px;
         justify-content: space-between;

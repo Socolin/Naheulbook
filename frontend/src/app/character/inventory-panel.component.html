@@ -1,5 +1,5 @@
 <div class="inventory-header">
-    <mat-form-field class="filter">
+    <mat-form-field class="filter" appearance="fill">
         <input matInput [(ngModel)]="itemFilterName" placeholder="Filtre" autocomplete="off" autocapitalize="off"/>
         <button matSuffix mat-icon-button *ngIf="itemFilterName?.length" (click)="itemFilterName = undefined" aria-label="Réinitialiser le filtre">
             <mat-icon>close</mat-icon>
@@ -10,7 +10,7 @@
         <mat-icon>sort</mat-icon>
     </button>
 
-    <mat-form-field class="view" appearance="standard">
+    <mat-form-field class="view" appearance="fill">
         <mat-label>Vue</mat-label>
         <mat-select [(value)]="viewMode">
             <mat-select-trigger>

@@ -2,17 +2,18 @@
 <mat-dialog-content>
     <div class="ug">
         <mat-form-field>
+            <mat-label>U.G.</mat-label>
             <input matInput
                    type="number"
                    [(ngModel)]="gemUg"
                    (ngModelChange)="updateGem()"
-                   class="form-control"
-                   placeholder="U.G."/>
+                   class="form-control"/>
         </mat-form-field>
 
         <span class="max-ug-selector">
             <mat-form-field>
-                <mat-select placeholder="Maximum U.G." [ngModel]="maxUg" (selectionChange)="setGemRandomUg($event.value)">
+                <mat-label>Maximum U.G.</mat-label>
+                <mat-select [ngModel]="maxUg" (selectionChange)="setGemRandomUg($event.value)">
                     <mat-option [value]="2">2</mat-option>
                     <mat-option [value]="4">4</mat-option>
                     <mat-option [value]="6">6</mat-option>
@@ -33,13 +34,13 @@
         </mat-button-toggle-group>
 
         <mat-form-field>
+            <mat-label>D20</mat-label>
             <input matInput
                    type="number"
                    min="1"
                    [(ngModel)]="randomDiceNumber"
                    (ngModelChange)="updateGem()"
-                   class="form-control"
-                   placeholder="D20"/>
+                   class="form-control"/>
         </mat-form-field>
 
         <button mat-icon-button

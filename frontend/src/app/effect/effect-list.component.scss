@@ -1,4 +1,7 @@
 :host {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     .effect-sub-category-selector {
         display: flex;
         flex-direction: row;
@@ -12,10 +15,6 @@
                 width: 100%;
             }
         }
-    }
-
-    mat-card {
-        margin: 5px;
     }
 
     .effect {

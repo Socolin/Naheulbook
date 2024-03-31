@@ -1,7 +1,8 @@
 <h2 mat-dialog-title>Ajouter un loot</h2>
 <mat-dialog-content>
     <mat-form-field>
-        <input autocomplete="off" matInput type="text" placeholder="Nom du loot" #lootName/>
+        <mat-label>Nom du loot</mat-label>
+        <input autocomplete="off" matInput type="text" #lootName/>
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
@@ -14,6 +15,6 @@
             [mat-dialog-close]="lootName.value"
             color="primary"
             [disabled]="!lootName.value">
-        CREER
+        CRÉER
     </button>
 </mat-dialog-actions>

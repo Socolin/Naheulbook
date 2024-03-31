@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {getRandomInt} from '../shared';
 import {Item, ItemData} from '../item';
-import {MonsterTemplate, MonsterTemplateSubCategory, MonsterTemplateService, MonsterTemplateType} from '../monster';
+import {MonsterTemplate, MonsterTemplateService, MonsterTemplateSubCategory, MonsterTemplateType} from '../monster';
 import {ItemTemplate} from '../item-template';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
-import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {NhbkMatDialog} from '../material-workaround';
 
 
@@ -161,7 +161,6 @@ export class AddMonsterDialogComponent implements OnInit {
 
     openItemTemplateDialog(itemTemplate: ItemTemplate) {
         this.dialog.open(ItemTemplateDialogComponent, {
-            panelClass: 'app-dialog-no-padding',
             data: {itemTemplate},
             autoFocus: false
         });

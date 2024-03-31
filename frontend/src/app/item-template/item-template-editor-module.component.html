@@ -1,26 +1,30 @@
 <mat-card [ngSwitch]="moduleName">
     <button class="delete-button" mat-icon-button (click)="deleteModule()"><mat-icon>close</mat-icon></button>
     <ng-template [ngSwitchCase]="'bourrin'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Arme de bourrin
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Arme de bourrin
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
-            Requiert la compétence Armes de bourrin pour pouvoir utiliser cet objet<br>
+            Requiert la compétence Armes de bourrin pour pouvoir utiliser cet objet<br>z
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'charge'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Charges / Utilisations
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Charges / Utilisations
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <div>
                 Cet objet a un nombre limité de
                 <mat-form-field style="width: 40px">
+                    <mat-label>Nombre de charges</mat-label>
                     <input matInput
                            class="input-center-align"
-                           placeholder="Nombre de charges"
                            [(ngModel)]="itemTemplate.data.charge"
                            type="number"/>
                 </mat-form-field>
@@ -54,10 +58,12 @@
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'collect'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Possibilités de récolte
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Possibilités de récolte
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <mat-form-field style="width: 100%">
                 <input matInput
@@ -66,28 +72,34 @@
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'container'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Conteneur
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Conteneur
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             Cet objet permet de stocker d'autres objets
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'currency'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Monnaie
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Monnaie
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             Cet objet est comptabiliser dans le total de piece d'or du joueur.
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'damage'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Dégât de l'objet
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Dégât de l'objet
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <div>
                 Cet objet permet d'infliger
@@ -101,26 +113,26 @@
             </div>
             <div class="damage-line">
                 <mat-form-field>
+                    <mat-label>Dé(s)</mat-label>
                     <input matInput
                            class="input-center-align"
-                           placeholder="Dé(s)"
                            [(ngModel)]="itemTemplate.data.damageDice"
                            type="number"/>
                     <span matSuffix>D6</span>
                 </mat-form-field>
 
                 <mat-form-field>
+                    <mat-label>Dégât fixe</mat-label>
                     <input matInput
                            class="input-center-align"
-                           placeholder="Dégât fixe"
                            [(ngModel)]="itemTemplate.data.bonusDamage"
                            type="number"/>
                 </mat-form-field>
 
                 <mat-form-field>
+                    <mat-label>Type de dégât</mat-label>
                     <input matInput
                            class="input-center-align"
-                           placeholder="Type de dégât"
                            [(ngModel)]="itemTemplate.data.damageType"
                            type="text"/>
                 </mat-form-field>
@@ -128,51 +140,59 @@
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'diceDrop'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Dé
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Dé
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             Cet objet s'obtient en lançant un dé avec une valeur de
             <mat-form-field>
+                <mat-label>Valeur du dé</mat-label>
                 <input matInput
                        class="input-center-align"
-                       placeholder="Valeur du dé"
                        [(ngModel)]="itemTemplate.data.diceDrop"
                        type="number"/>
             </mat-form-field>
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'enchantment'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Enchanté
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Enchanté
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             Cet objet est enchanté
             <mat-form-field>
+                <mat-label>Details</mat-label>
                 <input matInput
                        class="input-center-align"
-                       placeholder="Details"
                        [(ngModel)]="itemTemplate.data.enchantment"/>
             </mat-form-field>
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'gem'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Gemmes
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Gemmes
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             Cet objet est une gemme pouvant avoir un poix en U.G.
         </mat-card-content>
     </ng-template>
 
     <ng-template [ngSwitchCase]="'god'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Dieu
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Dieu
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content style="display: flex; align-items: center">
             <span style="padding-top: 15px">
                 Cet objet est lié au dieu&nbsp;
@@ -186,105 +206,111 @@
     </ng-template>
 
     <ng-template [ngSwitchCase]="'gun'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Arme à poudre
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Arme à poudre
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content style="display: flex; flex-direction: column">
             Statistiques de combat
             <mat-form-field style="width: 100%">
+                <mat-label>Portée utile</mat-label>
                 <input matInput
-                       placeholder="Portée utile"
                        [(ngModel)]="itemTemplate.data.gun.range"/>
             </mat-form-field>
             <mat-form-field style="width: 100%">
+                <mat-label>Dégâts</mat-label>
                 <input matInput
-                       placeholder="Dégâts"
                        [(ngModel)]="itemTemplate.data.gun.damages"/>
             </mat-form-field>
             <mat-form-field style="width: 100%">
+                <mat-label>Spécial</mat-label>
                 <input matInput
-                       placeholder="+Spécial"
                        [(ngModel)]="itemTemplate.data.gun.special"/>
             </mat-form-field>
             <mat-form-field style="width: 100%">
+                <mat-label>Cadence de tir</mat-label>
                 <input matInput
-                       placeholder="Cadence de tir"
                        [(ngModel)]="itemTemplate.data.gun.rateOfFire"/>
             </mat-form-field>
             <mat-form-field style="width: 100%">
+                <mat-label>Délai de rechargement</mat-label>
                 <input matInput
-                       placeholder="Délai de rechargement"
                        [(ngModel)]="itemTemplate.data.gun.reloadDelay"/>
             </mat-form-field>
             <mat-form-field style="width: 100%">
+                <mat-label>Épreuve de tir</mat-label>
                 <input matInput
-                       placeholder="Épreuve de tir"
                        [(ngModel)]="itemTemplate.data.gun.shootTest"/>
             </mat-form-field>
             <mat-divider></mat-divider>
             Munitions
             <mat-form-field style="width: 100%">
+                <mat-label>Combustion par coup</mat-label>
                 <input matInput
-                       placeholder="Combustion par coup"
                        [(ngModel)]="itemTemplate.data.gun.fuelPerShot"/>
             </mat-form-field>
             <mat-form-field style="width: 100%">
+                <mat-label>Munitions par coup</mat-label>
                 <input matInput
-                       placeholder="Munitions par coup"
                        [(ngModel)]="itemTemplate.data.gun.ammunitionPerShot"/>
             </mat-form-field>
             <mat-divider></mat-divider>
             <mat-form-field style="width: 100%">
+                <mat-label>Chances de fonctionnement</mat-label>
                 <input matInput
-                       placeholder="Chances de fonctionnement"
                        [(ngModel)]="itemTemplate.data.gun.workLuck"/>
             </mat-form-field>
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'instrument'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Instrument de musique
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Instrument de musique
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <div class="instrument-stats">
                 <mat-form-field>
+                    <mat-label>Coup Spécial</mat-label>
                     <input matInput
                            type="number"
                            step="1"
-                           placeholder="Coup Spécial"
                            [(ngModel)]="itemTemplate.data.instrument.specialMove"/>
                 </mat-form-field>
                 <mat-form-field>
+                    <mat-label>Discours Théâtre</mat-label>
                     <input matInput
                            type="number"
                            step="1"
-                           placeholder="Discours Théâtre"
                            [(ngModel)]="itemTemplate.data.instrument.speechTheater"/>
                 </mat-form-field>
                 <mat-form-field>
+                    <mat-label>Jonglage Danse</mat-label>
                     <input matInput
                            type="number"
                            step="1"
-                           placeholder="Jonglage Danse"
                            [(ngModel)]="itemTemplate.data.instrument.jugglingDance"/>
                 </mat-form-field>
                 <mat-form-field>
+                    <mat-label>Musique Chant</mat-label>
                     <input matInput
                            type="number"
                            step="1"
-                           placeholder="Musique Chant"
                            [(ngModel)]="itemTemplate.data.instrument.musicSinging"/>
                 </mat-form-field>
             </div>
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'itemTypes'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Type d'objet
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Type d'objet
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-subtitle>
             Utilisé pour vérifier si un personnage peut se servir de l'objet (cf. restriction métier/origine)
         </mat-card-subtitle>
@@ -300,11 +326,15 @@
         </mat-card-actions>
     </ng-template>
     <ng-template [ngSwitchCase]="'lifetime'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Durée de conservation
-        </mat-card-title>
-        <duration-selector [durable]="itemTemplate.data.lifetime"></duration-selector>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Durée de conservation
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <duration-selector [durable]="itemTemplate.data.lifetime"></duration-selector>
+        </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'level'">
         <mat-card-title>
@@ -319,20 +349,24 @@
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'modifiers'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Modificateurs
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Modificateurs
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <modifiers-editor [advancedModifiers]="true" [modifiers]="itemTemplate.modifiers">
             </modifiers-editor>
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'origin'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Origine
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Origine
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-subtitle>Méthode d'obtention</mat-card-subtitle>
         <mat-card-content>
             <mat-form-field style="width: 100%">
@@ -343,10 +377,12 @@
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'prereq'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Prérequis
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Prérequis
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <stat-requirements-editor [requirements]="itemTemplate.requirements">
             </stat-requirements-editor>
@@ -403,19 +439,23 @@
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'quantifiable'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Quantifiable
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Quantifiable
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             Il est possible de posséder cet objet dans une certaines quantité dans un seul slot de l'inventaire (piece d'or, ingredient magique...)
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'rarity'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Indice de rareté
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Indice de rareté
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <mat-form-field style="width: 100%">
                 <input matInput
@@ -425,19 +465,23 @@
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'relic'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Relique
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Relique
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             C'est objet est une relique, qui permet a un paladin d'acceder a ses pouvoir<br>
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'rupture'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Rupture
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Rupture
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <div *ngIf="itemTemplate.data.rupture > 1">
                 En cas d'echec critique ou de coup critique de l'énemis l'objet casse sur un score de
@@ -464,10 +508,12 @@
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'sex'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Sexe
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Sexe
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             Cet objet est réservé aux personnage de sexe
             <mat-radio-group [(ngModel)]="itemTemplate.data.sex">
@@ -477,10 +523,12 @@
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'skill'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Compétences
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Compétences
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content *ngIf="skills">
             <div>
                 <div *ngFor="let skill of itemTemplate.skills">
@@ -516,19 +564,23 @@
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'skillBook'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Livre de compétence
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Livre de compétence
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             Cet objet permet d'obtenir une compétence après avoir ete lu.
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'slots'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Équipement
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Équipement
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             Cet objet peut être équipé, et occupe les emplacement suivant:
             <div class="slots-list">
@@ -539,10 +591,12 @@
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'space'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Encombrement
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Encombrement
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <mat-form-field style="width: 100%">
                 <input matInput
@@ -551,19 +605,23 @@
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'throwable'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Arme prévue pour le jet
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Arme prévue pour le jet
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             Cet objet est une arme prévue pour le jet.
         </mat-card-content>
     </ng-template>
     <ng-template [ngSwitchCase]="'weight'">
-        <mat-card-title>
-            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-            Poids
-        </mat-card-title>
+        <mat-card-header>
+            <mat-card-title>
+                <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
+                Poids
+            </mat-card-title>
+        </mat-card-header>
         <mat-card-content>
             <mat-form-field>
                 <input matInput
@@ -581,7 +639,7 @@
     </ng-template>
 </mat-card>
 
-<ng-template cdk-portal #createItemTypeDialog="cdkPortal">
+<ng-template cdkPortal #createItemTypeDialog="cdkPortal">
     <mat-card>
         <mat-form-field>
             <input matInput

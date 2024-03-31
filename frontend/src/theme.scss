@@ -3,6 +3,7 @@
 // Plus imports for other components in your app.
 @import './app/shared/_value-editor-theme';
 @import './app/shared/_common-nav-theme';
+@import './app/shared/_full-screen-dialog-theme';
 @import './app/_app.theme';
 @import './app/character/character.theme';
 @import './app/group/fighter-panel.theme';
@@ -14,16 +15,8 @@
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // **Be sure that you only ever include this mixin once!**
-// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
-//  The following line adds:
-//    1. Default typography styles for all components
-//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
-//  If you specify typography styles for the components you use elsewhere, you should delete this line.
-//  If you don't need the default component typographies but still want the hierarchy styles,
-//  you can delete this line and instead use:
-//    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
-@include mat.all-legacy-component-typographies();
-@include mat.legacy-core();
+@include mat.all-component-typographies();
+@include mat.core();
 
 // Define the default theme
 $nhbk-primary: mat.define-palette(mat.$indigo-palette);
@@ -44,7 +37,7 @@ $nhbk-theme: mat.define-light-theme((
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include mat.all-legacy-component-themes($nhbk-theme);
+@include mat.all-component-themes($nhbk-theme);
 @include global-theme($nhbk-theme);
 
 @mixin custom-components-theme($theme) {
@@ -56,6 +49,7 @@ $nhbk-theme: mat.define-light-theme((
     @include fighter-panel-theme($theme);
     @include map-theme($theme);
     @include common-nav-theme($theme);
+    @include full-screen-dialog-theme($theme);
 }
 
 @include custom-components-theme($nhbk-theme);
@@ -77,7 +71,7 @@ $nhbk-theme: mat.define-light-theme((
         ));
 
         .#{$name} {
-            @include mat.all-legacy-component-colors($dark-theme);
+            @include mat.all-component-colors($dark-theme);
             @include global-theme($dark-theme);
             @include custom-components-theme($dark-theme);
         }
@@ -94,7 +88,7 @@ $nhbk-theme: mat.define-light-theme((
         ));
 
         .#{$name} {
-            @include mat.all-legacy-component-colors($light-theme);
+            @include mat.all-component-colors($light-theme);
             @include global-theme($light-theme);
             @include custom-components-theme($light-theme);
         }

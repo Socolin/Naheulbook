@@ -1,15 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {OverlayRef} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import {Component, OnInit} from '@angular/core';
 
 import {LoginService} from '../user';
-import {ThemeService} from '../theme.service';
-
-import {NhbkDialogService} from './nhbk-dialog.service';
 import {Router} from '@angular/router';
 import {GmModeService} from './gm-mode.service';
 import {ConfirmGmModeDialogComponent} from './confirm-gm-mode-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
+import {ThemeSelectorDialogComponent} from './theme-selector-dialog.component';
 
 @Component({
     selector: 'common-nav',
@@ -17,33 +13,16 @@ import {NhbkMatDialog} from '../material-workaround';
     styleUrls: ['./common-nav.component.scss'],
 })
 export class CommonNavComponent implements OnInit {
-    @ViewChild('themeSelectorDialog', {static: true})
-    public themeSelectorDialog: Portal<any>;
-    public themeSelectorOverlayRef: OverlayRef | undefined;
-
     constructor(
         public readonly loginService: LoginService,
-        private readonly nhbkDialogService: NhbkDialogService,
-        private readonly themeService: ThemeService,
         private readonly router: Router,
         private readonly dialog: NhbkMatDialog,
         public readonly gmModeService: GmModeService,
     ) {
     };
 
-    changeTheme(theme: string) {
-        this.themeService.setTheme(theme);
-    }
-
     openThemeSelector() {
-        this.themeSelectorOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.themeSelectorDialog);
-    }
-
-    closeThemeSelector() {
-        if (this.themeSelectorOverlayRef) {
-            this.themeSelectorOverlayRef.detach();
-            this.themeSelectorOverlayRef = undefined;
-        }
+        this.dialog.open(ThemeSelectorDialogComponent);
     }
 
     ngOnInit() {

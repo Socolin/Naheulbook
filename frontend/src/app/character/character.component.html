@@ -3,7 +3,9 @@
         <!-- Start of info tab -->
         <div class="info-tab">
             <mat-card *ngFor="let invite of character.invites">
-                <mat-card-title>Invitation</mat-card-title>
+                <mat-card-header>
+                    <mat-card-title>Invitation</mat-card-title>
+                </mat-card-header>
                 <mat-card-content>
                     Rejoindre le groupe <em>{{invite.groupName}}</em> ?
                 </mat-card-content>
@@ -14,28 +16,31 @@
             </mat-card>
 
             <mat-card>
-                <mat-card-title style="display: flex; justify-content: space-between; align-items: center">
+                <mat-toolbar>
                     {{character.name}}
+                    <span class="toolbar-spacer"></span>
                     <button mat-icon-button [matMenuTriggerFor]="characterBasicChange" aria-label="Menu edition du joueur">
                         <mat-icon>more_vert</mat-icon>
                     </button>
-                </mat-card-title>
+                    <mat-menu xPosition="before" #characterBasicChange="matMenu">
+                        <button mat-menu-item (click)="openChangeNameDialog()">
+                            <mat-icon>edit</mat-icon>
+                            Changer le nom
+                        </button>
+                        <button mat-menu-item (click)="openChangeSexDialog()">
+                            <mat-icon fontSet="game-icon" [fontIcon]="character.sex === 'Homme' ? 'game-icon-male' : 'game-icon-female'" class="ra-mat-button-icon-24"></mat-icon>
+                            Changer de sexe
+                        </button>
+                        <button mat-menu-item (click)="openChangeJobDialog()">
+                            <mat-icon fontSet="game-icon" fontIcon="game-icon-gear-hammer" class="ra-mat-button-icon-24"></mat-icon>
+                            Changer de métier
+                        </button>
+                    </mat-menu>
 
-                <mat-menu xPosition="before" #characterBasicChange="matMenu">
-                    <button mat-menu-item (click)="openChangeNameDialog()">
-                        <mat-icon>edit</mat-icon>
-                        Changer le nom
-                    </button>
-                    <button mat-menu-item (click)="openChangeSexDialog()">
-                        <mat-icon fontSet="game-icon" [fontIcon]="character.sex === 'Homme' ? 'game-icon-male' : 'game-icon-female'" class="ra-mat-button-icon-24"></mat-icon>
-                        Changer de sexe
-                    </button>
-                    <button mat-menu-item (click)="openChangeJobDialog()">
-                        <mat-icon fontSet="game-icon" fontIcon="game-icon-gear-hammer" class="ra-mat-button-icon-24"></mat-icon>
-                        Changer de métier
-                    </button>
-                </mat-menu>
-                <mat-card-content>
+                </mat-toolbar>
+                <mat-card-header>
+                </mat-card-header>
+               <mat-card-content>
                     <dl>
                         <dt>Origine</dt>
                         <dd style="display: flex; align-items: center">
@@ -124,10 +129,12 @@
                 </mat-card-content>
             </mat-card>
             <mat-card>
-                <mat-card-title>Notes</mat-card-title>
+                <mat-card-header>
+                    <mat-card-title>Notes</mat-card-title>
+                </mat-card-header>
                 <mat-card-content>
                     <p *ngIf="editingNotes">Vous pouvez utilisez du <a target="_blank" href="https://fr.wikipedia.org/wiki/Markdown">Markdown</a> pour formatter le texte</p>
-                    <mat-form-field [style.display]="editingNotes ? 'block' : 'none'">
+                    <mat-form-field [style.display]="editingNotes ? 'block' : 'none'" appearance="outline">
                         <textarea #notesEditor matInput
                                   cdkTextareaAutosize
                                   cdkAutosizeMinRows="1"
@@ -145,7 +152,9 @@
                 </mat-card-actions>
             </mat-card>
             <mat-card *ngIf="character.computedData.stats['AD'] > 12">
-                <mat-card-title>Adresse exceptionnelle</mat-card-title>
+                <mat-card-header>
+                    <mat-card-title>Adresse exceptionnelle</mat-card-title>
+                </mat-card-header>
                 <mat-card-content>
                     <p>
                         Un score d'adresse (AD) exceptionnelle confère un point <em>bonus</em> en attaque (AT) ou en parade (PRD)
@@ -157,7 +166,9 @@
                 </mat-card-content>
             </mat-card>
             <mat-card *ngIf="character.computedData.stats['AD'] < 9" class="row">
-                <mat-card-title>Adresse pourri</mat-card-title>
+                <mat-card-header>
+                    <mat-card-title>Adresse pourri</mat-card-title>
+                </mat-card-header>
                 <mat-card-content>
                     <p>
                         Un score d'adresse (AD) inférieur ou égale à 8 induit un point <em>malus</em> en attaque (AT) ou en parade (PRD)
@@ -169,7 +180,9 @@
                 </mat-card-content>
             </mat-card>
             <mat-card *ngIf="character.computedData.stats['INT'] > 12">
-                <mat-card-title>Intelligence exceptionnelle</mat-card-title>
+                <mat-card-header>
+                    <mat-card-title>Intelligence exceptionnelle</mat-card-title>
+                </mat-card-header>
                 <mat-card-content>
                     <p>
                         Un score d'inteligence (INT) exceptionnelle confère un point de dégâts des sorts
@@ -191,7 +204,9 @@
                 </mat-card-content>
             </mat-card>
             <mat-card *ngIf="character.computedData.stats['FO'] <= 8">
-                <mat-card-title>Force de mauviette</mat-card-title>
+                <mat-card-header>
+                    <mat-card-title>Force de mauviette</mat-card-title>
+                </mat-card-header>
                 <mat-card-content>
                     <p>
                         Un score exceptionnel offre forcément des avantages dans ce monde violent...
@@ -201,9 +216,11 @@
                 </mat-card-content>
             </mat-card>
             <mat-card>
-                <mat-card-title>
-                    Compétences
-                </mat-card-title>
+                <mat-card-header>
+                    <mat-card-title>
+                        Compétences
+                    </mat-card-title>
+                </mat-card-header>
                 <mat-card-content class="skill-list">
                     <div *ngFor="let skill of character.computedData.skills" class="skill">
                         <span class="name" [class.canceled]="skill.canceled">
@@ -464,8 +481,8 @@
 </mat-tab-group>
 
 <div class="add-button" *ngIf="currentTab === 'inventory' && (inGroupTab || character.group === undefined || character.group.config.allowPlayersToAddObject)">
-    <button class="extended-fab-button" mat-fab color="primary" (click)="inventoryPanel.openAddItemModal()" aria-label="Ajouter un objet">
+    <button class="extended-fab-button" mat-fab extended color="primary" (click)="inventoryPanel.openAddItemModal()" aria-label="Ajouter un objet">
         <mat-icon>add</mat-icon>
-        <span class="extended-fab-button__text">Ajouter un objet</span>
+        Ajouter un objet
     </button>
 </div>

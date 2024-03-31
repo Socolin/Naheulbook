@@ -1,19 +1,7 @@
 :host {
-    .fighter-card {
-        > h2 {
-            display: flex;
-            justify-content: space-between;
-            margin-left: 8px;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            margin-left: 8px;
-            align-items: baseline;
-        }
-        padding: 8px 8px 8px;
-        margin: 8px;
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     .next-button {
         display: flex;
         flex-direction: row-reverse;

@@ -30,7 +30,7 @@ mat-card {
 
 .damage-line {
     display: grid;
-    grid-template-columns: 60px minmax(50px, 90px) minmax(90px, 1fr);
+    grid-template-columns: 80px minmax(50px, 90px) minmax(90px, 1fr);
     grid-gap: 16px;
     > mat-form-field {
         width: 100%;
