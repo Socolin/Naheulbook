@@ -6,7 +6,7 @@ namespace Naheulbook.Requests.Validators;
 
 public class LapCountDecrementValidator : AbstractValidator<LapCountDecrement>
 {
-    private static readonly List<string> ValidWhenValues = new List<string> {"BEFORE", "AFTER"};
+    private static readonly List<string> ValidWhenValues = ["BEFORE", "AFTER"];
 
     public LapCountDecrementValidator()
     {

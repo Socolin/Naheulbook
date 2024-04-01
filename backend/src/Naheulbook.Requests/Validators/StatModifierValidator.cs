@@ -6,7 +6,7 @@ namespace Naheulbook.Requests.Validators;
 
 public class StatModifierValidator : AbstractValidator<StatModifierRequest>
 {
-    private static readonly List<string> ValidTypeValues = new List<string> {"ADD", "MUL", "DIV", "SET", "PERCENTAGE"};
+    private static readonly List<string> ValidTypeValues = ["ADD", "MUL", "DIV", "SET", "PERCENTAGE"];
 
     public StatModifierValidator()
     {

@@ -12,7 +12,7 @@ namespace Naheulbook.Tests.Functional.Code.Init;
 public class InitializersProfiler(ISpecFlowOutputHelper specFlowOutputHelper)
 {
     private static readonly Terminal256ColorCodes[] GradiantGreenRed =
-    {
+    [
         Terminal256ColorCodes.PaleGreen3C77,
         Terminal256ColorCodes.DarkSeaGreen4C71,
         Terminal256ColorCodes.Chartreuse4C64,
@@ -21,7 +21,7 @@ public class InitializersProfiler(ISpecFlowOutputHelper specFlowOutputHelper)
         Terminal256ColorCodes.DarkOrange3C130,
         Terminal256ColorCodes.DarkOrange3C166,
         Terminal256ColorCodes.Red3C160,
-    };
+    ];
 
     private static InitProfiler _profiler;
     private static readonly Stopwatch InitStopwatch = new();

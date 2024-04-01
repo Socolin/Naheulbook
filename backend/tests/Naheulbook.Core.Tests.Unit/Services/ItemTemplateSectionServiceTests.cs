@@ -43,12 +43,12 @@ public class ItemTemplateSectionServiceTests
             Name = "some-name",
             Icon = "some-icon",
             Note = "some-note",
-            Specials = new List<string>
-            {
+            Specials =
+            [
                 "some-specials0",
                 "some-specials1",
                 "some-specials2",
-            },
+            ],
         };
 
         var itemTemplateSection = await _service.CreateItemTemplateSectionAsync(new NaheulbookExecutionContext(), createItemTemplateSectionRequest);
@@ -65,7 +65,7 @@ public class ItemTemplateSectionServiceTests
     [Test]
     public async Task CreateItemTemplateSection_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
     {
-        var request = new CreateItemTemplateSectionRequest {Name = string.Empty, Icon = string.Empty, Specials = new List<string>()};
+        var request = new CreateItemTemplateSectionRequest {Name = string.Empty, Icon = string.Empty, Specials = []};
         var executionContext = new NaheulbookExecutionContext();
 
         await _service.CreateItemTemplateSectionAsync(executionContext, request);

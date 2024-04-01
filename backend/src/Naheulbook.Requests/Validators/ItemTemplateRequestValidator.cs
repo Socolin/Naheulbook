@@ -6,7 +6,7 @@ namespace Naheulbook.Requests.Validators;
 
 public class ItemTemplateRequestValidator : AbstractValidator<ItemTemplateRequest>
 {
-    private static readonly List<string> ValidSources = new List<string> {"official", "private", "community"};
+    private static readonly List<string> ValidSources = ["official", "private", "community"];
 
     public ItemTemplateRequestValidator()
     {

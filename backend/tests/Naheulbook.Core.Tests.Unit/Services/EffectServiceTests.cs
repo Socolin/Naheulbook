@@ -163,27 +163,30 @@ public class EffectServiceTests
             Dice = (short?)2,
             LapCount = 3,
             TimeDuration = 4,
-            Modifiers = new List<StatModifierRequest>
-            {
+            Modifiers =
+            [
                 new()
                 {
                     Stat = "some-stat",
                     Type = "some-type",
                     Value = 5,
                 },
+
                 new()
                 {
                     Stat = "some-stat",
                     Type = "some-type",
                     Value = 6,
                 },
+
                 new()
                 {
                     Stat = "some-stat",
                     Type = "some-type",
                     Value = 7,
                 },
-            },
+
+            ],
         };
         var executionContext = new NaheulbookExecutionContext();
 
@@ -201,7 +204,7 @@ public class EffectServiceTests
     public async Task CreateEffect_EnsureThatUserIsAnAdmin_BeforeAddingInDatabase()
     {
         var executionContext = new NaheulbookExecutionContext();
-        var createEffectRequest = new CreateEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = new List<StatModifierRequest>()};
+        var createEffectRequest = new CreateEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = []};
 
         await _effectService.CreateEffectAsync(executionContext, 2, createEffectRequest);
 
@@ -228,27 +231,30 @@ public class EffectServiceTests
             Dice = (short?)3,
             LapCount = 4,
             TimeDuration = 5,
-            Modifiers = new List<StatModifierRequest>
-            {
+            Modifiers =
+            [
                 new()
                 {
                     Stat = "some-stat",
                     Type = "some-type",
                     Value = 6,
                 },
+
                 new()
                 {
                     Stat = "some-stat",
                     Type = "some-type",
                     Value = 7,
                 },
+
                 new()
                 {
                     Stat = "some-stat",
                     Type = "some-type",
                     Value = 8,
                 },
-            },
+
+            ],
             SubCategoryId = 1,
         };
 
@@ -269,7 +275,7 @@ public class EffectServiceTests
     {
         var executionContext = new NaheulbookExecutionContext();
         var previousEffect = AutoFill<EffectEntity>.One(AutoFillFlags.RandomizeString | AutoFillFlags.RandomInt);
-        var editEffectRequest = new EditEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = new List<StatModifierRequest>()};
+        var editEffectRequest = new EditEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = []};
         previousEffect.Id = 42;
 
         _effectRepository.GetWithModifiersAsync(42)
@@ -288,7 +294,7 @@ public class EffectServiceTests
     public async Task EditEffect_WhenEffectDoesNotExists_Throw()
     {
         var executionContext = new NaheulbookExecutionContext();
-        var editEffectRequest = new EditEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = new List<StatModifierRequest>()};
+        var editEffectRequest = new EditEffectRequest {Name = string.Empty, DurationType = string.Empty, Modifiers = []};
 
         _effectRepository.GetWithModifiersAsync(Arg.Any<int>())
             .Returns((EffectEntity)null);

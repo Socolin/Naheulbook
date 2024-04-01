@@ -9,9 +9,13 @@ using Naheulbook.Web.Exceptions;
 
 namespace Naheulbook.Web.Middlewares;
 
-public class DevExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IConfiguration configuration)
+public class DevExceptionMiddleware(
+    RequestDelegate next,
+    ILoggerFactory loggerFactory,
+    IConfiguration configuration
+)
 {
-    private static readonly string[] ExcludedExceptionFields = {"TargetSite", "StackTrace", "Message", "Data", "InnerException", "HelpLink", "Source", "HResult"};
+    private static readonly string[] ExcludedExceptionFields = ["TargetSite", "StackTrace", "Message", "Data", "InnerException", "HelpLink", "Source", "HResult"];
     private readonly ILogger _logger = loggerFactory.CreateLogger(nameof(DevExceptionMiddleware));
     private readonly bool _displayExceptionFields = configuration.GetValue<bool>("DisplayExceptionFields");
 

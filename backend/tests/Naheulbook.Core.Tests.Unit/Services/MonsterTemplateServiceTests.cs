@@ -49,7 +49,7 @@ public class MonsterTemplateServiceTests
         _unitOfWorkFactory.GetUnitOfWork().MonsterSubCategories.GetAsync(subCategoryId)
             .Returns(monsterSubCategory);
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Is<IEnumerable<Guid>>(x => x.SequenceEqual(new[] {itemTemplateId})))
-            .Returns(new List<ItemTemplateEntity> {itemTemplate});
+            .Returns([itemTemplate]);
 
         var monsterTemplate = await _service.CreateMonsterTemplateAsync(executionContext, request);
 

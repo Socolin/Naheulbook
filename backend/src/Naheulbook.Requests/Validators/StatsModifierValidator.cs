@@ -7,7 +7,7 @@ namespace Naheulbook.Requests.Validators;
 public abstract class BaseStatsModifierValidator<T> : AbstractValidator<T>
     where T : StatsModifier
 {
-    private static List<string> ValidDurationTypes => new List<string> {"combat", "custom", "time", "lap", "forever"};
+    private static List<string> ValidDurationTypes => ["combat", "custom", "time", "lap", "forever"];
 
     protected BaseStatsModifierValidator()
     {

@@ -6,7 +6,7 @@ namespace Naheulbook.Requests.Validators;
 
 public class CreateCharacterRequestValidator: AbstractValidator<CreateCharacterRequest>
 {
-    private static readonly List<string> ValidSex = new List<string> {"Homme", "Femme"};
+    private static readonly List<string> ValidSex = ["Homme", "Femme"];
     public CreateCharacterRequestValidator()
     {
         RuleFor(e => e.Name).NotNull().Length(1, 255);

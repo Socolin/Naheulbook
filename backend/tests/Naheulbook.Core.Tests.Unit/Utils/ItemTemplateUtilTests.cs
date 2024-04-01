@@ -101,11 +101,11 @@ public class ItemTemplateUtilTests
             Name = string.Empty,
             Source = string.Empty,
             Data = new JObject(),
-            Slots = new List<IdRequest>
-            {
+            Slots =
+            [
                 new IdRequest {Id = 2},
                 new IdRequest {Id = 3},
-            },
+            ],
         };
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
@@ -152,21 +152,23 @@ public class ItemTemplateUtilTests
             Name = string.Empty,
             Source = string.Empty,
             Data = new JObject(),
-            Requirements = new List<ItemTemplateRequirementRequest>
-            {
+            Requirements =
+            [
                 new ItemTemplateRequirementRequest
                 {
                     Stat = "some-stat-name-2",
                     Min = 3,
                     Max = 8,
                 },
+
                 new ItemTemplateRequirementRequest
                 {
                     Stat = "some-stat-name-3",
                     Min = 4,
                     Max = 12,
                 },
-            },
+
+            ],
         };
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
@@ -218,8 +220,8 @@ public class ItemTemplateUtilTests
             Name = string.Empty,
             Source = string.Empty,
             Data = new JObject(),
-            Modifiers = new List<ItemTemplateModifierRequest>
-            {
+            Modifiers =
+            [
                 new ItemTemplateModifierRequest
                 {
                     Stat = "some-stat-name-2",
@@ -227,15 +229,17 @@ public class ItemTemplateUtilTests
                     Type = "ADD",
                     Value = 3,
                 },
+
                 new ItemTemplateModifierRequest
                 {
                     Stat = "some-stat-name-3",
                     OriginId = new Guid("00000000-0000-0000-0000-000000000001"),
                     Type = "ADD",
                     Value = 3,
-                    Special = new List<string> {"some-special-3"},
+                    Special = ["some-special-3"],
                 },
-            },
+
+            ],
         };
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
@@ -283,16 +287,16 @@ public class ItemTemplateUtilTests
             Name = string.Empty,
             Source = string.Empty,
             Data = new JObject(),
-            SkillIds = new List<Guid>
-            {
+            SkillIds =
+            [
                 new Guid("00000000-0000-0000-0000-000000000004"),
                 new Guid("00000000-0000-0000-0000-000000000005"),
-            },
-            UnSkillIds = new List<Guid>
-            {
+            ],
+            UnSkillIds =
+            [
                 new Guid("00000000-0000-0000-0000-000000000006"),
                 new Guid("00000000-0000-0000-0000-000000000007"),
-            },
+            ],
         };
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
@@ -327,11 +331,11 @@ public class ItemTemplateUtilTests
             Name = string.Empty,
             Source = string.Empty,
             Data = new JObject(),
-            SkillModifiers = new List<ItemTemplateSkillModifierRequest>
-            {
+            SkillModifiers =
+            [
                 new() {SkillId = new Guid("00000000-0000-0000-0000-000000000004"), Value = 3},
                 new() {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4},
-            },
+            ],
         };
 
         _util.ApplyChangesFromRequest(itemTemplate, request);

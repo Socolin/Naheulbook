@@ -379,7 +379,7 @@ public class ItemServiceTests
         };
 
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Any<IEnumerable<Guid>>())
-            .Returns(new List<ItemTemplateEntity>());
+            .Returns([]);
 
         Func<Task> act = () => _service.CreateItemsAsync(createItemRequests);
 
@@ -406,7 +406,7 @@ public class ItemServiceTests
         };
 
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Is<IEnumerable<Guid>>(ids => ids.SequenceEqual(new[] {itemTemplateId1, itemTemplateId2})))
-            .Returns(new List<ItemTemplateEntity> {itemTemplate1, itemTemplate2});
+            .Returns([itemTemplate1, itemTemplate2]);
         _itemFactory.CreateItem(itemTemplate1, itemData1)
             .Returns(item1);
         _itemFactory.CreateItem(itemTemplate2, itemData2)

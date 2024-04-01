@@ -248,11 +248,11 @@ public class ItemTemplateServiceTests
         _stringCleanupUtil.RemoveSeparators(cleanFilter)
             .Returns(cleanFilterWithoutSeparator);
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByCleanNameWithAllDataAsync(cleanFilter, Arg.Any<int>(), Arg.Any<int?>(), Arg.Any<bool>())
-            .Returns(new List<ItemTemplateEntity> {item1});
+            .Returns([item1]);
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithAllDataAsync(cleanFilter, Arg.Any<int>(), Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>())
-            .Returns(new List<ItemTemplateEntity> {item2});
+            .Returns([item2]);
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(cleanFilterWithoutSeparator, Arg.Any<int>(), Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>())
-            .Returns(new List<ItemTemplateEntity> {item3});
+            .Returns([item3]);
 
         var actualItemTemplates = await _service.SearchItemTemplateAsync(filter, 40, null);
 
@@ -267,11 +267,11 @@ public class ItemTemplateServiceTests
         _stringCleanupUtil.RemoveSeparators(Arg.Any<string>())
             .Returns("some-clean-name-with-no-separator");
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByCleanNameWithAllDataAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<int?>(), Arg.Any<bool>())
-            .Returns(new List<ItemTemplateEntity> {new ItemTemplateEntity(), new ItemTemplateEntity()});
+            .Returns([new ItemTemplateEntity(), new ItemTemplateEntity()]);
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithAllDataAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>())
-            .Returns(new List<ItemTemplateEntity> {new ItemTemplateEntity(), new ItemTemplateEntity(), new ItemTemplateEntity()});
+            .Returns([new ItemTemplateEntity(), new ItemTemplateEntity(), new ItemTemplateEntity()]);
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<IEnumerable<Guid>>(), Arg.Any<int?>(), Arg.Any<bool>())
-            .Returns(new List<ItemTemplateEntity> {new ItemTemplateEntity()});
+            .Returns([new ItemTemplateEntity()]);
 
         await _service.SearchItemTemplateAsync("some-filter", 10, null);
 

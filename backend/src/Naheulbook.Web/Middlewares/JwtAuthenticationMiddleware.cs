@@ -10,7 +10,12 @@ using Newtonsoft.Json;
 
 namespace Naheulbook.Web.Middlewares;
 
-public class JwtAuthenticationMiddleware(RequestDelegate next, IJwtService jwtService, ITimeService timeService, IUserAccessTokenService userAccessTokenService)
+public class JwtAuthenticationMiddleware(
+    RequestDelegate next,
+    IJwtService jwtService,
+    ITimeService timeService,
+    IUserAccessTokenService userAccessTokenService
+)
 {
     private const string UserAccessTokenPrefix = "userAccessToken:";
 
@@ -46,9 +51,10 @@ public class JwtAuthenticationMiddleware(RequestDelegate next, IJwtService jwtSe
                 }
 
                 context.SetExecutionContext(new NaheulbookExecutionContext
-                {
-                    UserId = token.UserId,
-                });
+                    {
+                        UserId = token.UserId,
+                    }
+                );
             }
             else
             {
@@ -59,6 +65,7 @@ public class JwtAuthenticationMiddleware(RequestDelegate next, IJwtService jwtSe
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(new {Message = "Invalid JWT"}));
                     return;
                 }
+
                 if (token.Exp < timeService.UtcNow.ToUnixTimeSeconds())
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -67,9 +74,10 @@ public class JwtAuthenticationMiddleware(RequestDelegate next, IJwtService jwtSe
                 }
 
                 context.SetExecutionContext(new NaheulbookExecutionContext
-                {
-                    UserId = token.Sub,
-                });
+                    {
+                        UserId = token.Sub,
+                    }
+                );
             }
         }
 

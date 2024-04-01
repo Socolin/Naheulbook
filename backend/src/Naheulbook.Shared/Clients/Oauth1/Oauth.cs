@@ -122,7 +122,7 @@ public class Oauth(string consumerKey, string consumerSecret, string requestUrl)
                 if (response.IsSuccessStatusCode)
                 {
                     return result.Split('&')
-                        .Select(s => s.Split(new[] {'='}, 2))
+                        .Select(s => s.Split(['='], 2))
                         .ToDictionary(s => s[0], s => s[1]);
                 }
 

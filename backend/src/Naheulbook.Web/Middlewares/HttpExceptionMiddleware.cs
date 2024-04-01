@@ -10,9 +10,13 @@ using Newtonsoft.Json;
 
 namespace Naheulbook.Web.Middlewares;
 
-public class HttpExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IConfiguration configuration)
+public class HttpExceptionMiddleware(
+    RequestDelegate next,
+    ILoggerFactory loggerFactory,
+    IConfiguration configuration
+)
 {
-    private static readonly string[] ExcludedExceptionFields = {"TargetSite", "StackTrace", "Message", "Data", "InnerException", "HelpLink", "Source", "HResult"};
+    private static readonly string[] ExcludedExceptionFields = ["TargetSite", "StackTrace", "Message", "Data", "InnerException", "HelpLink", "Source", "HResult"];
     private readonly ILogger _logger = loggerFactory.CreateLogger(nameof(HttpExceptionMiddleware));
     private readonly bool _displayExceptionFields = configuration.GetValue<bool>("DisplayExceptionFields");
 
@@ -28,9 +32,11 @@ public class HttpExceptionMiddleware(RequestDelegate next, ILoggerFactory logger
             context.Response.StatusCode = ex.StatusCode;
             context.Response.ContentType = "application/json";
             await context.Response.WriteAsync(JsonConvert.SerializeObject(new
-            {
-                ex.Message,
-            }));
+                    {
+                        ex.Message,
+                    }
+                )
+            );
         }
         catch (Exception ex)
         {
@@ -46,10 +52,11 @@ public class HttpExceptionMiddleware(RequestDelegate next, ILoggerFactory logger
             }
 
             await context.Response.WriteAsync(JsonConvert.SerializeObject(new
-            {
-                Message = $"An unexpected error occured, and was logged with reference id: {context.TraceIdentifier}",
-            }));
-
+                    {
+                        Message = $"An unexpected error occured, and was logged with reference id: {context.TraceIdentifier}",
+                    }
+                )
+            );
         }
     }
 }

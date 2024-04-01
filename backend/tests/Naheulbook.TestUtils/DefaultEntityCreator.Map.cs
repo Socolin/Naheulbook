@@ -31,14 +31,15 @@ public partial class DefaultEntityCreator
             Data = JsonConvert.SerializeObject(new MapData
             {
                 IsGm = true,
-                Attribution = new List<MapData.MapAttribution>()
-                {
+                Attribution =
+                [
                     new MapData.MapAttribution
                     {
                         Name = "some-attribution-name",
                         Url = "some-attribution-url",
                     },
-                },
+
+                ],
             }, new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),

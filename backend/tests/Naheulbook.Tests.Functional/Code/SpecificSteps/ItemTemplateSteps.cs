@@ -70,25 +70,41 @@ public class ItemTemplateSteps(TestDataUtil testDataUtil)
         {
             var itemTemplateData = JsonConvert.DeserializeObject<ItemTemplateData>(itemTemplate.Data?? "null") ?? new ItemTemplateData();
             itemTemplateData.Charge = 1;
-            itemTemplateData.Actions = new List<NhbkAction>
-            {
-                new NhbkAction{Type = "addItem",Data = new NhbkActionData
+            itemTemplateData.Actions =
+            [
+                new NhbkAction
                 {
-                    TemplateId = testDataUtil.GetLast<ItemTemplateEntity>().Id,
-                }},
-                new NhbkAction{Type = "addEv",Data = new NhbkActionData
+                    Type = "addItem", Data = new NhbkActionData
+                    {
+                        TemplateId = testDataUtil.GetLast<ItemTemplateEntity>().Id,
+                    }
+                },
+
+                new NhbkAction
                 {
-                    Ev = 1,
-                }},
-                new NhbkAction{Type = "addEa",Data = new NhbkActionData
+                    Type = "addEv", Data = new NhbkActionData
+                    {
+                        Ev = 1,
+                    }
+                },
+
+                new NhbkAction
                 {
-                    Ea = 1,
-                }},
-                new NhbkAction{Type = "custom",Data = new NhbkActionData
+                    Type = "addEa", Data = new NhbkActionData
+                    {
+                        Ea = 1,
+                    }
+                },
+
+                new NhbkAction
                 {
-                    Text = "some-text",
-                }},
-            };
+                    Type = "custom", Data = new NhbkActionData
+                    {
+                        Text = "some-text",
+                    }
+                },
+
+            ];
             itemTemplate.Data = JsonConvert.SerializeObject(itemTemplateData);
         });
     }
