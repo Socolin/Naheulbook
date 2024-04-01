@@ -17,6 +17,4 @@ public abstract class BaseStatsModifierValidator<T> : AbstractValidator<T>
     }
 }
 
-public class StatsModifierValidator : BaseStatsModifierValidator<StatsModifier>
-{
-}
+public class StatsModifierValidator : BaseStatsModifierValidator<StatsModifier>;

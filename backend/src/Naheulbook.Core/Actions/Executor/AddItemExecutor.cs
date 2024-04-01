@@ -7,9 +7,7 @@ using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Core.Actions.Executor;
 
-public interface IAddItemExecutor : IActionExecutor
-{
-}
+public interface IAddItemExecutor : IActionExecutor;
 
 public class AddItemExecutor(IItemFactory itemFactory) : IAddItemExecutor
 {

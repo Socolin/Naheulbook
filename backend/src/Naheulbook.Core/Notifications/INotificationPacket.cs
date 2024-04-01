@@ -6,6 +6,4 @@ public interface INotificationPacket
     INotificationPacketPayload Payload { get; }
 }
 
-public interface INotificationPacketPayload
-{
-}
+public interface INotificationPacketPayload;

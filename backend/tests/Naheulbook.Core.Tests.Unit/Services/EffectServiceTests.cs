@@ -11,7 +11,6 @@ using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Data.Repositories;
 using Naheulbook.Requests.Requests;
-using Naheulbook.Shared.TransientModels;
 using NSubstitute;
 using NUnit.Framework;
 using Socolin.TestUtils.AutoFillTestObjects;

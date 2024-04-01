@@ -67,7 +67,7 @@ public class MapperProfile : Profile
 
         CreateMap<ItemEntity, CharacterHistoryEntryResponse.ItemHistoryResponse>()
             .ForMember(m => m.Name,
-                opt => { opt.MapFrom(im => MapperHelpers.ItemNameFromData<ItemData>(im.Data)); });
+                opt => { opt.MapFrom(im => MapperHelpers.ItemNameFromData(im.Data)); });
         CreateMap<CharacterModifierEntity, CharacterHistoryEntryResponse.ModifierHistoryResponse>()
             .ForMember(m => m.Name, opt => opt.MapFrom(im => im.Name));
         CreateMap<EffectEntity, CharacterHistoryEntryResponse.EffectHistoryResponse>()

@@ -1,9 +1,5 @@
 namespace Naheulbook.Core.Services;
 
-public interface IMonsterSubCategoryService
-{
-}
+public interface IMonsterSubCategoryService;
 
-public class MonsterSubCategoryService : IMonsterSubCategoryService
-{
-}
+public class MonsterSubCategoryService : IMonsterSubCategoryService;

@@ -24,9 +24,9 @@ public class JwtAuthenticationMiddleware(
         string? jwt = null;
         if (context.Request.Query.ContainsKey("access_token"))
             jwt = context.Request.Query["access_token"];
-        else if (context.Request.Headers.ContainsKey("Authorization"))
+        else if (context.Request.Headers.TryGetValue("Authorization", out var header))
         {
-            var authHeader = AuthenticationHeaderValue.Parse(context.Request.Headers["Authorization"]);
+            var authHeader = AuthenticationHeaderValue.Parse(header.ToString());
             if (authHeader.Scheme != "JWT" && authHeader.Scheme != "Bearer")
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;

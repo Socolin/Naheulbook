@@ -8,9 +8,7 @@ using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Core.Actions.Executor;
 
-public interface IAddCustomModifierExecutor : IActionExecutor
-{
-}
+public interface IAddCustomModifierExecutor : IActionExecutor;
 
 public class AddCustomModifierExecutor(ICharacterHistoryUtil characterHistoryUtil) : IAddCustomModifierExecutor
 {

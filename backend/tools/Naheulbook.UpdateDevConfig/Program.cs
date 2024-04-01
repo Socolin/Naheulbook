@@ -47,5 +47,5 @@ void UpdateConfigFile(string file, Dictionary<string, string> values)
         Console.WriteLine($"Create config file: {file}");
     }
 
-    File.WriteAllText(file, configJObject!.ToString());
+    File.WriteAllText(file, configJObject.ToString());
 }

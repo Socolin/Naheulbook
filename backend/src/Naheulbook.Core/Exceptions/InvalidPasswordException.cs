@@ -2,6 +2,4 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class InvalidPasswordException : Exception
-{
-}
+public class InvalidPasswordException : Exception;

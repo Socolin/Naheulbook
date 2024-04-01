@@ -5,7 +5,4 @@ namespace Naheulbook.Core.Tests.Unit.Services;
 
 [TestFixture]
 [TestOf(typeof(NpcService))]
-public class NpcServiceTest
-{
-
-}
+public class NpcServiceTest;

@@ -2,6 +2,4 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class ForbiddenAccessException : Exception
-{
-}
+public class ForbiddenAccessException : Exception;

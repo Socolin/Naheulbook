@@ -19,8 +19,7 @@ public class MapperHelpers
         return str?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
     }
 
-    public static string? ItemNameFromData<T>(string? json)
-        where T : class
+    public static string? ItemNameFromData(string? json)
     {
         if (string.IsNullOrEmpty(json))
             return default;

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Naheulbook.Core.Actions.Executor;
 using Naheulbook.Core.Clients;
 using Naheulbook.Core.Configurations;
@@ -22,6 +23,7 @@ using Naheulbook.Shared.Clients.Facebook;
 using Naheulbook.Shared.Clients.Google;
 using Naheulbook.Shared.Clients.MicrosoftGraph;
 using Naheulbook.Shared.Clients.Twitter;
+using Naheulbook.Shared.Extensions;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Extensions;
@@ -34,19 +36,25 @@ using Newtonsoft.Json.Serialization;
 
 namespace Naheulbook.Web;
 
-public class Startup(IConfiguration configuration, IWebHostEnvironment environment)
+public class Startup(IConfiguration configuration)
 {
     public void ConfigureServices(IServiceCollection services)
     {
         var redisConnectionString = configuration.GetConnectionString("Redis");
         RegisterConfigurations(services);
 
-        var naheulbookDbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
-            .UseMySql(configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(configuration.GetConnectionString("DefaultConnection")), builder => builder.EnableRetryOnFailure());
-        if (environment.IsDevelopment())
-        {
-            naheulbookDbContextOptionsBuilder.EnableSensitiveDataLogging();
-        }
+        services.AddSingleton<DbContextOptions<NaheulbookDbContext>>(sp =>
+            {
+                var environment = sp.GetRequiredService<IWebHostEnvironment>();
+                var dbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
+                    .UseMySql(configuration.GetConnectionString("DefaultConnection").NotNull(), ServerVersion.AutoDetect(configuration.GetConnectionString("DefaultConnection")), builder => builder.EnableRetryOnFailure());
+
+                if (environment.IsDevelopment())
+                    dbContextOptionsBuilder.EnableSensitiveDataLogging();
+
+                return dbContextOptionsBuilder.Options;
+            }
+        );
 
         services.AddSession(options =>
         {
@@ -69,7 +77,7 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
 
         services.AddHttpContextAccessor();
         services.AddHealthChecks()
-            .AddMySql(configuration.GetConnectionString("DefaultConnection"));
+            .AddMySql(configuration.GetConnectionString("DefaultConnection").NotNull());
 
         if (redisConnectionString != null)
         {
@@ -86,7 +94,7 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
         services.AddScoped(servicesProvider => servicesProvider.GetRequiredService<IHttpContextAccessor>().HttpContext!.GetExecutionContext());
         services.AddScoped(servicesProvider => servicesProvider.GetRequiredService<IHttpContextAccessor>().HttpContext!.GetIfExistsExecutionContext());
 
-        services.AddSingleton<IUnitOfWorkFactory>(new UnitOfWorkFactory(naheulbookDbContextOptionsBuilder.Options));
+        services.AddSingleton<IUnitOfWorkFactory>(sp => new UnitOfWorkFactory(sp.GetRequiredService<DbContextOptions<NaheulbookDbContext>>()));
 
         services.AddSingleton<IActionsUtil, ActionsUtil>();
         services.AddSingleton<IAddItemExecutor, AddItemExecutor>();
@@ -161,9 +169,13 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
         services.AddSingleton<ITwitterClient, TwitterClient>();
         services.AddSingleton<IMicrosoftGraphClient, MicrosoftGraphClient>();
 
-        services.AddHttpClient<ILaPageAMelkorClient, LaPageAMelkorClient>(client =>
+        services.AddOptions<LaPageAMelkorClient.Options>()
+            .BindConfiguration("LaPageAMelkor")
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        services.AddHttpClient<ILaPageAMelkorClient, LaPageAMelkorClient>((sp, client) =>
         {
-            client.BaseAddress = new Uri(configuration["LaPageAMelkor:Url"]);
+            client.BaseAddress = new Uri(sp.GetRequiredService<IOptions<LaPageAMelkorClient.Options>>().Value.Url);
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.DefaultRequestHeaders.Add("User-Agent", "Naheulbook");
         });

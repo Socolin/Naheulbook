@@ -31,7 +31,4 @@ public class MonsterData
     public List<MonsterAlternativeWeapon>? AlternativeWeapon { get; set; }
 }
 
-public class MonsterAlternativeWeapon
-{
-
-}
+public class MonsterAlternativeWeapon;

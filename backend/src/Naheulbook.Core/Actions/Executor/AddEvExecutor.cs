@@ -6,9 +6,7 @@ using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Core.Actions.Executor;
 
-public interface IAddEvExecutor : IActionExecutor
-{
-}
+public interface IAddEvExecutor : IActionExecutor;
 
 public class AddEvExecutor(ICharacterHistoryUtil characterHistoryUtil) : IAddEvExecutor
 {

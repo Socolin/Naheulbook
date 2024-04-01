@@ -6,9 +6,7 @@ using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Core.Actions.Executor;
 
-public interface IRemoveItemExecutor : IActionExecutor
-{
-}
+public interface IRemoveItemExecutor : IActionExecutor;
 
 public class RemoveItemExecutor(IItemUtil itemUtil) : IRemoveItemExecutor
 {

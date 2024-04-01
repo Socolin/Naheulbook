@@ -1,5 +1,3 @@
 namespace Naheulbook.Web.Responses;
 
-public interface IHistoryEntryResponse
-{
-}
+public interface IHistoryEntryResponse;

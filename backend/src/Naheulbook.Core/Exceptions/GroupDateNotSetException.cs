@@ -2,7 +2,4 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class GroupDateNotSetException : Exception
-{
-
-}
+public class GroupDateNotSetException : Exception;

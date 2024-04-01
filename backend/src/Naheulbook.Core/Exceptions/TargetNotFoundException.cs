@@ -2,7 +2,4 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class TargetNotFoundException : Exception
-{
-
-}
+public class TargetNotFoundException : Exception;

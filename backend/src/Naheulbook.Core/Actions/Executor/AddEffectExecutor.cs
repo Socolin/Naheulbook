@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Naheulbook.Core.Exceptions;
 using Naheulbook.Core.Notifications;
@@ -9,9 +8,7 @@ using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Core.Actions.Executor;
 
-public interface IAddEffectExecutor : IActionExecutor
-{
-}
+public interface IAddEffectExecutor : IActionExecutor;
 
 public class AddEffectExecutor(ICharacterHistoryUtil characterHistoryUtil) : IAddEffectExecutor
 {
@@ -94,11 +91,6 @@ public class AddEffectExecutor(ICharacterHistoryUtil characterHistoryUtil) : IAd
                 Value = v.Value,
             }).ToList(),
         };
-
-        if (context.TargetCharacter.Modifiers == null)
-        {
-            context.TargetCharacter.Modifiers = new List<CharacterModifierEntity>();
-        }
 
         context.TargetCharacter.Modifiers.Add(characterModifier);
 
