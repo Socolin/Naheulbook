@@ -28,7 +28,7 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     @Input() skills: Skill[] = [];
     @Input() skillsById: { [skillId: number]: Skill } = {};
 
-    @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
+    @Output() deleted: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('createItemTypeDialog')
     public createItemTypeDialog: Portal<any>;
@@ -111,7 +111,7 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     }
 
     deleteModule() {
-        this.onDelete.emit(true);
+        this.deleted.emit(true);
     }
 
     ngOnInit(): void {

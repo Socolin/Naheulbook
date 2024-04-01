@@ -36,7 +36,7 @@ class InfoDefinition {
     templateUrl: './useful-data.component.html'
 })
 export class UsefulDataComponent implements OnInit, OnDestroy {
-    @Output() onAction = new EventEmitter<{ action: string, data: any }>();
+    @Output() actionTriggered = new EventEmitter<{ action: string, data: any }>();
     public basesInfoDefinitions: InfoDefinition[] = [
         { displayName: 'Sorts entropique', icon: 'game-icon-bolt-spell-cast', fontSet: 'game-icon', panel: 'entropicSpells' },
         { displayName: 'Récupération', icon: 'game-icon-sliced-bread', fontSet: 'game-icon', panel: 'recovery' },
@@ -132,7 +132,7 @@ export class UsefulDataComponent implements OnInit, OnDestroy {
                 setTimeout(() => this.openPanel(result.openPanel!.panelName, result.openPanel!.arg), 100)
             }
             if (result.action) {
-                this.onAction.next(result.action);
+                this.actionTriggered.next(result.action);
             }
         })
     }

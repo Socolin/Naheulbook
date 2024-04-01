@@ -102,10 +102,10 @@
                 [jobsName]="jobsName"
                 [originsName]="originsName"
                 [itemTemplateSection]="selectedSection"
-                (onStartEdit)="openEditItemTemplateDialog($event);"
-                (onStartCreateCopy)="openCreateCopyItemTemplateDialog($event);"
+                (startEdit)="openEditItemTemplateDialog($event);"
+                (startCreateCopy)="openCreateCopyItemTemplateDialog($event);"
                 [actions]="inTab ? ['addItem'] : []"
-                (onAction)="emitAction($event.action, $event.data)"
+                (actionTriggered)="emitAction($event.action, $event.data)"
             >
             </app-item-templates-table-view>
         </mat-card-content>
@@ -120,11 +120,11 @@
                                [jobsName]="jobsName"
                                [godsByTechName]="godsByTechName"
                                [editable]="isEditable(item) && !inTab"
-                               [copyable]="loginService.currentLoggedUser != undefined"
+                               [copyable]="!!loginService.currentLoggedUser"
                                [actions]="inTab ? ['addItem'] : []"
-                               (onAction)="emitAction($event.action, $event.data)"
-                               (onEdit)="reloadSectionForItem($event); reloadSectionForItem(item)"
-                               (onCreateCopy)="reloadSectionForItem($event)"
+                               (actionTriggered)="emitAction($event.action, $event.data)"
+                               (edit)="reloadSectionForItem($event); reloadSectionForItem(item)"
+                               (createCopy)="reloadSectionForItem($event)"
                                [itemTemplate]="item">
                 </item-template>
             </div>

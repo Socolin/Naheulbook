@@ -108,7 +108,7 @@
                         *ngIf="!data.itemInLoot || data.gmView"
                         [title]="'Quantité'"
                         [value]="data.item.data.quantity"
-                        (onChange)="data.itemActionService.onAction('update_quantity', data.item, {quantity: $event})">
+                        (valueChanged)="data.itemActionService.onAction('update_quantity', data.item, {quantity: $event})">
                     </value-editor>
                     <span *ngIf="data.itemInLoot && !data.gmView">{{data.item.data.quantity}}</span>
                 </div>
@@ -194,7 +194,7 @@
                             *ngIf="data.gmView"
                             [title]="'Unité Goltor'"
                             [value]="data.item.data.ug"
-                            (onChange)="updateItemUg($event)">
+                            (valueChanged)="updateItemUg($event)">
                         </value-editor>
                         <span *ngIf="!data.gmView">{{data.item.data.ug}}</span>
                         U.G

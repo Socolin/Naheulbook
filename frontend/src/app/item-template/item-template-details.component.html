@@ -1,9 +1,9 @@
 <!-- Sex -->
 <div class="icon-label" *ngIf="itemTemplate.data.sex">
-    <mat-icon *ngIf="itemTemplate.data.sex == 'h'" fontSet="game-icon" fontIcon="game-icon-male" class="ra-mat-button-icon-24"></mat-icon>
-    <mat-icon *ngIf="itemTemplate.data.sex == 'f'" fontSet="game-icon" fontIcon="game-icon-female" class="ra-mat-button-icon-24"></mat-icon>
-    <span *ngIf="itemTemplate.data.sex == 'h'">Homme uniq. </span>
-    <span *ngIf="itemTemplate.data.sex == 'f'">Femme uniq. </span>
+    <mat-icon *ngIf="itemTemplate.data.sex === 'h'" fontSet="game-icon" fontIcon="game-icon-male" class="ra-mat-button-icon-24"></mat-icon>
+    <mat-icon *ngIf="itemTemplate.data.sex === 'f'" fontSet="game-icon" fontIcon="game-icon-female" class="ra-mat-button-icon-24"></mat-icon>
+    <span *ngIf="itemTemplate.data.sex === 'h'">Homme uniq. </span>
+    <span *ngIf="itemTemplate.data.sex === 'f'">Femme uniq. </span>
 </div>
 
 <!-- Relic -->
@@ -158,7 +158,7 @@
 </div>
 
 <!-- Rupture -->
-<div class="icon-label" *ngIf="itemTemplate.data.rupture != undefined">
+<div class="icon-label" *ngIf="!!itemTemplate.data.rupture">
     <mat-icon fontSet="game-icon" fontIcon="game-icon-cracked-shield" class="ra-mat-button-icon-24"></mat-icon>
     <div>
         <div *ngIf="itemTemplate.data.rupture">

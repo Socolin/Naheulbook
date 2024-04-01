@@ -18,7 +18,7 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() inputSubCategoryId: number | undefined;
     @Input() isOverlay = false;
     @Input() options: string[] = [];
-    @Output() onAction = new EventEmitter<{ action: string, data: any }>();
+    @Output() actionTriggered = new EventEmitter<{ action: string, data: any }>();
 
     public effectTypes: EffectType[];
     public selectedType: EffectType;
@@ -65,7 +65,7 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     emitAction(actionName: string, data: any) {
-        this.onAction.emit({action: actionName, data: data});
+        this.actionTriggered.emit({action: actionName, data: data});
     }
 
     editEffect(effect: Effect) {

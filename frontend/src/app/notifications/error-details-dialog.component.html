@@ -1,22 +1,22 @@
 <h2 mat-dialog-title>Erreur</h2>
 <mat-dialog-content>
 
-    <ng-template [ngIf]="errorType == 'BadGateway'">
+    <ng-template [ngIf]="errorType === 'BadGateway'">
         <h4 mat-h4>Cause possible</h4>
         <p mat-body>
             Le serveur est coupé temporairement (possiblement une mis à jour est en cours).
             Si l'erreur persiste ceci veut probablement dire que le serveur à crash.
         </p>
     </ng-template>
-    <ng-template [ngIf]="errorType == 'ServerError'">
+    <ng-template [ngIf]="errorType === 'ServerError'">
         <h4 mat-h4>Cause possible</h4>
         <p mat-body>Une erreur c'est produite sur le serveur.</p>
     </ng-template>
-    <ng-template [ngIf]="errorType == 'Forbidden'">
+    <ng-template [ngIf]="errorType === 'Forbidden'">
         <h4 mat-h4>Cause possible</h4>
         <p mat-body>Vous essayez d'accèder à une ressource pour laquelle vous n'avez pas les droits.</p>
     </ng-template>
-    <ng-template [ngIf]="errorType == 'BadRequest'">
+    <ng-template [ngIf]="errorType === 'BadRequest'">
         <h4 mat-h4>Cause possible</h4>
         <p mat-body>
             Une erreur dans le code de l'application est survenue.

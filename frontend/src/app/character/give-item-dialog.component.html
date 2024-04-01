@@ -8,7 +8,7 @@
                               [minValue]="1"
                               [maxValue]="data.item.data.quantity"
                               [hideMaxValue]="true"
-                              (onChange)="giveQuantity = $event"
+                              (valueChanged)="giveQuantity = $event"
                               [title]="'Quantité à donner'">
                 </value-editor>
             </span>

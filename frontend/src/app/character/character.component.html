@@ -78,7 +78,7 @@
                         <dd>
                             <value-editor [title]="'Point de destin'"
                                           [value]=character.fatePoint
-                                          (onChange)="changeStat('fatePoint', $event)">
+                                          (valueChanged)="changeStat('fatePoint', $event)">
                             </value-editor>
                         </dd>
 
@@ -97,7 +97,7 @@
                         <dd>
                             <value-editor [title]="'Experience'"
                                           [value]=character.experience
-                                          (onChange)="changeStat('experience', $event)">
+                                          (valueChanged)="changeStat('experience', $event)">
                             </value-editor> / {{character.computedData.xpToNextLevel}}
                         </dd>
 
@@ -117,13 +117,13 @@
                         <dt *ngIf="inGroupTab">Debilibeuk</dt>
                         <dd *ngIf="inGroupTab">
                             <value-editor [title]="'Debilibeuk du joueur'" [value]=character.gmData.debilibeuk
-                                          (onChange)="changeGmData('debilibeuk', $event)"></value-editor>
+                                          (valueChanged)="changeGmData('debilibeuk', $event)"></value-editor>
                         </dd>
 
                         <dt *ngIf="inGroupTab">Mankdebol</dt>
                         <dd *ngIf="inGroupTab">
                             <value-editor [title]="'Mankdebol du joueur'" [value]=character.gmData.mankdebol
-                                          (onChange)="changeGmData('mankdebol', $event)"></value-editor>
+                                          (valueChanged)="changeGmData('mankdebol', $event)"></value-editor>
                         </dd>
                     </dl>
                 </mat-card-content>
@@ -244,7 +244,7 @@
 
     <mat-tab label="Combat">
         <!-- Start of combat tab -->
-        <app-combat-tab [character]="character" (onChangeStat)="changeStat($event.stat, $event.value)" [inGroupTab]="inGroupTab"></app-combat-tab>
+        <app-combat-tab [character]="character" (statChanged)="changeStat($event.stat, $event.value)" [inGroupTab]="inGroupTab"></app-combat-tab>
         <!-- End of combat tab -->
     </mat-tab>
     <mat-tab label="Stat">
@@ -394,7 +394,7 @@
                 </mat-card-actions>
             </mat-card>
 
-            <mat-card *ngIf="character.computedData.stats['MV'] != 100
+            <mat-card *ngIf="character.computedData.stats['MV'] !== 100
                                 || character.computedData.stats['THROW_MODIFIER']
                                 || character.computedData.stats['DISCRETION_MODIFIER']
                                 || character.computedData.stats['DANSE_MODIFIER']

@@ -41,7 +41,7 @@ import {debounceTime, map, startWith, switchMap, tap} from 'rxjs/operators';
 })
 export class ItemTemplateListComponent implements OnInit, OnDestroy {
     @Input() inTab: boolean;
-    @Output() onAction = new EventEmitter<{ action: string, data: any }>();
+    @Output() actionTriggered = new EventEmitter<{ action: string, data: any }>();
     public showHeaderInfo = false;
     public itemSections: ItemTemplateSection[];
     public selectedItemSubCategory?: ItemTemplateSubCategory;
@@ -144,7 +144,7 @@ export class ItemTemplateListComponent implements OnInit, OnDestroy {
     }
 
     emitAction(actionName: string, data: any) {
-        this.onAction.emit({action: actionName, data: data});
+        this.actionTriggered.emit({action: actionName, data: data});
     }
 
     openCreateItemTemplateDialog() {

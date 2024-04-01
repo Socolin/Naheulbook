@@ -13,7 +13,7 @@
         <ng-template [ngSwitchCase]="'addItem'">
             <autocomplete-input [clearOnSelect]="false"
                                 [placeholder]="'Objet'"
-                                (onSelect)="selectItemTemplate($event)"
+                                (selected)="selectItemTemplate($event)"
                                 [callback]="autocompleteItemCallback">
             </autocomplete-input>
             <div *ngIf="selectedItemTemplate?.data?.quantifiable">
@@ -59,7 +59,7 @@
             </stats-modifier-editor>
         </ng-template>
         <ng-template [ngSwitchCase]="'addEffect'">
-            <active-effect-editor [reusableToggle]="false" (onChange)="updateEffect($event)">
+            <active-effect-editor [reusableToggle]="false" (changed)="updateEffect($event)">
             </active-effect-editor>
         </ng-template>
         <ng-template ngSwitchDefault>

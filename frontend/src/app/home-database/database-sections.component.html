@@ -1,4 +1,4 @@
-<ng-template [ngIf]="!(gmModeService.gmMode | async)">
+<ng-template [ngIf]="(gmModeService.gmMode | async) === false">
     <p class="mat-body">
         Cette section permet d'accéder à un certains nombres d'informations utiles pour les <strong>Maître de
         jeu</strong>.

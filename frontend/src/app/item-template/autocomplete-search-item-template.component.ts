@@ -16,7 +16,7 @@ import {ItemTemplateService} from './item-template.service';
 export class AutocompleteSearchItemTemplateComponent {
     @Input() clearOnSelect: boolean;
     @Input() placeholder = 'Chercher un objet';
-    @Output() onSelect: EventEmitter<ItemTemplate> = new EventEmitter<ItemTemplate>();
+    @Output() selected: EventEmitter<ItemTemplate> = new EventEmitter<ItemTemplate>();
     @ViewChild('autocomplete', {static: true})
     autocomplete: AutocompleteInputComponent;
 
@@ -28,7 +28,7 @@ export class AutocompleteSearchItemTemplateComponent {
     }
 
     selectItemTemplate(itemTemplate: ItemTemplate) {
-        this.onSelect.emit(itemTemplate);
+        this.selected.emit(itemTemplate);
     }
 
     updateAutocompleteItem(filter: string) {

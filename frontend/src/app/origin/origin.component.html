@@ -1,7 +1,7 @@
 <mat-expansion-panel>
     <mat-expansion-panel-header>{{origin.name}}</mat-expansion-panel-header>
 
-    <div *ngIf="!(gmModeService.gmMode | async)">
+    <div *ngIf="(gmModeService.gmMode | async) === false">
         <app-origin-player-info [origin]="origin"></app-origin-player-info>
     </div>
     <div *ngIf="gmModeService.gmMode | async">

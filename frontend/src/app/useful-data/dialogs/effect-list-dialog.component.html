@@ -8,7 +8,7 @@
 </mat-toolbar>
 
 <div class="content mat-typography">
-    <effect-list (onAction)="onAction($event)"
+    <effect-list (actionTriggered)="onAction($event)"
                  [isOverlay]="true"
                  [options]="['applyButton']"
                  [inputSubCategoryId]="data.inputSubCategoryId">

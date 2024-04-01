@@ -1,24 +1,14 @@
-import {Component, Output, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
 import {NhbkDialogService} from '../shared';
-import {
-    NhbkDateOffset,
-    NhbkDate,
-    DurationSelectorDialogComponent,
-    DurationSelectorDialogData,
-    DurationSelectorDialogResult
-} from '../date';
-import {dateOffset2TimeDuration, date2Timestamp, timestamp2Date} from '../date/util';
+import {DurationSelectorDialogComponent, DurationSelectorDialogData, DurationSelectorDialogResult, NhbkDate, NhbkDateOffset} from '../date';
+import {date2Timestamp, dateOffset2TimeDuration, timestamp2Date} from '../date/util';
 
 import {NEvent} from './event.model';
 import {NhbkMatDialog} from '../material-workaround';
-import {
-    DateSelectorDialogComponent,
-    DateSelectorDialogData,
-    DateSelectorDialogResult
-} from '../date/date-selector-dialog.component';
+import {DateSelectorDialogComponent, DateSelectorDialogData, DateSelectorDialogResult} from '../date/date-selector-dialog.component';
 
 @Component({
     selector: 'event-editor',
@@ -31,8 +21,8 @@ export class EventEditorComponent implements OnInit {
         addEvent(event: NEvent): void,
         removeEvent(eventId: number): void,
     };
-    @Output() onCreate: EventEmitter<NEvent> = new EventEmitter<NEvent>();
-    @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
+    @Output() create: EventEmitter<NEvent> = new EventEmitter<NEvent>();
+    @Output() closed: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('eventEditorDialog', {static: true})
     public eventEditorDialog: Portal<any>;
@@ -56,7 +46,7 @@ export class EventEditorComponent implements OnInit {
 
     closeDialog() {
         this.eventEditorOverlayRef.detach();
-        this.onClose.emit(true);
+        this.closed.emit(true);
     }
 
     setTimeDuration(dateOffset: NhbkDateOffset) {
@@ -83,7 +73,7 @@ export class EventEditorComponent implements OnInit {
             return;
         }
         this.closeDialog();
-        this.onCreate.emit(this.event);
+        this.create.emit(this.event);
     }
 
     ngOnInit(): void {

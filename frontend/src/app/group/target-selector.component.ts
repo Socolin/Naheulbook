@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ConnectionPositionPair} from '@angular/cdk/overlay';
 
 import {Fighter} from './group.model';
@@ -11,7 +11,7 @@ import {Fighter} from './group.model';
 export class TargetSelectorComponent implements OnInit {
     @Input() fighter: Fighter;
     @Input() targets: Fighter[];
-    @Output() onTargetChange: EventEmitter<Fighter> = new EventEmitter<Fighter>();
+    @Output() targetChange: EventEmitter<Fighter> = new EventEmitter<Fighter>();
     public showSelector = false;
     public selectedTabIndex: number;
 
@@ -39,7 +39,7 @@ export class TargetSelectorComponent implements OnInit {
 
     selectTarget(target: Fighter) {
         this.hideSelector();
-        this.onTargetChange.emit(target);
+        this.targetChange.emit(target);
     }
 
     ngOnInit(): void {

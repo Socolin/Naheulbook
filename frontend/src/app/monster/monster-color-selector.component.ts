@@ -1,4 +1,4 @@
-import {EventEmitter, Component, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 import {Monster} from './monster.model';
 import {tokenColors} from '../shared';
@@ -10,8 +10,8 @@ import {tokenColors} from '../shared';
 })
 export class MonsterColorSelectorComponent {
     @Input() monster: Monster;
-    @Output() onColorChange: EventEmitter<string> = new EventEmitter<string>();
-    @Output() onNumberChange: EventEmitter<number> = new EventEmitter<number>();
+    @Output() colorChanged: EventEmitter<string> = new EventEmitter<string>();
+    @Output() numberChanged: EventEmitter<number> = new EventEmitter<number>();
     @Output() fontSize = '48px';
 
     public showSelector = false;
@@ -38,12 +38,12 @@ export class MonsterColorSelectorComponent {
         if (color.indexOf('#') === 0) {
             color = color.substring(1);
         }
-        this.onColorChange.emit(color);
+        this.colorChanged.emit(color);
         this.closeSelector();
     }
 
     changeNumber(number: number) {
-        this.onNumberChange.emit(number);
+        this.numberChanged.emit(number);
         this.closeSelector();
     }
 

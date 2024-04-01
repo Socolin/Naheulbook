@@ -30,11 +30,11 @@ export class ItemTemplatesTableViewComponent implements OnInit, OnChanges {
     godsByTechName: GodByTechName;
 
     @Output()
-    onStartEdit: EventEmitter<ItemTemplate> = new EventEmitter<ItemTemplate>()
+    startEdit: EventEmitter<ItemTemplate> = new EventEmitter<ItemTemplate>()
     @Output()
-    onStartCreateCopy: EventEmitter<ItemTemplate> = new EventEmitter<ItemTemplate>()
+    startCreateCopy: EventEmitter<ItemTemplate> = new EventEmitter<ItemTemplate>()
     @Input() actions: string[];
-    @Output() onAction = new EventEmitter<{action: string, data: any}>();
+    @Output() actionTriggered = new EventEmitter<{action: string, data: any}>();
 
     baseColumns = [
         {columnName: 'name', priority: 50},
@@ -166,6 +166,6 @@ export class ItemTemplatesTableViewComponent implements OnInit, OnChanges {
     }
 
     emitAction(actionName: string, data: any) {
-        this.onAction.emit({action: actionName, data: data});
+        this.actionTriggered.emit({action: actionName, data: data});
     }
 }

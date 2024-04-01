@@ -3,7 +3,7 @@
 <mat-dialog-content class="mat-typography">
     <p *ngIf="data.modifier.description">{{data.modifier.description!}}</p>
 
-    <div class="icon-label" *ngIf="data.modifier.durationType === 'lap' || data.modifier.durationType == 'combat' || data.modifier.durationType == 'time'">
+    <div class="icon-label" *ngIf="data.modifier.durationType === 'lap' || data.modifier.durationType === 'combat' || data.modifier.durationType === 'time'">
         <mat-icon fontSet="game-icon" fontIcon="game-icon-duration " class="ra-mat-button-icon-24"></mat-icon>
         <div>
             <div>

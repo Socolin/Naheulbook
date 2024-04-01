@@ -8,7 +8,7 @@ import {tokenColors} from '../shared';
 })
 export class CharacterColorSelectorComponent {
     @Input() character: Character;
-    @Output() onColorChange: EventEmitter<string> = new EventEmitter<string>();
+    @Output() colorChanged: EventEmitter<string> = new EventEmitter<string>();
 
     public showSelector = false;
     public colors: string[] = tokenColors.map(color => '#' + color);
@@ -24,7 +24,7 @@ export class CharacterColorSelectorComponent {
     }
 
     changeColor(color: string) {
-        this.onColorChange.emit(color);
+        this.colorChanged.emit(color);
         this.showSelector = false;
     }
 }

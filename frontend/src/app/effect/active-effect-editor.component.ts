@@ -1,8 +1,7 @@
-
-import {from as observableFrom, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 
 import {map} from 'rxjs/operators';
-import {Component, Output, EventEmitter, Input, DoCheck} from '@angular/core';
+import {Component, DoCheck, EventEmitter, Input, Output} from '@angular/core';
 
 import {AutocompleteValue} from '../shared';
 
@@ -17,8 +16,8 @@ import {IDurable} from '../api/shared';
 })
 export class ActiveEffectEditorComponent implements DoCheck {
     @Input() reusableToggle = true;
-    @Output() onValidate: EventEmitter<{effect: Effect, data: any}> = new EventEmitter<{effect: Effect, data: any}>();
-    @Output() onChange: EventEmitter<{effect: Effect, data: any}> = new EventEmitter<{effect: Effect, data: any}>();
+    @Output() validate: EventEmitter<{effect: Effect, data: any}> = new EventEmitter<{effect: Effect, data: any}>();
+    @Output() changed: EventEmitter<{effect: Effect, data: any}> = new EventEmitter<{effect: Effect, data: any}>();
 
     public effectFilterName: string;
     public autocompleteEffectListCallback: Function = this.updateEffectListAutocomplete.bind(this);
@@ -102,7 +101,7 @@ export class ActiveEffectEditorComponent implements DoCheck {
     addEffect() {
         let newEffect = this.updateNewEffect();
         if (newEffect) {
-            this.onValidate.emit(newEffect);
+            this.validate.emit(newEffect);
         }
     }
 
@@ -121,7 +120,7 @@ export class ActiveEffectEditorComponent implements DoCheck {
     ngDoCheck() {
         let newEffect = this.updateNewEffect();
         if (newEffect) {
-            this.onChange.emit(newEffect);
+            this.changed.emit(newEffect);
         }
     }
 }

@@ -2,12 +2,12 @@
     <div class="icon">
         <monster-color-selector *ngIf="fighter.isMonster"
                                 [monster]="fighter.monster"
-                                (onNumberChange)='changeNumber(fighter, $event)'
-                                (onColorChange)='changeColor(fighter, $event)'>
+                                (numberChanged)='changeNumber(fighter, $event)'
+                                (colorChanged)='changeColor(fighter, $event)'>
         </monster-color-selector>
         <character-color-selector *ngIf="!fighter.isMonster"
                                   [character]="fighter.character"
-                                  (onColorChange)='changeColor(fighter, $event)'>
+                                  (colorChanged)='changeColor(fighter, $event)'>
         </character-color-selector>
     </div>
 
@@ -105,7 +105,7 @@
         <value-editor [title]="'Energie vitale'"
                       [value]="fighter.stats.ev"
                       [maxValue]="fighter.stats.maxEv"
-                      (onChange)="changeStat('ev', $event)">
+                      (valueChanged)="changeStat('ev', $event)">
         </value-editor>
     </div>
     <div class="field-with-label ea">
@@ -114,7 +114,7 @@
             <value-editor [title]="'Energie astrale'"
                           [value]="fighter.stats.ea"
                           [maxValue]="fighter.stats.maxEa"
-                          (onChange)="changeStat('ea', $event)">
+                          (valueChanged)="changeStat('ea', $event)">
             </value-editor>
         </span>
         <span *ngIf="!fighter.stats.maxEa">-</span>

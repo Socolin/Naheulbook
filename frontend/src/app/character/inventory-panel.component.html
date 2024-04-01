@@ -44,23 +44,23 @@
 </div>
 
 <mat-menu #sortMenu>
-    <button mat-menu-item [disabled]="sortType == 'asc'" (click)="sortType = 'asc'" role="menuitemcheckbox">
-        <mat-icon *ngIf="sortType == 'asc'">check</mat-icon>
-        <mat-icon *ngIf="sortType != 'asc'"></mat-icon>
+    <button mat-menu-item [disabled]="sortType === 'asc'" (click)="sortType = 'asc'" role="menuitemcheckbox">
+        <mat-icon *ngIf="sortType === 'asc'">check</mat-icon>
+        <mat-icon *ngIf="sortType !== 'asc'"></mat-icon>
         Alphabétique
     </button>
-    <button mat-menu-item [disabled]="sortType == 'desc'" (click)="sortType = 'desc'" role="menuitemcheckbox">
-        <mat-icon *ngIf="sortType == 'desc'">check</mat-icon>
-        <mat-icon *ngIf="sortType != 'desc'"></mat-icon>
+    <button mat-menu-item [disabled]="sortType === 'desc'" (click)="sortType = 'desc'" role="menuitemcheckbox">
+        <mat-icon *ngIf="sortType === 'desc'">check</mat-icon>
+        <mat-icon *ngIf="sortType !== 'desc'"></mat-icon>
         Alphabétique inverse
     </button>
-    <button mat-menu-item [disabled]="sortType == 'not_identified_first'" (click)="sortType = 'not_identified_first'" role="menuitemcheckbox">
-        <mat-icon *ngIf="sortType == 'not_identified_first'">check</mat-icon>
-        <mat-icon *ngIf="sortType != 'not_identified_first'"></mat-icon>
+    <button mat-menu-item [disabled]="sortType === 'not_identified_first'" (click)="sortType = 'not_identified_first'" role="menuitemcheckbox">
+        <mat-icon *ngIf="sortType === 'not_identified_first'">check</mat-icon>
+        <mat-icon *ngIf="sortType !== 'not_identified_first'"></mat-icon>
         Non identifier en premier
     </button>
 </mat-menu>
-<div class="items" *ngIf="viewMode == 'all'">
+<div class="items" *ngIf="viewMode === 'all'">
     <div *ngFor="let item of filteredItems; trackBy: trackByItemId" class="item separator">
         <app-item-line [character]="character"
                        [item]="item"
@@ -70,7 +70,7 @@
     </div>
 </div>
 
-<div class="items" *ngIf="viewMode == 'bag'">
+<div class="items" *ngIf="viewMode === 'bag'">
     <bag-item-view
         [itemFilterName]="itemFilterName"
         [sortType]="sortType"
@@ -81,7 +81,7 @@
     </bag-item-view>
 </div>
 
-<div class="items" *ngIf="viewMode == 'money'">
+<div class="items" *ngIf="viewMode === 'money'">
     <div *ngFor="let item of moneyItems" class="item separator">
         <app-item-line [character]="character"
                        [itemMenu]="itemMenu"

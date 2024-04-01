@@ -20,9 +20,9 @@ export class ItemTemplateComponent {
     @Input() jobsName: {[jobId: string]: string};
     @Input() godsByTechName: {[techName: string]: God};
     @Input() actions: string[];
-    @Output() onAction = new EventEmitter<{action: string, data: any}>();
-    @Output() onEdit = new EventEmitter<ItemTemplate>();
-    @Output() onCreateCopy = new EventEmitter<ItemTemplate>();
+    @Output() actionTriggered = new EventEmitter<{action: string, data: any}>();
+    @Output() edit = new EventEmitter<ItemTemplate>();
+    @Output() createCopy = new EventEmitter<ItemTemplate>();
 
     constructor(
         private readonly dialog: NhbkMatDialog,
@@ -40,7 +40,7 @@ export class ItemTemplateComponent {
             if (!result) {
                 return;
             }
-            this.onEdit.next(result);
+            this.edit.next(result);
         });
     }
 
@@ -55,7 +55,7 @@ export class ItemTemplateComponent {
             if (!result) {
                 return;
             }
-            this.onEdit.next(result);
+            this.edit.next(result);
         });
     }
 
@@ -64,6 +64,6 @@ export class ItemTemplateComponent {
     }
 
     emitAction(actionName: string, data: any) {
-        this.onAction.emit({action: actionName, data: data});
+        this.actionTriggered.emit({action: actionName, data: data});
     }
 }

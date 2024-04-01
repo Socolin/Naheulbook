@@ -9,7 +9,7 @@
                     <value-editor [title]="'Energie vitale'"
                                   [value]="character.ev"
                                   [maxValue]="character.computedData.stats['EV']"
-                                  (onChange)="changeStat('ev', $event)">
+                                  (valueChanged)="changeStat('ev', $event)">
                     </value-editor>
                 </div>
                 <div class="stat-label">E.Vitale</div>
@@ -24,7 +24,7 @@
                     <value-editor [title]="'Energie astrale'"
                                   [value]="character.ea"
                                   [maxValue]="character.computedData.stats['EA']"
-                                  (onChange)="changeStat('ea', $event)">
+                                  (valueChanged)="changeStat('ea', $event)">
                     </value-editor>
                 </div>
                 <div class="stat-label">E.Astrale</div>

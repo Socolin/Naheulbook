@@ -1,4 +1,4 @@
-import {Component, Input, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 import {QuestService} from './quest.service';
 import {QuestTemplate} from './quest.model';
@@ -9,7 +9,7 @@ import {QuestTemplate} from './quest.model';
 })
 export class QuestEditorComponent {
     @Input() quest: QuestTemplate;
-    @Output() onValid: EventEmitter<QuestTemplate> = new EventEmitter<QuestTemplate>();
+    @Output() valid: EventEmitter<QuestTemplate> = new EventEmitter<QuestTemplate>();
 
     public previewDescription: boolean;
 

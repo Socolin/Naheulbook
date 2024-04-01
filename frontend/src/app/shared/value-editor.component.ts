@@ -1,5 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
-import { NhbkMatDialog } from '../material-workaround';
+import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild} from '@angular/core';
+import {NhbkMatDialog} from '../material-workaround';
 import {
     ValueEditorModes,
     ValueEditorSettingsDialogComponent,
@@ -27,7 +27,7 @@ export class ValueEditorComponent implements OnChanges {
     @Input() minValue?: number;
     @Input() title: string;
     @Input() hideMaxValue: boolean;
-    @Output() onChange: EventEmitter<number> = new EventEmitter<number>();
+    @Output() valueChanged: EventEmitter<number> = new EventEmitter<number>();
 
     public valueDelta: string | undefined;
     public newValue = 0;
@@ -127,7 +127,7 @@ export class ValueEditorComponent implements OnChanges {
 
     commitValue() {
         this.displayEditor = false;
-        this.onChange.emit(this.newValue);
+        this.valueChanged.emit(this.newValue);
         this.valueDelta = undefined;
     }
 

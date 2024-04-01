@@ -1,7 +1,7 @@
 <div *ngIf="!preSelectedEffect">
     <autocomplete-input [value]="effectFilterName"
                         [placeholder]="'Effet'"
-                        (onSelect)="selectEffectInAutocompleteList($event)"
+                        (selected)="selectEffectInAutocompleteList($event)"
                         [callback]="autocompleteEffectListCallback">
     </autocomplete-input>
 </div>

@@ -29,7 +29,7 @@
                             <dd>
                                 <value-editor [value]="group.data.mankdebol"
                                               [title]="'Mankdebol du groupe'"
-                                              (onChange)="changeGroupValue('mankdebol', $event)">
+                                              (valueChanged)="changeGroupValue('mankdebol', $event)">
                                 </value-editor>
                             </dd>
 
@@ -37,7 +37,7 @@
                             <dd>
                                 <value-editor [value]="group.data.debilibeuk"
                                               [title]="'Débilibeuk du groupe'"
-                                              (onChange)="changeGroupValue('debilibeuk', $event)">
+                                              (valueChanged)="changeGroupValue('debilibeuk', $event)">
                                 </value-editor>
                             </dd>
 
@@ -392,5 +392,5 @@
 
 
 <div class="useful-data-fab">
-    <useful-data (onAction)="usefulDataAction($event)"></useful-data>
+    <useful-data (actionTriggered)="usefulDataAction($event)"></useful-data>
 </div>

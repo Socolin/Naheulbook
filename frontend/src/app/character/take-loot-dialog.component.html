@@ -9,7 +9,7 @@
         <value-editor [title]="'Quantité'"
                       [hideMaxValue]="true"
                       [value]="takingQuantity"
-                      (onChange)="takingQuantity = $event"
+                      (valueChanged)="takingQuantity = $event"
                       [maxValue]="data.item.data.quantity">
         </value-editor>
         {{data.item.data.name}}

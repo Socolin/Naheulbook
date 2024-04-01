@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChild, ElementRef} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {IconDescription} from './icon.model';
 
 export class AutocompleteValue {
@@ -28,7 +28,7 @@ export class AutocompleteInputComponent {
     @Input() placeholder: string;
     @Input() disabled = false;
     @Input() clearOnSelect = false;
-    @Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
+    @Output() selected: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('inputField', {static: true})
     public inputField: ElementRef;
@@ -37,7 +37,7 @@ export class AutocompleteInputComponent {
     public preSelectedValueIndex: number;
 
     selectValue(value: any) {
-        this.onSelect.emit(value.value);
+        this.selected.emit(value.value);
         if (this.clearOnSelect) {
             this.value = '';
         }

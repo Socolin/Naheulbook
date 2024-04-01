@@ -8,9 +8,6 @@
         "*.ts"
       ],
       "parserOptions": {
-        "project": [
-          "tsconfig.json"
-        ],
         "createDefaultProgram": true
       },
       "extends": [
@@ -18,19 +15,20 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "@angular-eslint/no-empty-lifecycle-method": 0,
         "@angular-eslint/directive-selector": [
-          "error",
+          "off",
           {
             "type": "attribute",
-            "prefix": "admin",
+            "prefix": "app",
             "style": "camelCase"
           }
         ],
         "@angular-eslint/component-selector": [
-          "error",
+          "off",
           {
             "type": "element",
-            "prefix": "admin",
+            "prefix": "app",
             "style": "kebab-case"
           }
         ]

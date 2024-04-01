@@ -96,11 +96,11 @@
 
 <mat-menu #itemTemplateActionsMenu>
     <ng-template matMenuContent let-itemTemplate="itemTemplate">
-        <button mat-menu-item (click)="onStartEdit.next(itemTemplate)" *ngIf="isEditable(itemTemplate)">
+        <button mat-menu-item (click)="startEdit.next(itemTemplate)" *ngIf="isEditable(itemTemplate)">
             <mat-icon>edit</mat-icon>
             Éditer
         </button>
-        <button mat-menu-item (click)="onStartCreateCopy.next(itemTemplate)">
+        <button mat-menu-item (click)="startCreateCopy.next(itemTemplate)">
             <mat-icon>content_copy</mat-icon>
             Créer une copie
         </button>

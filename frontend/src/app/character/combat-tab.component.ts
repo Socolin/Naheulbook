@@ -14,7 +14,7 @@ import {toDictionaryByKey} from '../utils/utils';
 export class CombatTabComponent implements OnInit {
     @Input() character: Character;
     @Input() inGroupTab: boolean;
-    @Output() onChangeStat: EventEmitter<{stat: string, value: any}> = new EventEmitter<{stat: string; value: any}>();
+    @Output() statChanged: EventEmitter<{stat: string, value: any}> = new EventEmitter<{stat: string; value: any}>();
     slotsByTechNames: { [slotTechName: string]: ItemSlot } = {};
 
     constructor(
@@ -30,7 +30,7 @@ export class CombatTabComponent implements OnInit {
     }
 
     changeStat(stat: string, value: any) {
-        this.onChangeStat.emit({stat, value});
+        this.statChanged.emit({stat, value});
     }
 
     unEquipAllAndEquip(item: Item) {
