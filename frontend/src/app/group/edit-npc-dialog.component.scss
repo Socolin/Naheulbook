@@ -1,33 +1,41 @@
 @import "app/style/responsive-utils";
 
-:host {
-    .content {
-        .name {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            grid-column-gap: 8px;
+mat-card-content {
+    .name {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-column-gap: 8px;
+        align-items: center;
+    }
+
+    .location-origin {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+
+    }
+
+    .sex-selector {
+        display: flex;
+        flex-direction: row;
+
+        @include for-phone-only {
+            flex-direction: column;
+        }
+
+        mat-radio-button {
+            padding: 8px;
+            @include for-phone-only {
+                padding: 8px 0;
+            }
+        }
+
+        .mat-radio-label-content {
+            display: flex;
             align-items: center;
         }
-
-        .sex-selector {
-            display: flex;
-            flex-direction: row;
-
-            @include for-phone-only {
-                flex-direction: column;
-            }
-
-            mat-radio-button {
-                padding: 8px;
-                @include for-phone-only {
-                    padding: 8px 0;
-                }
-            }
-
-            ::ng-deep .mat-radio-label-content {
-                display: flex;
-                align-items: center;
-            }
-        }
+    }
+    .note {
+        display: flex;
     }
 }
