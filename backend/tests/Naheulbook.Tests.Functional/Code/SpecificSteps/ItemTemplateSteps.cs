@@ -127,7 +127,7 @@ public class ItemTemplateSteps(TestDataUtil testDataUtil)
         {
             itemTemplate.Requirements = new List<ItemTemplateRequirementEntity>
             {
-                new ItemTemplateRequirementEntity
+                new()
                 {
                     Stat = testDataUtil.GetLast<StatEntity>(),
                     MinValue = 2,
@@ -136,7 +136,7 @@ public class ItemTemplateSteps(TestDataUtil testDataUtil)
             };
             itemTemplate.Modifiers = new List<ItemTemplateModifierEntity>
             {
-                new ItemTemplateModifierEntity
+                new()
                 {
                     Special = null,
                     RequiredJob = testDataUtil.GetLast<JobEntity>(),
@@ -148,28 +148,28 @@ public class ItemTemplateSteps(TestDataUtil testDataUtil)
             };
             itemTemplate.Skills = new List<ItemTemplateSkillEntity>
             {
-                new ItemTemplateSkillEntity
+                new()
                 {
                     Skill = testDataUtil.GetFromEnd<SkillEntity>(0),
                 },
             };
             itemTemplate.UnSkills = new List<ItemTemplateUnSkillEntity>
             {
-                new ItemTemplateUnSkillEntity
+                new()
                 {
                     Skill = testDataUtil.GetFromEnd<SkillEntity>(1),
                 },
             };
             itemTemplate.Slots = new List<ItemTemplateSlotEntity>
             {
-                new ItemTemplateSlotEntity
+                new()
                 {
                     Slot = testDataUtil.GetLast<SlotEntity>(),
                 },
             };
             itemTemplate.SkillModifiers = new List<ItemTemplateSkillModifierEntity>
             {
-                new ItemTemplateSkillModifierEntity
+                new()
                 {
                     Skill = testDataUtil.GetFromEnd<SkillEntity>(2),
                     Value = 2,

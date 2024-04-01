@@ -8,7 +8,7 @@ namespace Naheulbook.Web.Mappers;
 
 public class MapperHelpers
 {
-    private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
+    private static readonly JsonSerializerSettings JsonSerializerSettings = new()
     {
         NullValueHandling = NullValueHandling.Ignore,
         Formatting = Formatting.None,

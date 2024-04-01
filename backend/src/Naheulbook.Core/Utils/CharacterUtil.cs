@@ -159,7 +159,7 @@ public class CharacterUtil(
             Name = "LevelUp charisme: " + character.Level,
             Values = new List<CharacterModifierValueEntity>
             {
-                new CharacterModifierValueEntity
+                new()
                 {
                     StatName = "CHA",
                     Value = 1,

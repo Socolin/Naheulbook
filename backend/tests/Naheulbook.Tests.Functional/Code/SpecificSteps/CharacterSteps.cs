@@ -27,7 +27,7 @@ public class CharacterSteps(
                 {
                     c.Jobs = new List<CharacterJobEntity>
                     {
-                        new CharacterJobEntity {JobId = testDataUtil.GetLast<JobEntity>().Id},
+                        new() {JobId = testDataUtil.GetLast<JobEntity>().Id},
                     };
                 });
             }

@@ -83,12 +83,12 @@ public class ItemTemplateUtilTests
         {
             Slots = new List<ItemTemplateSlotEntity>
             {
-                new ItemTemplateSlotEntity
+                new()
                 {
                     SlotId = 1,
                     Slot = slot1,
                 },
-                new ItemTemplateSlotEntity
+                new()
                 {
                     SlotId = 2,
                     Slot = slot2,
@@ -130,14 +130,14 @@ public class ItemTemplateUtilTests
         {
             Requirements = new List<ItemTemplateRequirementEntity>
             {
-                new ItemTemplateRequirementEntity
+                new()
                 {
                     Id = 1,
                     StatName = "some-stat-name-1",
                     MinValue = 2,
                     MaxValue = 3,
                 },
-                new ItemTemplateRequirementEntity
+                new()
                 {
                     Id = 2,
                     StatName = "some-stat-name-2",
@@ -198,14 +198,14 @@ public class ItemTemplateUtilTests
         {
             Modifiers = new List<ItemTemplateModifierEntity>
             {
-                new ItemTemplateModifierEntity
+                new()
                 {
                     Id = 1,
                     StatName = "some-stat-name-1",
                     Value = 2,
                     Special = "some-special-1",
                 },
-                new ItemTemplateModifierEntity
+                new()
                 {
                     Id = 2,
                     StatName = "some-stat-name-2",
@@ -272,13 +272,13 @@ public class ItemTemplateUtilTests
         {
             Skills = new List<ItemTemplateSkillEntity>
             {
-                new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000001")},
-                new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000002")},
+                new() {SkillId = new Guid("00000000-0000-0000-0000-000000000001")},
+                new() {SkillId = new Guid("00000000-0000-0000-0000-000000000002")},
             },
             UnSkills = new List<ItemTemplateUnSkillEntity>
             {
-                new ItemTemplateUnSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000003")},
-                new ItemTemplateUnSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000004")},
+                new() {SkillId = new Guid("00000000-0000-0000-0000-000000000003")},
+                new() {SkillId = new Guid("00000000-0000-0000-0000-000000000004")},
             },
         };
 

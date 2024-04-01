@@ -32,7 +32,7 @@ public class MapStep(TestDataUtil testDataUtil)
                         IsGm = true,
                         Markers = new List<MapMarkerEntity>
                         {
-                            new MapMarkerEntity
+                            new()
                             {
                                 Name = "some-marker-name",
                                 Description = "some-marker-description",
@@ -40,7 +40,7 @@ public class MapStep(TestDataUtil testDataUtil)
                                 Type = "point",
                                 Links = new List<MapMarkerLinkEntity>
                                 {
-                                    new MapMarkerLinkEntity
+                                    new()
                                     {
                                         Name = "some-link-name",
                                         TargetMapId = targetMap.Id,
@@ -68,7 +68,7 @@ public class MapStep(TestDataUtil testDataUtil)
                         IsGm = true,
                         Markers = new List<MapMarkerEntity>
                         {
-                            new MapMarkerEntity
+                            new()
                             {
                                 Name = "some-marker-name",
                                 Description = "some-marker-description",

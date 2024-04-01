@@ -51,8 +51,8 @@ public partial class TestDataUtil
 
         character.Jobs = new List<CharacterJobEntity>
         {
-            new CharacterJobEntity {Job = GetFromEnd<JobEntity>(0)},
-            new CharacterJobEntity {Job = GetFromEnd<JobEntity>(1)},
+            new() {Job = GetFromEnd<JobEntity>(0)},
+            new() {Job = GetFromEnd<JobEntity>(1)},
         };
 
         var characterModifier1 = defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>
@@ -83,13 +83,13 @@ public partial class TestDataUtil
 
         character.Specialities = new List<CharacterSpecialityEntity>
         {
-            new CharacterSpecialityEntity {Speciality = GetLast<SpecialityEntity>()},
+            new() {Speciality = GetLast<SpecialityEntity>()},
         };
 
         character.Skills = new List<CharacterSkillEntity>
         {
-            new CharacterSkillEntity {Skill = GetFromEnd<SkillEntity>(0)},
-            new CharacterSkillEntity {Skill = GetFromEnd<SkillEntity>(1)},
+            new() {Skill = GetFromEnd<SkillEntity>(0)},
+            new() {Skill = GetFromEnd<SkillEntity>(1)},
         };
 
         character.Group = GetLast<GroupEntity>();

@@ -75,7 +75,7 @@ public partial class DefaultEntityCreator
             Data = """{"key":"value"}""",
             Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>
                 {
-                    new ActiveStatsModifier
+                    new()
                     {
                         Active = true,
                         Description = "some-description",
@@ -97,7 +97,7 @@ public partial class DefaultEntityCreator
             Data = @"{""key"":""value""}",
             Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>
                 {
-                    new ActiveStatsModifier
+                    new()
                     {
                         Active = true,
                         Description = "some-description",

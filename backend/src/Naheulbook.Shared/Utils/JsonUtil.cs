@@ -13,7 +13,7 @@ public interface IJsonUtil
 
 public class JsonUtil : IJsonUtil
 {
-    private readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings
+    private readonly JsonSerializerSettings _serializerSettings = new()
     {
         NullValueHandling = NullValueHandling.Ignore,
         ContractResolver = new CamelCasePropertyNamesContractResolver(),

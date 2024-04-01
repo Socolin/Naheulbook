@@ -90,10 +90,10 @@ public class MonsterServiceTests
         const int groupId = 42;
         const int itemId = 24;
         var request = CreateRequest();
-        request.Items = new List<CreateItemRequest> {new CreateItemRequest()};
+        request.Items = new List<CreateItemRequest> {new()};
         var executionContext = new NaheulbookExecutionContext();
         var group = new GroupEntity {Id = groupId};
-        var items = new List<ItemEntity> {new ItemEntity {Id = itemId}};
+        var items = new List<ItemEntity> {new() {Id = itemId}};
         var fullyLoadedItems = new List<ItemEntity>();
 
         _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)

@@ -10,7 +10,7 @@ internal class AutoFillContext
     public AutoFillSettings Settings { get; set; }
     public int Depth => Levels.Count;
     public HashSet<string> IgnoredMembers { get; set; }
-    public List<string> Levels { get; } = new List<string>();
+    public List<string> Levels { get; } = new();
 
     public int GetNextInt()
     {

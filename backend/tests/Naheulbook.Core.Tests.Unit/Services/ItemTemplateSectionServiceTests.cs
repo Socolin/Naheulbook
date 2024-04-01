@@ -82,8 +82,8 @@ public class ItemTemplateSectionServiceTests
     {
         const int sectionId = 8;
         const int userId = 12;
-        var allSectionItemTemplates = new List<ItemTemplateEntity> {new ItemTemplateEntity(), new ItemTemplateEntity()};
-        var filteredItemTemplate = new List<ItemTemplateEntity> {new ItemTemplateEntity()};
+        var allSectionItemTemplates = new List<ItemTemplateEntity> {new(), new()};
+        var filteredItemTemplate = new List<ItemTemplateEntity> {new()};
 
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(sectionId)
             .Returns(allSectionItemTemplates);

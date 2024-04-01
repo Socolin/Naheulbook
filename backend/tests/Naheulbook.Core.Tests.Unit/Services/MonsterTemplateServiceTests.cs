@@ -113,7 +113,7 @@ public class MonsterTemplateServiceTests
             Name = "some-monster-name",
             Inventory = new List<MonsterTemplateInventoryElementRequest>
             {
-                new MonsterTemplateInventoryElementRequest
+                new()
                 {
                     Chance = 0.5f,
                     MinCount = 1,
@@ -132,7 +132,7 @@ public class MonsterTemplateServiceTests
             Data = @"{""key"":""value""}",
             Items = new List<MonsterTemplateInventoryElementEntity>()
             {
-                new MonsterTemplateInventoryElementEntity
+                new()
                 {
                     Chance = 0.5f,
                     MinCount = 1,

@@ -10,5 +10,5 @@ public class MapLayerResponse
     public string Name { get; set; } = null!;
     public string Source { get; set; } = null!;
     public bool IsGm { get; set; }
-    public List<MapMarkerResponse> Markers { get; set; } = new List<MapMarkerResponse>();
+    public List<MapMarkerResponse> Markers { get; set; } = new();
 }

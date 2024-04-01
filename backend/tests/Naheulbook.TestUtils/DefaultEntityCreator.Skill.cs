@@ -26,7 +26,7 @@ public partial class DefaultEntityCreator
             Test = 2,
             SkillEffects = new List<SkillEffect>
             {
-                new SkillEffect
+                new()
                 {
                     Value = 5,
                     StatName = "CHA",

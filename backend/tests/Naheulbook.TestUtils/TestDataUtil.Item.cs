@@ -62,7 +62,7 @@ public partial class TestDataUtil
         {
             itemTemplate.Requirements = new List<ItemTemplateRequirementEntity>
             {
-                new ItemTemplateRequirementEntity
+                new()
                 {
                     Stat = Get<StatEntity>(),
                     MinValue = 2,
@@ -71,7 +71,7 @@ public partial class TestDataUtil
             };
             itemTemplate.Modifiers = new List<ItemTemplateModifierEntity>
             {
-                new ItemTemplateModifierEntity
+                new()
                 {
                     Special = null,
                     RequiredJob = Get<JobEntity>(),
@@ -83,28 +83,28 @@ public partial class TestDataUtil
             };
             itemTemplate.Skills = new List<ItemTemplateSkillEntity>
             {
-                new ItemTemplateSkillEntity
+                new()
                 {
                     Skill = Get<SkillEntity>(0),
                 },
             };
             itemTemplate.UnSkills = new List<ItemTemplateUnSkillEntity>
             {
-                new ItemTemplateUnSkillEntity
+                new()
                 {
                     Skill = Get<SkillEntity>(1),
                 },
             };
             itemTemplate.Slots = new List<ItemTemplateSlotEntity>
             {
-                new ItemTemplateSlotEntity
+                new()
                 {
                     Slot = Get<SlotEntity>(0),
                 },
             };
             itemTemplate.SkillModifiers = new List<ItemTemplateSkillModifierEntity>
             {
-                new ItemTemplateSkillModifierEntity
+                new()
                 {
                     Skill = Get<SkillEntity>(2),
                     Value = 2,

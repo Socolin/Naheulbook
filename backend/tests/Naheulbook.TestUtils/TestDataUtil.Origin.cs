@@ -35,7 +35,7 @@ public partial class TestDataUtil
         });
         origin.Bonuses = new List<OriginBonus>
         {
-            new OriginBonus
+            new()
             {
                 Flags = "[]",
                 Description = $"some-description-{suffix}",
@@ -43,7 +43,7 @@ public partial class TestDataUtil
         };
         origin.Requirements = new List<OriginRequirementEntity>
         {
-            new OriginRequirementEntity
+            new()
             {
                 MaxValue = 5,
                 MinValue = 2,
@@ -52,13 +52,13 @@ public partial class TestDataUtil
         };
         origin.Skills = new List<OriginSkillEntity>
         {
-            new OriginSkillEntity
+            new()
             {
                 Skill = skill1,
                 SkillId = skill1.Id,
                 Default = true,
             },
-            new OriginSkillEntity
+            new()
             {
                 Skill = skill2,
                 SkillId = skill2.Id,
@@ -67,7 +67,7 @@ public partial class TestDataUtil
         };
         origin.Restrictions = new List<OriginRestrictEntity>
         {
-            new OriginRestrictEntity
+            new()
             {
                 Text = "some-restriction-text",
                 Flags = @"[{""data"": null, ""type"": ""value""}]",

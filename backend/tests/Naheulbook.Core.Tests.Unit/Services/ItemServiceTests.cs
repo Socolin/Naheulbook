@@ -375,7 +375,7 @@ public class ItemServiceTests
     {
         var createItemRequests = new List<CreateItemRequest>
         {
-            new CreateItemRequest {ItemTemplateId = Guid.NewGuid()},
+            new() {ItemTemplateId = Guid.NewGuid()},
         };
 
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Any<IEnumerable<Guid>>())
@@ -401,8 +401,8 @@ public class ItemServiceTests
 
         var createItemRequests = new List<CreateItemRequest>
         {
-            new CreateItemRequest {ItemTemplateId = itemTemplateId1, ItemData = itemData1},
-            new CreateItemRequest {ItemTemplateId = itemTemplateId2, ItemData = itemData2},
+            new() {ItemTemplateId = itemTemplateId1, ItemData = itemData1},
+            new() {ItemTemplateId = itemTemplateId2, ItemData = itemData2},
         };
 
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetByIdsAsync(Arg.Is<IEnumerable<Guid>>(ids => ids.SequenceEqual(new[] {itemTemplateId1, itemTemplateId2})))

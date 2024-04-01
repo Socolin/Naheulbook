@@ -68,7 +68,7 @@ public class EffectRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
             .AddStat()
             .AddEffect((effect) => effect.Modifiers = new List<EffectModifierEntity>
             {
-                new EffectModifierEntity
+                new()
                 {
                     Stat = TestDataUtil.GetLast<StatEntity>(),
                     Type = "ADD",

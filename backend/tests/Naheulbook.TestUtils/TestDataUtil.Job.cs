@@ -30,14 +30,14 @@ public partial class TestDataUtil
 
         job.Bonuses = new List<JobBonusEntity>
         {
-            new JobBonusEntity
+            new()
             {
                 Description = $"some-job-bonus-description-{suffix}",
             },
         };
         job.Requirements = new List<JobRequirementEntity>
         {
-            new JobRequirementEntity
+            new()
             {
                 Stat = stat,
                 MinValue = 2,
@@ -46,7 +46,7 @@ public partial class TestDataUtil
         };
         job.Restrictions = new List<JobRestrictionEntity>
         {
-            new JobRestrictionEntity
+            new()
             {
                 Text = $"some-job-restriction-{suffix}",
                 Flags = "[]",
@@ -54,12 +54,12 @@ public partial class TestDataUtil
         };
         job.Skills = new List<JobSkillEntity>
         {
-            new JobSkillEntity
+            new()
             {
                 Default = true,
                 Skill = skill1,
             },
-            new JobSkillEntity
+            new()
             {
                 Default = false,
                 Skill = skill2,
@@ -94,7 +94,7 @@ public partial class TestDataUtil
 
         speciality.Modifiers = new List<SpecialityModifierEntity>
         {
-            new SpecialityModifierEntity
+            new()
             {
                 Stat = GetLast<StatEntity>().Name,
                 Value = 2,
@@ -103,7 +103,7 @@ public partial class TestDataUtil
 
         speciality.Specials = new List<SpecialitySpecialEntity>
         {
-            new SpecialitySpecialEntity
+            new()
             {
                 Description = $"some-speciality-special-description-{suffix}",
                 Flags = @"[{""data"": ""some-data"", ""type"": ""ONE_SPECIALITY""}]",

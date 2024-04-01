@@ -52,7 +52,7 @@ public class MonsterSteps(TestDataUtil testDataUtil)
         {
             m.Items = new List<MonsterTemplateInventoryElementEntity>
             {
-                new MonsterTemplateInventoryElementEntity
+                new()
                 {
                     Chance = 0.5f,
                     ItemTemplate = testDataUtil.GetLast<ItemTemplateEntity>(),
@@ -74,7 +74,7 @@ public class MonsterSteps(TestDataUtil testDataUtil)
     {
         testDataUtil.AddMonster(m => m.Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>
         {
-            new ActiveStatsModifier
+            new()
             {
                 Active = true,
                 Id = 8,
@@ -104,7 +104,7 @@ public class MonsterSteps(TestDataUtil testDataUtil)
     {
         testDataUtil.AddMonster(m => m.Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>
         {
-            new ActiveStatsModifier
+            new()
             {
                 Active = true,
                 Id = 8,

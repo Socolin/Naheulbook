@@ -8,7 +8,7 @@ namespace Naheulbook.Core.Tests.Unit.TestUtils;
 
 public class FakeUnitOfWorkFactory : IUnitOfWorkFactory
 {
-    private readonly List<IUnitOfWork> _hubUnitOfWorks = new List<IUnitOfWork>();
+    private readonly List<IUnitOfWork> _hubUnitOfWorks = new();
     private int _uowIndex;
 
     public FakeUnitOfWorkFactory(int countUnitOfWork = 1)

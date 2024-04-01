@@ -43,7 +43,7 @@ public class CharacterFactory : ICharacterFactory
         if (characterRequest.JobId.HasValue)
             character.Jobs = new List<CharacterJobEntity>
             {
-                new CharacterJobEntity
+                new()
                 {
                     JobId = characterRequest.JobId.Value,
                 },
@@ -76,7 +76,7 @@ public class CharacterFactory : ICharacterFactory
         if (characterRequest.SpecialityId.HasValue)
             character.Specialities = new List<CharacterSpecialityEntity>
             {
-                new CharacterSpecialityEntity
+                new()
                 {
                     SpecialityId = characterRequest.SpecialityId.Value,
                 },
