@@ -10,18 +10,11 @@ public interface ISkillService
     Task<ICollection<SkillEntity>> GetSkillsAsync();
 }
 
-public class SkillService : ISkillService
+public class SkillService(IUnitOfWorkFactory unitOfWorkFactory) : ISkillService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-    public SkillService(IUnitOfWorkFactory unitOfWorkFactory)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-    }
-
     public async Task<ICollection<SkillEntity>> GetSkillsAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Skills.GetAllWithEffectsAsync();
         }

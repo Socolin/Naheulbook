@@ -2,12 +2,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class UserNotFoundException : Exception
+public class UserNotFoundException(int? userId = null) : Exception
 {
-    public int? UserId { get; }
-
-    public UserNotFoundException(int? userId = null)
-    {
-        UserId = userId;
-    }
+    public int? UserId { get; } = userId;
 }

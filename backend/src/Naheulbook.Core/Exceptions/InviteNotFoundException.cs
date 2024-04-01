@@ -5,14 +5,8 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class InviteNotFoundException : Exception
+public class InviteNotFoundException(int characterId, int groupId) : Exception
 {
-    public int GroupId { get; }
-    public int CharacterId { get; }
-
-    public InviteNotFoundException(int characterId, int groupId)
-    {
-        CharacterId = characterId;
-        GroupId = groupId;
-    }
+    public int GroupId { get; } = groupId;
+    public int CharacterId { get; } = characterId;
 }

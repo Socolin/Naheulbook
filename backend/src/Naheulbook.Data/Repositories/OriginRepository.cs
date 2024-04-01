@@ -13,12 +13,8 @@ public interface IOriginRepository : IRepository<OriginEntity>
     Task<OriginEntity?> GetWithAllDataAsync(Guid originId);
 }
 
-public class OriginRepository : Repository<OriginEntity, NaheulbookDbContext>, IOriginRepository
+public class OriginRepository(NaheulbookDbContext context) : Repository<OriginEntity, NaheulbookDbContext>(context), IOriginRepository
 {
-    public OriginRepository(NaheulbookDbContext context) : base(context)
-    {
-    }
-
     public async Task<ICollection<OriginEntity>> GetAllWithAllDataAsync()
     {
         return await Context.Origins

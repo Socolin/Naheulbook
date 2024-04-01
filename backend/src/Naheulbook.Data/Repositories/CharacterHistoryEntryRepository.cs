@@ -7,10 +7,4 @@ public interface ICharacterHistoryEntryRepository : IRepository<CharacterHistory
 {
 }
 
-public class CharacterHistoryEntryRepository : Repository<CharacterHistoryEntryEntity, NaheulbookDbContext>, ICharacterHistoryEntryRepository
-{
-    public CharacterHistoryEntryRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-}
+public class CharacterHistoryEntryRepository(NaheulbookDbContext context) : Repository<CharacterHistoryEntryEntity, NaheulbookDbContext>(context), ICharacterHistoryEntryRepository;

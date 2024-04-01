@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class MonsterTemplateNotFoundException : Exception
+public class MonsterTemplateNotFoundException(int monsterTemplateId) : Exception
 {
-    public int MonsterTemplateId { get; }
-
-    public MonsterTemplateNotFoundException(int monsterTemplateId)
-    {
-        MonsterTemplateId = monsterTemplateId;
-    }
+    public int MonsterTemplateId { get; } = monsterTemplateId;
 }

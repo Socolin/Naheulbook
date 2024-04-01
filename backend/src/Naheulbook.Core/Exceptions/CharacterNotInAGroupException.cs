@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class CharacterNotInAGroupException : Exception
+public class CharacterNotInAGroupException(int characterId) : Exception
 {
-    public int CharacterId { get; }
-
-    public CharacterNotInAGroupException(int characterId)
-    {
-        CharacterId = characterId;
-    }
+    public int CharacterId { get; } = characterId;
 }

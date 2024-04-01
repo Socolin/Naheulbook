@@ -14,25 +14,16 @@ public interface IFacebookClient
     Task<FacebookProfileResponse> GetUserProfileAsync(string accessToken);
 }
 
-public class FacebookClient : IFacebookClient
+public class FacebookClient(FacebookConfiguration configuration, IJsonUtil jsonUtil) : IFacebookClient
 {
-    private readonly FacebookConfiguration _configuration;
-    private readonly IJsonUtil _jsonUtil;
-
-    public FacebookClient(FacebookConfiguration configuration, IJsonUtil jsonUtil)
-    {
-        _configuration = configuration;
-        _jsonUtil = jsonUtil;
-    }
-
     public async Task<string> GetAccessTokenAsync(string redirectUri, string code)
     {
         var requestUri = new StringBuilder();
         requestUri.AppendFormat("https://graph.facebook.com/v13.0/oauth/access_token");
         requestUri.AppendFormat("?redirect_uri={0}", Uri.EscapeDataString(redirectUri));
         requestUri.AppendFormat("&code={0}", Uri.EscapeDataString(code));
-        requestUri.AppendFormat("&client_id={0}", _configuration.AppId);
-        requestUri.AppendFormat("&client_secret={0}", _configuration.AppSecret);
+        requestUri.AppendFormat("&client_id={0}", configuration.AppId);
+        requestUri.AppendFormat("&client_secret={0}", configuration.AppSecret);
 
         using (var client = new HttpClient())
         {
@@ -42,7 +33,7 @@ public class FacebookClient : IFacebookClient
                 if (!response.IsSuccessStatusCode)
                     throw new FacebookClientException(content, (int) response.StatusCode);
 
-                return _jsonUtil.DeserializeOrCreate<FacebookAccessTokenResponse>(content).AccessToken;
+                return jsonUtil.DeserializeOrCreate<FacebookAccessTokenResponse>(content).AccessToken;
             }
         }
     }
@@ -59,7 +50,7 @@ public class FacebookClient : IFacebookClient
                 if (!response.IsSuccessStatusCode)
                     throw new FacebookClientException(content, (int) response.StatusCode);
 
-                return _jsonUtil.DeserializeOrCreate<FacebookProfileResponse>(content);
+                return jsonUtil.DeserializeOrCreate<FacebookProfileResponse>(content);
             }
         }
     }

@@ -4,31 +4,24 @@ using TechTalk.SpecFlow;
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
-public class OriginSteps
+public class OriginSteps(TestDataUtil testDataUtil)
 {
-    private readonly TestDataUtil _testDataUtil;
-
-    public OriginSteps(TestDataUtil testDataUtil)
-    {
-        _testDataUtil = testDataUtil;
-    }
-
     [Given("an origin")]
     public void GivenAnOrigin()
     {
-        _testDataUtil.AddOrigin();
+        testDataUtil.AddOrigin();
     }
 
     [Given("an origin with random name api configured")]
     public void GivenAnOriginWithRandomNameApiConfigured()
     {
-        _testDataUtil.AddOrigin();
-        _testDataUtil.AddOriginRandomNameUrl();
+        testDataUtil.AddOrigin();
+        testDataUtil.AddOriginRandomNameUrl();
     }
 
     [Given("an origin with all possible data")]
     public void GivenAnOriginWithAllPossibleData()
     {
-        _testDataUtil.AddOriginWithAllData();
+        testDataUtil.AddOriginWithAllData();
     }
 }

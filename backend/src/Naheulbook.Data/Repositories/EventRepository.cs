@@ -12,13 +12,8 @@ public interface IEventRepository : IRepository<EventEntity>
     Task<List<EventEntity>> GetByGroupIdAsync(int groupId);
 }
 
-public class EventRepository : Repository<EventEntity, NaheulbookDbContext>, IEventRepository
+public class EventRepository(NaheulbookDbContext context) : Repository<EventEntity, NaheulbookDbContext>(context), IEventRepository
 {
-    public EventRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<List<EventEntity>> GetByGroupIdAsync(int groupId)
     {
         return Context.Events

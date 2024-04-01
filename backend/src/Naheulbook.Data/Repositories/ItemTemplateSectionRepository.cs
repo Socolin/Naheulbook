@@ -11,13 +11,8 @@ public interface IItemTemplateSectionRepository : IRepository<ItemTemplateSectio
     Task<List<ItemTemplateSectionEntity>> GetAllWithCategoriesAsync();
 }
 
-public class ItemTemplateSectionRepository : Repository<ItemTemplateSectionEntity, NaheulbookDbContext>, IItemTemplateSectionRepository
+public class ItemTemplateSectionRepository(NaheulbookDbContext context) : Repository<ItemTemplateSectionEntity, NaheulbookDbContext>(context), IItemTemplateSectionRepository
 {
-    public ItemTemplateSectionRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<List<ItemTemplateSectionEntity>> GetAllWithCategoriesAsync()
     {
         return Context.ItemTemplateSections

@@ -10,18 +10,11 @@ public interface IMonsterTraitService
     Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync();
 }
 
-public class MonsterTraitService : IMonsterTraitService
+public class MonsterTraitService(IUnitOfWorkFactory unitOfWorkFactory) : IMonsterTraitService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-    public MonsterTraitService(IUnitOfWorkFactory unitOfWorkFactory)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-    }
-
     public async Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.MonsterTraits.GetAllAsync();
         }

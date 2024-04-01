@@ -11,17 +11,9 @@ public interface IAddItemExecutor : IActionExecutor
 {
 }
 
-public class AddItemExecutor : IAddItemExecutor
+public class AddItemExecutor(IItemFactory itemFactory) : IAddItemExecutor
 {
     private const string ActionType = "addItem";
-    private readonly IItemFactory _itemFactory;
-
-    public AddItemExecutor(
-        IItemFactory itemFactory
-    )
-    {
-        _itemFactory = itemFactory;
-    }
 
     public async Task ExecuteAsync(
         NhbkAction action,
@@ -46,7 +38,7 @@ public class AddItemExecutor : IAddItemExecutor
         if (action.Data.Quantity.HasValue)
             itemData.Quantity = action.Data.Quantity.Value;
 
-        var item = _itemFactory.CreateItem(ItemOwnerType.Character, context.SourceCharacter.Id, itemTemplate, itemData);
+        var item = itemFactory.CreateItem(ItemOwnerType.Character, context.SourceCharacter.Id, itemTemplate, itemData);
         context.UnitOfWork.Items.Add(item);
 
         notificationSession.NotifyCharacterAddItem(context.SourceCharacter.Id, item, true);

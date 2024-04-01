@@ -15,13 +15,8 @@ public interface ILootRepository : IRepository<LootEntity>
     Task<LootEntity?> GetWithAllDataAsync(int lootId);
 }
 
-public class LootRepository : Repository<LootEntity, NaheulbookDbContext>, ILootRepository
+public class LootRepository(NaheulbookDbContext context) : Repository<LootEntity, NaheulbookDbContext>(context), ILootRepository
 {
-    public LootRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<List<LootEntity>> GetByGroupIdAsync(int groupId)
     {
         return Context.Loots

@@ -9,34 +9,25 @@ using TechTalk.SpecFlow;
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
-public class CharacterSteps
+public class CharacterSteps(
+    TestDataUtil testDataUtil,
+    ScenarioContext scenarioContext
+)
 {
-    private readonly TestDataUtil _testDataUtil;
-    private readonly ScenarioContext _scenarioContext;
-
-    public CharacterSteps(
-        TestDataUtil testDataUtil,
-        ScenarioContext scenarioContext
-    )
-    {
-        _testDataUtil = testDataUtil;
-        _scenarioContext = scenarioContext;
-    }
-
     [Given(@"(a|\d+) characters?")]
     public void GivenACharacter(string amount)
     {
-        if (!_testDataUtil.Contains<OriginEntity>())
-            _testDataUtil.AddOrigin();
-        if (_testDataUtil.Contains<JobEntity>())
+        if (!testDataUtil.Contains<OriginEntity>())
+            testDataUtil.AddOrigin();
+        if (testDataUtil.Contains<JobEntity>())
         {
             for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
             {
-                _testDataUtil.AddCharacter(_scenarioContext.GetUserId(), c =>
+                testDataUtil.AddCharacter(scenarioContext.GetUserId(), c =>
                 {
                     c.Jobs = new List<CharacterJobEntity>
                     {
-                        new CharacterJobEntity {JobId = _testDataUtil.GetLast<JobEntity>().Id},
+                        new CharacterJobEntity {JobId = testDataUtil.GetLast<JobEntity>().Id},
                     };
                 });
             }
@@ -44,20 +35,20 @@ public class CharacterSteps
         else
         {
             for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
-                _testDataUtil.AddCharacter(_scenarioContext.GetUserId());
+                testDataUtil.AddCharacter(scenarioContext.GetUserId());
         }
     }
 
     [Given(@"a character modifier")]
     public void GivenACharacterModifier()
     {
-        _testDataUtil.AddCharacterModifier();
+        testDataUtil.AddCharacterModifier();
     }
 
     [Given(@"an (inactive|active) (non-reusable|reusable) character modifier active for (\d) lap")]
     public void GivenACharacterModifier(string active, string reusable, int lapCount)
     {
-        _testDataUtil.AddCharacterModifier(c =>
+        testDataUtil.AddCharacterModifier(c =>
         {
             c.Reusable = reusable == "reusable";
             c.IsActive = active == "active";
@@ -69,7 +60,7 @@ public class CharacterSteps
     [Given(@"an inactive reusable character modifier that last 2 combat")]
     public void GivenAnInactiveReusableCharacterModifierThatLast2Combat()
     {
-        _testDataUtil.AddCharacterModifier(c =>
+        testDataUtil.AddCharacterModifier(c =>
         {
             c.Reusable = true;
             c.IsActive = false;
@@ -80,72 +71,72 @@ public class CharacterSteps
     [Given(@"a character with all possible data")]
     public void GivenACharacterWithAllPossibleData()
     {
-        _testDataUtil.AddCharacterWithAllData(_scenarioContext.GetUserId());
+        testDataUtil.AddCharacterWithAllData(scenarioContext.GetUserId());
     }
 
     [Given(@"an item based on that item template in the character inventory")]
     public void GivenAnItemBasedOnThatItemTemplateInTheCharacterInventory()
     {
-        _testDataUtil.AddItem(_testDataUtil.GetLast<CharacterEntity>());
-        _testDataUtil.GetLast<CharacterEntity>().Items = new List<ItemEntity>
+        testDataUtil.AddItem(testDataUtil.GetLast<CharacterEntity>());
+        testDataUtil.GetLast<CharacterEntity>().Items = new List<ItemEntity>
         {
-            _testDataUtil.GetLast<ItemEntity>(),
+            testDataUtil.GetLast<ItemEntity>(),
         };
-        _testDataUtil.SaveChanges();
+        testDataUtil.SaveChanges();
     }
 
     [Given(@"an item based on that item template in the character inventory with (\d+) charges?")]
     public void GivenAnItemBasedOnThatItemTemplateInTheCharacterInventoryWithXCharge(int chargeCount)
     {
-        _testDataUtil.AddItem(_testDataUtil.GetLast<CharacterEntity>(), item =>
+        testDataUtil.AddItem(testDataUtil.GetLast<CharacterEntity>(), item =>
         {
             item.Data = JsonConvert.SerializeObject(new {charge = chargeCount});
         });
 
-        _testDataUtil.GetLast<CharacterEntity>().Items = new List<ItemEntity>
+        testDataUtil.GetLast<CharacterEntity>().Items = new List<ItemEntity>
         {
-            _testDataUtil.GetLast<ItemEntity>(),
+            testDataUtil.GetLast<ItemEntity>(),
         };
-        _testDataUtil.SaveChanges();
+        testDataUtil.SaveChanges();
     }
 
     [Given(@"an item in the loot")]
     public void GivenAnItemInTheLoot()
     {
-        if (!_testDataUtil.Contains<ItemTemplateEntity>())
-            _testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
-        _testDataUtil.AddItem(_testDataUtil.GetLast<LootEntity>());
-        _testDataUtil.SaveChanges();
+        if (!testDataUtil.Contains<ItemTemplateEntity>())
+            testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
+        testDataUtil.AddItem(testDataUtil.GetLast<LootEntity>());
+        testDataUtil.SaveChanges();
     }
 
     [Given(@"an item in the character inventory")]
     public void GivenAnItemInTheCharacterInventory()
     {
-        if (!_testDataUtil.Contains<ItemTemplateEntity>())
-            _testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
-        _testDataUtil.AddItem(_testDataUtil.GetLast<CharacterEntity>());
-        _testDataUtil.SaveChanges();
+        if (!testDataUtil.Contains<ItemTemplateEntity>())
+            testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
+        testDataUtil.AddItem(testDataUtil.GetLast<CharacterEntity>());
+        testDataUtil.SaveChanges();
     }
 
     [Given("that the (.+) character is a member of the group")]
     public void GivenThatXTheCharacterIsAMemberOfTheGroup(string indexString)
     {
-        var character = _testDataUtil.Get<CharacterEntity>(StepArgumentUtil.ParseIndex(indexString));
-        character.GroupId = _testDataUtil.GetLast<GroupEntity>().Id;
-        _testDataUtil.SaveChanges();
+        var character = testDataUtil.Get<CharacterEntity>(StepArgumentUtil.ParseIndex(indexString));
+        character.GroupId = testDataUtil.GetLast<GroupEntity>().Id;
+        testDataUtil.SaveChanges();
     }
 
     [Given("that the character is a member of the group")]
     public void GivenThatTheCharacterIsAMemberOfTheGroup()
     {
-        var character = _testDataUtil.GetLast<CharacterEntity>();
-        character.GroupId = _testDataUtil.GetLast<GroupEntity>().Id;
-        _testDataUtil.SaveChanges();
+        var character = testDataUtil.GetLast<CharacterEntity>();
+        character.GroupId = testDataUtil.GetLast<GroupEntity>().Id;
+        testDataUtil.SaveChanges();
     }
 
     [Given("a character history entry")]
     public void GivenACharacterHistoryEntry()
     {
-        _testDataUtil.AddCharacterHistoryEntry();
+        testDataUtil.AddCharacterHistoryEntry();
     }
 }

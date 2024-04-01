@@ -7,18 +7,11 @@ using Naheulbook.Data.DbContexts;
 
 namespace Naheulbook.TestUtils;
 
-public partial class TestDataUtil : IDisposable
+public partial class TestDataUtil(DbContextOptions<NaheulbookDbContext> dbContextOptions, DefaultEntityCreator defaultEntityCreator)
+    : IDisposable
 {
-    private readonly List<object> _allEntities;
-    private readonly DefaultEntityCreator _defaultEntityCreator;
-    private readonly NaheulbookDbContext _dbContext;
-
-    public TestDataUtil(DbContextOptions<NaheulbookDbContext> dbContextOptions, DefaultEntityCreator defaultEntityCreator)
-    {
-        _defaultEntityCreator = defaultEntityCreator;
-        _allEntities = new List<object>();
-        _dbContext = new NaheulbookDbContext(dbContextOptions);
-    }
+    private readonly List<object> _allEntities = new();
+    private readonly NaheulbookDbContext _dbContext = new(dbContextOptions);
 
     public T Get<T>()
     {

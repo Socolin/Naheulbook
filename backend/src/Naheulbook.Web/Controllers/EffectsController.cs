@@ -14,17 +14,8 @@ namespace Naheulbook.Web.Controllers;
 
 [ApiController]
 [Route("api/v2/effects")]
-public class EffectsController : ControllerBase
+public class EffectsController(IEffectService effectService, IMapper mapper) : ControllerBase
 {
-    private readonly IEffectService _effectService;
-    private readonly IMapper _mapper;
-
-    public EffectsController(IEffectService effectService, IMapper mapper)
-    {
-        _effectService = effectService;
-        _mapper = mapper;
-    }
-
     [HttpPut("{effectId:int:min(1)}")]
     public async Task<ActionResult<EffectResponse>> PutEditEffectAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
@@ -34,8 +25,8 @@ public class EffectsController : ControllerBase
     {
         try
         {
-            var effect = await _effectService.EditEffectAsync(executionContext, effectId, request);
-            var effectResponse = _mapper.Map<EffectResponse>(effect);
+            var effect = await effectService.EditEffectAsync(executionContext, effectId, request);
+            var effectResponse = mapper.Map<EffectResponse>(effect);
             return effectResponse;
         }
         catch (ForbiddenAccessException ex)
@@ -55,8 +46,8 @@ public class EffectsController : ControllerBase
     {
         try
         {
-            var effect = await _effectService.GetEffectAsync(effectId);
-            var effectResponse = _mapper.Map<EffectResponse>(effect);
+            var effect = await effectService.GetEffectAsync(effectId);
+            var effectResponse = mapper.Map<EffectResponse>(effect);
             return effectResponse;
         }
         catch (EffectNotFoundException ex)
@@ -70,7 +61,7 @@ public class EffectsController : ControllerBase
         [FromQuery] string filter
     )
     {
-        var effects = await _effectService.SearchEffectsAsync(filter);
-        return _mapper.Map<List<EffectResponse>>(effects);
+        var effects = await effectService.SearchEffectsAsync(filter);
+        return mapper.Map<List<EffectResponse>>(effects);
     }
 }

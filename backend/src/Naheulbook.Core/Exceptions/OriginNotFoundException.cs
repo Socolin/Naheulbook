@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class OriginNotFoundException : Exception
+public class OriginNotFoundException(Guid originId) : Exception
 {
-    public Guid OriginId { get; }
-
-    public OriginNotFoundException(Guid originId)
-    {
-        OriginId = originId;
-    }
+    public Guid OriginId { get; } = originId;
 }

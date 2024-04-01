@@ -8,7 +8,7 @@ public partial class TestDataUtil
 {
     public TestDataUtil AddCharacter(int ownerId, Action<CharacterEntity> customizer = null)
     {
-        return SaveEntity(_defaultEntityCreator.CreateCharacter(ownerId, GetLast<OriginEntity>()), customizer);
+        return SaveEntity(defaultEntityCreator.CreateCharacter(ownerId, GetLast<OriginEntity>()), customizer);
     }
 
     public TestDataUtil AddCharacter(Action<CharacterEntity> customizer = null)
@@ -20,7 +20,7 @@ public partial class TestDataUtil
     {
         var user = GetLast<UserEntity>();
         var originEntity = GetLast<OriginEntity>();
-        character = _defaultEntityCreator.CreateCharacter(user.Id, originEntity);
+        character = defaultEntityCreator.CreateCharacter(user.Id, originEntity);
         var group = GetLastIfExists<GroupEntity>();
         if (group != null)
             character.GroupId = group.Id;
@@ -31,7 +31,7 @@ public partial class TestDataUtil
     {
         AddUser(out var user);
         AddOrigin(out var origin);
-        return SaveEntity(_defaultEntityCreator.CreateCharacter(user.Id, origin), customizer);
+        return SaveEntity(defaultEntityCreator.CreateCharacter(user.Id, origin), customizer);
     }
 
     public TestDataUtil AddCharacterWithAllData(int ownerId, Action<CharacterEntity> customizer = null)
@@ -47,7 +47,7 @@ public partial class TestDataUtil
 
         AddSpeciality();
 
-        var character = _defaultEntityCreator.CreateCharacter(ownerId, GetLast<OriginEntity>());
+        var character = defaultEntityCreator.CreateCharacter(ownerId, GetLast<OriginEntity>());
 
         character.Jobs = new List<CharacterJobEntity>
         {
@@ -55,20 +55,20 @@ public partial class TestDataUtil
             new CharacterJobEntity {Job = GetFromEnd<JobEntity>(1)},
         };
 
-        var characterModifier1 = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>
+        var characterModifier1 = defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>
         {
-            _defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(0), 1),
-            _defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(1), 2),
+            defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(0), 1),
+            defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(1), 2),
         });
         characterModifier1.DurationType = "combat";
         characterModifier1.CombatCount = 2;
         characterModifier1.CurrentCombatCount = 1;
-        var characterModifier2 = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>
+        var characterModifier2 = defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>
         {
-            _defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(2), 4),
-            _defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(3), 6),
+            defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(2), 4),
+            defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(3), 6),
         });
-        var characterModifier3 = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>());
+        var characterModifier3 = defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>());
         characterModifier3.DurationType = "lap";
         characterModifier3.LapCount = 4;
         characterModifier3.CurrentLapCount = 2;
@@ -104,13 +104,13 @@ public partial class TestDataUtil
 
     public TestDataUtil AddCharacterHistoryEntry(out CharacterHistoryEntryEntity characterHistoryEntry, Action<CharacterHistoryEntryEntity> customizer = null)
     {
-        characterHistoryEntry = _defaultEntityCreator.CreateCharacterHistoryEntry(GetLast<CharacterEntity>());
+        characterHistoryEntry = defaultEntityCreator.CreateCharacterHistoryEntry(GetLast<CharacterEntity>());
         return SaveEntity(characterHistoryEntry, customizer);
     }
 
     public TestDataUtil AddCharacterModifier(Action<CharacterModifierEntity> customizer = null)
     {
-        var characterModifier = _defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>());
+        var characterModifier = defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>());
         characterModifier.Character = GetLast<CharacterEntity>();
         return SaveEntity(characterModifier, customizer);
     }

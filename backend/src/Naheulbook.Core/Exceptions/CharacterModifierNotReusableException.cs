@@ -2,12 +2,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class CharacterModifierNotReusableException : Exception
+public class CharacterModifierNotReusableException(int characterModifierId) : Exception
 {
-    public int CharacterModifierId { get; }
-
-    public CharacterModifierNotReusableException(int characterModifierId)
-    {
-        CharacterModifierId = characterModifierId;
-    }
+    public int CharacterModifierId { get; } = characterModifierId;
 }

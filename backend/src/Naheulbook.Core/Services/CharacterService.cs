@@ -36,47 +36,22 @@ public interface ICharacterService
     Task QuitGroupAsync(NaheulbookExecutionContext executionContext, int characterId);
 }
 
-public class CharacterService : ICharacterService
+public class CharacterService(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    ICharacterFactory characterFactory,
+    IItemService itemService,
+    IAuthorizationUtil authorizationUtil,
+    ICharacterHistoryUtil characterHistoryUtil,
+    IMapper mapper,
+    ICharacterModifierUtil characterModifierUtil,
+    INotificationSessionFactory notificationSessionFactory,
+    ICharacterUtil characterUtil,
+    IItemUtil itemUtil
+) : ICharacterService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly ICharacterFactory _characterFactory;
-    private readonly IItemService _itemService;
-    private readonly IAuthorizationUtil _authorizationUtil;
-    private readonly ICharacterHistoryUtil _characterHistoryUtil;
-    private readonly ICharacterUtil _characterUtil;
-    private readonly IMapper _mapper;
-    private readonly ICharacterModifierUtil _characterModifierUtil;
-    private readonly INotificationSessionFactory _notificationSessionFactory;
-    private readonly IItemUtil _itemUtil;
-
-    public CharacterService(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        ICharacterFactory characterFactory,
-        IItemService itemService,
-        IAuthorizationUtil authorizationUtil,
-        ICharacterHistoryUtil characterHistoryUtil,
-        IMapper mapper,
-        ICharacterModifierUtil characterModifierUtil,
-        INotificationSessionFactory notificationSessionFactory,
-        ICharacterUtil characterUtil,
-        IItemUtil itemUtil
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _characterFactory = characterFactory;
-        _itemService = itemService;
-        _authorizationUtil = authorizationUtil;
-        _characterHistoryUtil = characterHistoryUtil;
-        _mapper = mapper;
-        _characterModifierUtil = characterModifierUtil;
-        _notificationSessionFactory = notificationSessionFactory;
-        _characterUtil = characterUtil;
-        _itemUtil = itemUtil;
-    }
-
     public async Task<List<CharacterEntity>> GetCharacterListAsync(NaheulbookExecutionContext executionContext)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Characters.GetForSummaryByOwnerIdAsync(executionContext.UserId);
         }
@@ -84,21 +59,21 @@ public class CharacterService : ICharacterService
 
     public async Task<CharacterEntity> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var character = _characterFactory.CreateCharacter(request);
+            var character = characterFactory.CreateCharacter(request);
 
             if (request.GroupId.HasValue)
             {
                 var group = await uow.Groups.GetAsync(request.GroupId.Value);
                 if (group == null)
                     throw new GroupNotFoundException(request.GroupId.Value);
-                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+                authorizationUtil.EnsureIsGroupOwner(executionContext, group);
                 character.Group = group;
             }
 
             character.OwnerId = executionContext.UserId;
-            character.Items = await _itemUtil.CreateInitialPlayerInventoryAsync(request.Money);
+            character.Items = await itemUtil.CreateInitialPlayerInventoryAsync(request.Money);
 
             uow.Characters.Add(character);
 
@@ -110,16 +85,16 @@ public class CharacterService : ICharacterService
 
     public async Task<CharacterEntity> CreateCustomCharacterAsync(NaheulbookExecutionContext executionContext, CreateCustomCharacterRequest request)
     {
-        using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = _characterFactory.CreateCustomCharacter(request);
+        var character = characterFactory.CreateCustomCharacter(request);
 
         if (request.GroupId.HasValue)
         {
             var group = await uow.Groups.GetAsync(request.GroupId.Value);
             if (group == null)
                 throw new GroupNotFoundException(request.GroupId.Value);
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, @group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, @group);
             character.Group = @group;
         }
 
@@ -133,13 +108,13 @@ public class CharacterService : ICharacterService
 
     public async Task<CharacterEntity> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithAllDataAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
             return character;
         }
@@ -147,24 +122,24 @@ public class CharacterService : ICharacterService
 
     public async Task<ItemEntity> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithGroupAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
         }
 
-        var item = await _itemService.AddItemToAsync(ItemOwnerType.Character, characterId, request);
+        var item = await itemService.AddItemToAsync(ItemOwnerType.Character, characterId, request);
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogAddItem(characterId, item));
+            uow.CharacterHistoryEntries.Add(characterHistoryUtil.CreateLogAddItem(characterId, item));
             await uow.SaveChangesAsync();
         }
 
-        var session = _notificationSessionFactory.CreateSession();
+        var session = notificationSessionFactory.CreateSession();
         session.NotifyCharacterAddItem(characterId, item);
         await session.CommitAsync();
 
@@ -173,13 +148,13 @@ public class CharacterService : ICharacterService
 
     public async Task<List<LootEntity>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithGroupAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
             if (!character.GroupId.HasValue)
                 return new List<LootEntity>();
@@ -190,13 +165,13 @@ public class CharacterService : ICharacterService
 
     public async Task<List<IHistoryEntry>> GetCharacterHistoryEntryAsync(NaheulbookExecutionContext executionContext, int characterId, int page)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithGroupAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
             return await uow.Characters.GetHistoryByCharacterIdAsync(character.Id, character.GroupId, page, character.Group?.MasterId == characterId);
         }
@@ -204,34 +179,34 @@ public class CharacterService : ICharacterService
 
     public async Task<bool> EnsureUserCanAccessCharacterAndGetIfIsGroupMasterAsync(NaheulbookExecutionContext executionContext, int characterId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithGroupAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
             if (character.Group == null)
                 return false;
 
-            return _authorizationUtil.IsGroupOwner(executionContext, character.Group);
+            return authorizationUtil.IsGroupOwner(executionContext, character.Group);
         }
     }
 
     public async Task UpdateCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, PatchCharacterRequest request)
     {
-        var notificationSession = _notificationSessionFactory.CreateSession();
+        var notificationSession = notificationSessionFactory.CreateSession();
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithGroupAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-            _characterUtil.ApplyCharactersChange(executionContext, request, character, notificationSession);
+            characterUtil.ApplyCharactersChange(executionContext, request, character, notificationSession);
 
             await uow.SaveChangesAsync();
         }
@@ -241,19 +216,19 @@ public class CharacterService : ICharacterService
 
     public async Task SetCharacterAdBonusStatAsync(NaheulbookExecutionContext executionContext, int characterId, PutStatBonusAdRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithGroupAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
             character.StatBonusAd = request.Stat;
 
             await uow.SaveChangesAsync();
 
-            var session = _notificationSessionFactory.CreateSession();
+            var session = notificationSessionFactory.CreateSession();
             session.NotifyCharacterSetStatBonusAd(characterId, request.Stat);
             await session.CommitAsync();
         }
@@ -261,23 +236,23 @@ public class CharacterService : ICharacterService
 
     public async Task<CharacterModifierEntity> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithGroupAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-            var characterModifier = _mapper.Map<CharacterModifierEntity>(request);
+            var characterModifier = mapper.Map<CharacterModifierEntity>(request);
             characterModifier.Character = character;
 
             uow.CharacterModifiers.Add(characterModifier);
-            uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogAddModifier(character, characterModifier));
+            uow.CharacterHistoryEntries.Add(characterHistoryUtil.CreateLogAddModifier(character, characterModifier));
 
             await uow.SaveChangesAsync();
 
-            var session = _notificationSessionFactory.CreateSession();
+            var session = notificationSessionFactory.CreateSession();
             session.NotifyCharacterAddModifier(characterId, characterModifier);
             await session.CommitAsync();
 
@@ -287,13 +262,13 @@ public class CharacterService : ICharacterService
 
     public async Task DeleteModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithGroupAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
             var characterModifier = await uow.CharacterModifiers.GetByIdAndCharacterIdAsync(characterId, characterModifierId);
             if (characterModifier == null)
@@ -302,11 +277,11 @@ public class CharacterService : ICharacterService
             // TODO: workaround, will change after character history rework
             characterModifier.CharacterId = null;
             // uow.CharacterModifiers.Remove(characterModifier);
-            uow.CharacterHistoryEntries.Add(_characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId));
+            uow.CharacterHistoryEntries.Add(characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId));
 
             await uow.SaveChangesAsync();
 
-            var session = _notificationSessionFactory.CreateSession();
+            var session = notificationSessionFactory.CreateSession();
             session.NotifyCharacterRemoveModifier(characterId, characterModifierId);
             await session.CommitAsync();
         }
@@ -314,23 +289,23 @@ public class CharacterService : ICharacterService
 
     public async Task<CharacterModifierEntity> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithGroupAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
             var characterModifier = await uow.CharacterModifiers.GetByIdAndCharacterIdAsync(characterId, characterModifierId);
             if (characterModifier == null)
                 throw new CharacterModifierNotFoundException(characterModifierId);
 
-            _characterModifierUtil.ToggleModifier(character, characterModifier);
+            characterModifierUtil.ToggleModifier(character, characterModifier);
 
             await uow.SaveChangesAsync();
 
-            var session = _notificationSessionFactory.CreateSession();
+            var session = notificationSessionFactory.CreateSession();
             session.NotifyCharacterUpdateModifier(characterId, characterModifier);
             await session.CommitAsync();
 
@@ -343,7 +318,7 @@ public class CharacterService : ICharacterService
         if (string.IsNullOrWhiteSpace(filter))
             return new List<CharacterEntity>();
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Characters.SearchCharacterWithNoGroupByNameWithOriginWithOwner(filter, 10);
         }
@@ -351,13 +326,13 @@ public class CharacterService : ICharacterService
 
     public async Task<LevelUpResult> LevelUpCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterLevelUpRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithGroupAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
             if (character.Level + 1 != request.TargetLevelUp)
                 throw new InvalidTargetLevelUpRequestedException(character.Level, request.TargetLevelUp);
@@ -368,14 +343,14 @@ public class CharacterService : ICharacterService
 
             var origin = await uow.Origins.GetWithAllDataAsync(character.OriginId);
 
-            var levelUpResult = _characterUtil.LevelUpCharacter(character, origin.NotNull(), specialities, request);
+            var levelUpResult = characterUtil.LevelUpCharacter(character, origin.NotNull(), specialities, request);
 
             uow.CharacterModifiers.AddRange(levelUpResult.NewModifiers);
             uow.CharacterSkills.AddRange(levelUpResult.NewSkills);
             uow.CharacterSpecialities.AddRange(levelUpResult.NewSpecialities);
 
-            character.AddHistoryEntry(_characterHistoryUtil.CreateLogLevelUp(character.Id, character.Level));
-            var notificationSession = _notificationSessionFactory.CreateSession();
+            character.AddHistoryEntry(characterHistoryUtil.CreateLogLevelUp(character.Id, character.Level));
+            var notificationSession = notificationSessionFactory.CreateSession();
             notificationSession.NotifyCharacterLevelUp(character.Id, levelUpResult);
 
             await uow.SaveChangesAsync();
@@ -387,13 +362,13 @@ public class CharacterService : ICharacterService
 
     public async Task AddJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterAddJobRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithGroupWithJobsWithOriginAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
             if (character.Jobs.Any(x => x.JobId == request.JobId))
                 throw new CharacterAlreadyKnowThisJobException(character.Id, request.JobId);
@@ -407,7 +382,7 @@ public class CharacterService : ICharacterService
                 Job = job,
             });
 
-            var notificationSession = _notificationSessionFactory.CreateSession();
+            var notificationSession = notificationSessionFactory.CreateSession();
             notificationSession.NotifyCharacterAddJob(character.Id, job.Id);
 
             await uow.SaveChangesAsync();
@@ -417,13 +392,13 @@ public class CharacterService : ICharacterService
 
     public async Task RemoveJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterRemoveJobRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithGroupWithJobsWithOriginAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
             var characterJob = character.Jobs.FirstOrDefault(x => x.JobId == request.JobId);
             if (characterJob == null)
@@ -431,7 +406,7 @@ public class CharacterService : ICharacterService
 
             character.Jobs.Remove(characterJob);
 
-            var notificationSession = _notificationSessionFactory.CreateSession();
+            var notificationSession = notificationSessionFactory.CreateSession();
             notificationSession.NotifyCharacterRemoveJob(character.Id, request.JobId);
 
             await uow.SaveChangesAsync();
@@ -441,13 +416,13 @@ public class CharacterService : ICharacterService
 
     public async Task QuitGroupAsync(NaheulbookExecutionContext executionContext, int characterId)
     {
-        using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
         var character = await uow.Characters.GetWithGroupAsync(characterId);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
-        _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+        authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
         character.GroupId = null;
 

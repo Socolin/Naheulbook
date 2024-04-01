@@ -15,13 +15,8 @@ public interface IGroupRepository : IRepository<GroupEntity>
     Task<GroupEntity?> GetGroupsWithCharactersAsync(int groupId);
 }
 
-public class GroupRepository : Repository<GroupEntity, NaheulbookDbContext>, IGroupRepository
+public class GroupRepository(NaheulbookDbContext context) : Repository<GroupEntity, NaheulbookDbContext>(context), IGroupRepository
 {
-    public GroupRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<List<GroupEntity>> GetGroupsOwnedByAsync(int userId)
     {
         return Context.Groups

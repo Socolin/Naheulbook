@@ -11,13 +11,8 @@ public interface IJobRepository : IRepository<JobEntity>
     Task<ICollection<JobEntity>> GetAllWithAllDataAsync();
 }
 
-public class JobRepository : Repository<JobEntity, NaheulbookDbContext>, IJobRepository
+public class JobRepository(NaheulbookDbContext context) : Repository<JobEntity, NaheulbookDbContext>(context), IJobRepository
 {
-    public JobRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public async Task<ICollection<JobEntity>> GetAllWithAllDataAsync()
     {
         return await Context.Jobs

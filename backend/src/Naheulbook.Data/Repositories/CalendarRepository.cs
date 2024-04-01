@@ -7,10 +7,4 @@ public interface ICalendarRepository : IRepository<CalendarEntity>
 {
 }
 
-public class CalendarRepository : Repository<CalendarEntity, NaheulbookDbContext>, ICalendarRepository
-{
-    public CalendarRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-}
+public class CalendarRepository(NaheulbookDbContext context) : Repository<CalendarEntity, NaheulbookDbContext>(context), ICalendarRepository;

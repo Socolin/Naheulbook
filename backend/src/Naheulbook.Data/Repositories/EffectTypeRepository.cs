@@ -8,10 +8,4 @@ public interface IEffectTypeRepository : IRepository<EffectTypeEntity>
 }
 
 
-public class EffectTypeRepository : Repository<EffectTypeEntity, NaheulbookDbContext>, IEffectTypeRepository
-{
-    public EffectTypeRepository(NaheulbookDbContext naheulbookDbContext)
-        : base(naheulbookDbContext)
-    {
-    }
-}
+public class EffectTypeRepository(NaheulbookDbContext naheulbookDbContext) : Repository<EffectTypeEntity, NaheulbookDbContext>(naheulbookDbContext), IEffectTypeRepository;

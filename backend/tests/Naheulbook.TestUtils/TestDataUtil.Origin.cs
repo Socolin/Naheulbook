@@ -13,7 +13,7 @@ public partial class TestDataUtil
 
     public TestDataUtil AddOrigin(out OriginEntity origin, Action<OriginEntity> customizer = null)
     {
-        origin = _defaultEntityCreator.CreateOrigin();
+        origin = defaultEntityCreator.CreateOrigin();
         return SaveEntity(origin, customizer);
     }
 
@@ -21,7 +21,7 @@ public partial class TestDataUtil
     {
         var suffix = RngUtil.GetRandomHexString(8);
 
-        var origin = _defaultEntityCreator.CreateOrigin(suffix);
+        var origin = defaultEntityCreator.CreateOrigin(suffix);
 
         var stat = AddStat().GetLast<StatEntity>();
 
@@ -81,6 +81,6 @@ public partial class TestDataUtil
 
     public TestDataUtil AddOriginRandomNameUrl(Action<OriginRandomNameUrlEntity> customizer = null)
     {
-        return SaveEntity(_defaultEntityCreator.CreateOriginRandomNameUrl(GetLast<OriginEntity>(), "some-sex"), customizer);
+        return SaveEntity(defaultEntityCreator.CreateOriginRandomNameUrl(GetLast<OriginEntity>(), "some-sex"), customizer);
     }
 }

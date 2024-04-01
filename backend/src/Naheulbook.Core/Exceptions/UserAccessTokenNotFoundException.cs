@@ -2,15 +2,8 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class UserAccessTokenNotFoundException : Exception
+public class UserAccessTokenNotFoundException(int userId, Guid userAccessTokenId) : Exception("User access token was not found")
 {
-    public int UserId { get; }
-    public Guid UserAccessTokenId { get; }
-
-    public UserAccessTokenNotFoundException(int userId, Guid userAccessTokenId)
-        : base("User access token was not found")
-    {
-        UserId = userId;
-        UserAccessTokenId = userAccessTokenId;
-    }
+    public int UserId { get; } = userId;
+    public Guid UserAccessTokenId { get; } = userAccessTokenId;
 }

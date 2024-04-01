@@ -5,21 +5,14 @@ using TechTalk.SpecFlow;
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
-public class JobSteps
+public class JobSteps(TestDataUtil testDataUtil)
 {
-    private readonly TestDataUtil _testDataUtil;
-
-    public JobSteps(TestDataUtil testDataUtil)
-    {
-        _testDataUtil = testDataUtil;
-    }
-
     [Given(@"(a) job")]
     [Given(@"(.*) jobs")]
     public void GivenAJob(string amount)
     {
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
-            _testDataUtil.AddJob();
+            testDataUtil.AddJob();
     }
 
     [Given(@"(a) speciality")]
@@ -27,12 +20,12 @@ public class JobSteps
     public void GivenSpecialities(string amount)
     {
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
-            _testDataUtil.AddSpeciality();
+            testDataUtil.AddSpeciality();
     }
 
     [Given("a job with all possible data")]
     public void GivenAJobWithAllPossibleData()
     {
-        _testDataUtil.AddJobWithAllData();
+        testDataUtil.AddJobWithAllData();
     }
 }

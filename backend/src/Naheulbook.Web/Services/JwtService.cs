@@ -14,20 +14,12 @@ public interface IJwtService
     JwtTokenPayload? DecodeJwt(string jwt);
 }
 
-public class JwtService : IJwtService
+public class JwtService(IAuthenticationConfiguration configuration, ITimeService timeService)
+    : IJwtService
 {
-    private readonly IAuthenticationConfiguration _configuration;
-    private readonly ITimeService _timeService;
-
-    public JwtService(IAuthenticationConfiguration configuration, ITimeService timeService)
-    {
-        _configuration = configuration;
-        _timeService = timeService;
-    }
-
     public string GenerateJwtToken(int userId)
     {
-        var expiration = _timeService.UtcNow.AddMinutes(_configuration.JwtExpirationDelayInMinutes).ToUnixTimeSeconds();
+        var expiration = timeService.UtcNow.AddMinutes(configuration.JwtExpirationDelayInMinutes).ToUnixTimeSeconds();
 
         var payload = new Dictionary<string, object>()
         {
@@ -35,14 +27,14 @@ public class JwtService : IJwtService
             {"exp", expiration},
         };
 
-        return JWT.Encode(payload, Convert.FromBase64String(_configuration.JwtSigningKey), JwsAlgorithm.HS256);
+        return JWT.Encode(payload, Convert.FromBase64String(configuration.JwtSigningKey), JwsAlgorithm.HS256);
     }
 
     public JwtTokenPayload? DecodeJwt(string jwt)
     {
         try
         {
-            return JWT.Decode<JwtTokenPayload>(jwt, Convert.FromBase64String(_configuration.JwtSigningKey));
+            return JWT.Decode<JwtTokenPayload>(jwt, Convert.FromBase64String(configuration.JwtSigningKey));
         }
         catch (Exception)
         {

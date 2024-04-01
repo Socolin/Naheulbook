@@ -10,21 +10,9 @@ using Newtonsoft.Json;
 
 namespace Naheulbook.Web.Middlewares;
 
-public class JwtAuthenticationMiddleware
+public class JwtAuthenticationMiddleware(RequestDelegate next, IJwtService jwtService, ITimeService timeService, IUserAccessTokenService userAccessTokenService)
 {
     private const string UserAccessTokenPrefix = "userAccessToken:";
-    private readonly RequestDelegate _next;
-    private readonly IJwtService _jwtService;
-    private readonly ITimeService _timeService;
-    private readonly IUserAccessTokenService _userAccessTokenService;
-
-    public JwtAuthenticationMiddleware(RequestDelegate next, IJwtService jwtService, ITimeService timeService, IUserAccessTokenService userAccessTokenService)
-    {
-        _next = next;
-        _jwtService = jwtService;
-        _timeService = timeService;
-        _userAccessTokenService = userAccessTokenService;
-    }
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -49,7 +37,7 @@ public class JwtAuthenticationMiddleware
             // A bit hacky because signalr does not support other scheme for now.
             if (jwt.StartsWith(UserAccessTokenPrefix))
             {
-                var token = await _userAccessTokenService.ValidateTokenAsync(jwt.Substring(UserAccessTokenPrefix.Length));
+                var token = await userAccessTokenService.ValidateTokenAsync(jwt.Substring(UserAccessTokenPrefix.Length));
                 if (token == null)
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -64,14 +52,14 @@ public class JwtAuthenticationMiddleware
             }
             else
             {
-                var token = _jwtService.DecodeJwt(jwt);
+                var token = jwtService.DecodeJwt(jwt);
                 if (token == null)
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(new {Message = "Invalid JWT"}));
                     return;
                 }
-                if (token.Exp < _timeService.UtcNow.ToUnixTimeSeconds())
+                if (token.Exp < timeService.UtcNow.ToUnixTimeSeconds())
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(new {Message = "Expired JWT"}));
@@ -85,6 +73,6 @@ public class JwtAuthenticationMiddleware
             }
         }
 
-        await _next(context);
+        await next(context);
     }
 }

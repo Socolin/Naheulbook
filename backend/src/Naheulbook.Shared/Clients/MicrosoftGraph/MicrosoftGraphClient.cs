@@ -14,19 +14,11 @@ public interface IMicrosoftGraphClient
     Task<MicrosoftGraphProfileResponse> GetUserProfileAsync(MicrosoftGraphAccessTokenResponse accessToken);
 }
 
-public class MicrosoftGraphClient : IMicrosoftGraphClient
+public class MicrosoftGraphClient(MicrosoftGraphConfiguration configuration, IJsonUtil jsonUtil)
+    : IMicrosoftGraphClient
 {
     private const string TokenApiRequestUri = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
     private const string AccessApiRequestUri = "https://graph.microsoft.com/v1.0/me?$select=id,displayName";
-
-    private readonly MicrosoftGraphConfiguration _configuration;
-    private readonly IJsonUtil _jsonUtil;
-
-    public MicrosoftGraphClient(MicrosoftGraphConfiguration configuration, IJsonUtil jsonUtil)
-    {
-        _configuration = configuration;
-        _jsonUtil = jsonUtil;
-    }
 
     public async Task<MicrosoftGraphAccessTokenResponse> GetAccessTokenAsync(string redirectUri, string code)
     {
@@ -35,8 +27,8 @@ public class MicrosoftGraphClient : IMicrosoftGraphClient
             ["redirect_uri"] = redirectUri,
             ["code"] = code,
             ["grant_type"] = "authorization_code",
-            ["client_id"] = _configuration.AppId,
-            ["client_secret"] = _configuration.AppSecret,
+            ["client_id"] = configuration.AppId,
+            ["client_secret"] = configuration.AppSecret,
         };
 
         using (var client = new HttpClient())
@@ -47,7 +39,7 @@ public class MicrosoftGraphClient : IMicrosoftGraphClient
                 if (!response.IsSuccessStatusCode)
                     throw new MicrosoftGraphClientException(content, (int) response.StatusCode);
 
-                return _jsonUtil.DeserializeOrCreate<MicrosoftGraphAccessTokenResponse>(content);
+                return jsonUtil.DeserializeOrCreate<MicrosoftGraphAccessTokenResponse>(content);
             }
         }
     }
@@ -64,7 +56,7 @@ public class MicrosoftGraphClient : IMicrosoftGraphClient
                 if (!response.IsSuccessStatusCode)
                     throw new MicrosoftGraphClientException(content, (int) response.StatusCode);
 
-                return _jsonUtil.DeserializeOrCreate<MicrosoftGraphProfileResponse>(content);
+                return jsonUtil.DeserializeOrCreate<MicrosoftGraphProfileResponse>(content);
             }
         }
     }

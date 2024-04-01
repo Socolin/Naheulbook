@@ -17,13 +17,8 @@ public interface IEffectRepository : IRepository<EffectEntity>
     Task<EffectEntity?> GetWithEffectWithModifiersAsync(int effectId);
 }
 
-public class EffectRepository : Repository<EffectEntity, NaheulbookDbContext>, IEffectRepository
+public class EffectRepository(NaheulbookDbContext naheulbookDbContext) : Repository<EffectEntity, NaheulbookDbContext>(naheulbookDbContext), IEffectRepository
 {
-    public EffectRepository(NaheulbookDbContext naheulbookDbContext)
-        : base(naheulbookDbContext)
-    {
-    }
-
     public async Task<ICollection<EffectTypeEntity>> GetCategoriesAsync()
     {
         return await Context.EffectTypes

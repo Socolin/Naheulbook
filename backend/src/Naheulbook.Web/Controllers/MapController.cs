@@ -15,26 +15,17 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("/api/v2/maps")]
 [ApiController]
-public class MapController : ControllerBase
+public class MapController(
+    IMapper mapper,
+    IMapService mapService
+) : ControllerBase
 {
-    private readonly IMapper _mapper;
-    private readonly IMapService _mapService;
-
-    public MapController(
-        IMapper mapper,
-        IMapService mapService
-    )
-    {
-        _mapper = mapper;
-        _mapService = mapService;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<MapSummaryResponse>>> GetMapListAsync()
     {
-        var maps = await _mapService.GetMapsAsync();
+        var maps = await mapService.GetMapsAsync();
 
-        return _mapper.Map<List<MapSummaryResponse>>(maps);
+        return mapper.Map<List<MapSummaryResponse>>(maps);
     }
 
     [HttpGet("{MapId:int:min(1)}")]
@@ -45,9 +36,9 @@ public class MapController : ControllerBase
     {
         try
         {
-            var map = await _mapService.GetMapAsync(mapId, executionContext.ExecutionExecutionContext?.UserId);
+            var map = await mapService.GetMapAsync(mapId, executionContext.ExecutionExecutionContext?.UserId);
 
-            return _mapper.Map<MapResponse>(map);
+            return mapper.Map<MapResponse>(map);
         }
         catch (MapNotFoundException ex)
         {
@@ -67,9 +58,9 @@ public class MapController : ControllerBase
             return BadRequest();
 
         var imageStream = image.OpenReadStream();
-        var map = await _mapService.CreateMapAsync(executionContext, request, imageStream);
+        var map = await mapService.CreateMapAsync(executionContext, request, imageStream);
 
-        return _mapper.Map<MapResponse>(map);
+        return mapper.Map<MapResponse>(map);
     }
 
     [HttpPut("{MapId:int:min(1)}")]
@@ -79,9 +70,9 @@ public class MapController : ControllerBase
         [FromBody] CreateMapRequest request
     )
     {
-        var map = await _mapService.UpdateMapAsync(executionContext, mapId, request);
+        var map = await mapService.UpdateMapAsync(executionContext, mapId, request);
 
-        return _mapper.Map<MapSummaryResponse>(map);
+        return mapper.Map<MapSummaryResponse>(map);
     }
 
 
@@ -92,8 +83,8 @@ public class MapController : ControllerBase
         [FromBody] MapLayerRequest request
     )
     {
-        var map = await _mapService.CreateMapLayerAsync(executionContext, mapId, request);
+        var map = await mapService.CreateMapLayerAsync(executionContext, mapId, request);
 
-        return _mapper.Map<MapLayerResponse>(map);
+        return mapper.Map<MapLayerResponse>(map);
     }
 }

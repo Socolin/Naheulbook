@@ -13,17 +13,8 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("/api/v2/mapMarkerLinks")]
 [ApiController]
-public class MapMarkerLinksController : ControllerBase
+public class MapMarkerLinksController(IMapService mapService, IMapper mapper) : ControllerBase
 {
-    private readonly IMapper _mapper;
-    private readonly IMapService _mapService;
-
-    public MapMarkerLinksController(IMapService mapService, IMapper mapper)
-    {
-        _mapService = mapService;
-        _mapper = mapper;
-    }
-
     [HttpPut("{MapMarkerLinkId}")]
     public async Task<ActionResult<MapMarkerLinkResponse>> PutEditMapMarkerLinkAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
@@ -33,8 +24,8 @@ public class MapMarkerLinksController : ControllerBase
     {
         try
         {
-            var mapMarkerLink = await _mapService.EditMapMarkerLinkAsync(executionContext, mapMarkerLinkId, request);
-            return _mapper.Map<MapMarkerLinkResponse>(mapMarkerLink);
+            var mapMarkerLink = await mapService.EditMapMarkerLinkAsync(executionContext, mapMarkerLinkId, request);
+            return mapper.Map<MapMarkerLinkResponse>(mapMarkerLink);
         }
         catch (MapMarkerNotFoundException ex)
         {
@@ -50,7 +41,7 @@ public class MapMarkerLinksController : ControllerBase
     {
         try
         {
-            await _mapService.DeleteMapMarkerLinkAsync(executionContext, mapMarkerLinkId);
+            await mapService.DeleteMapMarkerLinkAsync(executionContext, mapMarkerLinkId);
         }
         catch (MapMarkerNotFoundException ex)
         {

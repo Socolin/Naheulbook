@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class ItemNotFoundException : Exception
+public class ItemNotFoundException(int itemId) : Exception
 {
-    public int ItemId { get; }
-
-    public ItemNotFoundException(int itemId)
-    {
-        ItemId = itemId;
-    }
+    public int ItemId { get; } = itemId;
 }

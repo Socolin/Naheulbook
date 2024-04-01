@@ -4,18 +4,11 @@ using TechTalk.SpecFlow;
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
-public class MiscSteps
+public class MiscSteps(TestDataUtil testDataUtil)
 {
-    private readonly TestDataUtil _testDataUtil;
-
-    public MiscSteps(TestDataUtil testDataUtil)
-    {
-        _testDataUtil = testDataUtil;
-    }
-
     [Given("a calendar entry")]
     public void GivenACalendarEntry()
     {
-        _testDataUtil.AddCalendarEntry();
+        testDataUtil.AddCalendarEntry();
     }
 }

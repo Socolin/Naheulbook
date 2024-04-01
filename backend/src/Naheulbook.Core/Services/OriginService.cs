@@ -10,18 +10,11 @@ public interface IOriginService
     Task<ICollection<OriginEntity>> GetOriginsAsync();
 }
 
-public class OriginService : IOriginService
+public class OriginService(IUnitOfWorkFactory unitOfWorkFactory) : IOriginService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-    public OriginService(IUnitOfWorkFactory unitOfWorkFactory)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-    }
-
     public async Task<ICollection<OriginEntity>> GetOriginsAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Origins.GetAllWithAllDataAsync();
         }

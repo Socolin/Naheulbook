@@ -14,22 +14,13 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/monsterTemplates")]
 [ApiController]
-public class MonsterTemplatesController
+public class MonsterTemplatesController(IMapper mapper, IMonsterTemplateService monsterTemplateService)
 {
-    private readonly IMonsterTemplateService _monsterTemplateService;
-    private readonly IMapper _mapper;
-
-    public MonsterTemplatesController(IMapper mapper, IMonsterTemplateService monsterTemplateService)
-    {
-        _mapper = mapper;
-        _monsterTemplateService = monsterTemplateService;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<MonsterTemplateResponse>>> GetMonsterListAsync()
     {
-        var monsters = await _monsterTemplateService.GetAllMonstersAsync();
-        return _mapper.Map<List<MonsterTemplateResponse>>(monsters);
+        var monsters = await monsterTemplateService.GetAllMonstersAsync();
+        return mapper.Map<List<MonsterTemplateResponse>>(monsters);
     }
 
     [HttpPost]
@@ -40,9 +31,9 @@ public class MonsterTemplatesController
     {
         try
         {
-            var createdMonster = await _monsterTemplateService.CreateMonsterTemplateAsync(executionContext, request);
+            var createdMonster = await monsterTemplateService.CreateMonsterTemplateAsync(executionContext, request);
 
-            var result = _mapper.Map<MonsterTemplateResponse>(createdMonster);
+            var result = mapper.Map<MonsterTemplateResponse>(createdMonster);
             return new JsonResult(result) {StatusCode = StatusCodes.Status201Created};
         }
         catch (MonsterSubCategoryNotFoundException ex)
@@ -64,9 +55,9 @@ public class MonsterTemplatesController
     {
         try
         {
-            var monster = await _monsterTemplateService.EditMonsterTemplateAsync(executionContext, monsterTemplateId, request);
+            var monster = await monsterTemplateService.EditMonsterTemplateAsync(executionContext, monsterTemplateId, request);
 
-            var result = _mapper.Map<MonsterTemplateResponse>(monster);
+            var result = mapper.Map<MonsterTemplateResponse>(monster);
             return new JsonResult(result);
         }
         catch (MonsterSubCategoryNotFoundException ex)
@@ -90,7 +81,7 @@ public class MonsterTemplatesController
         [FromQuery] int? monsterSubCategoryId
     )
     {
-        var monsterTemplates = await _monsterTemplateService.SearchMonsterAsync(filter, monsterTypeId, monsterSubCategoryId);
-        return _mapper.Map<List<MonsterTemplateResponse>>(monsterTemplates);
+        var monsterTemplates = await monsterTemplateService.SearchMonsterAsync(filter, monsterTypeId, monsterSubCategoryId);
+        return mapper.Map<List<MonsterTemplateResponse>>(monsterTemplates);
     }
 }

@@ -11,20 +11,11 @@ using TechTalk.SpecFlow;
 namespace Naheulbook.Tests.Functional.Code.Init;
 
 [Binding]
-public class ServerInitializer
+public class ServerInitializer(
+    IObjectContainer objectContainer,
+    ScenarioContext scenarioContext
+)
 {
-    private readonly IObjectContainer _objectContainer;
-    private readonly ScenarioContext _scenarioContext;
-
-    public ServerInitializer(
-        IObjectContainer objectContainer,
-        ScenarioContext scenarioContext
-    )
-    {
-        _objectContainer = objectContainer;
-        _scenarioContext = scenarioContext;
-    }
-
     private static NaheulbookApiServer _naheulbookApiServer;
     private static LaPageAMelkorStub _laPageAMelkorStub;
     private static FakeSmtpServer _fakeSmtpServer;
@@ -64,9 +55,9 @@ public class ServerInitializer
     [BeforeScenario(Order = 0)]
     public void InitializeIoc()
     {
-        _objectContainer.RegisterInstanceAs(_fakeSmtpServer, typeof(IMailReceiver));
-        _objectContainer.RegisterInstanceAs(_naheulbookApiServer, typeof(NaheulbookApiServer));
-        _objectContainer.RegisterInstanceAs(new NaheulbookHttpClient(_naheulbookApiServer.ListenUrls.First()));
-        _scenarioContext.SetMapImageOutputDirectory(_mapImageOutputDirectory);
+        objectContainer.RegisterInstanceAs(_fakeSmtpServer, typeof(IMailReceiver));
+        objectContainer.RegisterInstanceAs(_naheulbookApiServer, typeof(NaheulbookApiServer));
+        objectContainer.RegisterInstanceAs(new NaheulbookHttpClient(_naheulbookApiServer.ListenUrls.First()));
+        scenarioContext.SetMapImageOutputDirectory(_mapImageOutputDirectory);
     }
 }

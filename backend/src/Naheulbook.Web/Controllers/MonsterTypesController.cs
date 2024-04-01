@@ -15,22 +15,13 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/monsterTypes")]
 [ApiController]
-public class MonsterTypesController
+public class MonsterTypesController(IMapper mapper, IMonsterTypeService monsterTypeService)
 {
-    private readonly IMonsterTypeService _monsterTypeService;
-    private readonly IMapper _mapper;
-
-    public MonsterTypesController(IMapper mapper, IMonsterTypeService monsterTypeService)
-    {
-        _mapper = mapper;
-        _monsterTypeService = monsterTypeService;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<MonsterTypeResponse>>> GetMonsterTypesAsync()
     {
-        var monsterTypes = await _monsterTypeService.GetMonsterTypesWithCategoriesAsync();
-        return _mapper.Map<List<MonsterTypeResponse>>(monsterTypes);
+        var monsterTypes = await monsterTypeService.GetMonsterTypesWithCategoriesAsync();
+        return mapper.Map<List<MonsterTypeResponse>>(monsterTypes);
     }
 
 
@@ -42,8 +33,8 @@ public class MonsterTypesController
     {
         try
         {
-            var monsterType = await _monsterTypeService.CreateMonsterTypeAsync(executionContext, request);
-            return _mapper.Map<MonsterTypeResponse>(monsterType);
+            var monsterType = await monsterTypeService.CreateMonsterTypeAsync(executionContext, request);
+            return mapper.Map<MonsterTypeResponse>(monsterType);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -60,8 +51,8 @@ public class MonsterTypesController
     {
         try
         {
-            var monsterSubCategory = await _monsterTypeService.CreateMonsterSubCategoryAsync(executionContext, monsterTypeId, request);
-            return _mapper.Map<MonsterSubCategoryResponse>(monsterSubCategory);
+            var monsterSubCategory = await monsterTypeService.CreateMonsterSubCategoryAsync(executionContext, monsterTypeId, request);
+            return mapper.Map<MonsterSubCategoryResponse>(monsterSubCategory);
         }
         catch (ForbiddenAccessException ex)
         {

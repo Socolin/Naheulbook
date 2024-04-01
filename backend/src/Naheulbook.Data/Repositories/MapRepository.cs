@@ -11,13 +11,8 @@ public interface IMapRepository : IRepository<MapEntity>
     Task<MapEntity?> GetMapDetailsForCurrentUserAsync(int mapId, int? userId);
 }
 
-public class MapRepository : Repository<MapEntity, NaheulbookDbContext>, IMapRepository
+public class MapRepository(NaheulbookDbContext context) : Repository<MapEntity, NaheulbookDbContext>(context), IMapRepository
 {
-    public MapRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public async Task<MapEntity?> GetMapDetailsForCurrentUserAsync(int mapId, int? userId)
     {
         var map = await Context.Maps

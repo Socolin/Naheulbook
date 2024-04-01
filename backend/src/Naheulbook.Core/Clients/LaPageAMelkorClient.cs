@@ -11,18 +11,11 @@ public interface ILaPageAMelkorClient
     Task<ICollection<string>> GetRandomNameAsync(string url);
 }
 
-public class LaPageAMelkorClient : ILaPageAMelkorClient
+public class LaPageAMelkorClient(HttpClient client) : ILaPageAMelkorClient
 {
-    private readonly HttpClient _client;
-
-    public LaPageAMelkorClient(HttpClient client)
-    {
-        _client = client;
-    }
-
     public async Task<ICollection<string>> GetRandomNameAsync(string url)
     {
-        var response = await _client.GetAsync(url);
+        var response = await client.GetAsync(url);
         var responseContent = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {

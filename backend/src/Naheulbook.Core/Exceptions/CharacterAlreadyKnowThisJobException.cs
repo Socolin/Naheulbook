@@ -5,14 +5,8 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class CharacterAlreadyKnowThisJobException : Exception
+public class CharacterAlreadyKnowThisJobException(int characterId, Guid jobId) : Exception
 {
-    public int CharacterId { get; }
-    public Guid JobId { get; }
-
-    public CharacterAlreadyKnowThisJobException(int characterId, Guid jobId)
-    {
-        CharacterId = characterId;
-        JobId = jobId;
-    }
+    public int CharacterId { get; } = characterId;
+    public Guid JobId { get; } = jobId;
 }

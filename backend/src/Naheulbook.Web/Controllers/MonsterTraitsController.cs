@@ -9,22 +9,13 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/monsterTraits")]
 [ApiController]
-public class MonsterTraitsController
+public class MonsterTraitsController(IMonsterTraitService monsterTraitService, IMapper mapper)
 {
-    private readonly IMonsterTraitService _monsterTraitService;
-    private readonly IMapper _mapper;
-
-    public MonsterTraitsController(IMonsterTraitService monsterTraitService, IMapper mapper)
-    {
-        _monsterTraitService = monsterTraitService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<MonsterTraitResponse>>> GetMonsterTraitsAsync()
     {
-        var monsterTraits = await _monsterTraitService.GetMonsterTraitsAsync();
+        var monsterTraits = await monsterTraitService.GetMonsterTraitsAsync();
 
-        return _mapper.Map<List<MonsterTraitResponse>>(monsterTraits);
+        return mapper.Map<List<MonsterTraitResponse>>(monsterTraits);
     }
 }

@@ -12,7 +12,7 @@ public partial class TestDataUtil
 
     public TestDataUtil AddStat(out StatEntity stat, Action<StatEntity> customizer = null)
     {
-        stat = _defaultEntityCreator.CreateStat();
+        stat = defaultEntityCreator.CreateStat();
         return SaveEntity(stat, customizer);
     }
 }

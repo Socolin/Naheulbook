@@ -17,18 +17,11 @@ public interface ISocialMediaUserLinkService
     Task AssociateUserToMicrosoftIdAsync(int userId, string microsoftId);
 }
 
-public class SocialMediaUserLinkService : ISocialMediaUserLinkService
+public class SocialMediaUserLinkService(IUnitOfWorkFactory unitOfWorkFactory) : ISocialMediaUserLinkService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-    public SocialMediaUserLinkService(IUnitOfWorkFactory unitOfWorkFactory)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-    }
-
     public async Task<UserEntity> GetOrCreateUserFromFacebookAsync(string name, string facebookId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetByFacebookIdAsync(facebookId);
             if (user == null)
@@ -49,7 +42,7 @@ public class SocialMediaUserLinkService : ISocialMediaUserLinkService
 
     public async Task AssociateUserToFacebookIdAsync(int userId, string facebookId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetAsync(userId);
             if (user == null)
@@ -61,7 +54,7 @@ public class SocialMediaUserLinkService : ISocialMediaUserLinkService
 
     public async Task<UserEntity> GetOrCreateUserFromGoogleAsync(string name, string googleId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetByGoogleIdAsync(googleId);
             if (user == null)
@@ -82,7 +75,7 @@ public class SocialMediaUserLinkService : ISocialMediaUserLinkService
 
     public async Task AssociateUserToGoogleIdAsync(int userId, string googleId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetAsync(userId);
             if (user == null)
@@ -94,7 +87,7 @@ public class SocialMediaUserLinkService : ISocialMediaUserLinkService
 
     public async Task<UserEntity> GetOrCreateUserFromTwitterAsync(string name, string twitterId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetByTwitterIdAsync(twitterId);
             if (user == null)
@@ -115,7 +108,7 @@ public class SocialMediaUserLinkService : ISocialMediaUserLinkService
 
     public async Task AssociateUserToTwitterIdAsync(int userId, string twitterId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetAsync(userId);
             if (user == null)
@@ -127,7 +120,7 @@ public class SocialMediaUserLinkService : ISocialMediaUserLinkService
 
     public async Task<UserEntity> GetOrCreateUserFromMicrosoftAsync(string name, string microsoftId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetByMicrosoftIdAsync(microsoftId);
             if (user == null)
@@ -148,7 +141,7 @@ public class SocialMediaUserLinkService : ISocialMediaUserLinkService
 
     public async Task AssociateUserToMicrosoftIdAsync(int userId, string microsoftId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetAsync(userId);
             if (user == null)

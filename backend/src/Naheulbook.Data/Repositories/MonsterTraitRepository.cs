@@ -7,10 +7,4 @@ public interface IMonsterTraitRepository : IRepository<MonsterTraitEntity>
 {
 }
 
-public class MonsterTraitRepository : Repository<MonsterTraitEntity, NaheulbookDbContext>, IMonsterTraitRepository
-{
-    public MonsterTraitRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-}
+public class MonsterTraitRepository(NaheulbookDbContext context) : Repository<MonsterTraitEntity, NaheulbookDbContext>(context), IMonsterTraitRepository;

@@ -49,14 +49,9 @@ public interface IUnitOfWork : IDisposable
     Task<int> SaveChangesAsync();
 }
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
 {
-    private readonly NaheulbookDbContext _naheulbookDbContext;
-
-    public UnitOfWork(NaheulbookDbContext naheulbookDbContext)
-    {
-        _naheulbookDbContext = naheulbookDbContext ?? throw new ArgumentNullException(nameof(naheulbookDbContext));
-    }
+    private readonly NaheulbookDbContext _naheulbookDbContext = naheulbookDbContext ?? throw new ArgumentNullException(nameof(naheulbookDbContext));
 
     public ICalendarRepository Calendar => new CalendarRepository(_naheulbookDbContext);
     public ICharacterRepository Characters => new CharacterRepository(_naheulbookDbContext);

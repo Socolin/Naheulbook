@@ -17,30 +17,19 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/characters")]
 [ApiController]
-public class CharactersController : ControllerBase
+public class CharactersController(
+    ICharacterService characterService,
+    IMapper mapper,
+    ICharacterBackupService characterBackupService
+) : ControllerBase
 {
-    private readonly ICharacterService _characterService;
-    private readonly ICharacterBackupService _characterBackupService;
-    private readonly IMapper _mapper;
-
-    public CharactersController(
-        ICharacterService characterService,
-        IMapper mapper,
-        ICharacterBackupService characterBackupService
-    )
-    {
-        _characterService = characterService;
-        _mapper = mapper;
-        _characterBackupService = characterBackupService;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<CharacterSummaryResponse>>> GetCharactersListAsync(
         [FromServices] NaheulbookExecutionContext executionContext
     )
     {
-        var characters = await _characterService.GetCharacterListAsync(executionContext);
-        return _mapper.Map<List<CharacterSummaryResponse>>(characters);
+        var characters = await characterService.GetCharacterListAsync(executionContext);
+        return mapper.Map<List<CharacterSummaryResponse>>(characters);
     }
 
     [HttpGet("{CharacterId:int:min(1)}")]
@@ -51,12 +40,12 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            var character = await _characterService.LoadCharacterDetailsAsync(executionContext, characterId);
+            var character = await characterService.LoadCharacterDetailsAsync(executionContext, characterId);
 
             if (executionContext.UserId == character.Group?.MasterId)
-                return _mapper.Map<CharacterFoGmResponse>(character);
+                return mapper.Map<CharacterFoGmResponse>(character);
 
-            return _mapper.Map<CharacterResponse>(character);
+            return mapper.Map<CharacterResponse>(character);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -74,8 +63,8 @@ public class CharactersController : ControllerBase
         [FromQuery] string filter
     )
     {
-        var characters = await _characterService.SearchCharactersAsync(filter);
-        return _mapper.Map<List<CharacterSearchResponse>>(characters);
+        var characters = await characterService.SearchCharactersAsync(filter);
+        return mapper.Map<List<CharacterSearchResponse>>(characters);
     }
 
     [HttpPost]
@@ -86,8 +75,8 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            var character = await _characterService.CreateCharacterAsync(executionContext, request);
-            return _mapper.Map<CreateCharacterResponse>(character);
+            var character = await characterService.CreateCharacterAsync(executionContext, request);
+            return mapper.Map<CreateCharacterResponse>(character);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -107,8 +96,8 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            var character = await _characterService.CreateCustomCharacterAsync(executionContext, request);
-            return _mapper.Map<CreateCharacterResponse>(character);
+            var character = await characterService.CreateCustomCharacterAsync(executionContext, request);
+            return mapper.Map<CreateCharacterResponse>(character);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -129,8 +118,8 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            var item = await _characterService.AddItemToCharacterAsync(executionContext, characterId, request);
-            return _mapper.Map<ItemResponse>(item);
+            var item = await characterService.AddItemToCharacterAsync(executionContext, characterId, request);
+            return mapper.Map<ItemResponse>(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -155,8 +144,8 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            var item = await _characterService.AddModifiersAsync(executionContext, characterId, request);
-            return _mapper.Map<ActiveStatsModifier>(item);
+            var item = await characterService.AddModifiersAsync(executionContext, characterId, request);
+            return mapper.Map<ActiveStatsModifier>(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -177,7 +166,7 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            await _characterService.DeleteModifiersAsync(executionContext, characterId, characterModifierId);
+            await characterService.DeleteModifiersAsync(executionContext, characterId, characterModifierId);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -203,8 +192,8 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            var characterModifier = await _characterService.ToggleModifiersAsync(executionContext, characterId, characterModifierId);
-            return _mapper.Map<ActiveStatsModifier>(characterModifier);
+            var characterModifier = await characterService.ToggleModifiersAsync(executionContext, characterId, characterModifierId);
+            return mapper.Map<ActiveStatsModifier>(characterModifier);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -232,8 +221,8 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            var loots = await _characterService.GetCharacterLootsAsync(executionContext, characterId);
-            return _mapper.Map<List<LootResponse>>(loots);
+            var loots = await characterService.GetCharacterLootsAsync(executionContext, characterId);
+            return mapper.Map<List<LootResponse>>(loots);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -253,7 +242,7 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            return await _characterBackupService.GetBackupCharacterAsync(executionContext, characterId);
+            return await characterBackupService.GetBackupCharacterAsync(executionContext, characterId);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -274,8 +263,8 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            var loots = await _characterService.GetCharacterHistoryEntryAsync(executionContext, characterId, page);
-            return _mapper.Map<List<IHistoryEntryResponse>>(loots);
+            var loots = await characterService.GetCharacterHistoryEntryAsync(executionContext, characterId, page);
+            return mapper.Map<List<IHistoryEntryResponse>>(loots);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -296,7 +285,7 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            await _characterService.UpdateCharacterAsync(executionContext, characterId, request);
+            await characterService.UpdateCharacterAsync(executionContext, characterId, request);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -318,7 +307,7 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            await _characterService.SetCharacterAdBonusStatAsync(executionContext, characterId, request);
+            await characterService.SetCharacterAdBonusStatAsync(executionContext, characterId, request);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -340,8 +329,8 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            var levelUpResult = await _characterService.LevelUpCharacterAsync(executionContext, characterId, request);
-            return _mapper.Map<CharacterLevelUpResponse>(levelUpResult);
+            var levelUpResult = await characterService.LevelUpCharacterAsync(executionContext, characterId, request);
+            return mapper.Map<CharacterLevelUpResponse>(levelUpResult);
         }
         catch (SpecialityNotFoundException ex)
         {
@@ -370,7 +359,7 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            await _characterService.AddJobAsync(executionContext, characterId, request);
+            await characterService.AddJobAsync(executionContext, characterId, request);
             return new CharacterAddJobResponse {JobId = request.JobId};
         }
         catch (CharacterAlreadyKnowThisJobException ex)
@@ -400,7 +389,7 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            await _characterService.RemoveJobAsync(executionContext, characterId, request);
+            await characterService.RemoveJobAsync(executionContext, characterId, request);
             return new CharacterRemoveJobResponse {JobId = request.JobId};
         }
         catch (CharacterAlreadyKnowThisJobException ex)
@@ -430,7 +419,7 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            await _characterService.QuitGroupAsync(executionContext, characterId);
+            await characterService.QuitGroupAsync(executionContext, characterId);
             return NoContent();
         }
         catch (CharacterNotInAGroupException ex)

@@ -14,13 +14,8 @@ public interface IGroupInviteRepository : IRepository<GroupInviteEntity>
     Task<List<GroupInviteEntity>> GetInvitesByCharacterIdAsync(int characterId);
 }
 
-public class GroupInviteRepository : Repository<GroupInviteEntity, NaheulbookDbContext>, IGroupInviteRepository
+public class GroupInviteRepository(NaheulbookDbContext context) : Repository<GroupInviteEntity, NaheulbookDbContext>(context), IGroupInviteRepository
 {
-    public GroupInviteRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<GroupInviteEntity?> GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(int groupId, int characterId)
     {
         return Context.GroupInvites

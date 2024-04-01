@@ -15,17 +15,9 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/itemTemplateSubCategories")]
 [ApiController]
-public class ItemTemplateSubCategoriesController : ControllerBase
+public class ItemTemplateSubCategoriesController(IItemTemplateSubCategoryService itemTemplateSubSubCategoryService, IMapper mapper)
+    : ControllerBase
 {
-    private readonly IItemTemplateSubCategoryService _itemTemplateSubSubCategoryService;
-    private readonly IMapper _mapper;
-
-    public ItemTemplateSubCategoriesController(IItemTemplateSubCategoryService itemTemplateSubSubCategoryService, IMapper mapper)
-    {
-        _itemTemplateSubSubCategoryService = itemTemplateSubSubCategoryService;
-        _mapper = mapper;
-    }
-
     [HttpPost]
     public async Task<CreatedActionResult<ItemTemplateSubCategoryResponse>> PostCreateItemTemplateSubCategoryAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
@@ -34,8 +26,8 @@ public class ItemTemplateSubCategoriesController : ControllerBase
     {
         try
         {
-            var itemTemplateSubCategory = await _itemTemplateSubSubCategoryService.CreateItemTemplateSubCategoryAsync(executionContext, request);
-            return _mapper.Map<ItemTemplateSubCategoryResponse>(itemTemplateSubCategory);
+            var itemTemplateSubCategory = await itemTemplateSubSubCategoryService.CreateItemTemplateSubCategoryAsync(executionContext, request);
+            return mapper.Map<ItemTemplateSubCategoryResponse>(itemTemplateSubCategory);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -52,12 +44,12 @@ public class ItemTemplateSubCategoriesController : ControllerBase
     {
         try
         {
-            var itemTemplates = await _itemTemplateSubSubCategoryService.GetItemTemplatesBySubCategoryTechNameAsync(
+            var itemTemplates = await itemTemplateSubSubCategoryService.GetItemTemplatesBySubCategoryTechNameAsync(
                 itemTemplateSubCategoryName,
                 executionContext.ExecutionExecutionContext?.UserId,
                 includeCommunityItems
             );
-            return _mapper.Map<List<ItemTemplateResponse>>(itemTemplates);
+            return mapper.Map<List<ItemTemplateResponse>>(itemTemplates);
         }
         catch (ItemTemplateSubCategoryNotFoundException ex)
         {

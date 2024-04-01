@@ -165,13 +165,8 @@ public static class StringExtensions
         return tokens;
     }
 
-    private class ReplacementKeyNotfoundException : Exception
+    private class ReplacementKeyNotfoundException(string key) : Exception
     {
-        public string Key { get; }
-
-        public ReplacementKeyNotfoundException(string key)
-        {
-            Key = key;
-        }
+        public string Key { get; } = key;
     }
 }

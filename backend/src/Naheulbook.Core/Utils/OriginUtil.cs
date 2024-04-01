@@ -11,31 +11,24 @@ public interface IOriginUtil
     bool HasFlag(OriginEntity origin, string chaLvl2Lvl3);
 }
 
-public class OriginUtil : IOriginUtil
+public class OriginUtil(IJsonUtil jsonUtil) : IOriginUtil
 {
-    private readonly IJsonUtil _jsonUtil;
-
-    public OriginUtil(IJsonUtil jsonUtil)
-    {
-        _jsonUtil = jsonUtil;
-    }
-
     public bool HasFlag(OriginEntity origin, string flagName)
     {
-        var originFlags = _jsonUtil.Deserialize<IList<NhbkFlag>>(origin.Flags) ?? new List<NhbkFlag>();
+        var originFlags = jsonUtil.Deserialize<IList<NhbkFlag>>(origin.Flags) ?? new List<NhbkFlag>();
         if (originFlags.Any(f => f.Type == flagName))
             return true;
 
         foreach (var bonus in origin.Bonuses)
         {
-            var flags = _jsonUtil.Deserialize<IList<NhbkFlag>>(bonus.Flags) ?? new List<NhbkFlag>();
+            var flags = jsonUtil.Deserialize<IList<NhbkFlag>>(bonus.Flags) ?? new List<NhbkFlag>();
             if (flags.Any(f => f.Type == flagName))
                 return true;
         }
 
         foreach (var restrict in origin.Restrictions)
         {
-            var flags = _jsonUtil.Deserialize<IList<NhbkFlag>>(restrict.Flags) ?? new List<NhbkFlag>();
+            var flags = jsonUtil.Deserialize<IList<NhbkFlag>>(restrict.Flags) ?? new List<NhbkFlag>();
             if (flags.Any(f => f.Type == flagName))
                 return true;
         }

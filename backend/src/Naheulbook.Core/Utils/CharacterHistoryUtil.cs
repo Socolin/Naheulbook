@@ -29,7 +29,7 @@ public interface ICharacterHistoryUtil
     CharacterHistoryEntryEntity CreateLogLevelUp(int characterId, int characterLevel);
 }
 
-public class CharacterHistoryUtil : ICharacterHistoryUtil
+public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
 {
     private const string AddItemActionName = "ADD_ITEM";
     private const string ChangeEvActionName = "MODIFY_EV";
@@ -53,13 +53,6 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
     private const string IdentifyActionName = "IDENTIFY";
     private const string LevelUpActionName = "LEVEL_UP";
 
-    private readonly IJsonUtil _jsonUtil;
-
-    public CharacterHistoryUtil(IJsonUtil jsonUtil)
-    {
-        _jsonUtil = jsonUtil;
-    }
-
     public CharacterHistoryEntryEntity CreateLogChangeEv(CharacterEntity character, int? oldValue, int? newValue)
     {
         return new CharacterHistoryEntryEntity
@@ -67,7 +60,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Character = character,
             Action = ChangeEvActionName,
             Date = DateTime.Now,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -78,7 +71,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Character = character,
             Action = ChangeEaActionName,
             Date = DateTime.Now,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -89,7 +82,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Character = character,
             Action = ChangeFatePointActionName,
             Date = DateTime.Now,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -100,7 +93,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Character = character,
             Action = ChangeExperienceActionName,
             Date = DateTime.Now,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -111,7 +104,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Character = character,
             Action = ChangeSexActionName,
             Date = DateTime.Now,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -122,7 +115,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Character = character,
             Action = ChangeNameActionName,
             Date = DateTime.Now,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -244,7 +237,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Action = ChangeQuantityActionName,
             Date = DateTime.Now,
             ItemId = item.Id,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -256,7 +249,7 @@ public class CharacterHistoryUtil : ICharacterHistoryUtil
             Action = UseChargeActionName,
             Date = DateTime.Now,
             ItemId = item.Id,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 

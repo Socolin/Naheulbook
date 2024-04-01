@@ -13,13 +13,8 @@ public interface INpcRepository : IRepository<NpcEntity>
     Task<NpcEntity?> GetWitGroupAsync(int npcId);
 }
 
-public class NpcRepository : Repository<NpcEntity, NaheulbookDbContext>, INpcRepository
+public class NpcRepository(NaheulbookDbContext context) : Repository<NpcEntity, NaheulbookDbContext>(context), INpcRepository
 {
-    public NpcRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<List<NpcEntity>> GetByGroupIdAsync(int groupId)
     {
         return Context.Npcs.Where(x => x.GroupId == groupId)

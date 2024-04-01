@@ -12,22 +12,15 @@ public interface ITwitterClient
     Task<TwitterAccessTokenResponse> GetAccessTokenAsync(string loginToken, string oauthToken, string oauthVerifier);
 }
 
-public class TwitterClient : ITwitterClient
+public class TwitterClient(TwitterConfiguration configuration) : ITwitterClient
 {
     private const string RequestTokenUri = "https://api.twitter.com/oauth/request_token";
     private const string AccessTokenUri = "https://api.twitter.com/oauth/access_token";
 
-    private readonly TwitterConfiguration _configuration;
-
-    public TwitterClient(TwitterConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-
     public async Task<TwitterRequestTokenResponse> GetRequestTokenAsync()
     {
-        var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret, RequestTokenUri);
-        oauth.AddOauthParameter("callback", _configuration.Callback);
+        var oauth = new Oauth(configuration.AppId, configuration.AppSecret, RequestTokenUri);
+        oauth.AddOauthParameter("callback", configuration.Callback);
 
         try
         {
@@ -46,7 +39,7 @@ public class TwitterClient : ITwitterClient
 
     public async Task<TwitterAccessTokenResponse> GetAccessTokenAsync(string loginToken, string oauthToken, string oauthVerifier)
     {
-        var oauth = new Oauth(_configuration.AppId, _configuration.AppSecret, AccessTokenUri)
+        var oauth = new Oauth(configuration.AppId, configuration.AppSecret, AccessTokenUri)
         {
             AccessSecret = loginToken,
         };

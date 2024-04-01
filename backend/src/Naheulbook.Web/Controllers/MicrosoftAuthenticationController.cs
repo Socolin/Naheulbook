@@ -14,45 +14,28 @@ namespace Naheulbook.Web.Controllers;
 
 [ApiController]
 [Route("api/v2/authentications/microsoft")]
-public class MicrosoftAuthenticationController : ControllerBase
+public class MicrosoftAuthenticationController(
+    MicrosoftGraphConfiguration configuration,
+    IMicrosoftGraphClient microsoftGraphClient,
+    IJwtService jwtService,
+    IMapper mapper,
+    IRngUtil rngUtil,
+    ISocialMediaUserLinkService socialMediaUserLinkService
+) : ControllerBase
 {
     private const string MicrosoftLoginTokenKey = "microsoftLoginToken";
-
-    private readonly MicrosoftGraphConfiguration _configuration;
-    private readonly IMicrosoftGraphClient _microsoftGraphClient;
-    private readonly IJwtService _jwtService;
-    private readonly IMapper _mapper;
-    private readonly IRngUtil _rngUtil;
-    private readonly ISocialMediaUserLinkService _socialMediaUserLinkService;
-
-    public MicrosoftAuthenticationController(
-        MicrosoftGraphConfiguration configuration,
-        IMicrosoftGraphClient microsoftGraphClient,
-        IJwtService jwtService,
-        IMapper mapper,
-        IRngUtil rngUtil,
-        ISocialMediaUserLinkService socialMediaUserLinkService
-    )
-    {
-        _configuration = configuration;
-        _microsoftGraphClient = microsoftGraphClient;
-        _jwtService = jwtService;
-        _mapper = mapper;
-        _rngUtil = rngUtil;
-        _socialMediaUserLinkService = socialMediaUserLinkService;
-    }
 
     [HttpGet("initOAuthAuthentication")]
     public ActionResult<AuthenticationInitResponse> PostInitOauthAuthentication()
     {
-        var loginToken = _rngUtil.GetRandomHexString(64);
+        var loginToken = rngUtil.GetRandomHexString(64);
 
         HttpContext.Session.SetString(MicrosoftLoginTokenKey, loginToken);
 
         return new AuthenticationInitResponse
         {
             LoginToken = loginToken,
-            AppKey = _configuration.AppId,
+            AppKey = configuration.AppId,
         };
     }
 
@@ -66,22 +49,22 @@ public class MicrosoftAuthenticationController : ControllerBase
         if (loginToken != request.LoginToken)
             return BadRequest();
 
-        var accessToken = await _microsoftGraphClient.GetAccessTokenAsync(request.RedirectUri, request.Code);
-        var profile = await _microsoftGraphClient.GetUserProfileAsync(accessToken);
+        var accessToken = await microsoftGraphClient.GetAccessTokenAsync(request.RedirectUri, request.Code);
+        var profile = await microsoftGraphClient.GetUserProfileAsync(accessToken);
 
         var currentUserId = HttpContext.Session.GetCurrentUserId();
         if (currentUserId.HasValue)
-            await _socialMediaUserLinkService.AssociateUserToMicrosoftIdAsync(currentUserId.Value, profile.Id);
+            await socialMediaUserLinkService.AssociateUserToMicrosoftIdAsync(currentUserId.Value, profile.Id);
 
-        var user = await _socialMediaUserLinkService.GetOrCreateUserFromMicrosoftAsync(profile.Name, profile.Id);
+        var user = await socialMediaUserLinkService.GetOrCreateUserFromMicrosoftAsync(profile.Name, profile.Id);
 
         HttpContext.Session.SetCurrentUserId(user.Id);
-        var token = _jwtService.GenerateJwtToken(user.Id);
+        var token = jwtService.GenerateJwtToken(user.Id);
 
         return new UserJwtResponse
         {
             Token = token,
-            UserInfo = _mapper.Map<UserInfoResponse>(user),
+            UserInfo = mapper.Map<UserInfoResponse>(user),
         };
     }
 }

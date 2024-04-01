@@ -18,27 +18,15 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/users")]
 [ApiController]
-public class UsersController : ControllerBase
+public class UsersController(IUserService userService, IJwtService jwtService, IMapper mapper, IUserAccessTokenService userAccessTokenService)
+    : ControllerBase
 {
-    private readonly IUserService _userService;
-    private readonly IJwtService _jwtService;
-    private readonly IMapper _mapper;
-    private readonly IUserAccessTokenService _userAccessTokenService;
-
-    public UsersController(IUserService userService, IJwtService jwtService, IMapper mapper, IUserAccessTokenService userAccessTokenService)
-    {
-        _userService = userService;
-        _jwtService = jwtService;
-        _mapper = mapper;
-        _userAccessTokenService = userAccessTokenService;
-    }
-
     [HttpPost]
     public async Task<StatusCodeResult> PostAsync(CreateUserRequest request)
     {
         try
         {
-            await _userService.CreateUserAsync(request.Username, request.Password);
+            await userService.CreateUserAsync(request.Username, request.Password);
         }
         catch (UserAlreadyExistsException)
         {
@@ -53,7 +41,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            await _userService.ValidateUserAsync(username, request.ActivationCode);
+            await userService.ValidateUserAsync(username, request.ActivationCode);
         }
         catch (UserNotFoundException)
         {
@@ -72,9 +60,9 @@ public class UsersController : ControllerBase
     {
         try
         {
-            var user = await _userService.CheckPasswordAsync(username, request.Password);
+            var user = await userService.CheckPasswordAsync(username, request.Password);
             HttpContext.Session.SetCurrentUserId(user.Id);
-            var token = _jwtService.GenerateJwtToken(user.Id);
+            var token = jwtService.GenerateJwtToken(user.Id);
             return new UserJwtResponse {Token = token};
         }
         catch (UserNotFoundException)
@@ -95,8 +83,8 @@ public class UsersController : ControllerBase
         if (!userId.HasValue)
             return StatusCode(StatusCodes.Status401Unauthorized);
 
-        var user = await _userService.GetUserInfoAsync(userId.Value);
-        return _mapper.Map<UserInfoResponse>(user);
+        var user = await userService.GetUserInfoAsync(userId.Value);
+        return mapper.Map<UserInfoResponse>(user);
     }
 
     [HttpGet("me/jwt")]
@@ -107,13 +95,13 @@ public class UsersController : ControllerBase
         if (!userId.HasValue)
             return StatusCode(StatusCodes.Status401Unauthorized);
 
-        var userInfo = await _userService.GetUserInfoAsync(userId.Value);
-        var token = _jwtService.GenerateJwtToken(userId.Value);
+        var userInfo = await userService.GetUserInfoAsync(userId.Value);
+        var token = jwtService.GenerateJwtToken(userId.Value);
 
         return new UserJwtResponse
         {
             Token = token,
-            UserInfo = _mapper.Map<UserInfoResponse>(userInfo),
+            UserInfo = mapper.Map<UserInfoResponse>(userInfo),
         };
     }
 
@@ -125,8 +113,8 @@ public class UsersController : ControllerBase
         if (!userId.HasValue)
             return StatusCode(StatusCodes.Status401Unauthorized);
 
-        var accessTokens = await _userAccessTokenService.GetUserAccessTokensAsync(userId.Value);
-        return _mapper.Map<List<UserAccessTokenResponse>>(accessTokens);
+        var accessTokens = await userAccessTokenService.GetUserAccessTokensAsync(userId.Value);
+        return mapper.Map<List<UserAccessTokenResponse>>(accessTokens);
     }
 
     [HttpPost("me/accessTokens")]
@@ -139,9 +127,9 @@ public class UsersController : ControllerBase
         if (!userId.HasValue)
             return StatusCode(StatusCodes.Status401Unauthorized);
 
-        var accessToken= await _userAccessTokenService.CreateUserAccessTokenAsync(userId.Value, request);
+        var accessToken= await userAccessTokenService.CreateUserAccessTokenAsync(userId.Value, request);
 
-        return _mapper.Map<UserAccessTokenResponseWithKey>(accessToken);
+        return mapper.Map<UserAccessTokenResponseWithKey>(accessToken);
     }
 
     [HttpDelete("me/accessTokens/{UserAccessTokenId}")]
@@ -156,7 +144,7 @@ public class UsersController : ControllerBase
 
         try
         {
-            await _userAccessTokenService.DeleteUserAccessTokensAsync(userId.Value, userAccessTokenId);
+            await userAccessTokenService.DeleteUserAccessTokensAsync(userId.Value, userAccessTokenId);
             return NoContent();
         }
         catch (UserAccessTokenNotFoundException ex)
@@ -180,8 +168,8 @@ public class UsersController : ControllerBase
     {
         try
         {
-            var users = await _userService.SearchUserAsync(executionContext, request.Filter);
-            return _mapper.Map<List<UserSearchResponse>>(users);
+            var users = await userService.SearchUserAsync(executionContext, request.Filter);
+            return mapper.Map<List<UserSearchResponse>>(users);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -198,7 +186,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            await _userService.UpdateUserAsync(executionContext, userId, request);
+            await userService.UpdateUserAsync(executionContext, userId, request);
             return NoContent();
         }
         catch (UserNotFoundException ex)

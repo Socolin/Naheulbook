@@ -9,25 +9,17 @@ using Naheulbook.Web.Exceptions;
 
 namespace Naheulbook.Web.Middlewares;
 
-public class DevExceptionMiddleware
+public class DevExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IConfiguration configuration)
 {
     private static readonly string[] ExcludedExceptionFields = {"TargetSite", "StackTrace", "Message", "Data", "InnerException", "HelpLink", "Source", "HResult"};
-    private readonly RequestDelegate _next;
-    private readonly ILogger _logger;
-    private readonly bool _displayExceptionFields;
-
-    public DevExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IConfiguration configuration)
-    {
-        _next = next;
-        _logger = loggerFactory.CreateLogger(nameof(DevExceptionMiddleware));
-        _displayExceptionFields = configuration.GetValue<bool>("DisplayExceptionFields");
-    }
+    private readonly ILogger _logger = loggerFactory.CreateLogger(nameof(DevExceptionMiddleware));
+    private readonly bool _displayExceptionFields = configuration.GetValue<bool>("DisplayExceptionFields");
 
     public async Task InvokeAsync(HttpContext context)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (HttpErrorException)
         {

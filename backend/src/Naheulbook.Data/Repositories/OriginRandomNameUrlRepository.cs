@@ -12,12 +12,8 @@ public interface IOriginRandomNameUrlRepository : IRepository<OriginRandomNameUr
     Task<OriginRandomNameUrlEntity?> GetByOriginIdAndSexAsync(string sex, Guid originId);
 }
 
-public class OriginRandomNameUrlRepository : Repository<OriginRandomNameUrlEntity, NaheulbookDbContext>, IOriginRandomNameUrlRepository
+public class OriginRandomNameUrlRepository(NaheulbookDbContext context) : Repository<OriginRandomNameUrlEntity, NaheulbookDbContext>(context), IOriginRandomNameUrlRepository
 {
-    public OriginRandomNameUrlRepository(NaheulbookDbContext context) : base(context)
-    {
-    }
-
     public Task<OriginRandomNameUrlEntity?> GetByOriginIdAndSexAsync(string sex, Guid originId)
     {
         return Context.OriginRandomNameUrls

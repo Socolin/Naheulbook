@@ -17,51 +17,40 @@ public interface INpcService
     Task<NpcEntity> EditNpcAsync(NaheulbookExecutionContext executionContext, int npcId, NpcRequest request);
 }
 
-public class NpcService : INpcService
+public class NpcService(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    IAuthorizationUtil authorizationUtil,
+    IJsonUtil jsonUtil
+) : INpcService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IAuthorizationUtil _authorizationUtil;
-    private readonly IJsonUtil _jsonUtil;
-
-    public NpcService(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        IAuthorizationUtil authorizationUtil,
-        IJsonUtil jsonUtil
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _authorizationUtil = authorizationUtil;
-        _jsonUtil = jsonUtil;
-    }
-
     public async Task<List<NpcEntity>> LoadNpcsAsync(NaheulbookExecutionContext executionContext, int groupId)
     {
-        using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
         var group = await uow.Groups.GetAsync(groupId);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
-        _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+        authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
         return await uow.Npcs.GetByGroupIdAsync(groupId);
     }
 
     public async Task<NpcEntity> CreateNpcAsync(NaheulbookExecutionContext executionContext, int groupId, NpcRequest request)
     {
-        using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
         var group = await uow.Groups.GetAsync(groupId);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
-        _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+        authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
         var npc = new NpcEntity
         {
             GroupId = groupId,
             Name = request.Name,
-            Data = _jsonUtil.SerializeNonNull(request.Data),
+            Data = jsonUtil.SerializeNonNull(request.Data),
         };
 
         uow.Npcs.Add(npc);
@@ -73,16 +62,16 @@ public class NpcService : INpcService
 
     public async Task<NpcEntity> EditNpcAsync(NaheulbookExecutionContext executionContext, int npcId, NpcRequest request)
     {
-        using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
         var npc = await uow.Npcs.GetWitGroupAsync(npcId);
         if (npc == null)
             throw new NpcNotFoundException(npcId);
 
-        _authorizationUtil.EnsureIsGroupOwner(executionContext, npc.Group);
+        authorizationUtil.EnsureIsGroupOwner(executionContext, npc.Group);
 
         npc.Name = request.Name;
-        npc.Data = _jsonUtil.SerializeNonNull(request.Data);
+        npc.Data = jsonUtil.SerializeNonNull(request.Data);
 
         await uow.SaveChangesAsync();
 

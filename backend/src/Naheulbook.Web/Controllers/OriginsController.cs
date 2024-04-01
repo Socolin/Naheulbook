@@ -13,29 +13,18 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/origins")]
 [ApiController]
-public class OriginsController : ControllerBase
+public class OriginsController(
+    IOriginService originService,
+    IMapper mapper,
+    ICharacterRandomNameService characterRandomNameService
+) : ControllerBase
 {
-    private readonly IOriginService _originService;
-    private readonly IMapper _mapper;
-    private readonly ICharacterRandomNameService _characterRandomNameService;
-
-    public OriginsController(
-        IOriginService originService,
-        IMapper mapper,
-        ICharacterRandomNameService characterRandomNameService
-    )
-    {
-        _originService = originService;
-        _mapper = mapper;
-        _characterRandomNameService = characterRandomNameService;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<OriginResponse>>> GetAsync()
     {
-        var skills = await _originService.GetOriginsAsync();
+        var skills = await originService.GetOriginsAsync();
 
-        return _mapper.Map<List<OriginResponse>>(skills);
+        return mapper.Map<List<OriginResponse>>(skills);
     }
 
     [HttpGet("{OriginId:guid}/randomCharacterName")]
@@ -46,7 +35,7 @@ public class OriginsController : ControllerBase
     {
         try
         {
-            var randomName = await _characterRandomNameService.GenerateRandomCharacterNameAsync(originId, sex);
+            var randomName = await characterRandomNameService.GenerateRandomCharacterNameAsync(originId, sex);
             return new RandomCharacterNameResponse
             {
                 Name = randomName,

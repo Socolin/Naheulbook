@@ -13,20 +13,11 @@ namespace Naheulbook.Web.Controllers;
 
 [ApiController]
 [Route("/api/v2/npcs")]
-public class NpcController : ControllerBase
+public class NpcController(
+    INpcService npcService,
+    IMapper mapper
+) : ControllerBase
 {
-    private readonly INpcService _npcService;
-    private readonly IMapper _mapper;
-
-    public NpcController(
-        INpcService npcService,
-        IMapper mapper
-    )
-    {
-        _npcService = npcService;
-        _mapper = mapper;
-    }
-
     [HttpPut("{NpcId:int:min(1)}")]
     public async Task<ActionResult<NpcResponse>> PutEditNpcAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
@@ -36,8 +27,8 @@ public class NpcController : ControllerBase
     {
         try
         {
-            var npc = await _npcService.EditNpcAsync(executionContext, npcId, request);
-            return _mapper.Map<NpcResponse>(npc);
+            var npc = await npcService.EditNpcAsync(executionContext, npcId, request);
+            return mapper.Map<NpcResponse>(npc);
         }
         catch (ForbiddenAccessException ex)
         {

@@ -16,15 +16,8 @@ using TechTalk.SpecFlow;
 namespace Naheulbook.Tests.Functional.Code.Init;
 
 [Binding]
-public class DatabaseInitializer
+public class DatabaseInitializer(IObjectContainer objectContainer)
 {
-    private readonly IObjectContainer _objectContainer;
-
-    public DatabaseInitializer(IObjectContainer objectContainer)
-    {
-        _objectContainer = objectContainer;
-    }
-
     [BeforeTestRun]
     public static void InitializeDatabase()
     {
@@ -108,6 +101,6 @@ public class DatabaseInitializer
         var dbContextOptions = new DbContextOptionsBuilder<NaheulbookDbContext>()
             .UseMySql(DefaultTestConfigurations.NaheulbookTestConnectionString, ServerVersion.AutoDetect(DefaultTestConfigurations.NaheulbookTestConnectionString), builder => builder.EnableRetryOnFailure())
             .Options;
-        _objectContainer.RegisterInstanceAs(dbContextOptions);
+        objectContainer.RegisterInstanceAs(dbContextOptions);
     }
 }

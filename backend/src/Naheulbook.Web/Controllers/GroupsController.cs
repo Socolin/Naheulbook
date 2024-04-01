@@ -15,39 +15,22 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/groups")]
 [ApiController]
-public class GroupsController : ControllerBase
+public class GroupsController(
+    IGroupService groupService,
+    ILootService lootService,
+    IMonsterService monsterService,
+    IEventService eventService,
+    IMapper mapper,
+    INpcService npcService
+) : ControllerBase
 {
-    private readonly IGroupService _groupService;
-    private readonly ILootService _lootService;
-    private readonly IMonsterService _monsterService;
-    private readonly IEventService _eventService;
-    private readonly IMapper _mapper;
-    private readonly INpcService _npcService;
-
-    public GroupsController(
-        IGroupService groupService,
-        ILootService lootService,
-        IMonsterService monsterService,
-        IEventService eventService,
-        IMapper mapper,
-        INpcService npcService
-    )
-    {
-        _groupService = groupService;
-        _lootService = lootService;
-        _monsterService = monsterService;
-        _eventService = eventService;
-        _mapper = mapper;
-        _npcService = npcService;
-    }
-
     [HttpGet]
     public async Task<List<GroupSummaryResponse>> GetGroupListAsync(
         [FromServices] NaheulbookExecutionContext executionContext
     )
     {
-        var group = await _groupService.GetGroupListAsync(executionContext);
-        return _mapper.Map<List<GroupSummaryResponse>>(group);
+        var group = await groupService.GetGroupListAsync(executionContext);
+        return mapper.Map<List<GroupSummaryResponse>>(group);
     }
 
     [HttpPost]
@@ -56,8 +39,8 @@ public class GroupsController : ControllerBase
         CreateGroupRequest request
     )
     {
-        var group = await _groupService.CreateGroupAsync(executionContext, request);
-        return _mapper.Map<GroupResponse>(group);
+        var group = await groupService.CreateGroupAsync(executionContext, request);
+        return mapper.Map<GroupResponse>(group);
     }
 
     [HttpPatch("{GroupId:int:min(1)}")]
@@ -69,7 +52,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            await _groupService.EditGroupPropertiesAsync(executionContext, groupId, request);
+            await groupService.EditGroupPropertiesAsync(executionContext, groupId, request);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -91,7 +74,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            await _groupService.EditGroupConfigAsync(executionContext, groupId, request);
+            await groupService.EditGroupConfigAsync(executionContext, groupId, request);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -112,7 +95,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            await _groupService.StartCombatAsync(executionContext, groupId);
+            await groupService.StartCombatAsync(executionContext, groupId);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -137,7 +120,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            await _groupService.EndCombatAsync(executionContext, groupId);
+            await groupService.EndCombatAsync(executionContext, groupId);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -162,8 +145,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var loots = await _lootService.GetLootsForGroupAsync(executionContext, groupId);
-            return _mapper.Map<List<LootResponse>>(loots);
+            var loots = await lootService.GetLootsForGroupAsync(executionContext, groupId);
+            return mapper.Map<List<LootResponse>>(loots);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -184,8 +167,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var loot = await _lootService.CreateLootAsync(executionContext, groupId, request);
-            return _mapper.Map<LootResponse>(loot);
+            var loot = await lootService.CreateLootAsync(executionContext, groupId, request);
+            return mapper.Map<LootResponse>(loot);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -205,8 +188,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var events = await _eventService.GetEventsForGroupAsync(executionContext, groupId);
-            return _mapper.Map<List<EventResponse>>(events);
+            var events = await eventService.GetEventsForGroupAsync(executionContext, groupId);
+            return mapper.Map<List<EventResponse>>(events);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -227,8 +210,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var groupEvent = await _eventService.CreateEventAsync(executionContext, groupId, request);
-            return _mapper.Map<EventResponse>(groupEvent);
+            var groupEvent = await eventService.CreateEventAsync(executionContext, groupId, request);
+            return mapper.Map<EventResponse>(groupEvent);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -249,7 +232,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            await _eventService.DeleteEventAsync(executionContext, groupId, eventId);
+            await eventService.DeleteEventAsync(executionContext, groupId, eventId);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -270,8 +253,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var monsters = await _monsterService.GetMonstersForGroupAsync(executionContext, groupId);
-            return _mapper.Map<List<MonsterResponse>>(monsters);
+            var monsters = await monsterService.GetMonstersForGroupAsync(executionContext, groupId);
+            return mapper.Map<List<MonsterResponse>>(monsters);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -293,8 +276,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var monsters = await _monsterService.GetDeadMonstersForGroupAsync(executionContext, groupId, startIndex, count);
-            return _mapper.Map<List<DeadMonsterResponse>>(monsters);
+            var monsters = await monsterService.GetDeadMonstersForGroupAsync(executionContext, groupId, startIndex, count);
+            return mapper.Map<List<DeadMonsterResponse>>(monsters);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -315,8 +298,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var monster = await _monsterService.CreateMonsterAsync(executionContext, groupId, request);
-            return _mapper.Map<MonsterResponse>(monster);
+            var monster = await monsterService.CreateMonsterAsync(executionContext, groupId, request);
+            return mapper.Map<MonsterResponse>(monster);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -341,8 +324,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var invite = await _groupService.CreateInviteAsync(executionContext, groupId, request);
-            return _mapper.Map<GroupInviteResponse>(invite);
+            var invite = await groupService.CreateInviteAsync(executionContext, groupId, request);
+            return mapper.Map<GroupInviteResponse>(invite);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -371,8 +354,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var invite = await _groupService.CancelOrRejectInviteAsync(executionContext, groupId, characterId);
-            return _mapper.Map<DeleteInviteResponse>(invite);
+            var invite = await groupService.CancelOrRejectInviteAsync(executionContext, groupId, characterId);
+            return mapper.Map<DeleteInviteResponse>(invite);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -393,7 +376,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            await _groupService.AcceptInviteAsync(executionContext, groupId, characterId);
+            await groupService.AcceptInviteAsync(executionContext, groupId, characterId);
             return new NoContentResult();
         }
         catch (ForbiddenAccessException ex)
@@ -419,8 +402,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var historyEntries = await _groupService.GetGroupHistoryEntriesAsync(executionContext, groupId, page);
-            return _mapper.Map<List<GroupHistoryEntryResponse>>(historyEntries);
+            var historyEntries = await groupService.GetGroupHistoryEntriesAsync(executionContext, groupId, page);
+            return mapper.Map<List<GroupHistoryEntryResponse>>(historyEntries);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -441,7 +424,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            await _groupService.AddHistoryEntryAsync(executionContext, groupId, request);
+            await groupService.AddHistoryEntryAsync(executionContext, groupId, request);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -462,8 +445,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var group = await _groupService.GetGroupDetailsAsync(executionContext, groupId);
-            return _mapper.Map<GroupResponse>(group);
+            var group = await groupService.GetGroupDetailsAsync(executionContext, groupId);
+            return mapper.Map<GroupResponse>(group);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -484,7 +467,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            await _groupService.UpdateDurationsAsync(executionContext, groupId, request);
+            await groupService.UpdateDurationsAsync(executionContext, groupId, request);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -505,8 +488,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var characters = await _groupService.ListActiveCharactersAsync(executionContext, groupId);
-            return _mapper.Map<List<ListActiveCharacterResponse>>(characters);
+            var characters = await groupService.ListActiveCharactersAsync(executionContext, groupId);
+            return mapper.Map<List<ListActiveCharacterResponse>>(characters);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -527,7 +510,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            return await _groupService.AddTimeAsync(executionContext, groupId, request);
+            return await groupService.AddTimeAsync(executionContext, groupId, request);
         }
         catch (GroupDateNotSetException ex)
         {
@@ -551,8 +534,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var npcs = await _npcService.LoadNpcsAsync(executionContext, groupId);
-            return _mapper.Map<List<NpcResponse>>(npcs);
+            var npcs = await npcService.LoadNpcsAsync(executionContext, groupId);
+            return mapper.Map<List<NpcResponse>>(npcs);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -574,8 +557,8 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var npc = await _npcService.CreateNpcAsync(executionContext, groupId, request);
-            return _mapper.Map<NpcResponse>(npc);
+            var npc = await npcService.CreateNpcAsync(executionContext, groupId, request);
+            return mapper.Map<NpcResponse>(npc);
         }
         catch (ForbiddenAccessException ex)
         {

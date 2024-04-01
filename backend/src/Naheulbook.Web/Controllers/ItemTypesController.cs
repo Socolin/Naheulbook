@@ -9,24 +9,15 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/itemTypes")]
 [ApiController]
-public class ItemTypesController
+public class ItemTypesController(
+    IMapper mapper,
+    IItemTypeService itemTypeService
+)
 {
-    private readonly IMapper _mapper;
-    private readonly IItemTypeService _itemTypeService;
-
-    public ItemTypesController(
-        IMapper mapper,
-        IItemTypeService itemTypeService
-    )
-    {
-        _mapper = mapper;
-        _itemTypeService = itemTypeService;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<ItemTypeResponse>>> GetAllItemTypesAsync()
     {
-        var itemTypes = await _itemTypeService.GetAllItemTypesAsync();
-        return _mapper.Map<List<ItemTypeResponse>>(itemTypes);
+        var itemTypes = await itemTypeService.GetAllItemTypesAsync();
+        return mapper.Map<List<ItemTypeResponse>>(itemTypes);
     }
 }

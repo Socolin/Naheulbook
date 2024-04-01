@@ -7,28 +7,21 @@ using TechTalk.SpecFlow;
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
-public class MapStep
+public class MapStep(TestDataUtil testDataUtil)
 {
-    private readonly TestDataUtil _testDataUtil;
-
-    public MapStep(TestDataUtil testDataUtil)
-    {
-        _testDataUtil = testDataUtil;
-    }
-
     [Given(@"(a|\d+) maps?")]
     public void GivenXMap(string amount)
     {
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
-            _testDataUtil.AddMap();
+            testDataUtil.AddMap();
     }
 
     [Given(@"(a|\d+) maps? with all data")]
     public void GivenXMapWithAllData(string amount)
     {
-        var targetMap = _testDataUtil.AddMap().GetLast<MapEntity>();
+        var targetMap = testDataUtil.AddMap().GetLast<MapEntity>();
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
-            _testDataUtil.AddMap(x =>
+            testDataUtil.AddMap(x =>
             {
                 x.Layers = new[]
                 {
@@ -64,7 +57,7 @@ public class MapStep
     public void GivenXMapWithAMarker(string amount)
     {
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
-            _testDataUtil.AddMap(x =>
+            testDataUtil.AddMap(x =>
             {
                 x.Layers = new[]
                 {
@@ -93,7 +86,7 @@ public class MapStep
     public void GivenXMapWithALayer(string amount)
     {
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
-            _testDataUtil.AddMap(x =>
+            testDataUtil.AddMap(x =>
             {
                 x.Layers = new[]
                 {

@@ -16,29 +16,20 @@ public interface IEventService
     Task DeleteEventAsync(NaheulbookExecutionContext executionContext, int groupId, int eventId);
 }
 
-public class EventService : IEventService
+public class EventService(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    IAuthorizationUtil authorizationUtil
+) : IEventService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IAuthorizationUtil _authorizationUtil;
-
-    public EventService(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        IAuthorizationUtil authorizationUtil
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _authorizationUtil = authorizationUtil;
-    }
-
     public async Task<List<EventEntity>> GetEventsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
             return await uow.Events.GetByGroupIdAsync(groupId);
         }
@@ -46,13 +37,13 @@ public class EventService : IEventService
 
     public async Task<EventEntity> CreateEventAsync(NaheulbookExecutionContext executionContext, int groupId, CreateEventRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
             var groupEvent = new EventEntity
             {
@@ -72,13 +63,13 @@ public class EventService : IEventService
 
     public async Task DeleteEventAsync(NaheulbookExecutionContext executionContext, int groupId, int eventId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
             var groupEvent = await uow.Events.GetAsync(eventId);
             if (groupEvent == null || groupEvent.GroupId != group.Id)

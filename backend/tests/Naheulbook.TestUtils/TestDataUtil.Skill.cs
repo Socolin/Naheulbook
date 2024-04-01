@@ -12,7 +12,7 @@ public partial class TestDataUtil
 
     public TestDataUtil AddSkill(out SkillEntity skill, Action<SkillEntity> customizer = null)
     {
-        skill = _defaultEntityCreator.CreateSkill();
+        skill = defaultEntityCreator.CreateSkill();
         return SaveEntity(skill, customizer);
     }
 }

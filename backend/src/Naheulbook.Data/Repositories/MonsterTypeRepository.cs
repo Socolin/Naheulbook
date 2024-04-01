@@ -11,13 +11,8 @@ public interface IMonsterTypeRepository : IRepository<MonsterTypeEntity>
     Task<List<MonsterTypeEntity>> GetAllWithCategoriesAsync();
 }
 
-public class MonsterTypeRepository : Repository<MonsterTypeEntity, NaheulbookDbContext>, IMonsterTypeRepository
+public class MonsterTypeRepository(NaheulbookDbContext context) : Repository<MonsterTypeEntity, NaheulbookDbContext>(context), IMonsterTypeRepository
 {
-    public MonsterTypeRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<List<MonsterTypeEntity>> GetAllWithCategoriesAsync()
     {
         return Context.MonsterTypes

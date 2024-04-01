@@ -13,17 +13,8 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/effectTypes")]
 [ApiController]
-public class EffectTypesController : ControllerBase
+public class EffectTypesController(IEffectService effectService, IMapper mapper) : ControllerBase
 {
-    private readonly IEffectService _effectService;
-    private readonly IMapper _mapper;
-
-    public EffectTypesController(IEffectService effectService, IMapper mapper)
-    {
-        _effectService = effectService;
-        _mapper = mapper;
-    }
-
     [HttpPost]
     public async Task<JsonResult> PostCreateTypeAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
@@ -32,8 +23,8 @@ public class EffectTypesController : ControllerBase
     {
         try
         {
-            var effectType = await _effectService.CreateEffectTypeAsync(executionContext, request);
-            return new JsonResult(_mapper.Map<EffectTypeResponse>(effectType))
+            var effectType = await effectService.CreateEffectTypeAsync(executionContext, request);
+            return new JsonResult(mapper.Map<EffectTypeResponse>(effectType))
             {
                 StatusCode = 201,
             };

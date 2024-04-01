@@ -16,26 +16,15 @@ public interface IItemTemplateSectionService
     Task<List<ItemTemplateEntity>> GetItemTemplatesBySectionAsync(int sectionId, int? currentUserId);
 }
 
-public class ItemTemplateSectionService : IItemTemplateSectionService
+public class ItemTemplateSectionService(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    IAuthorizationUtil authorizationUtil,
+    IItemTemplateUtil itemTemplateUtil
+) : IItemTemplateSectionService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IAuthorizationUtil _authorizationUtil;
-    private readonly IItemTemplateUtil _itemTemplateUtil;
-
-    public ItemTemplateSectionService(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        IAuthorizationUtil authorizationUtil,
-        IItemTemplateUtil itemTemplateUtil
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _authorizationUtil = authorizationUtil;
-        _itemTemplateUtil = itemTemplateUtil;
-    }
-
     public async Task<IList<ItemTemplateSectionEntity>> GetAllSectionsAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.ItemTemplateSections.GetAllWithCategoriesAsync();
         }
@@ -43,7 +32,7 @@ public class ItemTemplateSectionService : IItemTemplateSectionService
 
     public async Task<ItemTemplateSectionEntity> CreateItemTemplateSectionAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSectionRequest request)
     {
-        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+        await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
         var itemTemplateSection = new ItemTemplateSectionEntity
         {
@@ -54,7 +43,7 @@ public class ItemTemplateSectionService : IItemTemplateSectionService
             SubCategories = new List<ItemTemplateSubCategoryEntity>(),
         };
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             uow.ItemTemplateSections.Add(itemTemplateSection);
             await uow.SaveChangesAsync();
@@ -65,10 +54,10 @@ public class ItemTemplateSectionService : IItemTemplateSectionService
 
     public async Task<List<ItemTemplateEntity>> GetItemTemplatesBySectionAsync(int sectionId, int? currentUserId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var itemTemplates = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(sectionId);
-            return _itemTemplateUtil.FilterItemTemplatesBySource(itemTemplates, currentUserId, true).ToList();
+            return itemTemplateUtil.FilterItemTemplatesBySource(itemTemplates, currentUserId, true).ToList();
         }
     }
 }

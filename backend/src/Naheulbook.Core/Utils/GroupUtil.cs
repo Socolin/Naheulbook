@@ -16,40 +16,31 @@ public interface IGroupUtil
     NhbkDate AddTimeAndNotify(GroupEntity @group, NhbkDateOffset request, INotificationSession notificationSession);
 }
 
-public class GroupUtil : IGroupUtil
+public class GroupUtil(
+    IJsonUtil jsonUtil,
+    IGroupHistoryUtil groupHistoryUtil
+) : IGroupUtil
 {
-    private readonly IJsonUtil _jsonUtil;
-    private readonly IGroupHistoryUtil _groupHistoryUtil;
-
-    public GroupUtil(
-        IJsonUtil jsonUtil,
-        IGroupHistoryUtil groupHistoryUtil
-    )
-    {
-        _jsonUtil = jsonUtil;
-        _groupHistoryUtil = groupHistoryUtil;
-    }
-
     public void ApplyChangesAndNotify(GroupEntity group, PatchGroupRequest request, INotificationSession notificationSession)
     {
-        var groupData = _jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
+        var groupData = jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
 
         if (request.Mankdebol.HasValue)
         {
-            group.AddHistoryEntry(_groupHistoryUtil.CreateLogChangeMankdebol(group, groupData.Mankdebol, request.Mankdebol.Value));
+            group.AddHistoryEntry(groupHistoryUtil.CreateLogChangeMankdebol(group, groupData.Mankdebol, request.Mankdebol.Value));
             groupData.Mankdebol = request.Mankdebol.Value;
         }
 
         if (request.Debilibeuk.HasValue)
         {
-            group.AddHistoryEntry(_groupHistoryUtil.CreateLogChangeDebilibeuk(group, groupData.Debilibeuk, request.Debilibeuk.Value));
+            group.AddHistoryEntry(groupHistoryUtil.CreateLogChangeDebilibeuk(group, groupData.Debilibeuk, request.Debilibeuk.Value));
             groupData.Debilibeuk = request.Debilibeuk.Value;
         }
 
         if (request.Date != null)
         {
             var newDate = new NhbkDate(request.Date);
-            group.AddHistoryEntry(_groupHistoryUtil.CreateLogChangeDate(group, groupData.Date, newDate));
+            group.AddHistoryEntry(groupHistoryUtil.CreateLogChangeDate(group, groupData.Date, newDate));
             groupData.Date = newDate;
         }
 
@@ -65,12 +56,12 @@ public class GroupUtil : IGroupUtil
 
         notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
 
-        group.Data = _jsonUtil.Serialize(groupData);
+        group.Data = jsonUtil.Serialize(groupData);
     }
 
     public void StartCombat(GroupEntity group, INotificationSession notificationSession)
     {
-        var groupData = _jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
+        var groupData = jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
         if (groupData.InCombat == true)
             throw new GroupAlreadyInCombatException();
 
@@ -86,40 +77,40 @@ public class GroupUtil : IGroupUtil
         group.CombatLoot = loot;
         group.CombatLootId = loot.Id;
 
-        group.AddHistoryEntry(_groupHistoryUtil.CreateLogStartCombat(group));
+        group.AddHistoryEntry(groupHistoryUtil.CreateLogStartCombat(group));
 
         notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
 
-        group.Data = _jsonUtil.Serialize(groupData);
+        group.Data = jsonUtil.Serialize(groupData);
     }
 
     public void EndCombat(GroupEntity group, INotificationSession notificationSession)
     {
-        var groupData = _jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
+        var groupData = jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
         if (groupData.InCombat != true)
             throw new GroupNotInCombatException();
 
         groupData.InCombat = false;
 
-        group.AddHistoryEntry(_groupHistoryUtil.CreateLogEndCombat(group));
+        group.AddHistoryEntry(groupHistoryUtil.CreateLogEndCombat(group));
 
         notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
 
-        group.Data = _jsonUtil.Serialize(groupData);
+        group.Data = jsonUtil.Serialize(groupData);
     }
 
     public NhbkDate AddTimeAndNotify(GroupEntity group, NhbkDateOffset timeOffset, INotificationSession notificationSession)
     {
-        var groupData = _jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
+        var groupData = jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
         if (groupData.Date == null)
             throw new GroupDateNotSetException();
 
         groupData.Date.Add(timeOffset);
 
-        group.AddHistoryEntry(_groupHistoryUtil.CreateLogAddTime(group, groupData.Date, timeOffset));
+        group.AddHistoryEntry(groupHistoryUtil.CreateLogAddTime(group, groupData.Date, timeOffset));
         notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
 
-        group.Data = _jsonUtil.Serialize(groupData);
+        group.Data = jsonUtil.Serialize(groupData);
 
         return groupData.Date;
     }

@@ -19,13 +19,8 @@ public interface IUserRepository : IRepository<UserEntity>
     Task<List<UserEntity>> SearchUsersAsync(string filter);
 }
 
-public class UserRepository : Repository<UserEntity, NaheulbookDbContext>, IUserRepository
+public class UserRepository(NaheulbookDbContext naheulbookDbContext) : Repository<UserEntity, NaheulbookDbContext>(naheulbookDbContext), IUserRepository
 {
-    public UserRepository(NaheulbookDbContext naheulbookDbContext)
-        : base(naheulbookDbContext)
-    {
-    }
-
     public Task<UserEntity?> GetByUsernameAsync(string username)
     {
         return Context.Users

@@ -5,17 +5,9 @@ using System;
 
 namespace Naheulbook.Core.Clients;
 
-public class GenericHttpClientException : Exception
+public class GenericHttpClientException(string requestUrl, int statusCode, string body) : Exception($"Unexpected response status code {statusCode} during request to {requestUrl}")
 {
-    public string RequestUrl { get; }
-    public int StatusCode { get; }
-    public string Body { get; }
-
-    public GenericHttpClientException(string requestUrl, int statusCode, string body)
-        : base($"Unexpected response status code {statusCode} during request to {requestUrl}")
-    {
-        RequestUrl = requestUrl;
-        StatusCode = statusCode;
-        Body = body;
-    }
+    public string RequestUrl { get; } = requestUrl;
+    public int StatusCode { get; } = statusCode;
+    public string Body { get; } = body;
 }

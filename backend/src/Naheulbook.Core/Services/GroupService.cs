@@ -33,41 +33,20 @@ public interface IGroupService
     Task EditGroupConfigAsync(NaheulbookExecutionContext executionContext, int groupId, PatchGroupConfigRequest request);
 }
 
-public class GroupService : IGroupService
+public class GroupService(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    IAuthorizationUtil authorizationUtil,
+    INotificationSessionFactory notificationSessionFactory,
+    IMapper mapper,
+    IDurationUtil durationUtil,
+    IGroupUtil groupUtil,
+    IGroupHistoryUtil groupHistoryUtil,
+    IGroupConfigUtil groupConfigUtil
+) : IGroupService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IAuthorizationUtil _authorizationUtil;
-    private readonly IMapper _mapper;
-    private readonly INotificationSessionFactory _notificationSessionFactory;
-    private readonly IDurationUtil _durationUtil;
-    private readonly IGroupUtil _groupUtil;
-    private readonly IGroupHistoryUtil _groupHistoryUtil;
-    private readonly IGroupConfigUtil _groupConfigUtil;
-
-    public GroupService(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        IAuthorizationUtil authorizationUtil,
-        INotificationSessionFactory notificationSessionFactory,
-        IMapper mapper,
-        IDurationUtil durationUtil,
-        IGroupUtil groupUtil,
-        IGroupHistoryUtil groupHistoryUtil,
-        IGroupConfigUtil groupConfigUtil
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _authorizationUtil = authorizationUtil;
-        _mapper = mapper;
-        _notificationSessionFactory = notificationSessionFactory;
-        _durationUtil = durationUtil;
-        _groupUtil = groupUtil;
-        _groupHistoryUtil = groupHistoryUtil;
-        _groupConfigUtil = groupConfigUtil;
-    }
-
     public async Task<GroupEntity> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = new GroupEntity
             {
@@ -91,7 +70,7 @@ public class GroupService : IGroupService
 
     public async Task<List<GroupEntity>> GetGroupListAsync(NaheulbookExecutionContext executionContext)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Groups.GetGroupsOwnedByAsync(executionContext.UserId);
         }
@@ -99,13 +78,13 @@ public class GroupService : IGroupService
 
     public async Task<GroupEntity> GetGroupDetailsAsync(NaheulbookExecutionContext executionContext, int groupId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetGroupsWithDetailsAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
             return group;
         }
@@ -113,17 +92,17 @@ public class GroupService : IGroupService
 
     public async Task EditGroupPropertiesAsync(NaheulbookExecutionContext executionContext, int groupId, PatchGroupRequest request)
     {
-        var notificationSession = _notificationSessionFactory.CreateSession();
+        var notificationSession = notificationSessionFactory.CreateSession();
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-            _groupUtil.ApplyChangesAndNotify(group, request, notificationSession);
+            groupUtil.ApplyChangesAndNotify(group, request, notificationSession);
 
             await uow.SaveChangesAsync();
         }
@@ -133,13 +112,13 @@ public class GroupService : IGroupService
 
     public async Task<List<GroupHistoryEntryEntity>> GetGroupHistoryEntriesAsync(NaheulbookExecutionContext executionContext, int groupId, int page)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetGroupsWithDetailsAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
             return await uow.GroupHistoryEntries.GetByGroupIdAndPageAsync(groupId, page);
         }
@@ -147,19 +126,19 @@ public class GroupService : IGroupService
 
     public async Task EnsureUserCanAccessGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetGroupsWithCharactersAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
         }
     }
 
     public async Task<GroupInviteEntity> CreateInviteAsync(NaheulbookExecutionContext executionContext, int groupId, CreateInviteRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
@@ -173,9 +152,9 @@ public class GroupService : IGroupService
                 throw new CharacterAlreadyInAGroupException(request.CharacterId);
 
             if (request.FromGroup)
-                _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+                authorizationUtil.EnsureIsGroupOwner(executionContext, group);
             else
-                _authorizationUtil.EnsureIsCharacterOwner(executionContext, character);
+                authorizationUtil.EnsureIsCharacterOwner(executionContext, character);
 
             var groupInvite = new GroupInviteEntity
             {
@@ -188,7 +167,7 @@ public class GroupService : IGroupService
 
             await uow.SaveChangesAsync();
 
-            var session = _notificationSessionFactory.CreateSession();
+            var session = notificationSessionFactory.CreateSession();
             session.NotifyCharacterGroupInvite(request.CharacterId, groupInvite);
             session.NotifyGroupCharacterInvite(groupId, groupInvite);
             await session.CommitAsync();
@@ -199,19 +178,19 @@ public class GroupService : IGroupService
 
     public async Task<GroupInviteEntity> CancelOrRejectInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var groupInvite = await uow.GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId);
             if (groupInvite == null)
                 throw new InviteNotFoundException(characterId, groupId);
 
-            _authorizationUtil.EnsureCanDeleteGroupInvite(executionContext, groupInvite);
+            authorizationUtil.EnsureCanDeleteGroupInvite(executionContext, groupInvite);
 
             uow.GroupInvites.Remove(groupInvite);
 
             await uow.SaveChangesAsync();
 
-            var session = _notificationSessionFactory.CreateSession();
+            var session = notificationSessionFactory.CreateSession();
             session.NotifyCharacterCancelGroupInvite(characterId, groupInvite);
             session.NotifyGroupCancelGroupInvite(groupId, groupInvite);
             await session.CommitAsync();
@@ -222,7 +201,7 @@ public class GroupService : IGroupService
 
     public async Task AcceptInviteAsync(NaheulbookExecutionContext executionContext, int groupId, int characterId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var groupInvite = await uow.GroupInvites.GetByCharacterIdAndGroupIdWithGroupWithCharacterAsync(groupId, characterId);
             if (groupInvite == null)
@@ -230,7 +209,7 @@ public class GroupService : IGroupService
             if (groupInvite.Character.GroupId.HasValue)
                 throw new CharacterAlreadyInAGroupException(characterId);
 
-            _authorizationUtil.EnsureCanAcceptGroupInvite(executionContext, groupInvite);
+            authorizationUtil.EnsureCanAcceptGroupInvite(executionContext, groupInvite);
 
             var allCharacterInvites = await uow.GroupInvites.GetInvitesByCharacterIdAsync(characterId);
             uow.GroupInvites.RemoveRange(allCharacterInvites);
@@ -238,7 +217,7 @@ public class GroupService : IGroupService
 
             await uow.SaveChangesAsync();
 
-            var notificationSession = _notificationSessionFactory.CreateSession();
+            var notificationSession = notificationSessionFactory.CreateSession();
             notificationSession.NotifyCharacterAcceptGroupInvite(characterId, groupInvite);
             notificationSession.NotifyGroupAcceptGroupInvite(groupId, groupInvite);
             await notificationSession.CommitAsync();
@@ -247,17 +226,17 @@ public class GroupService : IGroupService
 
     public async Task StartCombatAsync(NaheulbookExecutionContext executionContext, int groupId)
     {
-        var notificationSession = _notificationSessionFactory.CreateSession();
+        var notificationSession = notificationSessionFactory.CreateSession();
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-            _groupUtil.StartCombat(group, notificationSession);
+            groupUtil.StartCombat(group, notificationSession);
 
             await uow.SaveChangesAsync();
 
@@ -270,17 +249,17 @@ public class GroupService : IGroupService
 
     public async Task EndCombatAsync(NaheulbookExecutionContext executionContext, int groupId)
     {
-        var notificationSession = _notificationSessionFactory.CreateSession();
+        var notificationSession = notificationSessionFactory.CreateSession();
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-            _groupUtil.EndCombat(group, notificationSession);
+            groupUtil.EndCombat(group, notificationSession);
 
             await uow.SaveChangesAsync();
         }
@@ -290,27 +269,27 @@ public class GroupService : IGroupService
 
     public async Task UpdateDurationsAsync(NaheulbookExecutionContext executionContext, int groupId, IList<PostGroupUpdateDurationsRequest> request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
         }
 
-        await _durationUtil.UpdateDurationAsync(groupId, _mapper.Map<IList<FighterDurationChanges>>(request));
+        await durationUtil.UpdateDurationAsync(groupId, mapper.Map<IList<FighterDurationChanges>>(request));
     }
 
     public async Task<IEnumerable<CharacterEntity>> ListActiveCharactersAsync(NaheulbookExecutionContext executionContext, int groupId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetGroupsWithCharactersAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
 
             return group.Characters.Where(x => x.IsActive);
         }
@@ -318,17 +297,17 @@ public class GroupService : IGroupService
 
     public async Task<NhbkDate> AddTimeAsync(NaheulbookExecutionContext executionContext, int groupId, NhbkDateOffset request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-            var notificationSession = _notificationSessionFactory.CreateSession();
+            var notificationSession = notificationSessionFactory.CreateSession();
 
-            var newDate = _groupUtil.AddTimeAndNotify(group, request, notificationSession);
+            var newDate = groupUtil.AddTimeAndNotify(group, request, notificationSession);
 
             await uow.SaveChangesAsync();
             await notificationSession.CommitAsync();
@@ -339,32 +318,32 @@ public class GroupService : IGroupService
 
     public async Task AddHistoryEntryAsync(NaheulbookExecutionContext executionContext, int groupId, PostCreateGroupHistoryEntryRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-            group.AddHistoryEntry(_groupHistoryUtil.CreateLogEventRp(group, request.IsGm, request.Info));
+            group.AddHistoryEntry(groupHistoryUtil.CreateLogEventRp(group, request.IsGm, request.Info));
             await uow.SaveChangesAsync();
         }
     }
 
     public async Task EditGroupConfigAsync(NaheulbookExecutionContext executionContext, int groupId, PatchGroupConfigRequest request)
     {
-        var notificationSession = _notificationSessionFactory.CreateSession();
+        var notificationSession = notificationSessionFactory.CreateSession();
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-            _groupConfigUtil.ApplyChangesAndNotify(group, request, notificationSession);
+            groupConfigUtil.ApplyChangesAndNotify(group, request, notificationSession);
 
             await uow.SaveChangesAsync();
         }

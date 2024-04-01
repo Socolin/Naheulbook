@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class InvalidItemOwnerTypeException : Exception
+public class InvalidItemOwnerTypeException(int itemId) : Exception
 {
-    public int ItemId { get; }
-
-    public InvalidItemOwnerTypeException(int itemId)
-    {
-        ItemId = itemId;
-    }
+    public int ItemId { get; } = itemId;
 }

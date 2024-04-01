@@ -17,20 +17,12 @@ public interface IUserAccessTokenService
     Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId);
 }
 
-public class UserAccessTokenService : IUserAccessTokenService
+public class UserAccessTokenService(IUnitOfWorkFactory unitOfWorkFactory, ITimeService timeService)
+    : IUserAccessTokenService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly ITimeService _timeService;
-
-    public UserAccessTokenService(IUnitOfWorkFactory unitOfWorkFactory, ITimeService timeService)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _timeService = timeService;
-    }
-
     public async Task<IList<UserAccessTokenEntity>> GetUserAccessTokensAsync(int userId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.UserAccessTokenRepository.GetUserAccessTokensForUser(userId);
         }
@@ -38,7 +30,7 @@ public class UserAccessTokenService : IUserAccessTokenService
 
     public async Task<UserAccessTokenEntity> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var token = new UserAccessTokenEntity
             {
@@ -46,7 +38,7 @@ public class UserAccessTokenService : IUserAccessTokenService
                 Key = RngHelper.GetRandomHexString(64),
                 Name = request.Name,
                 UserId = userId,
-                DateCreated = _timeService.UtcNow,
+                DateCreated = timeService.UtcNow,
             };
             uow.UserAccessTokenRepository.Add(token);
             await uow.SaveChangesAsync();
@@ -56,7 +48,7 @@ public class UserAccessTokenService : IUserAccessTokenService
 
     public async Task<UserAccessTokenEntity?> ValidateTokenAsync(string accessKey)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var token = await uow.UserAccessTokenRepository.GetByKeyAsync(accessKey);
             return token;
@@ -65,7 +57,7 @@ public class UserAccessTokenService : IUserAccessTokenService
 
     public async Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var token = await uow.UserAccessTokenRepository.GetByUserIdAndTokenIdAsync(userId, userAccessTokenId);
             if (token == null)

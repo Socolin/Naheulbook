@@ -11,13 +11,8 @@ public interface ISkillRepository : IRepository<SkillEntity>
     Task<ICollection<SkillEntity>> GetAllWithEffectsAsync();
 }
 
-public class SkillRepository : Repository<SkillEntity, NaheulbookDbContext>, ISkillRepository
+public class SkillRepository(NaheulbookDbContext context) : Repository<SkillEntity, NaheulbookDbContext>(context), ISkillRepository
 {
-    public SkillRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public async Task<ICollection<SkillEntity>> GetAllWithEffectsAsync()
     {
         return await Context.Skills

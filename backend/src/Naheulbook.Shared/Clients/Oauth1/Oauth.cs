@@ -11,30 +11,21 @@ using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Shared.Clients.Oauth1;
 
-public class Oauth
+public class Oauth(string consumerKey, string consumerSecret, string requestUrl)
 {
     public string Method { get; set; } = "POST";
-    public string RequestUrl { get; }
+    public string RequestUrl { get; } = requestUrl;
     public string? AccessSecret { get; set; }
     public string SignatureMethod { get; set; } = "HMAC-SHA1";
     public string Version { get; set; } = "1.0";
-    private readonly string _consumerSecret;
-    private readonly string _consumerKey;
     private IDictionary<string, string> Parameters { get; } = new Dictionary<string, string>();
     private IDictionary<string, string> OauthParameters { get; } = new Dictionary<string, string>();
-
-    public Oauth(string consumerKey, string consumerSecret, string requestUrl)
-    {
-        _consumerKey = consumerKey;
-        _consumerSecret = consumerSecret;
-        RequestUrl = requestUrl;
-    }
 
     private void UpdateDefaultOauthParameters()
     {
         OauthParameters["nonce"] = RngHelper.GetRandomHexString(10);
         OauthParameters["timestamp"] = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
-        OauthParameters["consumer_key"] = _consumerKey;
+        OauthParameters["consumer_key"] = consumerKey;
         OauthParameters["signature_method"] = SignatureMethod;
         OauthParameters["version"] = Version;
     }
@@ -80,7 +71,7 @@ public class Oauth
 
     private string SignatureKey()
     {
-        var signatureKey = Uri.EscapeDataString(_consumerSecret) + "&";
+        var signatureKey = Uri.EscapeDataString(consumerSecret) + "&";
         if (!string.IsNullOrEmpty(AccessSecret))
         {
             signatureKey += Uri.EscapeDataString(AccessSecret);

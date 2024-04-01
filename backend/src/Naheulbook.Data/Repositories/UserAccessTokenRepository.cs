@@ -16,13 +16,8 @@ public interface IUserAccessTokenRepository : IRepository<UserAccessTokenEntity>
     Task<UserAccessTokenEntity?> GetByUserIdAndTokenIdAsync(int userId, Guid userAccessTokenId);
 }
 
-public class UserAccessTokenRepository : Repository<UserAccessTokenEntity, NaheulbookDbContext>, IUserAccessTokenRepository
+public class UserAccessTokenRepository(NaheulbookDbContext context) : Repository<UserAccessTokenEntity, NaheulbookDbContext>(context), IUserAccessTokenRepository
 {
-    public UserAccessTokenRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<List<UserAccessTokenEntity>> GetUserAccessTokensForUser(int userId)
     {
         return Context.UserAccessTokens

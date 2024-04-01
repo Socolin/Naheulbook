@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class LootNotFoundException : Exception
+public class LootNotFoundException(int lootId) : Exception
 {
-    public int LootId { get; }
-
-    public LootNotFoundException(int lootId)
-    {
-        LootId = lootId;
-    }
+    public int LootId { get; } = lootId;
 }

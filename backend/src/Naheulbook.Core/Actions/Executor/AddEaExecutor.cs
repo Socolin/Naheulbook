@@ -10,15 +10,9 @@ public interface IAddEaExecutor : IActionExecutor
 {
 }
 
-public class AddEaExecutor : IAddEaExecutor
+public class AddEaExecutor(ICharacterHistoryUtil characterHistoryUtil) : IAddEaExecutor
 {
     private const string ActionType = "addEa";
-    private readonly ICharacterHistoryUtil _characterHistoryUtil;
-
-    public AddEaExecutor(ICharacterHistoryUtil characterHistoryUtil)
-    {
-        _characterHistoryUtil = characterHistoryUtil;
-    }
 
     public Task ExecuteAsync(
         NhbkAction action,
@@ -38,7 +32,7 @@ public class AddEaExecutor : IAddEaExecutor
         var oldEa = context.TargetCharacter.Ea;
         var newEa = oldEa + action.Data.Ea.Value;
 
-        context.TargetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogChangeEa(context.TargetCharacter, oldEa, newEa));
+        context.TargetCharacter.AddHistoryEntry(characterHistoryUtil.CreateLogChangeEa(context.TargetCharacter, oldEa, newEa));
         context.TargetCharacter.Ea = newEa;
         notificationSession.NotifyCharacterChangeEa(context.TargetCharacter);
 

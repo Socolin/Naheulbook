@@ -18,13 +18,8 @@ public interface IItemRepository : IRepository<ItemEntity>
     Task<ItemEntity?> GetWithAllDataWithCharacterAsync(int itemId);
 }
 
-public class ItemRepository : Repository<ItemEntity, NaheulbookDbContext>, IItemRepository
+public class ItemRepository(NaheulbookDbContext context) : Repository<ItemEntity, NaheulbookDbContext>(context), IItemRepository
 {
-    public ItemRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<ItemEntity?> GetWithAllDataAsync(int itemId)
     {
         return Context.Items

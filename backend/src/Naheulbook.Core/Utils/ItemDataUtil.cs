@@ -32,23 +32,16 @@ public interface IItemDataUtil
 /// returns of GetItemData, GetItemData return an immutable object, but an optiimization would be to return a copy)
 /// of that cache object (one new + copy 10/12 fields should be fast enough)
 /// </summary>
-public class ItemDataUtil : IItemDataUtil
+public class ItemDataUtil(IJsonUtil jsonUtil) : IItemDataUtil
 {
-    private readonly IJsonUtil _jsonUtil;
-
-    public ItemDataUtil(IJsonUtil jsonUtil)
-    {
-        _jsonUtil = jsonUtil;
-    }
-
     public IReadOnlyItemData GetItemData(ItemEntity item)
     {
-        return _jsonUtil.DeserializeOrCreate<ItemData>(item.Data);
+        return jsonUtil.DeserializeOrCreate<ItemData>(item.Data);
     }
 
     public void SetItemData(ItemEntity item, IReadOnlyItemData itemData)
     {
-        item.Data = _jsonUtil.SerializeNonNull(itemData);
+        item.Data = jsonUtil.SerializeNonNull(itemData);
     }
 
     public bool IsItemEquipped(ItemEntity item)
@@ -114,7 +107,7 @@ public class ItemDataUtil : IItemDataUtil
 
     private void UpdateData(ItemEntity item, Action<ItemData> action)
     {
-        var itemData = _jsonUtil.DeserializeOrCreate<ItemData>(item.Data);
+        var itemData = jsonUtil.DeserializeOrCreate<ItemData>(item.Data);
         action(itemData);
         SetItemData(item, itemData);
     }

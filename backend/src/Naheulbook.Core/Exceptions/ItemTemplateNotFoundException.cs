@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class ItemTemplateNotFoundException : Exception
+public class ItemTemplateNotFoundException(Guid itemTemplateId) : Exception
 {
-    public Guid ItemTemplateId { get; }
-
-    public ItemTemplateNotFoundException(Guid itemTemplateId)
-    {
-        ItemTemplateId = itemTemplateId;
-    }
+    public Guid ItemTemplateId { get; } = itemTemplateId;
 }

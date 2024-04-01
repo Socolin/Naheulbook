@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class InvalidItemTemplateActionsDataException : Exception
+public class InvalidItemTemplateActionsDataException(Guid itemTemplateId) : Exception
 {
-    public Guid ItemTemplateId { get; }
-
-    public InvalidItemTemplateActionsDataException(Guid itemTemplateId)
-    {
-        ItemTemplateId = itemTemplateId;
-    }
+    public Guid ItemTemplateId { get; } = itemTemplateId;
 }

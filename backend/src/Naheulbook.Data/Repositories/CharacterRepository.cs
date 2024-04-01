@@ -21,14 +21,9 @@ public interface ICharacterRepository : IRepository<CharacterEntity>
     Task<List<CharacterEntity>> GetWithItemsWithModifiersByGroupAndByIdAsync(int groupId, IEnumerable<int> characterIds);
 }
 
-public class CharacterRepository : Repository<CharacterEntity, NaheulbookDbContext>, ICharacterRepository
+public class CharacterRepository(NaheulbookDbContext context) : Repository<CharacterEntity, NaheulbookDbContext>(context), ICharacterRepository
 {
     private const int HistoryPageSize = 40;
-
-    public CharacterRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
 
     public async Task<CharacterEntity?> GetWithAllDataAsync(int id)
     {

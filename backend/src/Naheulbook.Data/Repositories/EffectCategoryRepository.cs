@@ -7,10 +7,4 @@ public interface IEffectSubCategoryRepository : IRepository<EffectSubCategoryEnt
 {
 }
 
-public class EffectSubCategoryRepository : Repository<EffectSubCategoryEntity, NaheulbookDbContext>, IEffectSubCategoryRepository
-{
-    public EffectSubCategoryRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-}
+public class EffectSubCategoryRepository(NaheulbookDbContext context) : Repository<EffectSubCategoryEntity, NaheulbookDbContext>(context), IEffectSubCategoryRepository;

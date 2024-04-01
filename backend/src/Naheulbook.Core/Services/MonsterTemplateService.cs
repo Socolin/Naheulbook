@@ -19,22 +19,14 @@ public interface IMonsterTemplateService
     Task<List<MonsterTemplateEntity>> SearchMonsterAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId);
 }
 
-public class MonsterTemplateService : IMonsterTemplateService
+public class MonsterTemplateService(IUnitOfWorkFactory unitOfWorkFactory, IAuthorizationUtil authorizationUtil)
+    : IMonsterTemplateService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IAuthorizationUtil _authorizationUtil;
-
-    public MonsterTemplateService(IUnitOfWorkFactory unitOfWorkFactory, IAuthorizationUtil authorizationUtil)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _authorizationUtil = authorizationUtil;
-    }
-
     public async Task<MonsterTemplateEntity> CreateMonsterTemplateAsync(NaheulbookExecutionContext executionContext, MonsterTemplateRequest request)
     {
-        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+        await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var subCategory = await uow.MonsterSubCategories.GetAsync(request.SubCategoryId);
             if (subCategory == null)
@@ -65,9 +57,9 @@ public class MonsterTemplateService : IMonsterTemplateService
 
     public async Task<MonsterTemplateEntity> EditMonsterTemplateAsync(NaheulbookExecutionContext executionContext, int monsterTemplateId, MonsterTemplateRequest request)
     {
-        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+        await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var subCategory = await uow.MonsterSubCategories.GetAsync(request.SubCategoryId);
             if (subCategory == null)
@@ -107,7 +99,7 @@ public class MonsterTemplateService : IMonsterTemplateService
 
     public async Task<List<MonsterTemplateEntity>> GetAllMonstersAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.MonsterTemplates.GetAllWithItemsFullDataAsync();
         }
@@ -118,7 +110,7 @@ public class MonsterTemplateService : IMonsterTemplateService
         if (string.IsNullOrWhiteSpace(filter))
             return new List<MonsterTemplateEntity>();
 
-        using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
         return await uow.MonsterTemplates.SearchByNameAndSubCategoryAsync(filter, monsterTypeId, monsterSubCategoryId, 10);
     }
 }

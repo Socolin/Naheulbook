@@ -15,28 +15,17 @@ public interface IDurationUtil
     Task UpdateDurationAsync(int groupId, IList<FighterDurationChanges> fighters);
 }
 
-public class DurationUtil : IDurationUtil
+public class DurationUtil(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    IJsonUtil jsonUtil,
+    INotificationSessionFactory notificationSessionFactory
+) : IDurationUtil
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IJsonUtil _jsonUtil;
-    private readonly INotificationSessionFactory _notificationSessionFactory;
-
-    public DurationUtil(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        IJsonUtil jsonUtil,
-        INotificationSessionFactory notificationSessionFactory
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _jsonUtil = jsonUtil;
-        _notificationSessionFactory = notificationSessionFactory;
-    }
-
     public async Task UpdateDurationAsync(int groupId, IList<FighterDurationChanges> request)
     {
-        var notificationSession = _notificationSessionFactory.CreateSession();
+        var notificationSession = notificationSessionFactory.CreateSession();
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var monsterUpdateDurations = request.OfType<MonsterUpdateDuration>().ToList();
             var monsterIds = monsterUpdateDurations.Select(f => f.MonsterId).ToList();
@@ -64,7 +53,7 @@ public class DurationUtil : IDurationUtil
 
     private void UpdateMonsterDuration(MonsterEntity monster, IList<IDurationChange> changes, INotificationSession notificationSession)
     {
-        var modifiers = _jsonUtil.DeserializeOrCreate<List<ActiveStatsModifier>>(monster.Modifiers);
+        var modifiers = jsonUtil.DeserializeOrCreate<List<ActiveStatsModifier>>(monster.Modifiers);
 
         foreach (var change in changes.OfType<ModifierDurationChange>())
         {
@@ -73,16 +62,16 @@ public class DurationUtil : IDurationUtil
 
         UpdateItemsDuration(monster.Items, changes.OfType<IITemDurationChange>(), notificationSession);
 
-        monster.Modifiers = _jsonUtil.Serialize(modifiers);
+        monster.Modifiers = jsonUtil.Serialize(modifiers);
     }
 
     private void UpdateItemsDuration(ICollection<ItemEntity> items, IEnumerable<IITemDurationChange> changes, INotificationSession notificationSession)
     {
         foreach (var (item, change) in items.Join(changes.OfType<ItemModifierDurationChange>(), i => i.Id, c => c.ItemId, (item, change) => (item, change)))
         {
-            var modifiers = _jsonUtil.DeserializeOrCreate<List<ActiveStatsModifier>>(item.Modifiers);
+            var modifiers = jsonUtil.DeserializeOrCreate<List<ActiveStatsModifier>>(item.Modifiers);
             ApplyChangeOnItemModifier(modifiers, change);
-            item.Modifiers = _jsonUtil.Serialize(modifiers);
+            item.Modifiers = jsonUtil.Serialize(modifiers);
             notificationSession.NotifyItemUpdateModifier(item);
         }
     }

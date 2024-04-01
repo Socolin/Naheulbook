@@ -12,14 +12,9 @@ public interface IGroupHistoryEntryRepository : IRepository<GroupHistoryEntryEnt
     Task<List<GroupHistoryEntryEntity>> GetByGroupIdAndPageAsync(int groupId, int page);
 }
 
-public class GroupHistoryEntryRepository : Repository<GroupHistoryEntryEntity, NaheulbookDbContext>, IGroupHistoryEntryRepository
+public class GroupHistoryEntryRepository(NaheulbookDbContext naheulbookDbContext) : Repository<GroupHistoryEntryEntity, NaheulbookDbContext>(naheulbookDbContext), IGroupHistoryEntryRepository
 {
     private const int PageSize = 40;
-
-    public GroupHistoryEntryRepository(NaheulbookDbContext naheulbookDbContext)
-        : base(naheulbookDbContext)
-    {
-    }
 
     public Task<List<GroupHistoryEntryEntity>> GetByGroupIdAndPageAsync(int groupId, int page)
     {

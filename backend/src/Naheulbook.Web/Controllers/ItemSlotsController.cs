@@ -9,22 +9,13 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/itemSlots")]
 [ApiController]
-public class ItemSlotsController
+public class ItemSlotsController(IItemTemplateService itemTemplateService, IMapper mapper)
 {
-    private readonly IItemTemplateService _itemTemplateService;
-    private readonly IMapper _mapper;
-
-    public ItemSlotsController(IItemTemplateService itemTemplateService, IMapper mapper)
-    {
-        _itemTemplateService = itemTemplateService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<ItemSlotResponse>>> GetAsync()
     {
-        var skills = await _itemTemplateService.GetItemSlotsAsync();
+        var skills = await itemTemplateService.GetItemSlotsAsync();
 
-        return _mapper.Map<List<ItemSlotResponse>>(skills);
+        return mapper.Map<List<ItemSlotResponse>>(skills);
     }
 }

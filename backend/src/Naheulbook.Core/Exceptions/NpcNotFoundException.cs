@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class NpcNotFoundException : Exception
+public class NpcNotFoundException(int npcId) : Exception
 {
-    public int NpcId { get; }
-
-    public NpcNotFoundException(int npcId)
-    {
-        NpcId = npcId;
-    }
+    public int NpcId { get; } = npcId;
 }

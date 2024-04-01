@@ -5,14 +5,8 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class RandomNameGeneratorNotFound : Exception
+public class RandomNameGeneratorNotFound(string sex, Guid originId) : Exception
 {
-    public string Sex { get; }
-    public Guid OriginId { get; }
-
-    public RandomNameGeneratorNotFound(string sex, Guid originId)
-    {
-        Sex = sex;
-        OriginId = originId;
-    }
+    public string Sex { get; } = sex;
+    public Guid OriginId { get; } = originId;
 }

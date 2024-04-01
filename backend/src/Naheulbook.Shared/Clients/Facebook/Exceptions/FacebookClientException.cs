@@ -5,14 +5,8 @@ using System;
 
 namespace Naheulbook.Shared.Clients.Facebook.Exceptions;
 
-public class FacebookClientException : Exception
+public class FacebookClientException(string content, int statusCode) : Exception
 {
-    public string Content { get; }
-    public int StatusCode { get; }
-
-    public FacebookClientException(string content, int statusCode)
-    {
-        Content = content;
-        StatusCode = statusCode;
-    }
+    public string Content { get; } = content;
+    public int StatusCode { get; } = statusCode;
 }

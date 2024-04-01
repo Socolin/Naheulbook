@@ -11,13 +11,8 @@ public interface ICharacterModifierRepository : IRepository<CharacterModifierEnt
     Task<CharacterModifierEntity?> GetByIdAndCharacterIdAsync(int characterId, int characterModifierId);
 }
 
-public class CharacterModifierRepository : Repository<CharacterModifierEntity, NaheulbookDbContext>, ICharacterModifierRepository
+public class CharacterModifierRepository(NaheulbookDbContext naheulbookDbContext) : Repository<CharacterModifierEntity, NaheulbookDbContext>(naheulbookDbContext), ICharacterModifierRepository
 {
-    public CharacterModifierRepository(NaheulbookDbContext naheulbookDbContext)
-        : base(naheulbookDbContext)
-    {
-    }
-
     public Task<CharacterModifierEntity?> GetByIdAndCharacterIdAsync(int characterId, int characterModifierId)
     {
         return Context.CharacterModifiers

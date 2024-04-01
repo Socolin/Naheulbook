@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class MapLayerNotFoundException : Exception
+public class MapLayerNotFoundException(int mapLayerId) : Exception
 {
-    public int MapLayerId { get; }
-
-    public MapLayerNotFoundException(int mapLayerId)
-    {
-        MapLayerId = mapLayerId;
-    }
+    public int MapLayerId { get; } = mapLayerId;
 }

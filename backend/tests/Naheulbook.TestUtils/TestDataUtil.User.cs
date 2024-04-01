@@ -12,7 +12,7 @@ public partial class TestDataUtil
 
     public TestDataUtil AddUser(out UserEntity user, Action<UserEntity> customizer = null)
     {
-        user = _defaultEntityCreator.CreateUser();
+        user = defaultEntityCreator.CreateUser();
         return SaveEntity(user, customizer);
     }
 
@@ -23,7 +23,7 @@ public partial class TestDataUtil
 
     public TestDataUtil AddUserAccessToken(out UserAccessTokenEntity userAccessToken, Action<UserAccessTokenEntity> customizer = null)
     {
-        userAccessToken = _defaultEntityCreator.CreateUserAccessToken(GetLast<UserEntity>());
+        userAccessToken = defaultEntityCreator.CreateUserAccessToken(GetLast<UserEntity>());
         return SaveEntity(userAccessToken, customizer);
     }
 }

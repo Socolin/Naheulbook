@@ -6,20 +6,13 @@ using TechTalk.SpecFlow;
 namespace Naheulbook.Tests.Functional.Code.Init;
 
 [Binding]
-public class IocInitializer
+public class IocInitializer(IObjectContainer objectContainer)
 {
-    private readonly IObjectContainer _objectContainer;
-
-    public IocInitializer(IObjectContainer objectContainer)
-    {
-        _objectContainer = objectContainer;
-    }
-
     [BeforeScenario(Order = 0)]
     public void InitializeIoc()
     {
-        _objectContainer.RegisterTypeAs<EffectTestService, EffectTestService>();
-        _objectContainer.RegisterTypeAs<UserTestService, UserTestService>();
-        _objectContainer.RegisterTypeAs<TestDataUtil, TestDataUtil>();
+        objectContainer.RegisterTypeAs<EffectTestService, EffectTestService>();
+        objectContainer.RegisterTypeAs<UserTestService, UserTestService>();
+        objectContainer.RegisterTypeAs<TestDataUtil, TestDataUtil>();
     }
 }

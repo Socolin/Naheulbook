@@ -22,20 +22,12 @@ public interface IEffectService
     Task<List<EffectEntity>> SearchEffectsAsync(string filter);
 }
 
-public class EffectService : IEffectService
+public class EffectService(IUnitOfWorkFactory unitOfWorkFactory, IAuthorizationUtil authorizationUtil)
+    : IEffectService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IAuthorizationUtil _authorizationUtil;
-
-    public EffectService(IUnitOfWorkFactory unitOfWorkFactory, IAuthorizationUtil authorizationUtil)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _authorizationUtil = authorizationUtil;
-    }
-
     public async Task<EffectEntity> GetEffectAsync(int effectId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var effect = await uow.Effects.GetWithModifiersAsync(effectId);
             if (effect == null)
@@ -47,7 +39,7 @@ public class EffectService : IEffectService
 
     public async Task<ICollection<EffectTypeEntity>> GetEffectSubCategoriesAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Effects.GetCategoriesAsync();
         }
@@ -55,7 +47,7 @@ public class EffectService : IEffectService
 
     public async Task<ICollection<EffectEntity>> GetEffectsBySubCategoryAsync(long subCategoryId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Effects.GetBySubCategoryWithModifiersAsync(subCategoryId);
         }
@@ -63,7 +55,7 @@ public class EffectService : IEffectService
 
     public async Task<EffectTypeEntity> CreateEffectTypeAsync(NaheulbookExecutionContext executionContext, CreateEffectTypeRequest request)
     {
-        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+        await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
         var effectType = new EffectTypeEntity
         {
@@ -71,7 +63,7 @@ public class EffectService : IEffectService
             SubCategories = new List<EffectSubCategoryEntity>(),
         };
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             uow.EffectTypes.Add(effectType);
             await uow.SaveChangesAsync();
@@ -85,7 +77,7 @@ public class EffectService : IEffectService
         CreateEffectSubCategoryRequest request
     )
     {
-        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+        await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
         var effectSubCategory = new EffectSubCategoryEntity
         {
@@ -97,7 +89,7 @@ public class EffectService : IEffectService
             Effects = new List<EffectEntity>(),
         };
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             uow.EffectSubCategories.Add(effectSubCategory);
             await uow.SaveChangesAsync();
@@ -108,7 +100,7 @@ public class EffectService : IEffectService
 
     public async Task<EffectEntity> CreateEffectAsync(NaheulbookExecutionContext executionContext, int subCategoryId, CreateEffectRequest request)
     {
-        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+        await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
         var effect = new EffectEntity
         {
@@ -127,7 +119,7 @@ public class EffectService : IEffectService
             }).ToList(),
         };
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             uow.Effects.Add(effect);
             await uow.SaveChangesAsync();
@@ -138,9 +130,9 @@ public class EffectService : IEffectService
 
     public async Task<EffectEntity> EditEffectAsync(NaheulbookExecutionContext executionContext, int effectId, EditEffectRequest request)
     {
-        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+        await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var effect = await uow.Effects.GetWithModifiersAsync(effectId);
             if (effect == null)
@@ -170,7 +162,7 @@ public class EffectService : IEffectService
     {
         if (string.IsNullOrEmpty(filter))
             return new List<EffectEntity>();
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Effects.SearchByNameAsync(filter, 10);
         }

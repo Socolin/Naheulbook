@@ -12,13 +12,8 @@ public interface IItemTemplateSubCategoryRepository : IRepository<ItemTemplateSu
     Task<ItemTemplateSubCategoryEntity?> GetByTechNameAsync(string techName);
 }
 
-public class ItemTemplateSubCategoryRepository : Repository<ItemTemplateSubCategoryEntity, NaheulbookDbContext>, IItemTemplateSubCategoryRepository
+public class ItemTemplateSubCategoryRepository(NaheulbookDbContext context) : Repository<ItemTemplateSubCategoryEntity, NaheulbookDbContext>(context), IItemTemplateSubCategoryRepository
 {
-    public ItemTemplateSubCategoryRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<ItemTemplateSubCategoryEntity?> GetWithItemTemplatesByTechNameAsync(string techName)
     {
         return Context.ItemTemplateSubCategories

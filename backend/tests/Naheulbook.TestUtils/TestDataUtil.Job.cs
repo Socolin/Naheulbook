@@ -13,7 +13,7 @@ public partial class TestDataUtil
 
     public TestDataUtil AddJob(out JobEntity job, Action<JobEntity> customizer = null)
     {
-        job = _defaultEntityCreator.CreateJob();
+        job = defaultEntityCreator.CreateJob();
         return SaveEntity(job, customizer);
     }
 
@@ -21,7 +21,7 @@ public partial class TestDataUtil
     {
         var suffix = RngUtil.GetRandomHexString(8);
 
-        var job = _defaultEntityCreator.CreateJob(suffix);
+        var job = defaultEntityCreator.CreateJob(suffix);
 
         var stat = AddStat().GetLast<StatEntity>();
 
@@ -81,7 +81,7 @@ public partial class TestDataUtil
     public TestDataUtil AddSpeciality(out SpecialityEntity speciality, Action<SpecialityEntity> customizer = null)
     {
         var job = GetLast<JobEntity>();
-        speciality = _defaultEntityCreator.CreateSpeciality(job);
+        speciality = defaultEntityCreator.CreateSpeciality(job);
         return SaveEntity(speciality, customizer);
     }
 
@@ -90,7 +90,7 @@ public partial class TestDataUtil
         var suffix = RngUtil.GetRandomHexString(8);
 
         var job = GetLast<JobEntity>();
-        var speciality = _defaultEntityCreator.CreateSpeciality(job, suffix);
+        var speciality = defaultEntityCreator.CreateSpeciality(job, suffix);
 
         speciality.Modifiers = new List<SpecialityModifierEntity>
         {

@@ -14,17 +14,8 @@ public interface IItemFactory
     ItemEntity CloneItem(ItemEntity originalItem);
 }
 
-public class ItemFactory : IItemFactory
+public class ItemFactory(IJsonUtil jsonUtil, IItemDataUtil itemDataUtil) : IItemFactory
 {
-    private readonly IJsonUtil _jsonUtil;
-    private readonly IItemDataUtil _itemDataUtil;
-
-    public ItemFactory(IJsonUtil jsonUtil, IItemDataUtil itemDataUtil)
-    {
-        _jsonUtil = jsonUtil;
-        _itemDataUtil = itemDataUtil;
-    }
-
     public ItemEntity CreateItem(ItemOwnerType ownerType, int ownerId, ItemTemplateEntity itemTemplate, ItemData itemData)
     {
         var item = CreateItem(itemTemplate, itemData);
@@ -49,7 +40,7 @@ public class ItemFactory : IItemFactory
 
     public ItemEntity CreateItem(ItemTemplateEntity itemTemplate, ItemData itemData)
     {
-        var itemTemplateData = _jsonUtil.DeserializeOrCreate<PartialItemTemplateData>(itemTemplate.Data);
+        var itemTemplateData = jsonUtil.DeserializeOrCreate<PartialItemTemplateData>(itemTemplate.Data);
 
         if (itemTemplateData.Charge.HasValue)
             itemData.Charge = itemTemplateData.Charge.Value;
@@ -68,7 +59,7 @@ public class ItemFactory : IItemFactory
 
         var item = new ItemEntity
         {
-            Data = _jsonUtil.SerializeNonNull(itemData),
+            Data = jsonUtil.SerializeNonNull(itemData),
             ItemTemplateId = itemTemplate.Id,
         };
         return item;
@@ -76,12 +67,12 @@ public class ItemFactory : IItemFactory
 
     public ItemEntity CloneItem(ItemEntity originalItem)
     {
-        var originItemData = _itemDataUtil.GetItemData(originalItem);
+        var originItemData = itemDataUtil.GetItemData(originalItem);
         var clonedItem = new ItemEntity
         {
             Modifiers = originalItem.Modifiers,
             ItemTemplateId = originalItem.ItemTemplateId,
-            Data = _jsonUtil.SerializeNonNull(originItemData),
+            Data = jsonUtil.SerializeNonNull(originItemData),
         };
 
         return clonedItem;

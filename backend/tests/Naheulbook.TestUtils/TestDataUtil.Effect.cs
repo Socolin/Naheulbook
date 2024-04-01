@@ -12,7 +12,7 @@ public partial class TestDataUtil
 
     public TestDataUtil AddEffectType(out EffectTypeEntity effectType, Action<EffectTypeEntity> customizer = null)
     {
-        effectType = _defaultEntityCreator.CreateEffectType();
+        effectType = defaultEntityCreator.CreateEffectType();
         return SaveEntity(effectType, customizer);
     }
 
@@ -24,7 +24,7 @@ public partial class TestDataUtil
     public TestDataUtil AddEffectSubCategory(out EffectSubCategoryEntity effectSubCategory, Action<EffectSubCategoryEntity> customizer = null)
     {
         var effectType = GetLast<EffectTypeEntity>();
-        effectSubCategory = _defaultEntityCreator.CreateEffectSubCategory(effectType);
+        effectSubCategory = defaultEntityCreator.CreateEffectSubCategory(effectType);
         return SaveEntity(effectSubCategory, customizer);
     }
 
@@ -36,7 +36,7 @@ public partial class TestDataUtil
     public TestDataUtil AddEffect(out EffectEntity effect, Action<EffectEntity> customizer = null)
     {
         var effectSubCategory = GetLast<EffectSubCategoryEntity>();
-        effect = _defaultEntityCreator.CreateEffect(effectSubCategory);
+        effect = defaultEntityCreator.CreateEffect(effectSubCategory);
         return SaveEntity(effect, customizer);
     }
 

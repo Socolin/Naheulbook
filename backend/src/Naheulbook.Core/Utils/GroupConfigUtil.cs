@@ -11,18 +11,11 @@ public interface IGroupConfigUtil
     void ApplyChangesAndNotify(GroupEntity group, PatchGroupConfigRequest request, INotificationSession notificationSession);
 }
 
-public class GroupConfigUtil : IGroupConfigUtil
+public class GroupConfigUtil(IJsonUtil jsonUtil) : IGroupConfigUtil
 {
-    private readonly IJsonUtil _jsonUtil;
-
-    public GroupConfigUtil(IJsonUtil jsonUtil)
-    {
-        _jsonUtil = jsonUtil;
-    }
-
     public void ApplyChangesAndNotify(GroupEntity group, PatchGroupConfigRequest request, INotificationSession notificationSession)
     {
-        var config = _jsonUtil.DeserializeOrCreate<GroupConfig>(group.Config);
+        var config = jsonUtil.DeserializeOrCreate<GroupConfig>(group.Config);
 
         if (request.AllowPlayersToAddObject.HasValue)
             config.AllowPlayersToAddObject = request.AllowPlayersToAddObject.Value;
@@ -31,7 +24,7 @@ public class GroupConfigUtil : IGroupConfigUtil
         if (request.AllowPlayersToSeeGemPriceWhenIdentified.HasValue)
             config.AllowPlayersToSeeGemPriceWhenIdentified = request.AllowPlayersToSeeGemPriceWhenIdentified.Value;
 
-        group.Config = _jsonUtil.SerializeNonNull(config);
+        group.Config = jsonUtil.SerializeNonNull(config);
 
         notificationSession.NotifyGroupChangeConfig(group.Id, config);
     }

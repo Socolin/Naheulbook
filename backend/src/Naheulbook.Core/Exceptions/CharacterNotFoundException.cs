@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class CharacterNotFoundException : Exception
+public class CharacterNotFoundException(int characterId) : Exception
 {
-    public int CharacterId { get; }
-
-    public CharacterNotFoundException(int characterId)
-    {
-        CharacterId = characterId;
-    }
+    public int CharacterId { get; } = characterId;
 }

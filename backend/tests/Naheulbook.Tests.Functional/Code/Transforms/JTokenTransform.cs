@@ -13,21 +13,12 @@ namespace Naheulbook.Tests.Functional.Code.Transforms;
 public class JTokenTransform
 {
     [Binding]
-    public class StringReplacementTransform
+    public class StringReplacementTransform(ScenarioContext scenarioContext, TestDataUtil testDataUtil)
     {
-        private readonly ScenarioContext _scenarioContext;
-        private readonly TestDataUtil _testDataUtil;
-
-        public StringReplacementTransform(ScenarioContext scenarioContext, TestDataUtil testDataUtil)
-        {
-            _scenarioContext = scenarioContext;
-            _testDataUtil = testDataUtil;
-        }
-
         [StepArgumentTransformation]
         public JToken ReplaceJToken(string input)
         {
-            var expandedJson = input.ExecuteReplacement(_scenarioContext, _testDataUtil);
+            var expandedJson = input.ExecuteReplacement(scenarioContext, testDataUtil);
             try
             {
                 return JsonConvert.DeserializeObject<JToken>(expandedJson, new JsonSerializerSettings()
@@ -59,7 +50,7 @@ public class JTokenTransform
 
                 var stackTraceScenarioFrame = new StackTrace(true).GetFrames().FirstOrDefault(x => x.GetFileName()?.EndsWith(".feature") == true);
 
-                throw new Exception($"During the scenario '{_scenarioContext.ScenarioInfo.Title}'\nwhile parsing step `{_scenarioContext.StepContext.StepInfo.Text}`" +
+                throw new Exception($"During the scenario '{scenarioContext.ScenarioInfo.Title}'\nwhile parsing step `{scenarioContext.StepContext.StepInfo.Text}`" +
                                     $"\nInvalid JSON found. At line {ex.LineNumber} at position: {ex.LinePosition}" +
                                     $"\n\n{showErrorOutput}" +
                                     $"\n\nIn file {stackTraceScenarioFrame?.GetFileName()}:{stackTraceScenarioFrame?.GetFileLineNumber()}\n\n"

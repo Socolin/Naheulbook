@@ -17,13 +17,8 @@ public interface IMonsterTemplateRepository : IRepository<MonsterTemplateEntity>
     Task<MonsterTemplateEntity?> GetByIdWithItemsFullDataAsync(int monsterTemplateId);
 }
 
-public class MonsterTemplateRepository : Repository<MonsterTemplateEntity, NaheulbookDbContext>, IMonsterTemplateRepository
+public class MonsterTemplateRepository(NaheulbookDbContext context) : Repository<MonsterTemplateEntity, NaheulbookDbContext>(context), IMonsterTemplateRepository
 {
-    public MonsterTemplateRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<List<MonsterTemplateEntity>> GetAllWithItemsFullDataAsync()
     {
         return Context.MonsterTemplates

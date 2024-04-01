@@ -2,12 +2,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class CharacterModifierNotFoundException : Exception
+public class CharacterModifierNotFoundException(int characterModifierId) : Exception
 {
-    public int CharacterModifierId { get; }
-
-    public CharacterModifierNotFoundException(int characterModifierId)
-    {
-        CharacterModifierId = characterModifierId;
-    }
+    public int CharacterModifierId { get; } = characterModifierId;
 }

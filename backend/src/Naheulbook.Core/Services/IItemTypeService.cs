@@ -10,18 +10,11 @@ public interface IItemTypeService
     Task<List<ItemTypeEntity>> GetAllItemTypesAsync();
 }
 
-public class ItemTypeService : IItemTypeService
+public class ItemTypeService(IUnitOfWorkFactory unitOfWorkFactory) : IItemTypeService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-    public ItemTypeService(IUnitOfWorkFactory unitOfWorkFactory)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-    }
-
     public async Task<List<ItemTypeEntity>> GetAllItemTypesAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.ItemTypes.GetAllAsync();
         }

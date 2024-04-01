@@ -13,17 +13,8 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("/api/v2/mapMarkers")]
 [ApiController]
-public class MapMarkerController : ControllerBase
+public class MapMarkerController(IMapService mapService, IMapper mapper) : ControllerBase
 {
-    private readonly IMapper _mapper;
-    private readonly IMapService _mapService;
-
-    public MapMarkerController(IMapService mapService, IMapper mapper)
-    {
-        _mapService = mapService;
-        _mapper = mapper;
-    }
-
     [HttpDelete("{MapMarkerId}")]
     public async Task<IActionResult> DeleteMarkerAsync(
         [FromServices] NaheulbookExecutionContext naheulbookExecutionContext,
@@ -32,7 +23,7 @@ public class MapMarkerController : ControllerBase
     {
         try
         {
-            await _mapService.DeleteMapMarkerAsync(naheulbookExecutionContext, mapMarkerId);
+            await mapService.DeleteMapMarkerAsync(naheulbookExecutionContext, mapMarkerId);
         }
         catch (MapMarkerNotFoundException ex)
         {
@@ -51,8 +42,8 @@ public class MapMarkerController : ControllerBase
     {
         try
         {
-            var marker = await _mapService.EditMapMarkerAsync(naheulbookExecutionContext, mapMarkerId, request);
-            return _mapper.Map<MapMarkerResponse>(marker);
+            var marker = await mapService.EditMapMarkerAsync(naheulbookExecutionContext, mapMarkerId, request);
+            return mapper.Map<MapMarkerResponse>(marker);
         }
         catch (MapMarkerNotFoundException ex)
         {
@@ -69,8 +60,8 @@ public class MapMarkerController : ControllerBase
     {
         try
         {
-            var marker = await _mapService.CreateMapMarkerLinkAsync(naheulbookExecutionContext, mapMarkerId, request);
-            return _mapper.Map<MapMarkerLinkResponse>(marker);
+            var marker = await mapService.CreateMapMarkerLinkAsync(naheulbookExecutionContext, mapMarkerId, request);
+            return mapper.Map<MapMarkerLinkResponse>(marker);
         }
         catch (MapMarkerNotFoundException ex)
         {

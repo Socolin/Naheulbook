@@ -22,35 +22,22 @@ public interface ILootService
     Task<ItemEntity> AddRandomItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateRandomItemRequest request);
 }
 
-public class LootService : ILootService
+public class LootService(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    IAuthorizationUtil authorizationUtil,
+    INotificationSessionFactory notificationSessionFactory,
+    IItemService itemService
+) : ILootService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IAuthorizationUtil _authorizationUtil;
-    private readonly INotificationSessionFactory _notificationSessionFactory;
-    private readonly IItemService _itemService;
-
-    public LootService(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        IAuthorizationUtil authorizationUtil,
-        INotificationSessionFactory notificationSessionFactory,
-        IItemService itemService
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _authorizationUtil = authorizationUtil;
-        _notificationSessionFactory = notificationSessionFactory;
-        _itemService = itemService;
-    }
-
     public async Task<LootEntity> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
             var loot = new LootEntity
             {
@@ -70,13 +57,13 @@ public class LootService : ILootService
 
     public async Task<List<LootEntity>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var group = await uow.Groups.GetAsync(groupId);
             if (group == null)
                 throw new GroupNotFoundException(groupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
             return await uow.Loots.GetByGroupIdAsync(groupId);
         }
@@ -84,7 +71,7 @@ public class LootService : ILootService
 
     public async Task EnsureUserCanAccessLootAsync(NaheulbookExecutionContext executionContext, int lootId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var loot = await uow.Loots.GetAsync(lootId);
             if (loot == null)
@@ -94,13 +81,13 @@ public class LootService : ILootService
             if (group == null)
                 throw new GroupNotFoundException(loot.GroupId);
 
-            _authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
+            authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
         }
     }
 
     public async Task UpdateLootVisibilityAsync(NaheulbookExecutionContext executionContext, int lootId, PutLootVisibilityRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var loot = await uow.Loots.GetAsync(lootId);
             if (loot == null)
@@ -110,11 +97,11 @@ public class LootService : ILootService
             if (group == null)
                 throw new GroupNotFoundException(loot.GroupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
 
             loot.IsVisibleForPlayer = request.VisibleForPlayer;
 
-            var session = _notificationSessionFactory.CreateSession();
+            var session = notificationSessionFactory.CreateSession();
             session.NotifyLootUpdateVisibility(lootId, request.VisibleForPlayer);
 
             if (loot.IsVisibleForPlayer)
@@ -136,7 +123,7 @@ public class LootService : ILootService
 
     public async Task DeleteLootAsync(NaheulbookExecutionContext executionContext, int lootId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var loot = await uow.Loots.GetAsync(lootId);
             if (loot == null)
@@ -146,12 +133,12 @@ public class LootService : ILootService
             if (group == null)
                 throw new GroupNotFoundException(loot.GroupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
 
             uow.Loots.Remove(loot);
             await uow.SaveChangesAsync();
 
-            var session = _notificationSessionFactory.CreateSession();
+            var session = notificationSessionFactory.CreateSession();
             session.NotifyGroupDeleteLoot(group.Id, lootId);
             if (loot.IsVisibleForPlayer)
             {
@@ -165,7 +152,7 @@ public class LootService : ILootService
 
     public async Task<ItemEntity> AddItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateItemRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var loot = await uow.Loots.GetAsync(lootId);
             if (loot == null)
@@ -175,12 +162,12 @@ public class LootService : ILootService
             if (group == null)
                 throw new GroupNotFoundException(loot.GroupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
         }
 
-        var item = await _itemService.AddItemToAsync(ItemOwnerType.Loot, lootId, request);
+        var item = await itemService.AddItemToAsync(ItemOwnerType.Loot, lootId, request);
 
-        var session = _notificationSessionFactory.CreateSession();
+        var session = notificationSessionFactory.CreateSession();
         session.NotifyLootAddItem(lootId, item);
         await session.CommitAsync();
 
@@ -189,7 +176,7 @@ public class LootService : ILootService
 
     public async Task<ItemEntity> AddRandomItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateRandomItemRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var loot = await uow.Loots.GetAsync(lootId);
             if (loot == null)
@@ -199,12 +186,12 @@ public class LootService : ILootService
             if (group == null)
                 throw new GroupNotFoundException(loot.GroupId);
 
-            _authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
+            authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
         }
 
-        var item = await _itemService.AddRandomItemToAsync(ItemOwnerType.Loot, lootId, request, executionContext.UserId);
+        var item = await itemService.AddRandomItemToAsync(ItemOwnerType.Loot, lootId, request, executionContext.UserId);
 
-        var session = _notificationSessionFactory.CreateSession();
+        var session = notificationSessionFactory.CreateSession();
         session.NotifyLootAddItem(lootId, item);
         await session.CommitAsync();
 

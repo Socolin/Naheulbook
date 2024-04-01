@@ -9,22 +9,13 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/skills")]
 [ApiController]
-public class SkillsController : ControllerBase
+public class SkillsController(ISkillService skillService, IMapper mapper) : ControllerBase
 {
-    private readonly ISkillService _skillService;
-    private readonly IMapper _mapper;
-
-    public SkillsController(ISkillService skillService, IMapper mapper)
-    {
-        _skillService = skillService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<SkillResponse>>> GetAsync()
     {
-        var skills = await _skillService.GetSkillsAsync();
+        var skills = await skillService.GetSkillsAsync();
 
-        return _mapper.Map<List<SkillResponse>>(skills);
+        return mapper.Map<List<SkillResponse>>(skills);
     }
 }

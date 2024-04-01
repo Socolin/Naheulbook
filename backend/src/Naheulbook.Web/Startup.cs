@@ -34,25 +34,16 @@ using Newtonsoft.Json.Serialization;
 
 namespace Naheulbook.Web;
 
-public class Startup
+public class Startup(IConfiguration configuration, IWebHostEnvironment environment)
 {
-    private readonly IConfiguration _configuration;
-    private readonly IWebHostEnvironment _environment;
-
-    public Startup(IConfiguration configuration, IWebHostEnvironment environment)
-    {
-        _environment = environment;
-        _configuration = configuration;
-    }
-
     public void ConfigureServices(IServiceCollection services)
     {
-        var redisConnectionString = _configuration.GetConnectionString("Redis");
+        var redisConnectionString = configuration.GetConnectionString("Redis");
         RegisterConfigurations(services);
 
         var naheulbookDbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
-            .UseMySql(_configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(_configuration.GetConnectionString("DefaultConnection")), builder => builder.EnableRetryOnFailure());
-        if (_environment.IsDevelopment())
+            .UseMySql(configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(configuration.GetConnectionString("DefaultConnection")), builder => builder.EnableRetryOnFailure());
+        if (environment.IsDevelopment())
         {
             naheulbookDbContextOptionsBuilder.EnableSensitiveDataLogging();
         }
@@ -78,7 +69,7 @@ public class Startup
 
         services.AddHttpContextAccessor();
         services.AddHealthChecks()
-            .AddMySql(_configuration.GetConnectionString("DefaultConnection"));
+            .AddMySql(configuration.GetConnectionString("DefaultConnection"));
 
         if (redisConnectionString != null)
         {
@@ -172,7 +163,7 @@ public class Startup
 
         services.AddHttpClient<ILaPageAMelkorClient, LaPageAMelkorClient>(client =>
         {
-            client.BaseAddress = new Uri(_configuration["LaPageAMelkor:Url"]);
+            client.BaseAddress = new Uri(configuration["LaPageAMelkor:Url"]);
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.DefaultRequestHeaders.Add("User-Agent", "Naheulbook");
         });
@@ -181,31 +172,31 @@ public class Startup
     private void RegisterConfigurations(IServiceCollection services)
     {
         var mailConfiguration = new MailConfiguration();
-        _configuration.Bind("Mail", mailConfiguration);
+        configuration.Bind("Mail", mailConfiguration);
         services.AddSingleton<IMailConfiguration>(mailConfiguration);
 
         var authenticationConfiguration = new AuthenticationConfiguration();
-        _configuration.Bind("Authentication", authenticationConfiguration);
+        configuration.Bind("Authentication", authenticationConfiguration);
         services.AddSingleton<IAuthenticationConfiguration>(authenticationConfiguration);
 
         var googleConfiguration = new GoogleConfiguration();
-        _configuration.Bind("Authentication:Google", googleConfiguration);
+        configuration.Bind("Authentication:Google", googleConfiguration);
         services.AddSingleton(googleConfiguration);
 
         var facebookConfiguration = new FacebookConfiguration();
-        _configuration.Bind("Authentication:Facebook", facebookConfiguration);
+        configuration.Bind("Authentication:Facebook", facebookConfiguration);
         services.AddSingleton(facebookConfiguration);
 
         var twitterConfiguration = new TwitterConfiguration();
-        _configuration.Bind("Authentication:Twitter", twitterConfiguration);
+        configuration.Bind("Authentication:Twitter", twitterConfiguration);
         services.AddSingleton(twitterConfiguration);
 
         var microsoftConfiguration = new MicrosoftGraphConfiguration();
-        _configuration.Bind("Authentication:MicrosoftGraph", microsoftConfiguration);
+        configuration.Bind("Authentication:MicrosoftGraph", microsoftConfiguration);
         services.AddSingleton(microsoftConfiguration);
 
         var mapImageConfiguration = new MapImageConfiguration();
-        _configuration.Bind("MapImage", mapImageConfiguration);
+        configuration.Bind("MapImage", mapImageConfiguration);
         services.AddSingleton(mapImageConfiguration);
     }
 

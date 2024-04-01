@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class MapMarkerNotFoundException : Exception
+public class MapMarkerNotFoundException(int mapId) : Exception
 {
-    public int MapMarkerId { get; }
-
-    public MapMarkerNotFoundException(int mapId)
-    {
-        MapMarkerId = mapId;
-    }
+    public int MapMarkerId { get; } = mapId;
 }

@@ -24,18 +24,11 @@ public interface IAuthorizationUtil
     Task EnsureCanEditMapLayerAsync(NaheulbookExecutionContext executionContext, MapLayerEntity mapLayer);
 }
 
-public class AuthorizationUtil : IAuthorizationUtil
+public class AuthorizationUtil(IUnitOfWorkFactory unitOfWorkFactory) : IAuthorizationUtil
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-    public AuthorizationUtil(IUnitOfWorkFactory unitOfWorkFactory)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-    }
-
     public async Task EnsureAdminAccessAsync(NaheulbookExecutionContext executionContext)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetAsync(executionContext.UserId);
             if (user?.Admin != true)
@@ -167,7 +160,7 @@ public class AuthorizationUtil : IAuthorizationUtil
 
     public async Task EnsureCanEditMapLayerAsync(NaheulbookExecutionContext executionContext, MapLayerEntity mapLayer)
     {
-        using var uow = _unitOfWorkFactory.CreateUnitOfWork();
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
         if (mapLayer.Source == "official")
         {

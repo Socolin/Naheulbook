@@ -6,7 +6,7 @@ using Naheulbook.Data.Models;
 namespace Naheulbook.Data.DbContexts;
 
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
-public class NaheulbookDbContext : DbContext
+public class NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options) : DbContext(options)
 {
     public DbSet<CharacterEntity> Characters { get; set; } = null!;
     public DbSet<CharacterModifierEntity> CharacterModifiers { get; set; } = null!;
@@ -37,11 +37,6 @@ public class NaheulbookDbContext : DbContext
     public DbSet<LootEntity> Loots { get; set; } = null!;
     public DbSet<EventEntity> Events { get; set; } = null!;
     public DbSet<OriginRandomNameUrlEntity> OriginRandomNameUrls { get; set; } = null!;
-
-    public NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options)
-        : base(options)
-    {
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

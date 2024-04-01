@@ -12,34 +12,23 @@ public interface ICharacterBackupService
     Task<Models.Backup.BackupCharacter> GetBackupCharacterAsync(NaheulbookExecutionContext executionContext, int characterId);
 }
 
-public class CharacterBackupService : ICharacterBackupService
+public class CharacterBackupService(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    IAuthorizationUtil authorizationUtil,
+    IMapper mapper
+) : ICharacterBackupService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IAuthorizationUtil _authorizationUtil;
-    private readonly IMapper _mapper;
-
-    public CharacterBackupService(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        IAuthorizationUtil authorizationUtil,
-        IMapper mapper
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _authorizationUtil = authorizationUtil;
-        _mapper = mapper;
-    }
-
     public async Task<Models.Backup.BackupCharacter> GetBackupCharacterAsync(NaheulbookExecutionContext executionContext, int characterId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var character = await uow.Characters.GetWithAllDataAsync(characterId);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
-            _authorizationUtil.EnsureCharacterAccess(executionContext, character);
+            authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-            return _mapper.Map<Models.Backup.V1.BackupCharacter>(character);
+            return mapper.Map<Models.Backup.V1.BackupCharacter>(character);
         }
     }
 }

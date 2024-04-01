@@ -14,22 +14,14 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/itemTemplateSections")]
 [ApiController]
-public class ItemTemplateSectionsController : ControllerBase
+public class ItemTemplateSectionsController(IItemTemplateSectionService itemTemplateSectionService, IMapper mapper)
+    : ControllerBase
 {
-    private readonly IItemTemplateSectionService _itemTemplateSectionService;
-    private readonly IMapper _mapper;
-
-    public ItemTemplateSectionsController(IItemTemplateSectionService itemTemplateSectionService, IMapper mapper)
-    {
-        _itemTemplateSectionService = itemTemplateSectionService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<ItemTemplateSectionResponse>>> GetItemTemplateSectionsAsync()
     {
-        var sections = await _itemTemplateSectionService.GetAllSectionsAsync();
-        return _mapper.Map<List<ItemTemplateSectionResponse>>(sections);
+        var sections = await itemTemplateSectionService.GetAllSectionsAsync();
+        return mapper.Map<List<ItemTemplateSectionResponse>>(sections);
     }
 
     [HttpPost]
@@ -40,8 +32,8 @@ public class ItemTemplateSectionsController : ControllerBase
     {
         try
         {
-            var itemTemplateSection = await _itemTemplateSectionService.CreateItemTemplateSectionAsync(executionContext, request);
-            var itemTemplateSectionResponse = _mapper.Map<ItemTemplateSectionResponse>(itemTemplateSection);
+            var itemTemplateSection = await itemTemplateSectionService.CreateItemTemplateSectionAsync(executionContext, request);
+            var itemTemplateSectionResponse = mapper.Map<ItemTemplateSectionResponse>(itemTemplateSection);
             return new JsonResult(itemTemplateSectionResponse)
             {
                 StatusCode = StatusCodes.Status201Created,
@@ -59,7 +51,7 @@ public class ItemTemplateSectionsController : ControllerBase
         int sectionId
     )
     {
-        var sections = await _itemTemplateSectionService.GetItemTemplatesBySectionAsync(sectionId, executionContext.ExecutionExecutionContext?.UserId);
-        return _mapper.Map<List<ItemTemplateResponse>>(sections);
+        var sections = await itemTemplateSectionService.GetItemTemplatesBySectionAsync(sectionId, executionContext.ExecutionExecutionContext?.UserId);
+        return mapper.Map<List<ItemTemplateResponse>>(sections);
     }
 }

@@ -14,20 +14,11 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/loots")]
 [ApiController]
-public class LootController : ControllerBase
+public class LootController(
+    ILootService lootService,
+    IMapper mapper
+) : ControllerBase
 {
-    private readonly ILootService _lootService;
-    private readonly IMapper _mapper;
-
-    public LootController(
-        ILootService lootService,
-        IMapper mapper
-    )
-    {
-        _lootService = lootService;
-        _mapper = mapper;
-    }
-
     [HttpPut("{LootId:int:min(1)}/visibility")]
     public async Task<IActionResult> PutLootVisibilityAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
@@ -37,7 +28,7 @@ public class LootController : ControllerBase
     {
         try
         {
-            await _lootService.UpdateLootVisibilityAsync(executionContext, lootId, request);
+            await lootService.UpdateLootVisibilityAsync(executionContext, lootId, request);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -58,7 +49,7 @@ public class LootController : ControllerBase
     {
         try
         {
-            await _lootService.DeleteLootAsync(executionContext, lootId);
+            await lootService.DeleteLootAsync(executionContext, lootId);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -80,8 +71,8 @@ public class LootController : ControllerBase
     {
         try
         {
-            var item = await _lootService.AddItemToLootAsync(executionContext, lootId, request);
-            return _mapper.Map<ItemResponse>(item);
+            var item = await lootService.AddItemToLootAsync(executionContext, lootId, request);
+            return mapper.Map<ItemResponse>(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -106,8 +97,8 @@ public class LootController : ControllerBase
     {
         try
         {
-            var item = await _lootService.AddRandomItemToLootAsync(executionContext, lootId, request);
-            return _mapper.Map<ItemResponse>(item);
+            var item = await lootService.AddRandomItemToLootAsync(executionContext, lootId, request);
+            return mapper.Map<ItemResponse>(item);
         }
         catch (ForbiddenAccessException ex)
         {

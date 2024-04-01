@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class MonsterNotFoundException : Exception
+public class MonsterNotFoundException(int monsterId) : Exception
 {
-    public int MonsterId { get; }
-
-    public MonsterNotFoundException(int monsterId)
-    {
-        MonsterId = monsterId;
-    }
+    public int MonsterId { get; } = monsterId;
 }

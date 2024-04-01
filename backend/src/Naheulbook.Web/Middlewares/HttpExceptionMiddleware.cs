@@ -10,26 +10,18 @@ using Newtonsoft.Json;
 
 namespace Naheulbook.Web.Middlewares;
 
-public class HttpExceptionMiddleware
+public class HttpExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IConfiguration configuration)
 {
     private static readonly string[] ExcludedExceptionFields = {"TargetSite", "StackTrace", "Message", "Data", "InnerException", "HelpLink", "Source", "HResult"};
-    private readonly RequestDelegate _next;
-    private readonly ILogger _logger;
-    private readonly bool _displayExceptionFields;
-
-    public HttpExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IConfiguration configuration)
-    {
-        _next = next;
-        _logger = loggerFactory.CreateLogger(nameof(HttpExceptionMiddleware));
-        _displayExceptionFields = configuration.GetValue<bool>("DisplayExceptionFields");
-    }
+    private readonly ILogger _logger = loggerFactory.CreateLogger(nameof(HttpExceptionMiddleware));
+    private readonly bool _displayExceptionFields = configuration.GetValue<bool>("DisplayExceptionFields");
 
     public async Task InvokeAsync(HttpContext context)
     {
         try
         {
             // FIXME: logger context
-            await _next(context);
+            await next(context);
         }
         catch (HttpErrorException ex)
         {

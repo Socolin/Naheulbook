@@ -14,19 +14,10 @@ public interface IGoogleClient
     Task<GoogleProfileResponse> GetUserProfileAsync(string accessToken);
 }
 
-public class GoogleClient : IGoogleClient
+public class GoogleClient(GoogleConfiguration configuration, IJsonUtil jsonUtil) : IGoogleClient
 {
     private const string TokenApiRequestUri = "https://www.googleapis.com/oauth2/v4/token";
     private const string AccessApiRequestUri = "https://www.googleapis.com/plus/v1/people/me";
-
-    private readonly GoogleConfiguration _configuration;
-    private readonly IJsonUtil _jsonUtil;
-
-    public GoogleClient(GoogleConfiguration configuration, IJsonUtil jsonUtil)
-    {
-        _configuration = configuration;
-        _jsonUtil = jsonUtil;
-    }
 
     public async Task<string> GetAccessTokenAsync(string redirectUri, string code)
     {
@@ -35,8 +26,8 @@ public class GoogleClient : IGoogleClient
             ["redirect_uri"] = redirectUri,
             ["code"] = code,
             ["grant_type"] = "authorization_code",
-            ["client_id"] = _configuration.AppId,
-            ["client_secret"] = _configuration.AppSecret,
+            ["client_id"] = configuration.AppId,
+            ["client_secret"] = configuration.AppSecret,
         };
 
         using (var client = new HttpClient())
@@ -47,7 +38,7 @@ public class GoogleClient : IGoogleClient
                 if (!response.IsSuccessStatusCode)
                     throw new GoogleClientException(content, (int) response.StatusCode);
 
-                return _jsonUtil.DeserializeOrCreate<GoogleAccessTokenResponse>(content).AccessToken;
+                return jsonUtil.DeserializeOrCreate<GoogleAccessTokenResponse>(content).AccessToken;
             }
         }
     }
@@ -63,7 +54,7 @@ public class GoogleClient : IGoogleClient
                 if (!response.IsSuccessStatusCode)
                     throw new GoogleClientException(content, (int) response.StatusCode);
 
-                return _jsonUtil.DeserializeOrCreate<GoogleProfileResponse>(content);
+                return jsonUtil.DeserializeOrCreate<GoogleProfileResponse>(content);
             }
         }
     }

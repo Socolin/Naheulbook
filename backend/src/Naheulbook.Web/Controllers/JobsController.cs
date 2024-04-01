@@ -9,22 +9,13 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/jobs")]
 [ApiController]
-public class JobsController : ControllerBase
+public class JobsController(IJobService jobService, IMapper mapper) : ControllerBase
 {
-    private readonly IJobService _jobService;
-    private readonly IMapper _mapper;
-
-    public JobsController(IJobService jobService, IMapper mapper)
-    {
-        _jobService = jobService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<JobResponse>>> GetAsync()
     {
-        var jobs = await _jobService.GetJobsAsync();
+        var jobs = await jobService.GetJobsAsync();
 
-        return _mapper.Map<List<JobResponse>>(jobs);
+        return mapper.Map<List<JobResponse>>(jobs);
     }
 }

@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class MonsterSubCategoryNotFoundException : Exception
+public class MonsterSubCategoryNotFoundException(int subCategoryId) : Exception
 {
-    public int SubCategoryId { get; }
-
-    public MonsterSubCategoryNotFoundException(int subCategoryId)
-    {
-        SubCategoryId = subCategoryId;
-    }
+    public int SubCategoryId { get; } = subCategoryId;
 }

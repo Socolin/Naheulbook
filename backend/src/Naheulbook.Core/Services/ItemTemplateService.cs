@@ -22,32 +22,17 @@ public interface IItemTemplateService
     Task<ICollection<SlotEntity>> GetItemSlotsAsync();
 }
 
-public class ItemTemplateService : IItemTemplateService
+public class ItemTemplateService(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    IAuthorizationUtil authorizationUtil,
+    IMapper mapper,
+    IItemTemplateUtil itemTemplateUtil,
+    IStringCleanupUtil stringCleanupUtil
+) : IItemTemplateService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IAuthorizationUtil _authorizationUtil;
-    private readonly IItemTemplateUtil _itemTemplateUtil;
-    private readonly IStringCleanupUtil _stringCleanupUtil;
-    private readonly IMapper _mapper;
-
-    public ItemTemplateService(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        IAuthorizationUtil authorizationUtil,
-        IMapper mapper,
-        IItemTemplateUtil itemTemplateUtil,
-        IStringCleanupUtil stringCleanupUtil
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _authorizationUtil = authorizationUtil;
-        _mapper = mapper;
-        _itemTemplateUtil = itemTemplateUtil;
-        _stringCleanupUtil = stringCleanupUtil;
-    }
-
     public async Task<ItemTemplateEntity> GetItemTemplateAsync(Guid itemTemplateId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var itemTemplate = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
             if (itemTemplate == null)
@@ -59,14 +44,14 @@ public class ItemTemplateService : IItemTemplateService
     public async Task<ItemTemplateEntity> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request)
     {
         if (request.Source == "official")
-            await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+            await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-        var itemTemplate = _mapper.Map<ItemTemplateEntity>(request);
+        var itemTemplate = mapper.Map<ItemTemplateEntity>(request);
 
         if (request.Source != "official")
             itemTemplate.SourceUserId = executionContext.UserId;
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             uow.ItemTemplates.Add(itemTemplate);
             await uow.SaveChangesAsync();
@@ -78,25 +63,25 @@ public class ItemTemplateService : IItemTemplateService
 
     public async Task<ItemTemplateEntity> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, Guid itemTemplateId, ItemTemplateRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var itemTemplate = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
             if (itemTemplate == null)
                 throw new ItemTemplateNotFoundException(itemTemplateId);
 
-            await _authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, itemTemplate);
+            await authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, itemTemplate);
 
             if (itemTemplate.Source != request.Source)
             {
                 if (request.Source == "official")
                 {
-                    await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                    await authorizationUtil.EnsureAdminAccessAsync(executionContext);
                     itemTemplate.SourceUserId = null;
                 }
                 else
                     itemTemplate.SourceUserId = executionContext.UserId;
             }
-            _itemTemplateUtil.ApplyChangesFromRequest(itemTemplate, request);
+            itemTemplateUtil.ApplyChangesFromRequest(itemTemplate, request);
 
             await uow.SaveChangesAsync();
 
@@ -110,9 +95,9 @@ public class ItemTemplateService : IItemTemplateService
             return new List<ItemTemplateEntity>();
 
         var matchingItemTemplates = new List<ItemTemplateEntity>();
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var cleanFilter = _stringCleanupUtil.RemoveAccents(filter).ToUpperInvariant();
+            var cleanFilter = stringCleanupUtil.RemoveAccents(filter).ToUpperInvariant();
 
             var exactMatchingItems = await uow.ItemTemplates.GetItemByCleanNameWithAllDataAsync(cleanFilter, maxResultCount, currentUserId, true);
             matchingItemTemplates.AddRange(exactMatchingItems);
@@ -120,7 +105,7 @@ public class ItemTemplateService : IItemTemplateService
             var partialMatchingItems = await uow.ItemTemplates.GetItemByPartialCleanNameWithAllDataAsync(cleanFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id), currentUserId, true);
             matchingItemTemplates.AddRange(partialMatchingItems);
 
-            var noSeparatorFilter = _stringCleanupUtil.RemoveSeparators(cleanFilter);
+            var noSeparatorFilter = stringCleanupUtil.RemoveSeparators(cleanFilter);
             var partialMatchingIgnoreSpacesItems = await uow.ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(noSeparatorFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id), currentUserId, true);
             matchingItemTemplates.AddRange(partialMatchingIgnoreSpacesItems);
         }
@@ -130,7 +115,7 @@ public class ItemTemplateService : IItemTemplateService
 
     public async Task<ICollection<SlotEntity>> GetItemSlotsAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Slots.GetAllAsync();
         }

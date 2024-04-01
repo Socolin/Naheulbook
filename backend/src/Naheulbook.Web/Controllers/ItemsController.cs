@@ -15,17 +15,8 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/items")]
 [ApiController]
-public class ItemsController : ControllerBase
+public class ItemsController(IItemService itemTemplate, IMapper mapper) : ControllerBase
 {
-    private readonly IItemService _itemService;
-    private readonly IMapper _mapper;
-
-    public ItemsController(IItemService itemTemplate, IMapper mapper)
-    {
-        _itemService = itemTemplate;
-        _mapper = mapper;
-    }
-
     [HttpPut("{ItemId}/data")]
     public async Task<ActionResult<ItemPartialResponse>> PutEditItemDataAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
@@ -35,9 +26,9 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            var item = await _itemService.UpdateItemDataAsync(executionContext, itemId, itemData);
+            var item = await itemTemplate.UpdateItemDataAsync(executionContext, itemId, itemData);
 
-            return _mapper.Map<ItemPartialResponse>(item);
+            return mapper.Map<ItemPartialResponse>(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -57,7 +48,7 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            await _itemService.DeleteItemAsync(executionContext, itemId);
+            await itemTemplate.DeleteItemAsync(executionContext, itemId);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -79,8 +70,8 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            var item = await _itemService.UseChargeAsync(executionContext, itemId, request);
-            return _mapper.Map<ItemPartialResponse>(item);
+            var item = await itemTemplate.UseChargeAsync(executionContext, itemId, request);
+            return mapper.Map<ItemPartialResponse>(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -101,9 +92,9 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            var item = await _itemService.UpdateItemModifiersAsync(executionContext, itemId, itemModifiers);
+            var item = await itemTemplate.UpdateItemModifiersAsync(executionContext, itemId, itemModifiers);
 
-            return _mapper.Map<ItemPartialResponse>(item);
+            return mapper.Map<ItemPartialResponse>(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -124,9 +115,9 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            var item = await _itemService.EquipItemAsync(executionContext, itemId, request);
+            var item = await itemTemplate.EquipItemAsync(executionContext, itemId, request);
 
-            return _mapper.Map<ItemPartialResponse>(item);
+            return mapper.Map<ItemPartialResponse>(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -147,9 +138,9 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            var item = await _itemService.ChangeItemContainerAsync(executionContext, itemId, request);
+            var item = await itemTemplate.ChangeItemContainerAsync(executionContext, itemId, request);
 
-            return _mapper.Map<ItemPartialResponse>(item);
+            return mapper.Map<ItemPartialResponse>(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -170,12 +161,12 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            var (takenItem, remainingQuantity) = await _itemService.TakeItemAsync(executionContext, itemId, request);
+            var (takenItem, remainingQuantity) = await itemTemplate.TakeItemAsync(executionContext, itemId, request);
 
             return new TakeItemResponse
             {
                 RemainingQuantity = remainingQuantity,
-                TakenItem = _mapper.Map<ItemResponse>(takenItem),
+                TakenItem = mapper.Map<ItemResponse>(takenItem),
             };
         }
         catch (ForbiddenAccessException ex)
@@ -198,7 +189,7 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            var remainingQuantity = await _itemService.GiveItemAsync(executionContext, itemId, request);
+            var remainingQuantity = await itemTemplate.GiveItemAsync(executionContext, itemId, request);
 
             return new GiveItemResponse
             {

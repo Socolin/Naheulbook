@@ -12,13 +12,8 @@ public interface IMapMarkerRepository : IRepository<MapMarkerEntity>
     Task LoadLinksAsync(MapMarkerEntity mapMarker);
 }
 
-public class MapMarkerRepository : Repository<MapMarkerEntity, NaheulbookDbContext>, IMapMarkerRepository
+public class MapMarkerRepository(NaheulbookDbContext context) : Repository<MapMarkerEntity, NaheulbookDbContext>(context), IMapMarkerRepository
 {
-    public MapMarkerRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<MapMarkerEntity?> GetWithLayerAsync(int mapMarkerId)
     {
         return Context.MapMarkers

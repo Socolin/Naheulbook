@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class LocationNotFoundException : Exception
+public class LocationNotFoundException(int locationId) : Exception
 {
-    public int LocationId { get; }
-
-    public LocationNotFoundException(int locationId)
-    {
-        LocationId = locationId;
-    }
+    public int LocationId { get; } = locationId;
 }

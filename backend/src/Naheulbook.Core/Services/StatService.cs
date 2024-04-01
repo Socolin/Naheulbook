@@ -10,18 +10,11 @@ public interface IStatService
     Task<List<StatEntity>> GetAllStatsAsync();
 }
 
-public class StatService : IStatService
+public class StatService(IUnitOfWorkFactory unitOfWorkFactory) : IStatService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-    public StatService(IUnitOfWorkFactory unitOfWorkFactory)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-    }
-
     public async Task<List<StatEntity>> GetAllStatsAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Stats.GetAllAsync();
         }

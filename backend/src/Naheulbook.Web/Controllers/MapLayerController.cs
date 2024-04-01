@@ -10,20 +10,11 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("/api/v2/mapLayers")]
 [ApiController]
-public class MapLayerController : ControllerBase
+public class MapLayerController(
+    IMapper mapper,
+    IMapService mapService
+) : ControllerBase
 {
-    private readonly IMapper _mapper;
-    private readonly IMapService _mapService;
-
-    public MapLayerController(
-        IMapper mapper,
-        IMapService mapService
-    )
-    {
-        _mapper = mapper;
-        _mapService = mapService;
-    }
-
     [HttpPost("{MapLayerId:int:min(1)}/markers")]
     public async Task<ActionResult<MapMarkerResponse>> PostCreateMapMarkerAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
@@ -31,9 +22,9 @@ public class MapLayerController : ControllerBase
         [FromBody] MapMarkerRequest request
     )
     {
-        var map = await _mapService.CreateMapMarkerAsync(executionContext, mapLayerId, request);
+        var map = await mapService.CreateMapMarkerAsync(executionContext, mapLayerId, request);
 
-        return _mapper.Map<MapMarkerResponse>(map);
+        return mapper.Map<MapMarkerResponse>(map);
     }
 
     [HttpPut("{MapLayerId:int:min(1)}")]
@@ -43,9 +34,9 @@ public class MapLayerController : ControllerBase
         [FromBody] MapLayerRequest request
     )
     {
-        var map = await _mapService.EditMapLayerAsync(executionContext, mapLayerId, request);
+        var map = await mapService.EditMapLayerAsync(executionContext, mapLayerId, request);
 
-        return _mapper.Map<MapLayerResponse>(map);
+        return mapper.Map<MapLayerResponse>(map);
     }
 
     [HttpDelete("{MapLayerId:int:min(1)}")]
@@ -54,7 +45,7 @@ public class MapLayerController : ControllerBase
         [FromRoute] int mapLayerId
     )
     {
-        await _mapService.DeleteMapLayerAsync(executionContext, mapLayerId);
+        await mapService.DeleteMapLayerAsync(executionContext, mapLayerId);
 
         return NoContent();
     }

@@ -19,26 +19,13 @@ using TechTalk.SpecFlow;
 namespace Naheulbook.Tests.Functional.Code.Steps;
 
 [Binding]
-public class HttpSteps
+public class HttpSteps(
+    ScenarioContext scenarioContext,
+    NaheulbookHttpClient naheulbookHttpClient,
+    IJsonComparer jsonComparer,
+    JsonComparerColorOptions jsonComparerColorOptions
+)
 {
-    private readonly ScenarioContext _scenarioContext;
-    private readonly NaheulbookHttpClient _naheulbookHttpClient;
-    private readonly IJsonComparer _jsonComparer;
-    private readonly JsonComparerColorOptions _jsonComparerColorOptions;
-
-    public HttpSteps(
-        ScenarioContext scenarioContext,
-        NaheulbookHttpClient naheulbookHttpClient,
-        IJsonComparer jsonComparer,
-        JsonComparerColorOptions jsonComparerColorOptions
-    )
-    {
-        _scenarioContext = scenarioContext;
-        _naheulbookHttpClient = naheulbookHttpClient;
-        _jsonComparer = jsonComparer;
-        _jsonComparerColorOptions = jsonComparerColorOptions;
-    }
-
     [When(@"performing a (GET|DELETE) to the url ""(.*)""( with the current jwt| with "".+"" as access token)?")]
     public async Task WhenPerformingAGetToTheUrl(string method, string url, string useCurrentJwt)
     {
@@ -46,59 +33,59 @@ public class HttpSteps
         if (!string.IsNullOrEmpty(useCurrentJwt))
         {
             if (useCurrentJwt.StartsWith(" with the current jwt"))
-                httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt());
+                httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("JWT", scenarioContext.GetJwt());
             else if (useCurrentJwt.EndsWith("as access token"))
                 httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "userAccessToken:" + useCurrentJwt.Split('"')[1]);
         }
 
-        var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
+        var response = await naheulbookHttpClient.SendAsync(httpRequestMessage);
         var content = await response.Content.ReadAsStringAsync();
-        _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
-        _scenarioContext.SetLastHttpResponseContent(content);
+        scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
+        scenarioContext.SetLastHttpResponseContent(content);
     }
 
     [When(@"performing a (GET|DELETE) to the url ""(.*)"" with the current session")]
     public async Task WhenPerformingAGetToTheUrlWithTheCurrentSession(string method, string url)
     {
-        using var httpClient = new HttpClient(new HttpClientHandler {CookieContainer = _scenarioContext.GetHttpCookiesContainer()});
-        httpClient.BaseAddress = _naheulbookHttpClient.BaseAddress;
+        using var httpClient = new HttpClient(new HttpClientHandler {CookieContainer = scenarioContext.GetHttpCookiesContainer()});
+        httpClient.BaseAddress = naheulbookHttpClient.BaseAddress;
 
-        foreach (var (name, value) in _naheulbookHttpClient.DefaultRequestHeaders)
+        foreach (var (name, value) in naheulbookHttpClient.DefaultRequestHeaders)
             httpClient.DefaultRequestHeaders.Add(name, value);
 
         var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url);
         var response = await httpClient.SendAsync(httpRequestMessage);
         var content = await response.Content.ReadAsStringAsync();
 
-        _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
-        _scenarioContext.SetLastHttpResponseContent(content);
+        scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
+        scenarioContext.SetLastHttpResponseContent(content);
     }
 
     [When(@"performing a POST to the url ""(.*)"" with the following json content")]
     public async Task WhenPerformingAPostToTheUrlWithContent(string url, string contentData)
     {
         var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
-        var response = await _naheulbookHttpClient.PostAsync(url, requestContent);
+        var response = await naheulbookHttpClient.PostAsync(url, requestContent);
         var content = await response.Content.ReadAsStringAsync();
-        _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
-        _scenarioContext.SetLastHttpResponseContent(content);
+        scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
+        scenarioContext.SetLastHttpResponseContent(content);
     }
 
     [When(@"performing a POST to the url ""(.*)"" with the following json content and the current session")]
     public async Task WhenPerformingAPostToTheUrlWithContentAndTheCurrentSession(string url, string contentData)
     {
         var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
-        using var httpClient = new HttpClient(new HttpClientHandler {CookieContainer = _scenarioContext.GetHttpCookiesContainer()});
-        httpClient.BaseAddress = _naheulbookHttpClient.BaseAddress;
+        using var httpClient = new HttpClient(new HttpClientHandler {CookieContainer = scenarioContext.GetHttpCookiesContainer()});
+        httpClient.BaseAddress = naheulbookHttpClient.BaseAddress;
 
-        foreach (var (name, value) in _naheulbookHttpClient.DefaultRequestHeaders)
+        foreach (var (name, value) in naheulbookHttpClient.DefaultRequestHeaders)
             httpClient.DefaultRequestHeaders.Add(name, value);
 
         var response = await httpClient.PostAsync(url, requestContent);
         var content = await response.Content.ReadAsStringAsync();
 
-        _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
-        _scenarioContext.SetLastHttpResponseContent(content);
+        scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
+        scenarioContext.SetLastHttpResponseContent(content);
     }
 
     [When(@"performing a ([A-Z]+) to the url ""(.*)"" with the following json content and the current jwt")]
@@ -109,13 +96,13 @@ public class HttpSteps
             Content = new StringContent(contentData, Encoding.UTF8, "application/json"),
             Headers =
             {
-                Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt()),
+                Authorization = new AuthenticationHeaderValue("JWT", scenarioContext.GetJwt()),
             },
         };
-        var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
+        var response = await naheulbookHttpClient.SendAsync(httpRequestMessage);
         var content = await response.Content.ReadAsStringAsync();
-        _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
-        _scenarioContext.SetLastHttpResponseContent(content);
+        scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
+        scenarioContext.SetLastHttpResponseContent(content);
     }
 
     [When(@"performing a multipart POST to the url ""(.*)"" with the following json content as ""(.+)"" and an image as ""(.+)"" and the current jwt")]
@@ -143,40 +130,40 @@ public class HttpSteps
             Content = multipartContent,
             Headers =
             {
-                Authorization = new AuthenticationHeaderValue("JWT", _scenarioContext.GetJwt()),
+                Authorization = new AuthenticationHeaderValue("JWT", scenarioContext.GetJwt()),
             },
         };
-        var response = await _naheulbookHttpClient.SendAsync(httpRequestMessage);
+        var response = await naheulbookHttpClient.SendAsync(httpRequestMessage);
         var content = await response.Content.ReadAsStringAsync();
-        _scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
-        _scenarioContext.SetLastHttpResponseContent(content);
+        scenarioContext.SetLastHttpResponseStatusCode((int)response.StatusCode);
+        scenarioContext.SetLastHttpResponseContent(content);
     }
 
     [Then(@"the response status code is (.*)")]
     public void ThenTheResponseStatusCodeBe(int expectedStatusCode)
     {
-        var lastStatusCode = _scenarioContext.GetLastHttpResponseStatusCode();
+        var lastStatusCode = scenarioContext.GetLastHttpResponseStatusCode();
         if (lastStatusCode != expectedStatusCode)
         {
-            if (string.IsNullOrEmpty(_scenarioContext.GetLastHttpResponseContent()))
+            if (string.IsNullOrEmpty(scenarioContext.GetLastHttpResponseContent()))
                 Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with no content");
             else
-                Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with content:\n{_scenarioContext.GetLastHttpResponseContent()}\n");
+                Assert.Fail($"Expected {nameof(lastStatusCode)} to be {expectedStatusCode} but found {lastStatusCode} with content:\n{scenarioContext.GetLastHttpResponseContent()}\n");
         }
     }
 
     [Then(@"the response should contains the following json")]
     public void TheResponseShouldContainsTheFollowingJson(JToken expectedJson)
     {
-        var jsonContent = _scenarioContext.GetLastJsonHttpResponseContent();
+        var jsonContent = scenarioContext.GetLastJsonHttpResponseContent();
 
-        Assert.That(jsonContent, IsJson.EquivalentTo(expectedJson).WithComparer(_jsonComparer).WithColorOptions(_jsonComparerColorOptions));
+        Assert.That(jsonContent, IsJson.EquivalentTo(expectedJson).WithComparer(jsonComparer).WithColorOptions(jsonComparerColorOptions));
     }
 
     [Then(@"the response should contains a json array containing the following element identified by (.+)")]
     public void TheResponseShouldContainsAJsonArrayContainingTheFollowingElementIdentifiedBy(string identityField, string expectedJson)
     {
-        var content = _scenarioContext.GetLastHttpResponseContent();
+        var content = scenarioContext.GetLastHttpResponseContent();
 
         JObject expectedObject;
         try
@@ -199,7 +186,7 @@ public class HttpSteps
             if (identityValue?.Equals((JValue)actualObject.Property(identityField)?.Value) == false)
                 continue;
 
-            Assert.That(element, IsJson.EquivalentTo(expectedObject).WithComparer(_jsonComparer).WithColorOptions(_jsonComparerColorOptions));
+            Assert.That(element, IsJson.EquivalentTo(expectedObject).WithComparer(jsonComparer).WithColorOptions(jsonComparerColorOptions));
             return;
         }
 

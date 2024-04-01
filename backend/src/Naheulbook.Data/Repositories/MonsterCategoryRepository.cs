@@ -7,10 +7,4 @@ public interface IMonsterSubCategoryRepository : IRepository<MonsterSubCategoryE
 {
 }
 
-public class MonsterSubCategoryRepository : Repository<MonsterSubCategoryEntity, NaheulbookDbContext>, IMonsterSubCategoryRepository
-{
-    public MonsterSubCategoryRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-}
+public class MonsterSubCategoryRepository(NaheulbookDbContext context) : Repository<MonsterSubCategoryEntity, NaheulbookDbContext>(context), IMonsterSubCategoryRepository;

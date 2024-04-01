@@ -17,13 +17,8 @@ public interface IMonsterRepository : IRepository<MonsterEntity>
     Task<MonsterEntity?> GetWithGroupWithItemsAsync(int monsterId);
 }
 
-public class MonsterRepository : Repository<MonsterEntity, NaheulbookDbContext>, IMonsterRepository
+public class MonsterRepository(NaheulbookDbContext context) : Repository<MonsterEntity, NaheulbookDbContext>(context), IMonsterRepository
 {
-    public MonsterRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<List<MonsterEntity>> GetByGroupIdWithInventoryAsync(int groupId)
     {
         return Context.Monsters

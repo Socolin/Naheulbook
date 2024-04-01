@@ -13,13 +13,8 @@ public interface ICharacterSpecialityRepository : IRepository<CharacterSpecialit
     Task<List<SpecialityEntity>> GetWithModiferWithSpecialByIdsAsync(List<Guid> specialityIds);
 }
 
-public class CharacterSpecialityRepository : Repository<CharacterSpecialityEntity, NaheulbookDbContext>, ICharacterSpecialityRepository
+public class CharacterSpecialityRepository(NaheulbookDbContext naheulbookDbContext) : Repository<CharacterSpecialityEntity, NaheulbookDbContext>(naheulbookDbContext), ICharacterSpecialityRepository
 {
-    public CharacterSpecialityRepository(NaheulbookDbContext naheulbookDbContext)
-        : base(naheulbookDbContext)
-    {
-    }
-
     public Task<List<SpecialityEntity>> GetWithModiferWithSpecialByIdsAsync(List<Guid> specialityIds)
     {
         return Context.Specialities

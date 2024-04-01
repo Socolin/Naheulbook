@@ -5,20 +5,11 @@ using TechTalk.SpecFlow;
 namespace Naheulbook.Tests.Functional.Code.Transforms;
 
 [Binding]
-public class StringReplacementTransform
+public class StringReplacementTransform(ScenarioContext scenarioContext, TestDataUtil testDataUtil)
 {
-    private readonly ScenarioContext _scenarioContext;
-    private readonly TestDataUtil _testDataUtil;
-
-    public StringReplacementTransform(ScenarioContext scenarioContext, TestDataUtil testDataUtil)
-    {
-        _scenarioContext = scenarioContext;
-        _testDataUtil = testDataUtil;
-    }
-
     [StepArgumentTransformation]
     public string ReplacementTransform(string input)
     {
-        return input.ExecuteReplacement(_scenarioContext, _testDataUtil);
+        return input.ExecuteReplacement(scenarioContext, testDataUtil);
     }
 }

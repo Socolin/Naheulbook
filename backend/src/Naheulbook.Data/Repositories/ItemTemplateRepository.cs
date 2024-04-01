@@ -23,13 +23,8 @@ public interface IItemTemplateRepository : IRepository<ItemTemplateEntity>
     Task<ItemTemplateEntity> GetGoldCoinItemTemplate();
 }
 
-public class ItemTemplateRepository : Repository<ItemTemplateEntity, NaheulbookDbContext>, IItemTemplateRepository
+public class ItemTemplateRepository(NaheulbookDbContext context) : Repository<ItemTemplateEntity, NaheulbookDbContext>(context), IItemTemplateRepository
 {
-    public ItemTemplateRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-
     public Task<ItemTemplateEntity?> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(Guid id)
     {
         return Context.ItemTemplates

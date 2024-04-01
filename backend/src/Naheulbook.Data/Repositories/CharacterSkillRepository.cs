@@ -7,10 +7,4 @@ public interface ICharacterSkillRepository : IRepository<CharacterSkillEntity>
 {
 }
 
-public class CharacterSkillRepository : Repository<CharacterSkillEntity, NaheulbookDbContext>, ICharacterSkillRepository
-{
-    public CharacterSkillRepository(NaheulbookDbContext naheulbookDbContext)
-        : base(naheulbookDbContext)
-    {
-    }
-}
+public class CharacterSkillRepository(NaheulbookDbContext naheulbookDbContext) : Repository<CharacterSkillEntity, NaheulbookDbContext>(naheulbookDbContext), ICharacterSkillRepository;

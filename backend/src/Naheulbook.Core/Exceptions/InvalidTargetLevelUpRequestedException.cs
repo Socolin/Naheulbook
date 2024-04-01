@@ -5,14 +5,8 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class InvalidTargetLevelUpRequestedException : Exception
+public class InvalidTargetLevelUpRequestedException(int currentLevel, int targetLevel) : Exception
 {
-    public int CurrentLevel { get; }
-    public int TargetLevel { get; }
-
-    public InvalidTargetLevelUpRequestedException(int currentLevel, int targetLevel)
-    {
-        CurrentLevel = currentLevel;
-        TargetLevel = targetLevel;
-    }
+    public int CurrentLevel { get; } = currentLevel;
+    public int TargetLevel { get; } = targetLevel;
 }

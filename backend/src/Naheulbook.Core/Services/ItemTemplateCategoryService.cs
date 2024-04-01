@@ -15,23 +15,14 @@ public interface IItemTemplateSubCategoryService
     Task<List<ItemTemplateEntity>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems);
 }
 
-public class ItemTemplateSubCategoryService : IItemTemplateSubCategoryService
+public class ItemTemplateSubCategoryService(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    IAuthorizationUtil authorizationUtil
+) : IItemTemplateSubCategoryService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IAuthorizationUtil _authorizationUtil;
-
-    public ItemTemplateSubCategoryService(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        IAuthorizationUtil authorizationUtil
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _authorizationUtil = authorizationUtil;
-    }
-
     public async Task<ItemTemplateSubCategoryEntity> CreateItemTemplateSubCategoryAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSubCategoryRequest request)
     {
-        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+        await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
         var itemTemplateSubCategory = new ItemTemplateSubCategoryEntity()
         {
@@ -42,7 +33,7 @@ public class ItemTemplateSubCategoryService : IItemTemplateSubCategoryService
             TechName = request.TechName ?? string.Empty,
         };
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             uow.ItemTemplateSubCategories.Add(itemTemplateSubCategory);
             await uow.SaveChangesAsync();
@@ -53,7 +44,7 @@ public class ItemTemplateSubCategoryService : IItemTemplateSubCategoryService
 
     public async Task<List<ItemTemplateEntity>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var itemTemplateSubCategory = await uow.ItemTemplateSubCategories.GetByTechNameAsync(subCategoryTechName);
             if (itemTemplateSubCategory == null)

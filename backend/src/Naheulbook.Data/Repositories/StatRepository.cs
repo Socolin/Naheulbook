@@ -7,10 +7,4 @@ public interface IStatRepository : IRepository<StatEntity>
 {
 }
 
-public class StatRepository : Repository<StatEntity, NaheulbookDbContext>, IStatRepository
-{
-    public StatRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-}
+public class StatRepository(NaheulbookDbContext context) : Repository<StatEntity, NaheulbookDbContext>(context), IStatRepository;

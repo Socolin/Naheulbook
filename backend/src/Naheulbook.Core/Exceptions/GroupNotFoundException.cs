@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class GroupNotFoundException : Exception
+public class GroupNotFoundException(int groupId) : Exception
 {
-    public int GroupId { get; }
-
-    public GroupNotFoundException(int groupId)
-    {
-        GroupId = groupId;
-    }
+    public int GroupId { get; } = groupId;
 }

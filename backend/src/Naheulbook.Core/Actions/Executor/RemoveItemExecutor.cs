@@ -10,17 +10,9 @@ public interface IRemoveItemExecutor : IActionExecutor
 {
 }
 
-public class RemoveItemExecutor : IRemoveItemExecutor
+public class RemoveItemExecutor(IItemUtil itemUtil) : IRemoveItemExecutor
 {
-    private readonly IItemUtil _itemUtil;
     private const string ActionType = "removeItem";
-
-    public RemoveItemExecutor(
-        IItemUtil itemUtil
-    )
-    {
-        _itemUtil = itemUtil;
-    }
 
     public Task ExecuteAsync(
         NhbkAction action,
@@ -31,7 +23,7 @@ public class RemoveItemExecutor : IRemoveItemExecutor
         if (action.Type != ActionType)
             throw new InvalidActionTypeException(action.Type, ActionType);
 
-        if (_itemUtil.DecrementQuantityOrDeleteItem(context.UsedItem))
+        if (itemUtil.DecrementQuantityOrDeleteItem(context.UsedItem))
         {
             context.UnitOfWork.Items.Remove(context.UsedItem);
             notificationSession.NotifyItemDeleteItem(context.UsedItem);

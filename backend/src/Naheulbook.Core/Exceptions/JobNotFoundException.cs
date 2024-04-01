@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class JobNotFoundException : Exception
+public class JobNotFoundException(Guid jobId) : Exception
 {
-    public Guid JobId { get; }
-
-    public JobNotFoundException(Guid jobId)
-    {
-        JobId = jobId;
-    }
+    public Guid JobId { get; } = jobId;
 }

@@ -3,18 +3,10 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.Core.Actions;
 
-public class ActionContext
+public class ActionContext(ItemEntity usedItem, CharacterEntity sourceCharacter, CharacterEntity targetCharacter, IUnitOfWork unitOfWork)
 {
-    public ItemEntity UsedItem { get; }
-    public CharacterEntity SourceCharacter { get; }
-    public CharacterEntity TargetCharacter { get; }
-    public IUnitOfWork UnitOfWork { get; }
-
-    public ActionContext(ItemEntity usedItem, CharacterEntity sourceCharacter, CharacterEntity targetCharacter, IUnitOfWork unitOfWork)
-    {
-        UsedItem = usedItem;
-        SourceCharacter = sourceCharacter;
-        TargetCharacter = targetCharacter;
-        UnitOfWork = unitOfWork;
-    }
+    public ItemEntity UsedItem { get; } = usedItem;
+    public CharacterEntity SourceCharacter { get; } = sourceCharacter;
+    public CharacterEntity TargetCharacter { get; } = targetCharacter;
+    public IUnitOfWork UnitOfWork { get; } = unitOfWork;
 }

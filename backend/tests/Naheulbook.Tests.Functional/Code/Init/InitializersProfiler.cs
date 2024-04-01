@@ -9,7 +9,7 @@ using TechTalk.SpecFlow.Infrastructure;
 namespace Naheulbook.Tests.Functional.Code.Init;
 
 [Binding]
-public class InitializersProfiler
+public class InitializersProfiler(ISpecFlowOutputHelper specFlowOutputHelper)
 {
     private static readonly Terminal256ColorCodes[] GradiantGreenRed =
     {
@@ -23,14 +23,8 @@ public class InitializersProfiler
         Terminal256ColorCodes.Red3C160,
     };
 
-    private readonly ISpecFlowOutputHelper _specFlowOutputHelper;
     private static InitProfiler _profiler;
     private static readonly Stopwatch InitStopwatch = new();
-
-    public InitializersProfiler(ISpecFlowOutputHelper specFlowOutputHelper)
-    {
-        _specFlowOutputHelper = specFlowOutputHelper;
-    }
 
     [BeforeTestRun(Order = 0)]
     public static void SetupProfiler()
@@ -54,9 +48,9 @@ public class InitializersProfiler
     public void RegisterServiceInformation()
     {
         var titleColumnLength = _profiler.Sections.Max(x => x.Title.Length);
-        _specFlowOutputHelper.WriteLine($"┌{"".PadRight(titleColumnLength + 2, '─')}─{"".PadRight(14, '─')}┐");
-        _specFlowOutputHelper.WriteLine("│" + " Init profiler".PadRight(titleColumnLength + 17, ' ') + "│");
-        _specFlowOutputHelper.WriteLine($"├{"".PadRight(titleColumnLength + 2, '─')}┬{"".PadRight(14, '─')}┤");
+        specFlowOutputHelper.WriteLine($"┌{"".PadRight(titleColumnLength + 2, '─')}─{"".PadRight(14, '─')}┐");
+        specFlowOutputHelper.WriteLine("│" + " Init profiler".PadRight(titleColumnLength + 17, ' ') + "│");
+        specFlowOutputHelper.WriteLine($"├{"".PadRight(titleColumnLength + 2, '─')}┬{"".PadRight(14, '─')}┤");
         var total = _profiler.Sections.Sum(x => x.Stopwatch.ElapsedMilliseconds);
         var minDuration = _profiler.Sections.Min(x => x.Stopwatch.ElapsedMilliseconds);
         var maxDuration = _profiler.Sections.Max(x => x.Stopwatch.ElapsedMilliseconds);
@@ -65,29 +59,23 @@ public class InitializersProfiler
         {
             var duration = profilerSection.Stopwatch.ElapsedMilliseconds;
             var colorIndex = (int)Math.Floor((GradiantGreenRed.Length - 1) * ((float)duration - minDuration) / durationDiff);
-            _specFlowOutputHelper.WriteLine("│ " + profilerSection.Title.PadRight(titleColumnLength, ' ') + " │ " + AnsiColorCodes.Color256(duration.ToString("N0").PadLeft(9) + " ms", GradiantGreenRed[colorIndex]) + " │");
+            specFlowOutputHelper.WriteLine("│ " + profilerSection.Title.PadRight(titleColumnLength, ' ') + " │ " + AnsiColorCodes.Color256(duration.ToString("N0").PadLeft(9) + " ms", GradiantGreenRed[colorIndex]) + " │");
         }
-        _specFlowOutputHelper.WriteLine($"├{"".PadRight(titleColumnLength + 2, '─')}┴{"".PadRight(14, '─')}┤");
+        specFlowOutputHelper.WriteLine($"├{"".PadRight(titleColumnLength + 2, '─')}┴{"".PadRight(14, '─')}┤");
 
-        _specFlowOutputHelper.WriteLine("│" + " Total: " + InitStopwatch.ElapsedMilliseconds.ToString("N0").PadLeft(titleColumnLength + 5, ' ') + " ms " + "│");
-        _specFlowOutputHelper.WriteLine("│" + " Not profiled: " + (InitStopwatch.ElapsedMilliseconds - total).ToString("N0").PadLeft(titleColumnLength - 2, ' ') + " ms " + "│");
-        _specFlowOutputHelper.WriteLine($"└{"".PadRight(titleColumnLength + 2, '─')}─{"".PadRight(14, '─')}┘");
+        specFlowOutputHelper.WriteLine("│" + " Total: " + InitStopwatch.ElapsedMilliseconds.ToString("N0").PadLeft(titleColumnLength + 5, ' ') + " ms " + "│");
+        specFlowOutputHelper.WriteLine("│" + " Not profiled: " + (InitStopwatch.ElapsedMilliseconds - total).ToString("N0").PadLeft(titleColumnLength - 2, ' ') + " ms " + "│");
+        specFlowOutputHelper.WriteLine($"└{"".PadRight(titleColumnLength + 2, '─')}─{"".PadRight(14, '─')}┘");
     }
 
     private class InitProfiler
     {
         public IList<ProfileSection> Sections { get; set; } = new List<ProfileSection>();
 
-        public class ProfileSection : IDisposable
+        public class ProfileSection(string title) : IDisposable
         {
-            public readonly string Title;
-            public readonly Stopwatch Stopwatch;
-
-            public ProfileSection(string title)
-            {
-                Title = title;
-                Stopwatch = Stopwatch.StartNew();
-            }
+            public readonly string Title = title;
+            public readonly Stopwatch Stopwatch = Stopwatch.StartNew();
 
             public void Dispose()
             {

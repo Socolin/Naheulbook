@@ -15,25 +15,16 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/itemTemplates")]
 [ApiController]
-public class ItemTemplatesController : ControllerBase
+public class ItemTemplatesController(IItemTemplateService itemTemplateService, IMapper mapper) : ControllerBase
 {
-    private readonly IItemTemplateService _itemTemplateService;
-    private readonly IMapper _mapper;
-
-    public ItemTemplatesController(IItemTemplateService itemTemplateService, IMapper mapper)
-    {
-        _itemTemplateService = itemTemplateService;
-        _mapper = mapper;
-    }
-
     [HttpGet("{itemTemplateId:guid}")]
     public async Task<ActionResult<ItemTemplateResponse>> GetItemTemplateAsync(Guid itemTemplateId)
     {
         try
         {
-            var itemTemplate = await _itemTemplateService.GetItemTemplateAsync(itemTemplateId);
+            var itemTemplate = await itemTemplateService.GetItemTemplateAsync(itemTemplateId);
 
-            return _mapper.Map<ItemTemplateResponse>(itemTemplate);
+            return mapper.Map<ItemTemplateResponse>(itemTemplate);
         }
         catch (ItemTemplateNotFoundException ex)
         {
@@ -50,13 +41,13 @@ public class ItemTemplatesController : ControllerBase
     {
         try
         {
-            var itemTemplate = await _itemTemplateService.EditItemTemplateAsync(
+            var itemTemplate = await itemTemplateService.EditItemTemplateAsync(
                 executionContext,
                 itemTemplateId,
                 request
             );
 
-            return _mapper.Map<ItemTemplateResponse>(itemTemplate);
+            return mapper.Map<ItemTemplateResponse>(itemTemplate);
         }
         catch (ItemTemplateNotFoundException ex)
         {
@@ -74,8 +65,8 @@ public class ItemTemplatesController : ControllerBase
         [FromQuery] string filter
     )
     {
-        var itemTemplates= await _itemTemplateService.SearchItemTemplateAsync(filter, 40, executionContext.ExecutionExecutionContext?.UserId);
-        return _mapper.Map<List<ItemTemplateResponse>>(itemTemplates);
+        var itemTemplates= await itemTemplateService.SearchItemTemplateAsync(filter, 40, executionContext.ExecutionExecutionContext?.UserId);
+        return mapper.Map<List<ItemTemplateResponse>>(itemTemplates);
     }
 
     [HttpPost]
@@ -86,8 +77,8 @@ public class ItemTemplatesController : ControllerBase
     {
         try
         {
-            var itemTemplate = await _itemTemplateService.CreateItemTemplateAsync(executionContext, request);
-            var itemTemplateResponse = _mapper.Map<ItemTemplateResponse>(itemTemplate);
+            var itemTemplate = await itemTemplateService.CreateItemTemplateAsync(executionContext, request);
+            var itemTemplateResponse = mapper.Map<ItemTemplateResponse>(itemTemplate);
             return new JsonResult(itemTemplateResponse)
             {
                 StatusCode = StatusCodes.Status201Created,

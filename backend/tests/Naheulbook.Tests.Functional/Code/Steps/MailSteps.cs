@@ -12,34 +12,25 @@ using TechTalk.SpecFlow;
 namespace Naheulbook.Tests.Functional.Code.Steps;
 
 [Binding]
-public class MailSteps
+public class MailSteps(ScenarioContext scenarioContext, IMailReceiver mailReceiver)
 {
-    private readonly IMailReceiver _mailReceiver;
-    private readonly ScenarioContext _scenarioContext;
-
-    public MailSteps(ScenarioContext scenarioContext, IMailReceiver mailReceiver)
-    {
-        _scenarioContext = scenarioContext;
-        _mailReceiver = mailReceiver;
-    }
-
     [Then(@"a mail validation mail has been sent to ""(.*)""")]
     public async Task ThenAMailValidationMailHasBeenSentTo(string email)
     {
         var mail = await GetMailAndWaitIfNotReady(email, 2000);
         if (mail == null)
         {
-            var mailsDetails = string.Join("\n", _mailReceiver.Mails.Select(m => "'" + string.Join("','", m.To) + "' - " + m.Subject.FirstOrDefault()));
-            throw new Exception($"Did not received any mail with destination: {email}. Received {_mailReceiver.Mails.Count} mails:\n{mailsDetails}");
+            var mailsDetails = string.Join("\n", mailReceiver.Mails.Select(m => "'" + string.Join("','", m.To) + "' - " + m.Subject.FirstOrDefault()));
+            throw new Exception($"Did not received any mail with destination: {email}. Received {mailReceiver.Mails.Count} mails:\n{mailsDetails}");
         }
 
-        _scenarioContext.SetLastReceivedMail(mail);
+        scenarioContext.SetLastReceivedMail(mail);
 
         var activationCode = ParseActivationCodeFromActivationMail(mail);
         if (activationCode == null)
             Assert.Fail($"Fail to find activation code in mail body:\n'{mail.Data}'");
 
-        _scenarioContext.SetActivationCode(activationCode);
+        scenarioContext.SetActivationCode(activationCode);
     }
 
     private async Task<FakeSmtpMail?> GetMailAndWaitIfNotReady(string email, int delay)
@@ -48,7 +39,7 @@ public class MailSteps
         FakeSmtpMail? mail;
         do
         {
-            mail = _mailReceiver.Mails.LastOrDefault(m => m.To.Contains(email));
+            mail = mailReceiver.Mails.LastOrDefault(m => m.To.Contains(email));
             if (mail == null)
                 await Task.Delay(100);
         } while (mail == null && sw.ElapsedMilliseconds < delay);

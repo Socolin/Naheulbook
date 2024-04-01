@@ -22,31 +22,18 @@ public interface IUserService
     Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter);
 }
 
-public class UserService : IUserService
+public class UserService(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    IPasswordHashingService passwordHashingService,
+    IMailService mailService,
+    IAuthorizationUtil authorizationUtil
+) : IUserService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IPasswordHashingService _passwordHashingService;
-    private readonly IMailService _mailService;
-    private readonly IAuthorizationUtil _authorizationUtil;
-
-    public UserService(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        IPasswordHashingService passwordHashingService,
-        IMailService mailService,
-        IAuthorizationUtil authorizationUtil
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _passwordHashingService = passwordHashingService;
-        _mailService = mailService;
-        _authorizationUtil = authorizationUtil;
-    }
-
     public async Task CreateUserAsync(string username, string password)
     {
         string activationCode;
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var alreadyExistingUser = await uow.Users.GetByUsernameAsync(username);
             if (alreadyExistingUser != null)
@@ -62,7 +49,7 @@ public class UserService : IUserService
             var user = new UserEntity()
             {
                 Username = username,
-                HashedPassword = _passwordHashingService.HashPassword(password),
+                HashedPassword = passwordHashingService.HashPassword(password),
                 ActivationCode = activationCode,
             };
 
@@ -70,12 +57,12 @@ public class UserService : IUserService
             await uow.SaveChangesAsync();
         }
 
-        await _mailService.SendCreateUserMailAsync(username, activationCode);
+        await mailService.SendCreateUserMailAsync(username, activationCode);
     }
 
     public async Task ValidateUserAsync(string username, string activationCode)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetByUsernameAsync(username);
             if (user == null)
@@ -89,14 +76,14 @@ public class UserService : IUserService
 
     public async Task<UserEntity> CheckPasswordAsync(string username, string password)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetByUsernameAsync(username);
             if (user == null)
                 throw new UserNotFoundException();
             if (user.HashedPassword == null)
                 throw new InvalidPasswordException();
-            var success = _passwordHashingService.VerifyPassword(user.HashedPassword, password);
+            var success = passwordHashingService.VerifyPassword(user.HashedPassword, password);
             if (!success)
                 throw new InvalidPasswordException();
             return user;
@@ -105,7 +92,7 @@ public class UserService : IUserService
 
     public async Task<UserEntity> GetUserInfoAsync(int userId)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetAsync(userId);
             if (user == null)
@@ -116,13 +103,13 @@ public class UserService : IUserService
 
     public async Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var user = await uow.Users.GetAsync(userId);
             if (user == null)
                 throw new UserNotFoundException();
 
-            _authorizationUtil.EnsureCanEditUser(executionContext, user);
+            authorizationUtil.EnsureCanEditUser(executionContext, user);
 
             if (!string.IsNullOrEmpty(request.DisplayName))
                 user.DisplayName = request.DisplayName;
@@ -144,7 +131,7 @@ public class UserService : IUserService
         if (string.IsNullOrWhiteSpace(filter))
             return new List<UserEntity>();
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Users.SearchUsersAsync(filter);
         }

@@ -7,10 +7,4 @@ public interface ISlotRepository : IRepository<SlotEntity>
 {
 }
 
-public class SlotRepository : Repository<SlotEntity, NaheulbookDbContext>, ISlotRepository
-{
-    public SlotRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-}
+public class SlotRepository(NaheulbookDbContext context) : Repository<SlotEntity, NaheulbookDbContext>(context), ISlotRepository;

@@ -14,45 +14,28 @@ namespace Naheulbook.Web.Controllers;
 
 [ApiController]
 [Route("api/v2/authentications/facebook")]
-public class FacebookAuthenticationController : ControllerBase
+public class FacebookAuthenticationController(
+    FacebookConfiguration configuration,
+    IFacebookClient facebookClient,
+    IJwtService jwtService,
+    IMapper mapper,
+    IRngUtil rngUtil,
+    ISocialMediaUserLinkService socialMediaUserLinkService
+) : ControllerBase
 {
     private const string FacebookLoginTokenKey = "facebookLoginToken";
-
-    private readonly FacebookConfiguration _configuration;
-    private readonly IFacebookClient _facebookClient;
-    private readonly IJwtService _jwtService;
-    private readonly IMapper _mapper;
-    private readonly IRngUtil _rngUtil;
-    private readonly ISocialMediaUserLinkService _socialMediaUserLinkService;
-
-    public FacebookAuthenticationController(
-        FacebookConfiguration configuration,
-        IFacebookClient facebookClient,
-        IJwtService jwtService,
-        IMapper mapper,
-        IRngUtil rngUtil,
-        ISocialMediaUserLinkService socialMediaUserLinkService
-    )
-    {
-        _configuration = configuration;
-        _facebookClient = facebookClient;
-        _jwtService = jwtService;
-        _mapper = mapper;
-        _rngUtil = rngUtil;
-        _socialMediaUserLinkService = socialMediaUserLinkService;
-    }
 
     [HttpGet("initOAuthAuthentication")]
     public ActionResult<AuthenticationInitResponse> PostInitOauthAuthentication()
     {
-        var loginToken = _rngUtil.GetRandomHexString(64);
+        var loginToken = rngUtil.GetRandomHexString(64);
 
         HttpContext.Session.SetString(FacebookLoginTokenKey, loginToken);
 
         return new AuthenticationInitResponse
         {
             LoginToken = loginToken,
-            AppKey = _configuration.AppId,
+            AppKey = configuration.AppId,
         };
     }
 
@@ -66,22 +49,22 @@ public class FacebookAuthenticationController : ControllerBase
         if (loginToken != request.LoginToken)
             return BadRequest();
 
-        var accessToken = await _facebookClient.GetAccessTokenAsync(request.RedirectUri, request.Code);
-        var profile = await _facebookClient.GetUserProfileAsync(accessToken);
+        var accessToken = await facebookClient.GetAccessTokenAsync(request.RedirectUri, request.Code);
+        var profile = await facebookClient.GetUserProfileAsync(accessToken);
 
         var currentUserId = HttpContext.Session.GetCurrentUserId();
         if (currentUserId.HasValue)
-            await _socialMediaUserLinkService.AssociateUserToFacebookIdAsync(currentUserId.Value, profile.Id);
+            await socialMediaUserLinkService.AssociateUserToFacebookIdAsync(currentUserId.Value, profile.Id);
 
-        var user = await _socialMediaUserLinkService.GetOrCreateUserFromFacebookAsync(profile.Name, profile.Id);
+        var user = await socialMediaUserLinkService.GetOrCreateUserFromFacebookAsync(profile.Name, profile.Id);
 
         HttpContext.Session.SetCurrentUserId(user.Id);
-        var token = _jwtService.GenerateJwtToken(user.Id);
+        var token = jwtService.GenerateJwtToken(user.Id);
 
         return new UserJwtResponse
         {
             Token = token,
-            UserInfo = _mapper.Map<UserInfoResponse>(user),
+            UserInfo = mapper.Map<UserInfoResponse>(user),
         };
     }
 }

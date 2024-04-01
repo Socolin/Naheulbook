@@ -10,18 +10,11 @@ public interface ICalendarService
     Task<List<CalendarEntity>> GetCalendarAsync();
 }
 
-public class CalendarService : ICalendarService
+public class CalendarService(IUnitOfWorkFactory unitOfWorkFactory) : ICalendarService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-    public CalendarService(IUnitOfWorkFactory unitOfWorkFactory)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-    }
-
     public async Task<List<CalendarEntity>> GetCalendarAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Calendar.GetAllAsync();
         }

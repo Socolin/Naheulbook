@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class EmptyItemTemplateSubCategoryException : Exception
+public class EmptyItemTemplateSubCategoryException(int itemTemplateSubCategoryId) : Exception
 {
-    public int ItemTemplateSubCategoryId { get; }
-
-    public EmptyItemTemplateSubCategoryException(int itemTemplateSubCategoryId)
-    {
-        ItemTemplateSubCategoryId = itemTemplateSubCategoryId;
-    }
+    public int ItemTemplateSubCategoryId { get; } = itemTemplateSubCategoryId;
 }

@@ -5,14 +5,8 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class InvalidActionTypeException : Exception
+public class InvalidActionTypeException(string actionType, string expectedActionType) : Exception
 {
-    public string ActionType { get; }
-    public string ExpectedActionType { get; }
-
-    public InvalidActionTypeException(string actionType, string expectedActionType)
-    {
-        ActionType = actionType;
-        ExpectedActionType = expectedActionType;
-    }
+    public string ActionType { get; } = actionType;
+    public string ExpectedActionType { get; } = expectedActionType;
 }

@@ -8,15 +8,8 @@ public interface ICharacterModifierUtil
     void ToggleModifier(CharacterEntity character, CharacterModifierEntity modifier);
 }
 
-public class CharacterModifierUtil : ICharacterModifierUtil
+public class CharacterModifierUtil(ICharacterHistoryUtil characterHistoryUtil) : ICharacterModifierUtil
 {
-    private readonly ICharacterHistoryUtil _characterHistoryUtil;
-
-    public CharacterModifierUtil(ICharacterHistoryUtil characterHistoryUtil)
-    {
-        _characterHistoryUtil = characterHistoryUtil;
-    }
-
     public void ToggleModifier(CharacterEntity character, CharacterModifierEntity modifier)
     {
         if (!modifier.Reusable)
@@ -29,11 +22,11 @@ public class CharacterModifierUtil : ICharacterModifierUtil
             modifier.CurrentLapCount = modifier.LapCount;
             modifier.CurrentTimeDuration = modifier.TimeDuration;
 
-            character.AddHistoryEntry(_characterHistoryUtil.CreateLogActiveModifier(character.Id, modifier.Id));
+            character.AddHistoryEntry(characterHistoryUtil.CreateLogActiveModifier(character.Id, modifier.Id));
         }
         else
         {
-            character.AddHistoryEntry(_characterHistoryUtil.CreateLogDisableModifier(character.Id, modifier.Id));
+            character.AddHistoryEntry(characterHistoryUtil.CreateLogDisableModifier(character.Id, modifier.Id));
         }
     }
 }

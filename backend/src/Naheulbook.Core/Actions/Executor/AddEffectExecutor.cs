@@ -13,15 +13,9 @@ public interface IAddEffectExecutor : IActionExecutor
 {
 }
 
-public class AddEffectExecutor : IAddEffectExecutor
+public class AddEffectExecutor(ICharacterHistoryUtil characterHistoryUtil) : IAddEffectExecutor
 {
     private const string ActionType = "addEffect";
-    private readonly ICharacterHistoryUtil _characterHistoryUtil;
-
-    public AddEffectExecutor(ICharacterHistoryUtil characterHistoryUtil)
-    {
-        _characterHistoryUtil = characterHistoryUtil;
-    }
 
     public async Task ExecuteAsync(
         NhbkAction action,
@@ -108,7 +102,7 @@ public class AddEffectExecutor : IAddEffectExecutor
 
         context.TargetCharacter.Modifiers.Add(characterModifier);
 
-        context.TargetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogAddModifier(context.TargetCharacter, characterModifier));
+        context.TargetCharacter.AddHistoryEntry(characterHistoryUtil.CreateLogAddModifier(context.TargetCharacter, characterModifier));
         notificationSession.NotifyCharacterAddModifier(context.TargetCharacter.Id, characterModifier, true);
     }
 }

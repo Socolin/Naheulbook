@@ -4,12 +4,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class InvalidCustomDurationActionException : Exception
+public class InvalidCustomDurationActionException(string customDurationType) : Exception
 {
-    private string CustomDurationType { get; }
-
-    public InvalidCustomDurationActionException(string customDurationType)
-    {
-        CustomDurationType = customDurationType;
-    }
+    private string CustomDurationType { get; } = customDurationType;
 }

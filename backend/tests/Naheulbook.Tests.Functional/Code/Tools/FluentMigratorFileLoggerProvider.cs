@@ -7,16 +7,10 @@ using Microsoft.Extensions.Options;
 
 namespace Naheulbook.Tests.Functional.Code.Tools;
 
-public class FluentMigratorFileLoggerProvider : ILoggerProvider
+public class FluentMigratorFileLoggerProvider(string path, IOptions<FluentMigratorLoggerOptions> options) : ILoggerProvider
 {
-    private readonly FluentMigratorLoggerOptions _options;
-    private readonly TextWriter _output;
-
-    public FluentMigratorFileLoggerProvider(string path, IOptions<FluentMigratorLoggerOptions> options)
-    {
-        _options = options.Value;
-        _output = new StreamWriter(path, false, Encoding.UTF8, 1);
-    }
+    private readonly FluentMigratorLoggerOptions _options = options.Value;
+    private readonly TextWriter _output = new StreamWriter(path, false, Encoding.UTF8, 1);
 
     public ILogger CreateLogger(string categoryName)
     {

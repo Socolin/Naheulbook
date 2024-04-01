@@ -15,20 +15,11 @@ public interface IItemTemplateUtil
     ItemTemplateData GetItemTemplateData(ItemTemplateEntity itemTemplate);
 }
 
-public class ItemTemplateUtil : IItemTemplateUtil
+public class ItemTemplateUtil(
+    IStringCleanupUtil stringCleanupUtil,
+    IJsonUtil jsonUtil
+) : IItemTemplateUtil
 {
-    private readonly IStringCleanupUtil _stringCleanupUtil;
-    private readonly IJsonUtil _jsonUtil;
-
-    public ItemTemplateUtil(
-        IStringCleanupUtil stringCleanupUtil,
-        IJsonUtil jsonUtil
-    )
-    {
-        _stringCleanupUtil = stringCleanupUtil;
-        _jsonUtil = jsonUtil;
-    }
-
     public void ApplyChangesFromRequest(ItemTemplateEntity itemTemplate, ItemTemplateRequest request)
     {
         itemTemplate.Name = request.Name;
@@ -37,7 +28,7 @@ public class ItemTemplateUtil : IItemTemplateUtil
         itemTemplate.SubCategoryId = request.SubCategoryId;
         itemTemplate.Data = JsonConvert.SerializeObject(request.Data, Formatting.None);
 
-        itemTemplate.CleanName = _stringCleanupUtil.RemoveAccents(request.Name);
+        itemTemplate.CleanName = stringCleanupUtil.RemoveAccents(request.Name);
 
         itemTemplate.Slots = request.Slots.Select(x => new ItemTemplateSlotEntity {SlotId = x.Id}).ToList();
 
@@ -85,6 +76,6 @@ public class ItemTemplateUtil : IItemTemplateUtil
 
     public ItemTemplateData GetItemTemplateData(ItemTemplateEntity itemTemplate)
     {
-        return _jsonUtil.Deserialize<ItemTemplateData>(itemTemplate.Data) ?? new ItemTemplateData();
+        return jsonUtil.Deserialize<ItemTemplateData>(itemTemplate.Data) ?? new ItemTemplateData();
     }
 }

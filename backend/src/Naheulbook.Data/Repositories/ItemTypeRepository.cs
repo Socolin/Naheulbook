@@ -7,10 +7,4 @@ public interface IItemTypeRepository : IRepository<ItemTypeEntity>
 {
 }
 
-public class ItemTypeRepository : Repository<ItemTypeEntity, NaheulbookDbContext>, IItemTypeRepository
-{
-    public ItemTypeRepository(NaheulbookDbContext context)
-        : base(context)
-    {
-    }
-}
+public class ItemTypeRepository(NaheulbookDbContext context) : Repository<ItemTypeEntity, NaheulbookDbContext>(context), IItemTypeRepository;

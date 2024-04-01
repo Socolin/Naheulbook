@@ -12,23 +12,14 @@ public interface ICharacterRandomNameService
     Task<string> GenerateRandomCharacterNameAsync(Guid originId, string sex);
 }
 
-public class CharacterRandomNameService : ICharacterRandomNameService
+public class CharacterRandomNameService(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    ILaPageAMelkorClient httpClient
+) : ICharacterRandomNameService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly ILaPageAMelkorClient _httpClient;
-
-    public CharacterRandomNameService(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        ILaPageAMelkorClient httpClient
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _httpClient = httpClient;
-    }
-
     public async Task<string> GenerateRandomCharacterNameAsync(Guid originId, string sex)
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var origin = await uow.Origins.GetAsync(originId);
             if (origin == null)
@@ -38,7 +29,7 @@ public class CharacterRandomNameService : ICharacterRandomNameService
             if (originRandomNameUrl == null)
                 throw new RandomNameGeneratorNotFound(sex, originId);
 
-            var result = await _httpClient.GetRandomNameAsync(originRandomNameUrl.Url);
+            var result = await httpClient.GetRandomNameAsync(originRandomNameUrl.Url);
 
             return result.First();
         }

@@ -12,15 +12,9 @@ public interface IAddCustomModifierExecutor : IActionExecutor
 {
 }
 
-public class AddCustomModifierExecutor : IAddCustomModifierExecutor
+public class AddCustomModifierExecutor(ICharacterHistoryUtil characterHistoryUtil) : IAddCustomModifierExecutor
 {
     private const string ActionType = "addCustomModifier";
-    private readonly ICharacterHistoryUtil _characterHistoryUtil;
-
-    public AddCustomModifierExecutor(ICharacterHistoryUtil characterHistoryUtil)
-    {
-        _characterHistoryUtil = characterHistoryUtil;
-    }
 
     public Task ExecuteAsync(
         NhbkAction action,
@@ -60,7 +54,7 @@ public class AddCustomModifierExecutor : IAddCustomModifierExecutor
 
         context.TargetCharacter.Modifiers.Add(characterModifier);
 
-        context.TargetCharacter.AddHistoryEntry(_characterHistoryUtil.CreateLogAddModifier(context.TargetCharacter, characterModifier));
+        context.TargetCharacter.AddHistoryEntry(characterHistoryUtil.CreateLogAddModifier(context.TargetCharacter, characterModifier));
         notificationSession.NotifyCharacterAddModifier(context.TargetCharacter.Id, characterModifier, true);
 
         return Task.CompletedTask;

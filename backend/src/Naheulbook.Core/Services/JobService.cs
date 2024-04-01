@@ -10,18 +10,11 @@ public interface IJobService
     Task<ICollection<JobEntity>> GetJobsAsync();
 }
 
-public class JobService : IJobService
+public class JobService(IUnitOfWorkFactory unitOfWorkFactory) : IJobService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-    public JobService(IUnitOfWorkFactory unitOfWorkFactory)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-    }
-
     public async Task<ICollection<JobEntity>> GetJobsAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Jobs.GetAllWithAllDataAsync();
         }

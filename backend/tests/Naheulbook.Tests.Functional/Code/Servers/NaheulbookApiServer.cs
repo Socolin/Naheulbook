@@ -15,25 +15,15 @@ using Socolin.TestUtils.FakeSmtp;
 
 namespace Naheulbook.Tests.Functional.Code.Servers;
 
-public class NaheulbookApiServer
+public class NaheulbookApiServer(
+    FakeSmtpConfig mailConfig,
+    string laPageAMelkorUrl,
+    string mapImageOutputDirectory
+)
 {
-    private readonly FakeSmtpConfig _mailConfig;
-    private readonly string _laPageAMelkorUrl;
-    private readonly string _mapImageOutputDirectory;
     public const string JwtSigningKey = "jUPS+BG/+FxexuNitsuiIHWXOLTZb3yQSxyLpOfTo2/BB8MNUZcNP+13cvAlPP5O";
     public IEnumerable<string> ListenUrls => _server.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>().Addresses;
     private IHost _server;
-
-    public NaheulbookApiServer(
-        FakeSmtpConfig mailConfig,
-        string laPageAMelkorUrl,
-        string mapImageOutputDirectory
-    )
-    {
-        _mailConfig = mailConfig;
-        _laPageAMelkorUrl = laPageAMelkorUrl;
-        _mapImageOutputDirectory = mapImageOutputDirectory;
-    }
 
     public void Start()
     {
@@ -41,14 +31,14 @@ public class NaheulbookApiServer
         {
             ["Authentication:JwtSigningKey"] = JwtSigningKey,
             ["ConnectionStrings:DefaultConnection"] = DefaultTestConfigurations.NaheulbookTestConnectionString,
-            ["Mail:Smtp:Host"] = _mailConfig.Host.ToString(),
-            ["Mail:Smtp:Port"] = _mailConfig.Port.ToString(),
-            ["Mail:Smtp:Username"] = _mailConfig.Username,
-            ["Mail:Smtp:Password"] = _mailConfig.Password,
+            ["Mail:Smtp:Host"] = mailConfig.Host.ToString(),
+            ["Mail:Smtp:Port"] = mailConfig.Port.ToString(),
+            ["Mail:Smtp:Username"] = mailConfig.Username,
+            ["Mail:Smtp:Password"] = mailConfig.Password,
             ["Mail:Smtp:Ssl"] = false.ToString(),
             ["Mail:FromAddress"] = "some-address@some-domain.aa",
-            ["LaPageAMelkor:Url"] = _laPageAMelkorUrl,
-            ["MapImage:OutputDirectory"] = _mapImageOutputDirectory,
+            ["LaPageAMelkor:Url"] = laPageAMelkorUrl,
+            ["MapImage:OutputDirectory"] = mapImageOutputDirectory,
         };
 
         var configuration = new ConfigurationBuilder()

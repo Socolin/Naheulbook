@@ -9,24 +9,15 @@ namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/gods")]
 [ApiController]
-public class GodsController : ControllerBase
+public class GodsController(
+    IMapper mapper,
+    IGodService godService
+) : ControllerBase
 {
-    private readonly IMapper _mapper;
-    private readonly IGodService _godService;
-
-    public GodsController(
-        IMapper mapper,
-        IGodService godService
-    )
-    {
-        _mapper = mapper;
-        _godService = godService;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<GodResponse>>> GetAllGodsAsync()
     {
-        var gods = await _godService.GetAllGodsAsync();
-        return _mapper.Map<List<GodResponse>>(gods);
+        var gods = await godService.GetAllGodsAsync();
+        return mapper.Map<List<GodResponse>>(gods);
     }
 }

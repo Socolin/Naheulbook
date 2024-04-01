@@ -16,7 +16,7 @@ public interface IGroupHistoryUtil
     GroupHistoryEntryEntity CreateLogEventRp(GroupEntity @group, bool isGm, string info);
 }
 
-public class GroupHistoryUtil : IGroupHistoryUtil
+public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
 {
     private const string StartCombatActionName = "START_COMBAT";
     private const string EndCombatActionName = "END_COMBAT";
@@ -25,13 +25,6 @@ public class GroupHistoryUtil : IGroupHistoryUtil
     private const string UpdateDateActionName = "CHANGE_DATE";
     private const string AddTimeActionName = "ADD_TIME";
     private const string EventRpActionName = "EVENT_RP";
-
-    private readonly IJsonUtil _jsonUtil;
-
-    public GroupHistoryUtil(IJsonUtil jsonUtil)
-    {
-        _jsonUtil = jsonUtil;
-    }
 
     public GroupHistoryEntryEntity CreateLogStartCombat(GroupEntity group)
     {
@@ -63,7 +56,7 @@ public class GroupHistoryUtil : IGroupHistoryUtil
             Action = UpdateMankdebolActionName,
             Date = DateTime.Now,
             Gm = true,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -75,7 +68,7 @@ public class GroupHistoryUtil : IGroupHistoryUtil
             Action = UpdateDebilibeukActionName,
             Date = DateTime.Now,
             Gm = true,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -87,7 +80,7 @@ public class GroupHistoryUtil : IGroupHistoryUtil
             Action = UpdateDateActionName,
             Date = DateTime.Now,
             Gm = false,
-            Data = _jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
 
@@ -99,7 +92,7 @@ public class GroupHistoryUtil : IGroupHistoryUtil
             Action = AddTimeActionName,
             Date = DateTime.Now,
             Gm = false,
-            Data = _jsonUtil.Serialize(new {timeOffset, date}),
+            Data = jsonUtil.Serialize(new {timeOffset, date}),
         };
     }
 

@@ -15,20 +15,11 @@ namespace Naheulbook.Web.Controllers;
 
 [ApiController]
 [Route("api/v2/monsters")]
-public class MonsterController : ControllerBase
+public class MonsterController(
+    IMonsterService monsterService,
+    IMapper mapper
+) : ControllerBase
 {
-    private readonly IMonsterService _monsterService;
-    private readonly IMapper _mapper;
-
-    public MonsterController(
-        IMonsterService monsterService,
-        IMapper mapper
-    )
-    {
-        _monsterService = monsterService;
-        _mapper = mapper;
-    }
-
     [HttpGet("{MonsterId}")]
     public async Task<ActionResult<MonsterResponse>> GetMonsterAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
@@ -37,8 +28,8 @@ public class MonsterController : ControllerBase
     {
         try
         {
-            var monster = await _monsterService.GetMonsterAsync(executionContext, monsterId);
-            return _mapper.Map<MonsterResponse>(monster);
+            var monster = await monsterService.GetMonsterAsync(executionContext, monsterId);
+            return mapper.Map<MonsterResponse>(monster);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -58,7 +49,7 @@ public class MonsterController : ControllerBase
     {
         try
         {
-            await _monsterService.DeleteMonsterAsync(executionContext, monsterId);
+            await monsterService.DeleteMonsterAsync(executionContext, monsterId);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -79,7 +70,7 @@ public class MonsterController : ControllerBase
     {
         try
         {
-            await _monsterService.KillMonsterAsync(executionContext, monsterId);
+            await monsterService.KillMonsterAsync(executionContext, monsterId);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -101,7 +92,7 @@ public class MonsterController : ControllerBase
     {
         try
         {
-            var modifier = await _monsterService.AddModifierAsync(executionContext, monsterId, statsModifier);
+            var modifier = await monsterService.AddModifierAsync(executionContext, monsterId, statsModifier);
             return modifier;
         }
         catch (ForbiddenAccessException ex)
@@ -123,7 +114,7 @@ public class MonsterController : ControllerBase
     {
         try
         {
-            await _monsterService.RemoveModifierAsync(executionContext, monsterId, modifierId);
+            await monsterService.RemoveModifierAsync(executionContext, monsterId, modifierId);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -149,7 +140,7 @@ public class MonsterController : ControllerBase
     {
         try
         {
-            await _monsterService.UpdateMonsterDataAsync(executionContext, monsterId, request);
+            await monsterService.UpdateMonsterDataAsync(executionContext, monsterId, request);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -171,7 +162,7 @@ public class MonsterController : ControllerBase
     {
         try
         {
-            await _monsterService.UpdateMonsterTargetAsync(executionContext, monsterId, request);
+            await monsterService.UpdateMonsterTargetAsync(executionContext, monsterId, request);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -197,7 +188,7 @@ public class MonsterController : ControllerBase
     {
         try
         {
-            await _monsterService.UpdateMonsterAsync(executionContext, monsterId, request);
+            await monsterService.UpdateMonsterAsync(executionContext, monsterId, request);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -219,8 +210,8 @@ public class MonsterController : ControllerBase
     {
         try
         {
-            var item = await _monsterService.AddItemToMonsterAsync(executionContext, monsterId, request);
-            return _mapper.Map<ItemResponse>(item);
+            var item = await monsterService.AddItemToMonsterAsync(executionContext, monsterId, request);
+            return mapper.Map<ItemResponse>(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -245,8 +236,8 @@ public class MonsterController : ControllerBase
     {
         try
         {
-            var item = await _monsterService.AddRandomItemToMonsterAsync(executionContext, monsterId, request);
-            return _mapper.Map<ItemResponse>(item);
+            var item = await monsterService.AddRandomItemToMonsterAsync(executionContext, monsterId, request);
+            return mapper.Map<ItemResponse>(item);
         }
         catch (ForbiddenAccessException ex)
         {

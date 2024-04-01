@@ -15,23 +15,14 @@ public interface IMonsterTypeService
     Task<MonsterSubCategoryEntity> CreateMonsterSubCategoryAsync(NaheulbookExecutionContext executionContext, int monsterTypeId, CreateMonsterSubCategoryRequest request);
 }
 
-public class MonsterTypeService : IMonsterTypeService
+public class MonsterTypeService(
+    IUnitOfWorkFactory unitOfWorkFactory,
+    IAuthorizationUtil authorizationUtil
+) : IMonsterTypeService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly IAuthorizationUtil _authorizationUtil;
-
-    public MonsterTypeService(
-        IUnitOfWorkFactory unitOfWorkFactory,
-        IAuthorizationUtil authorizationUtil
-    )
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-        _authorizationUtil = authorizationUtil;
-    }
-
     public async Task<List<MonsterTypeEntity>> GetMonsterTypesWithCategoriesAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.MonsterTypes.GetAllWithCategoriesAsync();
         }
@@ -42,9 +33,9 @@ public class MonsterTypeService : IMonsterTypeService
         CreateMonsterTypeRequest request
     )
     {
-        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+        await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var monsterType = new MonsterTypeEntity
             {
@@ -65,9 +56,9 @@ public class MonsterTypeService : IMonsterTypeService
         CreateMonsterSubCategoryRequest request
     )
     {
-        await _authorizationUtil.EnsureAdminAccessAsync(executionContext);
+        await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             var monsterSubCategory = new MonsterSubCategoryEntity
             {

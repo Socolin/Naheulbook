@@ -5,12 +5,7 @@ using System;
 
 namespace Naheulbook.Core.Exceptions;
 
-public class InvalidSourceException : Exception
+public class InvalidSourceException(string source) : Exception
 {
-    public string SourceValue { get; }
-
-    public InvalidSourceException(string source)
-    {
-        SourceValue = source;
-    }
+    public string SourceValue { get; } = source;
 }

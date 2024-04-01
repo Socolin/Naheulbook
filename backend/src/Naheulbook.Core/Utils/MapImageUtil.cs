@@ -11,41 +11,34 @@ public interface IMapImageUtil
     MapImageData SplitMapImage(Stream imageStream, int mapId);
 }
 
-public class MapImageUtil : IMapImageUtil
+public class MapImageUtil(MapImageConfiguration configuration) : IMapImageUtil
 {
-    private readonly MapImageConfiguration _configuration;
-
-    public MapImageUtil(MapImageConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-
     public MapImageData SplitMapImage(Stream imageStream, int mapId)
     {
         using (var image = new MagickImage(imageStream))
         {
             var zoomCount = ComputeZoomCount(image);
-            var zoomNumber = zoomCount + _configuration.ExtraZoomCount;
-            var sizePercentage = 100d * Math.Pow(2, _configuration.ExtraZoomCount);
-            var mapDirectoryPath = Path.Combine(_configuration.OutputDirectory, mapId.ToString());
+            var zoomNumber = zoomCount + configuration.ExtraZoomCount;
+            var sizePercentage = 100d * Math.Pow(2, configuration.ExtraZoomCount);
+            var mapDirectoryPath = Path.Combine(configuration.OutputDirectory, mapId.ToString());
             Directory.CreateDirectory(mapDirectoryPath);
 
             while (zoomNumber >= 0)
             {
                 var copy = image.Clone();
                 copy.Resize((int) (image.Width * sizePercentage / 100), (int) (image.Height * sizePercentage / 100));
-                var tiles = copy.CropToTiles(_configuration.TilesSize, _configuration.TilesSize);
+                var tiles = copy.CropToTiles(configuration.TilesSize, configuration.TilesSize);
 
                 var zoomDirectoryPath = Path.Combine(mapDirectoryPath, zoomNumber.ToString());
                 Directory.CreateDirectory(zoomDirectoryPath);
 
                 foreach (var tile in tiles)
                 {
-                    var fileX = tile.Page.X / _configuration.TilesSize;
-                    var fileY = tile.Page.Y / _configuration.TilesSize;
+                    var fileX = tile.Page.X / configuration.TilesSize;
+                    var fileY = tile.Page.Y / configuration.TilesSize;
                     var filePath = Path.Combine(zoomDirectoryPath, fileX + "_" + fileY + ".png");
                     tile.BackgroundColor = MagickColors.Transparent;
-                    tile.Extent(_configuration.TilesSize, _configuration.TilesSize, Gravity.Northwest);
+                    tile.Extent(configuration.TilesSize, configuration.TilesSize, Gravity.Northwest);
                     tile.Write(filePath);
                 }
 
@@ -57,7 +50,7 @@ public class MapImageUtil : IMapImageUtil
                 Width = image.Width,
                 Height = image.Height,
                 ZoomCount = zoomCount,
-                ExtraZoomCount = _configuration.ExtraZoomCount,
+                ExtraZoomCount = configuration.ExtraZoomCount,
             };
         }
     }
@@ -66,7 +59,7 @@ public class MapImageUtil : IMapImageUtil
     {
         var zoomCount = 0;
         var width = image.Width;
-        while (width > _configuration.MinZoomMapSize)
+        while (width > configuration.MinZoomMapSize)
         {
             zoomCount++;
             width /= 2;

@@ -10,18 +10,11 @@ public interface IGodService
     Task<List<GodEntity>> GetAllGodsAsync();
 }
 
-public class GodService : IGodService
+public class GodService(IUnitOfWorkFactory unitOfWorkFactory) : IGodService
 {
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-    public GodService(IUnitOfWorkFactory unitOfWorkFactory)
-    {
-        _unitOfWorkFactory = unitOfWorkFactory;
-    }
-
     public async Task<List<GodEntity>> GetAllGodsAsync()
     {
-        using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
+        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             return await uow.Gods.GetAllAsync();
         }

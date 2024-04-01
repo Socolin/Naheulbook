@@ -13,18 +13,18 @@ public partial class TestDataUtil
 
     public TestDataUtil AddSlot(out SlotEntity slot, Action<SlotEntity> customizer = null)
     {
-        slot = _defaultEntityCreator.CreateSlot();
+        slot = defaultEntityCreator.CreateSlot();
         return SaveEntity(slot, customizer);
     }
 
     public TestDataUtil AddItemTemplateSection(Action<ItemTemplateSectionEntity> customizer = null)
     {
-        return SaveEntity(_defaultEntityCreator.CreateItemTemplateSection(), customizer);
+        return SaveEntity(defaultEntityCreator.CreateItemTemplateSection(), customizer);
     }
 
     public TestDataUtil AddItemTemplateSubCategory(Action<ItemTemplateSubCategoryEntity> customizer = null)
     {
-        return SaveEntity(_defaultEntityCreator.CreateItemTemplateSubCategory(GetLast<ItemTemplateSectionEntity>()), customizer);
+        return SaveEntity(defaultEntityCreator.CreateItemTemplateSubCategory(GetLast<ItemTemplateSectionEntity>()), customizer);
     }
 
     public TestDataUtil AddItemTemplate(Action<ItemTemplateEntity> customizer = null)
@@ -34,7 +34,7 @@ public partial class TestDataUtil
 
     public TestDataUtil AddItemTemplate(out ItemTemplateEntity itemTemplate, Action<ItemTemplateEntity> customizer = null)
     {
-        itemTemplate = _defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateSubCategoryEntity>());
+        itemTemplate = defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateSubCategoryEntity>());
 
         return SaveEntity(itemTemplate, customizer);
     }
@@ -43,7 +43,7 @@ public partial class TestDataUtil
     {
         AddItemTemplateSection();
         AddItemTemplateSubCategory();
-        return SaveEntity(_defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateSubCategoryEntity>()), customizer);
+        return SaveEntity(defaultEntityCreator.CreateItemTemplate(GetLast<ItemTemplateSubCategoryEntity>()), customizer);
     }
 
     public TestDataUtil AddItemTemplateWithAllData()
@@ -175,14 +175,14 @@ public partial class TestDataUtil
 
     public TestDataUtil AddItem(out ItemEntity item, Action<ItemEntity> customizer = null)
     {
-        item = _defaultEntityCreator.CreateItem(GetLast<ItemTemplateEntity>());
+        item = defaultEntityCreator.CreateItem(GetLast<ItemTemplateEntity>());
 
         return SaveEntity(item, customizer);
     }
 
     public TestDataUtil AddItemType(Action<ItemTypeEntity> customizer = null)
     {
-        return SaveEntity(_defaultEntityCreator.CreateItemType(), customizer);
+        return SaveEntity(defaultEntityCreator.CreateItemType(), customizer);
     }
 
     public TestDataUtil AddItemTemplateRequirement(Action<ItemTemplateRequirementEntity> customizer = null)
