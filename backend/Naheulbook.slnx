@@ -1,0 +1,36 @@
+﻿<Solution>
+  <Folder Name="/src/">
+    <Project Path="src\Naheulbook.Core\Naheulbook.Core.csproj" Type="Classic C#" />
+    <Project Path="src\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" Type="Classic C#" />
+    <Project Path="src\Naheulbook.Data\Naheulbook.Data.csproj" Type="Classic C#" />
+    <Project Path="src\Naheulbook.Requests\Naheulbook.Requests.csproj" Type="Classic C#" />
+    <Project Path="src\Naheulbook.Shared\Naheulbook.Shared.csproj" Type="Classic C#" />
+    <Project Path="src\Naheulbook.Web\Naheulbook.Web.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests\Naheulbook.Core.Tests.Unit\Naheulbook.Core.Tests.Unit.csproj" Type="Classic C#" />
+    <Project Path="tests\Naheulbook.Data.Tests.Integration\Naheulbook.Data.Tests.Integration.csproj" Type="Classic C#" />
+    <Project Path="tests\Naheulbook.Tests.Functional\Naheulbook.Tests.Functional.csproj" Type="Classic C#" />
+    <Project Path="tests\Naheulbook.Web.Tests.Unit\Naheulbook.Web.Tests.Unit.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/tests/utils/">
+    <Project Path="tests\Naheulbook.TestUtils\Naheulbook.TestUtils.csproj" Type="Classic C#" />
+    <Project Path="tests\Socolin.TestUtils.AutoFillTestObjects.Tests.Unit\Socolin.TestUtils.AutoFillTestObjects.Tests.Unit.csproj" Type="Classic C#" />
+    <Project Path="tests\Socolin.TestUtils.AutoFillTestObjects\Socolin.TestUtils.AutoFillTestObjects.csproj" Type="Classic C#" />
+    <Project Path="tests\Socolin.TestUtils.Console\Socolin.TestUtils.Console.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools\Naheulbook.DatabaseMigrator.Cli\Naheulbook.DatabaseMigrator.Cli.csproj" Type="Classic C#" />
+    <Project Path="tools\Naheulbook.GenerateDevCertificate\Naheulbook.GenerateDevCertificate.csproj" Type="Classic C#" />
+    <Project Path="tools\Naheulbook.SetupDevDatabase\Naheulbook.SetupDevDatabase.csproj" Type="Classic C#" />
+    <Project Path="tools\Naheulbook.Tools.Shared\Naheulbook.Tools.Shared.csproj" Type="Classic C#" />
+    <Project Path="tools\Naheulbook.UpdateDevConfig\Naheulbook.UpdateDevConfig.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/_/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="nuget.config" />
+    <File Path="README.md" />
+    <File Path=".gitignore" />
+  </Folder>
+</Solution>
