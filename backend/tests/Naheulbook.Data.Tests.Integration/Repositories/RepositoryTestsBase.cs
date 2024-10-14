@@ -92,6 +92,7 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
                     .Excluding(x => x.Characters)
                     .Excluding(x => x.Invites)
                     .Excluding(x => x.Events)
+                    .Excluding(x => x.Fights)
                     .Excluding(x => x.HistoryEntries)
                     .Excluding(x => x.Npcs)
                     .As<EquivalencyAssertionOptions<T>>();

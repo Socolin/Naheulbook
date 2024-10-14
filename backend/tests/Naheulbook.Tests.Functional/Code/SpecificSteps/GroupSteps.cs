@@ -95,4 +95,16 @@ public class GroupSteps(TestDataUtil testDataUtil, ScenarioContext scenarioConte
     {
         testDataUtil.AddNpc();
     }
+
+    [Given(@"a prepared fight")]
+    public void GivenAPreparedFight()
+    {
+        testDataUtil.AddFight();
+    }
+
+    [Given(@"a monster for the fight")]
+    public void GivenAMonsterForTheFight()
+    {
+        testDataUtil.AddMonster(m => m.FightId = testDataUtil.GetLast<FightEntity>().Id);
+    }
 }

@@ -1,9 +1,36 @@
 Feature: Fight Preparation
 
     Scenario: Can load group fights
+        Given a JWT for a user
+        Given a group
+        And a prepared fight
+        And a monster for the fight
+
+        When performing a GET to the url "/api/v2/groups/${Group.Id}/fights" with the current jwt
+        Then the response status code is 200
+        And the response should contains the following json
+        """
+        [
+          {
+            "id": ${Fight.Id},
+            "name": "${Fight.Name}",
+            "monsters": [
+              {
+                "id": ${Monster.Id},
+                "name": "${Monster.Name}",
+                "fightId": ${Fight.Id},
+                "data": ${Monster.Data},
+                "modifiers": [],
+                "items": []
+              }
+            ]
+          }
+        ]
+        """
 
     Scenario: A GM can prepare a fight with monters
         Given a JWT for a user
+        Given an item template
         Given a group
 
         When performing a POST to the url "/api/v2/groups/${Group.Id}/fights" with the following json content and the current jwt
@@ -15,18 +42,18 @@ Feature: Fight Preparation
         Then the response status code is 201
         And the response should contains the following json
         """
-        [
-          {
-            "id": {"__capture": {"name": "FightId"}}
-            "name": "some-fight"
-          }
-        ]
+        {
+          "id": {"__capture": {"type": "integer", "name": "FightId"}},
+          "name": "some-fight",
+          "monsters": []
+        }
         """
 
-        When performing a POST to the url "/api/v2/groups/${Group.Id}/fights/${FightId}/monsters" with the following json content and the current jwt
-        """json
+        When performing a POST to the url "/api/v2/groups/${Group.Id}/monsters" with the following json content and the current jwt
+        """
         {
           "name": "some-monster-name",
+          "fightId": ${FightId},
           "data": {
             "at": 8,
             "chercheNoise": false,
@@ -84,9 +111,10 @@ Feature: Fight Preparation
         """
         Then the response status code is 201
         And the response should contains the following json
-        """json
+        """
         {
           "id": {"__match": {"type": "integer"}},
+          "fightId": ${FightId},
           "name": "some-monster-name",
           "data": {
             "at": 8,
@@ -148,5 +176,5 @@ Feature: Fight Preparation
         Given a group
         And a prepared fight
 
-        When performing a DELETE to the url "/api/v2/groups/${Group.Id}/events/${Event.Id}" with the current jwt
+        When performing a DELETE to the url "/api/v2/groups/${Group.Id}/fights/${Fight.Id}" with the current jwt
         Then the response status code is 204
