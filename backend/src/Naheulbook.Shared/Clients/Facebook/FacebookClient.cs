@@ -19,7 +19,7 @@ public class FacebookClient(FacebookConfiguration configuration, IJsonUtil jsonU
     public async Task<string> GetAccessTokenAsync(string redirectUri, string code)
     {
         var requestUri = new StringBuilder();
-        requestUri.AppendFormat("https://graph.facebook.com/v19.0/oauth/access_token");
+        requestUri.AppendFormat("https://graph.facebook.com/v21.0/oauth/access_token");
         requestUri.AppendFormat("?redirect_uri={0}", Uri.EscapeDataString(redirectUri));
         requestUri.AppendFormat("&code={0}", Uri.EscapeDataString(code));
         requestUri.AppendFormat("&client_id={0}", configuration.AppId);
