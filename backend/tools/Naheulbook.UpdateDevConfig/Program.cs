@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 var configResolver = new ConfigResolver();
 var mysqlPort = await configResolver.GetMysqlPortAsync();
 var redisPort = await configResolver.GetRedisPortAsync();
-var naheulbookRootFolder = FileSystemHelper.FindDirectoryContaining("Naheulbook.sln");
+var naheulbookRootFolder = FileSystemHelper.FindDirectoryContaining("Naheulbook.slnx");
 var mysqlConnectionString = $"Server=localhost;Database=naheulbook;Uid=naheulbook;Pwd=naheulbook;SslMode=None;CharSet=utf8;AllowPublicKeyRetrieval=True;Port={mysqlPort}";
 var redisConnectionString = $"localhost:{redisPort},abortConnect=false";
 

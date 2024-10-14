@@ -7,7 +7,7 @@ import {HttpClient} from '@angular/common/http';
 import {ActiveStatsModifier} from '../shared';
 import {Monster} from './monster.model';
 import {SkillService} from '../skill';
-import {CreateMonsterRequest} from '../api/requests';
+import {CreateMonsterRequest, MoveMonsterToFightRequest} from '../api/requests';
 import {MonsterResponse} from '../api/responses';
 import {IActiveStatsModifier} from '../api/shared';
 
@@ -42,6 +42,10 @@ export class MonsterService {
 
     killMonster(monsterId: number): Observable<void> {
         return this.httpClient.post<void>(`/api/v2/monsters/${monsterId}/kill`, {});
+    }
+
+    moveMonsterToFight(monsterId: number, request: MoveMonsterToFightRequest) {
+        return this.httpClient.post<void>(`/api/v2/monsters/${monsterId}/moveToFight`, request);
     }
 
     deleteMonster(monsterId: number): Observable<any> {

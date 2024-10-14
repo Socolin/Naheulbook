@@ -17,6 +17,7 @@ public interface IUnitOfWork : IDisposable
     IEffectSubCategoryRepository EffectSubCategories { get; }
     IEffectTypeRepository EffectTypes { get; }
     IEventRepository Events { get; }
+    IFightRepository Fights { get; }
     IGodRepository Gods { get; }
     IGroupRepository Groups { get; }
     IGroupHistoryEntryRepository GroupHistoryEntries { get; }
@@ -63,6 +64,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public IEffectTypeRepository EffectTypes => new EffectTypeRepository(_naheulbookDbContext);
     public IEffectSubCategoryRepository EffectSubCategories => new EffectSubCategoryRepository(_naheulbookDbContext);
     public IEventRepository Events => new EventRepository(_naheulbookDbContext);
+    public IFightRepository Fights => new FightRepository(_naheulbookDbContext);
     public IGodRepository Gods => new GodRepository(_naheulbookDbContext);
     public IGroupRepository Groups => new GroupRepository(_naheulbookDbContext);
     public IGroupHistoryEntryRepository GroupHistoryEntries => new GroupHistoryEntryRepository(_naheulbookDbContext);

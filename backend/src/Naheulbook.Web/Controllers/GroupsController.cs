@@ -20,6 +20,7 @@ public class GroupsController(
     ILootService lootService,
     IMonsterService monsterService,
     IEventService eventService,
+    IFightService fightService,
     IMapper mapper,
     INpcService npcService
 ) : ControllerBase
@@ -244,6 +245,103 @@ public class GroupsController(
             throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }
     }
+
+    [HttpGet("{GroupId:int:min(1)}/fights")]
+    public async Task<ActionResult<List<FightResponse>>> GetFightListAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int groupId
+    )
+    {
+        try
+        {
+            var fights = await fightService.GetFightsForGroupAsync(executionContext, groupId);
+            return mapper.Map<List<FightResponse>>(fights);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (GroupNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpPost("{GroupId:int:min(1)}/fights")]
+    public async Task<CreatedActionResult<FightResponse>> PostCreateFightAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int groupId,
+        CreateFightRequest request
+    )
+    {
+        try
+        {
+            var groupFight = await fightService.CreateFightAsync(executionContext, groupId, request);
+            return mapper.Map<FightResponse>(groupFight);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (GroupNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+
+    [HttpPost("{GroupId:int:min(1)}/fights/{FightId:int:min(1)}/start")]
+    public async Task<ActionResult<List<FightResponse>>> PostStartFightAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int groupId,
+        [FromRoute] int fightId
+    )
+    {
+        try
+        {
+            await fightService.StartFightAsync(executionContext, groupId, fightId);
+            return NoContent();
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (GroupNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+        catch (FightNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpDelete("{GroupId:int:min(1)}/fights/{FightId:int:min(1)}")]
+    public async Task<ActionResult<FightResponse>> PostDeleteFightAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int groupId,
+        [FromRoute] int fightId
+    )
+    {
+        try
+        {
+            await fightService.DeleteFightAsync(executionContext, groupId, fightId);
+            return NoContent();
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (GroupNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+        catch (FightNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
 
     [HttpGet("{GroupId:int:min(1)}/monsters")]
     public async Task<ActionResult<List<MonsterResponse>>> GetMonsterListAsync(

@@ -1,14 +1,14 @@
 import {Subject} from 'rxjs';
 
 import {ActiveStatsModifier, DurationChange, IMetadata, StatModifier} from '../shared';
-import {Skill, SkillDictionary} from '../skill';
+import {SkillDictionary} from '../skill';
 import {ItemTemplate} from '../item-template';
 import {Item, PartialItem} from '../item';
 import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
 
 import {TargetJsonData} from '../group/target.model';
 import {Fighter} from '../group';
-import {MonsterSubCategoryResponse, MonsterResponse, MonsterTemplateResponse, MonsterTypeResponse} from '../api/responses';
+import {MonsterResponse, MonsterSubCategoryResponse, MonsterTemplateResponse, MonsterTypeResponse} from '../api/responses';
 import {IMonsterData, MonsterTemplateData} from '../api/shared';
 
 export class MonsterData implements IMonsterData {
@@ -60,6 +60,7 @@ export class MonsterComputedData {
 
 export class Monster extends WsRegistrable {
     public id: number;
+    public fightId?: number;
     public name: string;
     public data: MonsterData = new MonsterData();
     public dead: string;

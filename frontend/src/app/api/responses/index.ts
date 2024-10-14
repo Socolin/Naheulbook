@@ -12,6 +12,7 @@ export * from './effect-sub-category-response';
 export * from './effect-response';
 export * from './effect-type-response';
 export * from './event-response';
+export * from './fight-response';
 export * from './flag-response';
 export * from './group-response';
 export * from './group-summary-response';

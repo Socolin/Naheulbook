@@ -12,6 +12,7 @@ import {TargetJsonData} from './target.model';
 import {FighterDurationChanges, tokenColors} from '../shared';
 import {DeleteInviteResponse, GroupResponse, NpcResponse} from '../api/responses';
 import {IGroupConfig, IGroupData, INpcData} from '../api/shared';
+import {Fight} from './fight';
 
 export class FighterStat {
     private fighter: Fighter;
@@ -336,6 +337,10 @@ export class Group extends WsRegistrable {
     public monsterRemoved: Subject<Monster> = new Subject<Monster>();
     public monsterSubscriptions: { [monsterId: number]: Subscription } = {};
 
+    public fights: Fight[] = [];
+    public fightAdded: Subject<Fight> = new Subject<Fight>();
+    public fightRemoved: Subject<Fight> = new Subject<Fight>();
+
     public loots: Loot[] = [];
     public lootAdded: Subject<Loot> = new Subject<Loot>();
     public lootRemoved: Subject<Loot> = new Subject<Loot>();
@@ -444,7 +449,7 @@ export class Group extends WsRegistrable {
     }
 
     /**
-     * Add an monster to the group
+     * Add a monster to the group
      * @param addedMonster The monster to add
      * @returns {boolean} true if the monster has been added (false if the monster was already in)
      */
@@ -462,6 +467,30 @@ export class Group extends WsRegistrable {
         if (this.wsSubscribtion) {
             this.wsSubscribtion.service.registerElement(addedMonster);
         }
+        return true;
+    }
+
+    addFight(addedFight: Fight) {
+        let i = this.fights.findIndex(fight => fight.id === addedFight.id);
+        if (i !== -1) {
+            return false;
+        }
+        this.fights.push(addedFight);
+        this.fightAdded.next(addedFight);
+        if (this.wsSubscribtion) {
+            this.wsSubscribtion.service.registerElement(addedFight);
+        }
+        return true;
+    }
+
+    removeFight(fightId: number) {
+        let i = this.fights.findIndex(fight => fight.id === fightId);
+        if (i === -1) {
+            return false;
+        }
+        let removedFight = this.fights.splice(i, 1)[0];
+        this.fightRemoved.next(removedFight);
+
         return true;
     }
 
@@ -604,8 +633,8 @@ export class Group extends WsRegistrable {
             });
         }
         this.fighters.forEach(f => f.updateTarget(this.fighters));
-        if (this.data.currentFighterIndex > this.fighters.length) {
-            this.data.currentFighterIndex = -1;
+        if (this.data.currentFighterIndex >= this.fighters.length) {
+            this.nextLap();
         }
     }
 
@@ -737,6 +766,9 @@ export class Group extends WsRegistrable {
         for (let character of this.characters) {
             service.registerElement(character);
         }
+        for (let fight of this.fights) {
+            service.registerElement(fight);
+        }
     }
 
     public onWsUnregister(): void {
@@ -751,6 +783,9 @@ export class Group extends WsRegistrable {
         }
         for (let character of this.characters) {
             this.wsSubscribtion.service.unregisterElement(character);
+        }
+        for (let fight of this.fights) {
+            this.wsSubscribtion.service.unregisterElement(fight);
         }
     }
 
@@ -813,11 +848,28 @@ export class Group extends WsRegistrable {
                 break;
             }
             case 'addMonster': {
-                // FIXME: implements if needed at some point (this opcode is used for foundry)
+                services.skill.getSkillsById().subscribe(skillsById => {
+                    this.addMonster(Monster.fromResponse(data, skillsById));
+                });
                 break;
             }
             case 'killMonster': {
-                // FIXME: implements if needed at some point (this opcode is used for foundry)
+                this.removeMonster(data);
+                break;
+            }
+            case 'deleteMonster': {
+                this.removeMonster(data);
+                break;
+            }
+            case 'deleteFight': {
+                this.removeFight(data);
+                break;
+            }
+            case 'addFight': {
+                services.skill.getSkillsById().subscribe(skillsById => {
+                    let fight = Fight.fromResponse(data, skillsById);
+                    this.addFight(fight);
+                });
                 break;
             }
             default: {
@@ -841,6 +893,10 @@ export class Group extends WsRegistrable {
                 this.monsterSubscriptions[monster.id].unsubscribe();
             }
             monster.dispose();
+        }
+
+        for (let fight of this.fights) {
+            fight.dispose();
         }
 
         for (let fighter of this.fighters) {
@@ -958,6 +1014,33 @@ export class Group extends WsRegistrable {
             return color;
         }
         return '000000';
+    }
+
+    moveMonsterToFight(monster: Monster, fightId?: number) {
+        if (monster.fightId === fightId)
+            return;
+
+        let actualFight = this.fights.find(f => f.id === monster.fightId);
+        let targetFight = this.fights.find(f => f.id === fightId)
+        if (actualFight) {
+            monster.fightId = fightId;
+            if (!targetFight) {
+                // Move to active combat
+                actualFight.removeMonster(monster.id);
+                this.addMonster(monster);
+            }
+            else {
+                // Move to another fight
+                actualFight.removeMonster(monster.id);
+                targetFight.addMonster(monster);
+            }
+        }
+        else if (targetFight) {
+            // Move from active combat to another fight
+            monster.fightId = fightId;
+            this.removeMonster(monster.id);
+            targetFight.addMonster(monster);
+        }
     }
 }
 

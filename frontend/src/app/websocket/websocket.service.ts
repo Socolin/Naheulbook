@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Subject, Observable, Observer} from 'rxjs';
+import {Observable, Observer, Subject} from 'rxjs';
 import * as signalR from '@microsoft/signalr';
 
 import {MiscService} from '../shared';
@@ -8,7 +8,7 @@ import {SkillService} from '../skill';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
 
-import {WsMessage, WsEvent, WsRegistrable} from './websocket.model';
+import {WsEvent, WsMessage, WsRegistrable} from './websocket.model';
 import {share} from 'rxjs/operators';
 import {LoginService} from '../user';
 
@@ -45,6 +45,7 @@ export class WebSocketService {
                     };
                     registrable.handleWebsocketEvent(res.opcode, res.data, services);
                 } catch (err) {
+                    console.error(err);
                     let error = new Error('An error occured while handling websocket event `' + res.opcode + '\' on '
                         + registrable.getWsTypeName()
                     );

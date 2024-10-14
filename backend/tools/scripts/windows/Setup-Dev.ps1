@@ -12,7 +12,7 @@ Write-Host "Running from: " $NaheulbookRootPath
 $Depth = 0;
 while ($true) {
 	$NaheulbookRootPath = Join-Path $NaheulbookRootPath -ChildPath ".." -Resolve
-	$TestSlnFilePath = Join-Path $NaheulbookRootPath -ChildPath "Naheulbook.sln"
+	$TestSlnFilePath = Join-Path $NaheulbookRootPath -ChildPath "Naheulbook.slnx"
 	if (Test-Path -Path $TestSlnFilePath -PathType Leaf) {
 		break;
 	}

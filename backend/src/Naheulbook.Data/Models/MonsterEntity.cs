@@ -13,6 +13,10 @@ public class MonsterEntity
 
     public string? Modifiers { get; set; }
 
+    public int? FightId { get; set; }
+    private FightEntity? _fight;
+    public FightEntity? Fight { get => _fight.ThrowIfNotLoadedAndNotNull(LootId); set => _fight = value; }
+
     public int GroupId { get; set; }
     private GroupEntity? _group;
     public GroupEntity Group { get => _group.ThrowIfNotLoaded(); set => _group = value; }

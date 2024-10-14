@@ -84,6 +84,8 @@ public class MapperProfile : Profile
 
         CreateMap<EventEntity, EventResponse>();
 
+        CreateMap<FightEntity, FightResponse>();
+
         CreateMap<GodEntity, GodResponse>();
 
         CreateMap<GroupInviteEntity, DeleteInviteResponse>();

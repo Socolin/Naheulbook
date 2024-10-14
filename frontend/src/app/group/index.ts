@@ -4,6 +4,7 @@ export * from './group.service';
 export * from './group-action.service';
 
 export * from './add-loot-dialog.component';
+export * from './create-fight-dialog.component';
 export * from './create-gem-dialog.component';
 export * from './create-group.component';
 export * from './create-item-dialog.component';

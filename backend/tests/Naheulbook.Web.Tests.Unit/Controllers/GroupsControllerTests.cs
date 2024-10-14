@@ -28,6 +28,7 @@ public class GroupsControllerTests
     private NaheulbookExecutionContext _executionContext;
 
     private GroupsController _controller;
+    private IFightService _fightService;
 
     [SetUp]
     public void SetUp()
@@ -38,12 +39,14 @@ public class GroupsControllerTests
         _eventService = Substitute.For<IEventService>();
         _mapper = Substitute.For<IMapper>();
         _npcService = Substitute.For<INpcService>();
+        _fightService = Substitute.For<IFightService>();
 
         _controller = new GroupsController(
             _groupService,
             _lootService,
             _monsterService,
             _eventService,
+            _fightService,
             _mapper,
             _npcService
         );

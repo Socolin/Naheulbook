@@ -1,7 +1,7 @@
 import {Subject, Subscription} from 'rxjs';
 
 import {IMetadata} from '../shared';
-import {WsRegistrable, WebSocketService, WsEventServices} from '../websocket';
+import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
 
 import {SkillDictionary} from '../skill';
 import {Item, ItemData, PartialItem} from '../item';
@@ -201,7 +201,7 @@ export class Loot extends WsRegistrable {
                 break;
             }
             case 'deleteMonster': {
-                this.removeMonster(data.id);
+                this.removeMonster(data);
                 break;
             }
             case 'updateVisibility': {

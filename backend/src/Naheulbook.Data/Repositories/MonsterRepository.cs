@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
+using Naheulbook.Data.Extensions;
 using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.Repositories;
@@ -22,29 +23,8 @@ public class MonsterRepository(NaheulbookDbContext context) : Repository<Monster
     public Task<List<MonsterEntity>> GetByGroupIdWithInventoryAsync(int groupId)
     {
         return Context.Monsters
-            .Include(m => m.Items)
-            .ThenInclude(i => i.ItemTemplate)
-            .ThenInclude(i => i.UnSkills)
-            .Include(m => m.Items)
-            .ThenInclude(i => i.ItemTemplate)
-            .ThenInclude(i => i.Skills)
-            .Include(m => m.Items)
-            .ThenInclude(i => i.ItemTemplate)
-            .ThenInclude(i => i.Modifiers)
-            .Include(m => m.Items)
-            .ThenInclude(i => i.ItemTemplate)
-            .ThenInclude(i => i.SkillModifiers)
-            .Include(m => m.Items)
-            .ThenInclude(i => i.ItemTemplate)
-            .ThenInclude(i => i.Requirements)
-            .Include(m => m.Items)
-            .ThenInclude(i => i.ItemTemplate)
-            .ThenInclude(i => i.Slots)
-            .ThenInclude(i => i.Slot)
-            .Include(m => m.Items)
-            .ThenInclude(i => i.ItemTemplate)
-            .ThenInclude(i => i.Modifiers)
-            .Where(g => g.GroupId == groupId && g.Dead == null)
+            .IncludeItemDetails(m => m.Items)
+            .Where(g => g.GroupId == groupId && g.FightId == null && g.Dead == null)
             .ToListAsync();
     }
 

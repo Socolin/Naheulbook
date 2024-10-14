@@ -33,11 +33,15 @@ public class GroupEntity
     private ICollection<EventEntity>? _events;
     public ICollection<EventEntity> Events { get => _events.ThrowIfNotLoaded(); set => _events = value; }
 
+    private ICollection<FightEntity>? _fights;
+    public ICollection<FightEntity> Fights { get => _fights.ThrowIfNotLoaded(); set => _fights = value; }
+
     private ICollection<GroupHistoryEntryEntity>? _historyEntries;
     public ICollection<GroupHistoryEntryEntity> HistoryEntries { get => _historyEntries.ThrowIfNotLoaded(); set => _historyEntries = value; }
 
     private ICollection<NpcEntity>? _npcs;
     public ICollection<NpcEntity> Npcs { get => _npcs.ThrowIfNotLoaded(); set => _npcs = value; }
+
 
     public void AddHistoryEntry(GroupHistoryEntryEntity entry)
     {

@@ -139,3 +139,85 @@
         </mat-card>
     </ng-template>
 </mat-card>
+
+<h2>Combats préparer</h2>
+
+@for (fight of group.fights; track fight.id) {
+    <mat-card>
+        <mat-toolbar>
+            <h2 class="mat-h2">
+                Combat: {{fight.name}}
+            </h2>
+            <span class="toolbar-spacer"></span>
+            <button mat-icon-button [matMenuTriggerFor]="menuFight"
+                    [attr.aria-label]="'Menu du combat ' + fight.name">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menuFight="matMenu">
+                <button mat-menu-item
+                        (click)="openAddMonsterDialog(fight.id)">
+                    <mat-icon>add</mat-icon>
+                    Ajouter un monstre
+                </button>
+                <button mat-menu-item
+                        (click)="startFight(fight.id)">
+                    <mat-icon>play_arrow</mat-icon>
+                    Commencer ce combat
+                </button>
+                <button mat-menu-item [matMenuTriggerFor]="deleteFightConfirm">
+                    <mat-icon>delete</mat-icon>
+                    Supprimer
+                </button>
+            </mat-menu>
+
+            <mat-menu #deleteFightConfirm="matMenu">
+                <button mat-menu-item
+                        (click)=deleteFight(fight.id)>
+                    Confirmer
+                </button>
+            </mat-menu>
+        </mat-toolbar>
+
+        <mat-divider></mat-divider>
+        <mat-accordion class="fighters" *ngIf="isMobile">
+            <ng-template ngFor let-fighter [ngForOf]="fight.fighters" let-i=index>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <fighter-icon [fighter]="fighter" fontSize="32px"></fighter-icon>
+                            <span>{{fighter.name}}</span>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <fighter
+                        [selected]="group.data.inCombat && group.data.currentFighterIndex === i"
+                        [group]="group"
+                        [fighter]="fighter"
+                        [fighters]="group.fighters"
+                        [expandedView]="true">
+                    </fighter>
+                </mat-expansion-panel>
+            </ng-template>
+        </mat-accordion>
+        <ng-template [ngIf]="!isMobile">
+            <div *ngFor="let fighter of fight.fighters; let i=index">
+                <fighter
+                    [selected]="group.data.inCombat && group.data.currentFighterIndex === i"
+                    [group]="group"
+                    [fighter]="fighter"
+                    [fighters]="group.fighters"
+                    [expandedView]="false">
+                </fighter>
+                <mat-divider></mat-divider>
+            </div>
+        </ng-template>
+    </mat-card>
+} @empty {
+    Vous pouvez préparer des monsters a l'avance pour démarrer un combat en 1 clique.
+}
+
+<button class="add-fight-button" mat-button (click)="openCreateFightDialog()">
+    <mat-icon>add</mat-icon>
+    Préparer un combat
+</button>

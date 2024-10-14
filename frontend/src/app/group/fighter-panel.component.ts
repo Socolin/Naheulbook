@@ -11,13 +11,14 @@ import {Group} from './group.model';
 import {GroupActionService} from './group-action.service';
 import {GroupService} from './group.service';
 import {AddMonsterDialogComponent, AddMonsterDialogResult} from './add-monster-dialog.component';
-import {CreateMonsterRequest} from '../api/requests';
+import {CreateFightRequest, CreateMonsterRequest} from '../api/requests';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {NhbkMatDialog} from '../material-workaround';
 import {EndCombatDialogComponent, EndCombatDialogResult} from './end-combat-dialog.component';
 import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
 import {Router} from '@angular/router';
 import {DeadMonsterResponse} from '../api/responses/dead-monster-response';
+import {CreateFightDialogComponent, CreateFightDialogResult} from './create-fight-dialog.component';
 
 @Component({
     selector: 'fighter-panel',
@@ -56,7 +57,7 @@ export class FighterPanelComponent implements OnInit, OnDestroy {
         });
     }
 
-    openAddMonsterDialog() {
+    openAddMonsterDialog(fightId?: number) {
         const dialogRef = this.dialog.openFullScreen<AddMonsterDialogComponent, any, AddMonsterDialogResult>(AddMonsterDialogComponent);
 
         dialogRef.afterClosed().subscribe((result) => {
@@ -68,6 +69,7 @@ export class FighterPanelComponent implements OnInit, OnDestroy {
             const request = {
                 name: name,
                 items: items.map(i => ({itemTemplateId: i.template.id, itemData: i.data})),
+                fightId: fightId,
                 data: monsterData
             } as CreateMonsterRequest;
 
@@ -77,11 +79,53 @@ export class FighterPanelComponent implements OnInit, OnDestroy {
 
             this.monsterService.createMonster(this.group.id, request).subscribe(
                 monster => {
-                    this.group.addMonster(monster);
+                    if (fightId) {
+                        let fight = this.group.fights.find(f => f.id === fightId);
+                        if (fight)
+                            fight.addMonster(monster);
+                    } else {
+                        this.group.addMonster(monster);
+                    }
                     this.group.notify('addMonster', 'Nouveau monstre ajouté: ' + monster.name, monster);
                 }
             );
         });
+    }
+
+    openCreateFightDialog() {
+        const dialogRef = this.dialog.open<CreateFightDialogComponent, any, CreateFightDialogResult>(CreateFightDialogComponent);
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+
+            const {name} = result;
+            const request = {
+                name: name,
+            } as CreateFightRequest;
+
+            this.groupService.createFight(this.group.id, request).subscribe(
+                fight => {
+                    this.group.addFight(fight);
+                    this.group.notify('addFight', 'Nouveau combat ajouté: ' + fight.name);
+                }
+            );
+        });
+    }
+
+    startFight(fightId: number) {
+        this.groupService.startFight(this.group.id, fightId).subscribe(() => {
+            this.group.removeFight(fightId);
+            this.group.data.changeValue('inCombat', true);
+            this.registerCombatQuickActions();
+        })
+    }
+
+    deleteFight(fightId: number) {
+        this.groupService.deleteFight(this.group.id, fightId).subscribe(() => {
+            this.group.removeFight(fightId);
+        })
     }
 
     openDeadMonstersDialog() {
@@ -123,6 +167,19 @@ export class FighterPanelComponent implements OnInit, OnDestroy {
             () => {
                 this.group.removeMonster(monster.id);
                 this.group.notify('deleteMonster', 'Monstre supprimé: ' + monster.name, monster);
+                if (this.group.pendingModifierChanges) {
+                    this.groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges).subscribe();
+                    this.group.pendingModifierChanges = undefined;
+                }
+            }
+        );
+    }
+
+    moveMonsterToFight(monster: Monster, fightId?: number) {
+        this.monsterService.moveMonsterToFight(monster.id, {fightId}).subscribe(
+            () => {
+                this.group.moveMonsterToFight(monster, fightId);
+                this.group.notify('moveMonster', 'Monstre déplacé: ' + monster.name, monster);
                 if (this.group.pendingModifierChanges) {
                     this.groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges).subscribe();
                     this.group.pendingModifierChanges = undefined;
@@ -190,6 +247,11 @@ export class FighterPanelComponent implements OnInit, OnDestroy {
         this.actionService.registerAction('killMonster').subscribe(
             data => {
                 this.killMonster(data.data);
+            }
+        );
+        this.actionService.registerAction('moveMonsterToFight').subscribe(
+            data => {
+                this.moveMonsterToFight(data.data.monster, data.data.fightId);
             }
         );
         this.actionService.registerAction('deleteMonster').subscribe(

@@ -83,6 +83,28 @@ public class MonsterController(
         }
     }
 
+    [HttpPost("{MonsterId}/moveToFight")]
+    public async Task<CreatedActionResult<ActiveStatsModifier>> PostMoveMonsterToFightAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int monsterId,
+        [FromBody] MoveMonsterToFightRequest request
+    )
+    {
+        try
+        {
+            await monsterService.MoveMonsterToFightAsync(executionContext, monsterId, request.FightId);
+            return NoContent();
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (MonsterNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
     [HttpPost("{MonsterId}/modifiers")]
     public async Task<CreatedActionResult<ActiveStatsModifier>> PostAddModifierAsync(
         [FromServices] NaheulbookExecutionContext executionContext,

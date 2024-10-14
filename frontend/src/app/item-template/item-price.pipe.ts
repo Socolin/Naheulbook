@@ -9,6 +9,7 @@ export class ItemPricePipe implements PipeTransform {
         if (!price) {
             return '';
         }
+        price = Math.round(price * 100) / 100;
         if (price >= 1) {
             return price + ' P.O.';
         }

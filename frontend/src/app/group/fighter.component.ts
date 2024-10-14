@@ -3,18 +3,14 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NotificationsService} from '../notifications';
 import {CharacterService, ItemActionService} from '../character';
 import {Item, ItemService} from '../item';
-import {ActiveStatsModifier, LapCountDecrement, tokenColors} from '../shared';
+import {ActiveStatsModifier, LapCountDecrement} from '../shared';
 import {Monster, MonsterData, MonsterService} from '../monster';
 
 import {Fighter, Group} from './group.model';
 import {GroupActionService} from './group-action.service';
 import {TargetJsonData} from './target.model';
 import {AddEffectDialogComponent} from '../effect';
-import {
-    EditMonsterDialogComponent,
-    EditMonsterDialogData,
-    EditMonsterDialogResult
-} from './edit-monster-dialog.component';
+import {EditMonsterDialogComponent, EditMonsterDialogData, EditMonsterDialogResult} from './edit-monster-dialog.component';
 import {openCreateItemDialog} from './create-item-dialog.component';
 import {openCreateGemDialog} from './create-gem-dialog.component';
 import {ModifierDetailsDialogComponent} from '../effect/modifier-details-dialog.component';
@@ -176,6 +172,10 @@ export class FighterComponent implements OnInit {
         this.actionService.emitAction('killMonster', this.group, monster);
     }
 
+    moveMonsterToFight(monster: Monster, fightId?: number) {
+        this.actionService.emitAction('moveMonsterToFight', this.group, {monster, fightId});
+    }
+
     deleteMonster(monster: Monster) {
         this.actionService.emitAction('deleteMonster', this.group, monster);
     }
@@ -183,6 +183,7 @@ export class FighterComponent implements OnInit {
     duplicateMonster(sourceMonster: Monster) {
         const request: CreateMonsterRequest = {
             data: {...sourceMonster.data},
+            fightId: sourceMonster.fightId,
             items: [],
             modifiers: [],
             name: sourceMonster.name
@@ -194,7 +195,13 @@ export class FighterComponent implements OnInit {
 
         this.monsterService.createMonster(this.group.id, request).subscribe(
             monster => {
-                this.group.addMonster(monster);
+                if (monster.fightId) {
+                    let fight = this.group.fights.find(f => f.id === monster.fightId);
+                    if (fight)
+                        fight.addMonster(monster);
+                } else {
+                    this.group.addMonster(monster);
+                }
                 this.group.notify('addMonster', 'Nouveau monstre ajouté: ' + monster.name, monster);
             }
         );

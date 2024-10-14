@@ -18,6 +18,7 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
         Group,
         Monster,
         Loot,
+        Fight,
     }
 
     public INotificationPacket BuildCharacterChangeEv(CharacterEntity character)
@@ -254,6 +255,16 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
         return BuildGroupChange(groupId, "deleteLoot", lootId);
     }
 
+    public INotificationPacket BuildGroupAddFight(int groupId, FightEntity fight)
+    {
+        return BuildGroupChange(groupId, "addFight", mapper.Map<FightResponse>(fight));
+    }
+
+    public INotificationPacket BuildGroupDeleteFight(int groupId, int fightId)
+    {
+        return BuildGroupChange(groupId, "deleteFight", fightId);
+    }
+
     public INotificationPacket BuildGroupChangeConfig(in int groupId, GroupConfig groupConfig)
     {
         return BuildGroupChange(groupId, "changeConfig", groupConfig);
@@ -269,6 +280,11 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
         return BuildGroupChange(groupId, "killMonster", monsterId);
     }
 
+    public INotificationPacket BuildGroupDeleteMonster(int groupId, int monsterId)
+    {
+        return BuildGroupChange(groupId, "deleteMonster", monsterId);
+    }
+
     public INotificationPacket BuildLootUpdateVisibility(int lootId, bool visibleForPlayer)
     {
         return BuildLootChange(lootId, "updateVisibility", visibleForPlayer);
@@ -282,6 +298,11 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
     public INotificationPacket BuildLootAddItem(int lootId, ItemEntity item)
     {
         return BuildLootChange(lootId, "addItem", mapper.Map<ItemResponse>(item));
+    }
+
+    public INotificationPacket BuildLootDeleteMonster(int lootId, int monsterId)
+    {
+        return BuildLootChange(lootId, "deleteMonster", monsterId);
     }
 
     public INotificationPacket BuildMonsterAddModifier(int monsterId, ActiveStatsModifier modifier)
@@ -317,6 +338,16 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
     public INotificationPacket BuildMonsterChangeName(int monsterId, string name)
     {
         return BuildMonsterChange(monsterId, "changeName", name);
+    }
+
+    public INotificationPacket BuildFightAddMonster(int fightId, MonsterEntity monster)
+    {
+        return BuildFightChange(fightId, "addMonster", mapper.Map<MonsterResponse>(monster));
+    }
+
+    public INotificationPacket BuildFightRemoveMonster(int fightId, int monsterId)
+    {
+        return BuildFightChange(fightId, "removeMonster", monsterId);
     }
 
     private INotificationPacket BuildCharacterChange(int characterId, string action, object data)
@@ -360,6 +391,15 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
         (
             hubGroupUtil.GetMonsterGroupName(monsterId),
             GetPacket(ElementType.Monster, monsterId, action, data)
+        );
+    }
+
+    private INotificationPacket BuildFightChange(int fightId, string action, object data)
+    {
+        return new NotificationPacket
+        (
+            hubGroupUtil.GetFightGroupName(fightId),
+            GetPacket(ElementType.Fight, fightId, action, data)
         );
     }
 

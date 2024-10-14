@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Préparation d'un combat</h2>
+<mat-dialog-content>
+    <mat-form-field>
+        <input matInput
+               [(ngModel)]="name"
+               placeholder="Nom"/>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button
+            mat-dialog-close
+            color="primary">
+        ANNULER
+    </button>
+    <button mat-button
+            (click)="validate()"
+            color="primary">
+        AJOUTER
+    </button>
+</mat-dialog-actions>

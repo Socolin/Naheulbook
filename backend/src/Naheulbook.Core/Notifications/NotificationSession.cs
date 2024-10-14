@@ -51,12 +51,16 @@ public interface INotificationSession
     void NotifyGroupChangeConfig(int groupId, GroupConfig groupConfig);
     void NotifyGroupAddLoot(int groupId, LootEntity loot);
     void NotifyGroupDeleteLoot(int groupId, int lootId);
+    void NotifyGroupAddFight(int groupId, FightEntity fight);
+    void NotifyGroupDeleteFight(int groupId, int fightId);
     void NotifyGroupAddMonster(int groupId, MonsterEntity monster);
     void NotifyGroupKillMonster(MonsterEntity monster);
+    void NotifyGroupDeleteMonster(MonsterEntity monster);
 
     void NotifyLootUpdateVisibility(int lootId, bool visibleForPlayer);
     void NotifyLootAddMonster(int lootId, MonsterEntity monster);
     void NotifyLootAddItem(int lootId, ItemEntity item);
+    void NotifyLootDeleteMonster(int lootId, int monsterId);
 
     void NotifyMonsterAddModifier(int monsterId, ActiveStatsModifier modifier);
     void NotifyMonsterUpdateModifier(int monsterId, ActiveStatsModifier modifier);
@@ -65,6 +69,9 @@ public interface INotificationSession
     void NotifyMonsterUpdateData(int monsterId, MonsterData monsterData);
     void NotifyMonsterChangeTarget(int monsterId, TargetRequest request);
     void NotifyMonsterChangeName(int monsterId, string name);
+
+    void NotifyFightAddMonster(int fightId, MonsterEntity monster);
+    void NotifyFightRemoveMonster(int fightId, int monsterId);
 
     Task CommitAsync();
 }
@@ -272,6 +279,16 @@ public class NotificationSession(
         _packets.Add(packetBuilder.BuildGroupDeleteLoot(groupId, lootId));
     }
 
+    public void NotifyGroupAddFight(int groupId, FightEntity fight)
+    {
+        _packets.Add(packetBuilder.BuildGroupAddFight(groupId, fight));
+    }
+
+    public void NotifyGroupDeleteFight(int groupId, int fightId)
+    {
+        _packets.Add(packetBuilder.BuildGroupDeleteFight(groupId, fightId));
+    }
+
     public void NotifyGroupAddMonster(int groupId, MonsterEntity monster)
     {
         _packets.Add(packetBuilder.BuildGroupAddMonster(groupId, monster));
@@ -280,6 +297,11 @@ public class NotificationSession(
     public void NotifyGroupKillMonster(MonsterEntity monster)
     {
         _packets.Add(packetBuilder.BuildGroupKillMonster(monster.GroupId, monster.Id));
+    }
+
+    public void NotifyGroupDeleteMonster(MonsterEntity monster)
+    {
+        _packets.Add(packetBuilder.BuildGroupDeleteMonster(monster.GroupId, monster.Id));
     }
 
     public void NotifyLootUpdateVisibility(int lootId, bool visibleForPlayer)
@@ -295,6 +317,11 @@ public class NotificationSession(
     public void NotifyLootAddItem(int lootId, ItemEntity item)
     {
         _packets.Add(packetBuilder.BuildLootAddItem(lootId, item));
+    }
+
+    public void NotifyLootDeleteMonster(int lootId, int monsterId)
+    {
+        _packets.Add(packetBuilder.BuildLootDeleteMonster(lootId, monsterId));
     }
 
     public void NotifyMonsterAddModifier(int monsterId, ActiveStatsModifier modifier)
@@ -330,6 +357,16 @@ public class NotificationSession(
     public void NotifyMonsterChangeName(int monsterId, string name)
     {
         _packets.Add(packetBuilder.BuildMonsterChangeName(monsterId, name));
+    }
+
+    public void NotifyFightAddMonster(int fightId, MonsterEntity monster)
+    {
+        _packets.Add(packetBuilder.BuildFightAddMonster(fightId, monster));
+    }
+
+    public void NotifyFightRemoveMonster(int fightId, int monsterId)
+    {
+        _packets.Add(packetBuilder.BuildFightRemoveMonster(fightId, monsterId));
     }
 
     public async Task CommitAsync()

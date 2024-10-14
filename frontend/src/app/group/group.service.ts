@@ -15,15 +15,17 @@ import {SkillService} from '../skill';
 import {Group, GroupInviteResponse, Npc} from './group.model';
 import {
     CharacterSearchResponse,
+    FightResponse,
     GroupResponse,
     GroupSummaryResponse,
     LootResponse,
     MonsterResponse,
     NpcResponse
 } from '../api/responses';
-import {NpcRequest} from '../api/requests';
+import {CreateFightRequest, NpcRequest} from '../api/requests';
 import {PatchGroupConfigRequest} from '../api/requests/patch-group-config-request';
 import {DeadMonsterResponse} from '../api/responses/dead-monster-response';
+import {Fight} from './fight';
 
 @Injectable()
 export class GroupService {
@@ -54,13 +56,18 @@ export class GroupService {
                 forkJoin(charactersLoading),
                 this.loadMonsters(group.id),
                 this.loadLoots(group.id),
-                this.eventService.loadEvents(group.id)
-            ]).subscribe(([characters, monsters, loots, events]: [Character[], Monster[], Loot[], NEvent[]]) => {
+                this.eventService.loadEvents(group.id),
+                this.loadFights(group.id),
+            ]).subscribe(([characters, monsters, loots, events, fights]: [Character[], Monster[], Loot[], NEvent[], Fight[]]) => {
                 for (let character of characters) {
                     if (character === null) {
                         break;
                     }
                     group.addCharacter(character);
+                }
+                for (let i = 0; i < fights.length; i++) {
+                    let fight = fights[i];
+                    group.addFight(fight);
                 }
                 for (let i = 0; i < monsters.length; i++) {
                     let monster = monsters[i];
@@ -146,6 +153,32 @@ export class GroupService {
             isGm: isGm,
             info: info
         });
+    }
+
+    /* Fight */
+
+    loadFights(groupId: number): Observable<Fight[]> {
+        return forkJoin([
+            this.httpClient.get<FightResponse[]>(`/api/v2/groups/${groupId}/fights`),
+            this.skillService.getSkillsById()
+        ]).pipe(map(([fightResponses, skillsById]) => {
+            return Fight.fightsFromJson(fightResponses, skillsById)
+        }));
+    }
+
+    createFight(groupId: number, request: CreateFightRequest): Observable<Fight> {
+        return forkJoin([
+            this.httpClient.post<FightResponse>(`/api/v2/groups/${groupId}/fights`, request),
+            this.skillService.getSkillsById()
+        ]).pipe(map(([response, skillsById]) => Fight.fromResponse(response, skillsById)));
+    }
+
+    startFight(groupId: number, fightId: number) {
+        return this.httpClient.post<void>(`/api/v2/groups/${groupId}/fights/${fightId}/start`, {});
+    }
+
+    deleteFight(groupId: number, fightId: number): Observable<void> {
+        return this.httpClient.delete<void>(`/api/v2/groups/${groupId}/fights/${fightId}`);
     }
 
     /* Misc */

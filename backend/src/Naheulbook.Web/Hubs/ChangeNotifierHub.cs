@@ -93,6 +93,29 @@ public class ChangeNotifierHub(
         await Groups.AddToGroupAsync(Context.ConnectionId, hubGroupUtil.GetMonsterGroupName(monsterId));
     }
 
+    public async Task SubscribeFight(int fightId)
+    {
+        var executionContext = GetHttpContext().GetExecutionContext();
+        try
+        {
+            await monsterService.EnsureUserCanAccessFightAsync(executionContext, fightId);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HubException("Access to this resources is forbidden", ex);
+        }
+        catch (FightNotFoundException ex)
+        {
+            throw new HubException("Fight not found", ex);
+        }
+        catch (GroupNotFoundException ex)
+        {
+            throw new HubException("Group not found", ex);
+        }
+
+        await Groups.AddToGroupAsync(Context.ConnectionId, hubGroupUtil.GetFightGroupName(fightId));
+    }
+
     public async Task UnsubscribeCharacter(int characterId)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, hubGroupUtil.GetCharacterGroupName(characterId));
@@ -112,6 +135,11 @@ public class ChangeNotifierHub(
     public async Task UnsubscribeMonster(int monsterId)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, hubGroupUtil.GetMonsterGroupName(monsterId));
+    }
+
+    public async Task UnsubscribeFight(int fightId)
+    {
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, hubGroupUtil.GetMonsterGroupName(fightId));
     }
 
     private HttpContext GetHttpContext()

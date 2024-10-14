@@ -37,9 +37,11 @@ public class NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options) 
     public DbSet<LootEntity> Loots { get; set; } = null!;
     public DbSet<EventEntity> Events { get; set; } = null!;
     public DbSet<OriginRandomNameUrlEntity> OriginRandomNameUrls { get; set; } = null!;
+    public DbSet<FightEntity> Fights { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // FIXME: Use assembly
         modelBuilder.ApplyConfiguration(new CalendarConfiguration());
 
         modelBuilder.ApplyConfiguration(new CharacterConfiguration());
@@ -56,6 +58,8 @@ public class NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options) 
         modelBuilder.ApplyConfiguration(new EffectTypeConfiguration());
 
         modelBuilder.ApplyConfiguration(new EventConfiguration());
+
+        modelBuilder.ApplyConfiguration(new FightConfiguration());
 
         modelBuilder.ApplyConfiguration(new GodConfiguration());
 

@@ -48,13 +48,17 @@ public interface INotificationPacketBuilder
     INotificationPacket BuildGroupChangeGroupData(int groupId, GroupData groupData);
     INotificationPacket BuildGroupAddLoot(int groupId, LootEntity loot);
     INotificationPacket BuildGroupDeleteLoot(int groupId, int lootId);
+    INotificationPacket BuildGroupAddFight(int groupId, FightEntity fight);
+    INotificationPacket BuildGroupDeleteFight(int groupId, int fightId);
     INotificationPacket BuildGroupChangeConfig(in int groupId, GroupConfig groupConfig);
     INotificationPacket BuildGroupAddMonster(int groupId, MonsterEntity monster);
     INotificationPacket BuildGroupKillMonster(int monsterGroupId, int monsterId);
+    INotificationPacket BuildGroupDeleteMonster(int groupId, int monsterId);
 
     INotificationPacket BuildLootUpdateVisibility(int lootId, bool visibleForPlayer);
     INotificationPacket BuildLootAddMonster(int lootId, MonsterEntity monster);
     INotificationPacket BuildLootAddItem(int lootId, ItemEntity item);
+    INotificationPacket BuildLootDeleteMonster(int lootId, int monsterId);
 
     INotificationPacket BuildMonsterAddModifier(int monsterId, ActiveStatsModifier modifier);
     INotificationPacket BuildMonsterUpdateModifier(int monsterId, ActiveStatsModifier modifier);
@@ -63,4 +67,7 @@ public interface INotificationPacketBuilder
     INotificationPacket BuildMonsterUpdateData(int monsterId, MonsterData monsterData);
     INotificationPacket BuildMonsterChangeTarget(int monsterId, TargetRequest targetInfo);
     INotificationPacket BuildMonsterChangeName(int monsterId, string name);
+
+    INotificationPacket BuildFightAddMonster(int fightId, MonsterEntity monster);
+    INotificationPacket BuildFightRemoveMonster(int fightId, int monsterId);
 }

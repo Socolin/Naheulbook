@@ -113,6 +113,7 @@ public class Startup(IConfiguration configuration)
         services.AddSingleton<IDurationUtil, DurationUtil>();
         services.AddSingleton<IEventService, EventService>();
         services.AddSingleton<IEffectService, EffectService>();
+        services.AddSingleton<IFightService, FightService>();
         services.AddSingleton<IGodService, GodService>();
         services.AddSingleton<IGroupConfigUtil, GroupConfigUtil>();
         services.AddSingleton<IGroupHistoryUtil, GroupHistoryUtil>();

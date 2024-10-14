@@ -10,7 +10,7 @@ var certHostnames = new[]
     "*.local.naheulbook.fr",
     "*.localhost",
 };
-var outputDirectory = Path.Combine(FileSystemHelper.FindDirectoryContaining("Naheulbook.sln"), "tls");
+var outputDirectory = Path.Combine(FileSystemHelper.FindDirectoryContaining("Naheulbook.slnx"), "tls");
 if (!Directory.Exists(outputDirectory))
     Directory.CreateDirectory(outputDirectory);
 
