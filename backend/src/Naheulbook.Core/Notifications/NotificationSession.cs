@@ -53,6 +53,7 @@ public interface INotificationSession
     void NotifyGroupDeleteLoot(int groupId, int lootId);
     void NotifyGroupAddFight(int groupId, FightEntity fight);
     void NotifyGroupDeleteFight(int groupId, int fightId);
+    void NotifyGroupAddMerchant(int groupId, MerchantEntity merchant);
     void NotifyGroupAddMonster(int groupId, MonsterEntity monster);
     void NotifyGroupKillMonster(MonsterEntity monster);
     void NotifyGroupDeleteMonster(MonsterEntity monster);
@@ -287,6 +288,11 @@ public class NotificationSession(
     public void NotifyGroupDeleteFight(int groupId, int fightId)
     {
         _packets.Add(packetBuilder.BuildGroupDeleteFight(groupId, fightId));
+    }
+
+    public void NotifyGroupAddMerchant(int groupId, MerchantEntity merchant)
+    {
+        _packets.Add(packetBuilder.BuildGroupAddMerchant(groupId, merchant));
     }
 
     public void NotifyGroupAddMonster(int groupId, MonsterEntity monster)

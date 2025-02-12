@@ -270,6 +270,11 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
         return BuildGroupChange(groupId, "changeConfig", groupConfig);
     }
 
+    public INotificationPacket BuildGroupAddMerchant(int groupId, MerchantEntity merchant)
+    {
+        return BuildGroupChange(groupId, "addMerchant", mapper.Map<MerchantResponse>(merchant));
+    }
+
     public INotificationPacket BuildGroupAddMonster(int groupId, MonsterEntity monster)
     {
         return BuildGroupChange(groupId, "addMonster", mapper.Map<MonsterResponse>(monster));
@@ -360,8 +365,7 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     private INotificationPacket BuildCharacterGmChange(int characterId, string action, object data)
     {
-        return new NotificationPacket
-        (
+        return new NotificationPacket(
             hubGroupUtil.GetGmCharacterGroupName(characterId),
             GetPacket(ElementType.Character, characterId, action, data)
         );
@@ -369,8 +373,7 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     private INotificationPacket BuildGroupChange(int groupId, string action, object data)
     {
-        return new NotificationPacket
-        (
+        return new NotificationPacket(
             hubGroupUtil.GetGroupGroupName(groupId),
             GetPacket(ElementType.Group, groupId, action, data)
         );
@@ -378,8 +381,7 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     private INotificationPacket BuildLootChange(int lootId, string action, object data)
     {
-        return new NotificationPacket
-        (
+        return new NotificationPacket(
             hubGroupUtil.GetLootGroupName(lootId),
             GetPacket(ElementType.Loot, lootId, action, data)
         );
@@ -387,8 +389,7 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     private INotificationPacket BuildMonsterChange(int monsterId, string action, object data)
     {
-        return new NotificationPacket
-        (
+        return new NotificationPacket(
             hubGroupUtil.GetMonsterGroupName(monsterId),
             GetPacket(ElementType.Monster, monsterId, action, data)
         );
@@ -396,8 +397,7 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     private INotificationPacket BuildFightChange(int fightId, string action, object data)
     {
-        return new NotificationPacket
-        (
+        return new NotificationPacket(
             hubGroupUtil.GetFightGroupName(fightId),
             GetPacket(ElementType.Fight, fightId, action, data)
         );
@@ -405,8 +405,7 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     private static NotificationPacketPayload GetPacket(ElementType elementType, int elementId, string opcode, object data)
     {
-        return new NotificationPacketPayload
-        (
+        return new NotificationPacketPayload(
             elementId,
             elementType.ToString().ToLowerInvariant(),
             opcode,

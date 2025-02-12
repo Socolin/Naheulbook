@@ -94,18 +94,16 @@ public class GroupService(
     {
         var notificationSession = notificationSessionFactory.CreateSession();
 
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var group = await uow.Groups.GetAsync(groupId);
-            if (group == null)
-                throw new GroupNotFoundException(groupId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var group = await uow.Groups.GetAsync(groupId);
+        if (group == null)
+            throw new GroupNotFoundException(groupId);
 
-            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+        authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-            groupUtil.ApplyChangesAndNotify(group, request, notificationSession);
+        groupUtil.ApplyChangesAndNotify(group, request, notificationSession);
 
-            await uow.SaveChangesAsync();
-        }
+        await uow.SaveChangesAsync();
 
         await notificationSession.CommitAsync();
     }

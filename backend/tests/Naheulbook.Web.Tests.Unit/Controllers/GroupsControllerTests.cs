@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -13,6 +14,7 @@ using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers;
@@ -26,9 +28,10 @@ public class GroupsControllerTests
     private IMapper _mapper;
     private INpcService _npcService;
     private NaheulbookExecutionContext _executionContext;
+    private IFightService _fightService;
+    private IMerchantService _merchantService;
 
     private GroupsController _controller;
-    private IFightService _fightService;
 
     [SetUp]
     public void SetUp()
@@ -40,6 +43,7 @@ public class GroupsControllerTests
         _mapper = Substitute.For<IMapper>();
         _npcService = Substitute.For<INpcService>();
         _fightService = Substitute.For<IFightService>();
+        _merchantService = Substitute.For<IMerchantService>();
 
         _controller = new GroupsController(
             _groupService,
@@ -47,6 +51,7 @@ public class GroupsControllerTests
             _monsterService,
             _eventService,
             _fightService,
+            _merchantService,
             _mapper,
             _npcService
         );
@@ -321,6 +326,8 @@ public class GroupsControllerTests
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
 
+    #region GetMonstersForGroupAsync
+
     [Test]
     public async Task GetMonsterListAsync_LoadMonsterThenMapTheResponse()
     {
@@ -351,6 +358,48 @@ public class GroupsControllerTests
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
+
+    #endregion
+
+    #region CreateMerchantAsync
+
+    [Test]
+    public async Task CreateMerchantAsync_ShouldCreateNewMerchant_AndReturnCreatedData()
+    {
+        const int groupId = 1;
+        var request = new CreateMerchantRequest
+        {
+            Name = "some-name",
+        };
+        var expectedResponse = new MerchantResponse {Id = 42, Name = "some-name"};
+        var merchant = new MerchantEntity();
+
+        _merchantService.CreateAsync(_executionContext, groupId, request)
+            .Returns(merchant);
+        _mapper.Map<MerchantResponse>(merchant)
+            .Returns(expectedResponse);
+
+        var actual = await _controller.CreateMerchantAsync(_executionContext, groupId, request);
+
+        actual.Value.Should().BeEquivalentTo(expectedResponse);
+    }
+
+    [Test]
+    public async Task CreateMerchantAsync_WhenTheGroupDoesNotExists_ReturnsNotFound()
+    {
+        const int groupId = 1;
+        var request = new CreateMerchantRequest {Name = "some-name"};
+
+        _merchantService.CreateAsync(_executionContext, groupId, request)
+            .ThrowsAsync(new GroupNotFoundException(groupId));
+
+        var act = () => _controller.CreateMerchantAsync(_executionContext, groupId, request);
+
+        (await act.Should().ThrowAsync<HttpErrorException>())
+            .Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+    }
+
+    #endregion
 
     private static IEnumerable<TestCaseData> GetCommonGroupExceptionsAndExpectedStatusCode()
     {

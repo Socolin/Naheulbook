@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +23,7 @@ public class GroupsController(
     IMonsterService monsterService,
     IEventService eventService,
     IFightService fightService,
+    IMerchantService merchantService,
     IMapper mapper,
     INpcService npcService
 ) : ControllerBase
@@ -239,6 +242,25 @@ public class GroupsController(
         catch (ForbiddenAccessException ex)
         {
             throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (GroupNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpPost("{GroupId:int:min(1)}/merchants")]
+    public async Task<CreatedActionResult<MerchantResponse>> CreateMerchantAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int groupId,
+        [FromBody] CreateMerchantRequest request,
+        CancellationToken cancellationToken = default
+    )
+    {
+        try
+        {
+            var merchant = await merchantService.CreateAsync(executionContext, groupId, request, cancellationToken);
+            return mapper.Map<MerchantResponse>(merchant);
         }
         catch (GroupNotFoundException ex)
         {

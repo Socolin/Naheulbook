@@ -94,6 +94,8 @@ public class NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options) 
         modelBuilder.ApplyConfiguration(new MapMarkerConfiguration());
         modelBuilder.ApplyConfiguration(new MapMarkerLinkConfiguration());
 
+        modelBuilder.ApplyConfiguration(new MerchantConfiguration());
+
         modelBuilder.ApplyConfiguration(new MonsterConfiguration());
 
         modelBuilder.ApplyConfiguration(new MonsterSubCategoryConfiguration());

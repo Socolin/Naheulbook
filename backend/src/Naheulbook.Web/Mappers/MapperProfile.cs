@@ -230,6 +230,8 @@ public class MapperProfile : Profile
             .ForMember(m => m.TargetMapName, opt => opt.MapFrom(r => r.TargetMap.Name))
             .ForMember(m => m.TargetMapIsGm, opt => opt.MapFrom(r => MapperHelpers.FromJsonNotNull<MapData>(r.TargetMap.Data).IsGm));
 
+        CreateMap<MerchantEntity, MerchantResponse>();
+
         CreateMap<MonsterEntity, DeadMonsterResponse>()
             .ForMember(m => m.Dead, opt => opt.MapFrom(b => MapperHelpers.FromDateTimeToString(b.Dead)))
             .ForMember(m => m.Data, opt => opt.MapFrom(b => MapperHelpers.FromJson<JObject>(b.Data)));

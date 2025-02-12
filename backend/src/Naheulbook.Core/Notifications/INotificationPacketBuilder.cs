@@ -51,6 +51,7 @@ public interface INotificationPacketBuilder
     INotificationPacket BuildGroupAddFight(int groupId, FightEntity fight);
     INotificationPacket BuildGroupDeleteFight(int groupId, int fightId);
     INotificationPacket BuildGroupChangeConfig(in int groupId, GroupConfig groupConfig);
+    INotificationPacket BuildGroupAddMerchant(int groupId, MerchantEntity merchant);
     INotificationPacket BuildGroupAddMonster(int groupId, MonsterEntity monster);
     INotificationPacket BuildGroupKillMonster(int monsterGroupId, int monsterId);
     INotificationPacket BuildGroupDeleteMonster(int groupId, int monsterId);

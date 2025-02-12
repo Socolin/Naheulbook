@@ -147,7 +147,7 @@ public class GroupServiceTests
         _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(Arg.Any<int>())
             .Returns((GroupEntity) null);
 
-        Func<Task> act = () => _service.EditGroupPropertiesAsync(new NaheulbookExecutionContext(), 4, new PatchGroupRequest());
+        var act = () => _service.EditGroupPropertiesAsync(new NaheulbookExecutionContext(), 4, new PatchGroupRequest());
 
         await act.Should().ThrowAsync<GroupNotFoundException>();
     }

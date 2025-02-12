@@ -33,6 +33,7 @@ public interface IUnitOfWork : IDisposable
     IMapLayerRepository MapLayers { get; }
     IMapMarkerRepository MapMarkers { get; }
     IMapMarkerLinkRepository MapMarkerLinks { get; }
+    IMerchantRepository Merchants { get; }
     IMonsterRepository Monsters { get; }
     IMonsterTypeRepository MonsterTypes { get; }
     IMonsterSubCategoryRepository MonsterSubCategories { get; }
@@ -80,6 +81,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public IMapLayerRepository MapLayers => new MapLayerRepository(_naheulbookDbContext);
     public IMapMarkerRepository MapMarkers => new MapMarkerRepository(_naheulbookDbContext);
     public IMapMarkerLinkRepository MapMarkerLinks => new MapMarkerLinkRepository(_naheulbookDbContext);
+    public IMerchantRepository Merchants => new MerchantRepository(_naheulbookDbContext);
     public IMonsterRepository Monsters => new MonsterRepository(_naheulbookDbContext);
     public IMonsterTypeRepository MonsterTypes => new MonsterTypeRepository(_naheulbookDbContext);
     public IMonsterSubCategoryRepository MonsterSubCategories => new MonsterSubCategoryRepository(_naheulbookDbContext);

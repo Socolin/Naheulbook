@@ -131,6 +131,7 @@ public class Startup(IConfiguration configuration)
         services.AddSingleton<ILootService, LootService>();
         services.AddSingleton<IMapService, MapService>();
         services.AddSingleton<IMailService, MailService>();
+        services.AddSingleton<IMerchantService, MerchantService>();
         services.AddSingleton<IMonsterService, MonsterService>();
         services.AddSingleton<IMonsterTemplateService, MonsterTemplateService>();
         services.AddSingleton<IMonsterTraitService, MonsterTraitService>();
@@ -154,6 +155,7 @@ public class Startup(IConfiguration configuration)
 
         services.AddSingleton<ICharacterFactory, CharacterFactory>();
         services.AddSingleton<IItemFactory, ItemFactory>();
+        services.AddSingleton<IMerchantFactory, MerchantFactory>();
 
         services.AddSingleton<ITimeService, TimeService>();
         services.AddSingleton<IRngUtil, RngUtil>();
