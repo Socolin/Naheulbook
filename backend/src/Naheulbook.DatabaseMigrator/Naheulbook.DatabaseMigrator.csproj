@@ -17,8 +17,4 @@
         <EmbeddedResource Include="Migrations\Mig0028UpdateItemTemplateActionsItemTemplateIdReferences.sql" />
         <EmbeddedResource Include="init_data.sql" />
     </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="LICENSES.md" />
-    </ItemGroup>
 </Project>
