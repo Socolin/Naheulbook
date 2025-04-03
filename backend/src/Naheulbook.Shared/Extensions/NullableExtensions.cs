@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Naheulbook.Shared.Extensions;
@@ -6,7 +7,7 @@ namespace Naheulbook.Shared.Extensions;
 public static class NullableExtensions
 {
     public static T NotNull<T>(
-        this T? value,
+        [NotNull] this T? value,
         [CallerArgumentExpression("value")] string? expression = null
     ) where T : class
     {

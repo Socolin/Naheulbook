@@ -3,47 +3,47 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AspNetCore.HealthChecks.MySql" Version="8.0.0" />
-    <PackageVersion Include="AspNetCore.HealthChecks.Redis" Version="8.0.0" />
-    <PackageVersion Include="AutoMapper" Version="13.0.1" />
-    <PackageVersion Include="CliWrap" Version="3.6.6" />
-    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
-    <PackageVersion Include="FluentMigrator" Version="5.2.0" />
-    <PackageVersion Include="FluentMigrator.Runner" Version="5.2.0" />
-    <PackageVersion Include="FluentMigrator.Runner.MySql" Version="5.2.0" />
-    <PackageVersion Include="FluentValidation" Version="11.9.0" />
+    <PackageVersion Include="AspNetCore.HealthChecks.MySql" Version="9.0.0" />
+    <PackageVersion Include="AspNetCore.HealthChecks.Redis" Version="9.0.0" />
+    <PackageVersion Include="AutoMapper" Version="14.0.0" />
+    <PackageVersion Include="CliWrap" Version="3.8.2" />
+    <PackageVersion Include="AwesomeAssertions" Version="8.0.2" />
+    <PackageVersion Include="FluentMigrator" Version="7.1.0" />
+    <PackageVersion Include="FluentMigrator.Runner" Version="7.1.0" />
+    <PackageVersion Include="FluentMigrator.Runner.MySql" Version="7.1.0" />
+    <PackageVersion Include="FluentValidation" Version="11.11.0" />
     <PackageVersion Include="FluentValidation.AspNetCore" Version="11.3.0" />
-    <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
+    <PackageVersion Include="JetBrains.Annotations" Version="2024.3.0" />
     <PackageVersion Include="JUnitTestLogger4GitHub" Version="1.1.1" />
     <PackageVersion Include="JsonModelBinder" Version="2.1.1" />
-    <PackageVersion Include="Magick.NET-Q8-x64" Version="13.6.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.3" />
-    <PackageVersion Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.3" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.3" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.CommandLine" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageVersion Include="MySql.Data" Version="8.3.0" />
-    <PackageVersion Include="NSubstitute" Version="5.1.0" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageVersion Include="Magick.NET-Q8-x64" Version="14.6.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.2" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.CommandLine" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageVersion Include="MySql.Data" Version="9.2.0" />
+    <PackageVersion Include="NSubstitute" Version="5.3.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="5.0.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageVersion Include="Nunit" Version="4.1.0" />
-    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
-    <PackageVersion Include="Sentry" Version="4.2.1" />
-    <PackageVersion Include="Sentry.AspNetCore" Version="4.2.1" />
-    <PackageVersion Include="Sentry.Serilog" Version="4.2.1" />
-    <PackageVersion Include="Serilog" Version="3.1.1" />
-    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.1" />
+    <PackageVersion Include="Nunit" Version="4.3.2" />
+    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
+    <PackageVersion Include="Sentry" Version="5.5.0" />
+    <PackageVersion Include="Sentry.AspNetCore" Version="5.5.0" />
+    <PackageVersion Include="Sentry.Serilog" Version="5.5.0" />
+    <PackageVersion Include="Serilog" Version="4.2.0" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageVersion Include="Serilog.Exceptions" Version="8.4.0" />
-    <PackageVersion Include="Serilog.Extensions.Logging" Version="8.0.0" />
-    <PackageVersion Include="Serilog.Formatting.Compact" Version="2.0.0" />
-    <PackageVersion Include="Serilog.Settings.Configuration" Version="8.0.0" />
-    <PackageVersion Include="Serilog.Sinks.Console" Version="5.0.1" />
+    <PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.1" />
+    <PackageVersion Include="Serilog.Formatting.Compact" Version="3.0.0" />
+    <PackageVersion Include="Serilog.Settings.Configuration" Version="9.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageVersion Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
     <PackageVersion Include="Socolin.TestUtils.FakeSmtp" Version="1.0.3" />
     <PackageVersion Include="Socolin.TestUtils.JsonComparer" Version="1.16.0" />
@@ -52,7 +52,7 @@
     <PackageVersion Include="SpecFlow.NUnit" Version="3.9.74" />
     <PackageVersion Include="SpecFlow.NUnit.Runners" Version="3.9.74" />
     <PackageVersion Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
-    <PackageVersion Include="jose-jwt" Version="4.1.0" />
-    <PackageVersion Include="Spectre.Console" Version="0.48.0" />
+    <PackageVersion Include="jose-jwt" Version="5.1.1" />
+    <PackageVersion Include="Spectre.Console" Version="0.49.1" />
   </ItemGroup>
 </Project>

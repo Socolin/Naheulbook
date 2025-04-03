@@ -8,12 +8,10 @@ using Naheulbook.Core.Services;
 using Naheulbook.Core.Tests.Unit.Exceptions;
 using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Core.Utils;
-using Naheulbook.Data.Factories;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
 using NSubstitute;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Naheulbook.Core.Tests.Unit.Services;
 

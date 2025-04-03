@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using ImageMagick;
+using ImageMagick.Drawing;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Newtonsoft.Json;
@@ -111,7 +112,7 @@ public class HttpSteps(
         using var image = new MagickImage(new MagickColor("#ff00ff"), 1024, 512);
         using var memoryStream = new MemoryStream();
         new Drawables().Line(0, 0, 1024, 512).Draw(image);
-        image.Write(memoryStream, MagickFormat.Png);
+        await image.WriteAsync(memoryStream, MagickFormat.Png);
 
         var imageContent = new ByteArrayContent(memoryStream.GetBuffer())
         {

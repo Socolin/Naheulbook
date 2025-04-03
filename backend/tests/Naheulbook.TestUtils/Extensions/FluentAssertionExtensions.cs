@@ -6,7 +6,8 @@ namespace Naheulbook.TestUtils.Extensions;
 
 public static class FluentAssertionExtensions
 {
-    public static EquivalencyAssertionOptions<TExpectation> ExcludingChildren<TExpectation>(this EquivalencyAssertionOptions<TExpectation> config)
+    [Obsolete]
+    public static EquivalencyOptions<TExpectation> ExcludingChildren<TExpectation>(this EquivalencyOptions<TExpectation> config)
     {
         return config
             .ExcludingFields()

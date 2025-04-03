@@ -85,7 +85,7 @@ public static class CertificateAuthorityInstaller
 
         if (OperatingSystem.IsWindows())
         {
-            var caCert = X509Certificate.CreateFromCertFile(caPath);
+            var caCert = X509CertificateLoader.LoadCertificateFromFile(caPath);
             using var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
             store.Open(OpenFlags.ReadOnly);
 

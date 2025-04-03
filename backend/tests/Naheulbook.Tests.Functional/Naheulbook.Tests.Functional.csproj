@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" />
+        <PackageReference Include="AwesomeAssertions" />
         <PackageReference Include="MySql.Data" />
         <PackageReference Include="Nunit" />
         <PackageReference Include="NUnit3TestAdapter" />

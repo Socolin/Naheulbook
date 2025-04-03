@@ -55,20 +55,20 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
         actualEntities.Should().BeEquivalentTo(expectedEntities, options => GetEquivalentOptionsForEntity(options).WithStrictOrdering());
     }
 
-    private EquivalencyAssertionOptions<T> GetEquivalentOptionsForEntity<T>(EquivalencyAssertionOptions<T> options)
+    private EquivalencyOptions<T> GetEquivalentOptionsForEntity<T>(EquivalencyOptions<T> options)
         where T : class
     {
-        EquivalencyAssertionOptions<T> equivalencyAssertionOptions;
+        EquivalencyOptions<T> equivalencyOptions;
         switch (options)
         {
-            case EquivalencyAssertionOptions<CharacterJobEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<CharacterJobEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Character)
                     .Excluding(x => x.Job)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<CharacterEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<CharacterEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Owner)
                     .Excluding(x => x.Origin)
                     .Excluding(x => x.Group)
@@ -81,10 +81,10 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
                     .Excluding(x => x.Items)
                     .Excluding(x => x.Invites)
                     .Excluding(x => x.HistoryEntries)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<GroupEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<GroupEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.CombatLoot)
                     .Excluding(x => x.Master)
                     .Excluding(x => x.Loots)
@@ -95,60 +95,60 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
                     .Excluding(x => x.Fights)
                     .Excluding(x => x.HistoryEntries)
                     .Excluding(x => x.Npcs)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<GroupInviteEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<GroupInviteEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Character)
                     .Excluding(x => x.Group)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<EffectEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<EffectEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.SubCategory)
                     .Excluding(x => x.Modifiers)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<EffectModifierEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<EffectModifierEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Effect)
                     .Excluding(x => x.Stat)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<EffectTypeEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<EffectTypeEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.SubCategories)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<EffectSubCategoryEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<EffectSubCategoryEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Type)
                     .Excluding(x => x.Effects)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<IHistoryEntry> entityOptions:
-                equivalencyAssertionOptions = entityOptions
-                    .As<EquivalencyAssertionOptions<T>>();
+            case EquivalencyOptions<IHistoryEntry> entityOptions:
+                equivalencyOptions = entityOptions
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<CharacterHistoryEntryEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<CharacterHistoryEntryEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Character)
                     .Excluding(x => x.CharacterModifier)
                     .Excluding(x => x.Effect)
                     .Excluding(x => x.Item)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<ItemEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<ItemEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Container)
                     .Excluding(x => x.ItemTemplate)
                     .Excluding(x => x.Character)
                     .Excluding(x => x.Loot)
                     .Excluding(x => x.Monster)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<ItemTemplateEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<ItemTemplateEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.SubCategory)
                     .Excluding(x => x.SourceUser)
                     .Excluding(x => x.Modifiers)
@@ -157,109 +157,109 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
                     .Excluding(x => x.Slots)
                     .Excluding(x => x.Skills)
                     .Excluding(x => x.UnSkills)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<ItemTemplateModifierEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<ItemTemplateModifierEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.ItemTemplate)
                     .Excluding(x => x.RequiredJob)
                     .Excluding(x => x.RequiredOrigin)
                     .Excluding(x => x.Stat)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<ItemTemplateRequirementEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<ItemTemplateRequirementEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.ItemTemplate)
                     .Excluding(x => x.Stat)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<ItemTemplateSkillEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<ItemTemplateSkillEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.ItemTemplate)
                     .Excluding(x => x.Skill)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<ItemTemplateSkillModifierEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<ItemTemplateSkillModifierEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.ItemTemplate)
                     .Excluding(x => x.Skill)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<ItemTemplateUnSkillEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<ItemTemplateUnSkillEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.ItemTemplate)
                     .Excluding(x => x.Skill)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<ItemTemplateSlotEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<ItemTemplateSlotEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.ItemTemplate)
                     .Excluding(x => x.Slot)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<JobEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<JobEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Bonuses)
                     .Excluding(x => x.Information)
                     .Excluding(x => x.Requirements)
                     .Excluding(x => x.Restrictions)
                     .Excluding(x => x.Skills)
                     .Excluding(x => x.Specialities)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<JobBonusEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<JobBonusEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Job)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<JobRequirementEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<JobRequirementEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Job)
                     .Excluding(x => x.Stat)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<JobRestrictionEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<JobRestrictionEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Job)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<JobSkillEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<JobSkillEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Job)
                     .Excluding(x => x.Skill)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<OriginEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<OriginEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Bonuses)
                     .Excluding(x => x.Information)
                     .Excluding(x => x.Requirements)
                     .Excluding(x => x.Restrictions)
                     .Excluding(x => x.Skills)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<SlotEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
-                    .As<EquivalencyAssertionOptions<T>>();
+            case EquivalencyOptions<SlotEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<SpecialityEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<SpecialityEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Job)
                     .Excluding(x => x.Modifiers)
                     .Excluding(x => x.Specials)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
-            case EquivalencyAssertionOptions<UserEntity> entityOptions:
-                equivalencyAssertionOptions = entityOptions
+            case EquivalencyOptions<UserEntity> entityOptions:
+                equivalencyOptions = entityOptions
                     .Excluding(x => x.Characters)
                     .Excluding(x => x.Groups)
-                    .As<EquivalencyAssertionOptions<T>>();
+                    .As<EquivalencyOptions<T>>();
                 break;
             default:
                 throw new NotSupportedException($"{typeof(T).Name} is not supported. Add missing `case`");
         }
 
-        return equivalencyAssertionOptions
-            .RespectingRuntimeTypes();
+        return equivalencyOptions
+            .PreferringRuntimeMemberTypes();
     }
 }

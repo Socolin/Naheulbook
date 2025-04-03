@@ -26,7 +26,7 @@ public class MapImageUtil(MapImageConfiguration configuration) : IMapImageUtil
             while (zoomNumber >= 0)
             {
                 var copy = image.Clone();
-                copy.Resize((int) (image.Width * sizePercentage / 100), (int) (image.Height * sizePercentage / 100));
+                copy.Resize((uint) (image.Width * sizePercentage / 100), (uint) (image.Height * sizePercentage / 100));
                 var tiles = copy.CropToTiles(configuration.TilesSize, configuration.TilesSize);
 
                 var zoomDirectoryPath = Path.Combine(mapDirectoryPath, zoomNumber.ToString());

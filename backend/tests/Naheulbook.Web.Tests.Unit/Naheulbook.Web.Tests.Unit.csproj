@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" />
+        <PackageReference Include="AwesomeAssertions" />
         <PackageReference Include="JUnitTestLogger4GitHub" />
         <PackageReference Include="NSubstitute" />
         <PackageReference Include="nunit" />
@@ -16,10 +16,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Naheulbook.Web\Naheulbook.Web.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageVersion Update="nunit" Version="4.1.0" />
     </ItemGroup>
 
 </Project>
