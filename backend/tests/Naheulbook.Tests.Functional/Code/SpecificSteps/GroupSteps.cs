@@ -10,12 +10,12 @@ using TechTalk.SpecFlow;
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
-public class GroupSteps(TestDataUtil testDataUtil, ScenarioContext scenarioContext)
+public class GroupSteps(TestDataUtil testDataUtil)
 {
     [Given("a group")]
     public void GivenAGroup()
     {
-        testDataUtil.AddGroup(scenarioContext.GetUserId());
+        testDataUtil.AddGroup();
     }
 
     [Given("a group history entry")]

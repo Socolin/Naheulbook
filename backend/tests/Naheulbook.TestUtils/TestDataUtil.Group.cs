@@ -17,20 +17,35 @@ public partial class TestDataUtil
 
     public TestDataUtil AddGroup(out GroupEntity group, Action<GroupEntity> customizer = null)
     {
-        var userEntity = GetLast<UserEntity>();
-        group = defaultEntityCreator.CreateGroup(userEntity.Id);
-        return SaveEntity(group, customizer);
-    }
+        var user = GetLast<UserEntity>();
 
-    public TestDataUtil AddGroupWithRequiredData(Action<GroupEntity> customizer = null)
-    {
-        AddUser();
-        return SaveEntity(defaultEntityCreator.CreateGroup(GetLast<UserEntity>().Id), customizer);
+        group = new GroupEntity
+        {
+            Name = RngUtil.GetRandomString("some-group-name"),
+            Data = "{}",
+            MasterId = user.Id,
+        };
+
+        return SaveEntity(group, customizer);
     }
 
     public TestDataUtil AddLoot(Action<LootEntity> customizer = null)
     {
-        return SaveEntity(defaultEntityCreator.CreateLoot(GetLast<GroupEntity>()), customizer);
+        return AddLoot(out _, customizer);
+    }
+
+    public TestDataUtil AddLoot(out LootEntity loot, Action<LootEntity> customizer = null)
+    {
+        var group = GetLast<GroupEntity>();
+
+        loot = new LootEntity
+        {
+            Name = RngUtil.GetRandomString("some-loot-name"),
+            GroupId = group.Id,
+            IsVisibleForPlayer = false,
+        };
+
+        return SaveEntity(loot, customizer);
     }
 
     public TestDataUtil AddGroupInvite(CharacterEntity character, GroupEntity group, bool fromGroup)

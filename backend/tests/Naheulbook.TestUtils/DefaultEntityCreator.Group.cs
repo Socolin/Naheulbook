@@ -3,6 +3,7 @@ using Naheulbook.Data.Models;
 
 namespace Naheulbook.TestUtils;
 
+[Obsolete]
 public partial class DefaultEntityCreator
 {
     public GroupEntity CreateGroup(int masterId, string suffix = null)
@@ -15,20 +16,6 @@ public partial class DefaultEntityCreator
             Name = $"some-name-{suffix}",
             Data = "{}",
             MasterId = masterId,
-        };
-    }
-
-    public LootEntity CreateLoot(GroupEntity group, string suffix = null)
-    {
-        if (suffix == null)
-            suffix = RngUtil.GetRandomHexString(8);
-
-        return new LootEntity
-        {
-            Name = $"some-name-{suffix}",
-            Group = group,
-            GroupId = group.Id,
-            IsVisibleForPlayer = false,
         };
     }
 

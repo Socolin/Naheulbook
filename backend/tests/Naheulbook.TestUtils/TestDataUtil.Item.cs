@@ -123,32 +123,47 @@ public partial class TestDataUtil
             });
     }
 
-    public TestDataUtil AddItem(LootEntity loot, Action<ItemEntity> customizer = null)
+    public TestDataUtil AddItemToLoot(LootEntity loot = null, Action<ItemEntity> customizer = null)
     {
-        return AddItem(out _,
-            i =>
-            {
-                i.LootId = loot.Id;
-                customizer?.Invoke(i);
-            });
+        return AddItemToLoot(out _, loot, customizer);
     }
 
-    public TestDataUtil AddItem(MonsterEntity monster, Action<ItemEntity> customizer = null)
-    {
-        return AddItem(out _,
-            i =>
-            {
-                i.MonsterId = monster.Id;
-                customizer?.Invoke(i);
-            });
-    }
-
-    public TestDataUtil AddItem(out ItemEntity item, CharacterEntity character, Action<ItemEntity> customizer = null)
+    public TestDataUtil AddItemToLoot(out ItemEntity item, LootEntity loot = null, Action<ItemEntity> customizer = null)
     {
         return AddItem(out item,
             i =>
             {
-                i.CharacterId = character.Id;
+                i.LootId = loot?.Id ?? GetLast<LootEntity>().Id;
+                customizer?.Invoke(i);
+            });
+    }
+
+    public TestDataUtil AddItemToMonster(MonsterEntity monster = null, Action<ItemEntity> customizer = null)
+    {
+        return AddItemToMonster(out _, monster, customizer);
+    }
+
+    public TestDataUtil AddItemToMonster(out ItemEntity item, MonsterEntity monster = null, Action<ItemEntity> customizer = null)
+    {
+        return AddItem(out item,
+            i =>
+            {
+                i.MonsterId = monster?.Id ?? GetLast<MonsterEntity>().Id;
+                customizer?.Invoke(i);
+            });
+    }
+
+    public TestDataUtil AddItemToCharacter(CharacterEntity character = null, Action<ItemEntity> customizer = null)
+    {
+        return AddItemToCharacter(out _, character, customizer);
+    }
+
+    public TestDataUtil AddItemToCharacter(out ItemEntity item, CharacterEntity character = null, Action<ItemEntity> customizer = null)
+    {
+        return AddItem(out item,
+            i =>
+            {
+                i.CharacterId = character?.Id ?? GetLast<CharacterEntity>().Id;
                 customizer?.Invoke(i);
             });
     }

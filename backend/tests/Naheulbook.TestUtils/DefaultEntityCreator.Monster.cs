@@ -58,18 +58,4 @@ public partial class DefaultEntityCreator
             Data = @"{""key"":""value""}",
         };
     }
-
-    public MonsterEntity CreateMonster(GroupEntity group, string suffix = null)
-    {
-        if (suffix == null)
-            suffix = RngUtil.GetRandomHexString(8);
-
-        return new MonsterEntity
-        {
-            Name = $"some-monster-name-{suffix}",
-            Group = group,
-            GroupId = group.Id,
-            Data = @"{""key"": ""value""}",
-        };
-    }
 }

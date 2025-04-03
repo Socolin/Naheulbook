@@ -96,7 +96,7 @@ public class MonsterSteps(TestDataUtil testDataUtil)
     public void GivenAMonsterWithAnItemInItsInventory()
     {
         testDataUtil.AddMonster();
-        testDataUtil.AddItem(testDataUtil.GetLast<MonsterEntity>());
+        testDataUtil.AddItemToMonster();
     }
 
     [Given(@"a monster with an item in its inventory and a modifier")]
@@ -114,6 +114,6 @@ public class MonsterSteps(TestDataUtil testDataUtil)
                 CurrentCombatCount = 2
             },
         }));
-        testDataUtil.AddItem(testDataUtil.GetLast<MonsterEntity>());
+        testDataUtil.AddItemToMonster();
     }
 }

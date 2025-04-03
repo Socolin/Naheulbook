@@ -105,8 +105,7 @@ public class CharacterSteps(
     {
         if (!testDataUtil.Contains<ItemTemplateEntity>())
             testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
-        testDataUtil.AddItem(testDataUtil.GetLast<LootEntity>());
-        testDataUtil.SaveChanges();
+        testDataUtil.AddItemToLoot();
     }
 
     [Given(@"an item in the character inventory")]
@@ -114,8 +113,7 @@ public class CharacterSteps(
     {
         if (!testDataUtil.Contains<ItemTemplateEntity>())
             testDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate();
-        testDataUtil.AddItem(testDataUtil.GetLast<CharacterEntity>());
-        testDataUtil.SaveChanges();
+        testDataUtil.AddItemToCharacter();
     }
 
     [Given("that the (.+) character is a member of the group")]

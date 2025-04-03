@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using Microsoft.EntityFrameworkCore;
+using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Models;
 using Naheulbook.TestUtils;
 using NUnit.Framework;
@@ -22,7 +23,7 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
     public void BaseSetUp()
     {
         _repositoryDbContext = DbUtils.GetTestDbContext<TDbContext>(true);
-        TestDataUtil = new TestDataUtil(DbUtils.GetDbContextOptions(), new DefaultEntityCreator());
+        TestDataUtil = new TestDataUtil(DbUtils.GetDbContextOptions<NaheulbookDbContext>(), new DefaultEntityCreator());
         TestDataUtil.Cleanup();
     }
 

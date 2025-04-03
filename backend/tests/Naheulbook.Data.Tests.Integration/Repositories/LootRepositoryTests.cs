@@ -11,45 +11,45 @@ namespace Naheulbook.Data.Tests.Integration.Repositories;
 public class LootRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
 {
     private LootRepository _lootRepository;
-    private CharacterEntity _character;
-    private GroupEntity _group;
-
     [SetUp]
     public void SetUp()
     {
         _lootRepository = new LootRepository(RepositoryDbContext);
-
-        _character = TestDataUtil.AddOrigin().AddUser().AddCharacter().GetLast<CharacterEntity>();
-        _group = TestDataUtil.AddUser().AddGroup(g => g.Characters = new[] {_character}).GetLast<GroupEntity>();
     }
 
     [Test]
     public async Task GetLootsVisibleByCharactersOfGroupAsync_FullyLoadLootAndItems()
     {
-        var expectedLoot = TestDataUtil.AddLoot(l => l.IsVisibleForPlayer = true).GetLast<LootEntity>();
-        var expectedLootItemTemplate = TestDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate().GetLast<ItemTemplateEntity>();
-        var expectedLootItem = TestDataUtil.AddItem(expectedLoot).GetLast<ItemEntity>();
-        var expectedMonster = TestDataUtil.AddMonster(c => c.Loot = expectedLoot).GetLast<MonsterEntity>();
-        var expectedMonsterItemTemplate = TestDataUtil.AddItemTemplate().GetLast<ItemTemplateEntity>();
-        var expectedMonsterItem = TestDataUtil.AddItem(expectedMonster).GetLast<ItemEntity>();
+        TestDataUtil
+            .AddUser()
+            .AddGroup(out var group)
+            .AddLoot(out var loot)
+            .AddItemTemplateSection()
+            .AddItemTemplateSubCategory()
+            .AddItemTemplate(out var lootItemTemplate)
+            .AddItemToLoot(out var lootItem)
+            .AddMonster(out var monster, m => m.LootId = loot.Id)
+            .AddItemTemplate(out var monsterItemTemplate)
+            .AddItemToMonster(out var monsterItem)
+            ;
 
-        var loots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(_group.Id);
+        var loots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(group.Id);
 
-        var loot = loots.First();
-        loot.Should().BeEquivalentTo(expectedLoot, config => config.Excluding(l => l.Items).Excluding(l => l.Monsters).Excluding(l => l.Group));
-        loot.Items.First().Should().BeEquivalentTo(expectedLootItem, config => config.Excluding(i => i.ItemTemplate).Excluding(i => i.Character).Excluding(i => i.Loot));
-        loot.Items.First().ItemTemplate.Should().BeEquivalentTo(expectedLootItemTemplate, config => config.Excluding(i => i.SubCategory).Excluding(i => i.Modifiers).Excluding(i => i.Requirements).Excluding(i => i.Slots).Excluding(i => i.Skills).Excluding(i => i.UnSkills).Excluding(i => i.SkillModifiers));
-        loot.Monsters.First().Should().BeEquivalentTo(expectedMonster, config => config.Excluding(m => m.Items).Excluding(m => m.Group).Excluding(m => m.Loot).Excluding(x => x.Fight));
-        loot.Monsters.First().Items.First().Should().BeEquivalentTo(expectedMonsterItem, config => config.Excluding(i => i.ItemTemplate).Excluding(i => i.Monster));
-        loot.Monsters.First().Items.First().ItemTemplate.Should().BeEquivalentTo(expectedMonsterItemTemplate, config => config.Excluding(i => i.SubCategory).Excluding(i => i.Modifiers).Excluding(i => i.Requirements).Excluding(i => i.Slots).Excluding(i => i.Skills).Excluding(i => i.UnSkills).Excluding(i => i.SkillModifiers));
+        var actualLoot = loots.First();
+        AssertEntityIsLoaded(actualLoot, loot);
+        AssertEntitiesAreLoaded(actualLoot.Items, [lootItem]);
+        AssertEntityIsLoaded(actualLoot.Items.Single().ItemTemplate, lootItemTemplate);
+        AssertEntitiesAreLoaded(actualLoot.Monsters, [monster]);
+        AssertEntitiesAreLoaded(actualLoot.Monsters.Single().Items, [monsterItem]);
+        AssertEntityIsLoaded(actualLoot.Monsters.Single().Items.Single().ItemTemplate, monsterItemTemplate);
     }
 
     [Test]
     public async Task GetLootsVisibleByCharactersOfGroupAsync_ShouldNotReturnNonVisibleLoots()
     {
-        TestDataUtil.AddLoot(l => l.IsVisibleForPlayer = false).GetLast<LootEntity>();
+        TestDataUtil.AddLoot(out var loot, l => l.IsVisibleForPlayer = false);
 
-        var loots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(_group.Id);
+        var loots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(loot.Id);
 
         loots.Should().BeEmpty();
     }
@@ -57,41 +57,57 @@ public class LootRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
     [Test]
     public async Task GetLootsVisibleByCharactersOfGroupAsync_ShouldNotReturnLootNotAssociateToUserGroup()
     {
-        TestDataUtil.AddGroup().AddLoot(l => l.IsVisibleForPlayer = false).GetLast<LootEntity>();
+        TestDataUtil
+            .AddGroup(out var otherGroup)
+            .AddGroup(out var group)
+            .AddLoot(out var loot, l => l.IsVisibleForPlayer = false);
 
-        var loots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(_group.Id);
+        var actualLoots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(otherGroup.Id);
+        var existingLoots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(group.Id);
 
-        loots.Should().BeEmpty();
+        actualLoots.Should().BeEmpty();
+        AssertEntitiesAreLoaded(existingLoots, [loot]);
     }
 
     [Test]
     public async Task GetByGroupIdAsync_FullyLoadLootAndItems()
     {
-        var expectedLoot = TestDataUtil.AddLoot(l => l.IsVisibleForPlayer = true).GetLast<LootEntity>();
-        var expectedLootItemTemplate = TestDataUtil.AddItemTemplateSection().AddItemTemplateSubCategory().AddItemTemplate().GetLast<ItemTemplateEntity>();
-        var expectedLootItem = TestDataUtil.AddItem(expectedLoot).GetLast<ItemEntity>();
-        var expectedMonster = TestDataUtil.AddMonster(c => c.Loot = expectedLoot).GetLast<MonsterEntity>();
-        var expectedMonsterItemTemplate = TestDataUtil.AddItemTemplate().GetLast<ItemTemplateEntity>();
-        var expectedMonsterItem = TestDataUtil.AddItem(expectedMonster).GetLast<ItemEntity>();
+        TestDataUtil
+            .AddUser()
+            .AddGroup(out var group)
+            .AddLoot(out var loot)
+            .AddItemTemplateSection()
+            .AddItemTemplateSubCategory()
+            .AddItemTemplate(out var lootItemTemplate)
+            .AddItemToLoot(out var lootItem)
+            .AddMonster(out var monster, m => m.LootId = loot.Id)
+            .AddItemTemplate(out var monsterItemTemplate)
+            .AddItemToMonster(out var monsterItem)
+            ;
 
-        var loots = await _lootRepository.GetByGroupIdAsync(_group.Id);
+        var actualLoots = await _lootRepository.GetByGroupIdAsync(group.Id);
 
-        var loot = loots.First();
-        loot.Should().BeEquivalentTo(expectedLoot, config => config.Excluding(l => l.Items).Excluding(l => l.Monsters).Excluding(l => l.Group));
-        loot.Items.First().Should().BeEquivalentTo(expectedLootItem, config => config.Excluding(i => i.ItemTemplate).Excluding(i => i.Character).Excluding(i => i.Loot));
-        loot.Items.First().ItemTemplate.Should().BeEquivalentTo(expectedLootItemTemplate, config => config.Excluding(i => i.SubCategory).Excluding(i => i.Requirements).Excluding(i => i.Modifiers).Excluding(i => i.SkillModifiers).Excluding(i => i.UnSkills).Excluding(i => i.Slots).Excluding(i => i.Skills));
-        loot.Monsters.First().Should().BeEquivalentTo(expectedMonster, config => config.Excluding(m => m.Items).Excluding(m => m.Group).Excluding(m => m.Loot).Excluding(x => x.Fight));
-        loot.Monsters.First().Items.First().Should().BeEquivalentTo(expectedMonsterItem, config => config.Excluding(i => i.ItemTemplate).Excluding(i => i.Monster));
-        loot.Monsters.First().Items.First().ItemTemplate.Should().BeEquivalentTo(expectedMonsterItemTemplate, config => config.Excluding(i => i.SubCategory).Excluding(i => i.Requirements).Excluding(i => i.Modifiers).Excluding(i => i.SkillModifiers).Excluding(i => i.UnSkills).Excluding(i => i.Slots).Excluding(i => i.Skills));
+        var actualLoot = actualLoots.First();
+        AssertEntityIsLoaded(actualLoot, loot);
+        AssertEntitiesAreLoaded(actualLoot.Items, [lootItem]);
+        AssertEntityIsLoaded(actualLoot.Items.Single().ItemTemplate, lootItemTemplate);
+        AssertEntitiesAreLoaded(actualLoot.Monsters, [monster]);
+        AssertEntitiesAreLoaded(actualLoot.Monsters.Single().Items, [monsterItem]);
+        AssertEntityIsLoaded(actualLoot.Monsters.Single().Items.Single().ItemTemplate, monsterItemTemplate);
     }
 
     [Test]
     public async Task GetByGroupIdAsync_ShouldNotReturnLootNotAssociateToUserGroup()
     {
-        TestDataUtil.AddGroup().AddLoot(l => l.IsVisibleForPlayer = false).GetLast<LootEntity>();
+        TestDataUtil
+            .AddGroup(out var otherGroup)
+            .AddGroup(out var group)
+            .AddLoot(out var loot, l => l.IsVisibleForPlayer = false).GetLast<LootEntity>();
 
-        var loots = await _lootRepository.GetByGroupIdAsync(_group.Id);
+        var actualLoots = await _lootRepository.GetByGroupIdAsync(otherGroup.Id);
+        var existingLoots = await _lootRepository.GetByGroupIdAsync(group.Id);
 
-        loots.Should().BeEmpty();
+        actualLoots.Should().BeEmpty();
+        AssertEntitiesAreLoaded(existingLoots, [loot]);
     }
 }

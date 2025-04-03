@@ -27,6 +27,20 @@ public partial class TestDataUtil
 
     public TestDataUtil AddMonster(Action<MonsterEntity> customizer = null)
     {
-        return SaveEntity(defaultEntityCreator.CreateMonster(GetLast<GroupEntity>()), customizer);
+        return AddMonster(out _, customizer);
+    }
+
+    public TestDataUtil AddMonster(out MonsterEntity monster, Action<MonsterEntity> customizer = null)
+    {
+        var group = GetLast<GroupEntity>();
+
+        monster = new MonsterEntity
+        {
+            Name = RngUtil.GetRandomString("some-monster-name"),
+            GroupId = group.Id,
+            Data = """{"key": "value"}""",
+        };
+
+        return SaveEntity(monster, customizer);
     }
 }

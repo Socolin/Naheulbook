@@ -29,45 +29,66 @@ public partial class TestDataUtil
 
     public TestDataUtil AddCharacterWithRequiredDependencies(Action<CharacterEntity> customizer = null)
     {
-        AddUser(out var user);
-        AddOrigin(out var origin);
-        return SaveEntity(defaultEntityCreator.CreateCharacter(user.Id, origin), customizer);
+        return AddCharacterWithRequiredDependencies(out _, customizer);
+    }
+
+    public TestDataUtil AddCharacterWithRequiredDependencies(out CharacterEntity character, Action<CharacterEntity> customizer = null)
+    {
+        var user = GetLastIfExists<UserEntity>();
+        if (user is null)
+            AddUser(out user);
+
+        var origin = GetLastIfExists<OriginEntity>();
+        if (origin is null)
+            AddOrigin(out origin);
+
+        character = defaultEntityCreator.CreateCharacter(user.Id, origin);
+
+        return SaveEntity(character, customizer);
     }
 
     public TestDataUtil AddCharacterWithAllData(int ownerId, Action<CharacterEntity> customizer = null)
     {
+        return AddCharacterWithAllData(out _, ownerId, customizer);
+    }
+
+    public TestDataUtil AddCharacterWithAllData(out CharacterEntity character, int ownerId, Action<CharacterEntity> customizer = null)
+    {
         AddStat().AddStat().AddStat().AddStat();
         AddSkill().AddSkill();
         AddOrigin();
-        AddJob().GetLast<JobEntity>();
-        AddJob().GetLast<JobEntity>();
+
+        AddJob(out var job1);
+        AddJob(out var job2);
 
         if (!Contains<GroupEntity>())
             AddGroup(ownerId);
 
         AddSpeciality();
 
-        var character = defaultEntityCreator.CreateCharacter(ownerId, GetLast<OriginEntity>());
+        character = defaultEntityCreator.CreateCharacter(ownerId, GetLast<OriginEntity>());
 
         character.Jobs = new List<CharacterJobEntity>
         {
-            new() {Job = GetFromEnd<JobEntity>(0)},
-            new() {Job = GetFromEnd<JobEntity>(1)},
+            new() {Job = job2},
+            new() {Job = job1},
         };
 
         var characterModifier1 = defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>
-        {
-            defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(0), 1),
-            defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(1), 2),
-        });
+            {
+                defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(0), 1),
+                defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(1), 2),
+            }
+        );
         characterModifier1.DurationType = "combat";
         characterModifier1.CombatCount = 2;
         characterModifier1.CurrentCombatCount = 1;
         var characterModifier2 = defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>
-        {
-            defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(2), 4),
-            defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(3), 6),
-        });
+            {
+                defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(2), 4),
+                defaultEntityCreator.CreateCharacterModifierValue(GetFromEnd<StatEntity>(3), 6),
+            }
+        );
         var characterModifier3 = defaultEntityCreator.CreateCharacterModifier(new List<CharacterModifierValueEntity>());
         characterModifier3.DurationType = "lap";
         characterModifier3.LapCount = 4;
