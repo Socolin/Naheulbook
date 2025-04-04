@@ -14,9 +14,7 @@ public class JobService(IUnitOfWorkFactory unitOfWorkFactory) : IJobService
 {
     public async Task<ICollection<JobEntity>> GetJobsAsync()
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.Jobs.GetAllWithAllDataAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.Jobs.GetAllWithAllDataAsync();
     }
 }

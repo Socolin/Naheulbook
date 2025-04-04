@@ -14,9 +14,7 @@ public class MonsterTraitService(IUnitOfWorkFactory unitOfWorkFactory) : IMonste
 {
     public async Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync()
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.MonsterTraits.GetAllAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.MonsterTraits.GetAllAsync();
     }
 }

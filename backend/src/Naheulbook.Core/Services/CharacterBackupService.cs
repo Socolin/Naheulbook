@@ -20,15 +20,14 @@ public class CharacterBackupService(
 {
     public async Task<Models.Backup.BackupCharacter> GetBackupCharacterAsync(NaheulbookExecutionContext executionContext, int characterId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var character = await uow.Characters.GetWithAllDataAsync(characterId);
-            if (character == null)
-                throw new CharacterNotFoundException(characterId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-            authorizationUtil.EnsureCharacterAccess(executionContext, character);
+        var character = await uow.Characters.GetWithAllDataAsync(characterId);
+        if (character == null)
+            throw new CharacterNotFoundException(characterId);
 
-            return mapper.Map<Models.Backup.V1.BackupCharacter>(character);
-        }
+        authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+        return mapper.Map<Models.Backup.V1.BackupCharacter>(character);
     }
 }

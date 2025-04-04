@@ -33,11 +33,9 @@ public class ItemTemplateSubCategoryService(
             TechName = request.TechName ?? string.Empty,
         };
 
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            uow.ItemTemplateSubCategories.Add(itemTemplateSubCategory);
-            await uow.SaveChangesAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        uow.ItemTemplateSubCategories.Add(itemTemplateSubCategory);
+        await uow.SaveChangesAsync();
 
         return itemTemplateSubCategory;
     }

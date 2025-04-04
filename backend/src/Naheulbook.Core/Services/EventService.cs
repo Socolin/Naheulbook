@@ -23,61 +23,58 @@ public class EventService(
 {
     public async Task<List<EventEntity>> GetEventsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var group = await uow.Groups.GetAsync(groupId);
-            if (group == null)
-                throw new GroupNotFoundException(groupId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+        var group = await uow.Groups.GetAsync(groupId);
+        if (group == null)
+            throw new GroupNotFoundException(groupId);
 
-            return await uow.Events.GetByGroupIdAsync(groupId);
-        }
+        authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+        return await uow.Events.GetByGroupIdAsync(groupId);
     }
 
     public async Task<EventEntity> CreateEventAsync(NaheulbookExecutionContext executionContext, int groupId, CreateEventRequest request)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+
+        var group = await uow.Groups.GetAsync(groupId);
+        if (group == null)
+            throw new GroupNotFoundException(groupId);
+
+        authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+        var groupEvent = new EventEntity
         {
-            var group = await uow.Groups.GetAsync(groupId);
-            if (group == null)
-                throw new GroupNotFoundException(groupId);
+            Name = request.Name,
+            Description = request.Description,
+            GroupId = groupId,
+            Timestamp = request.Timestamp,
+        };
 
-            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+        uow.Events.Add(groupEvent);
 
-            var groupEvent = new EventEntity
-            {
-                Name = request.Name,
-                Description = request.Description,
-                GroupId = groupId,
-                Timestamp = request.Timestamp,
-            };
+        await uow.SaveChangesAsync();
 
-            uow.Events.Add(groupEvent);
-
-            await uow.SaveChangesAsync();
-
-            return groupEvent;
-        }
+        return groupEvent;
     }
 
     public async Task DeleteEventAsync(NaheulbookExecutionContext executionContext, int groupId, int eventId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var group = await uow.Groups.GetAsync(groupId);
-            if (group == null)
-                throw new GroupNotFoundException(groupId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+        var group = await uow.Groups.GetAsync(groupId);
+        if (group == null)
+            throw new GroupNotFoundException(groupId);
 
-            var groupEvent = await uow.Events.GetAsync(eventId);
-            if (groupEvent == null || groupEvent.GroupId != group.Id)
-                throw new EventNotFoundException(eventId);
+        authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-            uow.Events.Remove(groupEvent);
+        var groupEvent = await uow.Events.GetAsync(eventId);
+        if (groupEvent == null || groupEvent.GroupId != group.Id)
+            throw new EventNotFoundException(eventId);
 
-            await uow.SaveChangesAsync();
-        }
+        uow.Events.Remove(groupEvent);
+
+        await uow.SaveChangesAsync();
     }
 }

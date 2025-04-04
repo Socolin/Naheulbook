@@ -42,58 +42,54 @@ public class MapService(
 {
     public async Task<MapEntity> GetMapAsync(int mapId, int? userId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var map = await uow.Maps.GetMapDetailsForCurrentUserAsync(mapId, userId);
-            if (map == null)
-                throw new MapNotFoundException(mapId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var map = await uow.Maps.GetMapDetailsForCurrentUserAsync(mapId, userId);
+        if (map == null)
+            throw new MapNotFoundException(mapId);
 
-            return map;
-        }
+        return map;
     }
 
     public async Task<MapEntity> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream)
     {
         await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var mapData = new MapData
         {
-            var mapData = new MapData
-            {
-                IsGm = request.Data.IsGm,
-                PixelPerUnit = request.Data.PixelPerUnit,
-                UnitName = request.Data.UnitName,
-                Attribution = request.Data.Attribution
-                    .Select(x => new MapData.MapAttribution {Name = x.Name, Url = x.Url})
-                    .ToList(),
-            };
-            var map = new MapEntity
-            {
-                Name = request.Name,
-                Data = jsonUtil.SerializeNonNull(mapData),
-                ImageData = "{}",
-                Layers = new List<MapLayerEntity>(),
-            };
+            IsGm = request.Data.IsGm,
+            PixelPerUnit = request.Data.PixelPerUnit,
+            UnitName = request.Data.UnitName,
+            Attribution = request.Data.Attribution
+                .Select(x => new MapData.MapAttribution {Name = x.Name, Url = x.Url})
+                .ToList(),
+        };
+        var map = new MapEntity
+        {
+            Name = request.Name,
+            Data = jsonUtil.SerializeNonNull(mapData),
+            ImageData = "{}",
+            Layers = new List<MapLayerEntity>(),
+        };
 
-            uow.Maps.Add(map);
-            await uow.SaveChangesAsync();
-            map.Data = jsonUtil.SerializeNonNull(mapData);
+        uow.Maps.Add(map);
+        await uow.SaveChangesAsync();
+        map.Data = jsonUtil.SerializeNonNull(mapData);
 
-            try
-            {
-                var mapImageData = mapImageUtil.SplitMapImage(imageStream, map.Id);
-                map.ImageData = jsonUtil.SerializeNonNull(mapImageData);
-            }
-            catch (Exception ex)
-            {
-                logger.Warning(ex, "Failed to process map image");
-                uow.Maps.Remove(map);
-            }
-
-            await uow.SaveChangesAsync();
-
-            return map;
+        try
+        {
+            var mapImageData = mapImageUtil.SplitMapImage(imageStream, map.Id);
+            map.ImageData = jsonUtil.SerializeNonNull(mapImageData);
         }
+        catch (Exception ex)
+        {
+            logger.Warning(ex, "Failed to process map image");
+            uow.Maps.Remove(map);
+        }
+
+        await uow.SaveChangesAsync();
+
+        return map;
     }
 
     public async Task<MapEntity> UpdateMapAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapRequest request)

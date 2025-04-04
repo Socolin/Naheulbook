@@ -14,9 +14,7 @@ public class StatService(IUnitOfWorkFactory unitOfWorkFactory) : IStatService
 {
     public async Task<List<StatEntity>> GetAllStatsAsync()
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.Stats.GetAllAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.Stats.GetAllAsync();
     }
 }

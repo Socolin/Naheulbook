@@ -22,10 +22,8 @@ public class MonsterTypeService(
 {
     public async Task<List<MonsterTypeEntity>> GetMonsterTypesWithCategoriesAsync()
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.MonsterTypes.GetAllWithCategoriesAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.MonsterTypes.GetAllWithCategoriesAsync();
     }
 
     public async Task<MonsterTypeEntity> CreateMonsterTypeAsync(
@@ -35,19 +33,17 @@ public class MonsterTypeService(
     {
         await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var monsterType = new MonsterTypeEntity
         {
-            var monsterType = new MonsterTypeEntity
-            {
-                Name = request.Name,
-                SubCategories = new List<MonsterSubCategoryEntity>(),
-            };
+            Name = request.Name,
+            SubCategories = new List<MonsterSubCategoryEntity>(),
+        };
 
-            uow.MonsterTypes.Add(monsterType);
-            await uow.SaveChangesAsync();
+        uow.MonsterTypes.Add(monsterType);
+        await uow.SaveChangesAsync();
 
-            return monsterType;
-        }
+        return monsterType;
     }
 
     public async Task<MonsterSubCategoryEntity> CreateMonsterSubCategoryAsync(
@@ -58,18 +54,16 @@ public class MonsterTypeService(
     {
         await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var monsterSubCategory = new MonsterSubCategoryEntity
         {
-            var monsterSubCategory = new MonsterSubCategoryEntity
-            {
-                Name = request.Name,
-                TypeId = monsterTypeId,
-            };
+            Name = request.Name,
+            TypeId = monsterTypeId,
+        };
 
-            uow.MonsterSubCategories.Add(monsterSubCategory);
-            await uow.SaveChangesAsync();
+        uow.MonsterSubCategories.Add(monsterSubCategory);
+        await uow.SaveChangesAsync();
 
-            return monsterSubCategory;
-        }
+        return monsterSubCategory;
     }
 }

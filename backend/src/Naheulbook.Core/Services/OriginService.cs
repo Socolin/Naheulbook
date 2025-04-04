@@ -14,9 +14,7 @@ public class OriginService(IUnitOfWorkFactory unitOfWorkFactory) : IOriginServic
 {
     public async Task<ICollection<OriginEntity>> GetOriginsAsync()
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.Origins.GetAllWithAllDataAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.Origins.GetAllWithAllDataAsync();
     }
 }

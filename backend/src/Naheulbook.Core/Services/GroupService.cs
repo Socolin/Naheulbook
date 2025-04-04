@@ -46,26 +46,25 @@ public class GroupService(
 {
     public async Task<GroupEntity> CreateGroupAsync(NaheulbookExecutionContext executionContext, CreateGroupRequest request)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+
+        var group = new GroupEntity
         {
-            var group = new GroupEntity
-            {
-                Name = request.Name,
-                MasterId = executionContext.UserId,
-                Loots = new List<LootEntity>(),
-                Monsters = new List<MonsterEntity>(),
-                Characters = new List<CharacterEntity>(),
-                Invites = new List<GroupInviteEntity>(),
-                Events = new List<EventEntity>(),
-                HistoryEntries = new List<GroupHistoryEntryEntity>(),
-                Npcs = new List<NpcEntity>(),
-            };
+            Name = request.Name,
+            MasterId = executionContext.UserId,
+            Loots = new List<LootEntity>(),
+            Monsters = new List<MonsterEntity>(),
+            Characters = new List<CharacterEntity>(),
+            Invites = new List<GroupInviteEntity>(),
+            Events = new List<EventEntity>(),
+            HistoryEntries = new List<GroupHistoryEntryEntity>(),
+            Npcs = new List<NpcEntity>(),
+        };
 
-            uow.Groups.Add(group);
-            await uow.SaveChangesAsync();
+        uow.Groups.Add(group);
+        await uow.SaveChangesAsync();
 
-            return group;
-        }
+        return group;
     }
 
     public async Task<List<GroupEntity>> GetGroupListAsync(NaheulbookExecutionContext executionContext)

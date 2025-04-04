@@ -14,9 +14,7 @@ public class CalendarService(IUnitOfWorkFactory unitOfWorkFactory) : ICalendarSe
 {
     public async Task<List<CalendarEntity>> GetCalendarAsync()
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.Calendar.GetAllAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.Calendar.GetAllAsync();
     }
 }

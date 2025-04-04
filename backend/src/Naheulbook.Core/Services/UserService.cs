@@ -62,68 +62,60 @@ public class UserService(
 
     public async Task ValidateUserAsync(string username, string activationCode)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var user = await uow.Users.GetByUsernameAsync(username);
-            if (user == null)
-                throw new UserNotFoundException();
-            if (user.ActivationCode != activationCode)
-                throw new InvalidUserActivationCodeException();
-            user.ActivationCode = null;
-            await uow.SaveChangesAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetByUsernameAsync(username);
+        if (user == null)
+            throw new UserNotFoundException();
+        if (user.ActivationCode != activationCode)
+            throw new InvalidUserActivationCodeException();
+        user.ActivationCode = null;
+        await uow.SaveChangesAsync();
     }
 
     public async Task<UserEntity> CheckPasswordAsync(string username, string password)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var user = await uow.Users.GetByUsernameAsync(username);
-            if (user == null)
-                throw new UserNotFoundException();
-            if (user.HashedPassword == null)
-                throw new InvalidPasswordException();
-            var success = passwordHashingService.VerifyPassword(user.HashedPassword, password);
-            if (!success)
-                throw new InvalidPasswordException();
-            return user;
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetByUsernameAsync(username);
+        if (user == null)
+            throw new UserNotFoundException();
+        if (user.HashedPassword == null)
+            throw new InvalidPasswordException();
+        var success = passwordHashingService.VerifyPassword(user.HashedPassword, password);
+        if (!success)
+            throw new InvalidPasswordException();
+        return user;
     }
 
     public async Task<UserEntity> GetUserInfoAsync(int userId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var user = await uow.Users.GetAsync(userId);
-            if (user == null)
-                throw new UserNotFoundException(userId);
-            return user;
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetAsync(userId);
+        if (user == null)
+            throw new UserNotFoundException(userId);
+        return user;
     }
 
     public async Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetAsync(userId);
+        if (user == null)
+            throw new UserNotFoundException();
+
+        authorizationUtil.EnsureCanEditUser(executionContext, user);
+
+        if (!string.IsNullOrEmpty(request.DisplayName))
+            user.DisplayName = request.DisplayName;
+        if (request.ShowInSearchFor.HasValue)
         {
-            var user = await uow.Users.GetAsync(userId);
-            if (user == null)
-                throw new UserNotFoundException();
-
-            authorizationUtil.EnsureCanEditUser(executionContext, user);
-
-            if (!string.IsNullOrEmpty(request.DisplayName))
-                user.DisplayName = request.DisplayName;
-            if (request.ShowInSearchFor.HasValue)
-            {
-                if (request.ShowInSearchFor.Value == 0)
-                    user.ShowInSearchUntil = null;
-                else
-                    user.ShowInSearchUntil = DateTime.UtcNow.AddSeconds(request.ShowInSearchFor.Value);
-            }
-
-
-            await uow.SaveChangesAsync();
+            if (request.ShowInSearchFor.Value == 0)
+                user.ShowInSearchUntil = null;
+            else
+                user.ShowInSearchUntil = DateTime.UtcNow.AddSeconds(request.ShowInSearchFor.Value);
         }
+
+
+        await uow.SaveChangesAsync();
     }
 
     public async Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter)
@@ -131,9 +123,7 @@ public class UserService(
         if (string.IsNullOrWhiteSpace(filter))
             return new List<UserEntity>();
 
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.Users.SearchUsersAsync(filter);
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.Users.SearchUsersAsync(filter);
     }
 }

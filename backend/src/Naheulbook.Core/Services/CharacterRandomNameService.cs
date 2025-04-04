@@ -19,19 +19,18 @@ public class CharacterRandomNameService(
 {
     public async Task<string> GenerateRandomCharacterNameAsync(Guid originId, string sex)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var origin = await uow.Origins.GetAsync(originId);
-            if (origin == null)
-                throw new OriginNotFoundException(originId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-            var originRandomNameUrl = await uow.OriginRandomNameUrls.GetByOriginIdAndSexAsync(sex, originId);
-            if (originRandomNameUrl == null)
-                throw new RandomNameGeneratorNotFound(sex, originId);
+        var origin = await uow.Origins.GetAsync(originId);
+        if (origin == null)
+            throw new OriginNotFoundException(originId);
 
-            var result = await httpClient.GetRandomNameAsync(originRandomNameUrl.Url);
+        var originRandomNameUrl = await uow.OriginRandomNameUrls.GetByOriginIdAndSexAsync(sex, originId);
+        if (originRandomNameUrl == null)
+            throw new RandomNameGeneratorNotFound(sex, originId);
 
-            return result.First();
-        }
+        var result = await httpClient.GetRandomNameAsync(originRandomNameUrl.Url);
+
+        return result.First();
     }
 }

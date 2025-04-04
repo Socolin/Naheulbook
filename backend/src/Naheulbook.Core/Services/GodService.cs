@@ -14,9 +14,7 @@ public class GodService(IUnitOfWorkFactory unitOfWorkFactory) : IGodService
 {
     public async Task<List<GodEntity>> GetAllGodsAsync()
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.Gods.GetAllAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.Gods.GetAllAsync();
     }
 }

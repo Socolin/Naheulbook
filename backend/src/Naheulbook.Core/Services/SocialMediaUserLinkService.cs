@@ -21,133 +21,117 @@ public class SocialMediaUserLinkService(IUnitOfWorkFactory unitOfWorkFactory) : 
 {
     public async Task<UserEntity> GetOrCreateUserFromFacebookAsync(string name, string facebookId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetByFacebookIdAsync(facebookId);
+        if (user == null)
         {
-            var user = await uow.Users.GetByFacebookIdAsync(facebookId);
-            if (user == null)
+            user = new UserEntity
             {
-                user = new UserEntity
-                {
-                    FbId = facebookId,
-                    Admin = false,
-                    DisplayName = name,
-                };
-                uow.Users.Add(user);
-                await uow.SaveChangesAsync();
-            }
-
-            return user;
+                FbId = facebookId,
+                Admin = false,
+                DisplayName = name,
+            };
+            uow.Users.Add(user);
+            await uow.SaveChangesAsync();
         }
+
+        return user;
     }
 
     public async Task AssociateUserToFacebookIdAsync(int userId, string facebookId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var user = await uow.Users.GetAsync(userId);
-            if (user == null)
-                throw new UserNotFoundException(userId);
-            user.FbId = facebookId;
-            await uow.SaveChangesAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetAsync(userId);
+        if (user == null)
+            throw new UserNotFoundException(userId);
+        user.FbId = facebookId;
+        await uow.SaveChangesAsync();
     }
 
     public async Task<UserEntity> GetOrCreateUserFromGoogleAsync(string name, string googleId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetByGoogleIdAsync(googleId);
+        if (user == null)
         {
-            var user = await uow.Users.GetByGoogleIdAsync(googleId);
-            if (user == null)
+            user = new UserEntity
             {
-                user = new UserEntity
-                {
-                    GoogleId = googleId,
-                    Admin = false,
-                    DisplayName = name,
-                };
-                uow.Users.Add(user);
-                await uow.SaveChangesAsync();
-            }
-
-            return user;
+                GoogleId = googleId,
+                Admin = false,
+                DisplayName = name,
+            };
+            uow.Users.Add(user);
+            await uow.SaveChangesAsync();
         }
+
+        return user;
     }
 
     public async Task AssociateUserToGoogleIdAsync(int userId, string googleId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var user = await uow.Users.GetAsync(userId);
-            if (user == null)
-                throw new UserNotFoundException(userId);
-            user.GoogleId = googleId;
-            await uow.SaveChangesAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetAsync(userId);
+        if (user == null)
+            throw new UserNotFoundException(userId);
+        user.GoogleId = googleId;
+        await uow.SaveChangesAsync();
     }
 
     public async Task<UserEntity> GetOrCreateUserFromTwitterAsync(string name, string twitterId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetByTwitterIdAsync(twitterId);
+        if (user == null)
         {
-            var user = await uow.Users.GetByTwitterIdAsync(twitterId);
-            if (user == null)
+            user = new UserEntity
             {
-                user = new UserEntity
-                {
-                    TwitterId = twitterId,
-                    Admin = false,
-                    DisplayName = name,
-                };
-                uow.Users.Add(user);
-                await uow.SaveChangesAsync();
-            }
-
-            return user;
+                TwitterId = twitterId,
+                Admin = false,
+                DisplayName = name,
+            };
+            uow.Users.Add(user);
+            await uow.SaveChangesAsync();
         }
+
+        return user;
     }
 
     public async Task AssociateUserToTwitterIdAsync(int userId, string twitterId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var user = await uow.Users.GetAsync(userId);
-            if (user == null)
-                throw new UserNotFoundException(userId);
-            user.TwitterId = twitterId;
-            await uow.SaveChangesAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetAsync(userId);
+        if (user == null)
+            throw new UserNotFoundException(userId);
+        user.TwitterId = twitterId;
+        await uow.SaveChangesAsync();
     }
 
     public async Task<UserEntity> GetOrCreateUserFromMicrosoftAsync(string name, string microsoftId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetByMicrosoftIdAsync(microsoftId);
+        if (user == null)
         {
-            var user = await uow.Users.GetByMicrosoftIdAsync(microsoftId);
-            if (user == null)
+            user = new UserEntity
             {
-                user = new UserEntity
-                {
-                    MicrosoftId = microsoftId,
-                    Admin = false,
-                    DisplayName = name,
-                };
-                uow.Users.Add(user);
-                await uow.SaveChangesAsync();
-            }
-
-            return user;
+                MicrosoftId = microsoftId,
+                Admin = false,
+                DisplayName = name,
+            };
+            uow.Users.Add(user);
+            await uow.SaveChangesAsync();
         }
+
+        return user;
     }
 
     public async Task AssociateUserToMicrosoftIdAsync(int userId, string microsoftId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var user = await uow.Users.GetAsync(userId);
-            if (user == null)
-                throw new UserNotFoundException(userId);
-            user.MicrosoftId = microsoftId;
-            await uow.SaveChangesAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetAsync(userId);
+        if (user == null)
+            throw new UserNotFoundException(userId);
+        user.MicrosoftId = microsoftId;
+        await uow.SaveChangesAsync();
     }
 }

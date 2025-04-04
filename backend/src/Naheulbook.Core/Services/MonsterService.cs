@@ -45,16 +45,15 @@ public class MonsterService(
 {
     public async Task<MonsterEntity> GetMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId);
-            if (monster == null)
-                throw new MonsterNotFoundException(monsterId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-            authorizationUtil.EnsureIsGroupOwner(executionContext, monster.Group);
+        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId);
+        if (monster == null)
+            throw new MonsterNotFoundException(monsterId);
 
-            return monster;
-        }
+        authorizationUtil.EnsureIsGroupOwner(executionContext, monster.Group);
+
+        return monster;
     }
 
     public async Task<MonsterEntity> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request)

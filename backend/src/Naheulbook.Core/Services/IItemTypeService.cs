@@ -14,9 +14,7 @@ public class ItemTypeService(IUnitOfWorkFactory unitOfWorkFactory) : IItemTypeSe
 {
     public async Task<List<ItemTypeEntity>> GetAllItemTypesAsync()
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.ItemTypes.GetAllAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.ItemTypes.GetAllAsync();
     }
 }

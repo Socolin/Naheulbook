@@ -24,10 +24,8 @@ public class ItemTemplateSectionService(
 {
     public async Task<IList<ItemTemplateSectionEntity>> GetAllSectionsAsync()
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.ItemTemplateSections.GetAllWithCategoriesAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.ItemTemplateSections.GetAllWithCategoriesAsync();
     }
 
     public async Task<ItemTemplateSectionEntity> CreateItemTemplateSectionAsync(NaheulbookExecutionContext executionContext, CreateItemTemplateSectionRequest request)

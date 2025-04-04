@@ -31,28 +31,26 @@ public class LootService(
 {
     public async Task<LootEntity> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var group = await uow.Groups.GetAsync(groupId);
+        if (group == null)
+            throw new GroupNotFoundException(groupId);
+
+        authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+
+        var loot = new LootEntity
         {
-            var group = await uow.Groups.GetAsync(groupId);
-            if (group == null)
-                throw new GroupNotFoundException(groupId);
+            Group = group,
+            Name = request.Name,
+            IsVisibleForPlayer = false,
+            Items = new List<ItemEntity>(),
+            Monsters = new List<MonsterEntity>(),
+        };
 
-            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+        uow.Loots.Add(loot);
+        await uow.SaveChangesAsync();
 
-            var loot = new LootEntity
-            {
-                Group = group,
-                Name = request.Name,
-                IsVisibleForPlayer = false,
-                Items = new List<ItemEntity>(),
-                Monsters = new List<MonsterEntity>(),
-            };
-
-            uow.Loots.Add(loot);
-            await uow.SaveChangesAsync();
-
-            return loot;
-        }
+        return loot;
     }
 
     public async Task<List<LootEntity>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
@@ -145,8 +143,8 @@ public class LootService(
                 foreach (var character in group.Characters)
                     session.NotifyCharacterHideLoot(character.Id, loot.Id);
             }
-            await session.CommitAsync();
 
+            await session.CommitAsync();
         }
     }
 

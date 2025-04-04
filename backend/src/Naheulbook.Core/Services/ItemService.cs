@@ -51,19 +51,18 @@ public class ItemService(
         CreateItemRequest request
     )
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var itemTemplate = await uow.ItemTemplates.GetAsync(request.ItemTemplateId);
-            if (itemTemplate == null)
-                throw new ItemTemplateNotFoundException(request.ItemTemplateId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-            var item = itemFactory.CreateItem(ownerType, ownerId, itemTemplate, request.ItemData);
+        var itemTemplate = await uow.ItemTemplates.GetAsync(request.ItemTemplateId);
+        if (itemTemplate == null)
+            throw new ItemTemplateNotFoundException(request.ItemTemplateId);
 
-            uow.Items.Add(item);
-            await uow.SaveChangesAsync();
+        var item = itemFactory.CreateItem(ownerType, ownerId, itemTemplate, request.ItemData);
 
-            return (await uow.Items.GetWithAllDataAsync(item.Id))!;
-        }
+        uow.Items.Add(item);
+        await uow.SaveChangesAsync();
+
+        return (await uow.Items.GetWithAllDataAsync(item.Id))!;
     }
 
     public async Task<ItemEntity> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request, int? currentUserId)

@@ -14,9 +14,7 @@ public class SkillService(IUnitOfWorkFactory unitOfWorkFactory) : ISkillService
 {
     public async Task<ICollection<SkillEntity>> GetSkillsAsync()
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.Skills.GetAllWithEffectsAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.Skills.GetAllWithEffectsAsync();
     }
 }

@@ -32,13 +32,11 @@ public class ItemTemplateService(
 {
     public async Task<ItemTemplateEntity> GetItemTemplateAsync(Guid itemTemplateId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var itemTemplate = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
-            if (itemTemplate == null)
-                throw new ItemTemplateNotFoundException(itemTemplateId);
-            return itemTemplate;
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var itemTemplate = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
+        if (itemTemplate == null)
+            throw new ItemTemplateNotFoundException(itemTemplateId);
+        return itemTemplate;
     }
 
     public async Task<ItemTemplateEntity> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request)
@@ -81,6 +79,7 @@ public class ItemTemplateService(
                 else
                     itemTemplate.SourceUserId = executionContext.UserId;
             }
+
             itemTemplateUtil.ApplyChangesFromRequest(itemTemplate, request);
 
             await uow.SaveChangesAsync();
