@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Http;
-using Naheulbook.Core.Models;
+using Naheulbook.Core.Features.Shared;
 using Naheulbook.Web.Exceptions;
 
 namespace Naheulbook.Web.Extensions;

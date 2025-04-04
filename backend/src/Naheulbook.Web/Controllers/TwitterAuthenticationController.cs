@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Naheulbook.Core.Services;
+using Naheulbook.Core.Features.Users;
 using Naheulbook.Shared.Clients.Twitter;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Requests;

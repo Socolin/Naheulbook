@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Naheulbook.Core.Exceptions;
-using Naheulbook.Core.Services;
+using Naheulbook.Core.Features.Character;
+using Naheulbook.Core.Features.Origin;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Responses;
 
@@ -45,7 +45,7 @@ public class OriginsController(
         {
             throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }
-        catch (RandomNameGeneratorNotFound ex)
+        catch (RandomNameGeneratorNotFoundException ex)
         {
             throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }

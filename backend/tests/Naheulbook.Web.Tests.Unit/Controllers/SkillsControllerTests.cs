@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
-using Naheulbook.Core.Services;
+using Naheulbook.Core.Features.Skill;
 using Naheulbook.Data.Models;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Responses;

@@ -1,4 +1,4 @@
-using Naheulbook.Core.Models;
+using Naheulbook.Core.Features.Group;
 using Naheulbook.Data.Models;
 using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;

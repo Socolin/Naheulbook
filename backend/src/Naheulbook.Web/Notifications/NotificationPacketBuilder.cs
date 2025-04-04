@@ -1,6 +1,7 @@
 using System;
 using AutoMapper;
-using Naheulbook.Core.Models;
+using Naheulbook.Core.Features.Character;
+using Naheulbook.Core.Features.Group;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;

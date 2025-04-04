@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Naheulbook.Core.Services;
+using Naheulbook.Core.Features.Users;
 using Naheulbook.Shared.Clients.Facebook;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Extensions;

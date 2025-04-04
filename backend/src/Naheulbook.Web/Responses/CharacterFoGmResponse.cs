@@ -1,4 +1,4 @@
-using Naheulbook.Core.Models;
+using Naheulbook.Core.Features.Character;
 using Newtonsoft.Json;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global

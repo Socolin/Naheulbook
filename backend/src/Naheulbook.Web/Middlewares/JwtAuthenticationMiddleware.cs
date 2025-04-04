@@ -1,8 +1,8 @@
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Naheulbook.Core.Models;
-using Naheulbook.Core.Services;
+using Naheulbook.Core.Features.Shared;
+using Naheulbook.Core.Features.Users;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Services;

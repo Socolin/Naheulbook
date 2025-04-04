@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Naheulbook.Core.Models;
-using Naheulbook.Core.Services;
+using Naheulbook.Core.Features.Map;
+using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Responses;
 

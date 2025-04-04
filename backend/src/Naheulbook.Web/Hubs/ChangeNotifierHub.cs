@@ -1,8 +1,12 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
-using Naheulbook.Core.Exceptions;
-using Naheulbook.Core.Services;
+using Naheulbook.Core.Features.Character;
+using Naheulbook.Core.Features.Fight;
+using Naheulbook.Core.Features.Group;
+using Naheulbook.Core.Features.Loot;
+using Naheulbook.Core.Features.Monster;
+using Naheulbook.Core.Features.Shared;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Services;
 
