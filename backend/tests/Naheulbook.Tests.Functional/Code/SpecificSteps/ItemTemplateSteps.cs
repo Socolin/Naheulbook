@@ -3,32 +3,32 @@ using Naheulbook.Data.Models;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.TestUtils;
 using Newtonsoft.Json;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
 public class ItemTemplateSteps(TestDataUtil testDataUtil)
 {
-    [Given("a item type")]
+    [Given("^a item type$")]
     public void GivenAItemType()
     {
         testDataUtil.AddItemType();
     }
 
-    [Given("an item slot")]
+    [Given("^an item slot$")]
     public void GivenAnItemSlot()
     {
         testDataUtil.AddSlot();
     }
 
-    [Given("an item template section")]
+    [Given("^an item template section$")]
     public void GivenAnItemTemplateSection()
     {
         testDataUtil.AddItemTemplateSection();
     }
 
-    [Given("an item template sub-category")]
+    [Given("^an item template sub-category$")]
     public void GivenAnItemTemplateSubCategory()
     {
         if (!testDataUtil.Contains<ItemTemplateSectionEntity>())
@@ -36,7 +36,7 @@ public class ItemTemplateSteps(TestDataUtil testDataUtil)
         testDataUtil.AddItemTemplateSubCategory();
     }
 
-    [Given("item templates required for initial inventory")]
+    [Given("^item templates required for initial inventory$")]
     public void GivenItemTemplatesRequiredForInitialInventory()
     {
         if (!testDataUtil.Contains<ItemTemplateSectionEntity>())
@@ -49,7 +49,7 @@ public class ItemTemplateSteps(TestDataUtil testDataUtil)
         testDataUtil.AddItemTemplate(i => i.TechName = "SMALL_PURSE");
     }
 
-    [Given("an item template")]
+    [Given("^an item template$")]
     public void GivenAnItemTemplate()
     {
         if (!testDataUtil.Contains<ItemTemplateSectionEntity>())
@@ -59,7 +59,7 @@ public class ItemTemplateSteps(TestDataUtil testDataUtil)
         testDataUtil.AddItemTemplate();
     }
 
-    [Given("an item template with a charge")]
+    [Given("^an item template with a charge$")]
     public void GivenAnItemTemplateWithACharge()
     {
         if (!testDataUtil.Contains<ItemTemplateSectionEntity>())
@@ -109,7 +109,7 @@ public class ItemTemplateSteps(TestDataUtil testDataUtil)
         });
     }
 
-    [Given("an item template with all optional fields set")]
+    [Given("^an item template with all optional fields set$")]
     public void GivenAnItemTemplateWithAllOptionalFieldsSet()
     {
         testDataUtil

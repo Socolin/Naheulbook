@@ -1,9 +1,9 @@
-using BoDi;
 using Newtonsoft.Json.Linq;
 using Socolin.ANSITerminalColor;
 using Socolin.TestUtils.JsonComparer;
 using Socolin.TestUtils.JsonComparer.Color;
-using TechTalk.SpecFlow;
+using Reqnroll;
+using Reqnroll.BoDi;
 
 namespace Naheulbook.Tests.Functional.Code.Init;
 
@@ -25,26 +25,28 @@ public class JsonComparerInitializer(IObjectContainer objectContainer, ScenarioC
         };
         objectContainer.RegisterInstanceAs(jsonColorOptions, typeof(JsonComparerColorOptions));
         var jsonComparer = JsonComparer.GetDefault((name, value) =>
-        {
-            switch (value.Type)
             {
-                case JTokenType.Integer:
-                    scenarioContext[name] = value.ToObject<int>();
-                    break;
-                case JTokenType.Float:
-                    scenarioContext[name] = value.ToObject<float>();
-                    break;
-                case JTokenType.String:
-                    scenarioContext[name] = value.ToObject<string>();
-                    break;
-                case JTokenType.Boolean:
-                    scenarioContext[name] = value.ToObject<bool>();
-                    break;
-                default:
-                    scenarioContext[name] = value;
-                    break;
-            }
-        }, colorOptions: jsonColorOptions);
+                switch (value.Type)
+                {
+                    case JTokenType.Integer:
+                        scenarioContext[name] = value.ToObject<int>();
+                        break;
+                    case JTokenType.Float:
+                        scenarioContext[name] = value.ToObject<float>();
+                        break;
+                    case JTokenType.String:
+                        scenarioContext[name] = value.ToObject<string>();
+                        break;
+                    case JTokenType.Boolean:
+                        scenarioContext[name] = value.ToObject<bool>();
+                        break;
+                    default:
+                        scenarioContext[name] = value;
+                        break;
+                }
+            },
+            colorOptions: jsonColorOptions
+        );
         objectContainer.RegisterInstanceAs(jsonComparer, typeof(IJsonComparer));
     }
 }

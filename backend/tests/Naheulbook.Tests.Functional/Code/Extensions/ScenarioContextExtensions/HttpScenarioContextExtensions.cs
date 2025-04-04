@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 

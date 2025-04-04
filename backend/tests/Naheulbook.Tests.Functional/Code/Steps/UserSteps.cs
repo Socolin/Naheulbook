@@ -20,7 +20,7 @@ using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.Steps;
 
@@ -46,7 +46,7 @@ public class UserSteps
         _naheulbookApiServer = naheulbookApiServer;
     }
 
-    [Given("a user identified by a password")]
+    [Given("^a user identified by a password$")]
     public async Task GivenAUserIdentifiedByAPassword()
     {
         var (username, password, userId) = await _userTestService.CreateUserAsync();
@@ -60,13 +60,13 @@ public class UserSteps
         _testDataUtil.AddStaticObject(user);
     }
 
-    [Given("a user")]
+    [Given("^a user$")]
     public void GivenAUser()
     {
         _testDataUtil.AddUser();
     }
 
-    [Given("a JWT for a user")]
+    [Given("^a JWT for a user$")]
     public void GivenAJwtForAUser()
     {
         var hasUtil = new PasswordHashingService();
@@ -82,7 +82,7 @@ public class UserSteps
         _scenarioContext.SetJwt(jwt);
     }
 
-    [Given("a JWT for an admin user")]
+    [Given("^a JWT for an admin user$")]
     public void GivenAnAdminUser()
     {
         var hasUtil = new PasswordHashingService();
@@ -102,7 +102,7 @@ public class UserSteps
         _scenarioContext.SetJwt(jwt);
     }
 
-    [Then("the response content contains a valid JWT")]
+    [Then("^the response content contains a valid JWT$")]
     public void ThenTheResponseContentContainsAValidJwt()
     {
         var responseContent = _scenarioContext.GetLastHttpResponseContent();
@@ -118,14 +118,14 @@ public class UserSteps
         payload.Should().ContainKey("exp");
     }
 
-    [Given("that the owner of the character allow to appear in searches")]
+    [Given("^that the owner of the character allow to appear in searches$")]
     public void GivenThatTheOwnerOfTheCharacterAllowToAppearInSearches()
     {
         _testDataUtil.Get<CharacterEntity>().Owner.ShowInSearchUntil = DateTime.UtcNow.AddDays(1);
         _testDataUtil.SaveChanges();
     }
 
-    [Given("the user is authenticated with a session")]
+    [Given("^the user is authenticated with a session$")]
     public async Task GivenTheUserIsAuthenticatedWithASession()
     {
         var cookies = new CookieContainer();

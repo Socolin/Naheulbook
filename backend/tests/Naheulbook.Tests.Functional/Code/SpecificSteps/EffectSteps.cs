@@ -1,20 +1,20 @@
 using Naheulbook.Data.Models;
 using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
 public class EffectSteps(TestDataUtil testDataUtil)
 {
-    [Given("an effect type")]
+    [Given("^an effect type$")]
     public void GivenAnEffectType()
     {
         testDataUtil.AddEffectType();
     }
 
-    [Given(@"(an|\d+) effects? sub-categor(?:y|ies)")]
+    [Given(@"^(an|\d+) effects? sub-categor(?:y|ies)$")]
     public void GivenAnEffectSubCategory(string amount)
     {
         if (!testDataUtil.Contains<EffectTypeEntity>())
@@ -23,7 +23,7 @@ public class EffectSteps(TestDataUtil testDataUtil)
             testDataUtil.AddEffectSubCategory();
     }
 
-    [Given(@"(an|\d+) effects?")]
+    [Given(@"^(an|\d+) effects?$")]
     public void GivenAnEffect(string amount)
     {
         if (!testDataUtil.Contains<EffectTypeEntity>())

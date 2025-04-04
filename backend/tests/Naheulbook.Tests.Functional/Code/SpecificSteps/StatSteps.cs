@@ -1,13 +1,13 @@
 using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
 public class StatSteps(TestDataUtil testDataUtil)
 {
-    [Given(@"(a|\d+) stats?")]
+    [Given(@"^(a|\d+) stats?$")]
     public void GivenXSkills(string amount)
     {
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)

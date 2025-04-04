@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Socolin.TestUtils.Console;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Infrastructure;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.Init;
 
 [Binding]
-public class InitializersProfiler(ISpecFlowOutputHelper specFlowOutputHelper)
+public class InitializersProfiler(IReqnrollOutputHelper reqnrollOutputHelper)
 {
     private static readonly Terminal256ColorCodes[] GradiantGreenRed =
     [
@@ -48,9 +47,9 @@ public class InitializersProfiler(ISpecFlowOutputHelper specFlowOutputHelper)
     public void RegisterServiceInformation()
     {
         var titleColumnLength = _profiler.Sections.Max(x => x.Title.Length);
-        specFlowOutputHelper.WriteLine($"┌{"".PadRight(titleColumnLength + 2, '─')}─{"".PadRight(14, '─')}┐");
-        specFlowOutputHelper.WriteLine("│" + " Init profiler".PadRight(titleColumnLength + 17, ' ') + "│");
-        specFlowOutputHelper.WriteLine($"├{"".PadRight(titleColumnLength + 2, '─')}┬{"".PadRight(14, '─')}┤");
+        reqnrollOutputHelper.WriteLine($"┌{"".PadRight(titleColumnLength + 2, '─')}─{"".PadRight(14, '─')}┐");
+        reqnrollOutputHelper.WriteLine("│" + " Init profiler".PadRight(titleColumnLength + 17, ' ') + "│");
+        reqnrollOutputHelper.WriteLine($"├{"".PadRight(titleColumnLength + 2, '─')}┬{"".PadRight(14, '─')}┤");
         var total = _profiler.Sections.Sum(x => x.Stopwatch.ElapsedMilliseconds);
         var minDuration = _profiler.Sections.Min(x => x.Stopwatch.ElapsedMilliseconds);
         var maxDuration = _profiler.Sections.Max(x => x.Stopwatch.ElapsedMilliseconds);
@@ -59,13 +58,13 @@ public class InitializersProfiler(ISpecFlowOutputHelper specFlowOutputHelper)
         {
             var duration = profilerSection.Stopwatch.ElapsedMilliseconds;
             var colorIndex = (int)Math.Floor((GradiantGreenRed.Length - 1) * ((float)duration - minDuration) / durationDiff);
-            specFlowOutputHelper.WriteLine("│ " + profilerSection.Title.PadRight(titleColumnLength, ' ') + " │ " + AnsiColorCodes.Color256(duration.ToString("N0").PadLeft(9) + " ms", GradiantGreenRed[colorIndex]) + " │");
+            reqnrollOutputHelper.WriteLine("│ " + profilerSection.Title.PadRight(titleColumnLength, ' ') + " │ " + AnsiColorCodes.Color256(duration.ToString("N0").PadLeft(9) + " ms", GradiantGreenRed[colorIndex]) + " │");
         }
-        specFlowOutputHelper.WriteLine($"├{"".PadRight(titleColumnLength + 2, '─')}┴{"".PadRight(14, '─')}┤");
+        reqnrollOutputHelper.WriteLine($"├{"".PadRight(titleColumnLength + 2, '─')}┴{"".PadRight(14, '─')}┤");
 
-        specFlowOutputHelper.WriteLine("│" + " Total: " + InitStopwatch.ElapsedMilliseconds.ToString("N0").PadLeft(titleColumnLength + 5, ' ') + " ms " + "│");
-        specFlowOutputHelper.WriteLine("│" + " Not profiled: " + (InitStopwatch.ElapsedMilliseconds - total).ToString("N0").PadLeft(titleColumnLength - 2, ' ') + " ms " + "│");
-        specFlowOutputHelper.WriteLine($"└{"".PadRight(titleColumnLength + 2, '─')}─{"".PadRight(14, '─')}┘");
+        reqnrollOutputHelper.WriteLine("│" + " Total: " + InitStopwatch.ElapsedMilliseconds.ToString("N0").PadLeft(titleColumnLength + 5, ' ') + " ms " + "│");
+        reqnrollOutputHelper.WriteLine("│" + " Not profiled: " + (InitStopwatch.ElapsedMilliseconds - total).ToString("N0").PadLeft(titleColumnLength - 2, ' ') + " ms " + "│");
+        reqnrollOutputHelper.WriteLine($"└{"".PadRight(titleColumnLength + 2, '─')}─{"".PadRight(14, '─')}┘");
     }
 
     private class InitProfiler

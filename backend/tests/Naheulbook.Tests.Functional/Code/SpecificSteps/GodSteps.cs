@@ -1,12 +1,12 @@
 using Naheulbook.TestUtils;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
 public class GodSteps(TestDataUtil testDataUtil)
 {
-    [Given("a god")]
+    [Given("^a god$")]
     public void GivenAGod()
     {
         testDataUtil.AddGod();

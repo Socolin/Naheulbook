@@ -3,7 +3,7 @@ using Naheulbook.Data.Models;
 using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
 using Newtonsoft.Json;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
@@ -12,7 +12,7 @@ public class CharacterSteps(
     TestDataUtil testDataUtil
 )
 {
-    [Given(@"(a|\d+) characters?")]
+    [Given(@"^(a|\d+) characters?$")]
     public void GivenACharacter(string amount)
     {
         if (!testDataUtil.Contains<OriginEntity>())
@@ -39,13 +39,13 @@ public class CharacterSteps(
         }
     }
 
-    [Given(@"a character modifier")]
+    [Given(@"^a character modifier$")]
     public void GivenACharacterModifier()
     {
         testDataUtil.AddCharacterModifier();
     }
 
-    [Given(@"an (inactive|active) (non-reusable|reusable) character modifier active for (\d) lap")]
+    [Given(@"^an (inactive|active) (non-reusable|reusable) character modifier active for (\d) lap$")]
     public void GivenACharacterModifier(string active, string reusable, int lapCount)
     {
         testDataUtil.AddCharacterModifier(c =>
@@ -58,7 +58,7 @@ public class CharacterSteps(
         );
     }
 
-    [Given(@"an inactive reusable character modifier that last 2 combat")]
+    [Given(@"^an inactive reusable character modifier that last 2 combat$")]
     public void GivenAnInactiveReusableCharacterModifierThatLast2Combat()
     {
         testDataUtil.AddCharacterModifier(c =>
@@ -70,13 +70,13 @@ public class CharacterSteps(
         );
     }
 
-    [Given(@"a character with all possible data")]
+    [Given(@"^a character with all possible data$")]
     public void GivenACharacterWithAllPossibleData()
     {
         testDataUtil.AddCharacterWithAllData();
     }
 
-    [Given(@"an item based on that item template in the character inventory")]
+    [Given(@"^an item based on that item template in the character inventory$")]
     public void GivenAnItemBasedOnThatItemTemplateInTheCharacterInventory()
     {
         testDataUtil.AddItem(testDataUtil.GetLast<CharacterEntity>());
@@ -87,7 +87,7 @@ public class CharacterSteps(
         testDataUtil.SaveChanges();
     }
 
-    [Given(@"an item based on that item template in the character inventory with (\d+) charges?")]
+    [Given(@"^an item based on that item template in the character inventory with (\d+) charges?$")]
     public void GivenAnItemBasedOnThatItemTemplateInTheCharacterInventoryWithXCharge(int chargeCount)
     {
         testDataUtil.AddItem(testDataUtil.GetLast<CharacterEntity>(), item => { item.Data = JsonConvert.SerializeObject(new {charge = chargeCount}); });
@@ -99,7 +99,7 @@ public class CharacterSteps(
         testDataUtil.SaveChanges();
     }
 
-    [Given(@"an item in the loot")]
+    [Given(@"^an item in the loot$")]
     public void GivenAnItemInTheLoot()
     {
         if (!testDataUtil.Contains<ItemTemplateEntity>())
@@ -107,7 +107,7 @@ public class CharacterSteps(
         testDataUtil.AddItemToLoot();
     }
 
-    [Given(@"an item in the character inventory")]
+    [Given(@"^an item in the character inventory$")]
     public void GivenAnItemInTheCharacterInventory()
     {
         if (!testDataUtil.Contains<ItemTemplateEntity>())
@@ -115,7 +115,7 @@ public class CharacterSteps(
         testDataUtil.AddItemToCharacter();
     }
 
-    [Given("that the (.+) character is a member of the group")]
+    [Given("^that the (.+) character is a member of the group$")]
     public void GivenThatXTheCharacterIsAMemberOfTheGroup(string indexString)
     {
         var character = testDataUtil.Get<CharacterEntity>(StepArgumentUtil.ParseIndex(indexString));
@@ -123,7 +123,7 @@ public class CharacterSteps(
         testDataUtil.SaveChanges();
     }
 
-    [Given("that the character is a member of the group")]
+    [Given("^that the character is a member of the group$")]
     public void GivenThatTheCharacterIsAMemberOfTheGroup()
     {
         var character = testDataUtil.GetLast<CharacterEntity>();
@@ -131,7 +131,7 @@ public class CharacterSteps(
         testDataUtil.SaveChanges();
     }
 
-    [Given("a character history entry")]
+    [Given("^a character history entry$")]
     public void GivenACharacterHistoryEntry()
     {
         testDataUtil.AddCharacterHistoryEntry();

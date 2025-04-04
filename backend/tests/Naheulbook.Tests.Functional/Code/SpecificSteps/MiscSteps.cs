@@ -1,12 +1,12 @@
 using Naheulbook.TestUtils;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
 public class MiscSteps(TestDataUtil testDataUtil)
 {
-    [Given("a calendar entry")]
+    [Given("^a calendar entry$")]
     public void GivenACalendarEntry()
     {
         testDataUtil.AddCalendarEntry();

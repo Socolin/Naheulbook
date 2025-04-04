@@ -15,7 +15,7 @@ using NUnit.Framework;
 using Socolin.TestUtils.JsonComparer;
 using Socolin.TestUtils.JsonComparer.Color;
 using Socolin.TestUtils.JsonComparer.NUnitExtensions;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.Steps;
 
@@ -27,8 +27,8 @@ public class HttpSteps(
     JsonComparerColorOptions jsonComparerColorOptions
 )
 {
-    [When(@"performing a (GET|DELETE) to the url ""(.*)""( with the current jwt| with "".+"" as access token)?")]
-    public async Task WhenPerformingAGetToTheUrl(string method, string url, string useCurrentJwt)
+    [When("""^performing a (GET|DELETE) to the url "(.*)"( with the current jwt| with ".+" as access token|)$""")]
+    public async Task WhenPerformingAGetToTheUrlWithToken(string method, string url, string useCurrentJwt)
     {
         var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url);
         if (!string.IsNullOrEmpty(useCurrentJwt))
@@ -45,7 +45,7 @@ public class HttpSteps(
         scenarioContext.SetLastHttpResponseContent(content);
     }
 
-    [When(@"performing a (GET|DELETE) to the url ""(.*)"" with the current session")]
+    [When(@"^performing a (GET|DELETE) to the url ""(.*)"" with the current session$")]
     public async Task WhenPerformingAGetToTheUrlWithTheCurrentSession(string method, string url)
     {
         using var httpClient = new HttpClient(new HttpClientHandler {CookieContainer = scenarioContext.GetHttpCookiesContainer()});
@@ -62,7 +62,7 @@ public class HttpSteps(
         scenarioContext.SetLastHttpResponseContent(content);
     }
 
-    [When(@"performing a POST to the url ""(.*)"" with the following json content")]
+    [When(@"^performing a POST to the url ""(.*)"" with the following json content$")]
     public async Task WhenPerformingAPostToTheUrlWithContent(string url, string contentData)
     {
         var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
@@ -72,7 +72,7 @@ public class HttpSteps(
         scenarioContext.SetLastHttpResponseContent(content);
     }
 
-    [When(@"performing a POST to the url ""(.*)"" with the following json content and the current session")]
+    [When(@"^performing a POST to the url ""(.*)"" with the following json content and the current session$")]
     public async Task WhenPerformingAPostToTheUrlWithContentAndTheCurrentSession(string url, string contentData)
     {
         var requestContent = new StringContent(contentData, Encoding.UTF8, "application/json");
@@ -89,7 +89,7 @@ public class HttpSteps(
         scenarioContext.SetLastHttpResponseContent(content);
     }
 
-    [When(@"performing a ([A-Z]+) to the url ""(.*)"" with the following json content and the current jwt")]
+    [When(@"^performing a ([A-Z]+) to the url ""(.*)"" with the following json content and the current jwt$")]
     public async Task WhenPerformingAPostToTheUrlWithContentAndJwt(string method, string url, string contentData)
     {
         var httpRequestMessage = new HttpRequestMessage(new HttpMethod(method), url)
@@ -106,7 +106,7 @@ public class HttpSteps(
         scenarioContext.SetLastHttpResponseContent(content);
     }
 
-    [When(@"performing a multipart POST to the url ""(.*)"" with the following json content as ""(.+)"" and an image as ""(.+)"" and the current jwt")]
+    [When(@"^performing a multipart POST to the url ""(.*)"" with the following json content as ""(.+)"" and an image as ""(.+)"" and the current jwt$")]
     public async Task WhenPerformingAMultipartPostToTheUrlWithContentAndJwt(string url, string contentPartName, string imagePartName, string contentData)
     {
         using var image = new MagickImage(new MagickColor("#ff00ff"), 1024, 512);
@@ -140,7 +140,7 @@ public class HttpSteps(
         scenarioContext.SetLastHttpResponseContent(content);
     }
 
-    [Then(@"the response status code is (.*)")]
+    [Then(@"^the response status code is (.*)$")]
     public void ThenTheResponseStatusCodeBe(int expectedStatusCode)
     {
         var lastStatusCode = scenarioContext.GetLastHttpResponseStatusCode();
@@ -153,7 +153,7 @@ public class HttpSteps(
         }
     }
 
-    [Then(@"the response should contains the following json")]
+    [Then(@"^the response should contains the following json$")]
     public void TheResponseShouldContainsTheFollowingJson(JToken expectedJson)
     {
         var jsonContent = scenarioContext.GetLastJsonHttpResponseContent();
@@ -161,7 +161,7 @@ public class HttpSteps(
         Assert.That(jsonContent, IsJson.EquivalentTo(expectedJson).WithComparer(jsonComparer).WithColorOptions(jsonComparerColorOptions));
     }
 
-    [Then(@"the response should contains a json array containing the following element identified by (.+)")]
+    [Then(@"^the response should contains a json array containing the following element identified by (.+)$")]
     public void TheResponseShouldContainsAJsonArrayContainingTheFollowingElementIdentifiedBy(string identityField, string expectedJson)
     {
         var content = scenarioContext.GetLastHttpResponseContent();

@@ -1,6 +1,6 @@
 using System.Net;
 using Socolin.TestUtils.FakeSmtp;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 

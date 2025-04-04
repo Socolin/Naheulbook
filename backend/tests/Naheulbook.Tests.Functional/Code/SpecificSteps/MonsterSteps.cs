@@ -4,32 +4,32 @@ using Naheulbook.Data.Models;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.TestUtils;
 using Newtonsoft.Json;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
 public class MonsterSteps(TestDataUtil testDataUtil)
 {
-    [Given("a monster category type")]
+    [Given("^a monster category type$")]
     public void GivenAMonsterCategoryType()
     {
         testDataUtil.AddMonsterType();
     }
 
-    [Given("a monster sub-category")]
+    [Given("^a monster sub-category$")]
     public void GivenAMonsterSubCategory()
     {
         testDataUtil.AddMonsterSubCategory();
     }
 
-    [Given("a monster trait")]
+    [Given("^a monster trait$")]
     public void GivenAMonsterTrait()
     {
         testDataUtil.AddMonsterTrait();
     }
 
-    [Given("a monster template")]
+    [Given("^a monster template$")]
     public void GivenAMonsterTemplate()
     {
         if (!testDataUtil.Contains<MonsterTypeEntity>())
@@ -39,7 +39,7 @@ public class MonsterSteps(TestDataUtil testDataUtil)
         testDataUtil.AddMonsterTemplate();
     }
 
-    [Given("a monster template with inventory")]
+    [Given("^a monster template with inventory$")]
     public void GivenAMonsterTemplateWithLocationAndInventory()
     {
         if (!testDataUtil.Contains<MonsterTypeEntity>())
@@ -63,13 +63,13 @@ public class MonsterSteps(TestDataUtil testDataUtil)
         });
     }
 
-    [Given("a monster")]
+    [Given("^a monster$")]
     public void GivenAMonster()
     {
         testDataUtil.AddMonster();
     }
 
-    [Given(@"a monster with a modifier active for (\d) laps?")]
+    [Given(@"^a monster with a modifier active for (\d) laps?$")]
     public void GivenAMonsterWithAModifierActiveForXLap(int lapCount)
     {
         testDataUtil.AddMonster(m => m.Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>
@@ -86,20 +86,20 @@ public class MonsterSteps(TestDataUtil testDataUtil)
         }));
     }
 
-    [Given("a dead monster")]
+    [Given("^a dead monster$")]
     public void GivenADeadMonster()
     {
         testDataUtil.AddMonster(m => m.Dead = new DateTime(2042, 8, 6, 12, 23, 24, DateTimeKind.Utc));
     }
 
-    [Given("a monster with an item in its inventory")]
+    [Given("^a monster with an item in its inventory$")]
     public void GivenAMonsterWithAnItemInItsInventory()
     {
         testDataUtil.AddMonster();
         testDataUtil.AddItemToMonster();
     }
 
-    [Given(@"a monster with an item in its inventory and a modifier")]
+    [Given(@"^a monster with an item in its inventory and a modifier$")]
     public void GivenAMonsterWithAnItemInItsInventoryAndAModifier()
     {
         testDataUtil.AddMonster(m => m.Modifiers = JsonConvert.SerializeObject(new List<ActiveStatsModifier>

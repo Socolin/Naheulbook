@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using NUnit.Framework;
 using Socolin.TestUtils.FakeSmtp;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.Steps;
 
 [Binding]
 public class MailSteps(ScenarioContext scenarioContext, IMailReceiver mailReceiver)
 {
-    [Then(@"a mail validation mail has been sent to ""(.*)""")]
+    [Then(@"^a mail validation mail has been sent to ""(.*)""$")]
     public async Task ThenAMailValidationMailHasBeenSentTo(string email)
     {
         var mail = await GetMailAndWaitIfNotReady(email, 2000);

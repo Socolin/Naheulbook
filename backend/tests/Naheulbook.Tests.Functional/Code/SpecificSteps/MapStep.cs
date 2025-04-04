@@ -2,21 +2,21 @@ using System.Collections.Generic;
 using Naheulbook.Data.Models;
 using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
 public class MapStep(TestDataUtil testDataUtil)
 {
-    [Given(@"(a|\d+) maps?")]
+    [Given(@"^(a|\d+) maps?$")]
     public void GivenXMap(string amount)
     {
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
             testDataUtil.AddMap();
     }
 
-    [Given(@"(a|\d+) maps? with all data")]
+    [Given(@"^(a|\d+) maps? with all data$")]
     public void GivenXMapWithAllData(string amount)
     {
         var targetMap = testDataUtil.AddMap().GetLast<MapEntity>();
@@ -53,7 +53,7 @@ public class MapStep(TestDataUtil testDataUtil)
             });
     }
 
-    [Given(@"(a|\d+) maps? with a marker")]
+    [Given(@"^(a|\d+) maps? with a marker$")]
     public void GivenXMapWithAMarker(string amount)
     {
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
@@ -82,7 +82,7 @@ public class MapStep(TestDataUtil testDataUtil)
             });
     }
 
-    [Given(@"(a|\d+) maps? with a layer")]
+    [Given(@"^(a|\d+) maps? with a layer$")]
     public void GivenXMapWithALayer(string amount)
     {
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)

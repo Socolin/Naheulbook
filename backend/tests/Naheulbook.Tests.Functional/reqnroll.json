@@ -1,0 +1,10 @@
+{
+  "$schema": "https://schemas.reqnroll.net/reqnroll-config-latest.json",
+  "runtime": {
+    "missingOrPendingStepsOutcome": "Error"
+  },
+  "trace": {
+    "stepDefinitionSkeletonStyle": "RegexAttribute",
+    "coloredOutput": true
+  }
+}

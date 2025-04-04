@@ -1,7 +1,7 @@
-using BoDi;
 using Naheulbook.Tests.Functional.Code.TestServices;
 using Naheulbook.TestUtils;
-using TechTalk.SpecFlow;
+using Reqnroll;
+using Reqnroll.BoDi;
 
 namespace Naheulbook.Tests.Functional.Code.Init;
 
