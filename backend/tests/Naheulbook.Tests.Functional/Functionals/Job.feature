@@ -29,7 +29,12 @@ Feature: Job
         "bonuses": [
             {
                 "description": "${Job.Bonuses.[0].Description}",
-                "flags": []
+                "flags": [
+                    {
+                       "data": "some-data",
+                       "type": "some-type"
+                    }
+                ]
             }
         ],
         "requirements": [
@@ -42,7 +47,12 @@ Feature: Job
         "restrictions": [
             {
                 "description": "${Job.Restrictions.[0].Text}",
-                "flags": []
+                "flags": [
+                    {
+                       "data": "some-data",
+                       "type": "some-type"
+                    }
+                ]
             }
         ],
         "specialities": [
@@ -53,8 +63,8 @@ Feature: Job
                 "modifiers": [
                     {
                         "type": "ADD",
-                        "value": ${Speciality.Modifiers.[0].Value},
-                        "stat": "${Stat.Name}",
+                        "value": ${SpecialityModifierEntity.Value},
+                        "stat": "${SpecialityModifierEntity.Stat}",
                     }
                 ],
                 "specials": [

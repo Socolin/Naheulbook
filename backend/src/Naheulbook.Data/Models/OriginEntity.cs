@@ -16,8 +16,8 @@ public class OriginEntity
     public string? Size { get; set; }
     public string? Flags { get; set; }
 
-    private ICollection<OriginBonus>? _bonuses;
-    public ICollection<OriginBonus> Bonuses { get => _bonuses.ThrowIfNotLoaded(); set => _bonuses = value; }
+    private ICollection<OriginBonusEntity>? _bonuses;
+    public ICollection<OriginBonusEntity> Bonuses { get => _bonuses.ThrowIfNotLoaded(); set => _bonuses = value; }
 
     private ICollection<OriginInfoEntity>? _information;
     public ICollection<OriginInfoEntity> Information { get => _information.ThrowIfNotLoaded(); set => _information = value; }

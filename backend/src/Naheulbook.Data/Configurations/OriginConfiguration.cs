@@ -44,9 +44,9 @@ public class OriginConfiguration : IEntityTypeConfiguration<OriginEntity>
     }
 }
 
-public class OriginBonusConfiguration : IEntityTypeConfiguration<OriginBonus>
+public class OriginBonusConfiguration : IEntityTypeConfiguration<OriginBonusEntity>
 {
-    public void Configure(EntityTypeBuilder<OriginBonus> builder)
+    public void Configure(EntityTypeBuilder<OriginBonusEntity> builder)
     {
         builder.ToTable("origin_bonuses");
 

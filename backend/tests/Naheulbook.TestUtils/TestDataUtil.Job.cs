@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Naheulbook.Data.Models;
 
 namespace Naheulbook.TestUtils;
@@ -13,62 +12,34 @@ public partial class TestDataUtil
 
     public TestDataUtil AddJob(out JobEntity job, Action<JobEntity> customizer = null)
     {
-        job = defaultEntityCreator.CreateJob();
+        job = new JobEntity
+        {
+            Name = RngUtil.GetRandomString("some-job-name"),
+            Flags = """[{"type": "value"}]""",
+            PlayerDescription = RngUtil.GetRandomString("some-player-description"),
+            Information = RngUtil.GetRandomString("some-information"),
+            PlayerSummary = RngUtil.GetRandomString("some-player-summary"),
+            Data = """{"forOrigin": {"all": {"baseEa": 20, "diceEaLevelUp": 6}}}""",
+            IsMagic = true,
+        };
         return SaveEntity(job, customizer);
     }
 
     public TestDataUtil AddJobWithAllData(Action<JobEntity> customizer = null)
     {
-        var suffix = RngUtil.GetRandomHexString(8);
-
-        var job = defaultEntityCreator.CreateJob(suffix);
-
-        var stat = AddStat().GetLast<StatEntity>();
-
-        var skill1 = AddSkill().GetLast<SkillEntity>();
-        var skill2 = AddSkill().GetLast<SkillEntity>();
-
-        job.Bonuses = new List<JobBonusEntity>
-        {
-            new()
-            {
-                Description = $"some-job-bonus-description-{suffix}",
-            },
-        };
-        job.Requirements = new List<JobRequirementEntity>
-        {
-            new()
-            {
-                Stat = stat,
-                MinValue = 2,
-                MaxValue = 4,
-            },
-        };
-        job.Restrictions = new List<JobRestrictionEntity>
-        {
-            new()
-            {
-                Text = $"some-job-restriction-{suffix}",
-                Flags = "[]",
-            },
-        };
-        job.Skills = new List<JobSkillEntity>
-        {
-            new()
-            {
-                Default = true,
-                Skill = skill1,
-            },
-            new()
-            {
-                Default = false,
-                Skill = skill2,
-            },
-        };
-
-        SaveEntity(job, customizer);
-
-        AddSpecialityWithAllData();
+        AddJob()
+            .AddStat().AddJobRequirement(x =>
+                {
+                    x.MinValue = 2;
+                    x.MaxValue = 4;
+                }
+            )
+            .AddJobBonus()
+            .AddSkill().AddJobSkill(x => x.Default = true)
+            .AddSkill().AddJobSkill(x => x.Default = false)
+            .AddJobRestriction()
+            .AddSpecialityWithAllData()
+            ;
 
         return this;
     }
@@ -81,36 +52,62 @@ public partial class TestDataUtil
     public TestDataUtil AddSpeciality(out SpecialityEntity speciality, Action<SpecialityEntity> customizer = null)
     {
         var job = GetLast<JobEntity>();
-        speciality = defaultEntityCreator.CreateSpeciality(job);
+
+        speciality = new SpecialityEntity
+        {
+            Name = RngUtil.GetRandomString("some-speciality-name"),
+            Description = RngUtil.GetRandomString("some-speciality-description"),
+            Flags = """[{"type": "value"}]""",
+            JobId = job.Id,
+        };
+
         return SaveEntity(speciality, customizer);
     }
 
     public TestDataUtil AddSpecialityWithAllData(Action<SpecialityEntity> customizer = null)
     {
-        var suffix = RngUtil.GetRandomHexString(8);
+        return AddSpeciality()
+            .AddStat().AddSpecialityModifier()
+            .AddSpecialitySpecial();
+    }
 
-        var job = GetLast<JobEntity>();
-        var speciality = defaultEntityCreator.CreateSpeciality(job, suffix);
+    public TestDataUtil AddSpecialitySpecial(Action<SpecialitySpecialEntity> customizer = null)
+    {
+        return AddSpecialitySpecial(out _, customizer);
+    }
 
-        speciality.Modifiers = new List<SpecialityModifierEntity>
+    public TestDataUtil AddSpecialitySpecial(out SpecialitySpecialEntity jobBonus, Action<SpecialitySpecialEntity> customizer = null)
+    {
+        var speciality = GetLast<SpecialityEntity>();
+
+        jobBonus = new SpecialitySpecialEntity
         {
-            new()
-            {
-                Stat = GetLast<StatEntity>().Name,
-                Value = 2,
-            },
+            SpecialityId = speciality.Id,
+            Description = RngUtil.GetRandomString("some-speciality-special-description"),
+            Flags = """[{"data": "some-data", "type": "ONE_SPECIALITY"}]""",
+            IsBonus = true,
         };
 
-        speciality.Specials = new List<SpecialitySpecialEntity>
+        return SaveEntity(jobBonus, customizer);
+    }
+
+    public TestDataUtil AddSpecialityModifier(Action<SpecialityModifierEntity> customizer = null)
+    {
+        return AddSpecialityModifier(out _, customizer);
+    }
+
+    public TestDataUtil AddSpecialityModifier(out SpecialityModifierEntity jobBonus, Action<SpecialityModifierEntity> customizer = null)
+    {
+        var speciality = GetLast<SpecialityEntity>();
+
+        jobBonus = new SpecialityModifierEntity
         {
-            new()
-            {
-                Description = $"some-speciality-special-description-{suffix}",
-                Flags = @"[{""data"": ""some-data"", ""type"": ""ONE_SPECIALITY""}]",
-                IsBonus = true,
-            },
+            SpecialityId = speciality.Id,
+            Stat = GetLast<StatEntity>().Name,
+            Value = 2,
         };
-        return SaveEntity(speciality, customizer);
+
+        return SaveEntity(jobBonus, customizer);
     }
 
     public TestDataUtil AddJobBonus(Action<JobBonusEntity> customizer = null)
@@ -124,8 +121,8 @@ public partial class TestDataUtil
         jobBonus = new JobBonusEntity
         {
             JobId = job.Id,
-            Description = RngUtil.GetRandomString("some-description"),
-            Flags = """["some-flag"]""" ,
+            Description = RngUtil.GetRandomString("some-job-bonus-description"),
+            Flags = """[{"data": "some-data", "type": "some-type"}]""",
         };
         return SaveEntity(jobBonus, customizer);
     }
@@ -161,7 +158,7 @@ public partial class TestDataUtil
         {
             JobId = job.Id,
             Text = RngUtil.GetRandomString("some-text"),
-            Flags = """["some-flags"]""",
+            Flags = """[{"data": "some-data", "type": "some-type"}]""",
         };
         return SaveEntity(jobRestriction, customizer);
     }

@@ -17,10 +17,10 @@ Feature: Character backup
           "notes": "${Character.Notes}",
           "originId": "${Character.OriginId}",
           "sex": "${Character.Sex}",
-          "skillIds": [
-            "${Character.Skills.[1].SkillId}",
-            "${Character.Skills.[0].SkillId}"
-          ],
+          "skillIds": {"__partialArray": {"array": [
+            "${Character.Skills.[0].SkillId}",
+            "${Character.Skills.[1].SkillId}"
+          ]}},
           "specialitiesIds": [
             "${Character.Specialities.[0].SpecialityId}"
           ],
@@ -82,10 +82,10 @@ Feature: Character backup
               }
             }
           ],
-          "jobIds": [
-            "${Character.Jobs.[1].JobId}",
-            "${Character.Jobs.[0].JobId}"
-          ],
+          "jobIds": {"__partialArray": {"array": [
+            "${Character.Jobs.[0].JobId}",
+            "${Character.Jobs.[1].JobId}"
+          ]}},
           "modifiers": [
             {
               "combatCount": ${Character.Modifiers.[0].CombatCount},

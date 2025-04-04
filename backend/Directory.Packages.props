@@ -29,11 +29,11 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="MySql.Data" Version="9.2.0" />
+    <PackageVersion Include="MySql.EntityFrameworkCore" Version="9.0.0" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="5.0.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Nunit" Version="4.3.2" />
-    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
     <PackageVersion Include="Sentry" Version="5.5.0" />
     <PackageVersion Include="Sentry.AspNetCore" Version="5.5.0" />
     <PackageVersion Include="Sentry.Serilog" Version="5.5.0" />

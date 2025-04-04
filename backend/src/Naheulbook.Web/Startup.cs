@@ -47,7 +47,7 @@ public class Startup(IConfiguration configuration)
             {
                 var environment = sp.GetRequiredService<IWebHostEnvironment>();
                 var dbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
-                    .UseMySql(configuration.GetConnectionString("DefaultConnection").NotNull(), ServerVersion.AutoDetect(configuration.GetConnectionString("DefaultConnection")), builder => builder.EnableRetryOnFailure());
+                    .UseMySQL(configuration.GetConnectionString("DefaultConnection").NotNull(), builder => builder.EnableRetryOnFailure());
 
                 if (environment.IsDevelopment())
                     dbContextOptionsBuilder.EnableSensitiveDataLogging();

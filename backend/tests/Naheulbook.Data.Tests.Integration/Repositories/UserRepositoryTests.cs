@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using FluentAssertions;
-using FluentAssertions.Extensions;
 using Naheulbook.Data.DbContexts;
 using Naheulbook.Data.Repositories;
+using Naheulbook.Shared.Extensions;
 using NUnit.Framework;
 
 namespace Naheulbook.Data.Tests.Integration.Repositories;
@@ -63,7 +63,7 @@ public class UserRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
     [Test]
     public async Task SearchUser_ShouldReturnsMatchingUsers()
     {
-        TestDataUtil.AddUser(out var user, u => u.ShowInSearchUntil = RoundDate(DateTime.Now.AddDays(1)));
+        TestDataUtil.AddUser(out var user, u => u.ShowInSearchUntil = DateTime.Now.AddDays(1).RoundToSeconds());
 
         var actualEntities = await _userRepository.SearchUsersAsync(user.DisplayName!);
 
@@ -73,7 +73,7 @@ public class UserRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
     [Test]
     public async Task SearchUser_ShouldNotDisplayUser_WhenShowInSearchUntilIsOlderThanNow()
     {
-        TestDataUtil.AddUser(out var user, u => u.ShowInSearchUntil = DateTime.Now.AddDays(-1));
+        TestDataUtil.AddUser(out var user, u => u.ShowInSearchUntil = DateTime.Now.AddDays(-1).RoundToSeconds());
 
         var users = await _userRepository.SearchUsersAsync(user.DisplayName!);
 
@@ -81,10 +81,4 @@ public class UserRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
     }
 
     #endregion
-
-
-    private static DateTime? RoundDate(DateTime date)
-    {
-        return date.AddNanoseconds(-date.Nanosecond());
-    }
 }

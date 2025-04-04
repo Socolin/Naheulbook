@@ -2,16 +2,28 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.DbContexts;
 
 namespace Naheulbook.TestUtils;
 
-public partial class TestDataUtil(DbContextOptions<NaheulbookDbContext> dbContextOptions, DefaultEntityCreator defaultEntityCreator)
-    : IDisposable
+[PublicAPI]
+public partial class TestDataUtil : IDisposable
 {
     private readonly List<object> _allEntities = new();
-    private readonly NaheulbookDbContext _dbContext = new(dbContextOptions);
+    private readonly NaheulbookDbContext _dbContext;
+    private readonly DbContextOptions<NaheulbookDbContext> _dbContextOptions;
+
+    public TestDataUtil(
+        DbContextOptions<NaheulbookDbContext> dbContextOptions
+    )
+    {
+        _dbContextOptions = dbContextOptions;
+        _dbContext = CreateDbContext();
+    }
+
+    public NaheulbookDbContext CreateDbContext() => new(_dbContextOptions);
 
     public T Get<T>()
     {
@@ -160,5 +172,10 @@ public partial class TestDataUtil(DbContextOptions<NaheulbookDbContext> dbContex
     public IList<object> GetAllByTypeName(string typeName)
     {
         return _allEntities.Where(x => x.GetType().Name == typeName || x.GetType().Name == typeName + "Entity").ToList();
+    }
+
+    public void AddStaticObject(object obj)
+    {
+        _allEntities.Add(obj);
     }
 }

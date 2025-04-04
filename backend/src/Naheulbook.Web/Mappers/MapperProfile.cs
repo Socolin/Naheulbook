@@ -211,7 +211,7 @@ public class MapperProfile : Profile
             .ForMember(m => m.Stat, opt => opt.MapFrom(r => r.StatName))
             .ForMember(m => m.Min, opt => opt.MapFrom(r => r.MinValue))
             .ForMember(m => m.Max, opt => opt.MapFrom(r => r.MaxValue));
-        CreateMap<OriginBonus, DescribedFlagResponse>()
+        CreateMap<OriginBonusEntity, DescribedFlagResponse>()
             .ForMember(m => m.Flags, opt => opt.MapFrom(b => MapperHelpers.FromJson<List<FlagResponse>>(b.Flags)));
         CreateMap<OriginRestrictEntity, DescribedFlagResponse>()
             .ForMember(m => m.Description, opt => opt.MapFrom(r => r.Text))

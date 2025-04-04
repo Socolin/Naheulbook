@@ -1,6 +1,5 @@
 using Naheulbook.Core.Models;
 using Naheulbook.Data.Models;
-using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
 using Newtonsoft.Json;

@@ -21,22 +21,18 @@ public static class DbUtils
 
     public static NaheulbookDbContext CreateNaheulbookDbContext(bool logSqlQueries = false)
     {
-        var dbContextOptions = GetDbContextOptions(logSqlQueries);
+        var dbContextOptions = GetDbContextOptions<NaheulbookDbContext>(logSqlQueries);
 
         return new NaheulbookDbContext(dbContextOptions);
     }
 
-    public static DbContextOptions<NaheulbookDbContext> GetDbContextOptions(bool logSqlQueries = false)
+    public static DbContextOptions<T> GetDbContextOptions<T>(bool logSqlQueries = false)
+        where T : DbContext
     {
-        var connectionString = $"Server={Environment.GetEnvironmentVariable("MYSQL_HOST") ?? "localhost"};" +
-                               $"Port={DockerServicePortFinder.GetPortForServiceInDocker("scripts-naheulbook_dev_env_mysql-1", "3306/tcp")?.ToString() ?? Environment.GetEnvironmentVariable("MYSQL_PORT") ?? "3306"};" +
-                               "Database=naheulbook_integration;" +
-                               "User=naheulbook;" +
-                               "Password=naheulbook;" +
-                               "SslMode=None";
-        var dbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
+        var connectionString = GetConnectionString();
+        var dbContextOptionsBuilder = new DbContextOptionsBuilder<T>()
             .EnableSensitiveDataLogging()
-            .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), builder => builder.EnableRetryOnFailure());
+            .UseMySQL(connectionString, builder => builder.EnableRetryOnFailure());
 
         if (logSqlQueries)
         {
@@ -49,5 +45,15 @@ public static class DbUtils
         }
 
         return dbContextOptionsBuilder.Options;
+    }
+
+    public static string GetConnectionString()
+    {
+        return $"Server={Environment.GetEnvironmentVariable("MYSQL_HOST") ?? "localhost"};" +
+               $"Port={DockerServicePortFinder.GetPortForServiceInDocker("scripts-naheulbook_dev_env_mysql-1", "3306/tcp")?.ToString() ?? Environment.GetEnvironmentVariable("MYSQL_PORT") ?? "3306"};" +
+               "Database=naheulbook_integration;" +
+               "User=naheulbook;" +
+               "Password=naheulbook;" +
+               "SslMode=None";
     }
 }

@@ -34,7 +34,7 @@ internal class Program
 
     private static IServiceProvider CreateServices(string connectionString, string operation)
     {
-        var asm = typeof(Mig0001Init).Assembly;
+        var asm = typeof(Mig0039Init).Assembly;
         foreach (var n in asm.GetManifestResourceNames())
             Debug.WriteLine(n);
 
@@ -55,7 +55,7 @@ internal class Program
             .ConfigureRunner(rb => rb
                 .AddMySql5()
                 .WithGlobalConnectionString(connectionString + ";Allow User Variables=True")
-                .ScanIn(typeof(Mig0001Init).Assembly).For.Migrations().For.EmbeddedResources())
+                .ScanIn(typeof(Mig0039Init).Assembly).For.Migrations().For.EmbeddedResources())
             .AddLogging(lb => lb.AddFluentMigratorConsole())
             .BuildServiceProvider(false);
     }

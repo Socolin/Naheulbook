@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Naheulbook.Core.Services;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
@@ -53,6 +54,10 @@ public class UserSteps
         _scenarioContext.SetUsername(username);
         _scenarioContext.SetPassword(password);
         _scenarioContext.SetUserId(userId);
+
+        await using var dbContext = _testDataUtil.CreateDbContext();
+        var user = await dbContext.Users.SingleAsync(x => x.Username == username);
+        _testDataUtil.AddStaticObject(user);
     }
 
     [Given("a user")]

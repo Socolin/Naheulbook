@@ -77,8 +77,8 @@ Feature: Character
       },
       "originId": "${Origin.Id}",
       "jobIds": [
-        "${Job.[0].Id}",
-        "${Job.[1].Id}"
+        "${Job.[1].Id}",
+        "${Job.[0].Id}"
       ],
       "skillIds": [
         "${Skill.Id}"
@@ -143,10 +143,10 @@ Feature: Character
         "name": "${Character.Name}",
         "originId": "${Origin.Id}",
         "level": ${Character.Level},
-        "jobIds": [
+        "jobIds": {"__partialArray": {"array": [
             "${Job.[0].Id}",
             "${Job.[1].Id}"
-        ],
+        ]}},
         "stats": {
             "COU": ${Character.Cou},
             "AD": ${Character.Ad},
@@ -221,10 +221,10 @@ Feature: Character
                 "values": []
             }
         ],
-        "skillIds": [
-            "${Skill.[0].Id}",
-            "${Skill.[1].Id}"
-        ],
+        "skillIds": {"__partialArray": {"array": [
+            "${Skill.[1].Id}",
+            "${Skill.[0].Id}"
+        ]}},
         "specialities": [
             {
                 "id": "${Speciality.Id}",

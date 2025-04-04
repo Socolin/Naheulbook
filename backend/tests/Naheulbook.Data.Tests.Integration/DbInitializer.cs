@@ -1,5 +1,8 @@
 using System;
+using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Naheulbook.DatabaseMigrator;
 using NUnit.Framework;
 
 namespace Naheulbook.Data.Tests.Integration;
@@ -12,10 +15,16 @@ public class DbInitializer
     {
         try
         {
-            var dbContext = DbUtils.CreateNaheulbookDbContext();
+            using var dbContext = new DbContext(DbUtils.GetDbContextOptions<DbContext>());
             dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
-            dbContext.Database.Migrate();
+
+            var services = new ServiceCollection();
+            services.AddDatabaseMigrator(DbUtils.GetConnectionString());
+            using var serviceProvider = services.BuildServiceProvider();
+            using var scope = serviceProvider.CreateScope();
+            var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+            runner.MigrateUp();
         }
         catch (Exception ex)
         {

@@ -5,11 +5,6 @@ namespace Naheulbook.TestUtils;
 
 public partial class TestDataUtil
 {
-    public TestDataUtil AddGroup(int masterId, Action<GroupEntity> customizer = null)
-    {
-        return SaveEntity(defaultEntityCreator.CreateGroup(masterId), customizer);
-    }
-
     public TestDataUtil AddGroup(Action<GroupEntity> customizer = null)
     {
         return AddGroup(out _, customizer);
@@ -63,7 +58,7 @@ public partial class TestDataUtil
 
     public TestDataUtil AddGroupInvite(bool fromGroup, Action<GroupInviteEntity> customizer = null)
     {
-        return AddGroupInvite(out var _, fromGroup, customizer);
+        return AddGroupInvite(out _, fromGroup, customizer);
     }
 
     public TestDataUtil AddGroupInvite(out GroupInviteEntity groupInvite, bool fromGroup, Action<GroupInviteEntity> customizer = null)
@@ -79,7 +74,22 @@ public partial class TestDataUtil
 
     public TestDataUtil AddEvent(Action<EventEntity> customizer = null)
     {
-        return SaveEntity(defaultEntityCreator.CreateEvent(GetLast<GroupEntity>()), customizer);
+        return AddEvent(out _, customizer);
+    }
+
+    public TestDataUtil AddEvent(out EventEntity @event, Action<EventEntity> customizer = null)
+    {
+        var group = GetLast<GroupEntity>();
+
+        @event = new EventEntity
+        {
+            Name = RngUtil.GetRandomString("some-event-name"),
+            Description = RngUtil.GetRandomString("some-event-description"),
+            GroupId = group.Id,
+            Timestamp = 721487,
+        };
+
+        return SaveEntity(@event, customizer);
     }
 
     public TestDataUtil AddGroupHistoryEntry(Action<GroupHistoryEntryEntity> customizer = null)
@@ -90,7 +100,17 @@ public partial class TestDataUtil
     public TestDataUtil AddGroupHistoryEntry(out GroupHistoryEntryEntity groupHistoryEntry, Action<GroupHistoryEntryEntity> customizer = null)
     {
         var group = GetLast<GroupEntity>();
-        groupHistoryEntry = defaultEntityCreator.CreateGroupHistory(group);
+
+        groupHistoryEntry = new GroupHistoryEntryEntity
+        {
+            Data = "{}",
+            Gm = true,
+            Date = new DateTime(2020, 10, 5, 5, 7, 8, DateTimeKind.Utc),
+            GroupId = group.Id,
+            Action = RngUtil.GetRandomString("some-group-history-action"),
+            Info = RngUtil.GetRandomString("some-info"),
+        };
+
         return SaveEntity(groupHistoryEntry, customizer);
     }
 }

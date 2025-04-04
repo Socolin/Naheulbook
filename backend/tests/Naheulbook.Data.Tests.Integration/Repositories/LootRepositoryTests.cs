@@ -23,7 +23,7 @@ public class LootRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
         TestDataUtil
             .AddUser()
             .AddGroup(out var group)
-            .AddLoot(out var loot)
+            .AddLoot(out var loot, l => l.IsVisibleForPlayer = true)
             .AddItemTemplateSection()
             .AddItemTemplateSubCategory()
             .AddItemTemplate(out var lootItemTemplate)
@@ -33,10 +33,10 @@ public class LootRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
             .AddItemToMonster(out var monsterItem)
             ;
 
-        var loots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(group.Id);
+        var actualLoots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(group.Id);
 
-        var actualLoot = loots.First();
-        AssertEntityIsLoaded(actualLoot, loot);
+        AssertEntitiesAreLoaded(actualLoots, [loot]);
+        var actualLoot = actualLoots.First();
         AssertEntitiesAreLoaded(actualLoot.Items, [lootItem]);
         AssertEntityIsLoaded(actualLoot.Items.Single().ItemTemplate, lootItemTemplate);
         AssertEntitiesAreLoaded(actualLoot.Monsters, [monster]);
@@ -47,7 +47,10 @@ public class LootRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
     [Test]
     public async Task GetLootsVisibleByCharactersOfGroupAsync_ShouldNotReturnNonVisibleLoots()
     {
-        TestDataUtil.AddLoot(out var loot, l => l.IsVisibleForPlayer = false);
+        TestDataUtil
+            .AddUser()
+            .AddGroup()
+            .AddLoot(out var loot, l => l.IsVisibleForPlayer = false);
 
         var loots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(loot.Id);
 
@@ -58,9 +61,10 @@ public class LootRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
     public async Task GetLootsVisibleByCharactersOfGroupAsync_ShouldNotReturnLootNotAssociateToUserGroup()
     {
         TestDataUtil
+            .AddUser()
             .AddGroup(out var otherGroup)
             .AddGroup(out var group)
-            .AddLoot(out var loot, l => l.IsVisibleForPlayer = false);
+            .AddLoot(out var loot, l => l.IsVisibleForPlayer = true);
 
         var actualLoots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(otherGroup.Id);
         var existingLoots = await _lootRepository.GetLootsVisibleByCharactersOfGroupAsync(group.Id);
@@ -100,6 +104,7 @@ public class LootRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
     public async Task GetByGroupIdAsync_ShouldNotReturnLootNotAssociateToUserGroup()
     {
         TestDataUtil
+            .AddUser()
             .AddGroup(out var otherGroup)
             .AddGroup(out var group)
             .AddLoot(out var loot, l => l.IsVisibleForPlayer = false).GetLast<LootEntity>();

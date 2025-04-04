@@ -9,6 +9,7 @@ public class InitDataProfile : Migration
     {
         Execute.EmbeddedScript("init_data.sql");
     }
+
     public override void Down()
     {
     }

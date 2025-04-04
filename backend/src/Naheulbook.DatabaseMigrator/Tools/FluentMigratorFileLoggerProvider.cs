@@ -5,7 +5,7 @@ using FluentMigrator.Runner.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Naheulbook.Tests.Functional.Code.Tools;
+namespace Naheulbook.DatabaseMigrator.Tools;
 
 public class FluentMigratorFileLoggerProvider(string path, IOptions<FluentMigratorLoggerOptions> options) : ILoggerProvider
 {

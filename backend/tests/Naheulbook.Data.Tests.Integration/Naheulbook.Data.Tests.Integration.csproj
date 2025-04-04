@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" />
       <ProjectReference Include="..\..\src\Naheulbook.Data\Naheulbook.Data.csproj" />
       <ProjectReference Include="..\Naheulbook.TestUtils\Naheulbook.TestUtils.csproj" />
     </ItemGroup>

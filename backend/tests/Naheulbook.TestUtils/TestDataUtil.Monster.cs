@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Naheulbook.Data.Models;
 
 namespace Naheulbook.TestUtils;
@@ -7,22 +8,63 @@ public partial class TestDataUtil
 {
     public TestDataUtil AddMonsterType(Action<MonsterTypeEntity> customizer = null)
     {
-        return SaveEntity(defaultEntityCreator.CreateMonsterType(), customizer);
+        return AddMonsterType(out _, customizer);
+    }
+
+    public TestDataUtil AddMonsterType(out MonsterTypeEntity monsterType, Action<MonsterTypeEntity> customizer = null)
+    {
+        monsterType = new MonsterTypeEntity
+        {
+            Name = RngUtil.GetRandomString("some-monster-type-name"),
+            SubCategories = new List<MonsterSubCategoryEntity>(),
+        };
+
+        return SaveEntity(monsterType, customizer);
     }
 
     public TestDataUtil AddMonsterSubCategory(Action<MonsterSubCategoryEntity> customizer = null)
     {
-        return SaveEntity(defaultEntityCreator.CreateMonsterSubCategory(GetLast<MonsterTypeEntity>()), customizer);
+        var monsterSubCategory = new MonsterSubCategoryEntity
+        {
+            MonsterTemplates = new List<MonsterTemplateEntity>(),
+            Name = RngUtil.GetRandomString("some-name"),
+            TypeId = GetLast<MonsterTypeEntity>().Id,
+        };
+
+        return SaveEntity(monsterSubCategory, customizer);
     }
 
     public TestDataUtil AddMonsterTrait(Action<MonsterTraitEntity> customizer = null)
     {
-        return SaveEntity(defaultEntityCreator.CreateMonsterTrait(), customizer);
+        return AddMonsterTrait(out _, customizer);
+    }
+
+    public TestDataUtil AddMonsterTrait(out MonsterTraitEntity monsterTrait, Action<MonsterTraitEntity> customizer = null)
+    {
+        monsterTrait = new MonsterTraitEntity
+        {
+            Name = RngUtil.GetRandomString("some-monster-trait-name"),
+            Description = RngUtil.GetRandomString("some-monster-trait-description"),
+            Levels = @"[""level1"", ""level2""]",
+        };
+
+        return SaveEntity(monsterTrait, customizer);
     }
 
     public TestDataUtil AddMonsterTemplate(Action<MonsterTemplateEntity> customizer = null)
     {
-        return SaveEntity(defaultEntityCreator.CreateMonsterTemplate(GetLast<MonsterSubCategoryEntity>()), customizer);
+        return AddMonsterTemplate(out _, customizer);
+    }
+
+    public TestDataUtil AddMonsterTemplate(out MonsterTemplateEntity monsterTemplate, Action<MonsterTemplateEntity> customizer = null)
+    {
+        monsterTemplate = new MonsterTemplateEntity
+        {
+            Name = RngUtil.GetRandomString("some-monster-template-name"),
+            SubCategoryId = GetLast<MonsterSubCategoryEntity>().Id,
+            Data = """{"key":"value"}""",
+        };
+        return SaveEntity(monsterTemplate, customizer);
     }
 
     public TestDataUtil AddMonster(Action<MonsterEntity> customizer = null)

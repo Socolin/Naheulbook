@@ -23,7 +23,7 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
     public void BaseSetUp()
     {
         _repositoryDbContext = DbUtils.GetTestDbContext<TDbContext>(true);
-        TestDataUtil = new TestDataUtil(DbUtils.GetDbContextOptions<NaheulbookDbContext>(), new DefaultEntityCreator());
+        TestDataUtil = new TestDataUtil(DbUtils.GetDbContextOptions<NaheulbookDbContext>());
         TestDataUtil.Cleanup();
     }
 
@@ -66,6 +66,29 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
                 equivalencyOptions = entityOptions
                     .Excluding(x => x.Character)
                     .Excluding(x => x.Job)
+                    .As<EquivalencyOptions<T>>();
+                break;
+            case EquivalencyOptions<CharacterModifierEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.Character)
+                    .Excluding(x => x.Values)
+                    .As<EquivalencyOptions<T>>();
+                break;
+            case EquivalencyOptions<CharacterModifierValueEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.CharacterModifierId)
+                    .As<EquivalencyOptions<T>>();
+                break;
+            case EquivalencyOptions<CharacterSkillEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.Character)
+                    .Excluding(x => x.Skill)
+                    .As<EquivalencyOptions<T>>();
+                break;
+            case EquivalencyOptions<CharacterSpecialityEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.Character)
+                    .Excluding(x => x.Speciality)
                     .As<EquivalencyOptions<T>>();
                 break;
             case EquivalencyOptions<CharacterEntity> entityOptions:
@@ -228,6 +251,23 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
                 equivalencyOptions = entityOptions
                     .Excluding(x => x.Job)
                     .Excluding(x => x.Skill)
+                    .As<EquivalencyOptions<T>>();
+                break;
+            case EquivalencyOptions<LootEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.Group)
+                    .Excluding(x => x.Monsters)
+                    .Excluding(x => x.Items)
+                    .As<EquivalencyOptions<T>>();
+                break;
+            case EquivalencyOptions<MonsterEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.Fight)
+                    .Excluding(x => x.Group)
+                    .Excluding(x => x.Items)
+                    .Excluding(x => x.Loot)
+                    .Excluding(x => x.TargetedCharacter)
+                    .Excluding(x => x.TargetedMonster)
                     .As<EquivalencyOptions<T>>();
                 break;
             case EquivalencyOptions<OriginEntity> entityOptions:

@@ -14,7 +14,6 @@
 
     <ItemGroup>
         <EmbeddedResource Include="init.sql" />
-        <EmbeddedResource Include="Migrations\Mig0028UpdateItemTemplateActionsItemTemplateIdReferences.sql" />
         <EmbeddedResource Include="init_data.sql" />
     </ItemGroup>
 </Project>

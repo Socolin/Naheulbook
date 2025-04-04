@@ -3,7 +3,7 @@ using Naheulbook.Data.Extensions;
 
 namespace Naheulbook.Data.Models;
 
-public class OriginBonus
+public class OriginBonusEntity
 {
     public int Id { get; set; }
     public string Description { get; set; } = null!;

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Naheulbook.Data.Models;
-using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
 using Newtonsoft.Json;
@@ -10,8 +9,7 @@ namespace Naheulbook.Tests.Functional.Code.SpecificSteps;
 
 [Binding]
 public class CharacterSteps(
-    TestDataUtil testDataUtil,
-    ScenarioContext scenarioContext
+    TestDataUtil testDataUtil
 )
 {
     [Given(@"(a|\d+) characters?")]
@@ -23,19 +21,21 @@ public class CharacterSteps(
         {
             for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
             {
-                testDataUtil.AddCharacter(scenarioContext.GetUserId(), c =>
-                {
-                    c.Jobs = new List<CharacterJobEntity>
+                testDataUtil.AddCharacter(c =>
                     {
-                        new() {JobId = testDataUtil.GetLast<JobEntity>().Id},
-                    };
-                });
+                        c.GroupId = null;
+                        c.Jobs = new List<CharacterJobEntity>
+                        {
+                            new() {JobId = testDataUtil.GetLast<JobEntity>().Id},
+                        };
+                    }
+                );
             }
         }
         else
         {
             for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
-                testDataUtil.AddCharacter(scenarioContext.GetUserId());
+                testDataUtil.AddCharacter(c => c.GroupId = null);
         }
     }
 
@@ -49,29 +49,31 @@ public class CharacterSteps(
     public void GivenACharacterModifier(string active, string reusable, int lapCount)
     {
         testDataUtil.AddCharacterModifier(c =>
-        {
-            c.Reusable = reusable == "reusable";
-            c.IsActive = active == "active";
-            c.LapCount = lapCount;
-            c.CurrentLapCount = lapCount;
-        });
+            {
+                c.Reusable = reusable == "reusable";
+                c.IsActive = active == "active";
+                c.LapCount = lapCount;
+                c.CurrentLapCount = lapCount;
+            }
+        );
     }
 
     [Given(@"an inactive reusable character modifier that last 2 combat")]
     public void GivenAnInactiveReusableCharacterModifierThatLast2Combat()
     {
         testDataUtil.AddCharacterModifier(c =>
-        {
-            c.Reusable = true;
-            c.IsActive = false;
-            c.CombatCount = 2;
-        });
+            {
+                c.Reusable = true;
+                c.IsActive = false;
+                c.CombatCount = 2;
+            }
+        );
     }
 
     [Given(@"a character with all possible data")]
     public void GivenACharacterWithAllPossibleData()
     {
-        testDataUtil.AddCharacterWithAllData(scenarioContext.GetUserId());
+        testDataUtil.AddCharacterWithAllData();
     }
 
     [Given(@"an item based on that item template in the character inventory")]
@@ -88,10 +90,7 @@ public class CharacterSteps(
     [Given(@"an item based on that item template in the character inventory with (\d+) charges?")]
     public void GivenAnItemBasedOnThatItemTemplateInTheCharacterInventoryWithXCharge(int chargeCount)
     {
-        testDataUtil.AddItem(testDataUtil.GetLast<CharacterEntity>(), item =>
-        {
-            item.Data = JsonConvert.SerializeObject(new {charge = chargeCount});
-        });
+        testDataUtil.AddItem(testDataUtil.GetLast<CharacterEntity>(), item => { item.Data = JsonConvert.SerializeObject(new {charge = chargeCount}); });
 
         testDataUtil.GetLast<CharacterEntity>().Items = new List<ItemEntity>
         {

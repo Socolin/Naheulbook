@@ -433,7 +433,7 @@ Feature: ItemTemplate
              "${Skill.[-2].Id}"
          ]
      }
-     """
+    """
 
   Scenario: Can search an item template
     Given an item template
