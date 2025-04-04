@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json.Linq;
 
 namespace Naheulbook.Requests.Requests;
@@ -9,7 +10,10 @@ public class ItemTemplateRequest
 {
     public required string Source { get; set; }
     public int SubCategoryId { get; set; }
+
+    [StringLength(256, MinimumLength = 1)]
     public required string Name { get; set; }
+
     public string? TechName { get; set; }
     public List<ItemTemplateModifierRequest> Modifiers { get; set; } = new();
     public List<Guid> SkillIds { get; set; } = new();

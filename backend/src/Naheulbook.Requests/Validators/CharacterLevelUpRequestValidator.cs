@@ -13,6 +13,5 @@ public class CharacterLevelUpRequestValidator : AbstractValidator<CharacterLevel
     {
         RuleFor(r => r.EvOrEa).Must(s => ValidEvEa.Contains(s));
         RuleFor(r => r.StatToUp).Must(s => ValidStats.Contains(s));
-        RuleFor(r => r.SpecialityIds).NotNull();
     }
 }

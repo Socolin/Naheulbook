@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using Naheulbook.Data.Configurations;
 using Naheulbook.Data.Models;
 
 namespace Naheulbook.Data.DbContexts;
@@ -41,90 +40,7 @@ public class NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options) 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // FIXME: Use assembly
-        modelBuilder.ApplyConfiguration(new CalendarConfiguration());
-
-        modelBuilder.ApplyConfiguration(new CharacterConfiguration());
-        modelBuilder.ApplyConfiguration(new CharacterJobConfiguration());
-        modelBuilder.ApplyConfiguration(new CharacterModifierConfiguration());
-        modelBuilder.ApplyConfiguration(new CharacterModifierValueConfiguration());
-        modelBuilder.ApplyConfiguration(new CharacterSkillConfiguration());
-        modelBuilder.ApplyConfiguration(new CharacterSpecialityConfiguration());
-        modelBuilder.ApplyConfiguration(new CharacterHistoryEntryConfiguration());
-
-        modelBuilder.ApplyConfiguration(new EffectConfiguration());
-        modelBuilder.ApplyConfiguration(new EffectSubCategoryConfiguration());
-        modelBuilder.ApplyConfiguration(new EffectModifierConfiguration());
-        modelBuilder.ApplyConfiguration(new EffectTypeConfiguration());
-
-        modelBuilder.ApplyConfiguration(new EventConfiguration());
-
-        modelBuilder.ApplyConfiguration(new FightConfiguration());
-
-        modelBuilder.ApplyConfiguration(new GodConfiguration());
-
-        modelBuilder.ApplyConfiguration(new GroupConfiguration());
-        modelBuilder.ApplyConfiguration(new GroupHistoryEntryConfiguration());
-        modelBuilder.ApplyConfiguration(new GroupInviteConfiguration());
-
-        modelBuilder.ApplyConfiguration(new ItemConfiguration());
-
-        modelBuilder.ApplyConfiguration(new ItemTemplateConfiguration());
-        modelBuilder.ApplyConfiguration(new ItemTemplateSubCategoryConfiguration());
-        modelBuilder.ApplyConfiguration(new ItemTemplateModifierConfiguration());
-        modelBuilder.ApplyConfiguration(new ItemTemplateRequirementConfiguration());
-        modelBuilder.ApplyConfiguration(new ItemTemplateSectionConfiguration());
-        modelBuilder.ApplyConfiguration(new ItemTemplateSkillConfiguration());
-        modelBuilder.ApplyConfiguration(new ItemTemplateSkillModifiersConfiguration());
-        modelBuilder.ApplyConfiguration(new ItemTemplateSlotConfiguration());
-        modelBuilder.ApplyConfiguration(new ItemTemplateUnSkillConfiguration());
-        modelBuilder.ApplyConfiguration(new ItemTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new SlotConfiguration());
-
-        modelBuilder.ApplyConfiguration(new JobConfiguration());
-        modelBuilder.ApplyConfiguration(new JobBonusConfiguration());
-        modelBuilder.ApplyConfiguration(new JobRequirementConfiguration());
-        modelBuilder.ApplyConfiguration(new JobRestrictionConfiguration());
-        modelBuilder.ApplyConfiguration(new JobSkillConfiguration());
-
-        modelBuilder.ApplyConfiguration(new LootConfiguration());
-
-        modelBuilder.ApplyConfiguration(new MapConfiguration());
-        modelBuilder.ApplyConfiguration(new MapLayerConfiguration());
-        modelBuilder.ApplyConfiguration(new MapMarkerConfiguration());
-        modelBuilder.ApplyConfiguration(new MapMarkerLinkConfiguration());
-
-        modelBuilder.ApplyConfiguration(new MerchantConfiguration());
-
-        modelBuilder.ApplyConfiguration(new MonsterConfiguration());
-
-        modelBuilder.ApplyConfiguration(new MonsterSubCategoryConfiguration());
-        modelBuilder.ApplyConfiguration(new MonsterTemplateConfiguration());
-        modelBuilder.ApplyConfiguration(new MonsterTemplateInventoryElementConfiguration());
-        modelBuilder.ApplyConfiguration(new MonsterTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new MonsterTraitConfiguration());
-
-        modelBuilder.ApplyConfiguration(new NpcConfiguration());
-
-        modelBuilder.ApplyConfiguration(new OriginConfiguration());
-        modelBuilder.ApplyConfiguration(new OriginBonusConfiguration());
-        modelBuilder.ApplyConfiguration(new OriginInfoConfiguration());
-        modelBuilder.ApplyConfiguration(new OriginRequirementConfiguration());
-        modelBuilder.ApplyConfiguration(new OriginRestrictConfiguration());
-        modelBuilder.ApplyConfiguration(new OriginSkillConfiguration());
-        modelBuilder.ApplyConfiguration(new OriginRandomNameUrlConfiguration());
-
-        modelBuilder.ApplyConfiguration(new SkillConfiguration());
-        modelBuilder.ApplyConfiguration(new SkillEffectConfiguration());
-
-        modelBuilder.ApplyConfiguration(new SpecialityConfiguration());
-        modelBuilder.ApplyConfiguration(new SpecialityModifierConfiguration());
-        modelBuilder.ApplyConfiguration(new SpecialitySpecialConfiguration());
-
-        modelBuilder.ApplyConfiguration(new StatConfiguration());
-
-        modelBuilder.ApplyConfiguration(new UserConfiguration());
-        modelBuilder.ApplyConfiguration(new UserAccessTokenConfiguration());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(NaheulbookDbContext).Assembly);
 
         base.OnModelCreating(modelBuilder);
     }

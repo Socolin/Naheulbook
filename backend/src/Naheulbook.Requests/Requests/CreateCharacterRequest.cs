@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -10,10 +11,16 @@ namespace Naheulbook.Requests.Requests;
 
 public class CreateCharacterRequest
 {
+    [StringLength(255, MinimumLength = 1)]
     public string Name { get; set; } = null!;
+
     public string Sex { get; set; } = null!;
+
+    [StringLength(20_000)]
     public string? Notes { get; set; }
+    [Range(0, int.MaxValue)]
     public int Money { get; set; }
+    [Range(0, int.MaxValue)]
     public short FatePoint { get; set; }
     public bool IsNpc { get; set; }
     public int? GroupId { get; set; }

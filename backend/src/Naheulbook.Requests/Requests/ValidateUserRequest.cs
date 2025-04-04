@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Naheulbook.Requests.Requests;
 
 [PublicAPI]
 public class ValidateUserRequest
 {
-    public string ActivationCode { get; set; } = null!;
+    [StringLength(1000, MinimumLength = 1)]
+    public required string ActivationCode { get; set; }
 }
