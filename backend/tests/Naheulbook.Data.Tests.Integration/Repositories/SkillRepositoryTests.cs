@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using FluentAssertions;
-using Naheulbook.Data.DbContexts;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.DbContexts;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.Repositories;
 using NUnit.Framework;
 

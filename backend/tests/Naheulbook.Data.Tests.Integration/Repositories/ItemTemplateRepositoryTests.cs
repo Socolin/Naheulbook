@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Naheulbook.Data.DbContexts;
+using Naheulbook.Data.EntityFrameworkCore.DbContexts;
 using Naheulbook.Data.Repositories;
 using NUnit.Framework;
 

@@ -3,7 +3,7 @@ using System.Text;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.Options;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Services;

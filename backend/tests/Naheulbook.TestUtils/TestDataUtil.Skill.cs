@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 
 namespace Naheulbook.TestUtils;
 
@@ -25,7 +25,7 @@ public partial class TestDataUtil
             Using = RngUtil.GetRandomString("some-using"),
             Stat = "FO",
             Test = 2,
-            SkillEffects = new List<SkillEffect>
+            SkillEffects = new List<SkillEffectEntity>
             {
                 new()
                 {

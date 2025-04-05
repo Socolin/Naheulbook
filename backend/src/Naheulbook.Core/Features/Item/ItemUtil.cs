@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Notifications;
-using Naheulbook.Data.Factories;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
+using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
 

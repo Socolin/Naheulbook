@@ -1,5 +1,5 @@
-using Naheulbook.Data.Extensions.UnitOfWorks;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
+using Naheulbook.Data.UnitOfWorks;
 
 namespace Naheulbook.Core.Features.Item.Actions;
 

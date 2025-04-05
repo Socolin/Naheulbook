@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Naheulbook.Data.DbContexts;
+using Naheulbook.Data.EntityFrameworkCore.DbContexts;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.Extensions;
-using Naheulbook.Data.Models;
+
 #pragma warning disable 8619
 
 namespace Naheulbook.Data.Repositories;

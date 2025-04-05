@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using Microsoft.EntityFrameworkCore;
-using Naheulbook.Data.DbContexts;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.DbContexts;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.TestUtils;
 using NUnit.Framework;
 

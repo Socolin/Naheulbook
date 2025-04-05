@@ -1,5 +1,5 @@
 using Naheulbook.Core.Notifications;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;

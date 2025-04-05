@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Naheulbook.Data.Factories;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
+using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Utils;
 

@@ -3,7 +3,7 @@ using AutoMapper;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Group;
 using Naheulbook.Core.Notifications;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Responses;

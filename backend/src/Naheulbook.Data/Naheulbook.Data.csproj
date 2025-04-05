@@ -6,13 +6,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
       <PackageReference Include="MySql.EntityFrameworkCore" />
       <PackageReference Include="Serilog" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Naheulbook.Data.EntityFrameworkCore\Naheulbook.Data.EntityFrameworkCore.csproj" />
       <ProjectReference Include="..\Naheulbook.Shared\Naheulbook.Shared.csproj" />
     </ItemGroup>
 

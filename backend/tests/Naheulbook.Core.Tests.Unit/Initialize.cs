@@ -1,5 +1,5 @@
 using System;
-using Naheulbook.Data.Extensions;
+using Naheulbook.Data.EntityFrameworkCore.Extensions;
 using NUnit.Framework;
 
 namespace Naheulbook.Core.Tests.Unit;

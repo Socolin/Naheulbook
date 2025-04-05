@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Naheulbook.Data\Naheulbook.Data.csproj" />
+        <ProjectReference Include="..\..\Naheulbook.Data.EntityFrameworkCore\Naheulbook.Data.EntityFrameworkCore.csproj" />
         <ProjectReference Include="..\..\src\Naheulbook.Shared\Naheulbook.Shared.csproj" />
     </ItemGroup>
 

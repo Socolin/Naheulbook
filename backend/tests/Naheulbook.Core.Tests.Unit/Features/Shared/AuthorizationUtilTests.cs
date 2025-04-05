@@ -2,10 +2,9 @@ using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Features.Shared;
-using Naheulbook.Data.Extensions.UnitOfWorks;
-using Naheulbook.Data.Factories;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.Repositories;
+using Naheulbook.Data.UnitOfWorks;
 using NSubstitute;
 using NUnit.Framework;
 

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Naheulbook.Data.Extensions.UnitOfWorks;
-using Naheulbook.Data.Factories;
 using Naheulbook.Data.Repositories;
+using Naheulbook.Data.UnitOfWorks;
 using NSubstitute;
 
 namespace Naheulbook.Core.Tests.Unit.TestUtils;

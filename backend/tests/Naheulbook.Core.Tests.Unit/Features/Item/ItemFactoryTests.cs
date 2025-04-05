@@ -1,7 +1,7 @@
 using System;
 using FluentAssertions;
 using Naheulbook.Core.Features.Item;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
 using Newtonsoft.Json.Linq;

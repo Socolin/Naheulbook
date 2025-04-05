@@ -1,7 +1,7 @@
 using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Naheulbook.Data.DbContexts;
+using Naheulbook.Data.EntityFrameworkCore.DbContexts;
 using Naheulbook.DatabaseMigrator;
 using Naheulbook.Tests.Functional.Code.Constants;
 using Reqnroll;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Naheulbook.Core.Features.Origin;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Notifications;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Utils;
 

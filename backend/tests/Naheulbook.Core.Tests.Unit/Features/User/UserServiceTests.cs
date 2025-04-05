@@ -4,7 +4,7 @@ using FluentAssertions;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Core.Tests.Unit.TestUtils;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using NSubstitute;
 using NUnit.Framework;
 

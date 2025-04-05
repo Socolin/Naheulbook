@@ -2,7 +2,7 @@ using System;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Naheulbook.Core.Features.Character;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using NSubstitute;
 using NUnit.Framework;
 

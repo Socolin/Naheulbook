@@ -1,7 +1,7 @@
 using System.Linq;
 using AutoMapper;
 using Naheulbook.Core.Features.Character.Backup.V1;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 
 namespace Naheulbook.Web.Mappers;
 

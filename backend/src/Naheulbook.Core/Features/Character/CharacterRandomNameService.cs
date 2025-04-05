@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Naheulbook.Core.Features.Origin;
-using Naheulbook.Data.Factories;
+using Naheulbook.Data.UnitOfWorks;
 
 namespace Naheulbook.Core.Features.Character;
 

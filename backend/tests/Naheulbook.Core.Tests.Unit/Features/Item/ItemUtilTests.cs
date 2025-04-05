@@ -3,7 +3,7 @@ using FluentAssertions;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Tests.Unit.TestUtils;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Shared.Utils;
 using NSubstitute;
 using NUnit.Framework;

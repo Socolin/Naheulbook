@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Naheulbook.Data.DbContexts;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.DbContexts;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 
 namespace Naheulbook.Data.Repositories;
 

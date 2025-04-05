@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Core.Tests.Unit.TestUtils;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using NSubstitute;
 using NUnit.Framework;
 

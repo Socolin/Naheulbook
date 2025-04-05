@@ -7,7 +7,7 @@ using FluentAssertions.Execution;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Tests.Unit.TestUtils;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 using Newtonsoft.Json.Linq;
 using NSubstitute;

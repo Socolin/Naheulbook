@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Naheulbook.Data.Factories;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
+using Naheulbook.Data.UnitOfWorks;
 
 namespace Naheulbook.Core.Features.Shared;
 

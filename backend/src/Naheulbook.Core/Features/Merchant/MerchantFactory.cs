@@ -1,4 +1,4 @@
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 
 namespace Naheulbook.Core.Features.Merchant;

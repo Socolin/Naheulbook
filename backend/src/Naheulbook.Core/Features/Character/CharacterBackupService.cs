@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Naheulbook.Core.Features.Character.Backup;
 using Naheulbook.Core.Features.Shared;
-using Naheulbook.Data.Factories;
+using Naheulbook.Data.UnitOfWorks;
 
 namespace Naheulbook.Core.Features.Character;
 

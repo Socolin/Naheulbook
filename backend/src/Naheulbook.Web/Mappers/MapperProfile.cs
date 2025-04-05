@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Naheulbook.Core.Features.Character;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Responses;
@@ -253,7 +253,7 @@ public class MapperProfile : Profile
         CreateMap<NpcEntity, NpcResponse>()
             .ForMember(m => m.Data, opt => opt.MapFrom(r => MapperHelpers.FromJson<NpcData>(r.Data)));
 
-        CreateMap<SkillEffect, SkillEffectResponse>()
+        CreateMap<SkillEffectEntity, SkillEffectResponse>()
             .ForMember(m => m.Type, opt => opt.MapFrom(x => "ADD"))
             .ForMember(m => m.Stat, opt => opt.MapFrom(s => s.StatName));
         CreateMap<SkillEntity, SkillResponse>()

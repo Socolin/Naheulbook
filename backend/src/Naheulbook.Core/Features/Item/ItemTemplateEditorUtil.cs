@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Naheulbook.Core.Features.Shared;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;

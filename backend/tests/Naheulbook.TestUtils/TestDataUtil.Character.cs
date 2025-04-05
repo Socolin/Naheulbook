@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 
 namespace Naheulbook.TestUtils;
 

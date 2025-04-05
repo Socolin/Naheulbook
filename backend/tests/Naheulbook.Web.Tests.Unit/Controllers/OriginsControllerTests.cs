@@ -4,7 +4,7 @@ using AutoMapper;
 using FluentAssertions;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Origin;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Responses;
 using NSubstitute;

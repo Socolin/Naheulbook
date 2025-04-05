@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 
 namespace Naheulbook.Core.Features.Character;

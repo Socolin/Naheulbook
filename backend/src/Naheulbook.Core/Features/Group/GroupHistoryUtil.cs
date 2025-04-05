@@ -1,5 +1,5 @@
 using System;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Core.Features.Group;

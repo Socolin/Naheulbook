@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Notifications;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Shared.TransientModels;
 
 namespace Naheulbook.Core.Features.Item.Actions.Executor;

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Shared.TransientModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;

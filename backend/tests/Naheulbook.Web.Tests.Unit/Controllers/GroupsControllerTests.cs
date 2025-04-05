@@ -13,7 +13,7 @@ using Naheulbook.Core.Features.Merchant;
 using Naheulbook.Core.Features.Monster;
 using Naheulbook.Core.Features.Npc;
 using Naheulbook.Core.Features.Shared;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;

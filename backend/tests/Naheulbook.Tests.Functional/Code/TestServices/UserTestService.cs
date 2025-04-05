@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Naheulbook.Data.DbContexts;
+using Naheulbook.Data.EntityFrameworkCore.DbContexts;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Tests.Functional.Code.Steps;
 using Naheulbook.TestUtils;

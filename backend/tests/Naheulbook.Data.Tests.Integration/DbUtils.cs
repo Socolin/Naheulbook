@@ -1,7 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Naheulbook.Data.DbContexts;
+using Naheulbook.Data.EntityFrameworkCore.DbContexts;
 using Naheulbook.TestUtils;
 using Serilog;
 using Serilog.Extensions.Logging;

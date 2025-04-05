@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
 using Newtonsoft.Json;

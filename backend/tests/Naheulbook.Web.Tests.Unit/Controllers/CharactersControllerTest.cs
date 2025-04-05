@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Shared;
-using Naheulbook.Data.Models;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
