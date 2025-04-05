@@ -1,5 +1,3 @@
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Shared.TransientModels;
 
 public class IconDescription

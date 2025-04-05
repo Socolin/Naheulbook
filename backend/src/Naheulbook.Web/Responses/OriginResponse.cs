@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
+using JetBrains.Annotations;
 using Naheulbook.Shared.TransientModels;
-
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class OriginResponse
 {
     public Guid Id { get; set; }
@@ -27,6 +23,7 @@ public class OriginResponse
     public ICollection<DescribedFlagResponse> Restrictions { get; set; } = null!;
 }
 
+[PublicAPI]
 public class OriginRequirementResponse
 {
     public string Stat { get; set; } = null!;
@@ -34,6 +31,7 @@ public class OriginRequirementResponse
     public int? Max { get; set; }
 }
 
+[PublicAPI]
 public class OriginInformationResponse
 {
     public string Title { get; set; } = null!;

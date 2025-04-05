@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
+using JetBrains.Annotations;
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class SkillResponse
 {
     public Guid Id { get; set; }
@@ -23,6 +19,7 @@ public class SkillResponse
     public List<SkillEffectResponse> Effects { get; set; } = null!;
 }
 
+[PublicAPI]
 public class SkillEffectResponse
 {
     public string Stat { get; set; } = null!;

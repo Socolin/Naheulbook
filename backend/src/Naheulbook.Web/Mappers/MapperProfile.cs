@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Data.EntityFrameworkCore.Entities;

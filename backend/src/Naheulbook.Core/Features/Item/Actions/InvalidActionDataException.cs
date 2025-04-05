@@ -1,10 +1,6 @@
-using System;
-
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Core.Features.Item.Actions;
 
+[Serializable]
 public class InvalidActionDataException : Exception
 {
     public string ActionType { get; }

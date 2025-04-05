@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 
 namespace Naheulbook.Core.Features.Character;
 
+[Serializable]
 public class LevelUpResult
 {
     public IList<CharacterModifierEntity> NewModifiers { get; set; } = new List<CharacterModifierEntity>();

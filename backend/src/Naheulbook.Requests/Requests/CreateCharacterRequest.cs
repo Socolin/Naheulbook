@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Requests.Requests;
 
+[PublicAPI]
 public class CreateCharacterRequest
 {
     [StringLength(255, MinimumLength = 1)]

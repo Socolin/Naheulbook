@@ -104,3 +104,7 @@ tab_width = 4
 [*.feature]
 indent_style = space
 indent_size = 2
+
+[*.csproj]
+indent_style = space
+indent_size = 4

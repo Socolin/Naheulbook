@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Naheulbook.Core.Features.Character;
+﻿using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Effect;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Data.EntityFrameworkCore.Entities;

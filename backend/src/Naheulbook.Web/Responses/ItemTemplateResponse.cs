@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
+using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
-
-// ReSharper disable UnusedMember.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class ItemTemplateResponse
 {
     public Guid Id { get; set; }

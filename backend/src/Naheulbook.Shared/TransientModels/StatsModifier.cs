@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public class StatsModifier
 {
     public string Name { get; set; } = null!;

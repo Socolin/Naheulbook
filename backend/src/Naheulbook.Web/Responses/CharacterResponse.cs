@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
+using JetBrains.Annotations;
 using Naheulbook.Shared.TransientModels;
 using Newtonsoft.Json;
 
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class CharacterResponse
 {
     public class BasicStats

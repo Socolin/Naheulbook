@@ -1,10 +1,10 @@
+using JetBrains.Annotations;
 using Naheulbook.Core.Features.Character;
 using Newtonsoft.Json;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class CharacterFoGmResponse : CharacterResponse
 {
     [JsonProperty("active")]

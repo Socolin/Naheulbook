@@ -1,6 +1,3 @@
-using System;
-using Microsoft.AspNetCore.Http;
-
 namespace Naheulbook.Web.Exceptions;
 
 public class HttpErrorException : Exception

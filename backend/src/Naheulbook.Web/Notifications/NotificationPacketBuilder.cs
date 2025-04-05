@@ -1,4 +1,3 @@
-using System;
 using AutoMapper;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Group;

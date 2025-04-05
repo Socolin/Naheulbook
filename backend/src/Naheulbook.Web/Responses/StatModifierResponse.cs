@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
 using Newtonsoft.Json;
-
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class StatModifierResponse
 {
     public string Stat { get; set; } = null!;

@@ -1,6 +1,4 @@
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Shared.Utils;

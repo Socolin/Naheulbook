@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-using System.Linq;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Tests.Functional.Code.Servers;

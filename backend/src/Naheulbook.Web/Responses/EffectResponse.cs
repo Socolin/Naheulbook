@@ -1,7 +1,8 @@
-using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class EffectResponse
 {
     public int Id { get; set; }
@@ -17,6 +18,7 @@ public class EffectResponse
     public IList<StatModifierResponse> Modifiers { get; set; } = null!;
 }
 
+[PublicAPI]
 public class EffectTypeResponse
 {
     public int Id { get; set; }
@@ -24,6 +26,7 @@ public class EffectTypeResponse
     public IList<EffectSubCategoryResponse> SubCategories { get; set; } = null!;
 }
 
+[PublicAPI]
 public class EffectSubCategoryResponse
 {
     public int Id { get; set; }

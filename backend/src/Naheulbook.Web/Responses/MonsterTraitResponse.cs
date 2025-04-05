@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
+using JetBrains.Annotations;
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class MonsterTraitResponse
 {
     public int Id { get; set; }

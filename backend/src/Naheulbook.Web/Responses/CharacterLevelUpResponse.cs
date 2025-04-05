@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
+using JetBrains.Annotations;
 using Naheulbook.Shared.TransientModels;
-
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedMember.Global
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class CharacterLevelUpResponse
 {
     public List<ActiveStatsModifier> NewModifiers { get; set; } = null!;

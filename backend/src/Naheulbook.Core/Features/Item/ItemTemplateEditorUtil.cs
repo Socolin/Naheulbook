@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;

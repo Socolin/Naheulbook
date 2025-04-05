@@ -1,7 +1,6 @@
-using System.Collections.Generic;
-
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public class StatModifierRequest
 {
     public required string Stat { get; set; }

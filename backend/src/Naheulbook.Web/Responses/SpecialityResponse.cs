@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedMember.Global
+﻿using JetBrains.Annotations;
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class SpecialityResponse
 {
     public Guid Id { get; set; }
@@ -17,6 +13,7 @@ public class SpecialityResponse
     public List<FlagResponse>? Flags { get; set; }
 }
 
+[PublicAPI]
 public class SpecialitySpecialResponse
 {
     public int Id { get; set; }

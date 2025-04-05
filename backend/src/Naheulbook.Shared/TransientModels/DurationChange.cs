@@ -1,21 +1,18 @@
-using System.Collections.Generic;
-
-// ReSharper disable UnusedMemberInSuper.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public abstract class FighterDurationChanges
 {
     public IList<IDurationChange> Changes { get; set; } = null!;
 }
 
+[Serializable]
 public class CharacterUpdateDuration : FighterDurationChanges
 {
     public int CharacterId { get; set; }
 }
 
+[Serializable]
 public class MonsterUpdateDuration : FighterDurationChanges
 {
     public int MonsterId { get; set; }
@@ -36,6 +33,7 @@ public interface IModifierChange : IDurationChange
     NewModifierDurationValue Modifier { get; set; }
 }
 
+[Serializable]
 public class ItemModifierDurationChange : IITemDurationChange, IModifierChange
 {
     public const string TypeValue = "itemModifier";
@@ -45,6 +43,7 @@ public class ItemModifierDurationChange : IITemDurationChange, IModifierChange
     public NewModifierDurationValue Modifier { get; set; } = null!;
 }
 
+[Serializable]
 public class ItemLifetimeDurationChange : IITemDurationChange
 {
     public const string TypeValue = "itemLifetime";
@@ -53,6 +52,7 @@ public class ItemLifetimeDurationChange : IITemDurationChange
     public LifeTime LifeTime { get; set; } = null!;
 }
 
+[Serializable]
 public class ModifierDurationChange : IModifierChange
 {
     public const string TypeValue = "modifier";
@@ -60,6 +60,7 @@ public class ModifierDurationChange : IModifierChange
     public NewModifierDurationValue Modifier { get; set; } = null!;
 }
 
+[Serializable]
 public class NewModifierDurationValue
 {
     public int Id { get; set; }

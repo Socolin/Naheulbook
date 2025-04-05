@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Shared.Utils;

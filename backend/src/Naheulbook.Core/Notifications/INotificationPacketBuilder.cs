@@ -1,4 +1,3 @@
-using System;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Group;
 using Naheulbook.Data.EntityFrameworkCore.Entities;

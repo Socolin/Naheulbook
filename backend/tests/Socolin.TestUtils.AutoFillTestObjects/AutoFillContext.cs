@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Socolin.TestUtils.AutoFillTestObjects.Utils;
 
 namespace Socolin.TestUtils.AutoFillTestObjects;

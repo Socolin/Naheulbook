@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Naheulbook.Shared.Clients.Oauth1;
 using Naheulbook.Shared.Clients.Twitter.Exceptions;

@@ -4,6 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
@@ -32,30 +33,30 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Naheulbook.Core\Naheulbook.Core.csproj" />
-      <ProjectReference Include="..\Naheulbook.Requests\Naheulbook.Requests.csproj" />
+        <ProjectReference Include="..\Naheulbook.Core\Naheulbook.Core.csproj" />
+        <ProjectReference Include="..\Naheulbook.Requests\Naheulbook.Requests.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="appsettings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="appsettings.json">
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <Content Update="appsettings.local.json">
-        <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-      </Content>
-      <Content Update="appsettings.Development.json">
-        <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-      </Content>
-      <Content Update="appsettings.Production.json">
-        <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-      </Content>
+        <Content Update="appsettings.json">
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="appsettings.local.json">
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </Content>
+        <Content Update="appsettings.Development.json">
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </Content>
+        <Content Update="appsettings.Production.json">
+            <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>

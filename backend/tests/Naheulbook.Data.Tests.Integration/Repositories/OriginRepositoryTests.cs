@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Data.EntityFrameworkCore.DbContexts;
 using Naheulbook.Data.EntityFrameworkCore.Entities;

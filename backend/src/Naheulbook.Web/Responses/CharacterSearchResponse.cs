@@ -1,9 +1,9 @@
+using JetBrains.Annotations;
 using Newtonsoft.Json;
-
-// ReSharper disable UnusedMember.Global
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class CharacterSearchResponse
 {
     public int Id { get; set; }

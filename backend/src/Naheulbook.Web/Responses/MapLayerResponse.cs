@@ -1,9 +1,8 @@
-// ReSharper disable UnusedMember.Global
-
-using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class MapLayerResponse
 {
     public int Id { get; set; }

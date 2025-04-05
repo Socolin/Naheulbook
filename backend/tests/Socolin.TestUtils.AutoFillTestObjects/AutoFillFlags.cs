@@ -1,5 +1,3 @@
-using System;
-
 namespace Socolin.TestUtils.AutoFillTestObjects;
 
 [Flags]

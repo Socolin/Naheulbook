@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Web.Responses;

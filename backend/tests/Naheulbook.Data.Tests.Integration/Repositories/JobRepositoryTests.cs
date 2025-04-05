@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Naheulbook.Data.EntityFrameworkCore.DbContexts;
 using Naheulbook.Data.Repositories;
 using NUnit.Framework;

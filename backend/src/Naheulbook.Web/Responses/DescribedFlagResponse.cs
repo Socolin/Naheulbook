@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+﻿using JetBrains.Annotations;
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class DescribedFlagResponse
 {
     public string Description { get; set; } = null!;

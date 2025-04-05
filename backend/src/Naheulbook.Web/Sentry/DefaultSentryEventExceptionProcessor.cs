@@ -1,8 +1,5 @@
-using System;
-using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
-using Sentry;
 using Sentry.Extensibility;
 
 namespace Naheulbook.Web.Sentry;

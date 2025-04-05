@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Features.Effect;
 using Naheulbook.Core.Features.Shared;

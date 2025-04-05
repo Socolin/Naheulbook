@@ -1,4 +1,3 @@
-using System.Linq;
 using AutoMapper;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;

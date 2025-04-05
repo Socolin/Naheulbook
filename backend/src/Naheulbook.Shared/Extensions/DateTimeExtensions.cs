@@ -1,5 +1,3 @@
-using System;
-
 namespace Naheulbook.Shared.Extensions;
 
 public static class DateTimeExtensions

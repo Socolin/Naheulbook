@@ -1,7 +1,6 @@
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public class Durable
 {
     public string DurationType { get; set; } = null!;

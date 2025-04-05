@@ -1,11 +1,9 @@
-using System.Collections.Generic;
+using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
-
-// ReSharper disable UnusedMember.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class MapMarkerResponse
 {
     public int Id { get; set; }

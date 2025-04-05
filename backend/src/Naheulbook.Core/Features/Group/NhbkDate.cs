@@ -2,6 +2,7 @@ using Naheulbook.Requests.Requests;
 
 namespace Naheulbook.Core.Features.Group;
 
+[Serializable]
 public class NhbkDate
 {
     public NhbkDate()

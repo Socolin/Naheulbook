@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Features.Group;
 using Naheulbook.Core.Features.Merchant;

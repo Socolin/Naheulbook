@@ -1,5 +1,8 @@
+using JetBrains.Annotations;
+
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class DeleteInviteResponse
 {
     public int GroupId { get; set; }

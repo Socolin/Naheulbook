@@ -1,7 +1,5 @@
 #nullable enable
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.EntityFrameworkCore.DbContexts;
 using Naheulbook.Tests.Functional.Code.HttpClients;

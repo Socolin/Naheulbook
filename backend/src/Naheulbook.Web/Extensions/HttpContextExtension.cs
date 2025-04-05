@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Web.Exceptions;
 

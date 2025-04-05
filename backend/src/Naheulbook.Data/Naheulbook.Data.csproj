@@ -3,16 +3,17 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MySql.EntityFrameworkCore" />
-      <PackageReference Include="Serilog" />
+        <PackageReference Include="MySql.EntityFrameworkCore" />
+        <PackageReference Include="Serilog" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Naheulbook.Data.EntityFrameworkCore\Naheulbook.Data.EntityFrameworkCore.csproj" />
-      <ProjectReference Include="..\Naheulbook.Shared\Naheulbook.Shared.csproj" />
+        <ProjectReference Include="..\..\Naheulbook.Data.EntityFrameworkCore\Naheulbook.Data.EntityFrameworkCore.csproj" />
+        <ProjectReference Include="..\Naheulbook.Shared\Naheulbook.Shared.csproj" />
     </ItemGroup>
 
 </Project>

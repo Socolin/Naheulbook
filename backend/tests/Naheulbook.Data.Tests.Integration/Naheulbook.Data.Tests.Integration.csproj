@@ -3,10 +3,11 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <IsPackable>false</IsPackable>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AwesomeAssertions"/>
+        <PackageReference Include="AwesomeAssertions" />
         <PackageReference Include="nunit" />
         <PackageReference Include="NUnit3TestAdapter" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
@@ -16,9 +17,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" />
-      <ProjectReference Include="..\..\src\Naheulbook.Data\Naheulbook.Data.csproj" />
-      <ProjectReference Include="..\Naheulbook.TestUtils\Naheulbook.TestUtils.csproj" />
+        <ProjectReference Include="..\..\src\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" />
+        <ProjectReference Include="..\..\src\Naheulbook.Data\Naheulbook.Data.csproj" />
+        <ProjectReference Include="..\Naheulbook.TestUtils\Naheulbook.TestUtils.csproj" />
     </ItemGroup>
 
 </Project>

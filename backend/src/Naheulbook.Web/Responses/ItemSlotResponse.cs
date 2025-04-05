@@ -1,7 +1,8 @@
-// ReSharper disable UnusedMember.Global
+using JetBrains.Annotations;
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class ItemSlotResponse
 {
     public int Id { get; set; }

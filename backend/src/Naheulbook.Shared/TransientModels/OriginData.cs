@@ -1,5 +1,6 @@
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public class OriginData
 {
     public int BaseEv { get; set; }

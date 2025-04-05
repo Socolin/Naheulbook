@@ -1,4 +1,3 @@
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
 namespace Naheulbook.Shared.Clients.Google.Responses;
 

@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public class MapData
 {
+    [Serializable]
     public class MapAttribution
     {
         public string Name { get; set; } = null!;

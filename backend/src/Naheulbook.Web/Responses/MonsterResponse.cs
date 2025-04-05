@@ -1,13 +1,10 @@
-using System.Collections.Generic;
+using JetBrains.Annotations;
 using Naheulbook.Shared.TransientModels;
 using Newtonsoft.Json.Linq;
 
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class MonsterResponse
 {
     public int Id { get; set; }

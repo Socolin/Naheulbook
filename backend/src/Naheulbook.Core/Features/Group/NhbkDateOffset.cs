@@ -1,5 +1,6 @@
 namespace Naheulbook.Core.Features.Group;
 
+[Serializable]
 public class NhbkDateOffset
 {
     public const int YearDuration = 365 * 24 * 3600;

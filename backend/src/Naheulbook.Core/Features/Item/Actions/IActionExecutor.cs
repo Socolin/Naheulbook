@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Shared.TransientModels;
 

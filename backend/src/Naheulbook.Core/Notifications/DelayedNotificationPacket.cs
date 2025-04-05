@@ -1,5 +1,3 @@
-using System;
-
 namespace Naheulbook.Core.Notifications;
 
 public class DelayedNotificationPacket(Func<INotificationPacket> buildPacket) : INotificationPacket

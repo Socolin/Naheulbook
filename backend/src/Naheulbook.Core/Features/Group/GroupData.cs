@@ -1,5 +1,3 @@
-using System;
-
 namespace Naheulbook.Core.Features.Group;
 
 [Serializable]

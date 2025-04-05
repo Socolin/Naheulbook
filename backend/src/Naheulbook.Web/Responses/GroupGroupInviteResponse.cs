@@ -1,9 +1,4 @@
-using System.Collections.Generic;
 using Newtonsoft.Json;
-
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Naheulbook.Web.Responses;
 

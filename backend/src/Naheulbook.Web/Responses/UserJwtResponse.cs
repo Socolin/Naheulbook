@@ -1,7 +1,8 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global
+using JetBrains.Annotations;
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class UserJwtResponse
 {
     public string Token { get; set; } = null!;

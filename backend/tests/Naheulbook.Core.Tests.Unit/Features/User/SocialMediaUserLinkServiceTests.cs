@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using FluentAssertions;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Core.Tests.Unit.TestUtils;

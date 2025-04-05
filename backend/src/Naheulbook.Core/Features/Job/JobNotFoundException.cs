@@ -1,6 +1,5 @@
-using System;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace Naheulbook.Core.Features.Job;

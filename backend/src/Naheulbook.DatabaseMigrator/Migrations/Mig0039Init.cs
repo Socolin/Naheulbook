@@ -1,4 +1,3 @@
-using System;
 using FluentMigrator;
 
 namespace Naheulbook.DatabaseMigrator.Migrations;

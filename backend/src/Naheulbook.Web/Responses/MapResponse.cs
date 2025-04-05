@@ -1,11 +1,9 @@
-using System.Collections.Generic;
+using JetBrains.Annotations;
 using Naheulbook.Shared.TransientModels;
-
-// ReSharper disable UnusedMember.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class MapResponse
 {
     public int Id { get; set; }

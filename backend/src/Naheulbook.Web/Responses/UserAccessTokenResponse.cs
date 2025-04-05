@@ -1,9 +1,8 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
-using System;
+using JetBrains.Annotations;
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class UserAccessTokenResponse
 {
     public Guid Id { get; set; }
@@ -11,6 +10,7 @@ public class UserAccessTokenResponse
     public DateTimeOffset DateCreated { get; set; }
 }
 
+[PublicAPI]
 public class UserAccessTokenResponseWithKey : UserAccessTokenResponse
 {
     public string Key { get; set; } = null!;

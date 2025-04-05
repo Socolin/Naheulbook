@@ -1,10 +1,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public class PartialItemTemplateData
 {
     public int? Charge { get; set; }

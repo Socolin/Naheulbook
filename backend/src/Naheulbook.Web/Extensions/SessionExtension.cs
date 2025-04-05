@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-
 namespace Naheulbook.Web.Extensions;
 
 public static class SessionExtension

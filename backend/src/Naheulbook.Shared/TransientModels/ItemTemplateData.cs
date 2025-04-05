@@ -1,8 +1,5 @@
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
-// ReSharper disable UnusedMember.Global
 
 namespace Naheulbook.Shared.TransientModels;
 

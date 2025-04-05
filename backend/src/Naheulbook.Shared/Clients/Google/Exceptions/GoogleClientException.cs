@@ -1,6 +1,5 @@
-using System;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace Naheulbook.Shared.Clients.Google.Exceptions;

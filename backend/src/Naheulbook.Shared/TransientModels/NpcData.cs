@@ -1,5 +1,6 @@
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public class NpcData
 {
     public string? Location { get; set; }

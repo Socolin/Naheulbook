@@ -1,5 +1,3 @@
-using System;
-
 namespace Naheulbook.Web.Configurations;
 
 [Serializable]

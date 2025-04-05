@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Data.EntityFrameworkCore.Entities;

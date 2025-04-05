@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;

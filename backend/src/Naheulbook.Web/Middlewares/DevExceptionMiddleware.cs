@@ -1,10 +1,4 @@
-using System;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Naheulbook.Web.Exceptions;
 
 namespace Naheulbook.Web.Middlewares;

@@ -1,7 +1,4 @@
-using System;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Naheulbook.Shared.Clients.Facebook.Exceptions;
 using Naheulbook.Shared.Clients.Facebook.Responses;

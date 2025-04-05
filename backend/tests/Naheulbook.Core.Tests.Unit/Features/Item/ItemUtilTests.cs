@@ -1,4 +1,3 @@
-using System.Linq;
 using FluentAssertions;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Item;

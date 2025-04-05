@@ -1,8 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Shared.TransientModels;
 
 public interface IReadOnlyItemData
@@ -21,6 +19,7 @@ public interface IReadOnlyItemData
     bool? ShownToGm { get; }
 }
 
+[Serializable]
 public class ItemData : IReadOnlyItemData
 {
     public string? Name { get; set; }

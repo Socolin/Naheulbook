@@ -1,7 +1,4 @@
 #pragma warning disable 8619
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace Naheulbook.Data.Repositories;

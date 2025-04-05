@@ -1,7 +1,6 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public class MapImageData
 {
     public int ZoomCount { get; set; }

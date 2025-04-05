@@ -1,11 +1,9 @@
+using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
-
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class DeadMonsterResponse
 {
     public int Id { get; set; }

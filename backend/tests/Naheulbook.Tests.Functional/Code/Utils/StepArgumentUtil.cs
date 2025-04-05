@@ -1,5 +1,3 @@
-using System;
-
 namespace Naheulbook.Tests.Functional.Code.Utils;
 
 public static class StepArgumentUtil

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Initialization;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +14,7 @@ internal class Program
         var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddEnvironmentVariables()
-            .AddJsonFile($"appsettings.local.json", true)
+            .AddJsonFile("appsettings.local.json", true)
             .AddCommandLine(args)
             .Build();
         var connectionString = config["ConnectionStrings:DefaultConnection"];

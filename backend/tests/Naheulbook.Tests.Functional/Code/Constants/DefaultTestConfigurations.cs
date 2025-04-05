@@ -1,4 +1,3 @@
-using System;
 using Naheulbook.TestUtils;
 
 namespace Naheulbook.Tests.Functional.Code.Constants;

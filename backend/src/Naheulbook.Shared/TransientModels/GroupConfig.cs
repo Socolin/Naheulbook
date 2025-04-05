@@ -1,5 +1,6 @@
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public class GroupConfig
 {
     public bool AllowPlayersToSeeSkillGmDetails { get; set; }

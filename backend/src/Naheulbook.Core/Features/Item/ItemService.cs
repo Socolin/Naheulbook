@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Item.Actions;
 using Naheulbook.Core.Features.Shared;

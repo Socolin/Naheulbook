@@ -1,11 +1,8 @@
-using System.Collections.Generic;
-
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+using JetBrains.Annotations;
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class ItemTemplateSectionResponse
 {
     public int Id { get; set; }

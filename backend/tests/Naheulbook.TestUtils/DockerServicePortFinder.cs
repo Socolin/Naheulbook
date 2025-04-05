@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using CliWrap;
 using CliWrap.Buffered;
 using JetBrains.Annotations;

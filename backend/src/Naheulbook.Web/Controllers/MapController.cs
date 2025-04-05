@@ -1,8 +1,5 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using AutoMapper;
 using BrunoZell.ModelBinding;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Map;
 using Naheulbook.Core.Features.Shared;

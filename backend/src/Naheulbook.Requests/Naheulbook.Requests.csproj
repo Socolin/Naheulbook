@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
@@ -10,13 +11,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="FluentValidation" />
-      <PackageReference Include="JetBrains.Annotations" />
-      <PackageReference Include="Newtonsoft.Json" />
+        <PackageReference Include="FluentValidation" />
+        <PackageReference Include="JetBrains.Annotations" />
+        <PackageReference Include="Newtonsoft.Json" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Naheulbook.Shared\Naheulbook.Shared.csproj" />
+        <ProjectReference Include="..\Naheulbook.Shared\Naheulbook.Shared.csproj" />
     </ItemGroup>
 
 </Project>

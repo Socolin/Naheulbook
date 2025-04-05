@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public class MonsterData
 {
     public int At { get; set; }

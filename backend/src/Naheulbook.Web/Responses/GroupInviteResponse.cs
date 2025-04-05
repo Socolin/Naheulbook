@@ -1,12 +1,9 @@
-using System.Collections.Generic;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
-
-// ReSharper disable UnusedMember.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class GroupInviteResponse
 {
     public int Id { get; set; }

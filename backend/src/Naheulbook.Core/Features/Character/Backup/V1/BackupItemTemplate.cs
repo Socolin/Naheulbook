@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Naheulbook.Core.Features.Character.Backup.V1;
 
 public class BackupItemTemplate

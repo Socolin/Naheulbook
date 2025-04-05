@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Event;

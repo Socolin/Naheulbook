@@ -1,5 +1,3 @@
-using System;
-
 namespace Naheulbook.Requests.Requests;
 
 [PublicAPI]

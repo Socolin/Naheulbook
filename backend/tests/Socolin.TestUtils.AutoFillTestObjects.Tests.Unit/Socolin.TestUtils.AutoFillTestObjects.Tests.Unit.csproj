@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <IsPackable>false</IsPackable>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,11 +15,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Socolin.TestUtils.AutoFillTestObjects\Socolin.TestUtils.AutoFillTestObjects.csproj" />
+        <ProjectReference Include="..\Socolin.TestUtils.AutoFillTestObjects\Socolin.TestUtils.AutoFillTestObjects.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageVersion Update="nunit" Version="4.1.0" />
+        <PackageVersion Update="nunit" Version="4.1.0" />
     </ItemGroup>
 
 </Project>

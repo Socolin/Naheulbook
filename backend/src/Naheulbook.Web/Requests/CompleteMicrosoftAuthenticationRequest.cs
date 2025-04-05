@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+using JetBrains.Annotations;
 
 namespace Naheulbook.Web.Requests;
 
+[PublicAPI]
 public class CompleteMicrosoftAuthenticationRequest
 {
     [Required]

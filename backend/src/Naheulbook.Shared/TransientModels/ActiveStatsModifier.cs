@@ -1,6 +1,3 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
-
 namespace Naheulbook.Shared.TransientModels;
 
 public class ActiveStatsModifier : StatsModifier

@@ -1,4 +1,3 @@
-using System;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 
 namespace Naheulbook.TestUtils;

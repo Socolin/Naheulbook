@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Naheulbook.Shared.Clients.MicrosoftGraph.Exceptions;
 using Naheulbook.Shared.Clients.MicrosoftGraph.Responses;

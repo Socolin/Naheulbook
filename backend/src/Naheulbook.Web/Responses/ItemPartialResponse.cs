@@ -1,13 +1,10 @@
-using System.Collections.Generic;
+using JetBrains.Annotations;
 using Naheulbook.Shared.TransientModels;
 using Newtonsoft.Json.Linq;
 
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class ItemPartialResponse
 {
     public int Id { get; set; }

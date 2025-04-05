@@ -1,7 +1,9 @@
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Naheulbook.Web.Responses;
 
+[PublicAPI]
 public class MonsterSubCategoryResponse
 {
     public int Id { get; set; }

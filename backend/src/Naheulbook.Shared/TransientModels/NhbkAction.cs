@@ -1,11 +1,8 @@
-using System;
 using Newtonsoft.Json.Linq;
-
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
 
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public class NhbkAction
 {
     public string Type { get; set; } = null!;
@@ -13,6 +10,7 @@ public class NhbkAction
     public NhbkActionData? Data { get; set; }
 }
 
+[Serializable]
 public class NhbkActionData
 {
     public Guid? TemplateId { get; set; }

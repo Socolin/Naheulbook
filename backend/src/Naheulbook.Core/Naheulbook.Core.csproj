@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
-<!--		<ImplicitUsings>true</ImplicitUsings>-->
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,10 +13,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AutoMapper" />
-      <PackageReference Include="Magick.NET-Q8-x64" />
-      <PackageReference Include="Microsoft.Extensions.Http" />
-      <PackageReference Include="Serilog" />
+        <PackageReference Include="AutoMapper" />
+        <PackageReference Include="Magick.NET-Q8-x64" />
+        <PackageReference Include="Microsoft.Extensions.Http" />
+        <PackageReference Include="Serilog" />
     </ItemGroup>
 
 </Project>

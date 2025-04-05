@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using JetBrains.Annotations;
 using Naheulbook.Shared.TransientModels;
-
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Naheulbook.Web.Responses;
 
+
+[PublicAPI]
 public class JobResponse
 {
     public Guid Id { get; set; }

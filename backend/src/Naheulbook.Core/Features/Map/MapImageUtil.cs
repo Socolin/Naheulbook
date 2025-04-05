@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using ImageMagick;
 using Microsoft.Extensions.Options;
 using Naheulbook.Shared.TransientModels;

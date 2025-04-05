@@ -1,5 +1,6 @@
 namespace Naheulbook.Shared.TransientModels;
 
+[Serializable]
 public enum DurationType
 {
     None,

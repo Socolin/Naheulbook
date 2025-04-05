@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Naheulbook.Core.Features.Character;
+﻿using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Shared.TransientModels;
 

@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
-
 namespace Naheulbook.Core.Features.Character.Backup.V1;
 
+[Serializable]
 public class BackupCharacter : Backup.BackupCharacter
 {
     public BackupCharacter()
@@ -10,6 +8,7 @@ public class BackupCharacter : Backup.BackupCharacter
         Version = 1;
     }
 
+    [Serializable]
     public class BaseStats
     {
         public int Ad { get; set; }
@@ -19,6 +18,7 @@ public class BackupCharacter : Backup.BackupCharacter
         public int Cha { get; set; }
     }
 
+    [Serializable]
     public class CharacterModifier
     {
         public string Name { get; set; } = null!;
@@ -43,6 +43,7 @@ public class BackupCharacter : Backup.BackupCharacter
         public ICollection<CharacterModifierValue> Values { get; set; } = null!;
     }
 
+    [Serializable]
     public class CharacterModifierValue
     {
         public string StatName { get; set; } = null!;

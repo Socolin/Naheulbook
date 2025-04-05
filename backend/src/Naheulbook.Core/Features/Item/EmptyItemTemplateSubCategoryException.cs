@@ -1,7 +1,4 @@
 // ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
-using System;
 
 namespace Naheulbook.Core.Features.Item;
 
