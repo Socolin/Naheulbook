@@ -6,13 +6,13 @@ Feature: Calendar
     When performing a GET to the url "/api/v2/calendar/"
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     [
       {
-        "id": ${Calendar.Id},
+        "id": "!{Calendar.Id}",
         "name":"${Calendar.Name}",
-        "startDay": ${Calendar.StartDay},
-        "endDay": ${Calendar.EndDay},
+        "startDay": "!{Calendar.StartDay}",
+        "endDay": "!{Calendar.EndDay}",
         "note": "${Calendar.Note}"
       }
     ]

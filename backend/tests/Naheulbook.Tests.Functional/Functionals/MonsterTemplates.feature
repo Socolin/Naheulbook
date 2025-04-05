@@ -9,13 +9,13 @@ Feature: MonsterTemplates
     Given a monster sub-category
 
     When performing a POST to the url "/api/v2/monsterTemplates/" with the following json content and the current jwt
-    """
+    """json
     {
-      "subCategoryId": ${MonsterSubCategory.Id},
+      "subCategoryId": "!{MonsterSubCategory.Id}",
       "name": "some-monster-name",
       "data": {
         "at": 1,
-        "note": "some-note",
+        "note": "some-note"
       },
       "inventory": [
         {
@@ -29,14 +29,14 @@ Feature: MonsterTemplates
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
         "id": {"__match": {"type": "integer"}},
         "name": "some-monster-name",
-        "subCategoryId": ${MonsterSubCategory.Id},
+        "subCategoryId": "!{MonsterSubCategory.Id}",
         "data": {
           "at": 1,
-          "note": "some-note",
+          "note": "some-note"
         },
         "inventory": [
             {
@@ -52,7 +52,6 @@ Feature: MonsterTemplates
     }
     """
 
-
   Scenario: Listing types
     Given a monster category type
     Given a monster sub-category
@@ -62,20 +61,20 @@ Feature: MonsterTemplates
 
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
-        "id": ${MonsterType.Id},
+        "id": "!{MonsterType.Id}",
         "name": "${MonsterType.Name}",
         "subCategories": [
             {
-                "id": ${MonsterSubCategory.[0].Id},
+                "id": "!{MonsterSubCategory.[0].Id}",
                 "name": "${MonsterSubCategory.[0].Name}",
-                "typeid": ${MonsterType.Id}
+                "typeid": "!{MonsterType.Id}"
             },
             {
-                "id": ${MonsterSubCategory.[1].Id},
+                "id": "!{MonsterSubCategory.[1].Id}",
                 "name": "${MonsterSubCategory.[1].Name}",
-                "typeid": ${MonsterType.Id}
+                "typeid": "!{MonsterType.Id}"
             }
         ]
     }
@@ -88,15 +87,14 @@ Feature: MonsterTemplates
 
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
-        "id": ${MonsterTrait.Id},
+        "id": "!{MonsterTrait.Id}",
         "name": "${MonsterTrait.Name}",
         "description": "${MonsterTrait.Description}",
-        "levels": ["level1", "level2"],
+        "levels": ["level1", "level2"]
     }
     """
-
 
   Scenario: Listing monster templates
     Given a monster template with inventory
@@ -105,23 +103,23 @@ Feature: MonsterTemplates
 
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
-      "id": ${MonsterTemplate.Id},
+      "id": "!{MonsterTemplate.Id}",
       "name": "${MonsterTemplate.Name}",
-      "data": ${MonsterTemplate.Data},
-      "subCategoryId": ${MonsterTemplate.SubCategoryId},
+      "data": "!{MonsterTemplate.Data}",
+      "subCategoryId": "!{MonsterTemplate.SubCategoryId}",
       "inventory": [
         {
-          "id": ${MonsterTemplate.Items.[0].Id},
-          "chance": ${MonsterTemplate.Items.[0].Chance},
-          "maxCount": ${MonsterTemplate.Items.[0].MaxCount},
-          "minCount": ${MonsterTemplate.Items.[0].MinCount},
+          "id": "!{MonsterTemplate.Items.[0].Id}",
+          "chance": "!{MonsterTemplate.Items.[0].Chance}",
+          "maxCount": "!{MonsterTemplate.Items.[0].MaxCount}",
+          "minCount": "!{MonsterTemplate.Items.[0].MinCount}",
           "itemTemplate": { "__partial": {
             "id": "${ItemTemplate.Id}",
             "name": "${ItemTemplate.Name}"
           }}
-        },
+        }
       ]
     }
     """
@@ -130,14 +128,14 @@ Feature: MonsterTemplates
     Given a JWT for an admin user
 
     When performing a POST to the url "/api/v2/monsterTypes/" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-name"
     }
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}},
       "name": "some-name",
@@ -150,21 +148,20 @@ Feature: MonsterTemplates
     Given a monster category type
 
     When performing a POST to the url "/api/v2/monsterTypes/${MonsterType.Id}/subcategories" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-category-name"
     }
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}},
       "name": "some-category-name",
-      "typeid": ${MonsterType.Id}
+      "typeid": "!{MonsterType.Id}"
     }
     """
-
 
   Scenario: Search monster template
     Given a monster template with inventory
@@ -172,18 +169,18 @@ Feature: MonsterTemplates
     When performing a GET to the url "/api/v2/monsterTemplates/search?filter=${MonsterTemplate.Name}"
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
-      "id": ${MonsterTemplate.Id},
+      "id": "!{MonsterTemplate.Id}",
       "name": "${MonsterTemplate.Name}",
-      "data": ${MonsterTemplate.Data},
-      "subCategoryId": ${MonsterTemplate.SubCategoryId},
+      "data": "!{MonsterTemplate.Data}",
+      "subCategoryId": "!{MonsterTemplate.SubCategoryId}",
       "inventory": [
         {
-          "id": ${MonsterTemplate.Items.[0].Id},
-          "chance": ${MonsterTemplate.Items.[0].Chance},
-          "maxCount": ${MonsterTemplate.Items.[0].MaxCount},
-          "minCount": ${MonsterTemplate.Items.[0].MinCount},
+          "id": "!{MonsterTemplate.Items.[0].Id}",
+          "chance": "!{MonsterTemplate.Items.[0].Chance}",
+          "maxCount": "!{MonsterTemplate.Items.[0].MaxCount}",
+          "minCount": "!{MonsterTemplate.Items.[0].MinCount}",
           "itemTemplate": { "__partial": {
             "id": "${ItemTemplate.Id}",
             "name": "${ItemTemplate.Name}"
@@ -203,9 +200,9 @@ Feature: MonsterTemplates
     Given a monster sub-category
 
     When performing a PUT to the url "/api/v2/monsterTemplates/${MonsterTemplate.Id}" with the following json content and the current jwt
-    """
+    """json
     {
-      "subCategoryId": ${MonsterSubCategory.[1].Id},
+      "subCategoryId": "!{MonsterSubCategory.[1].Id}",
       "name": "some-new-monster-name",
       "data": {
         "at": 2,
@@ -224,11 +221,11 @@ Feature: MonsterTemplates
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${MonsterTemplate.Id},
+      "id": "!{MonsterTemplate.Id}",
       "name": "some-new-monster-name",
-      "subCategoryId": ${MonsterSubCategory.[1].Id},
+      "subCategoryId": "!{MonsterSubCategory.[1].Id}",
       "data": {
         "at": 2,
         "prd": 3,

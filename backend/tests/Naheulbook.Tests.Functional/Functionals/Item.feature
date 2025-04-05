@@ -8,7 +8,7 @@ Feature: Item
     And an item based on that item template in the character inventory
 
     When performing a PUT to the url "/api/v2/items/${Item.Id}/data" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-new-name",
       "description": "some-new-description"
@@ -16,10 +16,10 @@ Feature: Item
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Item.Id},
-      "modifiers": ${Item.Modifiers},
+      "id": "!{Item.Id}",
+      "modifiers": "!{Item.Modifiers}",
       "data": {
         "name": "some-new-name",
         "description": "some-new-description"
@@ -35,16 +35,16 @@ Feature: Item
     And an item based on that item template in the character inventory with 2 charges
 
     When performing a POST to the url "/api/v2/items/${Item.Id}/useCharge" with the following json content and the current jwt
-    """
+    """json
     {
     }
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Item.Id},
-      "modifiers": ${Item.Modifiers},
+      "id": "!{Item.Id}",
+      "modifiers": "!{Item.Modifiers}",
       "data": {
         "charge": 1
       }
@@ -76,10 +76,10 @@ Feature: Item
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Item.Id},
-      "data": ${Item.Data},
+      "id": "!{Item.Id}",
+      "data": "!{Item.Data}",
       "modifiers":  [
         {
           "id": 1,
@@ -103,19 +103,19 @@ Feature: Item
     And an item based on that item template in the character inventory
 
     When performing a POST to the url "/api/v2/items/${Item.Id}/equip" with the following json content and the current jwt
-    """
+    """json
     {
     }
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Item.Id},
-      "modifiers": ${Item.Modifiers},
+      "id": "!{Item.Id}",
+      "modifiers": "!{Item.Modifiers}",
       "data": {"__partial": {
         "equiped": 1
-      }},
+      }}
     }
     """
 
@@ -127,19 +127,19 @@ Feature: Item
     And an item based on that item template in the character inventory
 
     When performing a PUT to the url "/api/v2/items/${Item.[1].Id}/container" with the following json content and the current jwt
-    """
+    """json
     {
-      "containerId": ${Item.[0].Id}
+      "containerId": "!{Item.[0].Id}"
     }
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Item.[1].Id},
-      "modifiers": ${Item.[1].Modifiers},
-      "data": ${Item.[1].Data},
-      "containerId": ${Item.[0].Id}
+      "id": "!{Item.[1].Id}",
+      "modifiers": "!{Item.[1].Modifiers}",
+      "data": "!{Item.[1].Data}",
+      "containerId": "!{Item.[0].Id}"
     }
     """
 
@@ -152,7 +152,6 @@ Feature: Item
     When performing a DELETE to the url "/api/v2/items/${Item.Id}/" with the current jwt
     Then the response status code is 204
 
-
   Scenario: A character can take an item from a loot
     Given a JWT for a user
     And a character
@@ -163,18 +162,18 @@ Feature: Item
 
 
     When performing a POST to the url "/api/v2/items/${Item.Id}/take" with the following json content and the current jwt
-    """
+    """json
     {
-      "characterId": ${Character.Id}
+      "characterId": "!{Character.Id}"
     }
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
       "remainingQuantity": 0,
       "takenItem": {"__partial": {
-        "id": ${Item.Id}
+        "id": "!{Item.Id}"
       }}
     }
     """
@@ -189,14 +188,14 @@ Feature: Item
     And an item in the character inventory
 
     When performing a POST to the url "/api/v2/items/${Item.Id}/give" with the following json content and the current jwt
-    """
+    """json
     {
-      "characterId": ${Character.[0].Id}
+      "characterId": "!{Character.[0].Id}"
     }
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
       "remainingQuantity": 0
     }

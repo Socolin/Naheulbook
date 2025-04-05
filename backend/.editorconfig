@@ -84,10 +84,6 @@ indent_size = 2
 indent_style = space
 indent_size = 4
 
-[*.feature]
-indent_style = space
-indent_size = 4
-
 [{*.bash,*.sh,*.zsh}]
 indent_style = space
 indent_size = 2
@@ -104,3 +100,7 @@ tab_width = 4
 [*.nginx]
 indent_style = space
 tab_width = 4
+
+[*.feature]
+indent_style = space
+indent_size = 2

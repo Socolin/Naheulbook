@@ -1,6 +1,6 @@
 Feature: Merchant
 
-Scenario: A group owner can create a merchant
+  Scenario: A group owner can create a merchant
     Given a JWT for a user
     Given a group
 

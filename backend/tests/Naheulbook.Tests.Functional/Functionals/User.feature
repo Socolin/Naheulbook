@@ -4,7 +4,7 @@ Feature: User
     Given a JWT for a user
 
     When performing a PATCH to the url "/api/v2/users/${UserId}" with the following json content and the current jwt
-    """
+    """json
     {
       "displayName": "some-new-display-name",
       "showInSearchFor": 600
@@ -17,14 +17,14 @@ Feature: User
     And the user is authenticated with a session
 
     When performing a POST to the url "/api/v2/users/me/accessTokens" with the following json content and the current session
-    """
+    """json
     {
       "name": "some-access-token-name"
     }
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "__partial": {
         "id": {"__capture": {"name": "AccessTokenId", "type": "string"}},

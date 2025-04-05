@@ -5,14 +5,14 @@ Feature: Loot
     Given a group
 
     When performing a POST to the url "/api/v2/groups/${Group.Id}/loots" with the following json content and the current jwt
-    """
+    """json
     {
-      "name": "some-loot-name",
+      "name": "some-loot-name"
     }
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}},
       "visibleForPlayer": false,
@@ -34,7 +34,7 @@ Feature: Loot
     """
     [
       {
-        "id": ${Loot.Id},
+        "id": "!{Loot.Id}",
         "visibleForPlayer": false,
         "name": "${Loot.Name}",
         "items": [],
@@ -49,7 +49,7 @@ Feature: Loot
     And a loot
 
     When performing a PUT to the url "/api/v2/loots/${Loot.Id}/visibility" with the following json content and the current jwt
-    """
+    """json
     {
       "visibleForPlayer": true
     }
@@ -71,7 +71,7 @@ Feature: Loot
     And a loot
 
     When performing a POST to the url "/api/v2/loots/${Loot.Id}/items" with the following json content and the current jwt
-    """
+    """json
     {
       "itemTemplateId": "${ItemTemplate.Id}",
       "itemData": {
@@ -81,7 +81,7 @@ Feature: Loot
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
         "id": {"__match": {"type": "integer"}},
         "data": {
@@ -93,13 +93,13 @@ Feature: Loot
             "name": "${ItemTemplate.Name}",
             "techName": "${ItemTemplate.TechName}",
             "source": "official",
-            "subCategoryId": ${ItemTemplateSubCategory.Id},
+            "subCategoryId": "!{ItemTemplateSubCategory.Id}",
             "data": {
                 "key": "value"
             },
             "slots": [
                 {
-                    "id": ${Slot.[-1].Id},
+                    "id": "!{Slot.[-1].Id}",
                     "name": "${Slot.[-1].Name}",
                     "techName": "${Slot.[-1].TechName}"
                 }
@@ -145,14 +145,14 @@ Feature: Loot
     Given an item template
 
     When performing a POST to the url "/api/v2/loots/${Loot.Id}/addRandomItem" with the following json content and the current jwt
-    """
+    """json
     {
       "subCategoryTechName": "${ItemTemplateSubCategory.TechName}"
     }
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}},
       "data": {
@@ -164,7 +164,7 @@ Feature: Loot
         "name": "${ItemTemplate.Name}",
         "techName": "${ItemTemplate.TechName}",
         "source": "official",
-        "subCategoryId": ${ItemTemplateSubCategory.Id},
+        "subCategoryId": "!{ItemTemplateSubCategory.Id}",
         "data": {
           "key": "value"
         },

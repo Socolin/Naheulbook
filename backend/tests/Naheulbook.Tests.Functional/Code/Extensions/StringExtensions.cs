@@ -19,7 +19,7 @@ public static class StringExtensions
         var replacementTokens = ListReplacementTokens(str);
         var missingKeys = new List<string>();
 
-        foreach (var replacementToken in replacementTokens)
+        foreach (var (kind, replacementToken) in replacementTokens)
         {
             try
             {
@@ -38,7 +38,19 @@ public static class StringExtensions
                         break;
                 }
 
-                str = str.Replace($"${{{replacementToken}}}", replacementValue);
+                switch (kind)
+                {
+                    case ReplacementKind.None:
+                        break;
+                    case ReplacementKind.Raw:
+                        str = str.Replace($"${{{replacementToken}}}", replacementValue);
+                        break;
+                    case ReplacementKind.Quoted:
+                        str = str.Replace($"\"!{{{replacementToken}}}\"", replacementValue);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
             catch (ReplacementKeyNotfoundException ex)
             {
@@ -137,23 +149,31 @@ public static class StringExtensions
         return propertyName.StartsWith("[") && propertyName.EndsWith("]");
     }
 
-    private static IEnumerable<string> ListReplacementTokens(string str)
+    private static IEnumerable<(ReplacementKind, string)> ListReplacementTokens(string str)
     {
         var currentToken = new StringBuilder();
         var inReplacement = false;
+        var replacementKind = ReplacementKind.None;
         var previousChar = '\0';
-        var tokens = new List<string>();
 
         foreach (var c in str)
         {
             if (previousChar == '$' && c == '{')
             {
                 inReplacement = true;
+                replacementKind = ReplacementKind.Raw;
+                currentToken.Clear();
+            }
+            else if (previousChar == '!' && c == '{')
+            {
+                inReplacement = true;
+                replacementKind = ReplacementKind.Quoted;
                 currentToken.Clear();
             }
             else if (inReplacement && c == '}')
             {
-                tokens.Add(currentToken.ToString());
+                yield return (replacementKind, currentToken.ToString());
+                replacementKind = ReplacementKind.None;
                 inReplacement = false;
             }
             else if (inReplacement)
@@ -161,12 +181,17 @@ public static class StringExtensions
 
             previousChar = c;
         }
-
-        return tokens;
     }
 
     private class ReplacementKeyNotfoundException(string key) : Exception
     {
         public string Key { get; } = key;
+    }
+
+    public enum ReplacementKind
+    {
+        None,
+        Raw,
+        Quoted,
     }
 }

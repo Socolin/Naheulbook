@@ -4,7 +4,7 @@ Feature: Map
     Given a JWT for an admin user
 
     When performing a multipart POST to the url "/api/v2/maps/" with the following json content as "request" and an image as "image" and the current jwt
-    """
+    """json
     {
       "name": "some-map-name",
       "data": {
@@ -20,7 +20,7 @@ Feature: Map
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}},
       "name": "some-map-name",
@@ -50,32 +50,32 @@ Feature: Map
     When performing a GET to the url "/api/v2/maps/${Map.[-1].Id}"
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Map.[-1].Id},
+      "id": "!{Map.[-1].Id}",
       "name": "${Map.[-1].Name}",
       "layers": [
         {
-          "id": ${Map.[-1].Layers.[0].Id},
+          "id": "!{Map.[-1].Layers.[0].Id}",
           "name": "${Map.[-1].Layers.[0].Name}",
           "source": "${Map.[-1].Layers.[0].Source}",
           "isGm": true,
           "markers": [
             {
-              "id": ${Map.[-1].Layers.[0].Markers.[0].Id},
+              "id": "!{Map.[-1].Layers.[0].Markers.[0].Id}",
               "name": "${Map.[-1].Layers.[0].Markers.[0].Name}",
               "description": "${Map.[-1].Layers.[0].Markers.[0].Description}",
               "type": "${Map.[-1].Layers.[0].Markers.[0].Type}",
-              "markerInfo": ${Map.[-1].Layers.[0].Markers.[0].MarkerInfo},
+              "markerInfo": "!{Map.[-1].Layers.[0].Markers.[0].MarkerInfo}",
               "links": [
                 {
-                  "id": ${Map.[-1].Layers.[0].Markers.[0].Links.[0].Id},
+                  "id": "!{Map.[-1].Layers.[0].Markers.[0].Links.[0].Id}",
                   "name": "${Map.[-1].Layers.[0].Markers.[0].Links.[0].Name}",
                   "targetMapIsGm": true,
-                  "targetMapId": ${Map.[-1].Layers.[0].Markers.[0].Links.[0].TargetMapId},
+                  "targetMapId": "!{Map.[-1].Layers.[0].Markers.[0].Links.[0].TargetMapId}",
                   "targetMapName": "${Map.[0].Name}"
                 }
-              ],
+              ]
             }
           ]
         }
@@ -88,7 +88,7 @@ Feature: Map
           }
         ]
       }},
-      "imageData": ${Map.[-1].ImageData}
+      "imageData": "!{Map.[-1].ImageData}"
     }
     """
 
@@ -99,9 +99,9 @@ Feature: Map
     When performing a GET to the url "/api/v2/maps/"
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
-      "id": ${Map.[-1].Id},
+      "id": "!{Map.[-1].Id}",
       "name": "${Map.[-1].Name}",
       "data": {"__partial": {
         "isGm": true,
@@ -120,7 +120,7 @@ Feature: Map
     Given a map
 
     When performing a PUT to the url "/api/v2/maps/${Map.[-1].Id}" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-map-name",
       "data": {
@@ -138,9 +138,9 @@ Feature: Map
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Map.Id},
+      "id": "!{Map.Id}",
       "name": "some-map-name",
       "data": {
         "unitName": "5m",
@@ -161,7 +161,7 @@ Feature: Map
     Given a map
 
     When performing a POST to the url "/api/v2/maps/${Map.Id}/layers" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-layer-name",
       "source": "official",
@@ -170,7 +170,7 @@ Feature: Map
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}},
       "name": "some-layer-name",
@@ -185,7 +185,7 @@ Feature: Map
     Given a map with a layer
 
     When performing a PUT to the url "/api/v2/mapLayers/${Map.Layers.[0].Id}" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-new-layer-name",
       "source": "private",
@@ -194,9 +194,9 @@ Feature: Map
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Map.Layers.[0].Id},
+      "id": "!{Map.Layers.[0].Id}",
       "name": "some-new-layer-name",
       "isGm": false,
       "markers": [],
@@ -216,7 +216,7 @@ Feature: Map
     Given a map with a layer
 
     When performing a POST to the url "/api/v2/mapLayers/${Map.[-1].Layers.[0].Id}/markers" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-marker-name",
       "description": "some-marker-description",
@@ -229,7 +229,7 @@ Feature: Map
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}},
       "name": "some-marker-name",
@@ -255,7 +255,7 @@ Feature: Map
     Given a map with a marker
 
     When performing a PUT to the url "/api/v2/mapMarkers/${Map.Layers.[0].Markers.[0].Id}" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-new-marker-name",
       "description": "some-new-marker-description",
@@ -268,9 +268,9 @@ Feature: Map
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Map.Layers.[0].Markers.[0].Id},
+      "id": "!{Map.Layers.[0].Markers.[0].Id}",
       "name": "some-new-marker-name",
       "description": "some-new-marker-description",
       "type": "point",
@@ -287,20 +287,20 @@ Feature: Map
     Given 2 maps with all data
 
     When performing a POST to the url "/api/v2/mapMarkers/${Map.[1].Layers.[0].Markers.[0].Id}/links" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-link-name",
-      "targetMapId": ${Map.[2].Id}
+      "targetMapId": "!{Map.[2].Id}"
     }
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}},
       "name": "some-link-name",
       "targetMapIsGm": true,
-      "targetMapId": ${Map.[2].Id},
+      "targetMapId": "!{Map.[2].Id}",
       "targetMapName": "${Map.[2].Name}"
     }
     """
@@ -310,20 +310,20 @@ Feature: Map
     Given a map with all data
 
     When performing a PUT to the url "/api/v2/mapMarkerLinks/${Map.[-1].Layers.[0].Markers.[0].Links.[0].Id}" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-link-name",
-      "targetMapId": ${Map.[1].Id}
+      "targetMapId": "!{Map.[1].Id}"
     }
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Map.[-1].Layers.[0].Markers.[0].Links.[0].Id},
+      "id": "!{Map.[-1].Layers.[0].Markers.[0].Links.[0].Id}",
       "name": "some-link-name",
       "targetMapIsGm": true,
-      "targetMapId": ${Map.[1].Id},
+      "targetMapId": "!{Map.[1].Id}",
       "targetMapName": "${Map.[1].Name}"
     }
     """
@@ -334,4 +334,3 @@ Feature: Map
 
     When performing a DELETE to the url "/api/v2/mapMarkerLinks/${Map.[-1].Layers.[0].Markers.[0].Links.[0].Id}" with the current jwt
     Then the response status code is 204
-

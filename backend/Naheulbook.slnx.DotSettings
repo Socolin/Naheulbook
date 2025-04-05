@@ -29,6 +29,7 @@ public static class ServiceCollectionExtensions
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F9BE8C6944C15E429D07F152F09A7A68/Text/@EntryValue">private static readonly DateTimeOffset NowUtc = new DateTimeOffset(2020, 12, 8, 10, 12, 8, TimeSpan.Zero);</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=appsettings/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Debilibeuk/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=homme/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Mankdebol/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Melkor/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Middlewares/@EntryIndexedValue">True</s:Boolean>

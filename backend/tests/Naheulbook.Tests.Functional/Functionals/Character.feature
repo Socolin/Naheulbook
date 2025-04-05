@@ -9,7 +9,7 @@ Feature: Character
     And item templates required for initial inventory
 
     When performing a POST to the url "/api/v2/characters" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-name",
       "stats": {
@@ -41,7 +41,7 @@ Feature: Character
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}}
     }
@@ -55,7 +55,7 @@ Feature: Character
     And 2 specialities
 
     When performing a POST to the url "/api/v2/characters/custom" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-name",
       "sex": "Homme",
@@ -92,12 +92,11 @@ Feature: Character
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}}
     }
     """
-
 
   Scenario: Load characters list
     Given a JWT for a user
@@ -112,11 +111,11 @@ Feature: Character
     """
     [
       {
-        "id": ${Character.Id},
+        "id": "!{Character.Id}",
         "jobs": [
           "${Job.Name}"
         ],
-        "level": ${Character.Level},
+        "level": "!{Character.Level}",
         "name": "${Character.Name}",
         "origin": "${Origin.Name}"
       }
@@ -137,87 +136,87 @@ Feature: Character
 
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-        "id": ${Character.Id},
+        "id": "!{Character.Id}",
         "name": "${Character.Name}",
         "originId": "${Origin.Id}",
-        "level": ${Character.Level},
+        "level": "!{Character.Level}",
         "jobIds": {"__partialArray": {"array": [
             "${Job.[0].Id}",
             "${Job.[1].Id}"
         ]}},
         "stats": {
-            "COU": ${Character.Cou},
-            "AD": ${Character.Ad},
-            "FO": ${Character.Fo},
-            "INT": ${Character.Int},
-            "CHA": ${Character.Cha}
+            "COU": "!{Character.Cou}",
+            "AD": "!{Character.Ad}",
+            "FO": "!{Character.Fo}",
+            "INT": "!{Character.Int}",
+            "CHA": "!{Character.Cha}"
         },
-        "experience": ${Character.Experience},
+        "experience": "!{Character.Experience}",
         "sex": "Homme",
         "statBonusAD": "PRD",
         "notes": "some-notes",
-        "fatePoint": ${Character.FatePoint},
-        "ev": ${Character.Ev},
-        "ea": ${Character.Ea},
+        "fatePoint": "!{Character.FatePoint}",
+        "ev": "!{Character.Ev}",
+        "ea": "!{Character.Ea}",
         "isNpc": false,
         "modifiers": [
             {
-                "id": ${Character.Modifiers.[0].Id},
+                "id": "!{Character.Modifiers.[0].Id}",
                 "name": "${Character.Modifiers.[0].Name}",
-                "permanent": ${Character.Modifiers.[0].Permanent},
-                "reusable": ${Character.Modifiers.[0].Reusable},
-                "combatCount": ${Character.Modifiers.[0].CombatCount},
-                "currentCombatCount": ${Character.Modifiers.[0].CurrentCombatCount},
+                "permanent": "!{Character.Modifiers.[0].Permanent}",
+                "reusable": "!{Character.Modifiers.[0].Reusable}",
+                "combatCount": "!{Character.Modifiers.[0].CombatCount}",
+                "currentCombatCount": "!{Character.Modifiers.[0].CurrentCombatCount}",
                 "description": "${Character.Modifiers.[0].Description}",
                 "durationType": "${Character.Modifiers.[0].DurationType}",
-                "active": ${Character.Modifiers.[0].IsActive},
+                "active": "!{Character.Modifiers.[0].IsActive}",
                 "values": [
                     {
                         "stat": "${Character.Modifiers.[0].Values.[0].StatName}",
-                        "value": ${Character.Modifiers.[0].Values.[0].Value},
+                        "value": "!{Character.Modifiers.[0].Values.[0].Value}",
                         "type": "${Character.Modifiers.[0].Values.[0].Type}"
                     },
                     {
                         "stat": "${Character.Modifiers.[0].Values.[1].StatName}",
-                        "value": ${Character.Modifiers.[0].Values.[1].Value},
+                        "value": "!{Character.Modifiers.[0].Values.[1].Value}",
                         "type": "${Character.Modifiers.[0].Values.[1].Type}"
                     }
                 ]
             },
             {
-                "id": ${Character.Modifiers.[1].Id},
+                "id": "!{Character.Modifiers.[1].Id}",
                 "name": "${Character.Modifiers.[1].Name}",
                 "description": "${Character.Modifiers.[1].Description}",
-                "permanent": ${Character.Modifiers.[1].Permanent},
-                "reusable": ${Character.Modifiers.[1].Reusable},
+                "permanent": "!{Character.Modifiers.[1].Permanent}",
+                "reusable": "!{Character.Modifiers.[1].Reusable}",
                 "durationType": "${Character.Modifiers.[1].DurationType}",
-                "active": ${Character.Modifiers.[1].IsActive},
+                "active": "!{Character.Modifiers.[1].IsActive}",
                 "values": [
                     {
                         "stat": "${Character.Modifiers.[1].Values.[0].StatName}",
-                        "value": ${Character.Modifiers.[1].Values.[0].Value},
+                        "value": "!{Character.Modifiers.[1].Values.[0].Value}",
                         "type": "${Character.Modifiers.[1].Values.[0].Type}"
                     },
                     {
                         "stat": "${Character.Modifiers.[1].Values.[1].StatName}",
-                        "value": ${Character.Modifiers.[1].Values.[1].Value},
+                        "value": "!{Character.Modifiers.[1].Values.[1].Value}",
                         "type": "${Character.Modifiers.[1].Values.[1].Type}"
                     }
                 ]
             },
             {
-                "id": ${Character.Modifiers.[2].Id},
+                "id": "!{Character.Modifiers.[2].Id}",
                 "name": "${Character.Modifiers.[2].Name}",
                 "description": "${Character.Modifiers.[2].Description}",
-                "permanent": ${Character.Modifiers.[2].Permanent},
-                "reusable": ${Character.Modifiers.[2].Reusable},
-                "active": ${Character.Modifiers.[2].IsActive},
+                "permanent": "!{Character.Modifiers.[2].Permanent}",
+                "reusable": "!{Character.Modifiers.[2].Reusable}",
+                "active": "!{Character.Modifiers.[2].IsActive}",
                 "durationType": "${Character.Modifiers.[2].DurationType}",
-                "lapCount": ${Character.Modifiers.[2].LapCount},
-                "currentLapCount": ${Character.Modifiers.[2].CurrentLapCount},
-                "lapCountDecrement": ${Character.Modifiers.[2].LapCountDecrement},
+                "lapCount": "!{Character.Modifiers.[2].LapCount}",
+                "currentLapCount": "!{Character.Modifiers.[2].CurrentLapCount}",
+                "lapCountDecrement": "!{Character.Modifiers.[2].LapCountDecrement}",
                 "values": []
             }
         ],
@@ -232,12 +231,12 @@ Feature: Character
                 "description": "${Speciality.Description}",
                 "modifiers": [],
                 "specials": [],
-                "flags": ${Speciality.Flags}
+                "flags": "!{Speciality.Flags}"
             }
         ],
         "invites": [
           { "__partial": {
-            "groupId": ${Group.Id},
+            "groupId": "!{Group.Id}",
             "groupName": "${Group.Name}",
             "config": {
               "allowPlayersToAddObject": true,
@@ -250,21 +249,21 @@ Feature: Character
         ],
         "items": [
           {
-            "id": ${Item.Id},
-            "data": ${Item.Data},
-            "modifiers": ${Item.Modifiers},
+            "id": "!{Item.Id}",
+            "data": "!{Item.Data}",
+            "modifiers": "!{Item.Modifiers}",
             "template": {
               "id": "${ItemTemplate.Id}",
               "name": "${ItemTemplate.Name}",
               "techName": "${ItemTemplate.TechName}",
               "source": "official",
-              "subCategoryId": ${ItemTemplateSubCategory.Id},
+              "subCategoryId": "!{ItemTemplateSubCategory.Id}",
               "data": {
                 "key": "value"
               },
               "slots": [
                 {
-                  "id": ${Slot.[-1].Id},
+                  "id": "!{Slot.[-1].Id}",
                   "name": "${Slot.[-1].Name}",
                   "techName": "${Slot.[-1].TechName}"
                 }
@@ -272,7 +271,7 @@ Feature: Character
               "modifiers": [
                 {
                   "stat": "${ItemTemplate.Modifiers.[0].StatName}",
-                  "value": ${ItemTemplate.Modifiers.[0].Value},
+                  "value": "!{ItemTemplate.Modifiers.[0].Value}",
                   "jobId": "${ItemTemplate.Modifiers.[0].RequiredJobId}",
                   "originId": "${ItemTemplate.Modifiers.[0].RequiredOriginId}",
                   "special": [],
@@ -282,8 +281,8 @@ Feature: Character
               "requirements": [
                 {
                   "stat": "${ItemTemplate.Requirements.[0].StatName}",
-                  "min": ${ItemTemplate.Requirements.[0].MinValue},
-                  "max": ${ItemTemplate.Requirements.[0].MaxValue}
+                  "min": "!{ItemTemplate.Requirements.[0].MinValue}",
+                  "max": "!{ItemTemplate.Requirements.[0].MaxValue}"
                 }
               ],
               "skillModifiers": [
@@ -302,7 +301,7 @@ Feature: Character
           }
         ],
         "group": {
-          "id": ${Group.Id},
+          "id": "!{Group.Id}",
           "name": "${Group.Name}",
           "config": {
             "allowPlayersToAddObject": true,
@@ -321,7 +320,7 @@ Feature: Character
     Given a character
 
     When performing a POST to the url "/api/v2/characters/${Character.Id}/items" with the following json content and the current jwt
-    """
+    """json
     {
       "itemTemplateId": "${ItemTemplate.Id}",
       "itemData": {
@@ -331,7 +330,7 @@ Feature: Character
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
         "id": {"__match": {"type": "integer"}},
         "data": {
@@ -343,13 +342,13 @@ Feature: Character
             "name": "${ItemTemplate.Name}",
             "techName": "${ItemTemplate.TechName}",
             "source": "official",
-            "subCategoryId": ${ItemTemplateSubCategory.Id},
+            "subCategoryId": "!{ItemTemplateSubCategory.Id}",
             "data": {
                 "key": "value"
             },
             "slots": [
                 {
-                    "id": ${Slot.[-1].Id},
+                    "id": "!{Slot.[-1].Id}",
                     "name": "${Slot.[-1].Name}",
                     "techName": "${Slot.[-1].TechName}"
                 }
@@ -399,10 +398,10 @@ Feature: Character
 
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     [
       {
-        "id": ${Loot.Id},
+        "id": "!{Loot.Id}",
         "visibleForPlayer": true,
         "name": "${Loot.Name}",
         "items": [],
@@ -424,27 +423,25 @@ Feature: Character
     When performing a GET to the url "/api/v2/characters/${Character.Id}/history?page=0" with the current jwt
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     [
       {
-        "id": ${GroupHistoryEntry.Id},
+        "id": "!{GroupHistoryEntry.Id}",
         "date": "2020-10-05T05:07:08",
         "action": "${GroupHistoryEntry.Action}",
         "info": "${GroupHistoryEntry.Info}",
-        "gm": ${GroupHistoryEntry.Gm},
-        "action": "${GroupHistoryEntry.Action}",
+        "gm": "!{GroupHistoryEntry.Gm}",
         "isGroup": true,
-        "data": ${GroupHistoryEntry.Data}
+        "data": "!{GroupHistoryEntry.Data}"
       },
       {
-        "id": ${CharacterHistoryEntry.Id},
+        "id": "!{CharacterHistoryEntry.Id}",
         "date": "2019-10-05T05:07:08",
         "action": "${CharacterHistoryEntry.Action}",
         "info": "${CharacterHistoryEntry.Info}",
-        "gm": ${CharacterHistoryEntry.Gm},
-        "action": "${CharacterHistoryEntry.Action}",
+        "gm": "!{CharacterHistoryEntry.Gm}",
         "isGroup": false,
-        "data": ${CharacterHistoryEntry.Data}
+        "data": "!{CharacterHistoryEntry.Data}"
       }
     ]
     """
@@ -454,19 +451,19 @@ Feature: Character
     And a character
 
     When performing a PATCH to the url "/api/v2/characters/${Character.Id}/" with the following json content and the current jwt
-    """
+    """json
     {
       "ev": 8
     }
     """
     Then the response status code is 204
 
-  Scenario:  Can define stat bonus for bad or exceptional AD
+  Scenario: Can define stat bonus for bad or exceptional AD
     Given a JWT for a user
     And a character
 
     When performing a PUT to the url "/api/v2/characters/${Character.Id}/statBonusAd" with the following json content and the current jwt
-    """
+    """json
     {
       "stat": "AD"
     }
@@ -478,7 +475,7 @@ Feature: Character
     And a character
 
     When performing a POST to the url "/api/v2/characters/${Character.Id}/modifiers" with the following json content and the current jwt
-    """
+    """json
     {
       "reusable": false,
       "durationType": "combat",
@@ -489,7 +486,7 @@ Feature: Character
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     { "__partial": {
       "id": {"__match": {"type": "integer"}},
       "reusable": false,
@@ -514,12 +511,12 @@ Feature: Character
     And an inactive reusable character modifier that last 2 combat
 
     When performing a POST to the url "/api/v2/characters/${Character.Id}/modifiers/${CharacterModifier.Id}/toggle" with the following json content and the current jwt
-    """
+    """json
     {}
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     { "__partial": {
       "currentCombatCount": 2,
       "active": true
@@ -527,12 +524,12 @@ Feature: Character
     """
 
     When performing a POST to the url "/api/v2/characters/${Character.Id}/modifiers/${CharacterModifier.Id}/toggle" with the following json content and the current jwt
-    """
+    """json
     {}
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     { "__partial": {
       "active": false
     }}
@@ -547,13 +544,13 @@ Feature: Character
     And a user
 
     When performing a PATCH to the url "/api/v2/characters/${Character.Id}/" with the following json content and the current jwt
-    """
+    """json
     {
       "active": true,
-      "ownerId": ${User.[-1].Id},
+      "ownerId": "!{User.[-1].Id}",
       "target": {
         "isMonster": true,
-        "id": ${Monster.Id}
+        "id": "!{Monster.Id}"
       },
       "color": "054258",
       "mankdebol": 4,
@@ -566,14 +563,14 @@ Feature: Character
 
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     { "__partial": {
-      "id": ${Character.Id},
+      "id": "!{Character.Id}",
       "active": true,
-      "ownerId": ${User.[-1].Id},
+      "ownerId": "!{User.[-1].Id}",
       "target": {
         "isMonster": true,
-        "id": ${Monster.Id}
+        "id": "!{Monster.Id}"
       },
       "color": "054258",
       "gmData": {
@@ -589,9 +586,9 @@ Feature: Character
     And a skill
 
     When performing a POST to the url "/api/v2/characters/${Character.Id}/levelUp" with the following json content and the current jwt
-    """
+    """json
     {
-      "evOrEa": 'EV',
+      "evOrEa": "EV",
       "evOrEaValue": 4,
       "targetLevelUp": 2,
       "statToUp": "AD",
@@ -601,7 +598,7 @@ Feature: Character
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
       "newModifiers": [
         {
@@ -633,21 +630,20 @@ Feature: Character
     }
     """
 
-
   Scenario: A character can learn new job
     Given a JWT for a user
     And a character
     And a job
 
     When performing a POST to the url "/api/v2/characters/${Character.Id}/addJob" with the following json content and the current jwt
-    """
+    """json
     {
       "jobId": "${Job.[-1].Id}"
     }
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
       "jobId": "${Job.[-1].Id}"
     }
@@ -656,7 +652,7 @@ Feature: Character
     When performing a GET to the url "/api/v2/characters/${Character.Id}" with the current jwt
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
         "__partial": {
             "jobIds": [
@@ -672,14 +668,14 @@ Feature: Character
     And a character
 
     When performing a POST to the url "/api/v2/characters/${Character.Id}/removeJob" with the following json content and the current jwt
-    """
+    """json
     {
       "jobId": "${Job.[0].Id}"
     }
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
       "jobId": "${Job.[0].Id}"
     }
@@ -688,7 +684,7 @@ Feature: Character
     When performing a GET to the url "/api/v2/characters/${Character.Id}" with the current jwt
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
         "__partial": {
             "jobIds": []
@@ -701,7 +697,7 @@ Feature: Character
     And a character
 
     When performing a POST to the url "/api/v2/characters/${Character.Id}/quitGroup" with the following json content and the current jwt
-    """
+    """json
     {}
     """
     Then the response status code is 204

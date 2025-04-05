@@ -6,7 +6,7 @@ Feature: Monster
     Given an item template
 
     When performing a POST to the url "/api/v2/groups/${Group.Id}/monsters" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-monster-name",
       "data": {
@@ -66,7 +66,7 @@ Feature: Monster
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}},
       "name": "some-monster-name",
@@ -86,7 +86,7 @@ Feature: Monster
         "resm": 0,
         "xp": 0
       },
-      items: [
+      "items": [
         {
           "data": {
             "name": "some-item-name",
@@ -99,7 +99,7 @@ Feature: Monster
             }}
           }
       ],
-      modifiers: [
+      "modifiers": [
         {
           "id": 1,
           "name": "some-modifier-name",
@@ -137,13 +137,13 @@ Feature: Monster
     """
     [
       {
-        "id": ${Monster.Id},
+        "id": "!{Monster.Id}",
         "name": "${Monster.Name}",
-        "data": ${Monster.Data},
+        "data": "!{Monster.Data}",
         "modifiers": [],
         "items": [
           { "__partial": {
-            "id": ${Item.Id},
+            "id": "!{Item.Id}",
             "template": { "__partial": {
                 "id": "${ItemTemplate.Id}"
             }}
@@ -164,10 +164,10 @@ Feature: Monster
     """
     [
       {
-        "id": ${Monster.Id},
+        "id": "!{Monster.Id}",
         "dead": "2042-08-06T12:23:24",
         "name": "${Monster.Name}",
-        "data": ${Monster.Data}
+        "data": "!{Monster.Data}"
       }
     ]
     """
@@ -178,7 +178,7 @@ Feature: Monster
     And a monster
 
     When performing a POST to the url "/api/v2/monsters/${Monster.Id}/modifiers" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-modifier-name",
       "reusable": false,
@@ -201,7 +201,7 @@ Feature: Monster
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": 1,
       "name": "some-modifier-name",
@@ -248,7 +248,7 @@ Feature: Monster
     And a monster
 
     When performing a POST to the url "/api/v2/monsters/${Monster.Id}/kill" with the following json content and the current jwt
-    """
+    """json
     {}
     """
     Then the response status code is 204
@@ -260,7 +260,7 @@ Feature: Monster
     And a monster
 
     When performing a POST to the url "/api/v2/monsters/${Monster.Id}/items" with the following json content and the current jwt
-    """
+    """json
     {
       "itemTemplateId": "${ItemTemplate.Id}",
       "itemData": {
@@ -270,7 +270,7 @@ Feature: Monster
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
         "id": {"__match": {"type": "integer"}},
         "data": {
@@ -282,13 +282,13 @@ Feature: Monster
             "name": "${ItemTemplate.Name}",
             "techName": "${ItemTemplate.TechName}",
             "source": "official",
-            "subCategoryId": ${ItemTemplateSubCategory.Id},
+            "subCategoryId": "!{ItemTemplateSubCategory.Id}",
             "data": {
                 "key": "value"
             },
             "slots": [
                 {
-                    "id": ${Slot.[-1].Id},
+                    "id": "!{Slot.[-1].Id}",
                     "name": "${Slot.[-1].Name}",
                     "techName": "${Slot.[-1].TechName}"
                 }
@@ -326,7 +326,6 @@ Feature: Monster
     }
     """
 
-
   Scenario: Can add a random item from a category to a monster
     Given a JWT for a user
     Given a group
@@ -335,14 +334,14 @@ Feature: Monster
     Given an item template
 
     When performing a POST to the url "/api/v2/monsters/${Monster.Id}/addRandomItem" with the following json content and the current jwt
-    """
+    """json
     {
       "subCategoryTechName": "${ItemTemplateSubCategory.TechName}"
     }
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}},
       "data": {
@@ -354,7 +353,7 @@ Feature: Monster
         "name": "${ItemTemplate.Name}",
         "techName": "${ItemTemplate.TechName}",
         "source": "official",
-        "subCategoryId": ${ItemTemplateSubCategory.Id},
+        "subCategoryId": "!{ItemTemplateSubCategory.Id}",
         "data": {
           "key": "value"
         },
@@ -382,7 +381,7 @@ Feature: Monster
     And that the character is a member of the group
 
     When performing a PUT to the url "/api/v2/monsters/${Monster.Id}/data" with the following json content and the current jwt
-    """
+    """json
     {
       "at": 5,
       "prd": 8
@@ -392,24 +391,24 @@ Feature: Monster
 
 
     When performing a PUT to the url "/api/v2/monsters/${Monster.Id}/target" with the following json content and the current jwt
-    """
+    """json
     {
       "isMonster": false,
-      "id": ${Character.Id}
+      "id": "!{Character.Id}"
     }
     """
     Then the response status code is 204
 
 
     When performing a PATCH to the url "/api/v2/monsters/${Monster.Id}/" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-new-name"
     }
     """
     Then the response status code is 204
 
-Scenario: Load a monster info
+  Scenario: Load a monster info
     Given a JWT for a user
     Given a group
     Given a stat
@@ -420,9 +419,9 @@ Scenario: Load a monster info
     When performing a GET to the url "/api/v2/monsters/${Monster.Id}" with the current jwt
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Monster.Id},
+      "id": "!{Monster.Id}",
       "name": "${Monster.Name}",
       "data": {
         "key": "value"
@@ -441,7 +440,7 @@ Scenario: Load a monster info
       ],
       "items": [
         {
-          "id": ${Item.Id},
+          "id": "!{Item.Id}",
           "data": {
             "key": "value"
           },
@@ -459,7 +458,7 @@ Scenario: Load a monster info
             "name": "${ItemTemplate.Name}",
             "techName": "${ItemTemplate.TechName}",
             "source": "official",
-            "subCategoryId": ${ItemTemplateSubCategory.Id},
+            "subCategoryId": "!{ItemTemplateSubCategory.Id}",
             "data": {
               "key": "value"
             },

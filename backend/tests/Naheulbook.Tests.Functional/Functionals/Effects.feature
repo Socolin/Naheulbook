@@ -6,19 +6,19 @@ Feature: Effect
     When performing a GET to the url "/api/v2/effectSubCategories/${EffectSubCategory.Id}/effects"
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
-        "id": ${Effect.Id},
+        "id": "!{Effect.Id}",
         "name": "${Effect.Name}",
         "description": "${Effect.Description}",
         "durationType": "${Effect.DurationType}",
-        "combatCount": ${Effect.CombatCount},
-        "dice": ${Effect.Dice},
-        "subCategoryId": ${EffectSubCategory.Id},
+        "combatCount": "!{Effect.CombatCount}",
+        "dice": "!{Effect.Dice}",
+        "subCategoryId": "!{EffectSubCategory.Id}",
         "modifiers": [
             {
                 "stat": "${Effect.Modifiers.[0].StatName}",
-                "value": ${Effect.Modifiers.[0].Value},
+                "value": "!{Effect.Modifiers.[0].Value}",
                 "type": "${Effect.Modifiers.[0].Type}"
             }
         ]
@@ -30,26 +30,26 @@ Feature: Effect
     When performing a GET to the url "/api/v2/effectSubCategories/"
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
-        "id": ${EffectType.Id},
+        "id": "!{EffectType.Id}",
         "name": "${EffectType.Name}",
         "subCategories": [
             {
-                "id": ${EffectSubCategory.[0].Id},
+                "id": "!{EffectSubCategory.[0].Id}",
                 "name": "${EffectSubCategory.[0].Name}",
-                "diceCount": ${EffectSubCategory.[0].DiceCount},
-                "diceSize": ${EffectSubCategory.[0].DiceSize},
+                "diceCount": "!{EffectSubCategory.[0].DiceCount}",
+                "diceSize": "!{EffectSubCategory.[0].DiceSize}",
                 "note": "${EffectSubCategory.[0].Note}",
-                "typeId": ${EffectType.Id}
+                "typeId": "!{EffectType.Id}"
             },
             {
-                "id": ${EffectSubCategory.[1].Id},
+                "id": "!{EffectSubCategory.[1].Id}",
                 "name": "${EffectSubCategory.[1].Name}",
-                "diceCount": ${EffectSubCategory.[1].DiceCount},
-                "diceSize": ${EffectSubCategory.[1].DiceSize},
+                "diceCount": "!{EffectSubCategory.[1].DiceCount}",
+                "diceSize": "!{EffectSubCategory.[1].DiceSize}",
                 "note": "${EffectSubCategory.[1].Note}",
-                "typeId": ${EffectType.Id}
+                "typeId": "!{EffectType.Id}"
             }
         ]
     }
@@ -59,14 +59,14 @@ Feature: Effect
     Given a JWT for an admin user
 
     When performing a POST to the url "/api/v2/effectTypes/" with the following json content and the current jwt
-    """
+    """json
     {
         "name": "some-effect-type-name"
     }
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
         "id": {"__match": {"type": "integer"}},
         "name": "some-effect-type-name",
@@ -74,31 +74,30 @@ Feature: Effect
     }
     """
 
-
   Scenario: Create an effect sub-category
     Given a JWT for an admin user
     And an effect type
 
     When performing a POST to the url "/api/v2/effectSubCategories/" with the following json content and the current jwt
-    """
+    """json
     {
         "name": "some-effect-category-name",
         "diceCount": 2,
         "diceSize": 6,
         "note": "some-note",
-        "typeId": ${EffectType.Id}
+        "typeId": "!{EffectType.Id}"
     }
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
         "id": {"__match": {"type": "integer"}},
         "name": "some-effect-category-name",
         "diceCount": 2,
         "diceSize": 6,
         "note": "some-note",
-        "typeId": ${EffectType.Id}
+        "typeId": "!{EffectType.Id}"
     }
     """
 
@@ -107,7 +106,7 @@ Feature: Effect
     And an effect sub-category
 
     When performing a POST to the url "/api/v2/effectSubCategories/${EffectSubCategory.Id}/effects" with the following json content and the current jwt
-    """
+    """json
     {
       "combatCount": 1,
       "description": "some-description",
@@ -133,11 +132,11 @@ Feature: Effect
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}},
       "combatCount": 1,
-      "subCategoryId": ${EffectSubCategory.Id},
+      "subCategoryId": "!{EffectSubCategory.Id}",
       "description": "some-description",
       "duration": "some-duration",
       "dice": 4,
@@ -165,11 +164,11 @@ Feature: Effect
     Given an effect
 
     When performing a PUT to the url "/api/v2/effects/${Effect.Id}" with the following json content and the current jwt
-    """
+    """json
     {
       "combatCount": 1,
       "name": "some-name",
-      "subCategoryId": ${EffectSubCategory.Id},
+      "subCategoryId": "!{EffectSubCategory.Id}",
       "description": "some-description",
       "duration": "some-duration",
       "dice": 4,
@@ -192,10 +191,10 @@ Feature: Effect
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Effect.Id},
-      "subCategoryId": ${EffectSubCategory.Id},
+      "id": "!{Effect.Id}",
+      "subCategoryId": "!{EffectSubCategory.Id}",
       "name": "some-name",
       "combatCount": 1,
       "description": "some-description",
@@ -225,19 +224,19 @@ Feature: Effect
     When performing a GET to the url "/api/v2/effects/search?filter=${Effect.Name}"
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
-        "id": ${Effect.Id},
+        "id": "!{Effect.Id}",
         "name": "${Effect.Name}",
         "description": "${Effect.Description}",
         "durationType": "${Effect.DurationType}",
-        "combatCount": ${Effect.CombatCount},
-        "dice": ${Effect.Dice},
-        "subCategoryId": ${EffectSubCategory.Id},
+        "combatCount": "!{Effect.CombatCount}",
+        "dice": "!{Effect.Dice}",
+        "subCategoryId": "!{EffectSubCategory.Id}",
         "modifiers": [
             {
                 "stat": "${Effect.Modifiers.[0].StatName}",
-                "value": ${Effect.Modifiers.[0].Value},
+                "value": "!{Effect.Modifiers.[0].Value}",
                 "type": "${Effect.Modifiers.[0].Type}"
             }
         ]

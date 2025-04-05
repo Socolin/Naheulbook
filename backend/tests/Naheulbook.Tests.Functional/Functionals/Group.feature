@@ -38,7 +38,7 @@ Feature: Group
     """
     [
       {
-        "id": ${Group.Id},
+        "id": "!{Group.Id}",
         "name": "${Group.Name}",
         "characterCount": 0
       }
@@ -58,13 +58,13 @@ Feature: Group
     When performing a GET to the url "/api/v2/groups/${Group.Id}" with the current jwt
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Group.Id},
+      "id": "!{Group.Id}",
       "name": "${Group.Name}",
       "data": {},
       "characterIds": [
-        ${Character.[2].Id}
+        "!{Character.[2].Id}"
       ],
       "config": {
         "allowPlayersToAddObject": true,
@@ -75,14 +75,14 @@ Feature: Group
       },
       "invites": [
         {
-          "id": ${Character.[0].Id},
+          "id": "!{Character.[0].Id}",
           "name": "${Character.[0].Name}",
           "origin": "${Character.[0].Origin.Name}",
           "jobs": [],
           "fromGroup": true
         },
         {
-          "id": ${Character.[1].Id},
+          "id": "!{Character.[1].Id}",
           "name": "${Character.[1].Name}",
           "origin": "${Character.[1].Origin.Name}",
           "jobs": [],
@@ -103,14 +103,14 @@ Feature: Group
     """
     [
       {
-        "id": ${GroupHistoryEntry.Id},
+        "id": "!{GroupHistoryEntry.Id}",
         "date": "2020-10-05T05:07:08",
         "action": "${GroupHistoryEntry.Action}",
         "info": "${GroupHistoryEntry.Info}",
-        "gm": ${GroupHistoryEntry.Gm},
+        "gm": "!{GroupHistoryEntry.Gm}",
         "action": "${GroupHistoryEntry.Action}",
         "isGroup": true,
-        "data": ${GroupHistoryEntry.Data}
+        "data": "!{GroupHistoryEntry.Data}"
       }
     ]
     """
@@ -124,16 +124,16 @@ Feature: Group
     When performing a GET to the url "/api/v2/characters/search?filter=${Character.Name}" with the current jwt
     Then the response status code is 200
     And the response should contains the following json
-      """
-      [
-        {
-          "id": ${Character.Id},
-          "name": "${Character.Name}",
-          "origin": "${Character.Origin.Name}",
-          "owner": {"__match": {"type": "string"}}
-         }
-      ]
-      """
+    """
+    [
+      {
+        "id": "!{Character.Id}",
+        "name": "${Character.Name}",
+        "origin": "${Character.Origin.Name}",
+        "owner": {"__match": {"type": "string"}}
+       }
+    ]
+    """
 
   Scenario: Can invite a character to a group
     Given a JWT for a user
@@ -142,24 +142,24 @@ Feature: Group
     Given a character
 
     When performing a POST to the url "/api/v2/groups/${Group.Id}/invites/" with the following json content and the current jwt
-    """
+    """json
     {
-      "characterId": ${Character.Id},
+      "characterId": "!{Character.Id}",
       "fromGroup": true
     }
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
-      "id": ${Character.Id},
+      "id": "!{Character.Id}",
       "name": "${Character.Name}",
       "origin": "${Character.Origin.Name}",
       "jobs": [
         "${Job.Name}"
       ],
       "group": {
-        "id": ${Group.Id},
+        "id": "!{Group.Id}",
         "name": "${Group.Name}",
         "config": {
           "allowPlayersToAddObject": true,
@@ -182,10 +182,10 @@ Feature: Group
     When performing a DELETE to the url "/api/v2/groups/${Group.Id}/invites/${Character.Id}" with the current jwt
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
-      "groupId": ${Group.Id},
-      "characterId": ${Character.Id},
+      "groupId": "!{Group.Id}",
+      "characterId": "!{Character.Id}",
       "fromGroup": true
     }
     """
@@ -197,7 +197,7 @@ Feature: Group
     And an invite from the group to the 1st character
 
     When performing a POST to the url "/api/v2/groups/${Group.Id}/invites/${Character.Id}/accept" with the following json content and the current jwt
-    """
+    """json
     {}
     """
     Then the response status code is 204
@@ -207,7 +207,7 @@ Feature: Group
     Given a group
 
     When performing a PATCH to the url "/api/v2/groups/${Group.Id}/" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "new-name",
       "mankdebol": 4,
@@ -227,19 +227,18 @@ Feature: Group
     Given a group
 
     When performing a POST to the url "/api/v2/groups/${Group.Id}/startCombat" with the following json content and the current jwt
-    """
+    """json
     {
     }
     """
     Then the response status code is 204
 
     When performing a POST to the url "/api/v2/groups/${Group.Id}/endCombat" with the following json content and the current jwt
-    """
+    """json
     {
     }
     """
     Then the response status code is 204
-
 
   Scenario: Can update item/character/monster modifiers durations and  item lifetime durations
     Given a JWT for a user
@@ -254,7 +253,7 @@ Feature: Group
     """
     [
       {
-        "monsterId": ${Monster.Id},
+        "monsterId": "!{Monster.Id}",
         "changes": [
           {
             "type": "modifier",
@@ -267,12 +266,12 @@ Feature: Group
         ]
       },
       {
-        "characterId": ${Character.Id},
+        "characterId": "!{Character.Id}",
         "changes": [
           {
             "type": "modifier",
             "modifier": {
-              "id": ${Character.Modifiers.[0].Id},
+              "id": "!{Character.Modifiers.[0].Id}",
               "active": true,
               "currentLapCount": 1
             }
@@ -295,9 +294,9 @@ Feature: Group
     """
     [
       {
-        "id": ${Character.Id},
+        "id": "!{Character.Id}",
         "name": "${Character.Name}",
-        "isNpc": ${Character.IsNpc}
+        "isNpc": "!{Character.IsNpc}"
       }
     ]
     """
@@ -308,7 +307,7 @@ Feature: Group
     And that the group have a date set to the 5th day of the year 1459 at 8:42
 
     When performing a POST to the url "/api/v2/groups/${Group.Id}/addTime" with the following json content and the current jwt
-    """
+    """json
     {
       "minute":32,
       "hour":18,
@@ -319,7 +318,7 @@ Feature: Group
     """
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
       "minute":14,
       "hour":3,
@@ -332,10 +331,10 @@ Feature: Group
     Given a JWT for a user
     Given a group
     When performing a POST to the url "/api/v2/groups/${Group.Id}/history" with the following json content and the current jwt
-    """
+    """json
     {
-        isGm: true,
-        info: "some-log-info"
+        "isGm": true,
+        "info": "some-log-info"
     }
     """
     Then the response status code is 204
@@ -344,7 +343,7 @@ Feature: Group
     Given a JWT for a user
     Given a group
     When performing a PATCH to the url "/api/v2/groups/${Group.Id}/config" with the following json content and the current jwt
-    """
+    """json
     {
       "allowPlayersToSeeSkillGmDetails": true,
       "allowPlayersToAddObject": true,

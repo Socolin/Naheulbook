@@ -6,15 +6,15 @@ Feature: Job
     When performing a GET to the url "/api/v2/jobs"
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
         "id": "${Job.Id}",
         "name": "${Job.Name}",
         "information": "${Job.Information}",
         "playerDescription": "${Job.PlayerDescription}",
         "playerSummary": "${Job.PlayerSummary}",
-        "data": ${Job.Data},
-        "isMagic": ${Job.IsMagic},
+        "data": "!{Job.Data}",
+        "isMagic": "!{Job.IsMagic}",
         "flags": [
             {
                 "type": "value"
@@ -40,8 +40,8 @@ Feature: Job
         "requirements": [
             {
                 "stat": "${Stat.Name}",
-                "min": ${Job.Requirements.[0].MinValue},
-                "max": ${Job.Requirements.[0].MaxValue}
+                "min": "!{Job.Requirements.[0].MinValue}",
+                "max": "!{Job.Requirements.[0].MaxValue}"
             }
         ],
         "restrictions": [
@@ -63,16 +63,16 @@ Feature: Job
                 "modifiers": [
                     {
                         "type": "ADD",
-                        "value": ${SpecialityModifierEntity.Value},
-                        "stat": "${SpecialityModifierEntity.Stat}",
+                        "value": "!{SpecialityModifierEntity.Value}",
+                        "stat": "${SpecialityModifierEntity.Stat}"
                     }
                 ],
                 "specials": [
                     {
-                        "id": ${Speciality.Specials.[0].Id},
-                        "isBonus": ${Speciality.Specials.[0].IsBonus},
+                        "id": "!{Speciality.Specials.[0].Id}",
+                        "isBonus": "!{Speciality.Specials.[0].IsBonus}",
                         "description": "${Speciality.Specials.[0].Description}",
-                        "flags": ${Speciality.Specials.[0].Flags}
+                        "flags": "!{Speciality.Specials.[0].Flags}"
                     }
                 ],
                 "flags": [

@@ -4,7 +4,7 @@ Feature: ItemTemplate
     Given a JWT for an admin user
 
     When performing a POST to the url "/api/v2/itemTemplateSections/" with the following json content and the current jwt
-    """
+    """json
     {
       "name": "some-name",
       "note": "some-note",
@@ -16,7 +16,7 @@ Feature: ItemTemplate
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__capture": {"name": "ItemTemplateSectionId", "type": "integer"}},
       "name": "some-name",
@@ -34,9 +34,9 @@ Feature: ItemTemplate
     And an item template section
 
     When performing a POST to the url "/api/v2/itemTemplateSubCategories/" with the following json content and the current jwt
-    """
+    """json
     {
-      "sectionId": ${ItemTemplateSection.Id},
+      "sectionId": "!{ItemTemplateSection.Id}",
       "name": "some-name",
       "techName": "some-tech-name",
       "description": "some-description",
@@ -45,10 +45,10 @@ Feature: ItemTemplate
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "integer"}},
-      "sectionId": ${ItemTemplateSection.Id},
+      "sectionId": "!{ItemTemplateSection.Id}",
       "name": "some-name",
       "techName": "some-tech-name",
       "description": "some-description",
@@ -65,9 +65,9 @@ Feature: ItemTemplate
 
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
-        "id": ${ItemTemplateSection.Id},
+        "id": "!{ItemTemplateSection.Id}",
         "name": "${ItemTemplateSection.Name}",
         "note": "${ItemTemplateSection.Note}",
         "icon": "${ItemTemplateSection.Icon}",
@@ -76,20 +76,20 @@ Feature: ItemTemplate
         ],
         "subCategories": [
             {
-                "id": ${ItemTemplateSubCategory.[0].Id},
+                "id": "!{ItemTemplateSubCategory.[0].Id}",
                 "name": "${ItemTemplateSubCategory.[0].Name}",
                 "techName": "${ItemTemplateSubCategory.[0].TechName}",
                 "description": "${ItemTemplateSubCategory.[0].Description}",
                 "note": "${ItemTemplateSubCategory.[0].Note}",
-                "sectionId": ${ItemTemplateSubCategory.[0].SectionId}
+                "sectionId": "!{ItemTemplateSubCategory.[0].SectionId}"
             },
             {
-                "id": ${ItemTemplateSubCategory.[1].Id},
+                "id": "!{ItemTemplateSubCategory.[1].Id}",
                 "name": "${ItemTemplateSubCategory.[1].Name}",
                 "techName": "${ItemTemplateSubCategory.[1].TechName}",
                 "description": "${ItemTemplateSubCategory.[1].Description}",
                 "note": "${ItemTemplateSubCategory.[1].Note}",
-                "sectionId": ${ItemTemplateSubCategory.[1].SectionId}
+                "sectionId": "!{ItemTemplateSubCategory.[1].SectionId}"
             }
 
         ]
@@ -104,13 +104,12 @@ Feature: ItemTemplate
     And 3 skills
 
     When performing a POST to the url "/api/v2/itemTemplates/" with the following json content and the current jwt
-    """
+    """json
     {
       "source": "official",
-      "subCategoryId": ${ItemTemplateSubCategory.Id},
+      "subCategoryId": "!{ItemTemplateSubCategory.Id}",
       "name": "some-name",
       "techName": "some-tech-name",
-      "source": "official",
       "modifiers": [
         {
           "stat": "FO",
@@ -142,7 +141,7 @@ Feature: ItemTemplate
       ],
       "slots": [
         {
-          "id": ${Slot.Id}
+          "id": "!{Slot.Id}"
         }
       ],
       "data": {
@@ -152,14 +151,13 @@ Feature: ItemTemplate
     """
     Then the response status code is 201
     And the response should contains the following json
-    """
+    """json
     {
       "id": {"__match": {"type": "string"}},
       "source": "official",
-      "subCategoryId": ${ItemTemplateSubCategory.Id},
+      "subCategoryId": "!{ItemTemplateSubCategory.Id}",
       "name": "some-name",
       "techName": "some-tech-name",
-      "source": "official",
       "modifiers": [
         {
           "stat": "FO",
@@ -189,7 +187,7 @@ Feature: ItemTemplate
       ],
       "slots": [
         {
-          "id": ${Slot.Id},
+          "id": "!{Slot.Id}",
           "name": "${Slot.Name}",
           "techName": "${Slot.TechName}"
         }
@@ -206,9 +204,9 @@ Feature: ItemTemplate
     When performing a GET to the url "/api/v2/itemSlots"
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
-        "id": ${Slot.Id},
+        "id": "!{Slot.Id}",
         "name": "${Slot.Name}",
         "techName": "${Slot.TechName}"
     }
@@ -220,19 +218,19 @@ Feature: ItemTemplate
     When performing a GET to the url "/api/v2/itemTemplates/${ItemTemplate.Id}"
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
         "id": "${ItemTemplate.Id}",
         "name": "${ItemTemplate.Name}",
         "techName": "${ItemTemplate.TechName}",
         "source": "official",
-        "subCategoryId": ${ItemTemplateSubCategory.Id},
+        "subCategoryId": "!{ItemTemplateSubCategory.Id}",
         "data": {
             "key": "value"
         },
         "slots": [
             {
-                "id": ${Slot.[-1].Id},
+                "id": "!{Slot.[-1].Id}",
                 "name": "${Slot.[-1].Name}",
                 "techName": "${Slot.[-1].TechName}"
             }
@@ -275,19 +273,19 @@ Feature: ItemTemplate
     When performing a GET to the url "/api/v2/itemTemplateSections/${ItemTemplateSection.Id}"
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
         "id": "${ItemTemplate.Id}",
         "name": "${ItemTemplate.Name}",
         "techName": "${ItemTemplate.TechName}",
         "source": "official",
-        "subCategoryId": ${ItemTemplateSubCategory.Id},
+        "subCategoryId": "!{ItemTemplateSubCategory.Id}",
         "data": {
             "key": "value"
         },
         "slots": [
             {
-                "id": ${Slot.[-1].Id},
+                "id": "!{Slot.[-1].Id}",
                 "name": "${Slot.[-1].Name}",
                 "techName": "${Slot.[-1].TechName}"
             }
@@ -333,19 +331,19 @@ Feature: ItemTemplate
     And 3 skills
 
     When performing a PUT to the url "/api/v2/itemTemplates/${ItemTemplate.Id}" with the following json content and the current jwt
-    """
+    """json
     {
         "id": "${ItemTemplate.Id}",
         "name": "some-new-name",
         "techName": "some-new-tech-name",
         "source": "official",
-        "subCategoryId": ${ItemTemplateSubCategory.[-1].Id},
+        "subCategoryId": "!{ItemTemplateSubCategory.[-1].Id}",
         "data": {
             "new-key": "new-value"
         },
         "slots": [
             {
-                "id": ${Slot.[-1].Id},
+                "id": "!{Slot.[-1].Id}",
                 "name": "${Slot.[-1].Name}",
                 "techName": "${Slot.[-1].TechName}"
             }
@@ -386,19 +384,19 @@ Feature: ItemTemplate
 
     Then the response status code is 200
     And the response should contains the following json
-    """
+    """json
     {
          "id": "${ItemTemplate.Id}",
          "name": "some-new-name",
          "techName": "some-new-tech-name",
          "source": "official",
-         "subCategoryId": ${ItemTemplateSubCategory.[-1].Id},
+         "subCategoryId": "!{ItemTemplateSubCategory.[-1].Id}",
          "data": {
              "new-key": "new-value"
          },
          "slots": [
              {
-                 "id": ${Slot.[-1].Id},
+                 "id": "!{Slot.[-1].Id}",
                  "name": "${Slot.[-1].Name}",
                  "techName": "${Slot.[-1].TechName}"
              }
@@ -441,24 +439,24 @@ Feature: ItemTemplate
     When performing a GET to the url "/api/v2/itemTemplates/search?filter=${ItemTemplate.Name}"
     Then the response status code is 200
     And the response should contains the following json
-      """
-      [
-        {
-           "id": "${ItemTemplate.Id}",
-           "name": "${ItemTemplate.Name}",
-           "techName": "${ItemTemplate.TechName}",
-           "source": "official",
-           "subCategoryId": ${ItemTemplateSubCategory.Id},
-           "data": ${ItemTemplate.Data},
-           "slots": [],
-           "modifiers": [],
-           "requirements": [],
-           "skillModifiers": [],
-           "skillIds": [],
-           "unSkillIds": []
-         }
-      ]
-      """
+    """
+    [
+      {
+         "id": "${ItemTemplate.Id}",
+         "name": "${ItemTemplate.Name}",
+         "techName": "${ItemTemplate.TechName}",
+         "source": "official",
+         "subCategoryId": "!{ItemTemplateSubCategory.Id}",
+         "data": "!{ItemTemplate.Data}",
+         "slots": [],
+         "modifiers": [],
+         "requirements": [],
+         "skillModifiers": [],
+         "skillIds": [],
+         "unSkillIds": []
+       }
+    ]
+    """
 
   Scenario: Can get items by sub-category techName
     Given an item template
@@ -466,21 +464,21 @@ Feature: ItemTemplate
     When performing a GET to the url "/api/v2/itemTemplateSubCategories/${ItemTemplateSubCategory.TechName}/itemTemplates"
     Then the response status code is 200
     And the response should contains the following json
-      """
-      [
-        {
-           "id": "${ItemTemplate.Id}",
-           "name": "${ItemTemplate.Name}",
-           "techName": "${ItemTemplate.TechName}",
-           "source": "official",
-           "subCategoryId": ${ItemTemplateSubCategory.Id},
-           "data": ${ItemTemplate.Data},
-           "slots": [],
-           "modifiers": [],
-           "requirements": [],
-           "skillModifiers": [],
-           "skillIds": [],
-           "unSkillIds": []
-         }
-      ]
-      """
+    """
+    [
+      {
+         "id": "${ItemTemplate.Id}",
+         "name": "${ItemTemplate.Name}",
+         "techName": "${ItemTemplate.TechName}",
+         "source": "official",
+         "subCategoryId": "!{ItemTemplateSubCategory.Id}",
+         "data": "!{ItemTemplate.Data}",
+         "slots": [],
+         "modifiers": [],
+         "requirements": [],
+         "skillModifiers": [],
+         "skillIds": [],
+         "unSkillIds": []
+       }
+    ]
+    """

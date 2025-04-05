@@ -6,7 +6,7 @@ Feature: Skill
     When performing a GET to the url "/api/v2/skills"
     Then the response status code is 200
     And the response should contains a json array containing the following element identified by id
-    """
+    """json
     {
         "id": "${Skill.Id}",
         "name": "${Skill.Name}",
@@ -16,7 +16,7 @@ Feature: Skill
         "resist": "${Skill.Resist}",
         "using": "${Skill.Using}",
         "roleplay": "${Skill.Roleplay}",
-        "test": ${Skill.Test},
+        "test": "!{Skill.Test}",
         "stat": [
           "${Skill.Stat}"
         ],
@@ -28,7 +28,7 @@ Feature: Skill
         "effects": [
             {
                 "stat": "${Skill.SkillEffects.[0].StatName}",
-                "value": ${Skill.SkillEffects.[0].Value},
+                "value": "!{Skill.SkillEffects.[0].Value}",
                 "type": "ADD"
             }
         ]
