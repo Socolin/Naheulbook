@@ -4,7 +4,7 @@ namespace Naheulbook.Data.EntityFrameworkCore.Extensions;
 
 public static class EntityExtensions
 {
-	public static bool SkipThrow = false;
+	public static bool SkipThrow;
 
 	private class CancelSkip : IDisposable
 	{

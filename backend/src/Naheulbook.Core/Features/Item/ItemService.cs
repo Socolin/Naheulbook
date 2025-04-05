@@ -61,154 +61,142 @@ public class ItemService(
 
     public async Task<ItemEntity> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request, int? currentUserId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var itemTemplateSubCategory = await uow.ItemTemplateSubCategories.GetWithItemTemplatesByTechNameAsync(request.SubCategoryTechName);
-            if (itemTemplateSubCategory == null)
-                throw new ItemTemplateSubCategoryNotFoundException(request.SubCategoryTechName);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var itemTemplateSubCategory = await uow.ItemTemplateSubCategories.GetWithItemTemplatesByTechNameAsync(request.SubCategoryTechName);
+        if (itemTemplateSubCategory == null)
+            throw new ItemTemplateSubCategoryNotFoundException(request.SubCategoryTechName);
 
-            var itemTemplates = itemTemplateUtil.FilterItemTemplatesBySource(itemTemplateSubCategory.ItemTemplates, currentUserId, false).ToList();
-            if (itemTemplates.Count == 0)
-                throw new EmptyItemTemplateSubCategoryException(itemTemplateSubCategory.Id);
+        var itemTemplates = itemTemplateUtil.FilterItemTemplatesBySource(itemTemplateSubCategory.ItemTemplates, currentUserId, false).ToList();
+        if (itemTemplates.Count == 0)
+            throw new EmptyItemTemplateSubCategoryException(itemTemplateSubCategory.Id);
 
-            var itemTemplateIndex = rngUtil.GetRandomInt(0, itemTemplates.Count);
-            var itemTemplate = itemTemplates.ElementAt(itemTemplateIndex);
+        var itemTemplateIndex = rngUtil.GetRandomInt(0, itemTemplates.Count);
+        var itemTemplate = itemTemplates.ElementAt(itemTemplateIndex);
 
-            var item = itemFactory.CreateItem(ownerType, ownerId, itemTemplate, new ItemData());
+        var item = itemFactory.CreateItem(ownerType, ownerId, itemTemplate, new ItemData());
 
-            uow.Items.Add(item);
-            await uow.SaveChangesAsync();
+        uow.Items.Add(item);
+        await uow.SaveChangesAsync();
 
-            return (await uow.Items.GetWithAllDataAsync(item.Id))!;
-        }
+        return (await uow.Items.GetWithAllDataAsync(item.Id))!;
     }
 
     public async Task<ItemEntity> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var item = await uow.Items.GetWithOwnerAsync(itemId);
+        if (item == null)
+            throw new ItemNotFoundException(itemId);
+
+        authorizationUtil.EnsureItemAccess(executionContext, item);
+
+        var currentItemData = itemDataUtil.GetItemData(item);
+        if (item.CharacterId.HasValue)
         {
-            var item = await uow.Items.GetWithOwnerAsync(itemId);
-            if (item == null)
-                throw new ItemNotFoundException(itemId);
-
-            authorizationUtil.EnsureItemAccess(executionContext, item);
-
-            var currentItemData = itemDataUtil.GetItemData(item);
-            if (item.CharacterId.HasValue)
-            {
-                if (itemData.Quantity != currentItemData.Quantity)
-                    item.Character!.AddHistoryEntry(characterHistoryUtil.CreateLogChangeItemQuantity(item.CharacterId.Value, item, currentItemData.Quantity, itemData.Quantity));
-                if (itemData.ReadCount.HasValue && itemData.ReadCount == currentItemData.ReadCount + 1)
-                    item.Character!.AddHistoryEntry(characterHistoryUtil.CreateLogReadBook(item.CharacterId.Value, item));
-                if (currentItemData.NotIdentified == true && itemData.NotIdentified == null)
-                    item.Character!.AddHistoryEntry(characterHistoryUtil.CreateLogIdentifyItem(item.CharacterId.Value, item));
-            }
-
-            itemDataUtil.SetItemData(item, itemData);
-
-            await uow.SaveChangesAsync();
-
-            var session = notificationSessionFactory.CreateSession();
-            session.NotifyItemDataChanged(item);
-            await session.CommitAsync();
-
-            return item;
+            if (itemData.Quantity != currentItemData.Quantity)
+                item.Character!.AddHistoryEntry(characterHistoryUtil.CreateLogChangeItemQuantity(item.CharacterId.Value, item, currentItemData.Quantity, itemData.Quantity));
+            if (itemData.ReadCount.HasValue && itemData.ReadCount == currentItemData.ReadCount + 1)
+                item.Character!.AddHistoryEntry(characterHistoryUtil.CreateLogReadBook(item.CharacterId.Value, item));
+            if (currentItemData.NotIdentified == true && itemData.NotIdentified == null)
+                item.Character!.AddHistoryEntry(characterHistoryUtil.CreateLogIdentifyItem(item.CharacterId.Value, item));
         }
+
+        itemDataUtil.SetItemData(item, itemData);
+
+        await uow.SaveChangesAsync();
+
+        var session = notificationSessionFactory.CreateSession();
+        session.NotifyItemDataChanged(item);
+        await session.CommitAsync();
+
+        return item;
     }
 
     public async Task<ItemEntity> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var item = await uow.Items.GetWithOwnerAsync(itemId);
-            if (item == null)
-                throw new ItemNotFoundException(itemId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var item = await uow.Items.GetWithOwnerAsync(itemId);
+        if (item == null)
+            throw new ItemNotFoundException(itemId);
 
-            authorizationUtil.EnsureItemAccess(executionContext, item);
+        authorizationUtil.EnsureItemAccess(executionContext, item);
 
-            item.Modifiers = jsonUtil.Serialize(itemModifiers);
+        item.Modifiers = jsonUtil.Serialize(itemModifiers);
 
-            await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync();
 
-            var session = notificationSessionFactory.CreateSession();
-            session.NotifyItemModifiersChanged(item);
-            await session.CommitAsync();
+        var session = notificationSessionFactory.CreateSession();
+        session.NotifyItemModifiersChanged(item);
+        await session.CommitAsync();
 
-            return item;
-        }
+        return item;
     }
 
     public async Task<ItemEntity> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var item = await uow.Items.GetWithOwnerAsync(itemId);
-            if (item == null)
-                throw new ItemNotFoundException(itemId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var item = await uow.Items.GetWithOwnerAsync(itemId);
+        if (item == null)
+            throw new ItemNotFoundException(itemId);
 
-            authorizationUtil.EnsureItemAccess(executionContext, item);
+        authorizationUtil.EnsureItemAccess(executionContext, item);
 
-            itemUtil.EquipItem(item, request.Level);
+        itemUtil.EquipItem(item, request.Level);
 
-            await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync();
 
-            var session = notificationSessionFactory.CreateSession();
-            session.NotifyEquipItem(item);
-            await session.CommitAsync();
+        var session = notificationSessionFactory.CreateSession();
+        session.NotifyEquipItem(item);
+        await session.CommitAsync();
 
-            return item;
-        }
+        return item;
     }
 
     public async Task<ItemEntity> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var item = await uow.Items.GetWithOwnerAsync(itemId);
-            if (item == null)
-                throw new ItemNotFoundException(itemId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var item = await uow.Items.GetWithOwnerAsync(itemId);
+        if (item == null)
+            throw new ItemNotFoundException(itemId);
 
-            authorizationUtil.EnsureItemAccess(executionContext, item);
+        authorizationUtil.EnsureItemAccess(executionContext, item);
 
-            item.ContainerId = request.ContainerId;
+        item.ContainerId = request.ContainerId;
 
-            await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync();
 
-            var session = notificationSessionFactory.CreateSession();
-            session.NotifyItemChangeContainer(item);
-            await session.CommitAsync();
+        var session = notificationSessionFactory.CreateSession();
+        session.NotifyItemChangeContainer(item);
+        await session.CommitAsync();
 
-            return item;
-        }
+        return item;
     }
 
     public async Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var item = await uow.Items.GetWithOwnerAsync(itemId);
+        if (item == null)
+            throw new ItemNotFoundException(itemId);
+
+        authorizationUtil.EnsureItemAccess(executionContext, item);
+
+        var session = notificationSessionFactory.CreateSession();
+        session.NotifyItemDeleteItem(item);
+
+        // TODO: Rework history to be able to delete items in all case
+        if (item.CharacterId.HasValue)
         {
-            var item = await uow.Items.GetWithOwnerAsync(itemId);
-            if (item == null)
-                throw new ItemNotFoundException(itemId);
-
-            authorizationUtil.EnsureItemAccess(executionContext, item);
-
-            var session = notificationSessionFactory.CreateSession();
-            session.NotifyItemDeleteItem(item);
-
-            // TODO: Rework history to be able to delete items in all case
-            if (item.CharacterId.HasValue)
-            {
-                item.CharacterId = null;
-                item.ContainerId = null;
-            }
-            else
-            {
-                uow.Items.Remove(item);
-            }
-
-            await uow.SaveChangesAsync();
-            await session.CommitAsync();
+            item.CharacterId = null;
+            item.ContainerId = null;
         }
+        else
+        {
+            uow.Items.Remove(item);
+        }
+
+        await uow.SaveChangesAsync();
+        await session.CommitAsync();
     }
 
     public async Task<(ItemEntity takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request)
@@ -282,48 +270,46 @@ public class ItemService(
 
     public async Task<ItemEntity> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var usedItem = await uow.Items.GetWithAllDataWithCharacterAsync(itemId);
+        if (usedItem == null)
+            throw new ItemNotFoundException(itemId);
+        if (!usedItem.CharacterId.HasValue)
+            throw new InvalidItemOwnerTypeException(itemId);
+
+        authorizationUtil.EnsureItemAccess(executionContext, usedItem);
+
+        var sourceCharacter = await uow.Characters.GetWithAllDataAsync(usedItem.CharacterId.Value);
+        var targetCharacter = await uow.Characters.GetWithAllDataAsync(usedItem.CharacterId.Value);
+
+        if (sourceCharacter == null)
+            throw new CharacterNotFoundException(usedItem.CharacterId.Value);
+        if (targetCharacter == null)
+            throw new CharacterNotFoundException(usedItem.CharacterId.Value);
+
+        if (sourceCharacter.GroupId != targetCharacter.GroupId)
+            throw new ForbiddenAccessException();
+
+        var itemData = itemDataUtil.GetItemData(usedItem);
+        if (itemData.Charge < 1)
+            throw new NotChargeLeftOnItemException();
+
+        itemDataUtil.UpdateRelativeChargeCount(usedItem, -1);
+        sourceCharacter.AddHistoryEntry(characterHistoryUtil.CreateLogUseItemCharge(usedItem.CharacterId.Value, usedItem, itemData.Charge, itemData.Charge - 1));
+
+        var notificationSession = notificationSessionFactory.CreateSession();
+        var context = new ActionContext(usedItem, sourceCharacter, targetCharacter, uow);
+        var itemTemplateData = itemTemplateUtil.GetItemTemplateData(usedItem.ItemTemplate);
+        if (itemTemplateData.Actions == null)
+            throw new InvalidItemTemplateActionsDataException(usedItem.ItemTemplateId);
+        foreach (var action in itemTemplateData.Actions)
         {
-            var usedItem = await uow.Items.GetWithAllDataWithCharacterAsync(itemId);
-            if (usedItem == null)
-                throw new ItemNotFoundException(itemId);
-            if (!usedItem.CharacterId.HasValue)
-                throw new InvalidItemOwnerTypeException(itemId);
-
-            authorizationUtil.EnsureItemAccess(executionContext, usedItem);
-
-            var sourceCharacter = await uow.Characters.GetWithAllDataAsync(usedItem.CharacterId.Value);
-            var targetCharacter = await uow.Characters.GetWithAllDataAsync(usedItem.CharacterId.Value);
-
-            if (sourceCharacter == null)
-                throw new CharacterNotFoundException(usedItem.CharacterId.Value);
-            if (targetCharacter == null)
-                throw new CharacterNotFoundException(usedItem.CharacterId.Value);
-
-            if (sourceCharacter.GroupId != targetCharacter.GroupId)
-                throw new ForbiddenAccessException();
-
-            var itemData = itemDataUtil.GetItemData(usedItem);
-            if (itemData.Charge < 1)
-                throw new NotChargeLeftOnItemException();
-
-            itemDataUtil.UpdateRelativeChargeCount(usedItem, -1);
-            sourceCharacter.AddHistoryEntry(characterHistoryUtil.CreateLogUseItemCharge(usedItem.CharacterId.Value, usedItem, itemData.Charge, itemData.Charge - 1));
-
-            var notificationSession = notificationSessionFactory.CreateSession();
-            var context = new ActionContext(usedItem, sourceCharacter, targetCharacter, uow);
-            var itemTemplateData = itemTemplateUtil.GetItemTemplateData(usedItem.ItemTemplate);
-            if (itemTemplateData.Actions == null)
-                throw new InvalidItemTemplateActionsDataException(usedItem.ItemTemplateId);
-            foreach (var action in itemTemplateData.Actions)
-            {
-                await actionsUtil.ExecuteActionAsync(action, context, notificationSession);
-            }
-
-            await uow.SaveChangesAsync();
-            await notificationSession.CommitAsync();
-
-            return usedItem;
+            await actionsUtil.ExecuteActionAsync(action, context, notificationSession);
         }
+
+        await uow.SaveChangesAsync();
+        await notificationSession.CommitAsync();
+
+        return usedItem;
     }
 }

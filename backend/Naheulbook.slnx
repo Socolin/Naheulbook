@@ -18,7 +18,6 @@
     <Project Path="tests\Naheulbook.TestUtils\Naheulbook.TestUtils.csproj" Type="Classic C#" />
     <Project Path="tests\Socolin.TestUtils.AutoFillTestObjects.Tests.Unit\Socolin.TestUtils.AutoFillTestObjects.Tests.Unit.csproj" Type="Classic C#" />
     <Project Path="tests\Socolin.TestUtils.AutoFillTestObjects\Socolin.TestUtils.AutoFillTestObjects.csproj" Type="Classic C#" />
-    <Project Path="tests\Socolin.TestUtils.Console\Socolin.TestUtils.Console.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/tools/">
     <Project Path="tools\Naheulbook.DatabaseMigrator.Cli\Naheulbook.DatabaseMigrator.Cli.csproj" Type="Classic C#" />

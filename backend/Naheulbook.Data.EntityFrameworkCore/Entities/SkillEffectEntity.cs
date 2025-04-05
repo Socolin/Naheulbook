@@ -2,6 +2,7 @@
 
 namespace Naheulbook.Data.EntityFrameworkCore.Entities;
 
+[Serializable]
 public class SkillEffectEntity
 {
     public string StatName { get; set; } = null!;

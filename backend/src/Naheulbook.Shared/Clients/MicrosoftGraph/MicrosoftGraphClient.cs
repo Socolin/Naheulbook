@@ -29,33 +29,25 @@ public class MicrosoftGraphClient(IOptions<MicrosoftGraphOptions> configuration,
             ["client_secret"] = configuration.Value.AppSecret,
         };
 
-        using (var client = new HttpClient())
-        {
-            using (var response = await client.PostAsync(TokenApiRequestUri, new FormUrlEncodedContent(requestArgs)))
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                if (!response.IsSuccessStatusCode)
-                    throw new MicrosoftGraphClientException(content, (int)response.StatusCode);
+        using var client = new HttpClient();
+        using var response = await client.PostAsync(TokenApiRequestUri, new FormUrlEncodedContent(requestArgs));
+        var content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+            throw new MicrosoftGraphClientException(content, (int)response.StatusCode);
 
-                return jsonUtil.DeserializeOrCreate<MicrosoftGraphAccessTokenResponse>(content);
-            }
-        }
+        return jsonUtil.DeserializeOrCreate<MicrosoftGraphAccessTokenResponse>(content);
     }
 
     public async Task<MicrosoftGraphProfileResponse> GetUserProfileAsync(MicrosoftGraphAccessTokenResponse token)
     {
-        using (var client = new HttpClient())
-        {
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, AccessApiRequestUri);
-            httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue(token.TokenType, token.AccessToken);
-            using (var response = await client.SendAsync(httpRequestMessage))
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                if (!response.IsSuccessStatusCode)
-                    throw new MicrosoftGraphClientException(content, (int)response.StatusCode);
+        using var client = new HttpClient();
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, AccessApiRequestUri);
+        httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue(token.TokenType, token.AccessToken);
+        using var response = await client.SendAsync(httpRequestMessage);
+        var content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+            throw new MicrosoftGraphClientException(content, (int)response.StatusCode);
 
-                return jsonUtil.DeserializeOrCreate<MicrosoftGraphProfileResponse>(content);
-            }
-        }
+        return jsonUtil.DeserializeOrCreate<MicrosoftGraphProfileResponse>(content);
     }
 }

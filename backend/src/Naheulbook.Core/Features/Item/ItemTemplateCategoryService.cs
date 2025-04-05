@@ -38,13 +38,11 @@ public class ItemTemplateSubCategoryService(
 
     public async Task<List<ItemTemplateEntity>> GetItemTemplatesBySubCategoryTechNameAsync(string subCategoryTechName, int? currentUserId, bool includeCommunityItems)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var itemTemplateSubCategory = await uow.ItemTemplateSubCategories.GetByTechNameAsync(subCategoryTechName);
-            if (itemTemplateSubCategory == null)
-                throw new ItemTemplateSubCategoryNotFoundException(subCategoryTechName);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var itemTemplateSubCategory = await uow.ItemTemplateSubCategories.GetByTechNameAsync(subCategoryTechName);
+        if (itemTemplateSubCategory == null)
+            throw new ItemTemplateSubCategoryNotFoundException(subCategoryTechName);
 
-            return await uow.ItemTemplates.GetWithAllDataByCategoryIdAsync(itemTemplateSubCategory.Id, currentUserId, includeCommunityItems);
-        }
+        return await uow.ItemTemplates.GetWithAllDataByCategoryIdAsync(itemTemplateSubCategory.Id, currentUserId, includeCommunityItems);
     }
 }

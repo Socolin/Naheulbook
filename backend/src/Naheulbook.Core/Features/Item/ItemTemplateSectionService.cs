@@ -37,21 +37,17 @@ public class ItemTemplateSectionService(
             SubCategories = new List<ItemTemplateSubCategoryEntity>(),
         };
 
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            uow.ItemTemplateSections.Add(itemTemplateSection);
-            await uow.SaveChangesAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        uow.ItemTemplateSections.Add(itemTemplateSection);
+        await uow.SaveChangesAsync();
 
         return itemTemplateSection;
     }
 
     public async Task<List<ItemTemplateEntity>> GetItemTemplatesBySectionAsync(int sectionId, int? currentUserId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var itemTemplates = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(sectionId);
-            return itemTemplateUtil.FilterItemTemplatesBySource(itemTemplates, currentUserId, true).ToList();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var itemTemplates = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(sectionId);
+        return itemTemplateUtil.FilterItemTemplatesBySource(itemTemplates, currentUserId, true).ToList();
     }
 }

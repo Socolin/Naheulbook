@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Naheulbook.Core.Notifications;
 
 namespace Naheulbook.Web.Notifications;
@@ -8,6 +9,7 @@ public class NotificationPacket(string groupName, INotificationPacketPayload pay
     public INotificationPacketPayload Payload { get; } = payload;
 }
 
+[PublicAPI]
 public class NotificationPacketPayload(int id, string type, string opcode, object data)
     : INotificationPacketPayload
 {

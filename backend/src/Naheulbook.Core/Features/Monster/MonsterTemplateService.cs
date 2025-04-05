@@ -54,51 +54,47 @@ public class MonsterTemplateService(IUnitOfWorkFactory unitOfWorkFactory, IAutho
     {
         await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var subCategory = await uow.MonsterSubCategories.GetAsync(request.SubCategoryId);
-            if (subCategory == null)
-                throw new MonsterSubCategoryNotFoundException(request.SubCategoryId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var subCategory = await uow.MonsterSubCategories.GetAsync(request.SubCategoryId);
+        if (subCategory == null)
+            throw new MonsterSubCategoryNotFoundException(request.SubCategoryId);
 
-            var monsterTemplate = await uow.MonsterTemplates.GetByIdWithItemsAsync(monsterTemplateId);
-            if (monsterTemplate == null)
-                throw new MonsterTemplateNotFoundException(monsterTemplateId);
+        var monsterTemplate = await uow.MonsterTemplates.GetByIdWithItemsAsync(monsterTemplateId);
+        if (monsterTemplate == null)
+            throw new MonsterTemplateNotFoundException(monsterTemplateId);
 
-            var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(request.Inventory.Select(x => x.ItemTemplateId));
+        var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(request.Inventory.Select(x => x.ItemTemplateId));
 
-            monsterTemplate.Data = JsonConvert.SerializeObject(request.Data);
-            monsterTemplate.Name = request.Name;
+        monsterTemplate.Data = JsonConvert.SerializeObject(request.Data);
+        monsterTemplate.Name = request.Name;
 
-            monsterTemplate.SubCategoryId = subCategory.Id;
-            monsterTemplate.SubCategory = subCategory;
+        monsterTemplate.SubCategoryId = subCategory.Id;
+        monsterTemplate.SubCategory = subCategory;
 
-            monsterTemplate.Items = monsterTemplate.Items.Where(i => request.Inventory.Any(e => e.Id == i.Id)).ToList();
-            var newItems = request.Inventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateInventoryElementEntity
-                {
-                    Chance = i.Chance,
-                    ItemTemplate = itemTemplates.First(x => x.Id == i.ItemTemplateId),
-                    MaxCount = i.MaxCount,
-                    MinCount = i.MinCount,
-                }
-            );
-
-            foreach (var item in newItems)
+        monsterTemplate.Items = monsterTemplate.Items.Where(i => request.Inventory.Any(e => e.Id == i.Id)).ToList();
+        var newItems = request.Inventory.Where(i => !i.Id.HasValue || i.Id == 0).Select(i => new MonsterTemplateInventoryElementEntity
             {
-                monsterTemplate.Items.Add(item);
+                Chance = i.Chance,
+                ItemTemplate = itemTemplates.First(x => x.Id == i.ItemTemplateId),
+                MaxCount = i.MaxCount,
+                MinCount = i.MinCount,
             }
+        );
 
-            await uow.SaveChangesAsync();
-
-            return (await uow.MonsterTemplates.GetByIdWithItemsAsync(monsterTemplateId))!;
+        foreach (var item in newItems)
+        {
+            monsterTemplate.Items.Add(item);
         }
+
+        await uow.SaveChangesAsync();
+
+        return (await uow.MonsterTemplates.GetByIdWithItemsAsync(monsterTemplateId))!;
     }
 
     public async Task<List<MonsterTemplateEntity>> GetAllMonstersAsync()
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            return await uow.MonsterTemplates.GetAllWithItemsFullDataAsync();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.MonsterTemplates.GetAllWithItemsFullDataAsync();
     }
 
     public async Task<List<MonsterTemplateEntity>> SearchMonsterAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId)

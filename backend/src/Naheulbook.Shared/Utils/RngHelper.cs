@@ -41,15 +41,13 @@ public class RngHelper
         var remainder = max % diff;
 
         var bytes = new byte[4];
-        using (var rng = RandomNumberGenerator.Create())
+        using var rng = RandomNumberGenerator.Create();
+        while (true)
         {
-            while (true)
-            {
-                rng.GetBytes(bytes);
-                var number = BitConverter.ToUInt32(bytes);
-                if (number < max - remainder)
-                    return (int)(minValue + (number % diff));
-            }
+            rng.GetBytes(bytes);
+            var number = BitConverter.ToUInt32(bytes);
+            if (number < max - remainder)
+                return (int)(minValue + (number % diff));
         }
     }
 }

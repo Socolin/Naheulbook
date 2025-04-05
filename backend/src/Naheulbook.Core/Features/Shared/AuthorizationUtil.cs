@@ -24,12 +24,10 @@ public class AuthorizationUtil(IUnitOfWorkFactory unitOfWorkFactory) : IAuthoriz
 {
     public async Task EnsureAdminAccessAsync(NaheulbookExecutionContext executionContext)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var user = await uow.Users.GetAsync(executionContext.UserId);
-            if (user?.Admin != true)
-                throw new ForbiddenAccessException();
-        }
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetAsync(executionContext.UserId);
+        if (user?.Admin != true)
+            throw new ForbiddenAccessException();
     }
 
     public async Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateEntity itemTemplate)

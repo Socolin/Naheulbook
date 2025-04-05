@@ -2,6 +2,7 @@ using Naheulbook.Data.EntityFrameworkCore.Extensions;
 
 namespace Naheulbook.Data.EntityFrameworkCore.Entities;
 
+[Serializable]
 public class CharacterSkillEntity
 {
     public int CharacterId { get; set; }

@@ -105,79 +105,75 @@ public class MapService(
 
     public async Task<MapLayerEntity> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, MapLayerRequest request)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        switch (request.Source)
         {
-            switch (request.Source)
-            {
-                case "official":
-                    await authorizationUtil.EnsureAdminAccessAsync(executionContext);
-                    break;
-                case "private":
-                    break;
-                default:
-                    throw new InvalidSourceException(request.Source);
-            }
-
-            var map = await uow.Maps.GetAsync(mapId);
-            if (map == null)
-                throw new MapNotFoundException(mapId);
-
-            var mapLayer = new MapLayerEntity
-            {
-                Name = request.Name,
-                Source = request.Source,
-                IsGm = request.IsGm,
-                MapId = mapId,
-                UserId = request.Source == "official" ? null : executionContext.UserId,
-            };
-
-            uow.MapLayers.Add(mapLayer);
-            await uow.SaveChangesAsync();
-
-            return mapLayer;
+            case "official":
+                await authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                break;
+            case "private":
+                break;
+            default:
+                throw new InvalidSourceException(request.Source);
         }
+
+        var map = await uow.Maps.GetAsync(mapId);
+        if (map == null)
+            throw new MapNotFoundException(mapId);
+
+        var mapLayer = new MapLayerEntity
+        {
+            Name = request.Name,
+            Source = request.Source,
+            IsGm = request.IsGm,
+            MapId = mapId,
+            UserId = request.Source == "official" ? null : executionContext.UserId,
+        };
+
+        uow.MapLayers.Add(mapLayer);
+        await uow.SaveChangesAsync();
+
+        return mapLayer;
     }
 
     public async Task<MapLayerEntity> EditMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapLayerRequest request)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var mapLayer = await uow.MapLayers.GetAsync(mapLayerId);
+        if (mapLayer == null)
+            throw new MapLayerNotFoundException(mapLayerId);
+
+        switch (mapLayer.Source)
         {
-            var mapLayer = await uow.MapLayers.GetAsync(mapLayerId);
-            if (mapLayer == null)
-                throw new MapLayerNotFoundException(mapLayerId);
-
-            switch (mapLayer.Source)
-            {
-                case "official":
-                    await authorizationUtil.EnsureAdminAccessAsync(executionContext);
-                    break;
-                case "private":
-                    break;
-                default:
-                    throw new InvalidSourceException(request.Source);
-            }
-
-            switch (request.Source)
-            {
-                case "official":
-                    await authorizationUtil.EnsureAdminAccessAsync(executionContext);
-                    break;
-                case "private":
-                    break;
-                default:
-                    throw new InvalidSourceException(request.Source);
-            }
-
-            mapLayer.Name = request.Name;
-            mapLayer.Source = request.Source;
-            mapLayer.IsGm = request.IsGm;
-            mapLayer.UserId = request.Source == "official" ? null : executionContext.UserId;
-
-            await uow.SaveChangesAsync();
-            await uow.MapLayers.LoadMarkersForResponseAsync(mapLayer);
-
-            return mapLayer;
+            case "official":
+                await authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                break;
+            case "private":
+                break;
+            default:
+                throw new InvalidSourceException(request.Source);
         }
+
+        switch (request.Source)
+        {
+            case "official":
+                await authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                break;
+            case "private":
+                break;
+            default:
+                throw new InvalidSourceException(request.Source);
+        }
+
+        mapLayer.Name = request.Name;
+        mapLayer.Source = request.Source;
+        mapLayer.IsGm = request.IsGm;
+        mapLayer.UserId = request.Source == "official" ? null : executionContext.UserId;
+
+        await uow.SaveChangesAsync();
+        await uow.MapLayers.LoadMarkersForResponseAsync(mapLayer);
+
+        return mapLayer;
     }
 
     public async Task<MapMarkerEntity> CreateMapMarkerAsync(

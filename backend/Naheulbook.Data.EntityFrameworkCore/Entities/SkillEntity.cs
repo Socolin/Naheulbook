@@ -2,6 +2,7 @@
 
 namespace Naheulbook.Data.EntityFrameworkCore.Entities;
 
+[Serializable]
 public class SkillEntity
 {
     public Guid Id { get; set; }

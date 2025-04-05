@@ -1,6 +1,6 @@
 using System.Diagnostics;
-using Socolin.TestUtils.Console;
 using Reqnroll;
+using Socolin.ANSITerminalColor;
 
 namespace Naheulbook.Tests.Functional.Code.Init;
 
@@ -55,7 +55,7 @@ public class InitializersProfiler(IReqnrollOutputHelper reqnrollOutputHelper)
         {
             var duration = profilerSection.Stopwatch.ElapsedMilliseconds;
             var colorIndex = (int)Math.Floor((GradiantGreenRed.Length - 1) * ((float)duration - minDuration) / durationDiff);
-            reqnrollOutputHelper.WriteLine("│ " + profilerSection.Title.PadRight(titleColumnLength, ' ') + " │ " + AnsiColorCodes.Color256(duration.ToString("N0").PadLeft(9) + " ms", GradiantGreenRed[colorIndex]) + " │");
+            reqnrollOutputHelper.WriteLine("│ " + profilerSection.Title.PadRight(titleColumnLength, ' ') + " │ " + AnsiColor.Foreground(GradiantGreenRed[colorIndex]).Colorize(duration.ToString("N0").PadLeft(9) + " ms") + " │");
         }
         reqnrollOutputHelper.WriteLine($"├{"".PadRight(titleColumnLength + 2, '─')}┴{"".PadRight(14, '─')}┤");
 

@@ -1,5 +1,6 @@
 namespace Naheulbook.Data.EntityFrameworkCore.Entities;
 
+[Serializable]
 public class SlotEntity
 {
     public int Id { get; set; }

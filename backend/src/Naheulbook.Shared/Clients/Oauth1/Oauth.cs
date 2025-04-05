@@ -76,14 +76,12 @@ public class Oauth(string consumerKey, string consumerSecret, string requestUrl)
 
     private string GenerateSignature()
     {
-        using (var algorithm = new HMACSHA1())
-        {
-            var signatureKey = SignatureKey();
-            algorithm.Key = Encoding.ASCII.GetBytes(signatureKey);
-            var signatureBaseString = SignatureBaseString();
-            var hash = algorithm.ComputeHash(Encoding.ASCII.GetBytes(signatureBaseString));
-            return Convert.ToBase64String(hash);
-        }
+        using var algorithm = new HMACSHA1();
+        var signatureKey = SignatureKey();
+        algorithm.Key = Encoding.ASCII.GetBytes(signatureKey);
+        var signatureBaseString = SignatureBaseString();
+        var hash = algorithm.ComputeHash(Encoding.ASCII.GetBytes(signatureBaseString));
+        return Convert.ToBase64String(hash);
     }
 
     public string AuthorizationHeader()
@@ -103,25 +101,21 @@ public class Oauth(string consumerKey, string consumerSecret, string requestUrl)
 
     public async Task<IDictionary<string, string>> DoRequest()
     {
-        using (var httpClient = new HttpClient())
+        using var httpClient = new HttpClient();
+        var authorizationHeader = AuthorizationHeader();
+        httpClient.DefaultRequestHeaders.Add("Authorization", authorizationHeader);
+
+        // `!` is added because this issue https://github.com/dotnet/runtime/issues/54367
+        using var response = await httpClient.PostAsync(RequestUrl, new FormUrlEncodedContent(Parameters));
+        using var content = response.Content;
+        var result = await content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
         {
-            var authorizationHeader = AuthorizationHeader();
-            httpClient.DefaultRequestHeaders.Add("Authorization", authorizationHeader);
-
-            // `!` is added because this issue https://github.com/dotnet/runtime/issues/54367
-            using (var response = await httpClient.PostAsync(RequestUrl, new FormUrlEncodedContent(Parameters)))
-            using (var content = response.Content)
-            {
-                var result = await content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    return result.Split('&')
-                        .Select(s => s.Split(['='], 2))
-                        .ToDictionary(s => s[0], s => s[1]);
-                }
-
-                throw new OAuthException(RequestUrl, (int) response.StatusCode, result);
-            }
+            return result.Split('&')
+                .Select(s => s.Split(['='], 2))
+                .ToDictionary(s => s[0], s => s[1]);
         }
+
+        throw new OAuthException(RequestUrl, (int) response.StatusCode, result);
     }
 }

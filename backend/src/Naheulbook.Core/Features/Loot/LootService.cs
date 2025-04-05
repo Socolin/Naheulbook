@@ -53,97 +53,89 @@ public class LootService(
 
     public async Task<List<LootEntity>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var group = await uow.Groups.GetAsync(groupId);
-            if (group == null)
-                throw new GroupNotFoundException(groupId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var group = await uow.Groups.GetAsync(groupId);
+        if (group == null)
+            throw new GroupNotFoundException(groupId);
 
-            authorizationUtil.EnsureIsGroupOwner(executionContext, group);
+        authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-            return await uow.Loots.GetByGroupIdAsync(groupId);
-        }
+        return await uow.Loots.GetByGroupIdAsync(groupId);
     }
 
     public async Task EnsureUserCanAccessLootAsync(NaheulbookExecutionContext executionContext, int lootId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
-        {
-            var loot = await uow.Loots.GetAsync(lootId);
-            if (loot == null)
-                throw new LootNotFoundException(lootId);
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var loot = await uow.Loots.GetAsync(lootId);
+        if (loot == null)
+            throw new LootNotFoundException(lootId);
 
-            var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
-            if (group == null)
-                throw new GroupNotFoundException(loot.GroupId);
+        var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
+        if (group == null)
+            throw new GroupNotFoundException(loot.GroupId);
 
-            authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
-        }
+        authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
     }
 
     public async Task UpdateLootVisibilityAsync(NaheulbookExecutionContext executionContext, int lootId, PutLootVisibilityRequest request)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var loot = await uow.Loots.GetAsync(lootId);
+        if (loot == null)
+            throw new LootNotFoundException(lootId);
+
+        var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
+        if (group == null)
+            throw new GroupNotFoundException(loot.GroupId);
+
+        authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
+
+        loot.IsVisibleForPlayer = request.VisibleForPlayer;
+
+        var session = notificationSessionFactory.CreateSession();
+        session.NotifyLootUpdateVisibility(lootId, request.VisibleForPlayer);
+
+        if (loot.IsVisibleForPlayer)
         {
-            var loot = await uow.Loots.GetAsync(lootId);
-            if (loot == null)
-                throw new LootNotFoundException(lootId);
-
-            var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
-            if (group == null)
-                throw new GroupNotFoundException(loot.GroupId);
-
-            authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
-
-            loot.IsVisibleForPlayer = request.VisibleForPlayer;
-
-            var session = notificationSessionFactory.CreateSession();
-            session.NotifyLootUpdateVisibility(lootId, request.VisibleForPlayer);
-
-            if (loot.IsVisibleForPlayer)
-            {
-                var fullLootData = await uow.Loots.GetWithAllDataAsync(lootId);
-                foreach (var character in group.Characters)
-                    session.NotifyCharacterShowLoot(character.Id, fullLootData.NotNull());
-            }
-            else
-            {
-                foreach (var character in group.Characters)
-                    session.NotifyCharacterHideLoot(character.Id, loot.Id);
-            }
-
-            await uow.SaveChangesAsync();
-            await session.CommitAsync();
+            var fullLootData = await uow.Loots.GetWithAllDataAsync(lootId);
+            foreach (var character in group.Characters)
+                session.NotifyCharacterShowLoot(character.Id, fullLootData.NotNull());
         }
+        else
+        {
+            foreach (var character in group.Characters)
+                session.NotifyCharacterHideLoot(character.Id, loot.Id);
+        }
+
+        await uow.SaveChangesAsync();
+        await session.CommitAsync();
     }
 
     public async Task DeleteLootAsync(NaheulbookExecutionContext executionContext, int lootId)
     {
-        using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var loot = await uow.Loots.GetAsync(lootId);
+        if (loot == null)
+            throw new LootNotFoundException(lootId);
+
+        var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
+        if (group == null)
+            throw new GroupNotFoundException(loot.GroupId);
+
+        authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
+
+        uow.Loots.Remove(loot);
+        await uow.SaveChangesAsync();
+
+        var session = notificationSessionFactory.CreateSession();
+        session.NotifyGroupDeleteLoot(group.Id, lootId);
+        if (loot.IsVisibleForPlayer)
         {
-            var loot = await uow.Loots.GetAsync(lootId);
-            if (loot == null)
-                throw new LootNotFoundException(lootId);
-
-            var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
-            if (group == null)
-                throw new GroupNotFoundException(loot.GroupId);
-
-            authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
-
-            uow.Loots.Remove(loot);
-            await uow.SaveChangesAsync();
-
-            var session = notificationSessionFactory.CreateSession();
-            session.NotifyGroupDeleteLoot(group.Id, lootId);
-            if (loot.IsVisibleForPlayer)
-            {
-                foreach (var character in group.Characters)
-                    session.NotifyCharacterHideLoot(character.Id, loot.Id);
-            }
-
-            await session.CommitAsync();
+            foreach (var character in group.Characters)
+                session.NotifyCharacterHideLoot(character.Id, loot.Id);
         }
+
+        await session.CommitAsync();
     }
 
     public async Task<ItemEntity> AddItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateItemRequest request)

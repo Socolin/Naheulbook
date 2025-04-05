@@ -2,6 +2,7 @@ using Naheulbook.Data.EntityFrameworkCore.Extensions;
 
 namespace Naheulbook.Data.EntityFrameworkCore.Entities;
 
+[Serializable]
 public class EffectTypeEntity
 {
     public int Id { get; set; }
@@ -11,6 +12,7 @@ public class EffectTypeEntity
     public ICollection<EffectSubCategoryEntity> SubCategories { get => _subCategories.ThrowIfNotLoaded(); set => _subCategories = value; }
 }
 
+[Serializable]
 public class EffectSubCategoryEntity
 {
     public int Id { get; set; }
@@ -27,6 +29,7 @@ public class EffectSubCategoryEntity
     public ICollection<EffectEntity> Effects { get => _effects.ThrowIfNotLoaded(); set => _effects = value; }
 }
 
+[Serializable]
 public class EffectEntity
 {
     public int Id { get; set; }
@@ -48,6 +51,7 @@ public class EffectEntity
 }
 
 
+[Serializable]
 public class EffectModifierEntity
 {
     public short Value { get; set; }

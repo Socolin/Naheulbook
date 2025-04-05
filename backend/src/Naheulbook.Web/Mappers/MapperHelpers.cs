@@ -19,7 +19,7 @@ public class MapperHelpers
     public static string? ItemNameFromData(string? json)
     {
         if (string.IsNullOrEmpty(json))
-            return default;
+            return null;
 
         return JsonConvert.DeserializeObject<ItemData>(json, JsonSerializerSettings)?.Name;
     }
@@ -28,7 +28,7 @@ public class MapperHelpers
         where T : class
     {
         if (string.IsNullOrEmpty(json))
-            return default;
+            return null;
 
         return JsonConvert.DeserializeObject<T>(json, JsonSerializerSettings);
     }
@@ -53,7 +53,7 @@ public class MapperHelpers
     public static List<string>? FromCommaSeparatedList(string? list)
     {
         if (string.IsNullOrEmpty(list))
-            return default;
+            return null;
 
         return list.Split(",").ToList();
     }

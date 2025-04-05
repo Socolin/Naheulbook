@@ -12,6 +12,7 @@
         <PackageReference Include="Nunit" />
         <PackageReference Include="NUnit3TestAdapter" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="Socolin.ANSITerminalColor" />
         <PackageReference Include="Socolin.TestUtils.FakeSmtp" />
         <PackageReference Include="Socolin.TestUtils.JsonComparer" />
         <PackageReference Include="Socolin.TestUtils.JsonComparer.NUnitExtensions" />
@@ -24,6 +25,5 @@
         <ProjectReference Include="..\..\src\Naheulbook.Web\Naheulbook.Web.csproj" />
         <ProjectReference Include="..\Naheulbook.TestUtils\Naheulbook.TestUtils.csproj" />
         <ProjectReference Include="..\Socolin.TestUtils.AutoFillTestObjects\Socolin.TestUtils.AutoFillTestObjects.csproj" />
-        <ProjectReference Include="..\Socolin.TestUtils.Console\Socolin.TestUtils.Console.csproj" />
     </ItemGroup>
 </Project>
