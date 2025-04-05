@@ -39,6 +39,15 @@ public class NaheulbookApiServer(
             ["Mail:FromAddress"] = "some-address@some-domain.aa",
             ["LaPageAMelkor:Url"] = laPageAMelkorUrl,
             ["MapImage:OutputDirectory"] = mapImageOutputDirectory,
+            ["Authentication:Facebook:AppId"] = "unused",
+            ["Authentication:Facebook:AppSecret"] = "unused",
+            ["Authentication:MicrosoftGraph:AppId"] = "unused",
+            ["Authentication:MicrosoftGraph:AppSecret"] = "unused",
+            ["Authentication:Twitter:AppId"] = "unused",
+            ["Authentication:Twitter:AppSecret"] = "unused",
+            ["Authentication:Twitter:Callback"] = "unused",
+            ["Authentication:Google:AppId"] = "unused",
+            ["Authentication:Google:AppSecret"] = "unused",
         };
 
         var configuration = new ConfigurationBuilder()

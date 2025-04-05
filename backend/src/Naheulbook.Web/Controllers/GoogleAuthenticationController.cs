@@ -15,7 +15,7 @@ namespace Naheulbook.Web.Controllers;
 [ApiController]
 [Route("api/v2/authentications/google")]
 public class GoogleAuthenticationController(
-    GoogleConfiguration configuration,
+    GoogleOptions options,
     IGoogleClient googleClient,
     IJwtService jwtService,
     IMapper mapper,
@@ -35,7 +35,7 @@ public class GoogleAuthenticationController(
         return new AuthenticationInitResponse
         {
             LoginToken = loginToken,
-            AppKey = configuration.AppId,
+            AppKey = options.AppId,
         };
     }
 

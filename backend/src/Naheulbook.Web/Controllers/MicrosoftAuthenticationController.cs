@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Shared.Clients.MicrosoftGraph;
 using Naheulbook.Shared.Utils;
@@ -15,7 +16,7 @@ namespace Naheulbook.Web.Controllers;
 [ApiController]
 [Route("api/v2/authentications/microsoft")]
 public class MicrosoftAuthenticationController(
-    MicrosoftGraphConfiguration configuration,
+    IOptions<MicrosoftGraphOptions> configuration,
     IMicrosoftGraphClient microsoftGraphClient,
     IJwtService jwtService,
     IMapper mapper,
@@ -35,7 +36,7 @@ public class MicrosoftAuthenticationController(
         return new AuthenticationInitResponse
         {
             LoginToken = loginToken,
-            AppKey = configuration.AppId,
+            AppKey = configuration.Value.AppId,
         };
     }
 

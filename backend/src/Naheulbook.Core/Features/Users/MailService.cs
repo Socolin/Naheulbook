@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace Naheulbook.Core.Features.Users;
 
@@ -9,20 +10,20 @@ public interface IMailService
     Task SendCreateUserMailAsync(string email, string activationCode);
 }
 
-public class MailService(IMailConfiguration mailConfiguration) : IMailService
+public class MailService(IOptions<MailOptions> mailOptions) : IMailService
 {
     public async Task SendCreateUserMailAsync(string email, string activationCode)
     {
-        var client = new SmtpClient(mailConfiguration.Smtp.Host, mailConfiguration.Smtp.Port)
+        var client = new SmtpClient(mailOptions.Value.Smtp.Host, mailOptions.Value.Smtp.Port)
         {
             UseDefaultCredentials = false,
-            EnableSsl = mailConfiguration.Smtp.Ssl,
-            Credentials = new NetworkCredential(mailConfiguration.Smtp.Username, mailConfiguration.Smtp.Password),
+            EnableSsl = mailOptions.Value.Smtp.Ssl,
+            Credentials = new NetworkCredential(mailOptions.Value.Smtp.Username, mailOptions.Value.Smtp.Password),
         };
 
         var mailMessage = new MailMessage
         {
-            From = new MailAddress(mailConfiguration.FromAddress),
+            From = new MailAddress(mailOptions.Value.FromAddress),
             Body = $"ActivationCode: {activationCode}",
             Subject = "Activate naheulbook account",
         };

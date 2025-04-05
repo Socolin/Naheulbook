@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Naheulbook.Shared.Clients.Oauth1;
 using Naheulbook.Shared.Clients.Twitter.Exceptions;
 using Naheulbook.Shared.Clients.Twitter.Responses;
@@ -12,15 +13,15 @@ public interface ITwitterClient
     Task<TwitterAccessTokenResponse> GetAccessTokenAsync(string loginToken, string oauthToken, string oauthVerifier);
 }
 
-public class TwitterClient(TwitterConfiguration configuration) : ITwitterClient
+public class TwitterClient(IOptions<TwitterOptions> configuration) : ITwitterClient
 {
     private const string RequestTokenUri = "https://api.twitter.com/oauth/request_token";
     private const string AccessTokenUri = "https://api.twitter.com/oauth/access_token";
 
     public async Task<TwitterRequestTokenResponse> GetRequestTokenAsync()
     {
-        var oauth = new Oauth(configuration.AppId, configuration.AppSecret, RequestTokenUri);
-        oauth.AddOauthParameter("callback", configuration.Callback);
+        var oauth = new Oauth(configuration.Value.AppId, configuration.Value.AppSecret, RequestTokenUri);
+        oauth.AddOauthParameter("callback", configuration.Value.Callback);
 
         try
         {
@@ -39,7 +40,7 @@ public class TwitterClient(TwitterConfiguration configuration) : ITwitterClient
 
     public async Task<TwitterAccessTokenResponse> GetAccessTokenAsync(string loginToken, string oauthToken, string oauthVerifier)
     {
-        var oauth = new Oauth(configuration.AppId, configuration.AppSecret, AccessTokenUri)
+        var oauth = new Oauth(configuration.Value.AppId, configuration.Value.AppSecret, AccessTokenUri)
         {
             AccessSecret = loginToken,
         };

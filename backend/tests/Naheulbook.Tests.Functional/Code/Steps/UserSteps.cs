@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Data.Models;
 using Naheulbook.Requests.Requests;
@@ -76,7 +77,8 @@ public class UserSteps
         _scenarioContext.SetPassword("some-password");
         _scenarioContext.SetUserId(_testDataUtil.GetLast<UserEntity>().Id);
 
-        var jwtService = new JwtService(new AuthenticationConfiguration {JwtSigningKey = NaheulbookApiServer.JwtSigningKey, JwtExpirationDelayInMinutes = 10}, new TimeService());
+        var authenticationOptions = new AuthenticationOptions {JwtSigningKey = NaheulbookApiServer.JwtSigningKey, JwtExpirationDelayInMinutes = 10};
+        var jwtService = new JwtService(Options.Create(authenticationOptions), new TimeService());
         var jwt = jwtService.GenerateJwtToken(_testDataUtil.GetLast<UserEntity>().Id);
 
         _scenarioContext.SetJwt(jwt);
@@ -96,7 +98,8 @@ public class UserSteps
         _scenarioContext.SetPassword("some-password");
         _scenarioContext.SetUserId(_testDataUtil.GetLast<UserEntity>().Id);
 
-        var jwtService = new JwtService(new AuthenticationConfiguration {JwtSigningKey = NaheulbookApiServer.JwtSigningKey, JwtExpirationDelayInMinutes = 10}, new TimeService());
+        var authenticationOptions = new AuthenticationOptions {JwtSigningKey = NaheulbookApiServer.JwtSigningKey, JwtExpirationDelayInMinutes = 10};
+        var jwtService = new JwtService(Options.Create(authenticationOptions), new TimeService());
         var jwt = jwtService.GenerateJwtToken(_testDataUtil.GetLast<UserEntity>().Id);
 
         _scenarioContext.SetJwt(jwt);

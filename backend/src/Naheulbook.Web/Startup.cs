@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Naheulbook.Core.Features.Calendar;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Effect;
@@ -16,7 +15,6 @@ using Naheulbook.Core.Features.Fight;
 using Naheulbook.Core.Features.God;
 using Naheulbook.Core.Features.Group;
 using Naheulbook.Core.Features.Item;
-using Naheulbook.Core.Features.Item.Actions.Executor;
 using Naheulbook.Core.Features.Job;
 using Naheulbook.Core.Features.Loot;
 using Naheulbook.Core.Features.Map;
@@ -37,7 +35,6 @@ using Naheulbook.Shared.Clients.Google;
 using Naheulbook.Shared.Clients.MicrosoftGraph;
 using Naheulbook.Shared.Clients.Twitter;
 using Naheulbook.Shared.Extensions;
-using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Hubs;
@@ -53,14 +50,12 @@ public class Startup(IConfiguration configuration)
 {
     public void ConfigureServices(IServiceCollection services)
     {
-        var redisConnectionString = configuration.GetConnectionString("Redis");
-        RegisterConfigurations(services);
-
         services.AddSingleton<DbContextOptions<NaheulbookDbContext>>(sp =>
             {
                 var environment = sp.GetRequiredService<IWebHostEnvironment>();
+                var connectionString = sp.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection");
                 var dbContextOptionsBuilder = new DbContextOptionsBuilder<NaheulbookDbContext>()
-                    .UseMySQL(configuration.GetConnectionString("DefaultConnection").NotNull(), builder => builder.EnableRetryOnFailure());
+                    .UseMySQL(connectionString.NotNull(), builder => builder.EnableRetryOnFailure());
 
                 if (environment.IsDevelopment())
                     dbContextOptionsBuilder.EnableSensitiveDataLogging();
@@ -90,8 +85,9 @@ public class Startup(IConfiguration configuration)
 
         services.AddHttpContextAccessor();
         services.AddHealthChecks()
-            .AddMySql(configuration.GetConnectionString("DefaultConnection").NotNull());
+            .AddMySql(sp => sp.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection").NotNull());
 
+        var redisConnectionString = configuration.GetConnectionString("Redis");
         if (redisConnectionString != null)
         {
             services.AddHealthChecks().AddRedis(redisConnectionString);
@@ -109,123 +105,42 @@ public class Startup(IConfiguration configuration)
 
         services.AddSingleton<IUnitOfWorkFactory>(sp => new UnitOfWorkFactory(sp.GetRequiredService<DbContextOptions<NaheulbookDbContext>>()));
 
-        services.AddSingleton<IActionsUtil, ActionsUtil>();
-        services.AddSingleton<IAddItemExecutor, AddItemExecutor>();
-        services.AddSingleton<IRemoveItemExecutor, RemoveItemExecutor>();
-        services.AddSingleton<IAddCustomModifierExecutor, AddCustomModifierExecutor>();
-        services.AddSingleton<IAddEffectExecutor, AddEffectExecutor>();
-        services.AddSingleton<IAddEvExecutor, AddEvExecutor>();
-        services.AddSingleton<IAddEaExecutor, AddEaExecutor>();
-        services.AddSingleton<ICalendarService, CalendarService>();
-        services.AddSingleton<ICharacterRandomNameService, CharacterRandomNameService>();
-        services.AddSingleton<ICharacterService, CharacterService>();
-        services.AddSingleton<ICharacterBackupService, CharacterBackupService>();
-        services.AddSingleton<ICharacterUtil, CharacterUtil>();
-        services.AddSingleton<ICharacterModifierUtil, CharacterModifierUtil>();
-        services.AddSingleton<ICharacterHistoryUtil, CharacterHistoryUtil>();
-        services.AddSingleton<IDurationUtil, DurationUtil>();
-        services.AddSingleton<IEventService, EventService>();
-        services.AddSingleton<IEffectService, EffectService>();
-        services.AddSingleton<IFightService, FightService>();
-        services.AddSingleton<IGodService, GodService>();
-        services.AddSingleton<IGroupConfigUtil, GroupConfigUtil>();
-        services.AddSingleton<IGroupHistoryUtil, GroupHistoryUtil>();
-        services.AddSingleton<IGroupService, GroupService>();
-        services.AddSingleton<IGroupUtil, GroupUtil>();
-        services.AddSingleton<IItemService, ItemService>();
-        services.AddSingleton<IItemUtil, ItemUtil>();
-        services.AddSingleton<IItemDataUtil, ItemDataUtil>();
-        services.AddSingleton<IItemTemplateService, ItemTemplateService>();
-        services.AddSingleton<IItemTemplateSubCategoryService, ItemTemplateSubCategoryService>();
-        services.AddSingleton<IItemTemplateSectionService, ItemTemplateSectionService>();
-        services.AddSingleton<IItemTemplateUtil, ItemTemplateUtil>();
-        services.AddSingleton<IItemTypeService, ItemTypeService>();
-        services.AddSingleton<IJobService, JobService>();
-        services.AddSingleton<ILootService, LootService>();
-        services.AddSingleton<IMapService, MapService>();
-        services.AddSingleton<IMailService, MailService>();
-        services.AddSingleton<IMerchantService, MerchantService>();
-        services.AddSingleton<IMonsterService, MonsterService>();
-        services.AddSingleton<IMonsterTemplateService, MonsterTemplateService>();
-        services.AddSingleton<IMonsterTraitService, MonsterTraitService>();
-        services.AddSingleton<IMonsterTypeService, MonsterTypeService>();
-        services.AddSingleton<INpcService, NpcService>();
-        services.AddSingleton<IOriginService, OriginService>();
-        services.AddSingleton<IOriginUtil, OriginUtil>();
-        services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
-        services.AddSingleton<ISkillService, SkillService>();
-        services.AddSingleton<ISocialMediaUserLinkService, SocialMediaUserLinkService>();
-        services.AddSingleton<IStatService, StatService>();
-        services.AddSingleton<IUserService, UserService>();
-        services.AddSingleton<IUserAccessTokenService, UserAccessTokenService>();
+        services.AddCalendarService();
+        services.AddCharacterService();
+        services.AddEffectService();
+        services.AddEventService();
+        services.AddFightService();
+        services.AddGodService();
+        services.AddGroupService();
+        services.AddItemService();
+        services.AddJobService();
+        services.AddLootService();
+        services.AddMapService();
+        services.AddMerchantService();
+        services.AddMonsterService();
+        services.AddNpcService();
+        services.AddOriginService();
+        services.AddSkillService();
+        services.AddStatService();
+        services.AddUserService();
 
-        services.AddSingleton<IActiveStatsModifierUtil, ActiveStatsModifierUtil>();
-        services.AddSingleton<IAuthorizationUtil, AuthorizationUtil>();
-        services.AddSingleton<IStringCleanupUtil, StringCleanupUtil>();
-        services.AddSingleton<IJsonUtil, JsonUtil>();
-
-        services.AddSingleton<IMapImageUtil, MapImageUtil>();
-
-        services.AddSingleton<ICharacterFactory, CharacterFactory>();
-        services.AddSingleton<IItemFactory, ItemFactory>();
-        services.AddSingleton<IMerchantFactory, MerchantFactory>();
-
-        services.AddSingleton<ITimeService, TimeService>();
-        services.AddSingleton<IRngUtil, RngUtil>();
+        services.AddSharedUtilities();
 
         services.AddSingleton<IJwtService, JwtService>();
         services.AddSingleton<IHubGroupUtil, HubGroupUtil>();
+        services.AddOptions<AuthenticationOptions>()
+            .BindConfiguration("Authentication")
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         services.AddSingleton<INotificationPacketBuilder, NotificationPacketBuilder>();
         services.AddSingleton<INotificationSessionFactory, NotificationSessionFactory>();
         services.AddSingleton<INotificationSender, NotificationSender>();
 
-        services.AddSingleton<IFacebookClient, FacebookClient>();
-        services.AddSingleton<IGoogleClient, GoogleClient>();
-        services.AddSingleton<ITwitterClient, TwitterClient>();
-        services.AddSingleton<IMicrosoftGraphClient, MicrosoftGraphClient>();
-
-        services.AddOptions<LaPageAMelkorClient.Options>()
-            .BindConfiguration("LaPageAMelkor")
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
-        services.AddHttpClient<ILaPageAMelkorClient, LaPageAMelkorClient>((sp, client) =>
-        {
-            client.BaseAddress = new Uri(sp.GetRequiredService<IOptions<LaPageAMelkorClient.Options>>().Value.Url);
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-            client.DefaultRequestHeaders.Add("User-Agent", "Naheulbook");
-        });
-    }
-
-    private void RegisterConfigurations(IServiceCollection services)
-    {
-        var mailConfiguration = new MailConfiguration();
-        configuration.Bind("Mail", mailConfiguration);
-        services.AddSingleton<IMailConfiguration>(mailConfiguration);
-
-        var authenticationConfiguration = new AuthenticationConfiguration();
-        configuration.Bind("Authentication", authenticationConfiguration);
-        services.AddSingleton<IAuthenticationConfiguration>(authenticationConfiguration);
-
-        var googleConfiguration = new GoogleConfiguration();
-        configuration.Bind("Authentication:Google", googleConfiguration);
-        services.AddSingleton(googleConfiguration);
-
-        var facebookConfiguration = new FacebookConfiguration();
-        configuration.Bind("Authentication:Facebook", facebookConfiguration);
-        services.AddSingleton(facebookConfiguration);
-
-        var twitterConfiguration = new TwitterConfiguration();
-        configuration.Bind("Authentication:Twitter", twitterConfiguration);
-        services.AddSingleton(twitterConfiguration);
-
-        var microsoftConfiguration = new MicrosoftGraphConfiguration();
-        configuration.Bind("Authentication:MicrosoftGraph", microsoftConfiguration);
-        services.AddSingleton(microsoftConfiguration);
-
-        var mapImageConfiguration = new MapImageConfiguration();
-        configuration.Bind("MapImage", mapImageConfiguration);
-        services.AddSingleton(mapImageConfiguration);
+        services.AddFacebookClient();
+        services.AddGoogleClient();
+        services.AddMicrosoftGraphClient();
+        services.AddTwitterClient();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

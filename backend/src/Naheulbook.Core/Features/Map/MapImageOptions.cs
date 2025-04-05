@@ -1,9 +1,9 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+using System;
 
 namespace Naheulbook.Core.Features.Map;
 
-public class MapImageConfiguration
+[Serializable]
+public class MapImageOptions
 {
     public uint TilesSize { get; set; } = 256;
     public int MinZoomMapSize { get; set; } = 512;

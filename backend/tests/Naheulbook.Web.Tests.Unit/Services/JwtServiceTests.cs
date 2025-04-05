@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using Microsoft.Extensions.Options;
 using Naheulbook.Data.Models;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
@@ -20,14 +21,14 @@ public class JwtServiceTests
     [SetUp]
     public void SetUp()
     {
-        var authenticationConfiguration = new AuthenticationConfiguration()
+        var authenticationConfiguration = new AuthenticationOptions()
         {
-            JwtSigningKey = Convert.ToBase64String(Encoding.UTF8.GetBytes("some-key")),
+            JwtSigningKey = Convert.ToBase64String("some-key"u8.ToArray()),
             JwtExpirationDelayInMinutes = 3,
         };
 
         _timeService = Substitute.For<ITimeService>();
-        _jwtService = new JwtService(authenticationConfiguration, _timeService);
+        _jwtService = new JwtService(Options.Create(authenticationConfiguration), _timeService);
     }
 
     [Test]

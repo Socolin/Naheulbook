@@ -15,7 +15,7 @@ namespace Naheulbook.Web.Controllers;
 [ApiController]
 [Route("api/v2/authentications/facebook")]
 public class FacebookAuthenticationController(
-    FacebookConfiguration configuration,
+    FacebookOptions options,
     IFacebookClient facebookClient,
     IJwtService jwtService,
     IMapper mapper,
@@ -35,7 +35,7 @@ public class FacebookAuthenticationController(
         return new AuthenticationInitResponse
         {
             LoginToken = loginToken,
-            AppKey = configuration.AppId,
+            AppKey = options.AppId,
         };
     }
 

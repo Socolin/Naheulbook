@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Jose;
+using Microsoft.Extensions.Options;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Models;
@@ -14,12 +15,12 @@ public interface IJwtService
     JwtTokenPayload? DecodeJwt(string jwt);
 }
 
-public class JwtService(IAuthenticationConfiguration configuration, ITimeService timeService)
+public class JwtService(IOptions<AuthenticationOptions> configuration, ITimeService timeService)
     : IJwtService
 {
     public string GenerateJwtToken(int userId)
     {
-        var expiration = timeService.UtcNow.AddMinutes(configuration.JwtExpirationDelayInMinutes).ToUnixTimeSeconds();
+        var expiration = timeService.UtcNow.AddMinutes(configuration.Value.JwtExpirationDelayInMinutes).ToUnixTimeSeconds();
 
         var payload = new Dictionary<string, object>()
         {
@@ -27,14 +28,14 @@ public class JwtService(IAuthenticationConfiguration configuration, ITimeService
             {"exp", expiration},
         };
 
-        return JWT.Encode(payload, Convert.FromBase64String(configuration.JwtSigningKey), JwsAlgorithm.HS256);
+        return JWT.Encode(payload, Convert.FromBase64String(configuration.Value.JwtSigningKey), JwsAlgorithm.HS256);
     }
 
     public JwtTokenPayload? DecodeJwt(string jwt)
     {
         try
         {
-            return JWT.Decode<JwtTokenPayload>(jwt, Convert.FromBase64String(configuration.JwtSigningKey));
+            return JWT.Decode<JwtTokenPayload>(jwt, Convert.FromBase64String(configuration.Value.JwtSigningKey));
         }
         catch (Exception)
         {
