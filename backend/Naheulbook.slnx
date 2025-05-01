@@ -1,6 +1,6 @@
 ﻿<Solution>
   <Folder Name="/src/">
-    <Project Path="Naheulbook.Data.EntityFrameworkCore\Naheulbook.Data.EntityFrameworkCore.csproj" Type="Classic C#" />
+    <Project Path="src\Naheulbook.Data.EntityFrameworkCore\Naheulbook.Data.EntityFrameworkCore.csproj" Type="Classic C#" />
     <Project Path="src\Naheulbook.Core\Naheulbook.Core.csproj" Type="Classic C#" />
     <Project Path="src\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" Type="Classic C#" />
     <Project Path="src\Naheulbook.Data\Naheulbook.Data.csproj" Type="Classic C#" />
