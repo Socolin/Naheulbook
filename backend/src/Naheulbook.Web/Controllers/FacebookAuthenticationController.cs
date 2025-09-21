@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Shared.Clients.Facebook;
 using Naheulbook.Shared.Utils;
@@ -13,7 +14,7 @@ namespace Naheulbook.Web.Controllers;
 [ApiController]
 [Route("api/v2/authentications/facebook")]
 public class FacebookAuthenticationController(
-    FacebookOptions options,
+    IOptions<FacebookOptions> options,
     IFacebookClient facebookClient,
     IJwtService jwtService,
     IMapper mapper,
@@ -33,7 +34,7 @@ public class FacebookAuthenticationController(
         return new AuthenticationInitResponse
         {
             LoginToken = loginToken,
-            AppKey = options.AppId,
+            AppKey = options.Value.AppId,
         };
     }
 

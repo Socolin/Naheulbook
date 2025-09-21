@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Naheulbook.Data.EntityFrameworkCore\Naheulbook.Data.EntityFrameworkCore.csproj" />
+        <ProjectReference Include="..\..\src\Naheulbook.Data.EntityFrameworkCore\Naheulbook.Data.EntityFrameworkCore.csproj" />
         <ProjectReference Include="..\Naheulbook.Shared\Naheulbook.Shared.csproj" />
     </ItemGroup>
 

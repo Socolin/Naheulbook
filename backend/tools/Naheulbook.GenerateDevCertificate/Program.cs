@@ -1,4 +1,5 @@
-﻿using Naheulbook.GenerateDevCertificate;
+﻿using System.Security.Principal;
+using Naheulbook.GenerateDevCertificate;
 using Naheulbook.Tools.Shared;
 using Spectre.Console;
 
@@ -30,4 +31,21 @@ AnsiConsole.MarkupLine($"Certificate: [cyan]{certPath}[/]");
 AnsiConsole.MarkupLine($"Certificate private key: [cyan]{certPrivateKeyPath}[/]");
 AnsiConsole.MarkupLine($"Pfx (Certificate + Private Key): [cyan]{certPfxPath}[/]");
 
+return;
 
+static bool IsAdministrator()
+{
+    if (OperatingSystem.IsWindows())
+    {
+        using var identity = WindowsIdentity.GetCurrent();
+        var principal = new WindowsPrincipal(identity);
+        return principal.IsInRole(WindowsBuiltInRole.Administrator);
+    }
+    else if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+    {
+        // On Unix systems, the root user has a UID of 0
+        return Environment.UserName == "root" || Environment.GetEnvironmentVariable("SUDO_USER") != null;
+    }
+
+    return false;
+}

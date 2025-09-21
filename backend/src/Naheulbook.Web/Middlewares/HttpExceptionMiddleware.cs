@@ -1,4 +1,6 @@
 using System.Reflection;
+using Microsoft.AspNetCore.SignalR;
+using Naheulbook.Core.Features.Shared;
 using Naheulbook.Web.Exceptions;
 using Newtonsoft.Json;
 
@@ -20,6 +22,10 @@ public class HttpExceptionMiddleware(
         {
             // FIXME: logger context
             await next(context);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HubException("Access to this resources is forbidden", ex);
         }
         catch (HttpErrorException ex)
         {

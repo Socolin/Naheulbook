@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 using CliWrap;
 using CliWrap.Buffered;
@@ -16,56 +15,45 @@ public static class CertificateAuthorityInstaller
             var targetCaPath = Path.Combine("/", "usr", "local", "share", "ca-certificates", Path.GetFileName(caPath));
             await Cli.Wrap("sudo")
                 .WithArguments(builder =>
-                {
-                    builder.Add("cp");
-                    builder.Add(caPath);
-                    builder.Add(targetCaPath);
-                })
+                    {
+                        builder.Add("cp");
+                        builder.Add(caPath);
+                        builder.Add(targetCaPath);
+                    }
+                )
                 .ExecuteBufferedAsync();
             await Cli.Wrap("sudo")
                 .WithArguments(builder =>
-                {
-                    builder.Add("update-ca-certificates");
-                    builder.Add("--fresh");
-                })
+                    {
+                        builder.Add("update-ca-certificates");
+                        builder.Add("--fresh");
+                    }
+                )
                 .ExecuteBufferedAsync();
             await Cli.Wrap("certutil")
                 .WithArguments(builder =>
-                {
-                    builder.Add("-d").Add($"sql:/home/{Environment.UserName}/.pki/nssdb");
-                    builder.Add("-A");
-                    builder.Add("-t").Add("TC");
-                    builder.Add("-n").Add("Naheulbook Dev Certificate Authority");
-                    builder.Add("-i").Add(caPath);
-                })
+                    {
+                        builder.Add("-d").Add($"sql:/home/{Environment.UserName}/.pki/nssdb");
+                        builder.Add("-A");
+                        builder.Add("-t").Add("TC");
+                        builder.Add("-n").Add("Naheulbook Dev Certificate Authority");
+                        builder.Add("-i").Add(caPath);
+                    }
+                )
                 .ExecuteBufferedAsync();
             AnsiConsole.Write(new Rows(new Text("Certificate Authority was successfully installed", new Style(Color.Green))));
         }
         else if (OperatingSystem.IsWindows())
         {
-            var proc = new ProcessStartInfo
-            {
-                UseShellExecute = true,
-                WorkingDirectory = Environment.CurrentDirectory,
-                FileName = "pwsh",
-            };
-
-            var fileName = Path.GetTempFileName().Replace(".tmp", ".ps1");
-            // If we need to make it available in IIS:
-            // $Pfx = Import-PfxCertificate -FilePath cert.pfx -CertStoreLocation cert:\LocalMachine\My
-            // (Get-ChildItem -Path "Cert:\LocalMachine\My\$($Pfx.Thumbprint)").FriendlyName = 'Naheulbook Tls Certificate'
-            await File.WriteAllTextAsync(fileName,
-                $"""
-                Import-Certificate -FilePath {caPath} -CertStoreLocation cert:\LocalMachine\Root;
-                """);
-
-            proc.Arguments = $"-NoProfile -ExecutionPolicy Bypass -File {fileName}";
-            proc.Verb = "runas";
-
-            var process = Process.Start(proc);
-            if (process == null)
-                throw new Exception("Failed to start process to install certificate");
-            await process.WaitForExitAsync();
+            var certPem = await File.ReadAllTextAsync(caPath);
+            using var x509Certificate2 = X509Certificate2.CreateFromPem(certPem);
+            using var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
+            store.Open(OpenFlags.ReadWrite);
+            var oldCertificates = store.Certificates.Find(X509FindType.FindBySubjectName, x509Certificate2.SubjectName.Name, false);
+            foreach (var oldCert in oldCertificates)
+                store.Remove(oldCert);
+            store.Add(X509CertificateLoader.LoadCertificate(x509Certificate2.RawData));
+            AnsiConsole.WriteLine("  Root Certificate installed");
         }
         else
         {
