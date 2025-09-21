@@ -10,7 +10,8 @@ import {NhbkMatDialog} from '../material-workaround';
 @Component({
     selector: 'app-item-line',
     templateUrl: './item-line.component.html',
-    styleUrls: ['./item-line.component.scss']
+    styleUrls: ['./item-line.component.scss'],
+    standalone: false
 })
 export class ItemLineComponent {
     @Input() character?: Character;

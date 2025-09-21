@@ -10,6 +10,7 @@ import {GroupSummaryResponse} from '../api/responses';
 @Component({
     templateUrl: './home-gm.component.html',
     styleUrls: ['./home-gm.component.scss'],
+    standalone: false
 })
 export class HomeGmComponent implements OnInit {
     public groups: GroupSummaryResponse[];

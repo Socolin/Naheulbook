@@ -8,7 +8,8 @@ export interface MonsterTraitDialogData {
 
 @Component({
     templateUrl: './monster-trait-dialog.component.html',
-    styleUrls: ['./monster-trait-dialog.component.scss']
+    styleUrls: ['./monster-trait-dialog.component.scss'],
+    standalone: false
 })
 export class MonsterTraitDialogComponent implements OnInit {
 

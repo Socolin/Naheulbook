@@ -40,6 +40,7 @@ import {GroupConfigDialogComponent, GroupConfigDialogData, GroupConfigDialogResu
     templateUrl: './group.component.html',
     styleUrls: ['./group.component.scss'],
     providers: [GroupActionService],
+    standalone: false
 })
 export class GroupComponent implements OnInit, OnDestroy {
     public group: Group;

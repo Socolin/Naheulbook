@@ -8,7 +8,8 @@ export class EnableShowInSearchResult {
 @Component({
     selector: 'app-enable-show-in-search',
     templateUrl: './enable-show-in-search.component.html',
-    styleUrls: ['./enable-show-in-search.component.scss']
+    styleUrls: ['./enable-show-in-search.component.scss'],
+    standalone: false
 })
 export class EnableShowInSearchComponent implements OnInit {
     public duration = 600;

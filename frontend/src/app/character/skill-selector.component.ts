@@ -13,6 +13,7 @@ import {Guid} from '../api/shared/util';
     selector: 'skill-selector',
     templateUrl: './skill-selector.component.html',
     styleUrls: ['./skill-selector.component.scss'],
+    standalone: false
 })
 export class SkillSelectorComponent implements OnInit {
     // Inputs

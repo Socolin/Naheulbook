@@ -17,7 +17,8 @@ export class ValueEditorSettingsDialogResult {
 @Component({
     selector: 'app-value-editor-settings-dialog',
     templateUrl: './value-editor-settings-dialog.component.html',
-    styleUrls: ['./value-editor-settings-dialog.component.scss']
+    styleUrls: ['./value-editor-settings-dialog.component.scss'],
+    standalone: false
 })
 export class ValueEditorSettingsDialogComponent implements OnInit {
     modes = ValueEditorModes;

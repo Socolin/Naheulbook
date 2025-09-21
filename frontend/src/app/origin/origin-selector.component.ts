@@ -15,6 +15,7 @@ type OriginAvailability = {
     selector: 'origin-selector',
     templateUrl: './origin-selector.component.html',
     styleUrls: ['./origin-selector.component.scss'],
+    standalone: false
 })
 export class OriginSelectorComponent implements OnInit, OnChanges {
     @Input() cou: number;

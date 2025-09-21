@@ -18,7 +18,8 @@ import {Guid} from '../api/shared/util';
 @Component({
     selector: 'create-character',
     templateUrl: './create-character.component.html',
-    styleUrls: ['./create-character.component.scss']
+    styleUrls: ['./create-character.component.scss'],
+    standalone: false
 })
 export class CreateCharacterComponent implements OnInit {
     public step: number;

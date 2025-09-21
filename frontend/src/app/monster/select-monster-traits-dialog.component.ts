@@ -17,7 +17,8 @@ export interface SelectMonsterTraitsDialogResult {
 @Component({
     selector: 'app-select-monster-traits-dialog',
     templateUrl: './select-monster-traits-dialog.component.html',
-    styleUrls: ['./select-monster-traits-dialog.component.scss']
+    styleUrls: ['./select-monster-traits-dialog.component.scss'],
+    standalone: false
 })
 export class SelectMonsterTraitsDialogComponent implements OnInit {
     public traits?: MonsterTrait[];

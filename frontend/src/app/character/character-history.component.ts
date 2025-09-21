@@ -6,7 +6,8 @@ import {HistoryEntry} from '../shared';
 
 @Component({
     selector: 'character-history',
-    templateUrl: './character-history.component.html'
+    templateUrl: './character-history.component.html',
+    standalone: false
 })
 export class CharacterHistoryComponent implements OnInit {
     @Input() character: Character;

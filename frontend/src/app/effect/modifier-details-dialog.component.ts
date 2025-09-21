@@ -9,7 +9,8 @@ export interface ModifierDetailsDialogData {
 @Component({
     selector: 'app-modifier-details-dialog',
     templateUrl: './modifier-details-dialog.component.html',
-    styleUrls: ['./modifier-details-dialog.component.scss']
+    styleUrls: ['./modifier-details-dialog.component.scss'],
+    standalone: false
 })
 export class ModifierDetailsDialogComponent implements OnInit {
 

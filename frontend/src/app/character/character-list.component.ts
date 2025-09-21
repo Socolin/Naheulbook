@@ -7,7 +7,8 @@ import {CharacterSummaryResponse} from '../api/responses';
 @Component({
     templateUrl: './character-list.component.html',
     styleUrls: ['./character-list.component.scss'],
-    providers: [CharacterService]
+    providers: [CharacterService],
+    standalone: false
 })
 export class CharacterListComponent implements OnInit {
     public characters: CharacterSummaryResponse[];

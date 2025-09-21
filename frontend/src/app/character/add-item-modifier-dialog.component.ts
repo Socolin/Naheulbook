@@ -5,7 +5,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 @Component({
     selector: 'app-add-item-modifier-dialog',
     templateUrl: './add-item-modifier-dialog.component.html',
-    styleUrls: ['./add-item-modifier-dialog.component.scss', '../shared/full-screen-dialog.scss']
+    styleUrls: ['./add-item-modifier-dialog.component.scss', '../shared/full-screen-dialog.scss'],
+    standalone: false
 })
 export class AddItemModifierDialogComponent implements OnInit {
 

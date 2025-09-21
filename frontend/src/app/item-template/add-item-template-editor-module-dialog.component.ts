@@ -8,7 +8,8 @@ export interface AddItemTemplateEditorModuleDialogData {
 
 @Component({
     templateUrl: './add-item-template-editor-module-dialog.component.html',
-    styleUrls: ['./add-item-template-editor-module-dialog.component.scss']
+    styleUrls: ['./add-item-template-editor-module-dialog.component.scss'],
+    standalone: false
 })
 export class AddItemTemplateEditorModuleDialogComponent implements OnInit {
     public availableModules: ItemTemplateModuleDefinition[] = [];

@@ -17,7 +17,8 @@ export interface CreateItemDialogDialog {
 @Component({
     selector: 'app-create-item-dialog',
     templateUrl: './create-item-dialog.component.html',
-    styleUrls: ['./create-item-dialog.component.scss']
+    styleUrls: ['./create-item-dialog.component.scss'],
+    standalone: false
 })
 export class CreateItemDialogComponent implements OnInit {
     public newItem: Item = new Item();

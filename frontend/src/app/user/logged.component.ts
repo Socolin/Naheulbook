@@ -7,6 +7,7 @@ import {LoginService} from './login.service';
 
 @Component({
     templateUrl: './logged.component.html',
+    standalone: false
 })
 export class LoggedComponent implements OnInit, OnDestroy {
     public isInErrorState = false;

@@ -5,7 +5,8 @@ import {PanelNames} from '../useful-data.model';
 
 @Component({
     templateUrl: './entropic-spells-dialog.component.html',
-    styleUrls: ['../../shared/full-screen-dialog.scss', './entropic-spells-dialog.component.scss']
+    styleUrls: ['../../shared/full-screen-dialog.scss', './entropic-spells-dialog.component.scss'],
+    standalone: false
 })
 export class EntropicSpellsDialogComponent implements OnInit {
 

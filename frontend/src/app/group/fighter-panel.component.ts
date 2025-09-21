@@ -23,7 +23,8 @@ import {CreateFightDialogComponent, CreateFightDialogResult} from './create-figh
 @Component({
     selector: 'fighter-panel',
     templateUrl: './fighter-panel.component.html',
-    styleUrls: ['./fighter.component.scss', './fighter-panel.component.scss']
+    styleUrls: ['./fighter.component.scss', './fighter-panel.component.scss'],
+    standalone: false
 })
 export class FighterPanelComponent implements OnInit, OnDestroy {
     @Input() group: Group;

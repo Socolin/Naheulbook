@@ -16,7 +16,8 @@ import {NhbkMatDialog} from '../material-workaround';
 @Component({
     selector: 'item-template-editor-module',
     styleUrls: ['./item-template-editor-module.component.scss'],
-    templateUrl: './item-template-editor-module.component.html'
+    templateUrl: './item-template-editor-module.component.html',
+    standalone: false
 })
 export class ItemTemplateEditorModuleComponent implements OnInit {
     @Input() itemTemplate: ItemTemplate;

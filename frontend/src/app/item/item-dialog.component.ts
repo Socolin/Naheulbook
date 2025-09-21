@@ -17,7 +17,8 @@ export interface ItemDialogData {
 @Component({
     selector: 'app-item-dialog',
     templateUrl: './item-dialog.component.html',
-    styleUrls: ['./item-dialog.component.scss']
+    styleUrls: ['./item-dialog.component.scss'],
+    standalone: false
 })
 export class ItemDialogComponent implements OnInit {
     public jobsName?: { [id: number]: string };

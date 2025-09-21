@@ -17,7 +17,8 @@ export interface EditItemDialogResult {
 @Component({
     selector: 'app-edit-item-dialog',
     templateUrl: './edit-item-dialog.component.html',
-    styleUrls: ['./edit-item-dialog.component.scss']
+    styleUrls: ['./edit-item-dialog.component.scss'],
+    standalone: false
 })
 export class EditItemDialogComponent implements OnInit {
     public form = new UntypedFormGroup({

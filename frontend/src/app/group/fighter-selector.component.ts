@@ -14,7 +14,8 @@ export interface FighterSelectorDialogData {
 
 @Component({
     templateUrl: 'fighter-selector.component.html',
-    styleUrls: ['fighter-selector.component.scss']
+    styleUrls: ['fighter-selector.component.scss'],
+    standalone: false
 })
 export class FighterSelectorComponent {
     @ViewChild(MatSelectionList, {static: true})

@@ -20,6 +20,7 @@ interface IRect {
     selector: 'value-editor',
     styleUrls: ['./value-editor.component.scss'],
     templateUrl: './value-editor.component.html',
+    standalone: false
 })
 export class ValueEditorComponent implements OnChanges {
     @Input() value: number;

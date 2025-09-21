@@ -8,7 +8,8 @@ import {Map} from './map.model';
 @Component({
     selector: 'app-create-map',
     templateUrl: './create-map.component.html',
-    styleUrls: ['./create-map.component.scss']
+    styleUrls: ['./create-map.component.scss'],
+    standalone: false
 })
 export class CreateMapComponent {
     public form = new UntypedFormGroup({

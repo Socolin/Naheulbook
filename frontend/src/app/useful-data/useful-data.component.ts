@@ -33,7 +33,8 @@ class InfoDefinition {
 @Component({
     selector: 'useful-data',
     styleUrls: ['./useful-data.component.scss'],
-    templateUrl: './useful-data.component.html'
+    templateUrl: './useful-data.component.html',
+    standalone: false
 })
 export class UsefulDataComponent implements OnInit, OnDestroy {
     @Output() actionTriggered = new EventEmitter<{ action: string, data: any }>();

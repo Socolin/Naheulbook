@@ -17,7 +17,8 @@ export interface EditNpcDialogResult {
 
 @Component({
     templateUrl: './edit-npc-dialog.component.html',
-    styleUrls: ['../shared/full-screen-dialog.scss', './edit-npc-dialog.component.scss']
+    styleUrls: ['../shared/full-screen-dialog.scss', './edit-npc-dialog.component.scss'],
+    standalone: false
 })
 export class EditNpcDialogComponent {
     public form = new UntypedFormGroup({

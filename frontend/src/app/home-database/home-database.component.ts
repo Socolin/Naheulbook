@@ -8,6 +8,7 @@ import {Subscription} from 'rxjs';
 @Component({
     templateUrl: './home-database.component.html',
     styleUrls: ['./home-database.component.scss'],
+    standalone: false
 })
 export class HomeDatabaseComponent implements OnInit, OnDestroy {
     @ViewChild('start', {static: true, read: MatSidenav})

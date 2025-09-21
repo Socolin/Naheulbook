@@ -12,7 +12,8 @@ export interface ItemTemplateDialogData {
 
 @Component({
     templateUrl: './item-template-dialog.component.html',
-    styleUrls: ['./item-template-dialog.component.scss']
+    styleUrls: ['./item-template-dialog.component.scss'],
+    standalone: false
 })
 export class ItemTemplateDialogComponent implements OnInit {
     public originsName: { [originId: string]: string };

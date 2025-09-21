@@ -16,7 +16,8 @@ export interface GiveItemDialogResult {
 
 @Component({
     templateUrl: './give-item-dialog.component.html',
-    styleUrls: ['./give-item-dialog.component.scss']
+    styleUrls: ['./give-item-dialog.component.scss'],
+    standalone: false
 })
 export class GiveItemDialogComponent implements OnInit {
     public giveTarget?: CharacterGiveDestination;

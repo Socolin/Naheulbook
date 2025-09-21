@@ -7,6 +7,7 @@ import {MiscService} from './misc.service';
     selector: 'stat-requirements-editor',
     styleUrls: ['./stat-requirements-editor.component.scss'],
     templateUrl: './stat-requirements-editor.component.html',
+    standalone: false
 })
 export class StatRequirementsEditorComponent implements OnInit {
     public basicStats: string[] = ['AD', 'CHA', 'COU', 'INT', 'FO'];

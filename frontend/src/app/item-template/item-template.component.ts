@@ -11,6 +11,7 @@ import {NhbkMatDialog} from '../material-workaround';
     selector: 'item-template',
     styleUrls: ['./item-template.component.scss'],
     templateUrl: './item-template.component.html',
+    standalone: false
 })
 export class ItemTemplateComponent {
     @Input() itemTemplate: ItemTemplate;

@@ -21,6 +21,7 @@ export interface GroupAddEffectDialogResult {
 @Component({
     templateUrl: './group-add-effect-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './group-add-effect-dialog.component.scss'],
+    standalone: false
 })
 export class GroupAddEffectDialogComponent {
     @ViewChild('stepper', {static: true})

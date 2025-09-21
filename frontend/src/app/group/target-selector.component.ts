@@ -6,7 +6,8 @@ import {Fighter} from './group.model';
 @Component({
     selector: 'target-selector',
     templateUrl: './target-selector.component.html',
-    styleUrls: ['./target-selector.component.scss']
+    styleUrls: ['./target-selector.component.scss'],
+    standalone: false
 })
 export class TargetSelectorComponent implements OnInit {
     @Input() fighter: Fighter;

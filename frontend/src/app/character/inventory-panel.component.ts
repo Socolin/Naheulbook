@@ -30,6 +30,7 @@ import {ItemTemplate} from '../item-template';
     templateUrl: './inventory-panel.component.html',
     styleUrls: ['./inventory-panel.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class InventoryPanelComponent implements OnInit, OnChanges, OnDestroy {
     @Input() character: Character;

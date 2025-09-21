@@ -12,7 +12,8 @@ import {NhbkMatDialog} from '../material-workaround';
 @Component({
     selector: 'monster-template',
     styleUrls: ['./monster-template.component.scss'],
-    templateUrl: './monster-template.component.html'
+    templateUrl: './monster-template.component.html',
+    standalone: false
 })
 export class MonsterTemplateComponent implements OnInit {
     @Input() monsterTemplate: MonsterTemplate;

@@ -6,7 +6,8 @@ import {GroupService} from './group.service';
 
 @Component({
     templateUrl: './create-group.component.html',
-    providers: [CharacterService]
+    providers: [CharacterService],
+    standalone: false
 })
 export class CreateGroupComponent {
     public groupName: string;

@@ -5,6 +5,7 @@ import {Origin} from './origin.model';
     selector: 'app-origin-player-info',
     templateUrl: './origin-player-info.component.html',
     styleUrls: ['./origin-player-info.component.scss'],
+    standalone: false
 })
 export class OriginPlayerInfoComponent {
     @Input() origin: Origin;

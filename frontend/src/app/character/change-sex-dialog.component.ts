@@ -8,7 +8,8 @@ export interface ChangeSexDialogData {
 
 @Component({
     templateUrl: './change-sex-dialog.component.html',
-    styleUrls: ['./change-sex-dialog.component.scss']
+    styleUrls: ['./change-sex-dialog.component.scss'],
+    standalone: false
 })
 export class ChangeSexDialogComponent {
     public selectedSex: CharacterSex;

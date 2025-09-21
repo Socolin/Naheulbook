@@ -18,6 +18,7 @@ type JobAvailability = {
     selector: 'job-selector',
     templateUrl: './job-selector.component.html',
     styleUrls: ['./job-selector.component.scss'],
+    standalone: false
 })
 export class JobSelectorComponent implements OnInit, OnChanges {
     @Input() cou: number;

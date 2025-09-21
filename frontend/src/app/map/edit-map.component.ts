@@ -5,7 +5,8 @@ import {MapService} from './map.service';
 
 @Component({
     templateUrl: './edit-map.component.html',
-    styleUrls: ['./edit-map.component.scss']
+    styleUrls: ['./edit-map.component.scss'],
+    standalone: false
 })
 export class EditMapComponent implements OnInit {
     public saving = false;

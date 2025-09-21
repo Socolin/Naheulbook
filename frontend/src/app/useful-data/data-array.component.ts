@@ -5,6 +5,7 @@ import {CriticalData} from './useful-data.model';
     selector: 'data-array',
     styleUrls: ['./data-array.component.scss'],
     templateUrl: './data-array.component.html',
+    standalone: false
 })
 export class DataArrayComponent {
     @Input() labels: string[];

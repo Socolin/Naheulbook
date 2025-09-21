@@ -9,7 +9,8 @@ export interface EffectListDialogData {
 
 @Component({
     templateUrl: './effect-list-dialog.component.html',
-    styleUrls: ['../../shared/full-screen-dialog.scss', './effect-list-dialog.component.scss']
+    styleUrls: ['../../shared/full-screen-dialog.scss', './effect-list-dialog.component.scss'],
+    standalone: false
 })
 export class EffectListDialogComponent implements OnInit {
 

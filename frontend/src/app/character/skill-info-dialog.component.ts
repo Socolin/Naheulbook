@@ -9,7 +9,8 @@ export interface SkillInfoDialogData {
 
 @Component({
     templateUrl: './skill-info-dialog.component.html',
-    styleUrls: ['./skill-info-dialog.component.scss']
+    styleUrls: ['./skill-info-dialog.component.scss'],
+    standalone: false
 })
 export class SkillInfoDialogComponent implements OnInit {
     public viewGmSkillInfo = false;

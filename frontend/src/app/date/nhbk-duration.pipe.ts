@@ -3,7 +3,8 @@ import {NhbkDateOffset} from './date.model';
 import {duration2shortText, duration2text} from './util';
 
 @Pipe({
-    name: 'nhbkDuration'
+    name: 'nhbkDuration',
+    standalone: false
 })
 @Injectable()
 export class NhbkDateDurationPipe implements PipeTransform {
@@ -14,7 +15,8 @@ export class NhbkDateDurationPipe implements PipeTransform {
 }
 
 @Pipe({
-    name: 'nhbkShortDuration'
+    name: 'nhbkShortDuration',
+    standalone: false
 })
 @Injectable()
 export class NhbkDateShortDurationPipe implements PipeTransform {

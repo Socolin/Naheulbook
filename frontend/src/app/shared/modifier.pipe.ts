@@ -20,7 +20,8 @@ export function formatModifierValue(modifier) {
 }
 
 @Pipe({
-    name: 'modifier'
+    name: 'modifier',
+    standalone: false
 })
 @Injectable()
 export class ModifierPipe implements PipeTransform {

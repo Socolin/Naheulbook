@@ -9,7 +9,8 @@ import {WebSocketService} from '../websocket';
 import {CharacterSummaryResponse} from '../api/responses';
 
 @Component({
-    template: ``
+    template: ``,
+    standalone: false
 })
 export class LootPanelComponent implements OnDestroy {
     public loots: Loot[] = [];

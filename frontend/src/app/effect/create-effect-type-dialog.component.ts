@@ -12,7 +12,8 @@ export interface CreateEffectTypeDialogResult {
 @Component({
     selector: 'app-create-effect-type-dialog',
     templateUrl: './create-effect-type-dialog.component.html',
-    styleUrls: ['./create-effect-type-dialog.component.scss']
+    styleUrls: ['./create-effect-type-dialog.component.scss'],
+    standalone: false
 })
 export class CreateEffectTypeDialogComponent implements OnInit {
     form: UntypedFormGroup = new UntypedFormGroup({

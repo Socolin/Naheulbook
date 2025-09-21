@@ -8,7 +8,8 @@ import {QuickCommandService} from './quick-command.service';
 @Component({
     selector: 'app-quick-command',
     templateUrl: './quick-command.component.html',
-    styleUrls: ['./quick-command.component.scss']
+    styleUrls: ['./quick-command.component.scss'],
+    standalone: false
 })
 export class QuickCommandComponent implements OnInit {
 

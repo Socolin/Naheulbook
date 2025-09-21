@@ -8,6 +8,7 @@ import {Guid} from '../api/shared/util';
     selector: 'skill-modifiers-editor',
     styleUrls: ['./skill-modifiers-editor.component.scss'],
     templateUrl: './skill-modifiers-editor.component.html',
+    standalone: false
 })
 export class SkillModifiersEditorComponent implements OnInit {
     @Input() modifiers: any[];

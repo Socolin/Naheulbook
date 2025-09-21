@@ -13,7 +13,8 @@ export interface AddMonsterItemDialogData {
 
 @Component({
     templateUrl: './add-monster-item-dialog.component.html',
-    styleUrls: ['./add-monster-item-dialog.component.scss']
+    styleUrls: ['./add-monster-item-dialog.component.scss'],
+    standalone: false
 })
 export class AddMonsterItemDialogComponent implements OnInit {
     public filteredItemTemplates?: {

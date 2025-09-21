@@ -13,6 +13,7 @@ export interface IconSelectorComponentDialogData {
     selector: 'icon-selector',
     templateUrl: './icon-selector.component.html',
     styleUrls: ['./icon-selector.component.scss'],
+    standalone: false
 })
 export class IconSelectorComponent implements OnInit {
     public filter?: string;

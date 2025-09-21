@@ -29,7 +29,8 @@ export interface EditMonsterTemplateDialogData {
 
 @Component({
     templateUrl: './edit-monster-template-dialog.component.html',
-    styleUrls: ['../shared/full-screen-dialog.scss', './edit-monster-template-dialog.component.scss']
+    styleUrls: ['../shared/full-screen-dialog.scss', './edit-monster-template-dialog.component.scss'],
+    standalone: false
 })
 export class EditMonsterTemplateDialogComponent implements OnInit {
     public saving = false;

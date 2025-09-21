@@ -11,7 +11,8 @@ import {ItemTemplateService} from './item-template.service';
 @Component({
     selector: 'autocomplete-search-item-template',
     templateUrl: './autocomplete-search-item-template.component.html',
-    styleUrls: ['./autocomplete-search-item-template.component.scss']
+    styleUrls: ['./autocomplete-search-item-template.component.scss'],
+    standalone: false
 })
 export class AutocompleteSearchItemTemplateComponent {
     @Input() clearOnSelect: boolean;

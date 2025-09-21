@@ -11,6 +11,7 @@ import {CharacterService} from './character.service';
     selector: 'effect-panel',
     templateUrl: './effect-panel.component.html',
     styleUrls: ['./effect-panel.component.scss'],
+    standalone: false
 })
 export class EffectPanelComponent {
     @Input() character: Character;

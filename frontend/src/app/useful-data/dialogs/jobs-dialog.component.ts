@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  templateUrl: './jobs-dialog.component.html',
-  styleUrls: ['../../shared/full-screen-dialog.scss', './jobs-dialog.component.scss']
+    templateUrl: './jobs-dialog.component.html',
+    styleUrls: ['../../shared/full-screen-dialog.scss', './jobs-dialog.component.scss'],
+    standalone: false
 })
 export class JobsDialogComponent implements OnInit {
 

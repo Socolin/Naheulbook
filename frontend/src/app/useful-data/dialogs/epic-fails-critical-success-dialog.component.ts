@@ -13,7 +13,8 @@ export interface EpicFailsCriticalSuccessDialogData {
 
 @Component({
     templateUrl: './epic-fails-critical-success-dialog.component.html',
-    styleUrls: ['../../shared/full-screen-dialog.scss', './epic-fails-critical-success-dialog.component.scss']
+    styleUrls: ['../../shared/full-screen-dialog.scss', './epic-fails-critical-success-dialog.component.scss'],
+    standalone: false
 })
 export class EpicFailsCriticalSuccessDialogComponent implements OnInit {
     public criticalData: { [name: string]: CriticalData[] };

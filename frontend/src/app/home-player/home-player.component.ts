@@ -8,6 +8,7 @@ import {CharacterSummaryResponse} from '../api/responses';
 @Component({
     templateUrl: './home-player.component.html',
     styleUrls: ['./home-player.component.scss'],
+    standalone: false
 })
 export class HomePlayerComponent implements OnInit {
     public characters: CharacterSummaryResponse[];

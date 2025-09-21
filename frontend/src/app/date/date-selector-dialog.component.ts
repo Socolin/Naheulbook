@@ -16,7 +16,8 @@ export interface DateSelectorDialogResult {
 @Component({
     selector: 'app-date-selector-dialog',
     templateUrl: './date-selector-dialog.component.html',
-    styleUrls: ['./date-selector-dialog.component.scss']
+    styleUrls: ['./date-selector-dialog.component.scss'],
+    standalone: false
 })
 export class DateSelectorDialogComponent implements OnInit {
     public defaultDate: NhbkDate = new NhbkDate(0, 8, Math.floor(Math.random() * 365), 1498);

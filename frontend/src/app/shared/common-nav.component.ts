@@ -11,6 +11,7 @@ import {ThemeSelectorDialogComponent} from './theme-selector-dialog.component';
     selector: 'common-nav',
     templateUrl: './common-nav.component.html',
     styleUrls: ['./common-nav.component.scss'],
+    standalone: false
 })
 export class CommonNavComponent implements OnInit {
     constructor(

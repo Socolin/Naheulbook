@@ -9,7 +9,8 @@ export interface CharacterSheetDialogData {
 @Component({
     selector: 'app-character-sheet-dialog',
     templateUrl: './character-sheet-dialog.component.html',
-    styleUrls: ['./character-sheet-dialog.component.scss', '../shared/full-screen-dialog.scss']
+    styleUrls: ['./character-sheet-dialog.component.scss', '../shared/full-screen-dialog.scss'],
+    standalone: false
 })
 export class CharacterSheetDialogComponent implements OnInit {
 

@@ -13,6 +13,7 @@ import {IDurable} from '../api/shared';
     selector: 'active-effect-editor',
     templateUrl: './active-effect-editor.component.html',
     styleUrls: ['./active-effect-editor.component.scss'],
+    standalone: false
 })
 export class ActiveEffectEditorComponent implements DoCheck {
     @Input() reusableToggle = true;

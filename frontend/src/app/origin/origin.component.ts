@@ -6,6 +6,7 @@ import {GmModeService} from '../shared';
     selector: 'origin',
     templateUrl: './origin.component.html',
     styleUrls: ['./origin.component.scss'],
+    standalone: false
 })
 export class OriginComponent {
     @Input() origin: Origin;

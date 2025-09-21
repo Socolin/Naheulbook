@@ -6,7 +6,8 @@ import {removeDiacritics} from '../shared';
 @Component({
     selector: 'monster-trait',
     styleUrls: ['./monster-trait.component.scss'],
-    templateUrl: './monster-trait.component.html'
+    templateUrl: './monster-trait.component.html',
+    standalone: false
 })
 export class MonsterTraitComponent {
     @Input() trait: MonsterTrait;

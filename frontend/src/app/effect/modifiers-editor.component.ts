@@ -13,7 +13,8 @@ import {AddStatModifierDialogComponent} from './add-stat-modifier-dialog.compone
 @Component({
     selector: 'modifiers-editor',
     styleUrls: ['./modifiers-editor.component.scss'],
-    templateUrl: './modifiers-editor.component.html'
+    templateUrl: './modifiers-editor.component.html',
+    standalone: false
 })
 export class ModifiersEditorComponent implements OnInit {
     @Input() modifiers: ItemStatModifier[] = [];

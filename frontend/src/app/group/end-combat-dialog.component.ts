@@ -8,7 +8,8 @@ export class EndCombatDialogResult {
 @Component({
     selector: 'app-end-combat-dialog',
     templateUrl: './end-combat-dialog.component.html',
-    styleUrls: ['./end-combat-dialog.component.scss']
+    styleUrls: ['./end-combat-dialog.component.scss'],
+    standalone: false
 })
 export class EndCombatDialogComponent implements OnInit {
     public decreaseCombatTimer = true;

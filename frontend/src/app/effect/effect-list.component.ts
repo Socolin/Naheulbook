@@ -13,6 +13,7 @@ import {EditEffectDialogComponent, EditEffectDialogData} from './edit-effect-dia
     selector: 'effect-list',
     templateUrl: './effect-list.component.html',
     styleUrls: ['../shared/number-shadow.scss', './effect-list.component.scss'],
+    standalone: false
 })
 export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() inputSubCategoryId: number | undefined;

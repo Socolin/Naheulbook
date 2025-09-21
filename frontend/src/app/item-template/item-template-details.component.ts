@@ -5,7 +5,8 @@ import {God} from '../shared';
 @Component({
     selector: 'app-item-template-details',
     templateUrl: './item-template-details.component.html',
-    styleUrls: ['./item-template-details.component.scss']
+    styleUrls: ['./item-template-details.component.scss'],
+    standalone: false
 })
 export class ItemTemplateDetailsComponent implements OnInit {
     @Input() itemTemplate: ItemTemplate;

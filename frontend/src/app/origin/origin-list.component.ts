@@ -9,6 +9,7 @@ import {OriginService} from './origin.service';
     selector: 'origin-list',
     templateUrl: './origin-list.component.html',
     styleUrls: ['./origin-list.component.scss'],
+    standalone: false
 })
 export class OriginListComponent implements OnInit {
     public origins: Origin[];

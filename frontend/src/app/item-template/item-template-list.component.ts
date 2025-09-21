@@ -34,10 +34,11 @@ import {debounceTime, map, startWith, switchMap, tap} from 'rxjs/operators';
             state('1', style({
                 height: '*',
             })),
-            transition('1 => 0', animate(200, style({height: 0, overflow: 'hidden'}))),
-            transition('0 => 1', animate(200, style({height: '*', visibility: 'visible', overflow: 'hidden'})))
+            transition('1 => 0', animate(200, style({ height: 0, overflow: 'hidden' }))),
+            transition('0 => 1', animate(200, style({ height: '*', visibility: 'visible', overflow: 'hidden' })))
         ])
-    ]
+    ],
+    standalone: false
 })
 export class ItemTemplateListComponent implements OnInit, OnDestroy {
     @Input() inTab: boolean;

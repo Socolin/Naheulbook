@@ -13,6 +13,7 @@ import {Guid} from '../api/shared/util';
 @Component({
     templateUrl: './create-custom-character.component.html',
     styleUrls: ['./create-custom-character.component.scss'],
+    standalone: false
 })
 export class CreateCustomCharacterComponent implements OnInit {
     public form = new UntypedFormGroup({

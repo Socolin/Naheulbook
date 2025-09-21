@@ -10,7 +10,8 @@ const defaultIcon: IconDescription = {
 @Component({
     selector: 'icon',
     templateUrl: './icon.component.html',
-    styleUrls: ['./icon.component.scss']
+    styleUrls: ['./icon.component.scss'],
+    standalone: false
 })
 export class IconComponent {
     get displayedIcon() {

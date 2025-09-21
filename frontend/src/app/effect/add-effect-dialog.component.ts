@@ -17,6 +17,7 @@ export interface AddEffectDialogData {
 @Component({
     templateUrl: './add-effect-dialog.component.html',
     styleUrls: ['./add-effect-dialog.component.scss', '../shared/full-screen-dialog.scss'],
+    standalone: false
 })
 export class AddEffectDialogComponent {
     @ViewChild('stepper', {static: true})

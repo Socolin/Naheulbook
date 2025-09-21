@@ -23,6 +23,7 @@ import {CreateMonsterRequest} from '../api/requests';
     templateUrl: './fighter.component.html',
     styleUrls: ['./fighter.component.scss'],
     providers: [ItemActionService],
+    standalone: false
 })
 export class FighterComponent implements OnInit {
     @Input() group: Group;

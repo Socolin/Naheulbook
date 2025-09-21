@@ -1,7 +1,8 @@
 import {Injectable, Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
-    name: 'plusminus'
+    name: 'plusminus',
+    standalone: false
 })
 @Injectable()
 export class PlusMinusPipe implements PipeTransform {

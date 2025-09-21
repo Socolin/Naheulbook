@@ -11,7 +11,8 @@ export interface SelectMarkerTypeDialogResult {
 
 @Component({
     templateUrl: './select-marker-type-dialog.component.html',
-    styleUrls: ['./select-marker-type-dialog.component.scss']
+    styleUrls: ['./select-marker-type-dialog.component.scss'],
+    standalone: false
 })
 export class SelectMarkerTypeDialogComponent {
     types: { value: MapMarkerType, displayName: string }[] = [

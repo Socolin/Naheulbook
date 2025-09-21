@@ -21,7 +21,8 @@ export interface CharacterItemDialogData {
 
 @Component({
     templateUrl: './character-item-dialog.component.html',
-    styleUrls: ['./character-item-dialog.component.scss']
+    styleUrls: ['./character-item-dialog.component.scss'],
+    standalone: false
 })
 export class CharacterItemDialogComponent implements OnInit {
     public loading = true;

@@ -13,7 +13,8 @@ export class GroupConfigDialogResult {
 @Component({
     selector: 'app-group-config-dialog',
     templateUrl: './group-config-dialog.component.html',
-    styleUrls: ['./group-config-dialog.component.scss']
+    styleUrls: ['./group-config-dialog.component.scss'],
+    standalone: false
 })
 export class GroupConfigDialogComponent implements OnInit {
     public config: IGroupConfig

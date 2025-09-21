@@ -12,7 +12,8 @@ export interface MonsterInventoryDialogData {
 @Component({
     selector: 'app-monster-inventory-dialog',
     templateUrl: './monster-inventory-dialog.component.html',
-    styleUrls: ['./monster-inventory-dialog.component.scss']
+    styleUrls: ['./monster-inventory-dialog.component.scss'],
+    standalone: false
 })
 export class MonsterInventoryDialogComponent {
 

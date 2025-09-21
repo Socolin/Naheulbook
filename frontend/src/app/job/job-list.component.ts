@@ -7,6 +7,7 @@ import {JobService} from './job.service';
     selector: 'job-list',
     templateUrl: './job-list.component.html',
     styleUrls: ['./job-list.component.scss'],
+    standalone: false
 })
 export class JobListComponent implements OnInit {
     public jobs: Job[];

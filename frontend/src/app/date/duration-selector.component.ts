@@ -16,6 +16,7 @@ import {NhbkMatDialog} from '../material-workaround';
     selector: 'duration-selector',
     styleUrls: ['./duration-selector.component.scss'],
     templateUrl: './duration-selector.component.html',
+    standalone: false
 })
 export class DurationSelectorComponent implements OnChanges {
     @Input() durable: IDurable;

@@ -4,7 +4,8 @@ import {tokenColors} from '../shared';
 
 @Component({
     selector: 'character-color-selector',
-    templateUrl: './character-color-selector.component.html'
+    templateUrl: './character-color-selector.component.html',
+    standalone: false
 })
 export class CharacterColorSelectorComponent {
     @Input() character: Character;

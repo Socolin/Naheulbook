@@ -21,6 +21,7 @@ import {Router} from '@angular/router';
     selector: 'group-loot-panel',
     styleUrls: ['./group-loot-panel.component.scss'],
     templateUrl: './group-loot-panel.component.html',
+    standalone: false
 })
 export class GroupLootPanelComponent extends LootPanelComponent implements OnInit, OnDestroy {
     @Input() group: Group;

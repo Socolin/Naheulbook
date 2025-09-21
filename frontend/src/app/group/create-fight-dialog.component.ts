@@ -11,7 +11,6 @@ export type CreateFightDialogResult = {
 
 @Component({
     selector: 'app-create-fight-dialog',
-    standalone: true,
     imports: [
         MatDialogContent,
         MatDialogTitle,

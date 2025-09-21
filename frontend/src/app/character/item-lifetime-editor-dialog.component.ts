@@ -9,7 +9,8 @@ export interface ItemLifetimeEditorDialogData {
 
 @Component({
     templateUrl: './item-lifetime-editor-dialog.component.html',
-    styleUrls: ['./item-lifetime-editor-dialog.component.scss']
+    styleUrls: ['./item-lifetime-editor-dialog.component.scss'],
+    standalone: false
 })
 export class ItemLifetimeEditorDialogComponent {
     public lifetime: IDurable;

@@ -30,7 +30,8 @@ export interface EditMonsterDialogResult {
 @Component({
     selector: 'app-edit-monster-dialog',
     templateUrl: './edit-monster-dialog.component.html',
-    styleUrls: ['../shared/full-screen-dialog.scss', './edit-monster-dialog.component.scss']
+    styleUrls: ['../shared/full-screen-dialog.scss', './edit-monster-dialog.component.scss'],
+    standalone: false
 })
 export class EditMonsterDialogComponent implements OnInit {
     public readonly form: UntypedFormGroup;

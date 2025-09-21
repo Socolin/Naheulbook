@@ -9,7 +9,8 @@ import {startWith} from 'rxjs/operators';
 
 @Component({
     templateUrl: './map-list.component.html',
-    styleUrls: ['./map-list.component.scss']
+    styleUrls: ['./map-list.component.scss'],
+    standalone: false
 })
 export class MapListComponent implements OnInit, OnDestroy {
     public maps?: MapSummaryResponse[];

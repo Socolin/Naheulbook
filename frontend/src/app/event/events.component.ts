@@ -8,6 +8,7 @@ import {EventEditorComponent} from './event-editor.component';
     selector: 'events',
     styleUrls: ['./events.component.scss'],
     templateUrl: './events.component.html',
+    standalone: false
 })
 export class EventsComponent {
     @Input() group: {

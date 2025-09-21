@@ -1,6 +1,9 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
-@Pipe({name: 'textFormatter'})
+@Pipe({
+    name: 'textFormatter',
+    standalone: false
+})
 export class TextFormatterPipe implements PipeTransform {
     private tagsInfo = {
         b: {

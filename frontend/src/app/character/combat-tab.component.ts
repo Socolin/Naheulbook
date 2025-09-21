@@ -9,7 +9,8 @@ import {toDictionaryByKey} from '../utils/utils';
 @Component({
     selector: 'app-combat-tab',
     templateUrl: './combat-tab.component.html',
-    styleUrls: ['./combat-tab.component.scss']
+    styleUrls: ['./combat-tab.component.scss'],
+    standalone: false
 })
 export class CombatTabComponent implements OnInit {
     @Input() character: Character;

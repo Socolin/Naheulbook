@@ -8,7 +8,8 @@ import {GroupService} from './group.service';
 
 @Component({
     selector: 'group-history',
-    templateUrl: './group-history.component.html'
+    templateUrl: './group-history.component.html',
+    standalone: false
 })
 export class GroupHistoryComponent implements OnInit {
     @Input() group: Group;

@@ -13,6 +13,7 @@ import {DateSelectorDialogComponent, DateSelectorDialogData, DateSelectorDialogR
 @Component({
     selector: 'event-editor',
     templateUrl: './event-editor.component.html',
+    standalone: false
 })
 export class EventEditorComponent implements OnInit {
     @Input() group: {

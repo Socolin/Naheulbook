@@ -33,7 +33,8 @@ export interface AddMonsterDialogResult {
 @Component({
     selector: 'app-add-monster-dialog',
     templateUrl: './add-monster-dialog.component.html',
-    styleUrls: ['../shared/full-screen-dialog.scss', './add-monster-dialog.component.scss']
+    styleUrls: ['../shared/full-screen-dialog.scss', './add-monster-dialog.component.scss'],
+    standalone: false
 })
 export class AddMonsterDialogComponent implements OnInit {
     public monsterTypes: MonsterTemplateType[] = [];

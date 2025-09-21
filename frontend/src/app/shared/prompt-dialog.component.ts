@@ -16,7 +16,8 @@ export interface PromptDialogResult {
 
 @Component({
     templateUrl: './prompt-dialog.component.html',
-    styleUrls: ['./prompt-dialog.component.scss']
+    styleUrls: ['./prompt-dialog.component.scss'],
+    standalone: false
 })
 export class PromptDialogComponent implements OnInit {
 

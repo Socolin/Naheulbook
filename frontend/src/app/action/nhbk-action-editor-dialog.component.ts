@@ -23,7 +23,8 @@ export interface NhbkActionEditorDialogData {
 
 @Component({
     styleUrls: ['./nhbk-action-editor-dialog.component.scss'],
-    templateUrl: './nhbk-action-editor-dialog.component.html'
+    templateUrl: './nhbk-action-editor-dialog.component.html',
+    standalone: false
 })
 export class NhbkActionEditorDialogComponent {
     action: NhbkAction = NhbkActionFactory.createFromType(NhbkActionType.addEv, {ev: 1});

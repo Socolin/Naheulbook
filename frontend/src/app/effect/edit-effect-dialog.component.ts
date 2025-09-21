@@ -15,7 +15,8 @@ export interface EditEffectDialogData {
 
 @Component({
     templateUrl: './edit-effect-dialog.component.html',
-    styleUrls: ['../shared/full-screen-dialog.scss', './edit-effect-dialog.component.scss']
+    styleUrls: ['../shared/full-screen-dialog.scss', './edit-effect-dialog.component.scss'],
+    standalone: false
 })
 export class EditEffectDialogComponent implements OnInit {
     public saving = false;

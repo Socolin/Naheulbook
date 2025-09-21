@@ -4,7 +4,8 @@ import {NotificationsService} from './notifications.service';
 @Component({
     selector: 'simple-notifications',
     templateUrl: './simple-notifications.component.html',
-    styleUrls: ['./simple-notifications.component.css']
+    styleUrls: ['./simple-notifications.component.css'],
+    standalone: false
 })
 export class SimpleNotificationsComponent implements OnInit {
 

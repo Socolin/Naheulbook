@@ -8,7 +8,8 @@ export interface OriginPlayerDialogData {
 
 @Component({
     templateUrl: './origin-player-dialog.component.html',
-    styleUrls: ['../shared/full-screen-dialog.scss', './origin-player-dialog.component.scss']
+    styleUrls: ['../shared/full-screen-dialog.scss', './origin-player-dialog.component.scss'],
+    standalone: false
 })
 export class OriginPlayerDialogComponent {
 

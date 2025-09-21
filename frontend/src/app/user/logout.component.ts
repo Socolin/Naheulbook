@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 
 @Component({
     template: `logout`,
+    standalone: false
 })
 export class LogoutComponent implements OnInit {
     constructor(

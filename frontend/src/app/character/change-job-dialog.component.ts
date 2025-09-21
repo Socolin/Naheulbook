@@ -14,7 +14,8 @@ export interface ChangeJobDialogResult {
 
 @Component({
     templateUrl: './change-job-dialog.component.html',
-    styleUrls: ['../shared/full-screen-dialog.scss', './change-job-dialog.component.scss']
+    styleUrls: ['../shared/full-screen-dialog.scss', './change-job-dialog.component.scss'],
+    standalone: false
 })
 export class ChangeJobDialogComponent {
     public jobs: readonly Job[];

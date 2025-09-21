@@ -15,7 +15,8 @@ export interface NameGeneratorDialogResult {
 
 @Component({
     templateUrl: './name-generator-dialog.component.html',
-    styleUrls: ['./name-generator-dialog.component.scss']
+    styleUrls: ['./name-generator-dialog.component.scss'],
+    standalone: false
 })
 export class NameGeneratorDialogComponent implements OnInit, OnDestroy {
     private onClick = new BehaviorSubject<boolean>(true);

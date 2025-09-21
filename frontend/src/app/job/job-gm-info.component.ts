@@ -4,7 +4,8 @@ import {Job} from './job.model';
 @Component({
     selector: 'app-job-gm-info',
     templateUrl: './job-gm-info.component.html',
-    styleUrls: ['./job-gm-info.component.scss']
+    styleUrls: ['./job-gm-info.component.scss'],
+    standalone: false
 })
 export class JobGmInfoComponent implements OnInit {
     @Input() job: Job;

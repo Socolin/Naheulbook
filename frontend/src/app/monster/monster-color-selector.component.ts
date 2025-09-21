@@ -6,7 +6,8 @@ import {tokenColors} from '../shared';
 @Component({
     selector: 'monster-color-selector',
     templateUrl: './monster-color-selector.component.html',
-    styleUrls: ['./monster-color-selector.component.scss']
+    styleUrls: ['./monster-color-selector.component.scss'],
+    standalone: false
 })
 export class MonsterColorSelectorComponent {
     @Input() monster: Monster;

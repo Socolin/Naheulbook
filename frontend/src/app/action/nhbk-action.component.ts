@@ -14,7 +14,8 @@ import {ActiveStatsModifier} from '../shared';
 @Component({
     selector: 'nhbk-action',
     styleUrls: ['./nhbk-action.component.scss'],
-    templateUrl: './nhbk-action.component.html'
+    templateUrl: './nhbk-action.component.html',
+    standalone: false
 })
 export class NhbkActionComponent implements OnInit, OnChanges {
     @Input() action: NhbkAction;

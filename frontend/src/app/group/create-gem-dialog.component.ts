@@ -14,7 +14,8 @@ export interface CreateGemDialogDialog {
 @Component({
     selector: 'app-create-gem-dialog',
     templateUrl: './create-gem-dialog.component.html',
-    styleUrls: ['./create-gem-dialog.component.scss']
+    styleUrls: ['./create-gem-dialog.component.scss'],
+    standalone: false
 })
 export class CreateGemDialogComponent implements OnInit {
     public newItem = new Item();

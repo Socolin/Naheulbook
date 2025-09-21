@@ -32,6 +32,7 @@ import {InventoryPanelComponent} from './inventory-panel.component';
     templateUrl: './character.component.html',
     styleUrls: ['./character.component.scss'],
     providers: [ItemActionService],
+    standalone: false
 })
 export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;

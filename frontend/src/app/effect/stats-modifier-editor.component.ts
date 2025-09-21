@@ -5,6 +5,7 @@ import {StatsModifier} from '../shared';
     selector: 'stats-modifier-editor',
     templateUrl: './stats-modifier-editor.component.html',
     styleUrls: ['./stats-modifier-editor.component.scss'],
+    standalone: false
 })
 export class StatModifierEditorComponent {
     @Input() modifier: StatsModifier;

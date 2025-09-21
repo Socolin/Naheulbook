@@ -25,6 +25,7 @@ function sortItemContainerFirstFn(sortType: ItemSortType, a: Item, b: Item) {
     selector: 'bag-item-view',
     templateUrl: './bag-item-view.component.html',
     styleUrls: ['./bag-item-view.component.scss'],
+    standalone: false
 })
 export class BagItemViewComponent {
     @Input() items: Item[];

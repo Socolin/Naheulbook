@@ -5,7 +5,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
     selector: 'app-error-details-dialog',
     templateUrl: './error-details-dialog.component.html',
-    styleUrls: ['./error-details-dialog.component.scss']
+    styleUrls: ['./error-details-dialog.component.scss'],
+    standalone: false
 })
 export class ErrorDetailsDialogComponent implements OnInit {
     public readonly errorType: 'ServerError' | 'BadGateway' | 'Forbidden' | 'BadRequest' | undefined;

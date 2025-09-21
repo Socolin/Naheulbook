@@ -2,7 +2,8 @@ import {Pipe, PipeTransform} from '@angular/core';
 import {ItemTemplate} from './item-template.model';
 
 @Pipe({
-    name: 'itemTemplateDataProtection'
+    name: 'itemTemplateDataProtection',
+    standalone: false
 })
 export class ItemTemplateDataProtectionPipe implements PipeTransform {
 

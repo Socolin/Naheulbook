@@ -29,7 +29,8 @@ export class LevelUpInfo {
 
 @Component({
     templateUrl: './level-up-dialog.component.html',
-    styleUrls: ['../shared/full-screen-dialog.scss', './level-up-dialog.component.scss']
+    styleUrls: ['../shared/full-screen-dialog.scss', './level-up-dialog.component.scss'],
+    standalone: false
 })
 export class LevelUpDialogComponent {
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();

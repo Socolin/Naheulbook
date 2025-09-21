@@ -9,7 +9,8 @@ import {GroupSummaryResponse} from '../api/responses';
 
 @Component({
     templateUrl: './group-list.component.html',
-    styleUrls: ['./group-list.component.scss']
+    styleUrls: ['./group-list.component.scss'],
+    standalone: false
 })
 export class GroupListComponent implements OnInit {
     public groups: GroupSummaryResponse[];

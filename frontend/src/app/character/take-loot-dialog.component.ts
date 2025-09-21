@@ -12,7 +12,8 @@ export interface TakeLootDialogResult {
 
 @Component({
     templateUrl: './take-loot-dialog.component.html',
-    styleUrls: ['./take-loot-dialog.component.scss']
+    styleUrls: ['./take-loot-dialog.component.scss'],
+    standalone: false
 })
 export class TakeLootDialogComponent implements OnInit {
     public takingQuantity?: number;

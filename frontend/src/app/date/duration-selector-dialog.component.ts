@@ -35,6 +35,7 @@ const allUnits: { unit: UnitTypes, title: string }[] = [
 @Component({
     styleUrls: ['./duration-selector-dialog.component.scss'],
     templateUrl: './duration-selector-dialog.component.html',
+    standalone: false
 })
 export class DurationSelectorDialogComponent implements OnInit {
     static numberHeight = 19;

@@ -4,7 +4,8 @@ import {Speciality} from '../job';
 
 @Component({
     selector: 'speciality-selector',
-    templateUrl: './speciality-selector.component.html'
+    templateUrl: './speciality-selector.component.html',
+    standalone: false
 })
 export class SpecialitySelectorComponent {
     @Input() specialities: Speciality[];

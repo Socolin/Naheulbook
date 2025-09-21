@@ -4,7 +4,8 @@ import {UsefulDataDialogResult} from './useful-data-dialog-result';
 
 @Component({
     templateUrl: './item-templates-dialog.component.html',
-    styleUrls: ['../../shared/full-screen-dialog.scss', './item-templates-dialog.component.scss']
+    styleUrls: ['../../shared/full-screen-dialog.scss', './item-templates-dialog.component.scss'],
+    standalone: false
 })
 export class ItemTemplatesDialogComponent implements OnInit {
 

@@ -18,7 +18,8 @@ export interface StatModifierAdvancedDialogData {
 @Component({
     selector: 'app-stat-modifier-advanced-dialog',
     templateUrl: './stat-modifier-advanced-dialog.component.html',
-    styleUrls: ['./stat-modifier-advanced-dialog.component.scss']
+    styleUrls: ['./stat-modifier-advanced-dialog.component.scss'],
+    standalone: false
 })
 export class StatModifierAdvancedDialogComponent implements OnInit {
     public origins: Origin[];

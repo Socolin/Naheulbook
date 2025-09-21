@@ -5,6 +5,7 @@ import {DateService} from './date.service';
 @Component({
     selector: 'date',
     templateUrl: './date.component.html',
+    standalone: false
 })
 export class DateComponent implements OnInit, OnChanges {
     @Input() date: NhbkDate;

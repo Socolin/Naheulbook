@@ -15,7 +15,8 @@ export interface MapLayerDialogResult {
 
 @Component({
     templateUrl: './map-layer-dialog.component.html',
-    styleUrls: ['./map-layer-dialog.component.scss']
+    styleUrls: ['./map-layer-dialog.component.scss'],
+    standalone: false
 })
 export class MapLayerDialogComponent {
 

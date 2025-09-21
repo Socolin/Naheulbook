@@ -8,7 +8,8 @@ export interface JobPlayerDialogData {
 
 @Component({
     templateUrl: './job-player-dialog.component.html',
-    styleUrls: ['../shared/full-screen-dialog.scss', './job-player-dialog.component.scss']
+    styleUrls: ['../shared/full-screen-dialog.scss', './job-player-dialog.component.scss'],
+    standalone: false
 })
 export class JobPlayerDialogComponent {
 

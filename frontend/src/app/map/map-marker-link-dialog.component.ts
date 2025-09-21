@@ -20,7 +20,8 @@ export interface AddMapMarkerLinkDialogResult {
 
 @Component({
     templateUrl: './map-marker-link-dialog.component.html',
-    styleUrls: ['./map-marker-link-dialog.component.scss']
+    styleUrls: ['./map-marker-link-dialog.component.scss'],
+    standalone: false
 })
 export class MapMarkerLinkDialogComponent implements OnInit {
     maps?: MapSummaryResponse[];

@@ -13,6 +13,7 @@ import {NhbkMatDialog} from '../material-workaround';
     selector: 'character-loot-panel',
     styleUrls: ['./character-loot-panel.component.scss'],
     templateUrl: './character-loot-panel.component.html',
+    standalone: false
 })
 export class CharacterLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() character: Character;

@@ -6,7 +6,8 @@ import {GmModeService} from '../shared';
 @Component({
     selector: 'job',
     templateUrl: './job.component.html',
-    styleUrls: ['./job.component.scss']
+    styleUrls: ['./job.component.scss'],
+    standalone: false
 })
 export class JobComponent {
     @Input() job: Job;

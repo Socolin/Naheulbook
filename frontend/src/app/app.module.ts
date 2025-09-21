@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
+import { ErrorHandler, NgModule, inject, provideAppInitializer } from '@angular/core';
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -48,12 +48,10 @@ import { QuickCommandModule } from './quick-command/quick-command.module';
             useClass: AuthenticationInterceptor,
             multi: true
         },
-        {
-            provide: APP_INITIALIZER,
-            useFactory: onAppInit,
-            multi: true,
-            deps: [LoginService]
-        },
+        provideAppInitializer(() => {
+        const initializerFn = (onAppInit)(inject(LoginService));
+        return initializerFn();
+      }),
         provideHttpClient(withInterceptorsFromDi()),
     ] })
 export class AppModule {

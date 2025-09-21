@@ -4,7 +4,8 @@ import {Origin} from './origin.model';
 @Component({
     selector: 'app-origin-gm-info',
     templateUrl: './origin-gm-info.component.html',
-    styleUrls: ['./origin-gm-info.component.scss']
+    styleUrls: ['./origin-gm-info.component.scss'],
+    standalone: false
 })
 export class OriginGmInfoComponent {
     @Input() origin: Origin;

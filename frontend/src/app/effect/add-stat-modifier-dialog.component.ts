@@ -7,7 +7,8 @@ import {StatModificationOperand} from '../api/shared/enums';
 @Component({
     selector: 'app-add-stat-modifier-dialog',
     templateUrl: './add-stat-modifier-dialog.component.html',
-    styleUrls: ['./add-stat-modifier-dialog.component.scss']
+    styleUrls: ['./add-stat-modifier-dialog.component.scss'],
+    standalone: false
 })
 export class AddStatModifierDialogComponent implements OnInit {
     public selectedStat?: string;

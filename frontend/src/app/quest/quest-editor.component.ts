@@ -5,7 +5,8 @@ import {QuestTemplate} from './quest.model';
 
 @Component({
     selector: 'quest-editor',
-    templateUrl: './quest-editor.component.html'
+    templateUrl: './quest-editor.component.html',
+    standalone: false
 })
 export class QuestEditorComponent {
     @Input() quest: QuestTemplate;
