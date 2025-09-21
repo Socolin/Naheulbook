@@ -33,28 +33,28 @@
         background: linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12));
     }
     .fighter-container {
-        border-bottom-color: mat.get-color-from-palette($foreground, hint-text);
+        border-bottom-color: mat.m2-get-color-from-palette($foreground, hint-text);
     }
 
     .incompatible-item {
-        color: mat.get-color-from-palette($warn);
+        color: mat.m2-get-color-from-palette($warn);
     }
 
     .loot-list {
         .active {
-            background-color: mat.get-color-from-palette($background, selected-button);
+            background-color: mat.m2-get-color-from-palette($background, selected-button);
         }
 
         ul {
             > li {
                 > icon {
-                    color: mat.get-color-from-palette($foreground, text);
+                    color: mat.m2-get-color-from-palette($foreground, text);
                 }
             }
         }
         .loot-monsters {
             .monster-item {
-                border-left-color: mat.get-color-from-palette($foreground, hint-text);
+                border-left-color: mat.m2-get-color-from-palette($foreground, hint-text);
             }
         }
     }

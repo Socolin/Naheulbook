@@ -8,55 +8,55 @@
     $foreground: map-get($theme, foreground);
 
     .ve-value {
-        background: linear-gradient(mat.get-color-from-palette($primary, default, 0.12), mat.get-color-from-palette($primary, default, 0.20));
+        background: linear-gradient(mat.m2-get-color-from-palette($primary, default, 0.12), mat.m2-get-color-from-palette($primary, default, 0.20));
     }
     .ve-value:hover {
-        background: linear-gradient(mat.get-color-from-palette($primary, default, 0.30), mat.get-color-from-palette($primary, default, 0.30));
+        background: linear-gradient(mat.m2-get-color-from-palette($primary, default, 0.30), mat.m2-get-color-from-palette($primary, default, 0.30));
     }
 
     .ve-keyboard-container {
         .ve-title {
-            background: mat.get-color-from-palette($background, card);
-            color: mat.get-color-from-palette($foreground, base);
-            border-color: mat.get-color-from-palette($foreground, divider);
+            background: mat.m2-get-color-from-palette($background, card);
+            color: mat.m2-get-color-from-palette($foreground, base);
+            border-color: mat.m2-get-color-from-palette($foreground, divider);
         }
     }
     .ve-mobile-container {
         .ve-summary,
         .ve-title {
-            background: mat.get-color-from-palette($background, card);
-            color: mat.get-color-from-palette($foreground, base);
+            background: mat.m2-get-color-from-palette($background, card);
+            color: mat.m2-get-color-from-palette($foreground, base);
         }
 
         .ve-delta-value {
-            background: mat.get-color-from-palette($background, background);
-            color: mat.get-color-from-palette($foreground, base);
+            background: mat.m2-get-color-from-palette($background, background);
+            color: mat.m2-get-color-from-palette($foreground, base);
         }
 
         .ve-button {
             &.ve-button-valid {
-                background: mat.get-color-from-palette($accent);
-                color: mat.get-color-from-palette($accent, default-contrast);
+                background: mat.m2-get-color-from-palette($accent);
+                color: mat.m2-get-color-from-palette($accent, default-contrast);
             }
 
             &.ve-button-s500,
             &.ve-button-s50,
             &.ve-button-s5,
             &.ve-button-s1 {
-                background: mat.get-color-from-palette($primary, 400);
-                color: mat.get-color-from-palette($primary, default-contrast);
+                background: mat.m2-get-color-from-palette($primary, 400);
+                color: mat.m2-get-color-from-palette($primary, default-contrast);
             }
 
             &.ve-button-reset,
             &.ve-button-max,
             &.ve-button-zero,
             {
-                background: mat.get-color-from-palette($primary);
-                color: mat.get-color-from-palette($primary, default-contrast);
+                background: mat.m2-get-color-from-palette($primary);
+                color: mat.m2-get-color-from-palette($primary, default-contrast);
 
                 [disabled] {
-                    background: mat.get-color-from-palette($background, disabled-button);
-                    color: mat.get-color-from-palette($foreground, disabled-button);
+                    background: mat.m2-get-color-from-palette($background, disabled-button);
+                    color: mat.m2-get-color-from-palette($foreground, disabled-button);
                 }
             }
 
@@ -64,13 +64,13 @@
             &.ve-button-a50,
             &.ve-button-a5,
             &.ve-button-a1 {
-                background: mat.get-color-from-palette($primary, 600);
-                color: mat.get-color-from-palette($primary, default-contrast);
+                background: mat.m2-get-color-from-palette($primary, 600);
+                color: mat.m2-get-color-from-palette($primary, default-contrast);
             }
 
             &.disabled {
-                background: mat.get-color-from-palette($background, disabled-button);
-                color: mat.get-color-from-palette($foreground, disabled-button);
+                background: mat.m2-get-color-from-palette($background, disabled-button);
+                color: mat.m2-get-color-from-palette($foreground, disabled-button);
             }
         }
 

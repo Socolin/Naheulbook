@@ -5,9 +5,9 @@
     $background: map-get($theme, background);
 
     .nhbk-full-screen-dialog {
-        color: mat.get-color-from-palette($foreground, 'text');
+        color: mat.m2-get-color-from-palette($foreground, 'text');
         .mat-mdc-dialog-container .mdc-dialog__surface {
-            background-color: mat.get-color-from-palette($background, 'background');
+            background-color: mat.m2-get-color-from-palette($background, 'background');
         }
     }
 }

@@ -6,7 +6,7 @@
     common-nav {
         .gm-toggle {
             &:hover, &:focus {
-                background: mat.get-color-from-palette($background, 'hover');
+                background: mat.m2-get-color-from-palette($background, 'hover');
             }
         }
     }

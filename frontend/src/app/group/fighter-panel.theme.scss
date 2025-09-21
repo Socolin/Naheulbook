@@ -5,7 +5,7 @@
     $background: map-get($theme, background);
 
     .fighter-card {
-        background: mat.get-color-from-palette($background, card);
-        color: mat.get-color-from-palette($foreground, text);
+        background: mat.m2-get-color-from-palette($background, card);
+        color: mat.m2-get-color-from-palette($foreground, text);
     }
 }
