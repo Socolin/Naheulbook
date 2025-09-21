@@ -1,51 +1,59 @@
-<ng-template [ngIf]="(gmModeService.gmMode | async) === false">
-    <p class="mat-body">
-        Cette section permet d'accéder à un certains nombres d'informations utiles pour les <strong>Maître de
-        jeu</strong>.
-    </p>
-    <p class="mat-body">
-        Si vous êtes un joueur vous ne devriez pas avoir besoin de venir ici.
-    </p>
-    <p class="mat-body">
-        Si vous êtes un <strong>Maître de jeu</strong> vous pouvez activer le mode <strong>Maître de jeu</strong> dans
-        le menu
-        accessible via le bouton
-        <mat-icon>menu_vert</mat-icon>
-        en haut à gauche de cette page, afin d'avoir
-        accès à toutes les informations.
-    </p>
-</ng-template>
+@if ((gmModeService.gmMode | async) === false) {
+  <p class="mat-body">
+    Cette section permet d'accéder à un certains nombres d'informations utiles pour les <strong>Maître de
+  jeu</strong>.
+</p>
+<p class="mat-body">
+  Si vous êtes un joueur vous ne devriez pas avoir besoin de venir ici.
+</p>
+<p class="mat-body">
+  Si vous êtes un <strong>Maître de jeu</strong> vous pouvez activer le mode <strong>Maître de jeu</strong> dans
+  le menu
+  accessible via le bouton
+  <mat-icon>menu_vert</mat-icon>
+  en haut à gauche de cette page, afin d'avoir
+  accès à toutes les informations.
+</p>
+}
 
 <mat-card>
-    <mat-nav-list class="database-menu">
-        <a mat-list-item [routerLink]="['/database/origins']">
-            <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-ogre" class="ra-mat-button-icon-32"></mat-icon>
-            Origines
-        </a>
-        <a mat-list-item [routerLink]="['/database/jobs']">
-            <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-diploma" class="ra-mat-button-icon-32"></mat-icon>
-            Metiers
-        </a>
-        <a mat-list-item [routerLink]="['/database/skills']" *ngIf="gmModeService.gmMode | async">
-            <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-32"></mat-icon>
-            Compétences
-        </a>
-        <a mat-list-item [routerLink]="['/database/items']" *ngIf="gmModeService.gmMode | async">
-            <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-32"></mat-icon>
-            Objets
-        </a>
-        <a mat-list-item [routerLink]="['/database/effects']" *ngIf="gmModeService.gmMode | async">
-            <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-broken-bone" class="ra-mat-button-icon-32"></mat-icon>
-            Effets
-        </a>
-        <a mat-list-item [routerLink]="['/database/monsters']" *ngIf="gmModeService.gmMode | async">
-            <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-dragon-head" class="ra-mat-button-icon-32"></mat-icon>
-            Bestiaire
-        </a>
-        <a mat-list-item [routerLink]="['/map']">
-            <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-compass" class="ra-mat-button-icon-32"></mat-icon>
-            Cartographie
-        </a>
-    </mat-nav-list>
+  <mat-nav-list class="database-menu">
+    <a mat-list-item [routerLink]="['/database/origins']">
+      <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-ogre" class="ra-mat-button-icon-32"></mat-icon>
+      Origines
+    </a>
+    <a mat-list-item [routerLink]="['/database/jobs']">
+      <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-diploma" class="ra-mat-button-icon-32"></mat-icon>
+      Metiers
+    </a>
+    @if (gmModeService.gmMode | async) {
+      <a mat-list-item [routerLink]="['/database/skills']">
+        <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-32"></mat-icon>
+        Compétences
+      </a>
+    }
+    @if (gmModeService.gmMode | async) {
+      <a mat-list-item [routerLink]="['/database/items']">
+        <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-32"></mat-icon>
+        Objets
+      </a>
+    }
+    @if (gmModeService.gmMode | async) {
+      <a mat-list-item [routerLink]="['/database/effects']">
+        <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-broken-bone" class="ra-mat-button-icon-32"></mat-icon>
+        Effets
+      </a>
+    }
+    @if (gmModeService.gmMode | async) {
+      <a mat-list-item [routerLink]="['/database/monsters']">
+        <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-dragon-head" class="ra-mat-button-icon-32"></mat-icon>
+        Bestiaire
+      </a>
+    }
+    <a mat-list-item [routerLink]="['/map']">
+      <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-compass" class="ra-mat-button-icon-32"></mat-icon>
+      Cartographie
+    </a>
+  </mat-nav-list>
 </mat-card>
 

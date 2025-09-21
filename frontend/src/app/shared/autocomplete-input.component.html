@@ -1,33 +1,39 @@
 <span class="autocomplete-container">
-    <mat-form-field #autocompleteOrigin="cdkOverlayOrigin" cdk-overlay-origin>
-        <input matInput
-               #inputField
-               [disabled]="disabled"
-               [placeholder]="placeholder"
-               (keydown)="onKey($event)"
-               [(ngModel)]="value"
-               (ngModelChange)="updateList()"
-               (click)="updateList()"
-               autocomplete="false"/>
-    </mat-form-field>
+  <mat-form-field #autocompleteOrigin="cdkOverlayOrigin" cdk-overlay-origin>
+    <input matInput
+      #inputField
+      [disabled]="disabled"
+      [placeholder]="placeholder"
+      (keydown)="onKey($event)"
+      [(ngModel)]="value"
+      (ngModelChange)="updateList()"
+      (click)="updateList()"
+      autocomplete="false"/>
+  </mat-form-field>
 
-    <ng-template cdk-connected-overlay
-                 [cdkConnectedOverlayOrigin]="autocompleteOrigin"
-                 [cdkConnectedOverlayOpen]="value && matchingValues !== null && matchingValues?.length > 0"
-                 [cdkConnectedOverlayOffsetY]="-20"
-                 cdkConnectedOverlayHasBackdrop
-                 cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-                 (backdropClick)="matchingValues = undefined">
-        <mat-nav-list dense class="autocomplete-overlay">
-            <ng-template ngFor let-item [ngForOf]="matchingValues" let-i="index">
-                <mat-list-item (click)="selectValue(item)" [class.selected]="preSelectedValueIndex === i">
-                    <span *ngIf="item.icon" mat-list-avatar><icon [size]="'40px'" [icon]="item.icon"></icon></span>
-                    <span matLine style="display: flex; align-items: center">
-                        <mat-icon *ngIf="item.mdIcon">{{item.mdIcon}}</mat-icon>{{item.text}}
-                    </span>
-                    <span matLine *ngIf="item.secondaryText" class="secondary-text">{{item.secondaryText}}</span>
-                </mat-list-item>
-            </ng-template>
-        </mat-nav-list>
+  <ng-template cdk-connected-overlay
+    [cdkConnectedOverlayOrigin]="autocompleteOrigin"
+    [cdkConnectedOverlayOpen]="value && matchingValues !== null && matchingValues?.length > 0"
+    [cdkConnectedOverlayOffsetY]="-20"
+    cdkConnectedOverlayHasBackdrop
+    cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+    (backdropClick)="matchingValues = undefined">
+    <mat-nav-list dense class="autocomplete-overlay">
+      @for (item of matchingValues; track item; let i = $index) {
+        <mat-list-item (click)="selectValue(item)" [class.selected]="preSelectedValueIndex === i">
+          @if (item.icon) {
+            <span mat-list-avatar><icon [size]="'40px'" [icon]="item.icon"></icon></span>
+          }
+          <span matLine style="display: flex; align-items: center">
+            @if (item.mdIcon) {
+              <mat-icon>{{item.mdIcon}}</mat-icon>
+              }{{item.text}}
+            </span>
+            @if (item.secondaryText) {
+              <span matLine class="secondary-text">{{item.secondaryText}}</span>
+            }
+          </mat-list-item>
+        }
+      </mat-nav-list>
     </ng-template>
-</span>
+  </span>

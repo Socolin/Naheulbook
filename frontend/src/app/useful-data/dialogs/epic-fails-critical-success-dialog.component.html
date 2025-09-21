@@ -1,56 +1,72 @@
 <mat-toolbar color="primary">
-    <button mat-icon-button mat-dialog-close>
-        <mat-icon>close</mat-icon>
-    </button>
-    <span *ngIf="data.mode === 'epicFails'">
-        Maladresses (Echec critique)
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+  @if (data.mode === 'epicFails') {
+    <span>
+      Maladresses (Echec critique)
     </span>
-    <span *ngIf="data.mode === 'criticalSuccess'">
-        Attaque et parade critique (Réussite critique)
+  }
+  @if (data.mode === 'criticalSuccess') {
+    <span>
+      Attaque et parade critique (Réussite critique)
     </span>
+  }
 </mat-toolbar>
 
 <div class="content mat-typography">
-    <mat-form-field>
-        <mat-select [(ngModel)]="selectedIndex">
-            <mat-select-trigger>
-                <span class="tab-label-with-icon">
-                    <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + tabs[selectedIndex].icon"></mat-icon>
-                    <span>{{tabs[selectedIndex].title}}</span>
-                </span>
-            </mat-select-trigger>
-            <mat-option *ngFor="let tab of tabs; let i = index" [value]="i">
-                <span class="tab-label-with-icon">
-                    <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + tab.icon"></mat-icon>
-                    <span>{{tab.title}}</span>
-                </span>
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-tab-group [(selectedIndex)]="selectedIndex" [animationDuration]="isMobile ? '0' : '500ms'">
-        <mat-tab *ngFor="let tab of tabs">
-            <ng-template matTabLabel>
-                <div class="tab-label-with-icon">
-                    <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + tab.icon"></mat-icon>
-                    <span>{{tab.title}}</span>
-                </div>
-            </ng-template>
-            <div class="note">
-                <span class="label">{{tab.header.title}}</span>
-                <span class="details">{{tab.header.details}}</span>
-                <div class="description" *ngIf="tab.header.description">{{tab.header.description}}</div>
-            </div>
-            <data-array
-                [labels]="tab.labels"
-                [datas]="criticalData[tab.dataSet]">
-            </data-array>
-            <p class="note" *ngFor="let note of tab.notes" [innerHTML]="note"></p>
-            <p *ngIf="tab.showInjuryLink">
-                ** voir <a (click)="openPanel('effects', 4)">table des modifications liées aux blessures graves</a>
-            </p>
-            <p *ngIf="tab.showEntropicSpellsLink">
-                <a (click)="openPanel('entropicSpells')">Voir sorts entropiques</a>
-            </p>
-        </mat-tab>
-    </mat-tab-group>
+  <mat-form-field>
+    <mat-select [(ngModel)]="selectedIndex">
+      <mat-select-trigger>
+        <span class="tab-label-with-icon">
+          <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + tabs[selectedIndex].icon"></mat-icon>
+          <span>{{tabs[selectedIndex].title}}</span>
+        </span>
+      </mat-select-trigger>
+      @for (tab of tabs; track tab; let i = $index) {
+        <mat-option [value]="i">
+          <span class="tab-label-with-icon">
+            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + tab.icon"></mat-icon>
+            <span>{{tab.title}}</span>
+          </span>
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-tab-group [(selectedIndex)]="selectedIndex" [animationDuration]="isMobile ? '0' : '500ms'">
+    @for (tab of tabs; track tab) {
+      <mat-tab>
+        <ng-template matTabLabel>
+          <div class="tab-label-with-icon">
+            <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + tab.icon"></mat-icon>
+            <span>{{tab.title}}</span>
+          </div>
+        </ng-template>
+        <div class="note">
+          <span class="label">{{tab.header.title}}</span>
+          <span class="details">{{tab.header.details}}</span>
+          @if (tab.header.description) {
+            <div class="description">{{tab.header.description}}</div>
+          }
+        </div>
+        <data-array
+          [labels]="tab.labels"
+          [datas]="criticalData[tab.dataSet]">
+        </data-array>
+        @for (note of tab.notes; track note) {
+          <p class="note" [innerHTML]="note"></p>
+        }
+        @if (tab.showInjuryLink) {
+          <p>
+            ** voir <a (click)="openPanel('effects', 4)">table des modifications liées aux blessures graves</a>
+          </p>
+        }
+        @if (tab.showEntropicSpellsLink) {
+          <p>
+            <a (click)="openPanel('entropicSpells')">Voir sorts entropiques</a>
+          </p>
+        }
+      </mat-tab>
+    }
+  </mat-tab-group>
 </div>

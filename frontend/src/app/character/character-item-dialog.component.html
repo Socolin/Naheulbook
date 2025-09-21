@@ -1,525 +1,696 @@
-<mat-dialog-content *ngIf="loading">
+@if (loading) {
+  <mat-dialog-content>
     <mat-spinner></mat-spinner>
-</mat-dialog-content>
-<mat-dialog-content *ngIf="!loading">
+  </mat-dialog-content>
+}
+@if (!loading) {
+  <mat-dialog-content>
     <div class="item-header">
-        <icon [icon]="data.item.data.icon"
-              [size]="'40px'"
-              [notIdentified]="data.item.data.notIdentified"
-              [enchanted]="(!data.item.data.notIdentified || data.gmView) && data.item.template.data.enchantment !== undefined"></icon>
-        <span class="item-name">
-            <span *ngIf="data.item.template.data.quantifiable || data.item.data.quantity">
-                    {{data.item.data.quantity}}
-                </span>
+      <icon [icon]="data.item.data.icon"
+        [size]="'40px'"
+        [notIdentified]="data.item.data.notIdentified"
+      [enchanted]="(!data.item.data.notIdentified || data.gmView) && data.item.template.data.enchantment !== undefined"></icon>
+      <span class="item-name">
+        @if (data.item.template.data.quantifiable || data.item.data.quantity) {
+          <span>
+            {{data.item.data.quantity}}
+          </span>
+        }
+        <span>
+          {{data.item.data.name}}
+          @if ((!data.item.data.notIdentified || data.gmView) && data.item.template.data.enchantment !== undefined) {
             <span>
-                {{data.item.data.name}}
-                <span *ngIf="(!data.item.data.notIdentified || data.gmView) && data.item.template.data.enchantment !== undefined">
-                    (Ench. {{data.item.template.data.enchantment}})
-                </span>
+              (Ench. {{data.item.template.data.enchantment}})
             </span>
+          }
         </span>
+      </span>
     </div>
     <mat-card-content class="item-detail-content">
-        <span class="icon-label" *ngIf="data.item.data.notIdentified">
-            <mat-icon fontSet="game-icon" fontIcon="game-icon-uncertainty" class="ra-mat-button-icon-24"></mat-icon>
-            <div>
-                Non identifié
-            </div>
+      @if (data.item.data.notIdentified) {
+        <span class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-uncertainty" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            Non identifié
+          </div>
         </span>
-
-        <div *ngIf="data.item.data.notIdentified && !data.gmView">
-            <div class="icon-label" *ngIf="data.item.template.data.bonusDamage || data.item.template.data.damageDice">
-                <mat-icon fontSet="ra" fontIcon="ra-broadsword" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <span *ngIf="data.item.template.data.damageDice">{{data.item.template.data.damageDice}}
-                        <span class="ra ra-perspective-dice-random"></span>
-                    </span>
-                    <span *ngIf="data.item.template.data.damageDice && data.item.template.data.bonusDamage > 0">+</span>
-                    <span *ngIf="data.item.template.data.bonusDamage">{{data.item.template.data.bonusDamage}}</span>
-                    <ng-template [ngIf]="data.character">
-                        <div style="margin-left: 20px">
-                            <span
-                                *ngIf="data.character.computedData.stats['PI'] > 0">+{{data.character.computedData.stats['PI']}}
-                                (Bonus personnage)</span>
-                            <span
-                                *ngIf="data.character.computedData.stats['PI'] < 0">{{data.character.computedData.stats['PI']}}
-                                (Malus personnage)</span>
-                        </div>
-                    </ng-template>
-                </div>
+      }
+      @if (data.item.data.notIdentified && !data.gmView) {
+        <div>
+          @if (data.item.template.data.bonusDamage || data.item.template.data.damageDice) {
+            <div class="icon-label">
+              <mat-icon fontSet="ra" fontIcon="ra-broadsword" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                @if (data.item.template.data.damageDice) {
+                  <span>{{data.item.template.data.damageDice}}
+                    <span class="ra ra-perspective-dice-random"></span>
+                  </span>
+                }
+                @if (data.item.template.data.damageDice && data.item.template.data.bonusDamage > 0) {
+                  <span>+</span>
+                }
+                @if (data.item.template.data.bonusDamage) {
+                  <span>{{data.item.template.data.bonusDamage}}</span>
+                }
+                @if (data.character) {
+                  <div style="margin-left: 20px">
+                    @if (data.character.computedData.stats['PI'] > 0) {
+                      <span
+                        >+{{data.character.computedData.stats['PI']}}
+                      (Bonus personnage)</span>
+                    }
+                    @if (data.character.computedData.stats['PI'] < 0) {
+                      <span
+                        >{{data.character.computedData.stats['PI']}}
+                      (Malus personnage)</span>
+                    }
+                  </div>
+                }
+              </div>
             </div>
-            <div class="icon-label" *ngIf="data.item.data.description">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-quill" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    Description: {{data.item.data.description}}
-                </div>
+          }
+          @if (data.item.data.description) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-quill" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                Description: {{data.item.data.description}}
+              </div>
             </div>
+          }
         </div>
-        <div *ngIf="!data.item.data.notIdentified || data.gmView">
-            <div *ngIf="data.gmView && data.item.template.name !== data.item.data.name">
-                Nom reel: {{data.item.template.name}}
-            </div>
-
+      }
+      @if (!data.item.data.notIdentified || data.gmView) {
+        <div>
+          @if (data.gmView && data.item.template.name !== data.item.data.name) {
             <div>
-                <span *ngIf="data.item.template.data.relic" class="label label-primary">Relique</span>
-                <span *ngIf="data.item.template.data.sex === 'h'">Homme uniq.</span>
-                <span *ngIf="data.item.template.data.sex === 'f'">Femme uniq.</span>
+              Nom reel: {{data.item.template.name}}
             </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.throwable">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-throwing-ball" class="ra-mat-button-icon-24"></mat-icon>
+          }
+          <div>
+            @if (data.item.template.data.relic) {
+              <span class="label label-primary">Relique</span>
+            }
+            @if (data.item.template.data.sex === 'h') {
+              <span>Homme uniq.</span>
+            }
+            @if (data.item.template.data.sex === 'f') {
+              <span>Femme uniq.</span>
+            }
+          </div>
+          @if (data.item.template.data.throwable) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-throwing-ball" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                Prévue pour le jet
+              </div>
+            </div>
+          }
+          @if (data.item.data.description || data.item.template.data.description) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-quill" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                Description: {{data.item.data.description || data.item.template.data.description}}
+              </div>
+            </div>
+          }
+          @if (data.item.template.data.requireLevel) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-level-two" class="ra-mat-button-icon-24"></mat-icon>
+              <span>
+                Niveau requis: {{data.item.template.data.requireLevel}}
+              </span>
+            </div>
+          }
+          @if (data.item.template.slots?.length > 0) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                <mat-chip-set>
+                  @for (slot of data.item.template.slots; track slot) {
+                    <mat-chip>{{slot.name}}</mat-chip>
+                  }
+                </mat-chip-set>
+              </div>
+            </div>
+          }
+          @if (data.item.template.data.note) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-scroll-unfurled" class="ra-mat-button-icon-24"></mat-icon>
+              Note: {{data.item.template.data.note}}
+            </div>
+          }
+          @if (data.item.template.data.quantifiable) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-stack" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                Quantité:
+                @if (!data.itemInLoot || data.gmView) {
+                  <value-editor
+                    [title]="'Quantité'"
+                    [value]="data.item.data.quantity"
+                    (valueChanged)="data.itemActionService.onAction('update_quantity', data.item, {quantity: $event})">
+                  </value-editor>
+                }
+                @if (data.itemInLoot && !data.gmView) {
+                  <span>{{data.item.data.quantity}}</span>
+                }
+              </div>
+            </div>
+          }
+          <!-- Dieu -->
+          @if (data.item.template.data.god && godsByTechName) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-prayer" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                <span>Dieu:</span>
+                {{godsByTechName[data.item.template.data.god].displayName}}
+              </div>
+            </div>
+          }
+          @if (data.item.template.data.bonusDamage || data.item.template.data.damageDice) {
+            <div class="icon-label">
+              <mat-icon fontSet="ra" fontIcon="ra-broadsword" class="ra-mat-button-icon-24"></mat-icon>
+              <div class="damage">
+                @if (data.item.template.data.damageDice) {
+                  <span>{{data.item.template.data.damageDice}}
+                    <span class="ra ra-perspective-dice-random ra-mat-button-icon-24"></span>
+                  </span>
+                }
+                @if (data.item.template.data.damageDice && data.item.template.data.bonusDamage>0) {
+                  <span>+</span>
+                }
+                @if (data.item.template.data.bonusDamage) {
+                  <span>{{data.item.template.data.bonusDamage}}</span>
+                }
+                @if (data.item.template.data.damageType) {
+                  <span>({{data.item.template.data.damageType}})</span>
+                }
+                @if (data.character && data.character.computedData && data.character.computedData.stats['PI']) {
+                  <div style="margin-left: 20px">
+                    @if (data.character.computedData.stats['PI'] > 0) {
+                      <span>+{{data.character.computedData.stats['PI']}} (Bonus personnage)</span>
+                    }
+                    @if (data.character.computedData.stats['PI'] < 0) {
+                      <span>{{data.character.computedData.stats['PI']}} (Malus personnage)</span>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          }
+          @if (data.item.template.data.protection
+            || data.item.template.data.magicProtection
+            || data.item.template.data.protectionAgainstMagic) {
+            <div class="icon-label">
+              <mat-icon fontSet="ra" fontIcon="ra-shield" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                @if (data.item.template.data.protection) {
+                  <span>{{data.item.template.data.protection}}</span>
+                }
+                @if (data.item.template.data.protection && data.item.template.data.magicProtection) {
+                  <span>+</span>
+                }
+                @if (data.item.template.data.magicProtection) {
+                  <span>{{data.item.template.data.magicProtection}}(magique)</span>
+                }
+                @if ((data.item.template.data.protection || data.item.template.data.magicProtection) && data.item.template.data.protectionAgainstMagic) {
+                  <span>/</span>
+                }
+                @if (data.item.template.data.protectionAgainstMagic) {
+                  <span>{{data.item.template.data.protectionAgainstMagic}}
+                    @if (data.item.template.data.protectionAgainstType) {
+                      <span>(contre {{data.item.template.data.protectionAgainstType}})</span>
+                    }
+                    @if (!data.item.template.data.protectionAgainstType) {
+                      <span>(contre mag./myst.)</span>
+                    }
+                  </span>
+                }
+              </div>
+            </div>
+          }
+          @if (data.item.template.data.charge) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-magic-swirl" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
                 <div>
-                    Prévue pour le jet
+                  <span>Nombre d'utilisations:</span>
+                  {{data.item.data.charge}} / {{data.item.template.data.charge}}
                 </div>
+                @if (data.item.template.data?.actions?.length) {
+                  <div class="usage-actions">
+                    Lors de l'utilisation:
+                    @for (action of data.item.template.data.actions; track action) {
+                      <div class="usage-action">
+                        @if (!action.hidden) {
+                          <span class="dot">-</span>
+                        }
+                        @if (!action.hidden) {
+                          <nhbk-action [action]="action"></nhbk-action>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
             </div>
-
-            <div class="icon-label" *ngIf="data.item.data.description || data.item.template.data.description">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-quill" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    Description: {{data.item.data.description || data.item.template.data.description}}
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.requireLevel">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-level-two" class="ra-mat-button-icon-24"></mat-icon>
+          }
+          @if (data.item.template.data.weight && !data.item.template.data.useUG) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-weight" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
                 <span>
-                    Niveau requis: {{data.item.template.data.requireLevel}}
+                  Poids:
                 </span>
+                @if (data.item.template.data.weight < 1) {
+                  <span>{{(data.item.template.data.weight * 1000) | number:'1.0-3'}} g</span>
+                }
+                @if (data.item.template.data.weight >= 1) {
+                  <span>{{(data.item.template.data.weight)  | number:'1.0-3'}} Kg</span>
+                }
+                @if (data.item.data.quantity) {
+                  <span>Total: {{data.item.data.quantity * data.item.template.data.weight | number:'1.0-3'}} Kg</span>
+                }
+              </div>
             </div>
-            <div class="icon-label" *ngIf="data.item.template.slots?.length > 0">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <mat-chip-set>
-                        <mat-chip *ngFor="let slot of data.item.template.slots">{{slot.name}}</mat-chip>
-                    </mat-chip-set>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.note">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-scroll-unfurled" class="ra-mat-button-icon-24"></mat-icon>
-                Note: {{data.item.template.data.note}}
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.quantifiable">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-stack" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    Quantité:
+          }
+          @if (data.item.template.data.useUG) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-scales" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                <div [matTooltip]="'Unité Goltor'">
+                  @if (data.gmView) {
                     <value-editor
-                        *ngIf="!data.itemInLoot || data.gmView"
-                        [title]="'Quantité'"
-                        [value]="data.item.data.quantity"
-                        (valueChanged)="data.itemActionService.onAction('update_quantity', data.item, {quantity: $event})">
+                      [title]="'Unité Goltor'"
+                      [value]="data.item.data.ug"
+                      (valueChanged)="updateItemUg($event)">
                     </value-editor>
-                    <span *ngIf="data.itemInLoot && !data.gmView">{{data.item.data.quantity}}</span>
+                  }
+                  @if (!data.gmView) {
+                    <span>{{data.item.data.ug}}</span>
+                  }
+                  U.G
                 </div>
+                <div>Poids: {{data.item.data.ug * data.item.template.data.weight * 1000  | number:'1.3-3' }} g</div>
+              </div>
             </div>
-
-            <!-- Dieu -->
-            <div class="icon-label" *ngIf="data.item.template.data.god && godsByTechName">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-prayer" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <span>Dieu:</span>
-                    {{godsByTechName[data.item.template.data.god].displayName}}
-                </div>
+          }
+          @if (data.item.template.data.space) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                Encombrement: {{data.item.template.data.space}}
+              </div>
             </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.bonusDamage || data.item.template.data.damageDice">
-                <mat-icon fontSet="ra" fontIcon="ra-broadsword" class="ra-mat-button-icon-24"></mat-icon>
-                <div class="damage">
-                    <span *ngIf="data.item.template.data.damageDice">{{data.item.template.data.damageDice}}
-                        <span class="ra ra-perspective-dice-random ra-mat-button-icon-24"></span>
-                    </span>
-                    <span *ngIf="data.item.template.data.damageDice && data.item.template.data.bonusDamage>0">+</span>
-                    <span *ngIf="data.item.template.data.bonusDamage">{{data.item.template.data.bonusDamage}}</span>
-                    <span *ngIf="data.item.template.data.damageType">({{data.item.template.data.damageType}})</span>
-                    <ng-template
-                        [ngIf]="data.character && data.character.computedData && data.character.computedData.stats['PI']">
-                        <div style="margin-left: 20px">
-                            <span *ngIf="data.character.computedData.stats['PI'] > 0">+{{data.character.computedData.stats['PI']}} (Bonus personnage)</span>
-                            <span *ngIf="data.character.computedData.stats['PI'] < 0">{{data.character.computedData.stats['PI']}} (Malus personnage)</span>
-                        </div>
-                    </ng-template>
-                </div>
+          }
+          @if (data.item.template.data.rupture) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-cracked-shield" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                @if (data.item.template.data.rupture) {
+                  <div>
+                    Rupture:
+                    1 à {{data.item.template.data.rupture}}
+                  </div>
+                }
+                @if (data.item.template.data.rupture === 0) {
+                  <div>
+                    Rupture: Incassable
+                  </div>
+                }
+              </div>
             </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.protection
-                        || data.item.template.data.magicProtection
-                        || data.item.template.data.protectionAgainstMagic">
-                <mat-icon fontSet="ra" fontIcon="ra-shield" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <span *ngIf="data.item.template.data.protection">{{data.item.template.data.protection}}</span>
-                    <span *ngIf="data.item.template.data.protection && data.item.template.data.magicProtection">+</span>
-                    <span *ngIf="data.item.template.data.magicProtection">{{data.item.template.data.magicProtection}}(magique)</span>
-                    <span *ngIf="(data.item.template.data.protection || data.item.template.data.magicProtection) && data.item.template.data.protectionAgainstMagic">/</span>
-                    <span *ngIf="data.item.template.data.protectionAgainstMagic">{{data.item.template.data.protectionAgainstMagic}}
-                        <span *ngIf="data.item.template.data.protectionAgainstType">(contre {{data.item.template.data.protectionAgainstType}})</span>
-                        <span *ngIf="!data.item.template.data.protectionAgainstType">(contre mag./myst.)</span>
-                    </span>
-                </div>
+          }
+          @if (data.item.data.readCount) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-read" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                Lu: {{data.item.data.readCount}}
+              </div>
             </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.charge">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-magic-swirl" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div>
-                        <span>Nombre d'utilisations:</span>
-                        {{data.item.data.charge}} / {{data.item.template.data.charge}}
+          }
+          @if (allowViewPrice() && data.item.price) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                <span>Prix:</span>
+                {{data.item.price}} P.O.
+              </div>
+            </div>
+          }
+          @if (modifiers && modifiers.length) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                @for (modifier of modifiers; track modifier) {
+                  <div>
+                    @if (jobsName && modifier.jobId) {
+                      <span>{{jobsName[modifier.jobId]}}:</span>
+                    }
+                    @if (originsName && modifier.originId) {
+                      <span>{{originsName[modifier.originId]}}:</span>
+                    }
+                    {{modifier | modifier}}
+                  </div>
+                }
+              </div>
+            </div>
+          }
+          @if (!modifiers && data.item.template.modifiers?.length) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                @for (modifier of data.item.template.modifiers; track modifier) {
+                  <div>
+                    @if (jobsName && modifier.jobId) {
+                      <span>{{jobsName[modifier.jobId]}}:</span>
+                    }
+                    @if (originsName && modifier.originId) {
+                      <span>{{originsName[modifier.originId]}}:</span>
+                    }
+                    {{modifier | modifier}}
+                  </div>
+                }
+              </div>
+            </div>
+          }
+          @if (data.item.template.skills?.length || data.item.template.unSkills?.length || data.item.template.skillModifiers?.length) {
+            <div class="icon-label">
+              <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-24"></mat-icon>
+              <div>
+                @for (skill of data.item.template.skills; track skill) {
+                  <div>Donne la compétence "{{skill.name}}"</div>
+                }
+                @for (skill of data.item.template.unSkills; track skill) {
+                  <div>Annule "{{skill.name}}"</div>
+                }
+                @for (modifier of data.item.template.skillModifiers; track modifier) {
+                  <div>{{modifier.skill.name}}
+                    @if (modifier.value > 0) {
+                      <span>+</span>
+                      }{{modifier.value}}
                     </div>
-                    <div *ngIf="data.item.template.data?.actions?.length" class="usage-actions">
-                        Lors de l'utilisation:
-                        <div *ngFor="let action of data.item.template.data.actions" class="usage-action">
-                            <span class="dot" *ngIf="!action.hidden">-</span>
-                            <nhbk-action *ngIf="!action.hidden" [action]="action"></nhbk-action>
-                        </div>
-                    </div>
+                  }
                 </div>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.weight && !data.item.template.data.useUG">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-weight" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <span>
-                        Poids:
-                    </span>
-                    <span *ngIf="data.item.template.data.weight < 1">{{(data.item.template.data.weight * 1000) | number:'1.0-3'}} g</span>
-                    <span *ngIf="data.item.template.data.weight >= 1">{{(data.item.template.data.weight)  | number:'1.0-3'}} Kg</span>
-                    <span *ngIf="data.item.data.quantity">Total: {{data.item.data.quantity * data.item.template.data.weight | number:'1.0-3'}} Kg</span>
-                </div>
-            </div>
-            <div class="icon-label" *ngIf="data.item.template.data.useUG">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-scales" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div [matTooltip]="'Unité Goltor'">
-                        <value-editor
-                            *ngIf="data.gmView"
-                            [title]="'Unité Goltor'"
-                            [value]="data.item.data.ug"
-                            (valueChanged)="updateItemUg($event)">
-                        </value-editor>
-                        <span *ngIf="!data.gmView">{{data.item.data.ug}}</span>
-                        U.G
-                    </div>
-                    <div>Poids: {{data.item.data.ug * data.item.template.data.weight * 1000  | number:'1.3-3' }} g</div>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.space">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    Encombrement: {{data.item.template.data.space}}
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.rupture">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-cracked-shield" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div *ngIf="data.item.template.data.rupture">
-                        Rupture:
-                        1 à {{data.item.template.data.rupture}}
-                    </div>
-                    <div *ngIf="data.item.template.data.rupture === 0">
-                        Rupture: Incassable
-                    </div>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.data.readCount">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-read" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    Lu: {{data.item.data.readCount}}
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="allowViewPrice() && data.item.price">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <span>Prix:</span>
-                    {{data.item.price}} P.O.
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="modifiers && modifiers.length">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div *ngFor="let modifier of modifiers">
-                        <span *ngIf="jobsName && modifier.jobId">{{jobsName[modifier.jobId]}}:</span>
-                        <span *ngIf="originsName && modifier.originId">{{originsName[modifier.originId]}}:</span>
-                        {{modifier | modifier}}
-                    </div>
-                </div>
-            </div>
-            <div class="icon-label" *ngIf="!modifiers && data.item.template.modifiers?.length">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div *ngFor="let modifier of data.item.template.modifiers">
-                        <span *ngIf="jobsName && modifier.jobId">{{jobsName[modifier.jobId]}}:</span>
-                        <span *ngIf="originsName && modifier.originId">{{originsName[modifier.originId]}}:</span>
-                        {{modifier | modifier}}
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="icon-label" *ngIf="data.item.template.skills?.length || data.item.template.unSkills?.length || data.item.template.skillModifiers?.length">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div *ngFor="let skill of data.item.template.skills">Donne la compétence "{{skill.name}}"</div>
-                    <div *ngFor="let skill of data.item.template.unSkills">Annule "{{skill.name}}"</div>
-                    <div *ngFor="let modifier of data.item.template.skillModifiers">{{modifier.skill.name}}
-                        <span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
-                    </div>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.requirements?.length">
+              </div>
+            }
+            @if (data.item.template.requirements?.length) {
+              <div class="icon-label">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-thumb-up" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
-                    <div *ngFor="let requirement of data.item.template.requirements">
-                    <span *ngIf="requirement.min">
-                        Min {{requirement.stat}}: {{requirement.min}}
-                    </span>
-                        <span *ngIf="requirement.max">
-                        Max {{requirement.stat}}: {{requirement.max}}
-                    </span>
+                  @for (requirement of data.item.template.requirements; track requirement) {
+                    <div>
+                      @if (requirement.min) {
+                        <span>
+                          Min {{requirement.stat}}: {{requirement.min}}
+                        </span>
+                      }
+                      @if (requirement.max) {
+                        <span>
+                          Max {{requirement.stat}}: {{requirement.max}}
+                        </span>
+                      }
                     </div>
+                  }
                 </div>
-            </div>
-
-            <div class="icon-label"
-                 [class.text-warning]="!data.item.data.ignoreRestrictions"
-                 [class.text-info]="data.item.data.ignoreRestrictions"
-                 *ngIf="data.character?.checkItemIncompatibilities(data.item); let incompatibilities">
+              </div>
+            }
+            @if (data.character?.checkItemIncompatibilities(data.item); as incompatibilities) {
+              <div class="icon-label"
+                [class.text-warning]="!data.item.data.ignoreRestrictions"
+                [class.text-info]="data.item.data.ignoreRestrictions"
+                >
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-interdiction" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
-                    <span *ngIf="incompatibilities.length === 1">
-                        Une restriction s'applique sur l'utilisation de cet objet:
+                  @if (incompatibilities.length === 1) {
+                    <span>
+                      Une restriction s'applique sur l'utilisation de cet objet:
                     </span>
-                    <span *ngIf="incompatibilities.length > 1">
-                        Plusieurs restrictions s'applique sur l'utilisation cet objet:
+                  }
+                  @if (incompatibilities.length > 1) {
+                    <span>
+                      Plusieurs restrictions s'applique sur l'utilisation cet objet:
                     </span>
-                    <ul>
-                        <li *ngFor="let incompatibleData of incompatibilities">
-                            <span [ngSwitch]="incompatibleData.reason">
-                                <ng-template [ngSwitchCase]="'no_magic_weapon'">
-                                    Pas d'arme enchantée
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'no_magic_armor'">
-                                    Pas d'armure enchantée
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'no_magic_object'">
-                                    Pas d'objet magique
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'too_low_level'">
-                                    Vous n'avez pas le niveau requis pour utilisé cet objet.
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'bad_equipment_type'">
-                                    Ne peux pas utiliser ce type d'objet
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'cant_read'">
-                                    Ne sait pas lire
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'no_arme_bourrin'">
-                                    Ne possède pas la compétence Armes de bourrin.
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'bad_god'">
-                                    L'objet est lié a un autre dieu que celui du personnage
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'bad_sex_f'">
-                                    L'objet est réservé pour les personnages de sexe féminin
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'bad_sex_f'">
-                                    L'objet est réservé pour les personnages de sexe masculin
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'no_god'">
-                                    L'objet est lié a un dieu, et vous ne faites pas partie de son culte.
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'stat_to_high'">
-                                    Une de vos statistique est trop haute:&nbsp;
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'stat_to_low'">
-                                    Une de vos statistique est trop basse:&nbsp;
-                                </ng-template>
-                            </span>
-                            <ng-template [ngIf]="incompatibleData.source">
-                                <span [ngSwitch]="incompatibleData.source.type">
-                                    <ng-template [ngSwitchCase]="'origin'">
-                                        (Origine: {{incompatibleData.source.name}})
-                                    </ng-template>
-                                    <ng-template [ngSwitchCase]="'job'">
-                                        (Métier: {{incompatibleData.source.name}})
-                                    </ng-template>
-                                    <ng-template [ngSwitchCase]="'speciality'">
-                                        (Spécialitée: {{incompatibleData.source.name}})
-                                    </ng-template>
-                                    <ng-template [ngSwitchCase]="'stat'">
-                                        {{incompatibleData.source.name}}
-                                    </ng-template>
-                                </span>
-                            </ng-template>
-                        </li>
-                    </ul>
+                  }
+                  <ul>
+                    @for (incompatibleData of incompatibilities; track incompatibleData) {
+                      <li>
+                        <span>
+                          @switch (incompatibleData.reason) {
+                            @case ('no_magic_weapon') {
+                              Pas d'arme enchantée
+                            }
+                            @case ('no_magic_armor') {
+                              Pas d'armure enchantée
+                            }
+                            @case ('no_magic_object') {
+                              Pas d'objet magique
+                            }
+                            @case ('too_low_level') {
+                              Vous n'avez pas le niveau requis pour utilisé cet objet.
+                            }
+                            @case ('bad_equipment_type') {
+                              Ne peux pas utiliser ce type d'objet
+                            }
+                            @case ('cant_read') {
+                              Ne sait pas lire
+                            }
+                            @case ('no_arme_bourrin') {
+                              Ne possède pas la compétence Armes de bourrin.
+                            }
+                            @case ('bad_god') {
+                              L'objet est lié a un autre dieu que celui du personnage
+                            }
+                            @case ('bad_sex_f') {
+                              L'objet est réservé pour les personnages de sexe féminin
+                            }
+                            @case ('bad_sex_f') {
+                              L'objet est réservé pour les personnages de sexe masculin
+                            }
+                            @case ('no_god') {
+                              L'objet est lié a un dieu, et vous ne faites pas partie de son culte.
+                            }
+                            @case ('stat_to_high') {
+                              Une de vos statistique est trop haute:&nbsp;
+                            }
+                            @case ('stat_to_low') {
+                              Une de vos statistique est trop basse:&nbsp;
+                            }
+                          }
+                        </span>
+                        @if (incompatibleData.source) {
+                          <span>
+                            @switch (incompatibleData.source.type) {
+                              @case ('origin') {
+                                (Origine: {{incompatibleData.source.name}})
+                              }
+                              @case ('job') {
+                                (Métier: {{incompatibleData.source.name}})
+                              }
+                              @case ('speciality') {
+                                (Spécialitée: {{incompatibleData.source.name}})
+                              }
+                              @case ('stat') {
+                                {{incompatibleData.source.name}}
+                              }
+                            }
+                          </span>
+                        }
+                      </li>
+                    }
+                  </ul>
                 </div>
-
-
-                <button mat-button
-                        [color]="'primary'"
-                        *ngIf="data.gmView && !data.item.data.ignoreRestrictions"
-                        (click)="data.itemActionService.onAction('ignore_restrictions', data.item, true); $event.stopPropagation()">
+                @if (data.gmView && !data.item.data.ignoreRestrictions) {
+                  <button mat-button
+                    [color]="'primary'"
+                    (click)="data.itemActionService.onAction('ignore_restrictions', data.item, true); $event.stopPropagation()">
                     IGNORER RESTRICTIONS
-                </button>
-                <button mat-button
-                        [color]="'primary'"
-                        *ngIf="data.gmView && data.item.data.ignoreRestrictions"
-                        (click)="data.itemActionService.onAction('ignore_restrictions', data.item, undefined); $event.stopPropagation()">
+                  </button>
+                }
+                @if (data.gmView && data.item.data.ignoreRestrictions) {
+                  <button mat-button
+                    [color]="'primary'"
+                    (click)="data.itemActionService.onAction('ignore_restrictions', data.item, undefined); $event.stopPropagation()">
                     APPLIQUER RESTRICTIONS
-                </button>
-            </div>
-
+                  </button>
+                }
+              </div>
+            }
             <!-- Gun -->
-            <div class="icon-label" *ngIf="data.item.template.data.gun">
+            @if (data.item.template.data.gun) {
+              <div class="icon-label">
                 <mat-icon fontSet="game-icon" fontIcon="game-icon-revolver" class="ra-mat-button-icon-24"></mat-icon>
                 <div>
-                    Arme à poudre:
-                    <dl>
-                        <dt>Portée utile:</dt>
-                        <dd>{{data.item.template.data.gun.range}}</dd>
-                        <dt>Dégâts:</dt>
-                        <dd>{{data.item.template.data.gun.damages}}</dd>
-                        <dt>+Spécial:</dt>
-                        <dd>{{data.item.template.data.gun.special}}</dd>
-                        <dt>Cadence de tir:</dt>
-                        <dd>{{data.item.template.data.gun.rateOfFire}}</dd>
-                        <dt>Délai de rechargement:</dt>
-                        <dd>{{data.item.template.data.gun.reloadDelay}}</dd>
-                        <dt>Épreuve de tir:</dt>
-                        <dd>{{data.item.template.data.gun.shootTest}}</dd>
-                    </dl>
-                    <mat-divider></mat-divider>
-                    Munitions
-                    <dl>
-                        <dt>Combustion par coup:</dt>
-                        <dd>{{data.item.template.data.gun.fuelPerShot}}</dd>
-                        <dt>Munitions par coup:</dt>
-                        <dd>{{data.item.template.data.gun.ammunitionPerShot}}</dd>
-                    </dl>
-                    <mat-divider></mat-divider>
-                    <dl>
-                        <dt>Chances de fonctionnement:</dt>
-                        <dd>{{data.item.template.data.gun.workLuck}}</dd>
-                    </dl>
+                  Arme à poudre:
+                  <dl>
+                    <dt>Portée utile:</dt>
+                    <dd>{{data.item.template.data.gun.range}}</dd>
+                    <dt>Dégâts:</dt>
+                    <dd>{{data.item.template.data.gun.damages}}</dd>
+                    <dt>+Spécial:</dt>
+                    <dd>{{data.item.template.data.gun.special}}</dd>
+                    <dt>Cadence de tir:</dt>
+                    <dd>{{data.item.template.data.gun.rateOfFire}}</dd>
+                    <dt>Délai de rechargement:</dt>
+                    <dd>{{data.item.template.data.gun.reloadDelay}}</dd>
+                    <dt>Épreuve de tir:</dt>
+                    <dd>{{data.item.template.data.gun.shootTest}}</dd>
+                  </dl>
+                  <mat-divider></mat-divider>
+                  Munitions
+                  <dl>
+                    <dt>Combustion par coup:</dt>
+                    <dd>{{data.item.template.data.gun.fuelPerShot}}</dd>
+                    <dt>Munitions par coup:</dt>
+                    <dd>{{data.item.template.data.gun.ammunitionPerShot}}</dd>
+                  </dl>
+                  <mat-divider></mat-divider>
+                  <dl>
+                    <dt>Chances de fonctionnement:</dt>
+                    <dd>{{data.item.template.data.gun.workLuck}}</dd>
+                  </dl>
                 </div>
-            </div>
-        </div>
-
-
+              </div>
+            }
+          </div>
+        }
         <!-- Instrument -->
-        <div class="icon-label" *ngIf="data.item.template.data.instrument">
+        @if (data.item.template.data.instrument) {
+          <div class="icon-label">
             <mat-icon fontSet="game-icon" fontIcon="game-icon-musical-notes" class="ra-mat-button-icon-24"></mat-icon>
             <div>
-                <div *ngIf="data.item.template.data.instrument.specialMove">
-                    Coup spécial: {{data.item.template.data.instrument.specialMove | plusminus}}
+              @if (data.item.template.data.instrument.specialMove) {
+                <div>
+                  Coup spécial: {{data.item.template.data.instrument.specialMove | plusminus}}
                 </div>
-                <div *ngIf="data.item.template.data.instrument.speechTheater">
-                    Discours - Théâtre: {{data.item.template.data.instrument.speechTheater | plusminus}}
+              }
+              @if (data.item.template.data.instrument.speechTheater) {
+                <div>
+                  Discours - Théâtre: {{data.item.template.data.instrument.speechTheater | plusminus}}
                 </div>
-                <div *ngIf="data.item.template.data.instrument.jugglingDance">
-                    Jonglage - Danse: {{data.item.template.data.instrument.jugglingDance | plusminus}}
+              }
+              @if (data.item.template.data.instrument.jugglingDance) {
+                <div>
+                  Jonglage - Danse: {{data.item.template.data.instrument.jugglingDance | plusminus}}
                 </div>
-                <div *ngIf="data.item.template.data.instrument.musicSinging">
-                    Musique - Chant: {{data.item.template.data.instrument.musicSinging | plusminus}}
+              }
+              @if (data.item.template.data.instrument.musicSinging) {
+                <div>
+                  Musique - Chant: {{data.item.template.data.instrument.musicSinging | plusminus}}
                 </div>
+              }
             </div>
-        </div>
-
-
-        <div class="icon-label" *ngIf="data.item.data.lifetime?.durationType === 'time'" [class.text-warning]="data.item.data.lifetime.timeDuration === 0">
+          </div>
+        }
+        @if (data.item.data.lifetime?.durationType === 'time') {
+          <div class="icon-label" [class.text-warning]="data.item.data.lifetime.timeDuration === 0">
             <mat-icon fontSet="game-icon" fontIcon="game-icon-stopwatch" class="ra-mat-button-icon-24"></mat-icon>
             <div>
-                Temps de conservation:
+              Temps de conservation:
+              @if (data.item.data.lifetime.timeDuration > 0) {
                 <span
-                    *ngIf="data.item.data.lifetime.timeDuration > 0">{{data.item.data.lifetime.timeDuration | nhbkDuration}}</span>
-                <span *ngIf="data.item.data.lifetime.timeDuration === 0">expiré</span>
+                >{{data.item.data.lifetime.timeDuration | nhbkDuration}}</span>
+              }
+              @if (data.item.data.lifetime.timeDuration === 0) {
+                <span>expiré</span>
+              }
             </div>
-        </div>
-
-        <div class="icon-label" *ngIf="data.character?.computedData.containers && !data.item.data.equiped && data.item.containerId">
+          </div>
+        }
+        @if (data.character?.computedData.containers && !data.item.data.equiped && data.item.containerId) {
+          <div class="icon-label">
             <mat-icon fontSet="game-icon" fontIcon="game-icon-backpack" class="ra-mat-button-icon-24"></mat-icon>
             <div>
-                Stocké dans: {{data.item.containerInfo?.name}}
+              Stocké dans: {{data.item.containerInfo?.name}}
             </div>
-        </div>
-
-        <div *ngIf="data.item.modifiers && data.item.modifiers.length">
+          </div>
+        }
+        @if (data.item.modifiers && data.item.modifiers.length) {
+          <div>
             <div class="item-modifiers">
-                <div>
-                    Modificateur(s) additionnel(s):
-                </div>
-                <div class="item-modifier" *ngFor="let modifier of data.item.modifiers; let i = index">
-                    <div class="modifier-active">
-                        <mat-checkbox [ngModel]="modifier.active" disabled="true">
-                        </mat-checkbox>
-                    </div>
-                    <div class="modifier-name">
-                        {{modifier.name}}
-                    </div>
-                    <div class="modifier-actions">
-                        <mat-menu #modifierAction>
-                            <button mat-menu-item (click)="activeModifier(i)" *ngIf="modifier.reusable && !modifier.active">
-                                <mat-icon>power_settings_new</mat-icon>Activer
-                            </button>
-                            <button mat-menu-item (click)="disableModifier(i)" *ngIf="modifier.reusable && modifier.active">
-                                <mat-icon>power_settings_new</mat-icon>Désactiver
-                            </button>
-                            <button mat-menu-item (click)="removeModifier(i)">
-                                <mat-icon>delete</mat-icon> Supprimer
-                            </button>
-                        </mat-menu>
-                        <button mat-icon-button [matMenuTriggerFor]="modifierAction">
-                            <mat-icon>more_vert</mat-icon>
+              <div>
+                Modificateur(s) additionnel(s):
+              </div>
+              @for (modifier of data.item.modifiers; track modifier; let i = $index) {
+                <div class="item-modifier">
+                  <div class="modifier-active">
+                    <mat-checkbox [ngModel]="modifier.active" disabled="true">
+                    </mat-checkbox>
+                  </div>
+                  <div class="modifier-name">
+                    {{modifier.name}}
+                  </div>
+                  <div class="modifier-actions">
+                    <mat-menu #modifierAction>
+                      @if (modifier.reusable && !modifier.active) {
+                        <button mat-menu-item (click)="activeModifier(i)">
+                          <mat-icon>power_settings_new</mat-icon>Activer
                         </button>
-                    </div>
-                    <div class="modifier-duration">
-                        Durée:
-                        <ng-template [ngIf]="modifier.active">
-                            <div [ngSwitch]="modifier.durationType">
-                                <ng-template [ngSwitchCase]="'combat'">
-                                    {{modifier.currentCombatCount}} combats
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'lap'">
-                                    {{modifier.currentLapCount}} tours
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'time'">
-                                    {{modifier.currentTimeDuration | nhbkDuration}}
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'custom'">
-                                    {{modifier.duration}}
-                                </ng-template>
-                            </div>
-                        </ng-template>
-                        <ng-template [ngIf]="!modifier.active">
-                            <div [ngSwitch]="modifier.durationType">
-                                <ng-template [ngSwitchCase]="'combat'">
-                                    {{modifier.combatCount}} combats
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'lap'">
-                                    {{modifier.lapCount}} tours
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'time'">
-                                    {{modifier.timeDuration | nhbkDuration}}
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'custom'">
-                                    {{modifier.duration}}
-                                </ng-template>
-                            </div>
-                        </ng-template>
-                    </div>
-                    <div class="modifier-stats">
-                        <span *ngFor="let value of modifier.values">
-                            {{value | modifier}}
-                        </span>
-                    </div>
+                      }
+                      @if (modifier.reusable && modifier.active) {
+                        <button mat-menu-item (click)="disableModifier(i)">
+                          <mat-icon>power_settings_new</mat-icon>Désactiver
+                        </button>
+                      }
+                      <button mat-menu-item (click)="removeModifier(i)">
+                        <mat-icon>delete</mat-icon> Supprimer
+                      </button>
+                    </mat-menu>
+                    <button mat-icon-button [matMenuTriggerFor]="modifierAction">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                  </div>
+                  <div class="modifier-duration">
+                    Durée:
+                    @if (modifier.active) {
+                      <div>
+                        @switch (modifier.durationType) {
+                          @case ('combat') {
+                            {{modifier.currentCombatCount}} combats
+                          }
+                          @case ('lap') {
+                            {{modifier.currentLapCount}} tours
+                          }
+                          @case ('time') {
+                            {{modifier.currentTimeDuration | nhbkDuration}}
+                          }
+                          @case ('custom') {
+                            {{modifier.duration}}
+                          }
+                        }
+                      </div>
+                    }
+                    @if (!modifier.active) {
+                      <div>
+                        @switch (modifier.durationType) {
+                          @case ('combat') {
+                            {{modifier.combatCount}} combats
+                          }
+                          @case ('lap') {
+                            {{modifier.lapCount}} tours
+                          }
+                          @case ('time') {
+                            {{modifier.timeDuration | nhbkDuration}}
+                          }
+                          @case ('custom') {
+                            {{modifier.duration}}
+                          }
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="modifier-stats">
+                    @for (value of modifier.values; track value) {
+                      <span>
+                        {{value | modifier}}
+                      </span>
+                    }
+                  </div>
                 </div>
+              }
             </div>
-        </div>
-    </mat-card-content>
-</mat-dialog-content>
+          </div>
+        }
+      </mat-card-content>
+    </mat-dialog-content>
+  }

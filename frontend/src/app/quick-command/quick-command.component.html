@@ -1,16 +1,22 @@
 <ng-template #portal="cdkPortal" cdkPortal>
-    <div class="container">
-        <input #inputElement class="command-input" autofocus (keyup)="updateFilter(inputElement.value)">
-        <div *ngFor="let action of actions"
-             [class.selected]="action === selected"
-             class="suggestion"
-             matRipple
-             (click)="executeAction(action)">
-            <mat-icon *ngIf="!action.iconFontSet">{{action.icon}}</mat-icon>
-            <mat-icon *ngIf="action.iconFontSet" [fontIcon]="action.icon" [fontSet]="action.iconFontSet" [ngStyle]="{color: action.iconColor}"></mat-icon>
-            <span>
-                {{action.type}}: {{action.displayText}}
-            </span>
-        </div>
-    </div>
+  <div class="container">
+    <input #inputElement class="command-input" autofocus (keyup)="updateFilter(inputElement.value)">
+    @for (action of actions; track action) {
+      <div
+        [class.selected]="action === selected"
+        class="suggestion"
+        matRipple
+        (click)="executeAction(action)">
+        @if (!action.iconFontSet) {
+          <mat-icon>{{action.icon}}</mat-icon>
+        }
+        @if (action.iconFontSet) {
+          <mat-icon [fontIcon]="action.icon" [fontSet]="action.iconFontSet" [ngStyle]="{color: action.iconColor}"></mat-icon>
+        }
+        <span>
+          {{action.type}}: {{action.displayText}}
+        </span>
+      </div>
+    }
+  </div>
 </ng-template>

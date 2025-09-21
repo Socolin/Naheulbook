@@ -1,46 +1,54 @@
 <h2 mat-dialog-title></h2>
 <mat-dialog-content>
-    <mat-spinner *ngIf="!traits"></mat-spinner>
-    <div *ngIf="traits">
-        <mat-selection-list #simpleTraitsSelector>
-            <mat-list-option *ngFor="let trait of simpleTraits" [value]="trait.id" [selected]="selectedSimpleTraits[trait.id]">
-                <h4 mat-line class="trait-line">
-                    {{trait.name}}
-                    <button mat-icon-button (click)="showTraitInfo($event, trait)">
-                        <mat-icon>info</mat-icon>
-                    </button>
-                </h4>
-            </mat-list-option>
-        </mat-selection-list>
-        <mat-list>
-            <mat-list-item *ngFor="let trait of powerTraits">
-                <div class="power-trait">
-                    {{trait.name}}
-                    <button mat-icon-button (click)="showTraitInfo($event, trait)">
-                        <mat-icon>info</mat-icon>
-                    </button>
-                    <mat-form-field>
-                        <mat-select [(ngModel)]="selectedPowerTraits[trait.id]">
-                            <mat-option [value]="0">0</mat-option>
-                            <mat-option [value]="1">1</mat-option>
-                            <mat-option [value]="2">2</mat-option>
-                            <mat-option [value]="3">3</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </mat-list-item>
-        </mat-list>
+  @if (!traits) {
+    <mat-spinner></mat-spinner>
+  }
+  @if (traits) {
+    <div>
+      <mat-selection-list #simpleTraitsSelector>
+        @for (trait of simpleTraits; track trait) {
+          <mat-list-option [value]="trait.id" [selected]="selectedSimpleTraits[trait.id]">
+            <h4 mat-line class="trait-line">
+              {{trait.name}}
+              <button mat-icon-button (click)="showTraitInfo($event, trait)">
+                <mat-icon>info</mat-icon>
+              </button>
+            </h4>
+          </mat-list-option>
+        }
+      </mat-selection-list>
+      <mat-list>
+        @for (trait of powerTraits; track trait) {
+          <mat-list-item>
+            <div class="power-trait">
+              {{trait.name}}
+              <button mat-icon-button (click)="showTraitInfo($event, trait)">
+                <mat-icon>info</mat-icon>
+              </button>
+              <mat-form-field>
+                <mat-select [(ngModel)]="selectedPowerTraits[trait.id]">
+                  <mat-option [value]="0">0</mat-option>
+                  <mat-option [value]="1">1</mat-option>
+                  <mat-option [value]="2">2</mat-option>
+                  <mat-option [value]="3">3</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-list-item>
+        }
+      </mat-list>
     </div>
+  }
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button
-            mat-dialog-close
-            color="primary">
-        ANNULER
-    </button>
-    <button mat-button
-            color="primary"
-            (click)=save()>
-        SAUVEGARDER
-    </button>
+  <button mat-button
+    mat-dialog-close
+    color="primary">
+    ANNULER
+  </button>
+  <button mat-button
+    color="primary"
+    (click)=save()>
+    SAUVEGARDER
+  </button>
 </mat-dialog-actions>

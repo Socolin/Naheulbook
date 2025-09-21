@@ -1,70 +1,76 @@
 <mat-toolbar color="primary">
-    <button mat-icon-button mat-dialog-close>
-        <mat-icon>close</mat-icon>
-    </button>
-    <span>
-        Ajouter un effet
-    </span>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+  <span>
+    Ajouter un effet
+  </span>
+  @if (newStatsModifier?.name) {
     <button mat-button
-            *ngIf="newStatsModifier?.name"
-            (click)="addNewModifier()">
-        AJOUTER
+      (click)="addNewModifier()">
+      AJOUTER
     </button>
+  }
 </mat-toolbar>
 
 <div class="content">
-    <mat-vertical-stepper linear="true" #stepper [selectedIndex]="selectedStep">
-        <mat-step [completed]="searchCompleted" #searchStep>
-            <ng-template matStepLabel>Chercher un effet pré-existant</ng-template>
-            <mat-form-field>
-                <input matInput
-                       placeholder="Effet"
-                       #filter
-                       (keyup)="updateFilter(filter.value)">
-            </mat-form-field>
-            <mat-action-list>
-                <div mat-ripple *ngFor="let effect of filteredEffects" (click)="selectEffect(effect)">
-                    <div class="filter-result">
-                        <div class="name">{{effect.name}}</div>
-                        <div class="category mat-caption">{{effect.subCategory.type.name}} - {{effect.subCategory.name}}</div>
-                    </div>
-                </div>
-            </mat-action-list>
-            <div class="step-valid-button">
-                <button mat-button color=primary (click)="customize()">
-                    EFFET PERSONNALISÉ
-                </button>
+  <mat-vertical-stepper linear="true" #stepper [selectedIndex]="selectedStep">
+    <mat-step [completed]="searchCompleted" #searchStep>
+      <ng-template matStepLabel>Chercher un effet pré-existant</ng-template>
+      <mat-form-field>
+        <input matInput
+          placeholder="Effet"
+          #filter
+          (keyup)="updateFilter(filter.value)">
+      </mat-form-field>
+      <mat-action-list>
+        @for (effect of filteredEffects; track effect) {
+          <div mat-ripple (click)="selectEffect(effect)">
+            <div class="filter-result">
+              <div class="name">{{effect.name}}</div>
+              <div class="category mat-caption">{{effect.subCategory.type.name}} - {{effect.subCategory.name}}</div>
             </div>
-        </mat-step>
-        <mat-step #customizeStep>
-            <ng-template matStepLabel>Personnalisation</ng-template>
-            <stats-modifier-editor [options]="{noType: !fromEffect}" [modifier]="newStatsModifier">
-            </stats-modifier-editor>
-            <div class="step-valid-button">
-                <button mat-button color=primary (click)="completeCustomization()">
-                    VALIDER
-                </button>
-            </div>
-        </mat-step>
-        <mat-step>
-            <ng-template matStepLabel>Cible de l'effet</ng-template>
-            <mat-selection-list #fighterSelection>
-                <mat-list-option *ngFor="let fighter of data.fighters" [value]="fighter">
-                    <span class="line">
-                        <fighter-icon [fighter]="fighter"></fighter-icon>
-                        <span class="fighter-name">{{fighter.name}}</span>
-                    </span>
-                </mat-list-option>
-            </mat-selection-list>
-            <div class="step-valid-button">
-                <button mat-button
-                        color="primary"
-                        *ngIf="newStatsModifier?.name"
-                        (click)="addNewModifier()">
-                    AJOUTER
-                </button>
-            </div>
-        </mat-step>
-    </mat-vertical-stepper>
+          </div>
+        }
+      </mat-action-list>
+      <div class="step-valid-button">
+        <button mat-button color=primary (click)="customize()">
+          EFFET PERSONNALISÉ
+        </button>
+      </div>
+    </mat-step>
+    <mat-step #customizeStep>
+      <ng-template matStepLabel>Personnalisation</ng-template>
+      <stats-modifier-editor [options]="{noType: !fromEffect}" [modifier]="newStatsModifier">
+      </stats-modifier-editor>
+      <div class="step-valid-button">
+        <button mat-button color=primary (click)="completeCustomization()">
+          VALIDER
+        </button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Cible de l'effet</ng-template>
+      <mat-selection-list #fighterSelection>
+        @for (fighter of data.fighters; track fighter) {
+          <mat-list-option [value]="fighter">
+            <span class="line">
+              <fighter-icon [fighter]="fighter"></fighter-icon>
+              <span class="fighter-name">{{fighter.name}}</span>
+            </span>
+          </mat-list-option>
+        }
+      </mat-selection-list>
+      <div class="step-valid-button">
+        @if (newStatsModifier?.name) {
+          <button mat-button
+            color="primary"
+            (click)="addNewModifier()">
+            AJOUTER
+          </button>
+        }
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>
 </div>
 

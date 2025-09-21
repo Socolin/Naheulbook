@@ -1,33 +1,39 @@
-<ng-container *ngFor="let modifier of modifiers; let last = last; let i = index">
-    <div class="stat-modifier mat-typography">
-        <span>{{modifier | modifier}}</span>
-
-        <span [hidden]="!advancedModifiers" class="advanced-modifier">
-            <span *ngIf="jobsByIds && modifier.jobId">{{jobsByIds[modifier.jobId]?.name}}</span>
-            <span *ngIf="originsByIds && modifier.originId">{{originsByIds[modifier.originId]?.name}}</span>
-            <span *ngFor="let special of modifier.special">
-                {{specialValueDescriptionByValues[special]}}
-            </span>
+@for (modifier of modifiers; track modifier; let last = $last; let i = $index) {
+  <div class="stat-modifier mat-typography">
+    <span>{{modifier | modifier}}</span>
+    <span [hidden]="!advancedModifiers" class="advanced-modifier">
+      @if (jobsByIds && modifier.jobId) {
+        <span>{{jobsByIds[modifier.jobId]?.name}}</span>
+      }
+      @if (originsByIds && modifier.originId) {
+        <span>{{originsByIds[modifier.originId]?.name}}</span>
+      }
+      @for (special of modifier.special; track special) {
+        <span>
+          {{specialValueDescriptionByValues[special]}}
         </span>
-
-        <span [hidden]="!advancedModifiers">
-            <button mat-icon-button (click)="openAdvanceStatModifierDialog(modifier)">
-                <mat-icon>more_horiz</mat-icon>
-            </button>
-        </span>
-
-        <button mat-icon-button (click)="removeModifier(i)" class="delete-button">
-            <mat-icon>delete</mat-icon>
-        </button>
-    </div>
-
-    <mat-divider *ngIf="!last"></mat-divider>
-</ng-container>
+      }
+    </span>
+    <span [hidden]="!advancedModifiers">
+      <button mat-icon-button (click)="openAdvanceStatModifierDialog(modifier)">
+        <mat-icon>more_horiz</mat-icon>
+      </button>
+    </span>
+    <button mat-icon-button (click)="removeModifier(i)" class="delete-button">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+  @if (!last) {
+    <mat-divider></mat-divider>
+  }
+}
 
 
 <div class="actions">
-    <div class="mat-typography" *ngIf="modifiers.length === 0">
-        Aucune caractéristiques affectées
+  @if (modifiers.length === 0) {
+    <div class="mat-typography">
+      Aucune caractéristiques affectées
     </div>
-    <button mat-icon-button class="add-button" (click)="openAddStatModifierDialog()"><mat-icon>add</mat-icon></button>
+  }
+  <button mat-icon-button class="add-button" (click)="openAddStatModifierDialog()"><mat-icon>add</mat-icon></button>
 </div>

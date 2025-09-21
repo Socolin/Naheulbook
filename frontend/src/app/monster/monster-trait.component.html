@@ -1,13 +1,19 @@
 <div class="trait">
-    <div>
-        <div class="trait-levels">
-            <div *ngIf="trait.levels && traitInfo.level > 0" class="trait-level trait-level-1"></div>
-            <div *ngIf="trait.levels && traitInfo.level > 1" class="trait-level trait-level-2"></div>
-            <div *ngIf="trait.levels && traitInfo.level > 2" class="trait-level trait-level-3"></div>
-        </div>
-        <img [src]="imageUrl()"/>
+  <div>
+    <div class="trait-levels">
+      @if (trait.levels && traitInfo.level > 0) {
+        <div class="trait-level trait-level-1"></div>
+      }
+      @if (trait.levels && traitInfo.level > 1) {
+        <div class="trait-level trait-level-2"></div>
+      }
+      @if (trait.levels && traitInfo.level > 2) {
+        <div class="trait-level trait-level-3"></div>
+      }
     </div>
-    <div class="trait-label">
-        {{trait.name}}
-    </div>
+    <img [src]="imageUrl()"/>
+  </div>
+  <div class="trait-label">
+    {{trait.name}}
+  </div>
 </div>

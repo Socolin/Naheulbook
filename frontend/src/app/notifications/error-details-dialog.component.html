@@ -1,52 +1,52 @@
 <h2 mat-dialog-title>Erreur</h2>
 <mat-dialog-content>
 
-    <ng-template [ngIf]="errorType === 'BadGateway'">
-        <h4 mat-h4>Cause possible</h4>
-        <p mat-body>
-            Le serveur est coupé temporairement (possiblement une mis à jour est en cours).
-            Si l'erreur persiste ceci veut probablement dire que le serveur à crash.
-        </p>
-    </ng-template>
-    <ng-template [ngIf]="errorType === 'ServerError'">
-        <h4 mat-h4>Cause possible</h4>
-        <p mat-body>Une erreur c'est produite sur le serveur.</p>
-    </ng-template>
-    <ng-template [ngIf]="errorType === 'Forbidden'">
-        <h4 mat-h4>Cause possible</h4>
-        <p mat-body>Vous essayez d'accèder à une ressource pour laquelle vous n'avez pas les droits.</p>
-    </ng-template>
-    <ng-template [ngIf]="errorType === 'BadRequest'">
-        <h4 mat-h4>Cause possible</h4>
-        <p mat-body>
-            Une erreur dans le code de l'application est survenue.
-            Ou vous essayez de crée un objet ou autre qui ne passe pas la phase de validation (nom d'un personnage/objet
-            trop long par exemple)
-        </p>
-    </ng-template>
+  @if (errorType === 'BadGateway') {
+    <h4 mat-h4>Cause possible</h4>
+    <p mat-body>
+      Le serveur est coupé temporairement (possiblement une mis à jour est en cours).
+      Si l'erreur persiste ceci veut probablement dire que le serveur à crash.
+    </p>
+  }
+  @if (errorType === 'ServerError') {
+    <h4 mat-h4>Cause possible</h4>
+    <p mat-body>Une erreur c'est produite sur le serveur.</p>
+  }
+  @if (errorType === 'Forbidden') {
+    <h4 mat-h4>Cause possible</h4>
+    <p mat-body>Vous essayez d'accèder à une ressource pour laquelle vous n'avez pas les droits.</p>
+  }
+  @if (errorType === 'BadRequest') {
+    <h4 mat-h4>Cause possible</h4>
+    <p mat-body>
+      Une erreur dans le code de l'application est survenue.
+      Ou vous essayez de crée un objet ou autre qui ne passe pas la phase de validation (nom d'un personnage/objet
+      trop long par exemple)
+    </p>
+  }
 
-    <ng-template [ngIf]="showMoreInfo">
-        <h4 mat-h4>Information techniques</h4>
-        <pre>{{data.message}}</pre>
-        <ng-template [ngIf]="data.stack">
-            <pre>{{data.stack}}</pre>
-        </ng-template>
-        <ng-template [ngIf]="data.error">
-            <pre>{{data.error}}</pre>
-        </ng-template>
-        <ng-template [ngIf]="dataIsNotAndError()">
-            <pre>{{data | json}}</pre>
-        </ng-template>
-    </ng-template>
+  @if (showMoreInfo) {
+    <h4 mat-h4>Information techniques</h4>
+    <pre>{{data.message}}</pre>
+    @if (data.stack) {
+      <pre>{{data.stack}}</pre>
+    }
+    @if (data.error) {
+      <pre>{{data.error}}</pre>
+    }
+    @if (dataIsNotAndError()) {
+      <pre>{{data | json}}</pre>
+    }
+  }
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button
-            (click)="showMoreInfo = true"
-            color="primary">
-        PLUS D'INFOS
-    </button>
-    <button mat-button mat-dialog-close
-            color="primary">
-        FERMER
-    </button>
+  <button mat-button
+    (click)="showMoreInfo = true"
+    color="primary">
+    PLUS D'INFOS
+  </button>
+  <button mat-button mat-dialog-close
+    color="primary">
+    FERMER
+  </button>
 </mat-dialog-actions>

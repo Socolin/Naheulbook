@@ -1,67 +1,69 @@
 <h2 mat-dialog-title>{{data.title}}</h2>
 <mat-dialog-content>
-    <form [formGroup]="form">
-        <div class="date-selector">
-            <mat-form-field class="hour">
-                <mat-label>Heure</mat-label>
-                <input matInput
-                       formControlName="hour"
-                       type="number"
-                       min="0"
-                       max="23"
-                       step="1">
-            </mat-form-field>
-            <mat-form-field class="minute">
-                <mat-label>Minutes</mat-label>
-                <input matInput
-                       formControlName="minute"
-                       type="number"
-                       min="0"
-                       max="59"
-                       step="1">
-            </mat-form-field>
-            <mat-form-field class="year">
-                <mat-label>Année</mat-label>
-                <input matInput
-                       formControlName="year"
-                       type="number"
-                       min="0"
-                       step="1">
-            </mat-form-field>
-            <mat-form-field class="day">
-                <mat-label>Jour</mat-label>
-                <input matInput
-                       formControlName="relativeDay"
-                       type="number"
-                       min="1"
-                       step="1">
-            </mat-form-field>
+  <form [formGroup]="form">
+    <div class="date-selector">
+      <mat-form-field class="hour">
+        <mat-label>Heure</mat-label>
+        <input matInput
+          formControlName="hour"
+          type="number"
+          min="0"
+          max="23"
+          step="1">
+      </mat-form-field>
+      <mat-form-field class="minute">
+        <mat-label>Minutes</mat-label>
+        <input matInput
+          formControlName="minute"
+          type="number"
+          min="0"
+          max="59"
+          step="1">
+      </mat-form-field>
+      <mat-form-field class="year">
+        <mat-label>Année</mat-label>
+        <input matInput
+          formControlName="year"
+          type="number"
+          min="0"
+          step="1">
+      </mat-form-field>
+      <mat-form-field class="day">
+        <mat-label>Jour</mat-label>
+        <input matInput
+          formControlName="relativeDay"
+          type="number"
+          min="1"
+          step="1">
+      </mat-form-field>
 
-            <mat-form-field class="decade">
-                <mat-label>Période</mat-label>
-                <mat-select  formControlName="currentCalendarDate">
-                    <ng-template ngFor [ngForOf]="calendarPerRealMonth" let-month>
-                        <mat-optgroup [label]="month.monthName">
-                            <mat-option *ngFor="let cDate of month.calendarEntries" [value]="cDate">
-                                {{cDate.name}}
-                            </mat-option>
-                        </mat-optgroup>
-                    </ng-template>
-                </mat-select>
-            </mat-form-field>
-        </div>
-    </form>
+      <mat-form-field class="decade">
+        <mat-label>Période</mat-label>
+        <mat-select  formControlName="currentCalendarDate">
+          @for (month of calendarPerRealMonth; track month) {
+            <mat-optgroup [label]="month.monthName">
+              @for (cDate of month.calendarEntries; track cDate) {
+                <mat-option [value]="cDate">
+                  {{cDate.name}}
+                </mat-option>
+              }
+            </mat-optgroup>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button
-            color="primary"
-            mat-dialog-close>
-        FERMER
-    </button>
-    <button mat-button
-            color="primary"
-            [disabled]="!form.valid"
-            (click)="valid()">
-        VALIDER
-    </button>
+  <button mat-button
+    color="primary"
+    mat-dialog-close>
+    FERMER
+  </button>
+  <button mat-button
+    color="primary"
+    [disabled]="!form.valid"
+    (click)="valid()">
+    VALIDER
+  </button>
 </mat-dialog-actions>

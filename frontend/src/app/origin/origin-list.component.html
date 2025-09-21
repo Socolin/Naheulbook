@@ -1,4 +1,6 @@
 <h2>Origines</h2>
-<div *ngFor="let origin of origins">
+@for (origin of origins; track origin) {
+  <div>
     <origin [origin]="origin"></origin>
-</div>
+  </div>
+}

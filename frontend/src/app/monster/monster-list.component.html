@@ -1,31 +1,41 @@
 <h2>Bestiaires</h2>
-<div class="add-button" *ngIf="isAdmin">
+@if (isAdmin) {
+  <div class="add-button">
     <button mat-fab (click)="openCreateMonsterTemplateDialog()">
-        <mat-icon>
-            add
-        </mat-icon>
+      <mat-icon>
+        add
+      </mat-icon>
     </button>
-</div>
+  </div>
+}
 <div class="monster-category-selector">
+  <mat-form-field>
+    <mat-select [(ngModel)]="selectedMonsterType" (selectionChange)="selectMonsterType($event.value)">
+      @for (monsterType of monsterTypes; track monsterType) {
+        <mat-option [value]="monsterType">
+          {{monsterType.name}}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  @if (selectedMonsterType) {
     <mat-form-field>
-        <mat-select [(ngModel)]="selectedMonsterType" (selectionChange)="selectMonsterType($event.value)">
-            <mat-option *ngFor="let monsterType of monsterTypes" [value]="monsterType">
-                {{monsterType.name}}
-            </mat-option>
-        </mat-select>
+      <mat-select [(ngModel)]="selectedMonsterSubCategory">
+        @for (monsterSubCategory of selectedMonsterType.subCategories; track monsterSubCategory) {
+          <mat-option [value]="monsterSubCategory">
+            {{monsterSubCategory.name}}
+          </mat-option>
+        }
+      </mat-select>
     </mat-form-field>
-    <mat-form-field *ngIf="selectedMonsterType">
-        <mat-select [(ngModel)]="selectedMonsterSubCategory">
-            <mat-option *ngFor="let monsterSubCategory of selectedMonsterType.subCategories" [value]="monsterSubCategory">
-                {{monsterSubCategory.name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+  }
 </div>
 <div class="monster-templates">
-    <ng-container *ngIf="selectedMonsterSubCategory">
-        <div *ngFor="let monster of monsterBySubCategory[selectedMonsterSubCategory.id]">
-            <monster-template (edit)="editMonster($event)" [isAdmin]="isAdmin" [monsterTemplate]="monster"></monster-template>
-        </div>
-    </ng-container>
+  @if (selectedMonsterSubCategory) {
+    @for (monster of monsterBySubCategory[selectedMonsterSubCategory.id]; track monster) {
+      <div>
+        <monster-template (edit)="editMonster($event)" [isAdmin]="isAdmin" [monsterTemplate]="monster"></monster-template>
+      </div>
+    }
+  }
 </div>

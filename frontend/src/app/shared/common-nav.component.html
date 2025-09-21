@@ -1,27 +1,33 @@
 <h2 class="mat-h2">Autre</h2>
 
 <mat-nav-list>
-    <div class="gm-toggle" (click)="toggleGmMode(); $event.preventDefault(); $event.stopImmediatePropagation(); $event.stopPropagation()">
-        <mat-slide-toggle [ngModel]="gmModeService.gmMode | async">
-            Maitre du jeu
-        </mat-slide-toggle>
-    </div>
-    <a mat-list-item [routerLink]="['/']">
-        <mat-icon matListItemIcon>home</mat-icon> Accueil
+  <div class="gm-toggle" (click)="toggleGmMode(); $event.preventDefault(); $event.stopImmediatePropagation(); $event.stopPropagation()">
+    <mat-slide-toggle [ngModel]="gmModeService.gmMode | async">
+      Maitre du jeu
+    </mat-slide-toggle>
+  </div>
+  <a mat-list-item [routerLink]="['/']">
+    <mat-icon matListItemIcon>home</mat-icon> Accueil
+  </a>
+  <a mat-list-item (click)="openThemeSelector()">
+    <mat-icon matListItemIcon>style</mat-icon> Thème
+  </a>
+  <a mat-list-item [routerLink]="['/credit']">
+    <mat-icon matListItemIcon>info</mat-icon> Crédits
+  </a>
+  @if (loginService.currentLoggedUser) {
+    <a mat-list-item [routerLink]="['/profile']">
+      <mat-icon matListItemIcon>account_box</mat-icon> Profile
     </a>
-    <a mat-list-item (click)="openThemeSelector()">
-        <mat-icon matListItemIcon>style</mat-icon> Thème
+  }
+  @if (loginService.currentLoggedUser) {
+    <a mat-list-item [routerLink]="['/logout']">
+      <mat-icon matListItemIcon>power_settings_new</mat-icon> Déconnexion
     </a>
-    <a mat-list-item [routerLink]="['/credit']">
-        <mat-icon matListItemIcon>info</mat-icon> Crédits
+  }
+  @if (!loginService.currentLoggedUser) {
+    <a mat-list-item (click)="redirectToLogin()">
+      <mat-icon matListItemIcon>account_circle</mat-icon> Connexion
     </a>
-    <a mat-list-item *ngIf="loginService.currentLoggedUser" [routerLink]="['/profile']">
-        <mat-icon matListItemIcon>account_box</mat-icon> Profile
-    </a>
-    <a mat-list-item *ngIf="loginService.currentLoggedUser" [routerLink]="['/logout']">
-        <mat-icon matListItemIcon>power_settings_new</mat-icon> Déconnexion
-    </a>
-    <a mat-list-item *ngIf="!loginService.currentLoggedUser" (click)="redirectToLogin()">
-        <mat-icon matListItemIcon>account_circle</mat-icon> Connexion
-    </a>
+  }
 </mat-nav-list>

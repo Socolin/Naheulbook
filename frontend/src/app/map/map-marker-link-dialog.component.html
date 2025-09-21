@@ -1,43 +1,51 @@
 <h2 mat-dialog-title>Ajouter un lien vers une carte</h2>
-<mat-dialog-content *ngIf="maps === undefined">
+@if (maps === undefined) {
+  <mat-dialog-content>
     <mat-spinner></mat-spinner>
-</mat-dialog-content>
-<mat-dialog-content *ngIf="maps !== undefined">
+  </mat-dialog-content>
+}
+@if (maps !== undefined) {
+  <mat-dialog-content>
     <mat-form-field>
-        <input type="text" matInput [matAutocomplete]="autocompleteMap" [formControl]="targetMapFormControl" placeholder="Carte cible" required>
+      <input type="text" matInput [matAutocomplete]="autocompleteMap" [formControl]="targetMapFormControl" placeholder="Carte cible" required>
     </mat-form-field>
-
     <mat-autocomplete #autocompleteMap="matAutocomplete" [displayWith]="displayMapNameFn">
-        <mat-option *ngFor="let map of filteredMaps | async" [value]="map">{{map.name}}</mat-option>
+      @for (map of filteredMaps | async; track map) {
+        <mat-option [value]="map">{{map.name}}</mat-option>
+      }
     </mat-autocomplete>
-
     <mat-form-field>
-        <input matInput [formControl]="nameFormControl" placeholder="Nom"/>
-        <mat-hint>Optionnel</mat-hint>
+      <input matInput [formControl]="nameFormControl" placeholder="Nom"/>
+      <mat-hint>Optionnel</mat-hint>
     </mat-form-field>
-
-    <ng-template [ngIf]="selectedMap">
-        <mat-form-field>
-            <input type="text" matInput [matAutocomplete]="autocompleteMarkers" [formControl]="targetMarkerFormControl" placeholder="Marqueur cible">
-            <mat-hint>Optionnel</mat-hint>
-        </mat-form-field>
-
-        <mat-autocomplete #autocompleteMarkers="matAutocomplete" [displayWith]="displayMapNameFn">
-            <mat-option *ngFor="let marker of filteredMapMarkers | async" [value]="marker">{{marker.name}}</mat-option>
-        </mat-autocomplete>
-    </ng-template>
-</mat-dialog-content>
+    @if (selectedMap) {
+      <mat-form-field>
+        <input type="text" matInput [matAutocomplete]="autocompleteMarkers" [formControl]="targetMarkerFormControl" placeholder="Marqueur cible">
+        <mat-hint>Optionnel</mat-hint>
+      </mat-form-field>
+      <mat-autocomplete #autocompleteMarkers="matAutocomplete" [displayWith]="displayMapNameFn">
+        @for (marker of filteredMapMarkers | async; track marker) {
+          <mat-option [value]="marker">{{marker.name}}</mat-option>
+        }
+      </mat-autocomplete>
+    }
+  </mat-dialog-content>
+}
 <mat-dialog-actions align="end">
-    <button mat-button
-            mat-dialog-close
-            color="primary">
-        FERMER
-    </button>
-    <button mat-button
-            [disabled]="!targetMapFormControl.value?.id"
-            (click)="validate()"
-            color="primary">
-        <ng-template [ngIf]="!data.link">AJOUTER</ng-template>
-        <ng-template [ngIf]="data.link">ÉDITER</ng-template>
-    </button>
+  <button mat-button
+    mat-dialog-close
+    color="primary">
+    FERMER
+  </button>
+  <button mat-button
+    [disabled]="!targetMapFormControl.value?.id"
+    (click)="validate()"
+    color="primary">
+    @if (!data.link) {
+      AJOUTER
+    }
+    @if (data.link) {
+      ÉDITER
+    }
+  </button>
 </mat-dialog-actions>

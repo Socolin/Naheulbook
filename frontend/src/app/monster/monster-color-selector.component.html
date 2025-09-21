@@ -1,57 +1,65 @@
 <div cdk-overlay-origin #colorSelectorOrigin="cdkOverlayOrigin">
-    <div class="icon">
-        <i matRipple
-           [matRippleCentered]="true"
-           [matRippleUnbounded]="true"
-           [matRippleRadius]="32"
-           [style.fontSize]="fontSize"
-           [style.color]="'#' + monster.data.color" class="ra ra-monster-skull"
-           (click)="openSelector($event)"></i>
-        <span *ngIf="monster.data.number"
-              class="number"
-              matRipple
-              [matRippleCentered]="true"
-              [matRippleUnbounded]="true"
-              [matRippleRadius]="32"
-              [style.fontSize]="fontSize"
-              (click)="openSelector($event)">
-            {{monster.data.number}}
-        </span>
-    </div>
+  <div class="icon">
+    <i matRipple
+      [matRippleCentered]="true"
+      [matRippleUnbounded]="true"
+      [matRippleRadius]="32"
+      [style.fontSize]="fontSize"
+      [style.color]="'#' + monster.data.color" class="ra ra-monster-skull"
+    (click)="openSelector($event)"></i>
+    @if (monster.data.number) {
+      <span
+        class="number"
+        matRipple
+        [matRippleCentered]="true"
+        [matRippleUnbounded]="true"
+        [matRippleRadius]="32"
+        [style.fontSize]="fontSize"
+        (click)="openSelector($event)">
+        {{monster.data.number}}
+      </span>
+    }
+  </div>
 </div>
 
 <ng-template cdk-connected-overlay
-             cdkConnectedOverlayHasBackdrop
-             (backdropClick)="closeSelector()"
-             [cdkConnectedOverlayOpen]="showSelector"
-             [cdkConnectedOverlayOrigin]="colorSelectorOrigin">
-    <mat-card class="selector">
-        <div class="colors">
-            <div *ngFor="let color of colors" class="color">
-                <i class="ra ra-monster-skull"
-                   matRipple
-                   [matRippleCentered]="true"
-                   [matRippleUnbounded]="true"
-                   [matRippleRadius]="32"
-                   [style.color]=color
-                   [style.fontSize]="fontSize"
-                   (click)="changeColor(color)">
-                </i>
-            </div>
+  cdkConnectedOverlayHasBackdrop
+  (backdropClick)="closeSelector()"
+  [cdkConnectedOverlayOpen]="showSelector"
+  [cdkConnectedOverlayOrigin]="colorSelectorOrigin">
+  <mat-card class="selector">
+    <div class="colors">
+      @for (color of colors; track color) {
+        <div class="color">
+          <i class="ra ra-monster-skull"
+            matRipple
+            [matRippleCentered]="true"
+            [matRippleUnbounded]="true"
+            [matRippleRadius]="32"
+            [style.color]=color
+            [style.fontSize]="fontSize"
+            (click)="changeColor(color)">
+          </i>
         </div>
-        <div class="numbers">
-            <div *ngFor="let number of numbers">
-                <div class="number"
-                     matRipple
-                     [matRippleCentered]="true"
-                     [matRippleUnbounded]="true"
-                     [matRippleRadius]="32"
-                     (click)="changeNumber(number)">
-                    <div *ngIf="number" class="number" [style.fontSize]="'40px'">
-                        {{number}}
-                    </div>
-                </div>
-            </div>
+      }
+    </div>
+    <div class="numbers">
+      @for (number of numbers; track number) {
+        <div>
+          <div class="number"
+            matRipple
+            [matRippleCentered]="true"
+            [matRippleUnbounded]="true"
+            [matRippleRadius]="32"
+            (click)="changeNumber(number)">
+            @if (number) {
+              <div class="number" [style.fontSize]="'40px'">
+                {{number}}
+              </div>
+            }
+          </div>
         </div>
-    </mat-card>
+      }
+    </div>
+  </mat-card>
 </ng-template>

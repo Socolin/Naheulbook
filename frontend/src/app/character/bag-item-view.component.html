@@ -1,36 +1,46 @@
-<div *ngFor="let item of filteredBagItems" class="top-level-items separator">
+@for (item of filteredBagItems; track item) {
+  <div class="top-level-items separator">
     <div class="item">
-        <button *ngIf="item.content"
-                [attr.aria-label]="collapsed[item.id] ? 'Afficher contenu de l\'objet' : 'Cacher le contenu de l\'objet'"
-                (click)="toggleExpand(item)"
-                mat-icon-button>
-            <mat-icon *ngIf="!collapsed[item.id]">
-                keyboard_arrow_right
+      @if (item.content) {
+        <button
+          [attr.aria-label]="collapsed[item.id] ? 'Afficher contenu de l\'objet' : 'Cacher le contenu de l\'objet'"
+          (click)="toggleExpand(item)"
+          mat-icon-button>
+          @if (!collapsed[item.id]) {
+            <mat-icon>
+              keyboard_arrow_right
             </mat-icon>
-            <mat-icon *ngIf="!!collapsed[item.id]"
-                      matBadgeSize="small"
-                      matBadgeOverlap="true"
-                      matBadgePosition="above after"
-                      [matBadgeHidden]="!collapsed[item.id]"
-                      [matBadge]="item.content.length.toString()">
-                keyboard_arrow_down
+          }
+          @if (!!collapsed[item.id]) {
+            <mat-icon
+              matBadgeSize="small"
+              matBadgeOverlap="true"
+              matBadgePosition="above after"
+              [matBadgeHidden]="!collapsed[item.id]"
+              [matBadge]="item.content.length.toString()">
+              keyboard_arrow_down
             </mat-icon>
+          }
         </button>
-        <app-item-line [itemMenu]="itemMenu"
-                       [hideEquippedMarker]="true"
-                       [gmView]="gmView"
-                       [item]="item"
-                       [character]="character">
-        </app-item-line>
+      }
+      <app-item-line [itemMenu]="itemMenu"
+        [hideEquippedMarker]="true"
+        [gmView]="gmView"
+        [item]="item"
+        [character]="character">
+      </app-item-line>
     </div>
-    <div *ngIf="item.content && !collapsed[item.id]" class="child separator">
+    @if (item.content && !collapsed[item.id]) {
+      <div class="child separator">
         <bag-item-view
-            [itemFilterName]="itemFilterName"
-            [sortType]="sortType"
-            [items]="item.content"
-            [itemMenu]="itemMenu"
-            [character]="character"
-            [gmView]="gmView">
+          [itemFilterName]="itemFilterName"
+          [sortType]="sortType"
+          [items]="item.content"
+          [itemMenu]="itemMenu"
+          [character]="character"
+          [gmView]="gmView">
         </bag-item-view>
-    </div>
-</div>
+      </div>
+    }
+  </div>
+}

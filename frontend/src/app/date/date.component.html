@@ -1,1 +1,5 @@
-<span *ngIf="date">{{hour}}:{{minute}}, {{period}}, {{date?.year}}</span><span *ngIf="!date">Non défini</span>
+@if (date) {
+  <span>{{hour}}:{{minute}}, {{period}}, {{date?.year}}</span>
+  }@if (!date) {
+  <span>Non défini</span>
+}

@@ -1,47 +1,57 @@
 <mat-dialog-content>
 
-    <mat-form-field>
-        <mat-select placeholder="Stat" [(ngModel)]="selectedStat">
-            <mat-option *ngFor="let stat of basicStats" [value]="stat">
-                {{stat}}
-            </mat-option>
-            <mat-divider></mat-divider>
-            <mat-option *ngFor="let stat of lifeStats" [value]="stat">
-                {{stat}}
-            </mat-option>
-            <mat-divider></mat-divider>
-            <mat-option *ngFor="let stat of combatStats" [value]="stat">
-                {{stat}}
-            </mat-option>
-            <mat-divider></mat-divider>
-            <mat-option *ngFor="let stat of magicStats" [value]="stat">
-                {{stat}}
-            </mat-option>
-            <mat-divider></mat-divider>
-            <mat-option *ngFor="let stat of stats" [value]="stat">
-                {{stat}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+  <mat-form-field>
+    <mat-select placeholder="Stat" [(ngModel)]="selectedStat">
+      @for (stat of basicStats; track stat) {
+        <mat-option [value]="stat">
+          {{stat}}
+        </mat-option>
+      }
+      <mat-divider></mat-divider>
+      @for (stat of lifeStats; track stat) {
+        <mat-option [value]="stat">
+          {{stat}}
+        </mat-option>
+      }
+      <mat-divider></mat-divider>
+      @for (stat of combatStats; track stat) {
+        <mat-option [value]="stat">
+          {{stat}}
+        </mat-option>
+      }
+      <mat-divider></mat-divider>
+      @for (stat of magicStats; track stat) {
+        <mat-option [value]="stat">
+          {{stat}}
+        </mat-option>
+      }
+      <mat-divider></mat-divider>
+      @for (stat of stats; track stat) {
+        <mat-option [value]="stat">
+          {{stat}}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
 
-    <mat-form-field>
-        <mat-select placeholder="Operation" [(ngModel)]="selectedType">
-            <mat-option [value]="'ADD'">+</mat-option>
-            <mat-option [value]="'MUL'">*</mat-option>
-            <mat-option [value]="'DIV'">/</mat-option>
-            <mat-option [value]="'SET'">=</mat-option>
-        </mat-select>
-    </mat-form-field>
+  <mat-form-field>
+    <mat-select placeholder="Operation" [(ngModel)]="selectedType">
+      <mat-option [value]="'ADD'">+</mat-option>
+      <mat-option [value]="'MUL'">*</mat-option>
+      <mat-option [value]="'DIV'">/</mat-option>
+      <mat-option [value]="'SET'">=</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <mat-form-field>
-        <input matInput
-               [(ngModel)]="value"
-               type="number"
-               placeholder="Valeur"/>
-    </mat-form-field>
+  <mat-form-field>
+    <input matInput
+      [(ngModel)]="value"
+      type="number"
+      placeholder="Valeur"/>
+  </mat-form-field>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close color="primary">ANNULER</button>
-    <button mat-button color="primary" [disabled]="!canAddModifier()" (click)="addModifier()">AJOUTER</button>
+  <button mat-button mat-dialog-close color="primary">ANNULER</button>
+  <button mat-button color="primary" [disabled]="!canAddModifier()" (click)="addModifier()">AJOUTER</button>
 </mat-dialog-actions>

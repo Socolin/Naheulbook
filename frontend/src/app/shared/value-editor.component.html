@@ -1,80 +1,91 @@
 <span matRipple cdk-overlay-origin #trigger="cdkOverlayOrigin" (click)="showEditor($event)" class="ve-value">
-    {{value|number}}<span *ngIf="maxValue && !hideMaxValue">/{{maxValue}}</span
-></span
-><ng-template cdk-connected-overlay [cdkConnectedOverlayOrigin]="trigger" cdkConnectedOverlayHasBackdrop [cdkConnectedOverlayOpen]="displayEditor"
-          (backdropClick)="hideEditor()" (attach)="onDisplayed()">
+  {{value|number}}@if (maxValue && !hideMaxValue) {
+  <span>/{{maxValue}}</span
+    >
+    }</span
+    ><ng-template cdk-connected-overlay [cdkConnectedOverlayOrigin]="trigger" cdkConnectedOverlayHasBackdrop [cdkConnectedOverlayOpen]="displayEditor"
+    (backdropClick)="hideEditor()" (attach)="onDisplayed()">
     <div style="position: relative">
-        <div *ngIf="mode === undefined || mode === 'mobile'" class="ve-mobile-container ve-container"
-             [style.bottom]="(-15 - yOffset) + 'px'"
-             [style.left]="(40 + xOffset)+ 'px'">
-
-            <div class="ve-delta-value">
-                {{newValue}}
+      @if (mode === undefined || mode === 'mobile') {
+        <div class="ve-mobile-container ve-container"
+          [style.bottom]="(-15 - yOffset) + 'px'"
+          [style.left]="(40 + xOffset)+ 'px'">
+          <div class="ve-delta-value">
+            {{newValue}}
+          </div>
+          <div class="ve-summary">
+            <div>
+              {{value}} @if (maxValue) {
+              <span>/{{maxValue}}</span>
+              } -> {{newValue}} @if (maxValue) {
+              <span>/{{maxValue}}</span>
+              } ({{valueDelta ? valueDelta : "0"}})
             </div>
-            <div class="ve-summary">
-                <div>
-                    {{value}} <span *ngIf="maxValue">/{{maxValue}}</span> -> {{newValue}} <span *ngIf="maxValue">/{{maxValue}}</span> ({{valueDelta ? valueDelta : "0"}})
-                </div>
+          </div>
+          @if (title) {
+            <div class="ve-title">
+              {{title}}
             </div>
-            <div *ngIf="title" class="ve-title">
-                {{title}}
-            </div>
-            <div class="ve-settings">
-                <button mat-mini-fab color="primary" aria-label="Configuration" (click)="openSettings()">
-                    <mat-icon>settings</mat-icon>
-                </button>
-            </div>
-            <button class="ve-button ve-button-s500" matRipple [matRippleDisabled]="newValue === minValue" [class.disabled]="newValue === minValue" [disabled]="newValue === minValue" [matRippleColor]="'primary'" (click)="changeValue('-500')">
-                -500
+          }
+          <div class="ve-settings">
+            <button mat-mini-fab color="primary" aria-label="Configuration" (click)="openSettings()">
+              <mat-icon>settings</mat-icon>
             </button>
-            <button class="ve-button ve-button-s50" matRipple [matRippleDisabled]="newValue === minValue"  [class.disabled]="newValue === minValue" [disabled]="newValue === minValue" [matRippleColor]="'primary'" (click)="changeValue('-50')">
-                -50
-            </button>
-            <button class="ve-button ve-button-s5" matRipple [matRippleDisabled]="newValue === minValue"  [class.disabled]="newValue === minValue" [disabled]="newValue === minValue" [matRippleColor]="'primary'" (click)="changeValue('-5')">
-                -5
-            </button>
-            <button class="ve-button ve-button-s1" matRipple [matRippleDisabled]="newValue === minValue"  [class.disabled]="newValue === minValue" [disabled]="newValue === minValue" [matRippleColor]="'primary'" (click)="changeValue('-1')">
-                -1
-            </button>
-            <button class="ve-button ve-button-a500" matRipple [matRippleColor]="'primary'" (click)="changeValue('+500')">
-                +500
-            </button>
-            <button class="ve-button ve-button-a50" matRipple [matRippleColor]="'primary'" (click)="changeValue('+50')">
-                +50
-            </button>
-            <button class="ve-button ve-button-a5" matRipple [matRippleColor]="'primary'" (click)="changeValue('+5')">
-                +5
-            </button>
-            <button class="ve-button ve-button-a1" matRipple [matRippleColor]="'primary'" (click)="changeValue('+1')">
-                +1
-            </button>
-            <button class="ve-button ve-button-reset" matRipple [matRippleColor]="'primary'" (click)="changeValue('reset')">
-                RESET
-            </button>
-            <button class="ve-button ve-button-max" matRipple [matRippleColor]="'primary'" (click)="changeValue('max')" [disabled]="!maxValue">
-                MAX
-            </button>
-            <button class="ve-button ve-button-zero" matRipple [matRippleColor]="'primary'" (click)="changeValue('zero')">
-                0
-            </button>
-            <button class="ve-button ve-button-valid" matRipple [matRippleColor]="'primary'" (click)="commitValue()"><mat-icon>check</mat-icon></button>
+          </div>
+          <button class="ve-button ve-button-s500" matRipple [matRippleDisabled]="newValue === minValue" [class.disabled]="newValue === minValue" [disabled]="newValue === minValue" [matRippleColor]="'primary'" (click)="changeValue('-500')">
+            -500
+          </button>
+          <button class="ve-button ve-button-s50" matRipple [matRippleDisabled]="newValue === minValue"  [class.disabled]="newValue === minValue" [disabled]="newValue === minValue" [matRippleColor]="'primary'" (click)="changeValue('-50')">
+            -50
+          </button>
+          <button class="ve-button ve-button-s5" matRipple [matRippleDisabled]="newValue === minValue"  [class.disabled]="newValue === minValue" [disabled]="newValue === minValue" [matRippleColor]="'primary'" (click)="changeValue('-5')">
+            -5
+          </button>
+          <button class="ve-button ve-button-s1" matRipple [matRippleDisabled]="newValue === minValue"  [class.disabled]="newValue === minValue" [disabled]="newValue === minValue" [matRippleColor]="'primary'" (click)="changeValue('-1')">
+            -1
+          </button>
+          <button class="ve-button ve-button-a500" matRipple [matRippleColor]="'primary'" (click)="changeValue('+500')">
+            +500
+          </button>
+          <button class="ve-button ve-button-a50" matRipple [matRippleColor]="'primary'" (click)="changeValue('+50')">
+            +50
+          </button>
+          <button class="ve-button ve-button-a5" matRipple [matRippleColor]="'primary'" (click)="changeValue('+5')">
+            +5
+          </button>
+          <button class="ve-button ve-button-a1" matRipple [matRippleColor]="'primary'" (click)="changeValue('+1')">
+            +1
+          </button>
+          <button class="ve-button ve-button-reset" matRipple [matRippleColor]="'primary'" (click)="changeValue('reset')">
+            RESET
+          </button>
+          <button class="ve-button ve-button-max" matRipple [matRippleColor]="'primary'" (click)="changeValue('max')" [disabled]="!maxValue">
+            MAX
+          </button>
+          <button class="ve-button ve-button-zero" matRipple [matRippleColor]="'primary'" (click)="changeValue('zero')">
+            0
+          </button>
+          <button class="ve-button ve-button-valid" matRipple [matRippleColor]="'primary'" (click)="commitValue()"><mat-icon>check</mat-icon></button>
         </div>
-        <div *ngIf="mode === 'keyboard'" class="ve-container ve-keyboard-container"
-             [style.bottom]="(-15 - yOffset) + 'px'"
-             [style.left]="(40 + xOffset)+ 'px'">
-            <span class="ve-title">{{title}}</span>
-            <input #valueInput class="ve-input"
-                   type="text"
-                   [matTooltip]="'Vous pouvez choisir la nouvelle valeur, ou utiliser des valeur relative tel que +8 ou -16'"
-                   (keydown.enter)="changeValue(valueInput.value);commitValue()">
-            <button mat-raised-button color="primary" class="ve-valid"
-                    (click)="changeValue(valueInput.value);commitValue()"
-                    [matTooltip]="'Vous pouvez aussi appuyer sur Entrée pour valider'">
-                OK
-            </button>
-            <button mat-mini-fab aria-label="Configuration"  class="ve-settings" (click)="openSettings()" color="primary">
-                <mat-icon>settings</mat-icon>
-            </button>
+      }
+      @if (mode === 'keyboard') {
+        <div class="ve-container ve-keyboard-container"
+          [style.bottom]="(-15 - yOffset) + 'px'"
+          [style.left]="(40 + xOffset)+ 'px'">
+          <span class="ve-title">{{title}}</span>
+          <input #valueInput class="ve-input"
+            type="text"
+            [matTooltip]="'Vous pouvez choisir la nouvelle valeur, ou utiliser des valeur relative tel que +8 ou -16'"
+            (keydown.enter)="changeValue(valueInput.value);commitValue()">
+          <button mat-raised-button color="primary" class="ve-valid"
+            (click)="changeValue(valueInput.value);commitValue()"
+            [matTooltip]="'Vous pouvez aussi appuyer sur Entrée pour valider'">
+            OK
+          </button>
+          <button mat-mini-fab aria-label="Configuration"  class="ve-settings" (click)="openSettings()" color="primary">
+            <mat-icon>settings</mat-icon>
+          </button>
         </div>
+      }
     </div>
-</ng-template>
+  </ng-template>

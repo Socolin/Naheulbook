@@ -1,63 +1,70 @@
 <event-editor #eventEditor [group]=group (create)="createEvent($event)"></event-editor>
-<div *ngIf="group.data.timestamp">
-    <div *ngIf="group.pastEventCount">
+@if (group.data.timestamp) {
+  <div>
+    @if (group.pastEventCount) {
+      <div>
         <h4>Évènements passé</h4>
         <div class="event-list">
-            <ng-template ngFor let-event [ngForOf]="group.events">
-                <ng-template [ngIf]="event.timestamp <= group.data.timestamp">
-                    <mat-card class="past-event">
-                        <mat-card-header>
-                            <mat-card-title-group>
-                                <mat-card-title>{{event.name}}</mat-card-title>
-                                <mat-card-subtitle>
-                                    Il y a : {{group.data.timestamp - event.timestamp | nhbkDuration}}
-                                </mat-card-subtitle>
-                            </mat-card-title-group>
-                        </mat-card-header>
-                        <mat-card-content>
-                            {{event.description}}
-                        </mat-card-content>
-                        <mat-card-actions align="end">
-                            <button mat-button
-                                    color="primary"
-                                    (click)="deleteEvent(event)">
-                                SUPPRIMER
-                            </button>
-                        </mat-card-actions>
-                    </mat-card>
-                </ng-template>
-            </ng-template>
+          @for (event of group.events; track event) {
+            @if (event.timestamp <= group.data.timestamp) {
+              <mat-card class="past-event">
+                <mat-card-header>
+                  <mat-card-title-group>
+                    <mat-card-title>{{event.name}}</mat-card-title>
+                    <mat-card-subtitle>
+                      Il y a : {{group.data.timestamp - event.timestamp | nhbkDuration}}
+                    </mat-card-subtitle>
+                  </mat-card-title-group>
+                </mat-card-header>
+                <mat-card-content>
+                  {{event.description}}
+                </mat-card-content>
+                <mat-card-actions align="end">
+                  <button mat-button
+                    color="primary"
+                    (click)="deleteEvent(event)">
+                    SUPPRIMER
+                  </button>
+                </mat-card-actions>
+              </mat-card>
+            }
+          }
         </div>
-    </div>
-    <div *ngIf="group.futureEventCount">
+      </div>
+    }
+    @if (group.futureEventCount) {
+      <div>
         <h4>Évènements à venir</h4>
         <div class="event-list">
-            <ng-template ngFor let-event [ngForOf]="group.events">
-                <ng-template [ngIf]="event.timestamp > group.data.timestamp">
-                    <mat-card>
-                        <mat-card-title-group>
-                            <mat-card-title>{{event.name}}</mat-card-title>
-                            <mat-card-subtitle>
-                                Dans: {{event.timestamp - group.data.timestamp | nhbkDuration}}
-                            </mat-card-subtitle>
-                        </mat-card-title-group>
-                        <mat-card-content>
-                            {{event.description}}
-                        </mat-card-content>
-                        <mat-card-actions align="end">
-                            <button mat-button
-                                    color="primary"
-                                    (click)="deleteEvent(event)">
-                                SUPPRIMER
-                            </button>
-                        </mat-card-actions>
-                    </mat-card>
-
-                </ng-template>
-            </ng-template>
+          @for (event of group.events; track event) {
+            @if (event.timestamp > group.data.timestamp) {
+              <mat-card>
+                <mat-card-title-group>
+                  <mat-card-title>{{event.name}}</mat-card-title>
+                  <mat-card-subtitle>
+                    Dans: {{event.timestamp - group.data.timestamp | nhbkDuration}}
+                  </mat-card-subtitle>
+                </mat-card-title-group>
+                <mat-card-content>
+                  {{event.description}}
+                </mat-card-content>
+                <mat-card-actions align="end">
+                  <button mat-button
+                    color="primary"
+                    (click)="deleteEvent(event)">
+                    SUPPRIMER
+                  </button>
+                </mat-card-actions>
+              </mat-card>
+            }
+          }
         </div>
-    </div>
-</div>
-<div *ngIf="!group.data.timestamp">
+      </div>
+    }
+  </div>
+}
+@if (!group.data.timestamp) {
+  <div>
     Vous devez définir la date du groupe avant de pouvoir ajouter des évènements
-</div>
+  </div>
+}

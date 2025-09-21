@@ -1,14 +1,18 @@
 <h2>Compétences</h2>
 <mat-form-field style="width: 100%">
-    <mat-label>Filtre</mat-label>
-    <input matInput
-           (keydown.esc)="filter = undefined"
-           [(ngModel)]="filter">
+  <mat-label>Filtre</mat-label>
+  <input matInput
+    (keydown.esc)="filter = undefined"
+    [(ngModel)]="filter">
 </mat-form-field>
-<div *ngFor="let skill of skills">
-	<div *ngIf="isFiltered(skill)">
+@for (skill of skills; track skill) {
+  <div>
+    @if (isFiltered(skill)) {
+      <div>
         <mat-card style="margin-bottom: 10px">
-            <skill [skill]="skill"></skill>
+          <skill [skill]="skill"></skill>
         </mat-card>
-	</div>
-</div>
+      </div>
+    }
+  </div>
+}

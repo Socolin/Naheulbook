@@ -1,272 +1,332 @@
 <mat-sidenav-container [hasBackdrop]="isMobile || (!selectedMarker || !selectedMarker.editable)">
-    <mat-sidenav-content>
-        <div #mapElement class="map">
+  <mat-sidenav-content>
+    <div #mapElement class="map">
+    </div>
+  </mat-sidenav-content>
+  <mat-sidenav #menuSidenav mode="over" position="start" class="menu-panel" [autoFocus]="false">
+    <div class="panel">
+      <mat-nav-list>
+        <a mat-list-item [routerLink]="['/map']">
+          <mat-icon>arrow_back</mat-icon>
+          Liste des cartes
+        </a>
+      </mat-nav-list>
+      <div class="map-config side-panel-block">
+        <h2 class="mat-h2 header">
+          Informations
+          @if (currentUser?.admin) {
+            <button mat-icon-button [matMenuTriggerFor]="mapMenu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          }
+        </h2>
+        <mat-menu #mapMenu>
+          <button mat-menu-item (click)="editMap()">
+            <mat-icon>edit</mat-icon>
+            Éditer
+          </button>
+        </mat-menu>
+        <div>
+          {{map?.name}}
         </div>
-    </mat-sidenav-content>
-    <mat-sidenav #menuSidenav mode="over" position="start" class="menu-panel" [autoFocus]="false">
-        <div class="panel">
-            <mat-nav-list>
-                <a mat-list-item [routerLink]="['/map']">
-                    <mat-icon>arrow_back</mat-icon>
-                    Liste des cartes
-                </a>
-            </mat-nav-list>
-            <div class="map-config side-panel-block">
-                <h2 class="mat-h2 header">
-                    Informations
-                    <button mat-icon-button [matMenuTriggerFor]="mapMenu" *ngIf="currentUser?.admin">
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
-                </h2>
-                <mat-menu #mapMenu>
-                    <button mat-menu-item (click)="editMap()">
-                        <mat-icon>edit</mat-icon>
-                        Éditer
-                    </button>
+        <div class="unit">
+          <span>Échelle: {{map?.data.pixelPerUnit}} pixels / {{map?.data.unitName}}</span>
+          <button mat-mini-fab [color]="this.measureLine ? 'primary' : undefined" (click)="toggleMeasure()">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-pencil-ruler" class="ra-mat-button-icon-24"></mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="grid-config side-panel-block">
+        <h2 class="mat-h2">Grille</h2>
+        <div class="toggle-size">
+          <mat-checkbox [ngModel]="gridDisplayed" (change)="toggleGrid($event.checked)">Activé</mat-checkbox>
+          <mat-form-field>
+            <input matInput
+              placeholder="Espacement"
+              (ngModelChange)="changeGridSize($event)"
+              [(ngModel)]="gridSize"
+              type="number"
+              autocomplete="off"
+              autocapitalize="off"/>
+          </mat-form-field>
+        </div>
+        <div class="offset">
+          <mat-form-field>
+            <input matInput
+              placeholder="Offset X"
+              [(ngModel)]="gridOffsetX"
+              (ngModelChange)="changeGridOffsetX($event)"
+              type="number"
+              step="0.1"
+              autocomplete="off"
+              autocapitalize="off"/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput
+              placeholder="Offset Y"
+              [(ngModel)]="gridOffsetY"
+              (ngModelChange)="changeGridOffsetY($event)"
+              type="number"
+              step="0.1"
+              autocomplete="off"
+              autocapitalize="off"/>
+          </mat-form-field>
+        </div>
+      </div>
+      @if (map) {
+        <div class="markers side-panel-block">
+          <h2 class="mat-h2">
+            Marqueurs
+            @if (currentUser) {
+              <button mat-icon-button [matMenuTriggerFor]="markerMenu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            }
+          </h2>
+          @for (mapLayer of layersForCurrentUser$ | async; track mapLayer) {
+            <div class="layer">
+              <div class="title">
+                @if (!expandedLayerList[mapLayer.id]) {
+                  <button mat-icon-button
+                    (click)="expandMarkerList(mapLayer)">
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                  </button>
+                }
+                @if (expandedLayerList[mapLayer.id]) {
+                  <button mat-icon-button
+                    (click)="collapseMarkerList(mapLayer)">
+                    <mat-icon>keyboard_arrow_down</mat-icon>
+                  </button>
+                }
+                <span class="layer-name">
+                  @if (mapLayer.source !== 'official') {
+                    <mat-icon matTooltip="Privé (seulement visible par vous)">lock</mat-icon>
+                  }
+                  @if (canEditLayer(mapLayer)) {
+                    <a (click)="selectLayer(mapLayer)" [class.layer-selected]="selectedLayer === mapLayer">{{mapLayer.name}}</a>
+                  }
+                  @if (!canEditLayer(mapLayer)) {
+                    {{mapLayer.name}}
+                  }
+                </span>
+                @if (!canEditLayer(mapLayer)) {
+                  <button mat-icon-button (click)="toggleVisibility(mapLayer)">
+                    @if (hiddenLayers[mapLayer.id]) {
+                      <mat-icon>visibility_off</mat-icon>
+                    }
+                    @if (!hiddenLayers[mapLayer.id]) {
+                      <mat-icon>visibility_on</mat-icon>
+                    }
+                  </button>
+                }
+                @if (canEditLayer(mapLayer)) {
+                  <button mat-icon-button [matMenuTriggerFor]="layerMenu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                }
+                <mat-menu #layerMenu>
+                  <button mat-menu-item (click)="toggleVisibility(mapLayer)">
+                    @if (hiddenLayers[mapLayer.id]) {
+                      <mat-icon>visibility_on</mat-icon>
+                      Afficher
+                    }
+                    @if (!hiddenLayers[mapLayer.id]) {
+                      <mat-icon>visibility_off</mat-icon>
+                      Cacher
+                    }
+                  </button>
+                  <button mat-menu-item (click)="startEditLayer(mapLayer)">
+                    <mat-icon>edit</mat-icon>
+                    Éditer
+                  </button>
+                  <button mat-menu-item [matMenuTriggerFor]="confirmDeleteLayer">
+                    <mat-icon>delete</mat-icon>
+                    Supprimer
+                  </button>
                 </mat-menu>
-                <div>
-                    {{map?.name}}
-                </div>
-                <div class="unit">
-                    <span>Échelle: {{map?.data.pixelPerUnit}} pixels / {{map?.data.unitName}}</span>
-                    <button mat-mini-fab [color]="this.measureLine ? 'primary' : undefined" (click)="toggleMeasure()">
-                        <mat-icon fontSet="game-icon" fontIcon="game-icon-pencil-ruler" class="ra-mat-button-icon-24"></mat-icon>
-                    </button>
-                </div>
-            </div>
-            <div class="grid-config side-panel-block">
-                <h2 class="mat-h2">Grille</h2>
-                <div class="toggle-size">
-                    <mat-checkbox [ngModel]="gridDisplayed" (change)="toggleGrid($event.checked)">Activé</mat-checkbox>
-                    <mat-form-field>
-                        <input matInput
-                               placeholder="Espacement"
-                               (ngModelChange)="changeGridSize($event)"
-                               [(ngModel)]="gridSize"
-                               type="number"
-                               autocomplete="off"
-                               autocapitalize="off"/>
-                    </mat-form-field>
-                </div>
-                <div class="offset">
-                    <mat-form-field>
-                        <input matInput
-                               placeholder="Offset X"
-                               [(ngModel)]="gridOffsetX"
-                               (ngModelChange)="changeGridOffsetX($event)"
-                               type="number"
-                               step="0.1"
-                               autocomplete="off"
-                               autocapitalize="off"/>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <input matInput
-                               placeholder="Offset Y"
-                               [(ngModel)]="gridOffsetY"
-                               (ngModelChange)="changeGridOffsetY($event)"
-                               type="number"
-                               step="0.1"
-                               autocomplete="off"
-                               autocapitalize="off"/>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="markers side-panel-block" *ngIf="map">
-                <h2 class="mat-h2">
-                    Marqueurs
-                    <button mat-icon-button [matMenuTriggerFor]="markerMenu" *ngIf="currentUser">
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
-                </h2>
-                <div *ngFor="let mapLayer of layersForCurrentUser$ | async" class="layer">
-                    <div class="title">
-                        <button mat-icon-button
-                                *ngIf="!expandedLayerList[mapLayer.id]"
-                                (click)="expandMarkerList(mapLayer)">
-                            <mat-icon>keyboard_arrow_right</mat-icon>
-                        </button>
-                        <button mat-icon-button
-                                *ngIf="expandedLayerList[mapLayer.id]"
-                                (click)="collapseMarkerList(mapLayer)">
-                            <mat-icon>keyboard_arrow_down</mat-icon>
-                        </button>
-                        <span class="layer-name">
-                            <mat-icon *ngIf="mapLayer.source !== 'official'" matTooltip="Privé (seulement visible par vous)">lock</mat-icon>
-                            <ng-template [ngIf]="canEditLayer(mapLayer)">
-                                <a (click)="selectLayer(mapLayer)" [class.layer-selected]="selectedLayer === mapLayer">{{mapLayer.name}}</a>
-                            </ng-template>
-                            <ng-template [ngIf]="!canEditLayer(mapLayer)">
-                                {{mapLayer.name}}
-                            </ng-template>
-                        </span>
-                        <button *ngIf="!canEditLayer(mapLayer)" mat-icon-button (click)="toggleVisibility(mapLayer)">
-                            <mat-icon *ngIf="hiddenLayers[mapLayer.id]">visibility_off</mat-icon>
-                            <mat-icon *ngIf="!hiddenLayers[mapLayer.id]">visibility_on</mat-icon>
-                        </button>
-                        <button *ngIf="canEditLayer(mapLayer)" mat-icon-button [matMenuTriggerFor]="layerMenu">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                        <mat-menu #layerMenu>
-                            <button mat-menu-item (click)="toggleVisibility(mapLayer)">
-                                <ng-template [ngIf]="hiddenLayers[mapLayer.id]">
-                                    <mat-icon>visibility_on</mat-icon>
-                                    Afficher
-                                </ng-template>
-                                <ng-template [ngIf]="!hiddenLayers[mapLayer.id]">
-                                    <mat-icon>visibility_off</mat-icon>
-                                    Cacher
-                                </ng-template>
-                            </button>
-                            <button mat-menu-item (click)="startEditLayer(mapLayer)">
-                                <mat-icon>edit</mat-icon>
-                                Éditer
-                            </button>
-                            <button mat-menu-item [matMenuTriggerFor]="confirmDeleteLayer">
-                                <mat-icon>delete</mat-icon>
-                                Supprimer
-                            </button>
-                        </mat-menu>
-                        <mat-menu #confirmDeleteLayer>
-                            <button mat-menu-item (click)="deleteLayer(mapLayer)">
-                                <mat-icon>check</mat-icon>
-                                Confirmer
-                            </button>
-                        </mat-menu>
-                    </div>
-                    <ng-template [ngIf]="expandedLayerList[mapLayer.id]">
-                        <div *ngFor="let marker of mapLayer.markers" class="marker-link">
-                            <a *ngIf="!hiddenLayers[mapLayer.id]" (click)="goToMarker(marker)">{{marker.name}}</a>
-                            <span *ngIf="hiddenLayers[mapLayer.id]">{{marker.name}}</span>
-                        </div>
-                    </ng-template>
-                    <button mat-stroked-button (click)="startAddMapMarker(mapLayer)" *ngIf="canEditLayer(mapLayer)">
-                        <mat-icon>add</mat-icon>Marqueur
-                    </button>
-                </div>
-            </div>
-            <mat-menu #markerMenu>
-                <button mat-menu-item (click)="openAddMapLayerDialog()">
-                    <mat-icon>add</mat-icon>
-                    Ajouter un calque
+                <mat-menu #confirmDeleteLayer>
+                  <button mat-menu-item (click)="deleteLayer(mapLayer)">
+                    <mat-icon>check</mat-icon>
+                    Confirmer
+                  </button>
+                </mat-menu>
+              </div>
+              @if (expandedLayerList[mapLayer.id]) {
+                @for (marker of mapLayer.markers; track marker) {
+                  <div class="marker-link">
+                    @if (!hiddenLayers[mapLayer.id]) {
+                      <a (click)="goToMarker(marker)">{{marker.name}}</a>
+                    }
+                    @if (hiddenLayers[mapLayer.id]) {
+                      <span>{{marker.name}}</span>
+                    }
+                  </div>
+                }
+              }
+              @if (canEditLayer(mapLayer)) {
+                <button mat-stroked-button (click)="startAddMapMarker(mapLayer)">
+                  <mat-icon>add</mat-icon>Marqueur
                 </button>
-            </mat-menu>
-
-            <div class="login-area">
-                <common-nav></common-nav>
+              }
             </div>
+          }
         </div>
-    </mat-sidenav>
-    <mat-sidenav #infoSidenav mode="over" position="end" class="info-panel mat-typography" [autoFocus]="false">
-        <ng-template [ngIf]="selectedMarker">
-            <div *ngIf="selectedMarker.editable" class="marker-editor side-panel-block">
-                <div class="name" [formGroup]="markerForm">
-                    <mat-form-field>
-                        <input #markerNameInput matInput formControlName="name" placeholder="Nom"/>
-                    </mat-form-field>
-                </div>
-                <div class="description" [formGroup]="markerForm">
-                    <mat-form-field>
-                    <textarea cdkTextareaAutosize [cdkAutosizeMinRows]="4" [cdkAutosizeMaxRows]="10"
-                              matInput formControlName="description" placeholder="Description"></textarea>
-                    </mat-form-field>
-                </div>
-                <div class="color" *ngIf="selectedMarker.useColor()">
-                    Couleur: <input type="color" [ngModel]="$any(selectedMarker).color" (ngModelChange)="changeSelectedMarkerColor($event)">
-                </div>
-                <div [formGroup]="markerForm">
-                    <mat-radio-group formControlName="markerIcon" class="marker-icon-selector" *ngIf="selectedMarker.type === 'point'">
-                        <mat-radio-button [value]="markerIconName" *ngFor="let markerIconName of markerIconNames" class="icon">
-                            <img alt="Marqueur" src="{{markerIcons[markerIconName].options.iconUrl}}" width="48" />
-                        </mat-radio-button>
-                    </mat-radio-group>
-                </div>
-                <div class="actions">
-                    <button mat-button color="primary" [disabled]="markerForm.disabled" *ngIf="!selectedMarker.id" (click)="cancelEdit(selectedMarker)">SUPPRIMER</button>
-                    <button mat-button color="primary" [disabled]="markerForm.disabled" *ngIf="selectedMarker.id" (click)="cancelEdit(selectedMarker)">ANNULER</button>
-                    <button mat-button color="primary" [disabled]="markerForm.disabled" *ngIf="!selectedMarker.id" (click)="saveMarker(selectedMarker)">CRÉER</button>
-                    <button mat-button color="primary" [disabled]="markerForm.disabled" *ngIf="selectedMarker.id" (click)="saveMarker(selectedMarker)">MODIFIER</button>
-                </div>
+      }
+      <mat-menu #markerMenu>
+        <button mat-menu-item (click)="openAddMapLayerDialog()">
+          <mat-icon>add</mat-icon>
+          Ajouter un calque
+        </button>
+      </mat-menu>
+
+      <div class="login-area">
+        <common-nav></common-nav>
+      </div>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav #infoSidenav mode="over" position="end" class="info-panel mat-typography" [autoFocus]="false">
+    @if (selectedMarker) {
+      @if (selectedMarker.editable) {
+        <div class="marker-editor side-panel-block">
+          <div class="name" [formGroup]="markerForm">
+            <mat-form-field>
+              <input #markerNameInput matInput formControlName="name" placeholder="Nom"/>
+            </mat-form-field>
+          </div>
+          <div class="description" [formGroup]="markerForm">
+            <mat-form-field>
+              <textarea cdkTextareaAutosize [cdkAutosizeMinRows]="4" [cdkAutosizeMaxRows]="10"
+              matInput formControlName="description" placeholder="Description"></textarea>
+            </mat-form-field>
+          </div>
+          @if (selectedMarker.useColor()) {
+            <div class="color">
+              Couleur: <input type="color" [ngModel]="$any(selectedMarker).color" (ngModelChange)="changeSelectedMarkerColor($event)">
             </div>
-            <div *ngIf="!selectedMarker.editable" class="marker-detail">
-                <div class="side-panel-block">
-                    <h2 class="header">
-                        {{selectedMarker.name}}
-                        <button mat-icon-button [matMenuTriggerFor]="currentMarkerMenu" *ngIf="canEditLayer(selectedMarker.mapLayer)">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                    </h2>
+          }
+          <div [formGroup]="markerForm">
+            @if (selectedMarker.type === 'point') {
+              <mat-radio-group formControlName="markerIcon" class="marker-icon-selector">
+                @for (markerIconName of markerIconNames; track markerIconName) {
+                  <mat-radio-button [value]="markerIconName" class="icon">
+                    <img alt="Marqueur" src="{{markerIcons[markerIconName].options.iconUrl}}" width="48" />
+                  </mat-radio-button>
+                }
+              </mat-radio-group>
+            }
+          </div>
+          <div class="actions">
+            @if (!selectedMarker.id) {
+              <button mat-button color="primary" [disabled]="markerForm.disabled" (click)="cancelEdit(selectedMarker)">SUPPRIMER</button>
+            }
+            @if (selectedMarker.id) {
+              <button mat-button color="primary" [disabled]="markerForm.disabled" (click)="cancelEdit(selectedMarker)">ANNULER</button>
+            }
+            @if (!selectedMarker.id) {
+              <button mat-button color="primary" [disabled]="markerForm.disabled" (click)="saveMarker(selectedMarker)">CRÉER</button>
+            }
+            @if (selectedMarker.id) {
+              <button mat-button color="primary" [disabled]="markerForm.disabled" (click)="saveMarker(selectedMarker)">MODIFIER</button>
+            }
+          </div>
+        </div>
+      }
+      @if (!selectedMarker.editable) {
+        <div class="marker-detail">
+          <div class="side-panel-block">
+            <h2 class="header">
+              {{selectedMarker.name}}
+              @if (canEditLayer(selectedMarker.mapLayer)) {
+                <button mat-icon-button [matMenuTriggerFor]="currentMarkerMenu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+              }
+            </h2>
+          </div>
+          <div class="side-panel-block mat-typography" [innerHTML]="selectedMarker.description | markdown">
+          </div>
+          <div class="links">
+            @for (link of availableMarkerLinks$ | async; track link) {
+              <div class="map-link">
+                <div class="name" mat-ripple (click)="goToMap(link.targetMapId, link.targetMapMarkerId)">
+                  <mat-icon matListIcon>arrow_forward</mat-icon>
+                  <span>
+                    {{link.name}}
+                  </span>
                 </div>
-                <div class="side-panel-block mat-typography" [innerHTML]="selectedMarker.description | markdown">
-                </div>
-                <div class="links">
-                    <div *ngFor="let link of availableMarkerLinks$ | async" class="map-link">
-                        <div class="name" mat-ripple (click)="goToMap(link.targetMapId, link.targetMapMarkerId)">
-                            <mat-icon matListIcon>arrow_forward</mat-icon>
-                            <span>
-                                {{link.name}}
-                            </span>
-                        </div>
-                        <div class="actions" *ngIf="canEditLayer(selectedMarker.mapLayer)">
-                            <button mat-icon-button  [matMenuTriggerFor]="mapLinkMenu">
-                                <mat-icon>more_vert</mat-icon>
-                            </button>
-                        </div>
-                        <mat-menu #mapLinkMenu>
-                            <button mat-menu-item (click)="startEditLink(selectedMarker, link)">
-                                <mat-icon>edit</mat-icon>
-                                Éditer
-                            </button>
-                            <button mat-menu-item [matMenuTriggerFor]="confirmDeleteLink">
-                                <mat-icon>delete</mat-icon>
-                                Supprimer
-                            </button>
-                        </mat-menu>
-                        <mat-menu #confirmDeleteLink>
-                            <button mat-menu-item (click)="deleteLink(selectedMarker, link)">
-                                <mat-icon>check</mat-icon>
-                                Confirmer
-                            </button>
-                        </mat-menu>
-                    </div>
-                </div>
-                <mat-menu #currentMarkerMenu>
-                    <button mat-menu-item (click)="startEditMarker(selectedMarker)">
-                        <mat-icon>edit</mat-icon>
-                        Éditer
+                @if (canEditLayer(selectedMarker.mapLayer)) {
+                  <div class="actions">
+                    <button mat-icon-button  [matMenuTriggerFor]="mapLinkMenu">
+                      <mat-icon>more_vert</mat-icon>
                     </button>
-                    <button mat-menu-item (click)="startAddMapMarkerLink(selectedMarker)">
-                        <mat-icon>link</mat-icon>
-                        Ajouter un lien
-                    </button>
-                    <button mat-menu-item [matMenuTriggerFor]="confirmDeleteMarker">
-                        <mat-icon>delete</mat-icon>
-                        Supprimer
-                    </button>
+                  </div>
+                }
+                <mat-menu #mapLinkMenu>
+                  <button mat-menu-item (click)="startEditLink(selectedMarker, link)">
+                    <mat-icon>edit</mat-icon>
+                    Éditer
+                  </button>
+                  <button mat-menu-item [matMenuTriggerFor]="confirmDeleteLink">
+                    <mat-icon>delete</mat-icon>
+                    Supprimer
+                  </button>
                 </mat-menu>
-                <mat-menu #confirmDeleteMarker>
-                    <button mat-menu-item (click)="deleteMarker(selectedMarker)">
-                        <mat-icon>check</mat-icon>
-                        Confirmer
-                    </button>
+                <mat-menu #confirmDeleteLink>
+                  <button mat-menu-item (click)="deleteLink(selectedMarker, link)">
+                    <mat-icon>check</mat-icon>
+                    Confirmer
+                  </button>
                 </mat-menu>
-            </div>
-        </ng-template>
-    </mat-sidenav>
+              </div>
+            }
+          </div>
+          <mat-menu #currentMarkerMenu>
+            <button mat-menu-item (click)="startEditMarker(selectedMarker)">
+              <mat-icon>edit</mat-icon>
+              Éditer
+            </button>
+            <button mat-menu-item (click)="startAddMapMarkerLink(selectedMarker)">
+              <mat-icon>link</mat-icon>
+              Ajouter un lien
+            </button>
+            <button mat-menu-item [matMenuTriggerFor]="confirmDeleteMarker">
+              <mat-icon>delete</mat-icon>
+              Supprimer
+            </button>
+          </mat-menu>
+          <mat-menu #confirmDeleteMarker>
+            <button mat-menu-item (click)="deleteMarker(selectedMarker)">
+              <mat-icon>check</mat-icon>
+              Confirmer
+            </button>
+          </mat-menu>
+        </div>
+      }
+    }
+  </mat-sidenav>
 </mat-sidenav-container>
 
 
 <div class="menu-button">
-    <button color="primary" mat-mini-fab (click)="menuSidenav.toggle()" *ngIf="!menuSidenav.opened">
-        <mat-icon>menu</mat-icon>
+  @if (!menuSidenav.opened) {
+    <button color="primary" mat-mini-fab (click)="menuSidenav.toggle()">
+      <mat-icon>menu</mat-icon>
     </button>
+  }
 </div>
 
-<div class="menu-grid-placement" *ngIf="gridDisplayed && !menuSidenav.opened">
-    <button color="primary" mat-mini-fab (click)="startDragGrid()" *ngIf="!isGridDraggable">
+@if (gridDisplayed && !menuSidenav.opened) {
+  <div class="menu-grid-placement">
+    @if (!isGridDraggable) {
+      <button color="primary" mat-mini-fab (click)="startDragGrid()">
         <mat-icon>control_camera</mat-icon>
-    </button>
-    <button color="primary" mat-mini-fab (click)="stopDragGrid()" *ngIf="isGridDraggable">
+      </button>
+    }
+    @if (isGridDraggable) {
+      <button color="primary" mat-mini-fab (click)="stopDragGrid()">
         <mat-icon>stop</mat-icon>
-    </button>
-</div>
+      </button>
+    }
+  </div>
+}
 

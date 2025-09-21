@@ -1,14 +1,14 @@
 <div class="header mat-typography">
-    <div class="separator dice">{{labels[0]}}</div>
-    <div class="separator effect">{{labels[1]}}</div>
-    <div class="separator effect2">{{labels[2]}}</div>
+  <div class="separator dice">{{labels[0]}}</div>
+  <div class="separator effect">{{labels[1]}}</div>
+  <div class="separator effect2">{{labels[2]}}</div>
 </div>
 <div class="data separator mat-typography">
-    <ng-template ngFor [ngForOf]="datas" let-data>
-        <div class="separator dice">{{data.dice.join('-')}}</div>
-        <div class="separator label-effect">{{labels[1]}}</div>
-        <div class="separator effect">{{data.effect}}</div>
-        <div class="separator label-effect2">{{labels[2]}}</div>
-        <div class="separator effect2">{{data.effect2}}</div>
-    </ng-template>
+  @for (data of datas; track data) {
+    <div class="separator dice">{{data.dice.join('-')}}</div>
+    <div class="separator label-effect">{{labels[1]}}</div>
+    <div class="separator effect">{{data.effect}}</div>
+    <div class="separator label-effect2">{{labels[2]}}</div>
+    <div class="separator effect2">{{data.effect2}}</div>
+  }
 </div>

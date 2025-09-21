@@ -12,7 +12,7 @@
     "mapRoot": "./",
     "module": "es2020",
     "strictNullChecks": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "outDir": "../dist/out-tsc",
     "sourceMap": true,
     "target": "ES2022",

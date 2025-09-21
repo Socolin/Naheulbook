@@ -1,286 +1,418 @@
 <mat-dialog-content>
-    <mat-card-header>
-        <icon matRipple matCardAvatar [icon]="item.data.icon" [size]="'40px'" (click)="openSelectIconDialog()"></icon>
-        <mat-card-title>
-        <span *ngIf="item.template.data.quantifiable || item.data.quantity">
-            {{item.data.quantity}}
+  <mat-card-header>
+    <icon matRipple matCardAvatar [icon]="item.data.icon" [size]="'40px'" (click)="openSelectIconDialog()"></icon>
+    <mat-card-title>
+      @if (item.template.data.quantifiable || item.data.quantity) {
+        <span>
+          {{item.data.quantity}}
         </span>
-            <span style="vertical-align: top;">
-            {{item.data.name}}
-        </span>
-        </mat-card-title>
-        <mat-card-subtitle>
-            <div *ngIf="itemCategoriesById">
-                <span class="label label-default">{{itemCategoriesById[item.template.subCategoryId].section.name}}</span>
-                -
-                <span>{{itemCategoriesById[item.template.subCategoryId].name}}</span>
-            </div>
-
-            <span *ngIf="item.data.notIdentified">
-        Non identifié
-    </span>
-        </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content class="item-detail-content">
+      }
+      <span style="vertical-align: top;">
+        {{item.data.name}}
+      </span>
+    </mat-card-title>
+    <mat-card-subtitle>
+      @if (itemCategoriesById) {
         <div>
-            <div>
-                <span *ngIf="item.template.name !== item.data.name">Nom reel: {{item.template.name}}</span>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.data.description || data.item.template.data.description">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-quill" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    Description: {{data.item.data.description || data.item.template.data.description}}
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.requireLevel">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-level-two" class="ra-mat-button-icon-24"></mat-icon>
-                <span>
-                Niveau requis: {{data.item.template.data.requireLevel}}
-            </span>
-            </div>
-
-            <div>
-                <span *ngIf="item.template.data.relic" class="label label-primary">Relique</span>
-                <span *ngIf="item.template.data.sex === 'h'">Homme uniq.</span>
-                <span *ngIf="item.template.data.sex === 'f'">Femme uniq.</span>
-                <span *ngIf="item.template.data.throwable" class="label label-info">Prévue pour le jet</span>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.slots?.length > 0">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <mat-chip-set>
-                        <mat-chip *ngFor="let slot of data.item.template.slots">{{slot.name}}</mat-chip>
-                    </mat-chip-set>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.note">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-scroll-unfurled" class="ra-mat-button-icon-24"></mat-icon>
-                Note: {{data.item.template.data.note}}
-            </div>
-
-            <!-- Dieu -->
-            <div class="icon-label" *ngIf="data.item.template.data.god && godsByTechName">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-prayer" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <span>Dieu:</span>
-                    {{godsByTechName[data.item.template.data.god].displayName}}
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.data.quantifiable">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-stack" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    Quantité:
-                    <value-editor [value]="data.item.data.quantity"
-                                  [title]="'Quantité'"
-                                  (valueChanged)="updateItemQuantity($event)">
-                    </value-editor>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="item.template.data.bonusDamage || item.template.data.damageDice">
-                <mat-icon fontSet="ra" fontIcon="ra-broadsword" class="ra-mat-button-icon-24"></mat-icon>
-                <div class="damage">
-                <span *ngIf="data.item.template.data.damageDice">{{data.item.template.data.damageDice}}
-                    <span class="ra ra-perspective-dice-random ra-mat-button-icon-24"></span>
-                </span>
-                    <span *ngIf="item.template.data.damageDice && item.template.data.bonusDamage>0">+</span>
-                    <span *ngIf="item.template.data.bonusDamage">{{item.template.data.bonusDamage}}</span>
-                    <span *ngIf="item.template.data.damageType">({{item.template.data.damageType}})</span>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="item.template.data.protection
-                    || item.template.data.magicProtection
-                    || item.template.data.protectionAgainstMagic">
-                <mat-icon fontSet="ra" fontIcon="ra-shield" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <span *ngIf="item.template.data.protection">{{item.template.data.protection}}</span>
-                    <span *ngIf="item.template.data.protection && item.template.data.magicProtection">+</span>
-                    <span *ngIf="item.template.data.magicProtection">{{item.template.data.magicProtection}}(magique)</span>
-                    <span *ngIf="(item.template.data.protection || item.template.data.magicProtection) && item.template.data.protectionAgainstMagic">/</span>
-                    <span *ngIf="item.template.data.protectionAgainstMagic">{{item.template.data.protectionAgainstMagic}}
-                        <span *ngIf="item.template.data.protectionAgainstType">(contre {{item.template.data.protectionAgainstType}})</span>
-                    <span *ngIf="!item.template.data.protectionAgainstType">(contre mag./myst.)</span>
-                </span>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="item.template.data.charge">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-magic-swirl" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div>
-                        <span>Nombre d'utilisations:</span>
-                        {{item.data.charge}} / {{item.template.data.charge}}
-                    </div>
-                    <div *ngIf="item.template.data?.actions?.length">
-                        Lors de l'utilisation:
-                        <div *ngFor="let action of item.template.data.actions" style="3margin-left: 20px">
-                            <nhbk-action *ngIf="!action.hidden" [action]="action"></nhbk-action>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="item.template.data.weight && !item.template.data.useUG">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-weight" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    Poids:
-                    <span *ngIf="item.template.data.weight < 1">{{(item.template.data.weight * 1000) | number:'1.0-3'}} g</span>
-                    <span *ngIf="item.template.data.weight >= 1">{{(item.template.data.weight)  | number:'1.0-3'}} Kg</span>
-                    <span *ngIf="item.data.quantity">Total: {{item.data.quantity * item.template.data.weight | number:'1.0-3'}} Kg</span>
-                </div>
-            </div>
-            <div class="icon-label" *ngIf="item.template.data.useUG">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-scales" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div>U.G: {{item.data.ug}}</div>
-                    <div>Poids: {{item.data.ug * item.template.data.weight * 1000  | number:'1.0-3' }} g</div>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="item.template.data.space">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    Encombrement: {{item.template.data.space}}
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="item.template.data.rupture">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-cracked-shield" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div *ngIf="item.template.data.rupture">
-                        Rupture:
-                        1 à {{item.template.data.rupture}}
-                    </div>
-                    <div *ngIf="item.template.data.rupture === 0">
-                        Rupture: Incassable
-                    </div>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="item.price">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <span>Prix:</span>
-                    {{item.price}} P.O.
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="item.template.modifiers && item.template.modifiers.length">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div *ngFor="let modifier of item.template.modifiers">
-                        <div>
-                            <span *ngIf="jobsName && modifier.jobId">{{jobsName[modifier.jobId]}}:</span>
-                            <span *ngIf="originsName && modifier.originId">{{originsName[modifier.originId]}}:</span>
-                            {{modifier | modifier}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.skills?.length || data.item.template.unSkills?.length || data.item.template.skillModifiers?.length">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div *ngFor="let skill of data.item.template.skills">Donne la compétence "{{skill.name}}"</div>
-                    <div *ngFor="let skill of data.item.template.unSkills">Annule "{{skill.name}}"</div>
-                    <div *ngFor="let modifier of data.item.template.skillModifiers">{{modifier.skill.name}}
-                        <span *ngIf="modifier.value > 0">+</span>{{modifier.value}}
-                    </div>
-                </div>
-            </div>
-
-            <div class="icon-label" *ngIf="data.item.template.requirements?.length">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-thumb-up" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div *ngFor="let requirement of data.item.template.requirements">
-                <span *ngIf="requirement.min">
-                    Min {{requirement.stat}}: {{requirement.min}}
-                </span>
-                        <span *ngIf="requirement.max">
-                    Max {{requirement.stat}}: {{requirement.max}}
-                </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Origine -->
-            <div *ngIf="item.template.data.origin">
-                Origine: {{item.template.data.origin}}
-            </div>
-
-            <!-- Gun -->
-            <div class="icon-label" *ngIf="item.template.data.gun">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-revolver" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    Arme à poudre:
-                    <dl>
-                        <dt>Portée utile:</dt>
-                        <dd>{{item.template.data.gun.range}}</dd>
-                        <dt>Dégâts:</dt>
-                        <dd>{{item.template.data.gun.damages}}</dd>
-                        <dt>+Spécial:</dt>
-                        <dd>{{item.template.data.gun.special}}</dd>
-                        <dt>Cadence de tir:</dt>
-                        <dd>{{item.template.data.gun.rateOfFire}}</dd>
-                        <dt>Délai de rechargement:</dt>
-                        <dd>{{item.template.data.gun.reloadDelay}}</dd>
-                        <dt>Épreuve de tir:</dt>
-                        <dd>{{item.template.data.gun.shootTest}}</dd>
-                    </dl>
-                    <mat-divider></mat-divider>
-                    Munitions
-                    <dl>
-                        <dt>Combustion par coup:</dt>
-                        <dd>{{item.template.data.gun.fuelPerShot}}</dd>
-                        <dt>Munitions par coup:</dt>
-                        <dd>{{item.template.data.gun.ammunitionPerShot}}</dd>
-                    </dl>
-                    <mat-divider></mat-divider>
-                    <dl>
-                        <dt>Chances de fonctionnement:</dt>
-                        <dd>{{item.template.data.gun.workLuck}}</dd>
-                    </dl>
-                </div>
-            </div>
-
-            <!-- Instrument -->
-            <div class="icon-label" *ngIf="item.template.data.instrument">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-musical-notes" class="ra-mat-button-icon-24"></mat-icon>
-                <div>
-                    <div *ngIf="item.template.data.instrument.specialMove">
-                        Coup spécial: {{item.template.data.instrument.specialMove | plusminus}}
-                    </div>
-                    <div *ngIf="item.template.data.instrument.speechTheater">
-                        Discours - Théâtre: {{item.template.data.instrument.speechTheater | plusminus}}
-                    </div>
-                    <div *ngIf="item.template.data.instrument.jugglingDance">
-                        Jonglage - Danse: {{item.template.data.instrument.jugglingDance | plusminus}}
-                    </div>
-                    <div *ngIf="item.template.data.instrument.musicSinging">
-                        Musique - Chant: {{item.template.data.instrument.musicSinging | plusminus}}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Indice de rareté -->
-            <div *ngIf="item.template.data.rarityIndicator">
-                Indice de rareté: {{item.template.data.rarityIndicator}}
-            </div>
-
+          <span class="label label-default">{{itemCategoriesById[item.template.subCategoryId].section.name}}</span>
+          -
+          <span>{{itemCategoriesById[item.template.subCategoryId].name}}</span>
         </div>
+      }
 
-        <div *ngIf="item.data.lifetime?.durationType === 'time'">
-            <span class="game-icon game-icon-stopwatch"></span>Temps de conservation:
+      @if (item.data.notIdentified) {
+        <span>
+          Non identifié
+        </span>
+      }
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="item-detail-content">
+    <div>
+      <div>
+        @if (item.template.name !== item.data.name) {
+          <span>Nom reel: {{item.template.name}}</span>
+        }
+      </div>
+
+      @if (data.item.data.description || data.item.template.data.description) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-quill" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            Description: {{data.item.data.description || data.item.template.data.description}}
+          </div>
+        </div>
+      }
+
+      @if (data.item.template.data.requireLevel) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-level-two" class="ra-mat-button-icon-24"></mat-icon>
+          <span>
+            Niveau requis: {{data.item.template.data.requireLevel}}
+          </span>
+        </div>
+      }
+
+      <div>
+        @if (item.template.data.relic) {
+          <span class="label label-primary">Relique</span>
+        }
+        @if (item.template.data.sex === 'h') {
+          <span>Homme uniq.</span>
+        }
+        @if (item.template.data.sex === 'f') {
+          <span>Femme uniq.</span>
+        }
+        @if (item.template.data.throwable) {
+          <span class="label label-info">Prévue pour le jet</span>
+        }
+      </div>
+
+      @if (data.item.template.slots?.length > 0) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-battle-gear" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            <mat-chip-set>
+              @for (slot of data.item.template.slots; track slot) {
+                <mat-chip>{{slot.name}}</mat-chip>
+              }
+            </mat-chip-set>
+          </div>
+        </div>
+      }
+
+      @if (data.item.template.data.note) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-scroll-unfurled" class="ra-mat-button-icon-24"></mat-icon>
+          Note: {{data.item.template.data.note}}
+        </div>
+      }
+
+      <!-- Dieu -->
+      @if (data.item.template.data.god && godsByTechName) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-prayer" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            <span>Dieu:</span>
+            {{godsByTechName[data.item.template.data.god].displayName}}
+          </div>
+        </div>
+      }
+
+      @if (data.item.template.data.quantifiable) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-stack" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            Quantité:
+            <value-editor [value]="data.item.data.quantity"
+              [title]="'Quantité'"
+              (valueChanged)="updateItemQuantity($event)">
+            </value-editor>
+          </div>
+        </div>
+      }
+
+      @if (item.template.data.bonusDamage || item.template.data.damageDice) {
+        <div class="icon-label">
+          <mat-icon fontSet="ra" fontIcon="ra-broadsword" class="ra-mat-button-icon-24"></mat-icon>
+          <div class="damage">
+            @if (data.item.template.data.damageDice) {
+              <span>{{data.item.template.data.damageDice}}
+                <span class="ra ra-perspective-dice-random ra-mat-button-icon-24"></span>
+              </span>
+            }
+            @if (item.template.data.damageDice && item.template.data.bonusDamage>0) {
+              <span>+</span>
+            }
+            @if (item.template.data.bonusDamage) {
+              <span>{{item.template.data.bonusDamage}}</span>
+            }
+            @if (item.template.data.damageType) {
+              <span>({{item.template.data.damageType}})</span>
+            }
+          </div>
+        </div>
+      }
+
+      @if (item.template.data.protection
+        || item.template.data.magicProtection
+        || item.template.data.protectionAgainstMagic) {
+        <div class="icon-label">
+          <mat-icon fontSet="ra" fontIcon="ra-shield" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            @if (item.template.data.protection) {
+              <span>{{item.template.data.protection}}</span>
+            }
+            @if (item.template.data.protection && item.template.data.magicProtection) {
+              <span>+</span>
+            }
+            @if (item.template.data.magicProtection) {
+              <span>{{item.template.data.magicProtection}}(magique)</span>
+            }
+            @if ((item.template.data.protection || item.template.data.magicProtection) && item.template.data.protectionAgainstMagic) {
+              <span>/</span>
+            }
+            @if (item.template.data.protectionAgainstMagic) {
+              <span>{{item.template.data.protectionAgainstMagic}}
+                @if (item.template.data.protectionAgainstType) {
+                  <span>(contre {{item.template.data.protectionAgainstType}})</span>
+                }
+                @if (!item.template.data.protectionAgainstType) {
+                  <span>(contre mag./myst.)</span>
+                }
+              </span>
+            }
+          </div>
+        </div>
+      }
+
+      @if (item.template.data.charge) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-magic-swirl" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            <div>
+              <span>Nombre d'utilisations:</span>
+              {{item.data.charge}} / {{item.template.data.charge}}
+            </div>
+            @if (item.template.data?.actions?.length) {
+              <div>
+                Lors de l'utilisation:
+                @for (action of item.template.data.actions; track action) {
+                  <div style="3margin-left: 20px">
+                    @if (!action.hidden) {
+                      <nhbk-action [action]="action"></nhbk-action>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (item.template.data.weight && !item.template.data.useUG) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-weight" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            Poids:
+            @if (item.template.data.weight < 1) {
+              <span>{{(item.template.data.weight * 1000) | number:'1.0-3'}} g</span>
+            }
+            @if (item.template.data.weight >= 1) {
+              <span>{{(item.template.data.weight)  | number:'1.0-3'}} Kg</span>
+            }
+            @if (item.data.quantity) {
+              <span>Total: {{item.data.quantity * item.template.data.weight | number:'1.0-3'}} Kg</span>
+            }
+          </div>
+        </div>
+      }
+      @if (item.template.data.useUG) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-scales" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            <div>U.G: {{item.data.ug}}</div>
+            <div>Poids: {{item.data.ug * item.template.data.weight * 1000  | number:'1.0-3' }} g</div>
+          </div>
+        </div>
+      }
+
+      @if (item.template.data.space) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-swap-bag" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            Encombrement: {{item.template.data.space}}
+          </div>
+        </div>
+      }
+
+      @if (item.template.data.rupture) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-cracked-shield" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            @if (item.template.data.rupture) {
+              <div>
+                Rupture:
+                1 à {{item.template.data.rupture}}
+              </div>
+            }
+            @if (item.template.data.rupture === 0) {
+              <div>
+                Rupture: Incassable
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (item.price) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            <span>Prix:</span>
+            {{item.price}} P.O.
+          </div>
+        </div>
+      }
+
+      @if (item.template.modifiers && item.template.modifiers.length) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            @for (modifier of item.template.modifiers; track modifier) {
+              <div>
+                <div>
+                  @if (jobsName && modifier.jobId) {
+                    <span>{{jobsName[modifier.jobId]}}:</span>
+                  }
+                  @if (originsName && modifier.originId) {
+                    <span>{{originsName[modifier.originId]}}:</span>
+                  }
+                  {{modifier | modifier}}
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (data.item.template.skills?.length || data.item.template.unSkills?.length || data.item.template.skillModifiers?.length) {
+        <div class="icon-label">
+          <mat-icon fontSet="game-icon" fontIcon="game-icon-gears" class="ra-mat-button-icon-24"></mat-icon>
+          <div>
+            @for (skill of data.item.template.skills; track skill) {
+              <div>Donne la compétence "{{skill.name}}"</div>
+            }
+            @for (skill of data.item.template.unSkills; track skill) {
+              <div>Annule "{{skill.name}}"</div>
+            }
+            @for (modifier of data.item.template.skillModifiers; track modifier) {
+              <div>{{modifier.skill.name}}
+                @if (modifier.value > 0) {
+                  <span>+</span>
+                  }{{modifier.value}}
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        @if (data.item.template.requirements?.length) {
+          <div class="icon-label">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-thumb-up" class="ra-mat-button-icon-24"></mat-icon>
+            <div>
+              @for (requirement of data.item.template.requirements; track requirement) {
+                <div>
+                  @if (requirement.min) {
+                    <span>
+                      Min {{requirement.stat}}: {{requirement.min}}
+                    </span>
+                  }
+                  @if (requirement.max) {
+                    <span>
+                      Max {{requirement.stat}}: {{requirement.max}}
+                    </span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Origine -->
+        @if (item.template.data.origin) {
+          <div>
+            Origine: {{item.template.data.origin}}
+          </div>
+        }
+
+        <!-- Gun -->
+        @if (item.template.data.gun) {
+          <div class="icon-label">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-revolver" class="ra-mat-button-icon-24"></mat-icon>
+            <div>
+              Arme à poudre:
+              <dl>
+                <dt>Portée utile:</dt>
+                <dd>{{item.template.data.gun.range}}</dd>
+                <dt>Dégâts:</dt>
+                <dd>{{item.template.data.gun.damages}}</dd>
+                <dt>+Spécial:</dt>
+                <dd>{{item.template.data.gun.special}}</dd>
+                <dt>Cadence de tir:</dt>
+                <dd>{{item.template.data.gun.rateOfFire}}</dd>
+                <dt>Délai de rechargement:</dt>
+                <dd>{{item.template.data.gun.reloadDelay}}</dd>
+                <dt>Épreuve de tir:</dt>
+                <dd>{{item.template.data.gun.shootTest}}</dd>
+              </dl>
+              <mat-divider></mat-divider>
+              Munitions
+              <dl>
+                <dt>Combustion par coup:</dt>
+                <dd>{{item.template.data.gun.fuelPerShot}}</dd>
+                <dt>Munitions par coup:</dt>
+                <dd>{{item.template.data.gun.ammunitionPerShot}}</dd>
+              </dl>
+              <mat-divider></mat-divider>
+              <dl>
+                <dt>Chances de fonctionnement:</dt>
+                <dd>{{item.template.data.gun.workLuck}}</dd>
+              </dl>
+            </div>
+          </div>
+        }
+
+        <!-- Instrument -->
+        @if (item.template.data.instrument) {
+          <div class="icon-label">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-musical-notes" class="ra-mat-button-icon-24"></mat-icon>
+            <div>
+              @if (item.template.data.instrument.specialMove) {
+                <div>
+                  Coup spécial: {{item.template.data.instrument.specialMove | plusminus}}
+                </div>
+              }
+              @if (item.template.data.instrument.speechTheater) {
+                <div>
+                  Discours - Théâtre: {{item.template.data.instrument.speechTheater | plusminus}}
+                </div>
+              }
+              @if (item.template.data.instrument.jugglingDance) {
+                <div>
+                  Jonglage - Danse: {{item.template.data.instrument.jugglingDance | plusminus}}
+                </div>
+              }
+              @if (item.template.data.instrument.musicSinging) {
+                <div>
+                  Musique - Chant: {{item.template.data.instrument.musicSinging | plusminus}}
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Indice de rareté -->
+        @if (item.template.data.rarityIndicator) {
+          <div>
+            Indice de rareté: {{item.template.data.rarityIndicator}}
+          </div>
+        }
+
+      </div>
+
+      @if (item.data.lifetime?.durationType === 'time') {
+        <div>
+          <span class="game-icon game-icon-stopwatch"></span>Temps de conservation:
+          @if (item.data.lifetime.timeDuration > 0) {
             <span
-                *ngIf="item.data.lifetime.timeDuration > 0">{{item.data.lifetime.timeDuration | nhbkDuration}}</span>
-            <span *ngIf="item.data.lifetime.timeDuration === 0" class="invalid-level">expiré</span>
+            >{{item.data.lifetime.timeDuration | nhbkDuration}}</span>
+          }
+          @if (item.data.lifetime.timeDuration === 0) {
+            <span class="invalid-level">expiré</span>
+          }
         </div>
+      }
 
     </mat-card-content>
-</mat-dialog-content>
+  </mat-dialog-content>

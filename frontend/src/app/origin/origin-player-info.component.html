@@ -1,18 +1,24 @@
 <div class="mat-typography">
-    <h2>Résumé</h2>
-    <p class="origin-summary" [innerHTML]="origin.playerSummary | textFormatter"></p>
-    <h2>Description</h2>
-    <p class="origin-description" [innerHTML]="origin.playerDescription | textFormatter"></p>
-    <div class="skills" *ngIf="origin.skills.length">
-        <h2>Compétences</h2>
-        <p>
-            Je suis né avec les compétences suivantes:
-        </p>
-        <div class="skills-list">
-            <div *ngFor="let skill of origin.skills">
-                <span class="skill-name">{{skill.name}}</span>
-                <span *ngIf="skill.playerDescription">: {{skill.playerDescription}}</span>
-            </div>
-        </div>
+  <h2>Résumé</h2>
+  <p class="origin-summary" [innerHTML]="origin.playerSummary | textFormatter"></p>
+  <h2>Description</h2>
+  <p class="origin-description" [innerHTML]="origin.playerDescription | textFormatter"></p>
+  @if (origin.skills.length) {
+    <div class="skills">
+      <h2>Compétences</h2>
+      <p>
+        Je suis né avec les compétences suivantes:
+      </p>
+      <div class="skills-list">
+        @for (skill of origin.skills; track skill) {
+          <div>
+            <span class="skill-name">{{skill.name}}</span>
+            @if (skill.playerDescription) {
+              <span>: {{skill.playerDescription}}</span>
+            }
+          </div>
+        }
+      </div>
     </div>
+  }
 </div>

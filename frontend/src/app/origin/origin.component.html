@@ -1,12 +1,16 @@
 <mat-expansion-panel>
-    <mat-expansion-panel-header>{{origin.name}}</mat-expansion-panel-header>
+  <mat-expansion-panel-header>{{origin.name}}</mat-expansion-panel-header>
 
-    <div *ngIf="(gmModeService.gmMode | async) === false">
-        <app-origin-player-info [origin]="origin"></app-origin-player-info>
+  @if ((gmModeService.gmMode | async) === false) {
+    <div>
+      <app-origin-player-info [origin]="origin"></app-origin-player-info>
     </div>
-    <div *ngIf="gmModeService.gmMode | async">
-        <app-origin-gm-info [origin]="origin"></app-origin-gm-info>
+  }
+  @if (gmModeService.gmMode | async) {
+    <div>
+      <app-origin-gm-info [origin]="origin"></app-origin-gm-info>
     </div>
+  }
 </mat-expansion-panel>
 
 

@@ -1,17 +1,18 @@
 <div style="position: fixed; right:0; bottom: 0">
-    <ng-template ngFor let-notification [ngForOf]="_notifications.notifications">
-        <div class="alert"
-             [class.alert-danger]="notification.type==='error'"
-             [class.alert-info]="notification.type==='info'"
-             [class.alert-success]="notification.type==='success'">
-            <i *ngIf="notification.data?.isCharacter" [style.color]="'#' + notification.data.color"
-                  class="ra ra-player ra-lg">
-            </i>
-            <span>
-                <strong>{{notification.title}}</strong>
-            </span>
-
-            <span>{{notification.message}}</span>
-        </div>
-    </ng-template>
+  @for (notification of _notifications.notifications; track notification) {
+    <div class="alert"
+      [class.alert-danger]="notification.type==='error'"
+      [class.alert-info]="notification.type==='info'"
+      [class.alert-success]="notification.type==='success'">
+      @if (notification.data?.isCharacter) {
+        <i [style.color]="'#' + notification.data.color"
+          class="ra ra-player ra-lg">
+        </i>
+      }
+      <span>
+        <strong>{{notification.title}}</strong>
+      </span>
+      <span>{{notification.message}}</span>
+    </div>
+  }
 </div>

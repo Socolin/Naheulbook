@@ -1,55 +1,63 @@
 <h2 class="mat-h2">Informations</h2>
 <form [formGroup]="form">
+  <mat-form-field>
+    <input matInput placeholder="Nom de la carte" autocomplete="false" formControlName="name" required>
+  </mat-form-field>
+  <div class="unit">
     <mat-form-field>
-        <input matInput placeholder="Nom de la carte" autocomplete="false" formControlName="name" required>
+      <input matInput placeholder="Unité" autocomplete="false" formControlName="unitName" required>
+      <mat-hint>m/km etc...</mat-hint>
     </mat-form-field>
-    <div class="unit">
-        <mat-form-field>
-            <input matInput placeholder="Unité" autocomplete="false" formControlName="unitName" required>
-            <mat-hint>m/km etc...</mat-hint>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Nombre de pixel pour une unité" autocomplete="false" formControlName="pixelPerUnit" type="number" required>
-            <mat-hint>Pour calculer des distances, peut être un nombre a virgule</mat-hint>
-        </mat-form-field>
-    </div>
-    <div class="is-gm">
-        <mat-checkbox formControlName="isGm">Contient des informations pour Maitre de jeu uniquement</mat-checkbox>
-    </div>
+    <mat-form-field>
+      <input matInput placeholder="Nombre de pixel pour une unité" autocomplete="false" formControlName="pixelPerUnit" type="number" required>
+      <mat-hint>Pour calculer des distances, peut être un nombre a virgule</mat-hint>
+    </mat-form-field>
+  </div>
+  <div class="is-gm">
+    <mat-checkbox formControlName="isGm">Contient des informations pour Maitre de jeu uniquement</mat-checkbox>
+  </div>
 </form>
 
 <h2 class="mat-h2">Image</h2>
 <input type="file" (change)="onSelectFile($event)">
-<div class="text-warning" *ngIf="form.controls['image'].invalid && form.controls['image'].touched">Seulement un fichier image peut être utilisé</div>
+@if (form.controls['image'].invalid && form.controls['image'].touched) {
+  <div class="text-warning">Seulement un fichier image peut être utilisé</div>
+}
 
 <h2 class="mat-h2">Copyright</h2>
-<div *ngFor="let attribution of attributions; let i = index" class="attribution">
+@for (attribution of attributions; track attribution; let i = $index) {
+  <div class="attribution">
     <mat-form-field>
-        <input matInput placeholder="Nom" [(ngModel)]="attribution.name">
+      <input matInput placeholder="Nom" [(ngModel)]="attribution.name">
     </mat-form-field>
     <mat-form-field>
-        <input matInput placeholder="Url" [(ngModel)]="attribution.url">
+      <input matInput placeholder="Url" [(ngModel)]="attribution.url">
     </mat-form-field>
     <button mat-icon-button (click)="removeAttribution(i)" [disabled]="uploading">
-        <mat-icon>delete</mat-icon>
+      <mat-icon>delete</mat-icon>
     </button>
-</div>
+  </div>
+}
 <div class="add-attribution">
-    <button mat-button (click)="addAttribution()" [disabled]="uploading">
-        <mat-icon>add</mat-icon>Ajouter copyright
-    </button>
+  <button mat-button (click)="addAttribution()" [disabled]="uploading">
+    <mat-icon>add</mat-icon>Ajouter copyright
+  </button>
 </div>
-<mat-progress-bar *ngIf="uploading"
-                  [value]="progress"
-                  color="primary"
-                  [mode]="progress === 100 ? 'indeterminate' : 'determinate'">
-</mat-progress-bar>
+@if (uploading) {
+  <mat-progress-bar
+    [value]="progress"
+    color="primary"
+    [mode]="progress === 100 ? 'indeterminate' : 'determinate'">
+  </mat-progress-bar>
+}
 <div class="add-button">
-    <button mat-button color="primary" class="confirm-button" (click)="valid()" [disabled]="!form.valid || uploading">
-        AJOUTER
-    </button>
+  <button mat-button color="primary" class="confirm-button" (click)="valid()" [disabled]="!form.valid || uploading">
+    AJOUTER
+  </button>
 </div>
 
-<div *ngIf="createdMap">
+@if (createdMap) {
+  <div>
     Map créée ! <a [routerLink]="'/map/' + createdMap.id">Voir</a>
-</div>
+  </div>
+}

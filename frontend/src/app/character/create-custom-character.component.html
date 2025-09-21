@@ -1,244 +1,259 @@
 <mat-card>
-    <p class="mat-body">
-        Ce formulaire permet de créer des personnages, étant de niveau supérieur à 1 ou ne respectant pas forcément
-        toutes les restrictions des règles actuelle (personnage crée avec les règles de la 2.0, etc.).
-    </p>
-    <p class="mat-body">
-        Pour les caractéristiques, il ne faut pas compter les bonus d'équipements, ou autres bonus tel que le bonus
-        d'agilité exceptionnel / pourri, Ces bonus seront calculé automatiquement ensuite sur la fiche du personnage.
-        Les effets des blessures graves, n'ont pas besoin d'être pris en compte non plus, vous pourrez les ajouter plus
-        tard.
-    </p>
-    <p class="mat-body">
-        Une fois le personnage créer vous pourrez ajouter des modificateurs au besoin pour ajuster les caractéristiques
-        de votre personnage en détails.
-    </p>
+  <p class="mat-body">
+    Ce formulaire permet de créer des personnages, étant de niveau supérieur à 1 ou ne respectant pas forcément
+    toutes les restrictions des règles actuelle (personnage crée avec les règles de la 2.0, etc.).
+  </p>
+  <p class="mat-body">
+    Pour les caractéristiques, il ne faut pas compter les bonus d'équipements, ou autres bonus tel que le bonus
+    d'agilité exceptionnel / pourri, Ces bonus seront calculé automatiquement ensuite sur la fiche du personnage.
+    Les effets des blessures graves, n'ont pas besoin d'être pris en compte non plus, vous pourrez les ajouter plus
+    tard.
+  </p>
+  <p class="mat-body">
+    Une fois le personnage créer vous pourrez ajouter des modificateurs au besoin pour ajuster les caractéristiques
+    de votre personnage en détails.
+  </p>
 </mat-card>
 <mat-card>
-    <mat-card-header>
-        <mat-card-title>
-            Caractéristiques
-        </mat-card-title>
-    </mat-card-header>
-    <div [formGroup]="form">
-        <mat-card-content class="basic-stats" formGroupName="stats">
-            <mat-form-field class="cou">
-                <input matInput
-                       type="number"
-                       formControlName="cou"
-                       placeholder="Courage"
-                       step="1"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field class="int">
-                <input matInput
-                       type="number"
-                       formControlName="int"
-                       placeholder="Intelligence"
-                       step="1"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field class="cha">
-                <input matInput
-                       type="number"
-                       formControlName="cha"
-                       placeholder="Charisme"
-                       step="1"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field class="ad">
-                <input matInput
-                       type="number"
-                       formControlName="ad"
-                       placeholder="Adresse"
-                       step="1"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field class="fo">
-                <input matInput
-                       type="number"
-                       formControlName="fo"
-                       placeholder="Force"
-                       step="1"
-                       min=0 />
-            </mat-form-field>
-        </mat-card-content>
-    </div>
+  <mat-card-header>
+    <mat-card-title>
+      Caractéristiques
+    </mat-card-title>
+  </mat-card-header>
+  <div [formGroup]="form">
+    <mat-card-content class="basic-stats" formGroupName="stats">
+      <mat-form-field class="cou">
+        <input matInput
+          type="number"
+          formControlName="cou"
+          placeholder="Courage"
+          step="1"
+          min=0 />
+      </mat-form-field>
+      <mat-form-field class="int">
+        <input matInput
+          type="number"
+          formControlName="int"
+          placeholder="Intelligence"
+          step="1"
+          min=0 />
+      </mat-form-field>
+      <mat-form-field class="cha">
+        <input matInput
+          type="number"
+          formControlName="cha"
+          placeholder="Charisme"
+          step="1"
+          min=0 />
+      </mat-form-field>
+      <mat-form-field class="ad">
+        <input matInput
+          type="number"
+          formControlName="ad"
+          placeholder="Adresse"
+          step="1"
+          min=0 />
+      </mat-form-field>
+      <mat-form-field class="fo">
+        <input matInput
+          type="number"
+          formControlName="fo"
+          placeholder="Force"
+          step="1"
+          min=0 />
+      </mat-form-field>
+    </mat-card-content>
+  </div>
 </mat-card>
 <mat-card class="origin-card">
-    <mat-card-header>
-        <mat-card-title>
-            Origine
-        </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <mat-form-field>
-            <mat-select placeholder="Origine" [(ngModel)]="selectedOrigin" (selectionChange)="updateAvailableJobs()">
-                <mat-option *ngFor="let origin of origins" [value]="origin">
-                    {{origin.name}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-    </mat-card-content>
+  <mat-card-header>
+    <mat-card-title>
+      Origine
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-form-field>
+      <mat-select placeholder="Origine" [(ngModel)]="selectedOrigin" (selectionChange)="updateAvailableJobs()">
+        @for (origin of origins; track origin) {
+          <mat-option [value]="origin">
+            {{origin.name}}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-card-content>
 </mat-card>
-<mat-card *ngIf="selectedOrigin" class="job-card">
+@if (selectedOrigin) {
+  <mat-card class="job-card">
     <mat-card-header>
-        <mat-card-title>
-            Métier(s)
-        </mat-card-title>
+      <mat-card-title>
+        Métier(s)
+      </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <div *ngIf="selectedJobs.length === 0">Aucun</div>
-        <div *ngFor="let job of selectedJobs" class="job">
-            <button mat-icon-button (click)="removeJob(job)">
-                <mat-icon>delete</mat-icon>
-            </button>
-            {{job.name}}
-
-            <div class="speciality" *ngFor="let speciality of specialities[job.id]">
-                <button mat-icon-button (click)="removeSpeciality(job, speciality)">
-                    <mat-icon>delete</mat-icon>
-                </button>
-                {{speciality.name}}
-            </div>
-
+      @if (selectedJobs.length === 0) {
+        <div>Aucun</div>
+      }
+      @for (job of selectedJobs; track job) {
+        <div class="job">
+          <button mat-icon-button (click)="removeJob(job)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          {{job.name}}
+          @for (speciality of specialities[job.id]; track speciality) {
             <div class="speciality">
-                <mat-form-field class="speciality-selector" *ngIf="job.specialities.length > 0">
-                    <mat-select placeholder="Spécialité" (selectionChange)="addSpeciality(job, $event.value)">
-                        <ng-template ngFor [ngForOf]="job.specialities" let-speciality>
-                            <mat-option *ngIf="!isSpecialitySelected(job, speciality)" [value]="speciality">
-                                {{speciality.name}}
-                            </mat-option>
-                        </ng-template>
-                    </mat-select>
-                </mat-form-field>
+              <button mat-icon-button (click)="removeSpeciality(job, speciality)">
+                <mat-icon>delete</mat-icon>
+              </button>
+              {{speciality.name}}
             </div>
+          }
+          <div class="speciality">
+            @if (job.specialities.length > 0) {
+              <mat-form-field class="speciality-selector">
+                <mat-select placeholder="Spécialité" (selectionChange)="addSpeciality(job, $event.value)">
+                  @for (speciality of job.specialities; track speciality) {
+                    @if (!isSpecialitySelected(job, speciality)) {
+                      <mat-option [value]="speciality">
+                        {{speciality.name}}
+                      </mat-option>
+                    }
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
+          </div>
         </div>
-
-        <mat-form-field class="job-selector">
-            <mat-select placeholder="Métier" (selectionChange)="addJob($event.value)">
-                <ng-template ngFor [ngForOf]="availableJobs" let-job>
-                    <mat-option *ngIf="!isJobSelected(job)" [value]="job">
-                        {{job.name}}
-                    </mat-option>
-                </ng-template>
-            </mat-select>
-        </mat-form-field>
+      }
+      <mat-form-field class="job-selector">
+        <mat-select placeholder="Métier" (selectionChange)="addJob($event.value)">
+          @for (job of availableJobs; track job) {
+            @if (!isJobSelected(job)) {
+              <mat-option [value]="job">
+                {{job.name}}
+              </mat-option>
+            }
+          }
+        </mat-select>
+      </mat-form-field>
     </mat-card-content>
-</mat-card>
-<mat-card *ngIf="selectedOrigin">
+  </mat-card>
+}
+@if (selectedOrigin) {
+  <mat-card>
     <mat-card-header>
-        <mat-card-title>
-            Compétences
-        </mat-card-title>
+      <mat-card-title>
+        Compétences
+      </mat-card-title>
     </mat-card-header>
     <mat-card-content class="skill-list">
-        <ng-template ngFor [ngForOf]="knownSkills" let-skill>
-            <mat-checkbox [checked]="true" [disabled]="true">
-                {{skill.name}}
-            </mat-checkbox>
-            <span class="skill-description mat-hint">{{skill.playerDescription}}</span>
-        </ng-template>
-        <ng-template ngFor [ngForOf]="availableSkills" let-skill>
-            <mat-checkbox (change)="toggleSkill(skill, $event.checked)">
-                {{skill.name}}
-            </mat-checkbox>
-            <span class="skill-description mat-hint">{{skill.playerDescription}}</span>
-        </ng-template>
+      @for (skill of knownSkills; track skill) {
+        <mat-checkbox [checked]="true" [disabled]="true">
+          {{skill.name}}
+        </mat-checkbox>
+        <span class="skill-description mat-hint">{{skill.playerDescription}}</span>
+      }
+      @for (skill of availableSkills; track skill) {
+        <mat-checkbox (change)="toggleSkill(skill, $event.checked)">
+          {{skill.name}}
+        </mat-checkbox>
+        <span class="skill-description mat-hint">{{skill.playerDescription}}</span>
+      }
     </mat-card-content>
-</mat-card>
+  </mat-card>
+}
 <mat-card [formGroup]="form">
-    <mat-card-header>
-        <mat-card-title>
-            Divers
-        </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <div class="name-sex">
-            <mat-form-field class="name">
-                <input matInput
-                       formControlName="name"
-                       placeholder="Nom" />
-            </mat-form-field>
+  <mat-card-header>
+    <mat-card-title>
+      Divers
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="name-sex">
+      <mat-form-field class="name">
+        <input matInput
+          formControlName="name"
+          placeholder="Nom" />
+      </mat-form-field>
 
-            <div class="sex">
-                <mat-radio-group name="sexe" formControlName="sex">
-                    <mat-radio-button name="sexe" [value]="'Homme'">
-                        Homme
-                    </mat-radio-button>
-                    <mat-radio-button name="sexe" [value]="'Femme'">
-                        Femme
-                    </mat-radio-button>
-                </mat-radio-group>
-            </div>
-        </div>
-        <div class="level-exp-fate">
-            <mat-form-field>
-                <input matInput
-                       type="number"
-                       formControlName="level"
-                       placeholder="Niveau"
-                       step="1"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput
-                       type="number"
-                       formControlName="experience"
-                       placeholder="Experience"
-                       step="1"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput
-                       type="number"
-                       formControlName="fatePoint"
-                       placeholder="Point de destin"
-                       step="1"
-                       min=0 />
-            </mat-form-field>
-        </div>
-        <div class="ev-ea-at-prd" formGroupName="basicStatsOverrides">
-            <mat-form-field>
-                <input matInput
-                       type="number"
-                       formControlName="ev"
-                       placeholder="Énergie Vitale"
-                       step="1"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput
-                       type="number"
-                       formControlName="ea"
-                       placeholder="Énergie Astrale"
-                       step="1"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput
-                       type="number"
-                       formControlName="at"
-                       placeholder="AT"
-                       step="1"
-                       min=0 />
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput
-                       type="number"
-                       formControlName="prd"
-                       placeholder="PRD"
-                       step="1"
-                       min=0 />
-            </mat-form-field>
-        </div>
-    </mat-card-content>
+      <div class="sex">
+        <mat-radio-group name="sexe" formControlName="sex">
+          <mat-radio-button name="sexe" [value]="'Homme'">
+            Homme
+          </mat-radio-button>
+          <mat-radio-button name="sexe" [value]="'Femme'">
+            Femme
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+    <div class="level-exp-fate">
+      <mat-form-field>
+        <input matInput
+          type="number"
+          formControlName="level"
+          placeholder="Niveau"
+          step="1"
+          min=0 />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput
+          type="number"
+          formControlName="experience"
+          placeholder="Experience"
+          step="1"
+          min=0 />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput
+          type="number"
+          formControlName="fatePoint"
+          placeholder="Point de destin"
+          step="1"
+          min=0 />
+      </mat-form-field>
+    </div>
+    <div class="ev-ea-at-prd" formGroupName="basicStatsOverrides">
+      <mat-form-field>
+        <input matInput
+          type="number"
+          formControlName="ev"
+          placeholder="Énergie Vitale"
+          step="1"
+          min=0 />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput
+          type="number"
+          formControlName="ea"
+          placeholder="Énergie Astrale"
+          step="1"
+          min=0 />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput
+          type="number"
+          formControlName="at"
+          placeholder="AT"
+          step="1"
+          min=0 />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput
+          type="number"
+          formControlName="prd"
+          placeholder="PRD"
+          step="1"
+          min=0 />
+      </mat-form-field>
+    </div>
+  </mat-card-content>
 </mat-card>
 
 <div class="create-button">
-    <button mat-raised-button
-            [disabled]="!form.valid || !selectedOrigin || creating"
-            (click)="createCustomCharacter()">
-        Créer
-    </button>
+  <button mat-raised-button
+    [disabled]="!form.valid || !selectedOrigin || creating"
+    (click)="createCustomCharacter()">
+    Créer
+  </button>
 </div>

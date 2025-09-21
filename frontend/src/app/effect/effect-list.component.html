@@ -1,107 +1,138 @@
 <h2>Effets</h2>
 <mat-card>
-    <mat-card-content class="effect-sub-category-selector">
-        <div class="selector">
-            <mat-form-field>
-                <mat-select
-                    [(ngModel)]="selectedType"
-                    (selectionChange)="selectType($event.value)">
-                    <mat-option *ngFor="let type of effectTypes" [value]="type">
-                        {{type.name}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div class="selector">
-            <mat-form-field *ngIf="selectedType">
-                <mat-select [(ngModel)]="selectedSubCategory"
-                            (selectionChange)="selectSubCategory($event.value)">
-                    <mat-option *ngFor="let subCategory of selectedType.subCategories" [value]="subCategory">
-                        {{subCategory.name}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-    </mat-card-content>
+  <mat-card-content class="effect-sub-category-selector">
+    <div class="selector">
+      <mat-form-field>
+        <mat-select
+          [(ngModel)]="selectedType"
+          (selectionChange)="selectType($event.value)">
+          @for (type of effectTypes; track type) {
+            <mat-option [value]="type">
+              {{type.name}}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="selector">
+      @if (selectedType) {
+        <mat-form-field>
+          <mat-select [(ngModel)]="selectedSubCategory"
+            (selectionChange)="selectSubCategory($event.value)">
+            @for (subCategory of selectedType.subCategories; track subCategory) {
+              <mat-option [value]="subCategory">
+                {{subCategory.name}}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+    </div>
+  </mat-card-content>
 </mat-card>
 
-<mat-card *ngIf="selectedSubCategory && (editable || selectedSubCategory.note)">
+@if (selectedSubCategory && (editable || selectedSubCategory.note)) {
+  <mat-card>
     <mat-card-header>
-        <mat-card-subtitle>Note</mat-card-subtitle>
+      <mat-card-subtitle>Note</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content [innerHTML]="selectedSubCategory.note | markdown">
     </mat-card-content>
-</mat-card>
+  </mat-card>
+}
 
-<ng-template [ngIf]="effects && selectedSubCategory">
-    <mat-card class="effect" *ngFor="let effect of effects[selectedSubCategory.id]">
-        <mat-card-header>
-            <div matCardAvatar *ngIf="selectedSubCategory.diceCount" class="dice-number">
-                <span class="icon game-icon game-icon-perspective-dice-six-faces-random"></span>
-                <span class="number number-shadow-24">{{effect.dice}}</span>
-            </div>
-            <mat-card-title>
-                {{effect.name}}
-            </mat-card-title>
-            <button mat-icon-button
-                    class="actions-button"
-                    *ngIf="editable || hasOption('applyButton')"
-                    [matMenuTriggerFor]="effectMenu">
-                <mat-icon>more_vert</mat-icon>
+@if (effects && selectedSubCategory) {
+  @for (effect of effects[selectedSubCategory.id]; track effect) {
+    <mat-card class="effect">
+      <mat-card-header>
+        @if (selectedSubCategory.diceCount) {
+          <div matCardAvatar class="dice-number">
+            <span class="icon game-icon game-icon-perspective-dice-six-faces-random"></span>
+            <span class="number number-shadow-24">{{effect.dice}}</span>
+          </div>
+        }
+        <mat-card-title>
+          {{effect.name}}
+        </mat-card-title>
+        @if (editable || hasOption('applyButton')) {
+          <button mat-icon-button
+            class="actions-button"
+            [matMenuTriggerFor]="effectMenu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        }
+        <mat-menu #effectMenu>
+          @if (hasOption('applyButton')) {
+            <button mat-menu-item
+              (click)="emitAction('applyEffect', effect)">
+              <mat-icon>add</mat-icon>
+              Appliquer sur un membre du groupe
             </button>
-            <mat-menu #effectMenu>
-                <button mat-menu-item
-                        *ngIf="hasOption('applyButton')"
-                        (click)="emitAction('applyEffect', effect)">
-                    <mat-icon>add</mat-icon>
-                    Appliquer sur un membre du groupe
-                </button>
-                <button mat-menu-item
-                        *ngIf="editable"
-                        (click)=editEffect(effect)>
-                    <mat-icon>edit</mat-icon>
-                    Éditer
-                </button>
-            </mat-menu>
-        </mat-card-header>
-        <mat-card-content>
-            <p class="mat-body" [innerHTML]="effect.description | markdown"></p>
-            <div class="duration" *ngIf="effect.duration">
-                <mat-icon>timelapse</mat-icon>
-                {{effect.duration}}
-            </div>
-            <div class="duration" *ngIf="effect.timeDuration">
-                <mat-icon>timelapse</mat-icon>
-                {{effect.timeDuration | nhbkDuration}}
-            </div>
-            <div class="duration" *ngIf="effect.combatCount">
-                <mat-icon>timelapse</mat-icon>
-                {{effect.combatCount}} combats
-            </div>
-            <div class="duration" *ngIf="effect.lapCount">
-                <mat-icon>timelapse</mat-icon>
-                {{effect.lapCount}} tours
-            </div>
-            <div class="duration" *ngIf="!effect.lapCount && !effect.combatCount && !effect.timeDuration && !effect.duration">
-                <mat-icon>timelapse</mat-icon>
-                permanent
-            </div>
-            <div class="modifiers" *ngIf="effect.modifiers?.length">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
-                <div class="stats">
-                    <div *ngFor="let modifier of effect.modifiers">
-                        {{modifier | modifier}}
-                    </div>
+          }
+          @if (editable) {
+            <button mat-menu-item
+              (click)=editEffect(effect)>
+              <mat-icon>edit</mat-icon>
+              Éditer
+            </button>
+          }
+        </mat-menu>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="mat-body" [innerHTML]="effect.description | markdown"></p>
+        @if (effect.duration) {
+          <div class="duration">
+            <mat-icon>timelapse</mat-icon>
+            {{effect.duration}}
+          </div>
+        }
+        @if (effect.timeDuration) {
+          <div class="duration">
+            <mat-icon>timelapse</mat-icon>
+            {{effect.timeDuration | nhbkDuration}}
+          </div>
+        }
+        @if (effect.combatCount) {
+          <div class="duration">
+            <mat-icon>timelapse</mat-icon>
+            {{effect.combatCount}} combats
+          </div>
+        }
+        @if (effect.lapCount) {
+          <div class="duration">
+            <mat-icon>timelapse</mat-icon>
+            {{effect.lapCount}} tours
+          </div>
+        }
+        @if (!effect.lapCount && !effect.combatCount && !effect.timeDuration && !effect.duration) {
+          <div class="duration">
+            <mat-icon>timelapse</mat-icon>
+            permanent
+          </div>
+        }
+        @if (effect.modifiers?.length) {
+          <div class="modifiers">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
+            <div class="stats">
+              @for (modifier of effect.modifiers; track modifier) {
+                <div>
+                  {{modifier | modifier}}
                 </div>
+              }
             </div>
-        </mat-card-content>
+          </div>
+        }
+      </mat-card-content>
     </mat-card>
-</ng-template>
+  }
+}
 
-<div class="add-button" *ngIf="editable">
+@if (editable) {
+  <div class="add-button">
     <button mat-fab (click)="createEffect()">
-        <mat-icon>
-            add
-        </mat-icon>
+      <mat-icon>
+        add
+      </mat-icon>
     </button>
-</div>
+  </div>
+}

@@ -1,59 +1,81 @@
-<div *ngFor="let availability of availabilities">
+@for (availability of availabilities; track availability) {
+  <div>
     <h3 class="mat-h3 availability-title">{{availability.title}}</h3>
-
     <mat-accordion [multi]="false">
-        <mat-expansion-panel *ngFor="let origin of availability.origins">
-            <mat-expansion-panel-header>
-                <div class="origin-title">
-                <span class="icon-available">
-                    <mat-icon>{{availability.icon}}</mat-icon>
-                </span>
-                <span>
-                    {{origin.name}}
-                </span>
-                </div>
-            </mat-expansion-panel-header>
-
-            <p class="prereq">
-                Prérequis:
-                <ng-template ngFor [ngForOf]="origin.requirements" let-req let-last="last">
-                <span class="invalid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] < req.min">
-                    {{req.stat|uppercase}} &ge; {{req.min}}
-                </span>
-                    <span class="invalid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] > req.max">
-                    {{req.stat|uppercase}} &le; {{req.max}}
-                </span>
-                    <span class="valid-stat" *ngIf="req.min && stats[req.stat.toLowerCase()] >= req.min">
-                    {{req.stat|uppercase}} &ge; {{req.min}}
-                </span>
-                    <span class="valid-stat" *ngIf="req.max && stats[req.stat.toLowerCase()] <= req.max">
-                    {{req.stat|uppercase}} &le; {{req.max}}
-                </span>
-                    <span *ngIf="!last">,</span>
-                </ng-template>
-                <span *ngIf="!origin.requirements.length">aucun</span>
-            </p>
-            <p class="summary" [innerHTML]="origin.playerSummary | textFormatter"></p>
-            <p class="description" [innerHTML]="origin.playerDescription | textFormatter"></p>
-            <div class="skills" *ngIf="origin.skills.length">
-                Je suis né avec les compétences suivantes :
-                <ul>
-                    <li *ngFor="let skill of origin.skills">
-                        <div class="skill-name">{{skill.name}}</div>
-                        <span *ngIf="skill.playerDescription"> {{skill.playerDescription}}</span>
-                    </li>
-                </ul>
+      @for (origin of availability.origins; track origin) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <div class="origin-title">
+              <span class="icon-available">
+                <mat-icon>{{availability.icon}}</mat-icon>
+              </span>
+              <span>
+                {{origin.name}}
+              </span>
             </div>
-
-            <mat-action-row *ngIf="availability.state === 'ok'" align="end">
-                <button color="primary" mat-button (click)="selectOrigin(origin)">CHOISIR</button>
+          </mat-expansion-panel-header>
+          <p class="prereq">
+            Prérequis:
+            @for (req of origin.requirements; track req; let last = $last) {
+              @if (req.min && stats[req.stat.toLowerCase()] < req.min) {
+                <span class="invalid-stat">
+                  {{req.stat|uppercase}} &ge; {{req.min}}
+                </span>
+              }
+              @if (req.max && stats[req.stat.toLowerCase()] > req.max) {
+                <span class="invalid-stat">
+                  {{req.stat|uppercase}} &le; {{req.max}}
+                </span>
+              }
+              @if (req.min && stats[req.stat.toLowerCase()] >= req.min) {
+                <span class="valid-stat">
+                  {{req.stat|uppercase}} &ge; {{req.min}}
+                </span>
+              }
+              @if (req.max && stats[req.stat.toLowerCase()] <= req.max) {
+                <span class="valid-stat">
+                  {{req.stat|uppercase}} &le; {{req.max}}
+                </span>
+              }
+              @if (!last) {
+                <span>,</span>
+              }
+            }
+            @if (!origin.requirements.length) {
+              <span>aucun</span>
+            }
+          </p>
+          <p class="summary" [innerHTML]="origin.playerSummary | textFormatter"></p>
+          <p class="description" [innerHTML]="origin.playerDescription | textFormatter"></p>
+          @if (origin.skills.length) {
+            <div class="skills">
+              Je suis né avec les compétences suivantes :
+              <ul>
+                @for (skill of origin.skills; track skill) {
+                  <li>
+                    <div class="skill-name">{{skill.name}}</div>
+                    @if (skill.playerDescription) {
+                      <span> {{skill.playerDescription}}</span>
+                    }
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+          @if (availability.state === 'ok') {
+            <mat-action-row align="end">
+              <button color="primary" mat-button (click)="selectOrigin(origin)">CHOISIR</button>
             </mat-action-row>
-            <mat-action-row *ngIf="availability.state === 'swap'" align="end" class="swap-buttons">
-                <ng-template ngFor [ngForOf]="originsStates[origin.id].changes" let-change>
-                    <button class="swap-button" color="primary" mat-button (click)="doSwapStats(change)">INVERSER {{change[0]}} et {{change[1]}}</button>
-                </ng-template>
+          }
+          @if (availability.state === 'swap') {
+            <mat-action-row align="end" class="swap-buttons">
+              @for (change of originsStates[origin.id].changes; track change) {
+                <button class="swap-button" color="primary" mat-button (click)="doSwapStats(change)">INVERSER {{change[0]}} et {{change[1]}}</button>
+              }
             </mat-action-row>
+          }
         </mat-expansion-panel>
+      }
     </mat-accordion>
-
-</div>
+  </div>
+}

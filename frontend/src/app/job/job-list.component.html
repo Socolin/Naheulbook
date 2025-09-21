@@ -1,4 +1,6 @@
 <h2>Métiers</h2>
-<div *ngFor="let job of jobs">
+@for (job of jobs; track job) {
+  <div>
     <job [job]="job"></job>
-</div>
+  </div>
+}

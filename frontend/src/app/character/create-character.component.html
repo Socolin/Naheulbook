@@ -1,608 +1,739 @@
 <mat-card class="stats-card">
-    <mat-toolbar color="primary">
-        <span>Caractéristiques</span>
-        <button *ngIf="(step === 0)"
-                mat-icon-button
-                type="button"
-                (click)="rollStats()">
-            <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
-        </button>
-        <button *ngIf="(step >= 1)"
-                mat-icon-button
-                type="button"
-                (click)="setStep(0)">
-            <mat-icon>edit</mat-icon>
-        </button>
-    </mat-toolbar>
-    <mat-card-content *ngIf="step === 0">
-        <p>
-            Lancez cinq fois un D6 pour obtenir les caractéristiques principales. Ces jets cruciaux vont définir tout
-            le profil du personnage. Vous ajoutez 7 à chaque score pour obtenir les caractéristiques suivantes (ce qui
-            donnera une note de 8 à 13) :
-        </p>
-    </mat-card-content>
+  <mat-toolbar color="primary">
+    <span>Caractéristiques</span>
+    @if ((step === 0)) {
+      <button
+        mat-icon-button
+        type="button"
+        (click)="rollStats()">
+        <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
+      </button>
+    }
+    @if ((step >= 1)) {
+      <button
+        mat-icon-button
+        type="button"
+        (click)="setStep(0)">
+        <mat-icon>edit</mat-icon>
+      </button>
+    }
+  </mat-toolbar>
+  @if (step === 0) {
     <mat-card-content>
-        <mat-form-field>
-            <input matInput
-                   type="number"
-                   required
-                   [(ngModel)]="cou"
-                   [disabled]="step > 0"
-                   placeholder="Courage"
-                   min=8
-                   max=13
-                   [formControl]="couStatControl"
-            />
-            <mat-error>Valeur valide: 8 à 13</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput
-                   type="number"
-                   required
-                   [(ngModel)]="int"
-                   [disabled]="step > 0"
-                   placeholder="Inteligence"
-                   min=8
-                   max=13
-                   [formControl]="intStatControl"
-            />
-            <mat-error>Valeur valide: 8 à 13</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput
-                   type="number"
-                   required
-                   [(ngModel)]="cha"
-                   [disabled]="step > 0"
-                   placeholder="Charisme"
-                   min=8
-                   max=13
-                   [formControl]="chaStatControl"
-            />
-            <mat-error>Valeur valide: 8 à 13</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput
-                   type="number"
-                   required
-                   [(ngModel)]="ad"
-                   [disabled]="step > 0"
-                   placeholder="Adresse"
-                   min=8
-                   [formControl]="adStatControl"
-            />
-            <mat-error>Valeur valide: 8 à 13</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput
-                   type="number"
-                   required
-                   [(ngModel)]="fo"
-                   [disabled]="step > 0"
-                   placeholder="Force"
-                   min=8
-                   max=13
-                   [formControl]="foStatControl"
-            />
-            <mat-error>Valeur valide: 8 à 13</mat-error>
-        </mat-form-field>
+      <p>
+        Lancez cinq fois un D6 pour obtenir les caractéristiques principales. Ces jets cruciaux vont définir tout
+        le profil du personnage. Vous ajoutez 7 à chaque score pour obtenir les caractéristiques suivantes (ce qui
+        donnera une note de 8 à 13) :
+      </p>
     </mat-card-content>
-    <mat-card-actions *ngIf="step === 0" align="end">
-        <button mat-button type="button" color="primary" (click)="setStep(1)" [disabled]="!cou || !cha || !int || !fo || !ad">
-            VALIDER
-        </button>
+  }
+  <mat-card-content>
+    <mat-form-field>
+      <input matInput
+        type="number"
+        required
+        [(ngModel)]="cou"
+        [disabled]="step > 0"
+        placeholder="Courage"
+        min=8
+        max=13
+        [formControl]="couStatControl"
+        />
+      <mat-error>Valeur valide: 8 à 13</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+        type="number"
+        required
+        [(ngModel)]="int"
+        [disabled]="step > 0"
+        placeholder="Inteligence"
+        min=8
+        max=13
+        [formControl]="intStatControl"
+        />
+      <mat-error>Valeur valide: 8 à 13</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+        type="number"
+        required
+        [(ngModel)]="cha"
+        [disabled]="step > 0"
+        placeholder="Charisme"
+        min=8
+        max=13
+        [formControl]="chaStatControl"
+        />
+      <mat-error>Valeur valide: 8 à 13</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+        type="number"
+        required
+        [(ngModel)]="ad"
+        [disabled]="step > 0"
+        placeholder="Adresse"
+        min=8
+        [formControl]="adStatControl"
+        />
+      <mat-error>Valeur valide: 8 à 13</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+        type="number"
+        required
+        [(ngModel)]="fo"
+        [disabled]="step > 0"
+        placeholder="Force"
+        min=8
+        max=13
+        [formControl]="foStatControl"
+        />
+      <mat-error>Valeur valide: 8 à 13</mat-error>
+    </mat-form-field>
+  </mat-card-content>
+  @if (step === 0) {
+    <mat-card-actions align="end">
+      <button mat-button type="button" color="primary" (click)="setStep(1)" [disabled]="!cou || !cha || !int || !fo || !ad">
+        VALIDER
+      </button>
     </mat-card-actions>
+  }
 </mat-card>
 
-<mat-card *ngIf="(step >= 1)" class="stats-card">
+@if ((step >= 1)) {
+  <mat-card class="stats-card">
     <mat-toolbar color="primary">
-        <span>Origine</span>
-        <button *ngIf="(step === 1)"
-                mat-icon-button
-                type="button"
-                (click)="selectRandomOrigin()">
-            <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
+      <span>Origine</span>
+      @if ((step === 1)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="selectRandomOrigin()">
+          <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
-        <button *ngIf="(step > 1)"
-                mat-icon-button
-                type="button"
-                (click)="setStep(1)">
-            <mat-icon>edit</mat-icon>
+      }
+      @if ((step > 1)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="setStep(1)">
+          <mat-icon>edit</mat-icon>
         </button>
+      }
     </mat-toolbar>
     <mat-card-content [class.no-card-padding]="step === 1">
-        <div *ngIf="(step === 1)">
-            <origin-selector [selectedOrigin]="selectedOrigin"
-                             (originChange)="onSelectOrigin($event)"
-                             (swapStats)="swapStats($event)"
-                             [cou]="cou"
-                             [int]="int"
-                             [cha]="cha"
-                             [ad]="ad"
-                             [fo]="fo">
-            </origin-selector>
+      @if ((step === 1)) {
+        <div>
+          <origin-selector [selectedOrigin]="selectedOrigin"
+            (originChange)="onSelectOrigin($event)"
+            (swapStats)="swapStats($event)"
+            [cou]="cou"
+            [int]="int"
+            [cha]="cha"
+            [ad]="ad"
+            [fo]="fo">
+          </origin-selector>
         </div>
-        <div *ngIf="(step > 1)">
-            {{selectedOrigin!.name}}
+      }
+      @if ((step > 1)) {
+        <div>
+          {{selectedOrigin!.name}}
         </div>
+      }
     </mat-card-content>
-</mat-card>
+  </mat-card>
+}
 
 
-<mat-card *ngIf="(step >= 2)">
+@if ((step >= 2)) {
+  <mat-card>
     <mat-toolbar color="primary">
-        <span>Métier</span>
-        <button *ngIf="(step === 2)"
-                mat-icon-button
-                type="button"
-                (click)="selectRandomJob()">
-            <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
+      <span>Métier</span>
+      @if ((step === 2)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="selectRandomJob()">
+          <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
-        <button *ngIf="(step > 2)"
-                mat-icon-button
-                type="button"
-                (click)="setStep(2)">
-            <mat-icon>edit</mat-icon>
+      }
+      @if ((step > 2)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="setStep(2)">
+          <mat-icon>edit</mat-icon>
         </button>
+      }
     </mat-toolbar>
     <mat-card-content [class.no-card-padding]="step === 2">
-        <div *ngIf="(step === 2)">
-            <job-selector [selectedOrigin]="selectedOrigin"
-                          (jobChange)="onSelectJob($event)"
-                          (swapStats)="swapStats($event)"
-                          [cou]="cou"
-                          [int]="int"
-                          [cha]="cha"
-                          [ad]="ad"
-                          [fo]="fo">
-            </job-selector>
+      @if ((step === 2)) {
+        <div>
+          <job-selector [selectedOrigin]="selectedOrigin"
+            (jobChange)="onSelectJob($event)"
+            (swapStats)="swapStats($event)"
+            [cou]="cou"
+            [int]="int"
+            [cha]="cha"
+            [ad]="ad"
+            [fo]="fo">
+          </job-selector>
         </div>
-        <div *ngIf="(step > 2)">
-            <span *ngIf="selectedJobs.length">
-                {{selectedJobs[0].name}}
+      }
+      @if ((step > 2)) {
+        <div>
+          @if (selectedJobs.length) {
+            <span>
+              {{selectedJobs[0].name}}
             </span>
-            <span *ngIf="!selectedJobs.length">
-                Aucun
+          }
+          @if (!selectedJobs.length) {
+            <span>
+              Aucun
             </span>
+          }
         </div>
+      }
     </mat-card-content>
-</mat-card>
+  </mat-card>
+}
 
-<mat-card *ngIf="(step >= 3)">
+@if ((step >= 3)) {
+  <mat-card>
     <mat-toolbar color="primary">
-        <span>Compétences</span>
-        <button *ngIf="(step === 3)"
-                mat-icon-button
-                type="button"
-                (click)="selectRandomSkills()">
-            <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
+      <span>Compétences</span>
+      @if ((step === 3)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="selectRandomSkills()">
+          <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
-        <button *ngIf="(step > 3)"
-                mat-icon-button
-                type="button"
-                (click)="setStep(3)">
-            <mat-icon>edit</mat-icon>
+      }
+      @if ((step > 3)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="setStep(3)">
+          <mat-icon>edit</mat-icon>
         </button>
+      }
     </mat-toolbar>
     <mat-card-content [class.no-card-padding]="step === 3">
-        <div class="mat-body" *ngIf="step === 3">
-            Vous pouvez choisir deux compétences
+      @if (step === 3) {
+        <div class="mat-body">
+          Vous pouvez choisir deux compétences
         </div>
-        <div *ngIf="(step === 3)">
-            <skill-selector [selectedOrigin]="selectedOrigin!"
-                            [selectedJobs]="selectedJobs"
-                            (skillsSelected)="onSelectSkills($event)">
-            </skill-selector>
-        </div>
-        <div *ngIf="(step > 3)">
-            <div *ngFor="let skill of selectedSkills">
-                <h4 class="mat-h4">{{skill.name}}</h4>
-                <p class="mat-body">{{skill.playerDescription}}</p>
-            </div>
-        </div>
-    </mat-card-content>
-</mat-card>
-
-<mat-card *ngIf="(step >= 4)">
-    <mat-toolbar color="primary">
-        <span>Fortune de départ</span>
-        <button *ngIf="(step === 4)"
-                mat-icon-button
-                type="button"
-                (click)="rollMoney()">
-            <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
-        </button>
-        <button *ngIf="(step > 4)"
-                mat-icon-button
-                type="button"
-                (click)="setStep(4)">
-            <mat-icon>edit</mat-icon>
-        </button>
-    </mat-toolbar>
-    <mat-card-content>
-        <p *ngIf="step === 4">
-            Tirer le pécule de départ permet de connaître la classe sociale du personnage. Le jet de dés est le suivant :<br/>
-            ➢ 2D6 x 10 = pécule de pièces d’or au départ de l’aventure
-        </p>
-        <p *ngIf="step === 4 && has2MoneyRoll()">
-            Votre metier vous donne droit a un deuxieme jet de votre fortune initiale qui s'additionne avec le premier.
-        </p>
-        <div [hidden]="step > 4">
-            <mat-form-field>
-                <input matInput
-                       required
-                       type="number"
-                       [(ngModel)]="money"
-                       placeholder="Fortune"
-                       min=2
-                       max=12
-                       [formControl]="fortuneControl"
-                />
-                <mat-error>Valeur valide: 2 à 12</mat-error>
-            </mat-form-field>
-
-            <mat-form-field *ngIf="has2MoneyRoll()">
-                <input matInput
-                       required
-                       type="number"
-                       [(ngModel)]="money2"
-                       placeholder="Fortune jet 2"
-                       [formControl]="fortune2Control"
-                       min=2
-                       max=12
-                />
-                <mat-error>Valeur valide: 2 à 12</mat-error>
-            </mat-form-field>
-        </div>
+      }
+      @if ((step === 3)) {
         <div>
-            Fortune: {{(money + money2) * 10}} PO
+          <skill-selector [selectedOrigin]="selectedOrigin!"
+            [selectedJobs]="selectedJobs"
+            (skillsSelected)="onSelectSkills($event)">
+          </skill-selector>
         </div>
+      }
+      @if ((step > 3)) {
+        <div>
+          @for (skill of selectedSkills; track skill) {
+            <div>
+              <h4 class="mat-h4">{{skill.name}}</h4>
+              <p class="mat-body">{{skill.playerDescription}}</p>
+            </div>
+          }
+        </div>
+      }
     </mat-card-content>
-    <mat-card-actions *ngIf="step === 4" align="end">
+  </mat-card>
+}
+
+@if ((step >= 4)) {
+  <mat-card>
+    <mat-toolbar color="primary">
+      <span>Fortune de départ</span>
+      @if ((step === 4)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="rollMoney()">
+          <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
+        </button>
+      }
+      @if ((step > 4)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="setStep(4)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      }
+    </mat-toolbar>
+    <mat-card-content>
+      @if (step === 4) {
+        <p>
+          Tirer le pécule de départ permet de connaître la classe sociale du personnage. Le jet de dés est le suivant :<br/>
+          ➢ 2D6 x 10 = pécule de pièces d’or au départ de l’aventure
+        </p>
+      }
+      @if (step === 4 && has2MoneyRoll()) {
+        <p>
+          Votre metier vous donne droit a un deuxieme jet de votre fortune initiale qui s'additionne avec le premier.
+        </p>
+      }
+      <div [hidden]="step > 4">
+        <mat-form-field>
+          <input matInput
+            required
+            type="number"
+            [(ngModel)]="money"
+            placeholder="Fortune"
+            min=2
+            max=12
+            [formControl]="fortuneControl"
+            />
+          <mat-error>Valeur valide: 2 à 12</mat-error>
+        </mat-form-field>
+        @if (has2MoneyRoll()) {
+          <mat-form-field>
+            <input matInput
+              required
+              type="number"
+              [(ngModel)]="money2"
+              placeholder="Fortune jet 2"
+              [formControl]="fortune2Control"
+              min=2
+              max=12
+              />
+            <mat-error>Valeur valide: 2 à 12</mat-error>
+          </mat-form-field>
+        }
+      </div>
+      <div>
+        Fortune: {{(money + money2) * 10}} PO
+      </div>
+    </mat-card-content>
+    @if (step === 4) {
+      <mat-card-actions align="end">
         <button mat-button type="button" color="primary" (click)="validMondey()" [disabled]="!money || (!money2 && has2MoneyRoll())">
-            VALIDER
+          VALIDER
         </button>
-    </mat-card-actions>
-</mat-card>
+      </mat-card-actions>
+    }
+  </mat-card>
+}
 
 
-<mat-card *ngIf="(step >= 5) && hasStatModification()">
+@if ((step >= 5) && hasStatModification()) {
+  <mat-card>
     <mat-toolbar color="primary">
-        <span>Trucs spéciaux</span>
-        <button *ngIf="(step > 5)"
-                mat-icon-button
-                type="button"
-                (click)="setStep(5)">
-            <mat-icon>edit</mat-icon>
+      <span>Trucs spéciaux</span>
+      @if ((step > 5)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="setStep(5)">
+          <mat-icon>edit</mat-icon>
         </button>
+      }
     </mat-toolbar>
     <mat-card-content>
-        <div *ngIf="hasSuperBourin()">
-            <h3 class="mat-h3">SUPER-BOURRIN</h3>
-            <p class="mat-body" *ngIf="step === 5">
-                a le droit de retrancher jusqu'à 3 points à son score de base en ATTAQUE et/ou en PARADE
-                pour en faire un bonus de dégâts (au corps à corps, toutes armes confondues). Ainsi il peut avoir +3 en dégâts en plus de ses
-                autres bonus de FORCE, mais son côté bourrin le rend maladroit. Le bonus est à choisir en début de carrière et ne pourra
-                être modifié par la suite.
-            </p>
-
-            <div *ngIf="step === 5">
-                AT:
-                <mat-button-toggle-group [(ngModel)]="superBourrinValueAt" (change)="updateSuperBourrin()">
-                    <mat-button-toggle [value]="0">0</mat-button-toggle>
-                    <mat-button-toggle [disabled]="superBourrinValuePrd > 2"  [value]="1">-1</mat-button-toggle>
-                    <mat-button-toggle [disabled]="superBourrinValuePrd > 1"  [value]="2">-2</mat-button-toggle>
-                    <mat-button-toggle [disabled]="superBourrinValuePrd > 0"  [value]="3">-3</mat-button-toggle>
-                </mat-button-toggle-group>
-                PRD:
-                <mat-button-toggle-group [(ngModel)]="superBourrinValuePrd" (change)="updateSuperBourrin()">
-                    <mat-button-toggle [value]="0">0</mat-button-toggle>
-                    <mat-button-toggle [disabled]="superBourrinValueAt > 2" [value]="1">-1</mat-button-toggle>
-                    <mat-button-toggle [disabled]="superBourrinValueAt > 1" [value]="2">-2</mat-button-toggle>
-                    <mat-button-toggle [disabled]="superBourrinValueAt > 0" [value]="3">-3</mat-button-toggle>
-                </mat-button-toggle-group>
-            </div>
-
-            <p *ngIf="superBourrinValueAt && superBourrinValuePrd">
-                Retrancher <em>{{superBourrinValueAt}}</em> point(s) du score de base <em>d'attaque</em>
-                et <em>{{superBourrinValuePrd}}</em> point(s) du score de base de <em>parade</em>
-                et ajouter <em>{{superBourrinValueAt + superBourrinValuePrd}}</em> point(s) de dégâts.
-            </p>
-            <p *ngIf="!superBourrinValueAt && superBourrinValuePrd">
-                Retrancher <em>{{superBourrinValuePrd}}</em> point(s) du score de base de <em>parade</em>
-                et ajouter <em>{{superBourrinValueAt + superBourrinValuePrd}}</em> point(s) de dégâts.
-            </p>
-            <p *ngIf="superBourrinValueAt && !superBourrinValuePrd">
-                Retrancher <em>{{superBourrinValueAt}}</em> point(s) du score de base <em>d'attaque</em>
-                et ajouter <em>{{superBourrinValueAt + superBourrinValuePrd}}</em> point(s) de dégâts.
-            </p>
-            <p *ngIf="!superBourrinValueAt && !superBourrinValuePrd">
-                Ne rien changer.
-            </p>
-        </div>
-
-        <div *ngIf="hasMove1PointStat()">
-            <h3 class="mat-h3">Déplacement d'un point de stat</h3>
+      @if (hasSuperBourin()) {
+        <div>
+          <h3 class="mat-h3">SUPER-BOURRIN</h3>
+          @if (step === 5) {
             <p class="mat-body">
-                En raison de sa polyvalence, au niveau 1 le Ranger peut choisir de soustraire 1 point d'une CARAC pour l'ajouter à une
-                autre (INT, CHA, COU, FO, AD)
+              a le droit de retrancher jusqu'à 3 points à son score de base en ATTAQUE et/ou en PARADE
+              pour en faire un bonus de dégâts (au corps à corps, toutes armes confondues). Ainsi il peut avoir +3 en dégâts en plus de ses
+              autres bonus de FORCE, mais son côté bourrin le rend maladroit. Le bonus est à choisir en début de carrière et ne pourra
+              être modifié par la suite.
             </p>
-
-            <div class="move-stat-point-selector">
-                <button mat-icon-button (click)="move1PointStat('cou', 1)">
-                    <mat-icon [color]="move1PointStatValues['cou'] === 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
-                </button>
-                <button mat-icon-button (click)="move1PointStat('int', 1)">
-                    <mat-icon [color]="move1PointStatValues['int'] === 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
-                </button>
-                <button mat-icon-button (click)="move1PointStat('cha', 1)">
-                    <mat-icon [color]="move1PointStatValues['cha'] === 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
-                </button>
-                <button mat-icon-button (click)="move1PointStat('ad', 1)">
-                    <mat-icon [color]="move1PointStatValues['ad'] === 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
-                </button>
-                <button mat-icon-button (click)="move1PointStat('fo', 1)">
-                    <mat-icon [color]="move1PointStatValues['fo'] === 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
-                </button>
+          }
+          @if (step === 5) {
+            <div>
+              AT:
+              <mat-button-toggle-group [(ngModel)]="superBourrinValueAt" (change)="updateSuperBourrin()">
+                <mat-button-toggle [value]="0">0</mat-button-toggle>
+                <mat-button-toggle [disabled]="superBourrinValuePrd > 2"  [value]="1">-1</mat-button-toggle>
+                <mat-button-toggle [disabled]="superBourrinValuePrd > 1"  [value]="2">-2</mat-button-toggle>
+                <mat-button-toggle [disabled]="superBourrinValuePrd > 0"  [value]="3">-3</mat-button-toggle>
+              </mat-button-toggle-group>
+              PRD:
+              <mat-button-toggle-group [(ngModel)]="superBourrinValuePrd" (change)="updateSuperBourrin()">
+                <mat-button-toggle [value]="0">0</mat-button-toggle>
+                <mat-button-toggle [disabled]="superBourrinValueAt > 2" [value]="1">-1</mat-button-toggle>
+                <mat-button-toggle [disabled]="superBourrinValueAt > 1" [value]="2">-2</mat-button-toggle>
+                <mat-button-toggle [disabled]="superBourrinValueAt > 0" [value]="3">-3</mat-button-toggle>
+              </mat-button-toggle-group>
             </div>
-            <div class="move-stat-point-values">
-                <mat-form-field>
-                    <input matInput [ngModel]="cou + move1PointStatValues['cou']" disabled placeholder="Courage"/>
-                </mat-form-field>
-                <mat-form-field>
-                    <input matInput [ngModel]="int + move1PointStatValues['int']" disabled placeholder="Inteligence" />
-                </mat-form-field>
-                <mat-form-field>
-                    <input matInput [ngModel]="cha + move1PointStatValues['cha']" disabled placeholder="Charisme" />
-                </mat-form-field>
-                <mat-form-field>
-                    <input matInput [ngModel]="ad + move1PointStatValues['ad']" disabled placeholder="Adresse" />
-                </mat-form-field>
-                <mat-form-field>
-                    <input matInput [ngModel]="fo + move1PointStatValues['fo']" disabled placeholder="Force" />
-                </mat-form-field>
-            </div>
-            <div class="move-stat-point-selector">
-                <button mat-icon-button (click)="move1PointStat('cou', -1)">
-                    <mat-icon [color]="move1PointStatValues['cou'] === -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
-                </button>
-                <button mat-icon-button (click)="move1PointStat('int', -1)">
-                    <mat-icon [color]="move1PointStatValues['int'] === -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
-                </button>
-                <button mat-icon-button (click)="move1PointStat('cha', -1)">
-                    <mat-icon [color]="move1PointStatValues['cha'] === -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
-                </button>
-                <button mat-icon-button (click)="move1PointStat('ad', -1)">
-                    <mat-icon [color]="move1PointStatValues['ad'] === -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
-                </button>
-                <button mat-icon-button (click)="move1PointStat('fo', -1)">
-                    <mat-icon [color]="move1PointStatValues['fo'] === -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
-                </button>
-            </div>
+          }
+          @if (superBourrinValueAt && superBourrinValuePrd) {
+            <p>
+              Retrancher <em>{{superBourrinValueAt}}</em> point(s) du score de base <em>d'attaque</em>
+              et <em>{{superBourrinValuePrd}}</em> point(s) du score de base de <em>parade</em>
+              et ajouter <em>{{superBourrinValueAt + superBourrinValuePrd}}</em> point(s) de dégâts.
+            </p>
+          }
+          @if (!superBourrinValueAt && superBourrinValuePrd) {
+            <p>
+              Retrancher <em>{{superBourrinValuePrd}}</em> point(s) du score de base de <em>parade</em>
+              et ajouter <em>{{superBourrinValueAt + superBourrinValuePrd}}</em> point(s) de dégâts.
+            </p>
+          }
+          @if (superBourrinValueAt && !superBourrinValuePrd) {
+            <p>
+              Retrancher <em>{{superBourrinValueAt}}</em> point(s) du score de base <em>d'attaque</em>
+              et ajouter <em>{{superBourrinValueAt + superBourrinValuePrd}}</em> point(s) de dégâts.
+            </p>
+          }
+          @if (!superBourrinValueAt && !superBourrinValuePrd) {
+            <p>
+              Ne rien changer.
+            </p>
+          }
         </div>
-        <div *ngIf="hasChangeAtPrd()">
-            <h3 class="mat-h3">Déplacement d'un point de d'attaque et de parade</h3>
-            <p class="mat-body" *ngIf="step === 5">
-                Peut choisir au niveau 1 d'échanger 1 point d'ATTAQUE avec 1 point de PARADE, ou inversement
+      }
+      @if (hasMove1PointStat()) {
+        <div>
+          <h3 class="mat-h3">Déplacement d'un point de stat</h3>
+          <p class="mat-body">
+            En raison de sa polyvalence, au niveau 1 le Ranger peut choisir de soustraire 1 point d'une CARAC pour l'ajouter à une
+            autre (INT, CHA, COU, FO, AD)
+          </p>
+          <div class="move-stat-point-selector">
+            <button mat-icon-button (click)="move1PointStat('cou', 1)">
+              <mat-icon [color]="move1PointStatValues['cou'] === 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
+            </button>
+            <button mat-icon-button (click)="move1PointStat('int', 1)">
+              <mat-icon [color]="move1PointStatValues['int'] === 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
+            </button>
+            <button mat-icon-button (click)="move1PointStat('cha', 1)">
+              <mat-icon [color]="move1PointStatValues['cha'] === 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
+            </button>
+            <button mat-icon-button (click)="move1PointStat('ad', 1)">
+              <mat-icon [color]="move1PointStatValues['ad'] === 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
+            </button>
+            <button mat-icon-button (click)="move1PointStat('fo', 1)">
+              <mat-icon [color]="move1PointStatValues['fo'] === 1 ? 'accent' : null">keyboard_arrow_up</mat-icon>
+            </button>
+          </div>
+          <div class="move-stat-point-values">
+            <mat-form-field>
+              <input matInput [ngModel]="cou + move1PointStatValues['cou']" disabled placeholder="Courage"/>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [ngModel]="int + move1PointStatValues['int']" disabled placeholder="Inteligence" />
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [ngModel]="cha + move1PointStatValues['cha']" disabled placeholder="Charisme" />
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [ngModel]="ad + move1PointStatValues['ad']" disabled placeholder="Adresse" />
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [ngModel]="fo + move1PointStatValues['fo']" disabled placeholder="Force" />
+            </mat-form-field>
+          </div>
+          <div class="move-stat-point-selector">
+            <button mat-icon-button (click)="move1PointStat('cou', -1)">
+              <mat-icon [color]="move1PointStatValues['cou'] === -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
+            </button>
+            <button mat-icon-button (click)="move1PointStat('int', -1)">
+              <mat-icon [color]="move1PointStatValues['int'] === -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
+            </button>
+            <button mat-icon-button (click)="move1PointStat('cha', -1)">
+              <mat-icon [color]="move1PointStatValues['cha'] === -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
+            </button>
+            <button mat-icon-button (click)="move1PointStat('ad', -1)">
+              <mat-icon [color]="move1PointStatValues['ad'] === -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
+            </button>
+            <button mat-icon-button (click)="move1PointStat('fo', -1)">
+              <mat-icon [color]="move1PointStatValues['fo'] === -1 ? 'accent' : undefined">keyboard_arrow_down</mat-icon>
+            </button>
+          </div>
+        </div>
+      }
+      @if (hasChangeAtPrd()) {
+        <div>
+          <h3 class="mat-h3">Déplacement d'un point de d'attaque et de parade</h3>
+          @if (step === 5) {
+            <p class="mat-body">
+              Peut choisir au niveau 1 d'échanger 1 point d'ATTAQUE avec 1 point de PARADE, ou inversement
             </p>
-
-            <mat-button-toggle-group *ngIf="step === 5" [(ngModel)]="changeAtPrdValue" (change)="updateChangeAtPrd()">
-                <mat-button-toggle [value]="1">+1 AT -1 PRD</mat-button-toggle>
-                <mat-button-toggle [value]="0">Aucune modification</mat-button-toggle>
-                <mat-button-toggle [value]="-1">-1 AT +1 PRD</mat-button-toggle>
+          }
+          @if (step === 5) {
+            <mat-button-toggle-group [(ngModel)]="changeAtPrdValue" (change)="updateChangeAtPrd()">
+              <mat-button-toggle [value]="1">+1 AT -1 PRD</mat-button-toggle>
+              <mat-button-toggle [value]="0">Aucune modification</mat-button-toggle>
+              <mat-button-toggle [value]="-1">-1 AT +1 PRD</mat-button-toggle>
             </mat-button-toggle-group>
-
-            <div *ngIf="step > 5">
-                <span *ngIf="changeAtPrdValue === 1">Ajouter un point d'attaque et retrancher un point de parade</span>
-                <span *ngIf="changeAtPrdValue === 0">Aucune modification</span>
-                <span *ngIf="changeAtPrdValue === -1">Ajouter un point de parade et retrancher un point d'attaque</span>
+          }
+          @if (step > 5) {
+            <div>
+              @if (changeAtPrdValue === 1) {
+                <span>Ajouter un point d'attaque et retrancher un point de parade</span>
+              }
+              @if (changeAtPrdValue === 0) {
+                <span>Aucune modification</span>
+              }
+              @if (changeAtPrdValue === -1) {
+                <span>Ajouter un point de parade et retrancher un point d'attaque</span>
+              }
             </div>
+          }
         </div>
-        <div *ngIf="hasRemoveAttOrPrdToIntOrCha()">
-            <h3 class="mat-h3">Marchand</h3>
-            <p class="mat-body">
-                En raison de son érudition, au niveau 1 le marchand doit retirer 1 point à l'attaque ou à la parade,
-                qu'il pourra ajouter au choix à l'intelligence ou au charisme
-            </p>
-
-            <span *ngIf="step === 5">
-                Enlever un point
-                <mat-button-toggle-group [(ngModel)]="removeAttOrPrdToIntOrChaRemoveStat" (change)="updateRemoveAttOrPrdToIntOrCha()">
-                    <mat-button-toggle value="AT">d'attaque</mat-button-toggle>
-                    <mat-button-toggle value="PRD">de parade</mat-button-toggle>
-                </mat-button-toggle-group>
-
-                et l'ajouter en
-                <mat-button-toggle-group [(ngModel)]="removeAttOrPrdToIntOrChaAddStat" (change)="updateRemoveAttOrPrdToIntOrCha()">
-                    <mat-button-toggle value="INT">intelligence</mat-button-toggle>
-                    <mat-button-toggle value="CHA">charisme</mat-button-toggle>
-                </mat-button-toggle-group>
+      }
+      @if (hasRemoveAttOrPrdToIntOrCha()) {
+        <div>
+          <h3 class="mat-h3">Marchand</h3>
+          <p class="mat-body">
+            En raison de son érudition, au niveau 1 le marchand doit retirer 1 point à l'attaque ou à la parade,
+            qu'il pourra ajouter au choix à l'intelligence ou au charisme
+          </p>
+          @if (step === 5) {
+            <span>
+              Enlever un point
+              <mat-button-toggle-group [(ngModel)]="removeAttOrPrdToIntOrChaRemoveStat" (change)="updateRemoveAttOrPrdToIntOrCha()">
+                <mat-button-toggle value="AT">d'attaque</mat-button-toggle>
+                <mat-button-toggle value="PRD">de parade</mat-button-toggle>
+              </mat-button-toggle-group>
+              et l'ajouter en
+              <mat-button-toggle-group [(ngModel)]="removeAttOrPrdToIntOrChaAddStat" (change)="updateRemoveAttOrPrdToIntOrCha()">
+                <mat-button-toggle value="INT">intelligence</mat-button-toggle>
+                <mat-button-toggle value="CHA">charisme</mat-button-toggle>
+              </mat-button-toggle-group>
             </span>
-            <span *ngIf="step > 5">
-                Enlever un point <em>{{removeAttOrPrdToIntOrChaRemoveStat === 'AT' ? "d'attaque" : "de parade"}}</em>
-                et l'ajouter en <em>{{removeAttOrPrdToIntOrChaAddStat === 'INT' ? 'inteligence' : 'charisme'}}</em>.
+          }
+          @if (step > 5) {
+            <span>
+              Enlever un point <em>{{removeAttOrPrdToIntOrChaRemoveStat === 'AT' ? "d'attaque" : "de parade"}}</em>
+              et l'ajouter en <em>{{removeAttOrPrdToIntOrChaAddStat === 'INT' ? 'inteligence' : 'charisme'}}</em>.
             </span>
+          }
         </div>
-
-        <div *ngIf="hasRemoveAttOrPrdToIntOrAd()">
-            <h3 class="mat-h3">Ingénieur</h3>
-            <p class="mat-body">
-                En raison de sa spécialisation technique, au niveau 1 l'ingénieur doit retirer 1 point à l'attaque ou à la parade, qu'il pourra
-                ajouter au choix à l'intelligence ou à l'adresse
-            </p>
-
-            <span *ngIf="step === 5">
-                Enlever un point
-                <mat-button-toggle-group [(ngModel)]="removeAttOrPrdToIntOrAdRemoveStat" (change)="updateRemoveAttOrPrdToIntOrAd()">
-                    <mat-button-toggle value="AT">d'attaque</mat-button-toggle>
-                    <mat-button-toggle value="PRD">de parade</mat-button-toggle>
-                </mat-button-toggle-group>
-
-                et l'ajouter en
-                <mat-button-toggle-group [(ngModel)]="removeAttOrPrdToIntOrAdAddStat" (change)="updateRemoveAttOrPrdToIntOrAd()">
-                    <mat-button-toggle value="INT">intelligence</mat-button-toggle>
-                    <mat-button-toggle value="AD">adresse</mat-button-toggle>
-                </mat-button-toggle-group>
+      }
+      @if (hasRemoveAttOrPrdToIntOrAd()) {
+        <div>
+          <h3 class="mat-h3">Ingénieur</h3>
+          <p class="mat-body">
+            En raison de sa spécialisation technique, au niveau 1 l'ingénieur doit retirer 1 point à l'attaque ou à la parade, qu'il pourra
+            ajouter au choix à l'intelligence ou à l'adresse
+          </p>
+          @if (step === 5) {
+            <span>
+              Enlever un point
+              <mat-button-toggle-group [(ngModel)]="removeAttOrPrdToIntOrAdRemoveStat" (change)="updateRemoveAttOrPrdToIntOrAd()">
+                <mat-button-toggle value="AT">d'attaque</mat-button-toggle>
+                <mat-button-toggle value="PRD">de parade</mat-button-toggle>
+              </mat-button-toggle-group>
+              et l'ajouter en
+              <mat-button-toggle-group [(ngModel)]="removeAttOrPrdToIntOrAdAddStat" (change)="updateRemoveAttOrPrdToIntOrAd()">
+                <mat-button-toggle value="INT">intelligence</mat-button-toggle>
+                <mat-button-toggle value="AD">adresse</mat-button-toggle>
+              </mat-button-toggle-group>
             </span>
-            <span *ngIf="step > 5">
-                Enlever un point <em>{{removeAttOrPrdToIntOrAdRemoveStat === 'AT' ? "d'attaque" : "de parade"}}</em>
-                et l'ajouter en <em>{{removeAttOrPrdToIntOrAdAddStat === 'INT' ? 'inteligence' : 'adresse'}}</em>.
+          }
+          @if (step > 5) {
+            <span>
+              Enlever un point <em>{{removeAttOrPrdToIntOrAdRemoveStat === 'AT' ? "d'attaque" : "de parade"}}</em>
+              et l'ajouter en <em>{{removeAttOrPrdToIntOrAdAddStat === 'INT' ? 'inteligence' : 'adresse'}}</em>.
             </span>
+          }
         </div>
-
+      }
     </mat-card-content>
-    <mat-card-actions *ngIf="step === 5" align="end">
+    @if (step === 5) {
+      <mat-card-actions align="end">
         <button mat-button type="button" (click)="setStep(6)" color="primary" [disabled]="!isStatModificationValid()">
-            VALIDER
+          VALIDER
         </button>
-    </mat-card-actions>
-</mat-card>
+      </mat-card-actions>
+    }
+  </mat-card>
+}
 
-<mat-card *ngIf="(step >= 6) && hasSpeciality()">
+@if ((step >= 6) && hasSpeciality()) {
+  <mat-card>
     <mat-toolbar color="primary">
-        <span>Specialité</span>
-        <button *ngIf="(step === 6)"
-                mat-icon-button
-                type="button"
-                (click)="randomSpeciality()">
-            <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
+      <span>Specialité</span>
+      @if ((step === 6)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="randomSpeciality()">
+          <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
-        <button *ngIf="(step > 6)"
-                mat-icon-button
-                type="button"
-                (click)="setStep(6)">
-            <mat-icon>edit</mat-icon>
+      }
+      @if ((step > 6)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="setStep(6)">
+          <mat-icon>edit</mat-icon>
         </button>
+      }
     </mat-toolbar>
     <mat-card-content>
-        <div *ngIf="step === 6">
-            <ng-template ngFor let-speciality [ngForOf]="selectedJobs[0].specialities">
-                <mat-card class="speciality">
-                    <mat-card-header>
-                        <mat-card-title>
-                            {{speciality.name}}
-                        </mat-card-title>
-                    </mat-card-header>
-                    <mat-card-content>
-                        <p>{{speciality.description}}</p>
-                    </mat-card-content>
-                    <mat-card-actions align="end">
-                        <button mat-button color="primary" (click)="selectSpeciality(speciality)">
-                            SELECTIONNER
-                        </button>
-                    </mat-card-actions>
-                </mat-card>
-            </ng-template>
+      @if (step === 6) {
+        <div>
+          @for (speciality of selectedJobs[0].specialities; track speciality) {
+            <mat-card class="speciality">
+              <mat-card-header>
+                <mat-card-title>
+                  {{speciality.name}}
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p>{{speciality.description}}</p>
+              </mat-card-content>
+              <mat-card-actions align="end">
+                <button mat-button color="primary" (click)="selectSpeciality(speciality)">
+                  SELECTIONNER
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          }
         </div>
-        <div *ngIf="(step > 6 && !!selectedSpeciality)" class="row">
-            {{selectedSpeciality.name}}
+      }
+      @if ((step > 6 && !!selectedSpeciality)) {
+        <div class="row">
+          {{selectedSpeciality.name}}
         </div>
+      }
     </mat-card-content>
-</mat-card>
+  </mat-card>
+}
 
 
-<mat-card *ngIf="(step >= 7)">
+@if ((step >= 7)) {
+  <mat-card>
     <mat-toolbar color="primary">
-        <span>Nom &amp; sexe</span>
-        <button *ngIf="(step === 7)"
-                mat-icon-button
-                type="button"
-                [disabled]="loadingRandomName"
-                (click)="randomNameAndSex()">
-            <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
+      <span>Nom &amp; sexe</span>
+      @if ((step === 7)) {
+        <button
+          mat-icon-button
+          type="button"
+          [disabled]="loadingRandomName"
+          (click)="randomNameAndSex()">
+          <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
-        <button *ngIf="(step > 7)"
-                mat-icon-button
-                type="button"
-                (click)="setStep(7)">
-            <mat-icon>edit</mat-icon>
+      }
+      @if ((step > 7)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="setStep(7)">
+          <mat-icon>edit</mat-icon>
         </button>
+      }
     </mat-toolbar>
     <mat-card-content class="sex-name-step">
-        <div>
-            <mat-radio-group name="sexe" [(ngModel)]="sex" [disabled]="step > 7" aria-label="Choix du sexe du personnage">
-                <mat-radio-button name="sexe" [value]="'Homme'">
-                    Homme
-                </mat-radio-button>
-                <mat-radio-button name="sexe" [value]="'Femme'">
-                    Femme
-                </mat-radio-button>
-            </mat-radio-group>
-        </div>
-        <div class="name-selector">
-            <mat-form-field>
-                <input matInput
-                       type="text"
-                       [(ngModel)]="name"
-                       [disabled]="step > 7"
-                       placeholder="Nom"
-                       required/>
-            </mat-form-field>
-            <div  *ngIf="(step === 7)">
-                <button *ngIf="!loadingRandomName"
-                        mat-icon-button
-                        type="button"
-                        [disabled]="!randomNameAvailable"
-                        (click)="randomName()">
-                    <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
-                </button>
-                <mat-spinner *ngIf="loadingRandomName" [diameter]="32"></mat-spinner>
-            </div>
-        </div>
+      <div>
+        <mat-radio-group name="sexe" [(ngModel)]="sex" [disabled]="step > 7" aria-label="Choix du sexe du personnage">
+          <mat-radio-button name="sexe" [value]="'Homme'">
+            Homme
+          </mat-radio-button>
+          <mat-radio-button name="sexe" [value]="'Femme'">
+            Femme
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="name-selector">
+        <mat-form-field>
+          <input matInput
+            type="text"
+            [(ngModel)]="name"
+            [disabled]="step > 7"
+            placeholder="Nom"
+            required/>
+        </mat-form-field>
+        @if ((step === 7)) {
+          <div >
+            @if (!loadingRandomName) {
+              <button
+                mat-icon-button
+                type="button"
+                [disabled]="!randomNameAvailable"
+                (click)="randomName()">
+                <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
+              </button>
+            }
+            @if (loadingRandomName) {
+              <mat-spinner [diameter]="32"></mat-spinner>
+            }
+          </div>
+        }
+      </div>
     </mat-card-content>
-    <mat-card-actions *ngIf="step === 7" align="end">
+    @if (step === 7) {
+      <mat-card-actions align="end">
         <button mat-button type="button" (click)="validName()" color="primary" [disabled]="!name || !sex">
-            VALIDER
+          VALIDER
         </button>
-    </mat-card-actions>
-</mat-card>
+      </mat-card-actions>
+    }
+  </mat-card>
+}
 
 
 
-<mat-card *ngIf="(step >= 8)">
+@if ((step >= 8)) {
+  <mat-card>
     <mat-toolbar color="primary">
-        <span>Points de destin</span>
-        <button *ngIf="(step === 8)"
-                mat-icon-button
-                type="button"
-                (click)="rollFatePoint()">
-            <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
+      <span>Points de destin</span>
+      @if ((step === 8)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="rollFatePoint()">
+          <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
         </button>
-        <button *ngIf="(step > 8)"
-                mat-icon-button
-                type="button"
-                (click)="setStep(8)">
-            <mat-icon>edit</mat-icon>
+      }
+      @if ((step > 8)) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="setStep(8)">
+          <mat-icon>edit</mat-icon>
         </button>
+      }
     </mat-toolbar>
     <mat-card-content>
-        <div *ngIf="step === 8">
-            Tirez 1D4-1 pour determiner votre nombre de point de destins.
-            Cela donne un score de 0 à 3... Oui, les guignards n'ont pas de point de destin.
-        </div>
+      @if (step === 8) {
         <div>
-            <mat-form-field>
-                <input matInput
-                       type="number"
-                       [(ngModel)]="fatePoint"
-                       [disabled]="step > 8"
-                       placeholder="Point de destins"
-                       min=0 />
-            </mat-form-field>
+          Tirez 1D4-1 pour determiner votre nombre de point de destins.
+          Cela donne un score de 0 à 3... Oui, les guignards n'ont pas de point de destin.
         </div>
+      }
+      <div>
+        <mat-form-field>
+          <input matInput
+            type="number"
+            [(ngModel)]="fatePoint"
+            [disabled]="step > 8"
+            placeholder="Point de destins"
+            min=0 />
+        </mat-form-field>
+      </div>
     </mat-card-content>
-    <mat-card-actions *ngIf="step === 8" align="end">
+    @if (step === 8) {
+      <mat-card-actions align="end">
         <button mat-button type="button" (click)="validFatePoint()" color="primary" [disabled]="!fatePoint">
-            VALIDER
+          VALIDER
         </button>
-    </mat-card-actions>
-</mat-card>
+      </mat-card-actions>
+    }
+  </mat-card>
+}
 
-<div *ngIf="(step === 9)">
+@if ((step === 9)) {
+  <div>
     <button
-            mat-raised-button
-            [disabled]="creating"
-            (click)="createCharacter()">
-        Creer
+      mat-raised-button
+      [disabled]="creating"
+      (click)="createCharacter()">
+      Creer
     </button>
-</div>
+  </div>
+}

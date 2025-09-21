@@ -1,22 +1,24 @@
 <h2 mat-dialog-title>Type de marqueur</h2>
 <mat-dialog-content>
-    <mat-radio-group
-        class="types-selector"
-        [(ngModel)]="type">
-        <mat-radio-button *ngFor="let type of types" [value]="type.value">
-            {{type.displayName}}
-        </mat-radio-button>
-    </mat-radio-group>
+  <mat-radio-group
+    class="types-selector"
+    [(ngModel)]="type">
+    @for (type of types; track type) {
+      <mat-radio-button [value]="type.value">
+        {{type.displayName}}
+      </mat-radio-button>
+    }
+  </mat-radio-group>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button
-            mat-dialog-close
-            color="primary">
-        FERMER
-    </button>
-    <button mat-button
-            (click)="validate()"
-            color="primary">
-        AJOUTER
-    </button>
+  <button mat-button
+    mat-dialog-close
+    color="primary">
+    FERMER
+  </button>
+  <button mat-button
+    (click)="validate()"
+    color="primary">
+    AJOUTER
+  </button>
 </mat-dialog-actions>

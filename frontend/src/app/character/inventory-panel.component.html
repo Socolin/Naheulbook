@@ -1,202 +1,254 @@
 <div class="inventory-header">
-    <mat-form-field class="filter" appearance="fill">
-        <input matInput [(ngModel)]="itemFilterName" placeholder="Filtre" autocomplete="off" autocapitalize="off"/>
-        <button matSuffix mat-icon-button *ngIf="itemFilterName?.length" (click)="itemFilterName = undefined" aria-label="Réinitialiser le filtre">
-            <mat-icon>close</mat-icon>
-        </button>
-    </mat-form-field>
+  <mat-form-field class="filter" appearance="fill">
+    <input matInput [(ngModel)]="itemFilterName" placeholder="Filtre" autocomplete="off" autocapitalize="off"/>
+    @if (itemFilterName?.length) {
+      <button matSuffix mat-icon-button (click)="itemFilterName = undefined" aria-label="Réinitialiser le filtre">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
 
-    <button mat-icon-button class="sort" [matMenuTriggerFor]="sortMenu" aria-label="Trier">
-        <mat-icon>sort</mat-icon>
-    </button>
+  <button mat-icon-button class="sort" [matMenuTriggerFor]="sortMenu" aria-label="Trier">
+    <mat-icon>sort</mat-icon>
+  </button>
 
-    <mat-form-field class="view" appearance="fill">
-        <mat-label>Vue</mat-label>
-        <mat-select [(value)]="viewMode">
-            <mat-select-trigger>
-                <span class="selected-view-option" *ngIf="viewMode === 'all'">
-                    <mat-icon>list</mat-icon>
-                    <span>List</span>
-                </span>
-                <span class="selected-view-option" *ngIf="viewMode === 'bag'">
-                    <mat-icon>account_tree</mat-icon>
-                    <span>Sacs</span>
-                </span>
-                <span class="selected-view-option" *ngIf="viewMode === 'money'">
-                    <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>
-                    <span>Fortune</span>
-                </span>
-            </mat-select-trigger>
-            <mat-option value="all">
-                <mat-icon>list</mat-icon>
-                <span>List</span>
-            </mat-option>
-            <mat-option value="bag">
-                <mat-icon>account_tree</mat-icon>
-                <span>Sacs</span>
-            </mat-option>
-            <mat-option value="money">
-                <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>
-                <span>Fortune</span>
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+  <mat-form-field class="view" appearance="fill">
+    <mat-label>Vue</mat-label>
+    <mat-select [(value)]="viewMode">
+      <mat-select-trigger>
+        @if (viewMode === 'all') {
+          <span class="selected-view-option">
+            <mat-icon>list</mat-icon>
+            <span>List</span>
+          </span>
+        }
+        @if (viewMode === 'bag') {
+          <span class="selected-view-option">
+            <mat-icon>account_tree</mat-icon>
+            <span>Sacs</span>
+          </span>
+        }
+        @if (viewMode === 'money') {
+          <span class="selected-view-option">
+            <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>
+            <span>Fortune</span>
+          </span>
+        }
+      </mat-select-trigger>
+      <mat-option value="all">
+        <mat-icon>list</mat-icon>
+        <span>List</span>
+      </mat-option>
+      <mat-option value="bag">
+        <mat-icon>account_tree</mat-icon>
+        <span>Sacs</span>
+      </mat-option>
+      <mat-option value="money">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-two-coins" class="ra-mat-button-icon-32"></mat-icon>
+        <span>Fortune</span>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 
 <mat-menu #sortMenu>
-    <button mat-menu-item [disabled]="sortType === 'asc'" (click)="sortType = 'asc'" role="menuitemcheckbox">
-        <mat-icon *ngIf="sortType === 'asc'">check</mat-icon>
-        <mat-icon *ngIf="sortType !== 'asc'"></mat-icon>
-        Alphabétique
-    </button>
-    <button mat-menu-item [disabled]="sortType === 'desc'" (click)="sortType = 'desc'" role="menuitemcheckbox">
-        <mat-icon *ngIf="sortType === 'desc'">check</mat-icon>
-        <mat-icon *ngIf="sortType !== 'desc'"></mat-icon>
-        Alphabétique inverse
-    </button>
-    <button mat-menu-item [disabled]="sortType === 'not_identified_first'" (click)="sortType = 'not_identified_first'" role="menuitemcheckbox">
-        <mat-icon *ngIf="sortType === 'not_identified_first'">check</mat-icon>
-        <mat-icon *ngIf="sortType !== 'not_identified_first'"></mat-icon>
-        Non identifier en premier
-    </button>
+  <button mat-menu-item [disabled]="sortType === 'asc'" (click)="sortType = 'asc'" role="menuitemcheckbox">
+    @if (sortType === 'asc') {
+      <mat-icon>check</mat-icon>
+    }
+    @if (sortType !== 'asc') {
+      <mat-icon></mat-icon>
+    }
+    Alphabétique
+  </button>
+  <button mat-menu-item [disabled]="sortType === 'desc'" (click)="sortType = 'desc'" role="menuitemcheckbox">
+    @if (sortType === 'desc') {
+      <mat-icon>check</mat-icon>
+    }
+    @if (sortType !== 'desc') {
+      <mat-icon></mat-icon>
+    }
+    Alphabétique inverse
+  </button>
+  <button mat-menu-item [disabled]="sortType === 'not_identified_first'" (click)="sortType = 'not_identified_first'" role="menuitemcheckbox">
+    @if (sortType === 'not_identified_first') {
+      <mat-icon>check</mat-icon>
+    }
+    @if (sortType !== 'not_identified_first') {
+      <mat-icon></mat-icon>
+    }
+    Non identifier en premier
+  </button>
 </mat-menu>
-<div class="items" *ngIf="viewMode === 'all'">
-    <div *ngFor="let item of filteredItems; trackBy: trackByItemId" class="item separator">
+@if (viewMode === 'all') {
+  <div class="items">
+    @for (item of filteredItems; track trackByItemId($index, item)) {
+      <div class="item separator">
         <app-item-line [character]="character"
-                       [item]="item"
-                       [itemMenu]="itemMenu"
-                       [gmView]="inGroupTab">
+          [item]="item"
+          [itemMenu]="itemMenu"
+          [gmView]="inGroupTab">
         </app-item-line>
-    </div>
-</div>
+      </div>
+    }
+  </div>
+}
 
-<div class="items" *ngIf="viewMode === 'bag'">
+@if (viewMode === 'bag') {
+  <div class="items">
     <bag-item-view
-        [itemFilterName]="itemFilterName"
-        [sortType]="sortType"
-        [items]="topLevelBagItems"
-        [itemMenu]="itemMenu"
-        [character]="character"
-        [gmView]="inGroupTab">
+      [itemFilterName]="itemFilterName"
+      [sortType]="sortType"
+      [items]="topLevelBagItems"
+      [itemMenu]="itemMenu"
+      [character]="character"
+      [gmView]="inGroupTab">
     </bag-item-view>
-</div>
+  </div>
+}
 
-<div class="items" *ngIf="viewMode === 'money'">
-    <div *ngFor="let item of moneyItems" class="item separator">
+@if (viewMode === 'money') {
+  <div class="items">
+    @for (item of moneyItems; track item) {
+      <div class="item separator">
         <app-item-line [character]="character"
-                       [itemMenu]="itemMenu"
-                       [item]="item"
-                       [gmView]="inGroupTab">
+          [itemMenu]="itemMenu"
+          [item]="item"
+          [gmView]="inGroupTab">
         </app-item-line>
-    </div>
-</div>
+      </div>
+    }
+  </div>
+}
 
 <mat-menu xPosition="before" #itemMenu="matMenu">
-    <ng-template matMenuContent let-item="item">
-        <button mat-menu-item (click)="itemActionService.onAction   ('show_to_gm', item)">
-            <mat-icon>visibility</mat-icon>
-            Montrer l'objet au MJ
-        </button>
-        <button mat-menu-item
-                *ngIf="item.template.slots?.length > 0 && !item.data.equiped && !item.content?.length"
-                (click)="itemActionService.onAction('equip', item)">
-            <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon" class="ra-mat-button-icon-24"></mat-icon>
-            Équiper
-        </button>
-        <button mat-menu-item
-                *ngIf="item.template.slots?.length > 0 && item.data.equiped && !item.content?.length"
-                (click)="itemActionService.onAction('unequip', item)">
-            <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon" class="ra-mat-button-icon-24"></mat-icon>
-            Déséquipé
-        </button>
-        <button mat-menu-item [matMenuTriggerFor]="editItemMenu" [matMenuTriggerData]="{item: item}">
-            <mat-icon>edit</mat-icon>
-            Éditer
-        </button>
-        <button mat-menu-item [matMenuTriggerFor]="addModifierMenu" [matMenuTriggerData]="{item: item}">
-            <mat-icon>add</mat-icon>
-            Ajouter un modificateur
-        </button>
-        <button *ngIf="!item.data.equiped && character.computedData.containers?.length" mat-menu-item [matMenuTriggerFor]="containerMenu" [matMenuTriggerData]="{item: item}">
-            <mat-icon fontSet="game-icon" fontIcon="game-icon-profit" class="ra-mat-button-icon-24"></mat-icon>
-            <span matBadgeSize="small" matBadge="1" matBadgeOverlap="false" [matBadge]="item.shouldBePutInAContainer  && character.computedData.containers?.length ? '1' : undefined">
-            Ranger
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item (click)="itemActionService.onAction   ('show_to_gm', item)">
+      <mat-icon>visibility</mat-icon>
+      Montrer l'objet au MJ
+    </button>
+    @if (item.template.slots?.length > 0 && !item.data.equiped && !item.content?.length) {
+      <button mat-menu-item
+        (click)="itemActionService.onAction('equip', item)">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon" class="ra-mat-button-icon-24"></mat-icon>
+        Équiper
+      </button>
+    }
+    @if (item.template.slots?.length > 0 && item.data.equiped && !item.content?.length) {
+      <button mat-menu-item
+        (click)="itemActionService.onAction('unequip', item)">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-switch-weapon" class="ra-mat-button-icon-24"></mat-icon>
+        Déséquipé
+      </button>
+    }
+    <button mat-menu-item [matMenuTriggerFor]="editItemMenu" [matMenuTriggerData]="{item: item}">
+      <mat-icon>edit</mat-icon>
+      Éditer
+    </button>
+    <button mat-menu-item [matMenuTriggerFor]="addModifierMenu" [matMenuTriggerData]="{item: item}">
+      <mat-icon>add</mat-icon>
+      Ajouter un modificateur
+    </button>
+    @if (!item.data.equiped && character.computedData.containers?.length) {
+      <button mat-menu-item [matMenuTriggerFor]="containerMenu" [matMenuTriggerData]="{item: item}">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-profit" class="ra-mat-button-icon-24"></mat-icon>
+        <span matBadgeSize="small" matBadge="1" matBadgeOverlap="false" [matBadge]="item.shouldBePutInAContainer  && character.computedData.containers?.length ? '1' : undefined">
+          Ranger
         </span>
-        </button>
-        <button mat-menu-item (click)="openLifetimeDialog(item)">
-            <mat-icon>timelapse</mat-icon>
-            Éditer temps de conservation
-        </button>
-        <button *ngIf="character.group" mat-menu-item (click)="openGiveItemDialog(item)">
-            <mat-icon>redo</mat-icon>
-            Donner
-        </button>
-        <button mat-menu-item *ngIf="item.template.data.skillBook"
-                (click)="itemActionService.onAction('read_skill_book', item)">
-            <mat-icon>menu_book</mat-icon>
-            Lire
-        </button>
-        <button *ngIf="item.template.data.charge" [disabled]="!item.data.charge"
-                mat-menu-item
-                (click)="itemActionService.onAction('use_charge', item)">
-            <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
-            Utiliser sur soi-meme
-        </button>
-        <button *ngIf="item.template.data.charge" [disabled]="!item.data.charge"
-                mat-menu-item>
-            <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
-            Utiliser sur...
-        </button>
-        <button *ngIf="inGroupTab && item.data.notIdentified"
-                mat-menu-item
-                (click)="itemActionService.onAction('identify', item)">
-            <mat-icon>help</mat-icon>
-            Identifier
-        </button>
-        <button mat-menu-item [matMenuTriggerFor]="deleteConfirm" [matMenuTriggerData]="{item: item}">
-            <mat-icon>delete</mat-icon>
-            Supprimer
-        </button>
-    </ng-template>
+      </button>
+    }
+    <button mat-menu-item (click)="openLifetimeDialog(item)">
+      <mat-icon>timelapse</mat-icon>
+      Éditer temps de conservation
+    </button>
+    @if (character.group) {
+      <button mat-menu-item (click)="openGiveItemDialog(item)">
+        <mat-icon>redo</mat-icon>
+        Donner
+      </button>
+    }
+    @if (item.template.data.skillBook) {
+      <button mat-menu-item
+        (click)="itemActionService.onAction('read_skill_book', item)">
+        <mat-icon>menu_book</mat-icon>
+        Lire
+      </button>
+    }
+    @if (item.template.data.charge) {
+      <button [disabled]="!item.data.charge"
+        mat-menu-item
+        (click)="itemActionService.onAction('use_charge', item)">
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
+        Utiliser sur soi-meme
+      </button>
+    }
+    @if (item.template.data.charge) {
+      <button [disabled]="!item.data.charge"
+        mat-menu-item>
+        <mat-icon fontSet="game-icon" fontIcon="game-icon-drink-me" class="ra-mat-button-icon-24"></mat-icon>
+        Utiliser sur...
+      </button>
+    }
+    @if (inGroupTab && item.data.notIdentified) {
+      <button
+        mat-menu-item
+        (click)="itemActionService.onAction('identify', item)">
+        <mat-icon>help</mat-icon>
+        Identifier
+      </button>
+    }
+    <button mat-menu-item [matMenuTriggerFor]="deleteConfirm" [matMenuTriggerData]="{item: item}">
+      <mat-icon>delete</mat-icon>
+      Supprimer
+    </button>
+  </ng-template>
 </mat-menu>
 <mat-menu #deleteConfirm>
-    <ng-template matMenuContent let-item="item">
-        <button mat-menu-item
-                (click)="itemActionService.onAction('delete', item)">
-            Confirmer
-        </button>
-    </ng-template>
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item
+      (click)="itemActionService.onAction('delete', item)">
+      Confirmer
+    </button>
+  </ng-template>
 </mat-menu>
 <mat-menu #containerMenu>
-    <ng-template matMenuContent let-item="item">
-        <button mat-menu-item [disabled]="!item.containerId" (click)="putItemInContainer(item, undefined)">
-            <mat-icon *ngIf="!item.containerId">check</mat-icon>
-            <mat-icon *ngIf="item.containerId"></mat-icon>
-            Aucun
-        </button>
-        <button class="menu-button-with-item-icon" *ngFor="let container of character.computedData.containers" mat-menu-item (click)="putItemInContainer(item, container)"
-                [disabled]="item.containerId === container.id || item.id === container.id">
-            <icon size="24px" [icon]="container.data.icon" [notIdentified]="container.data.notIdentified"></icon> {{container.data.name}}
-        </button>
-    </ng-template>
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item [disabled]="!item.containerId" (click)="putItemInContainer(item, undefined)">
+      @if (!item.containerId) {
+        <mat-icon>check</mat-icon>
+      }
+      @if (item.containerId) {
+        <mat-icon></mat-icon>
+      }
+      Aucun
+    </button>
+    @for (container of character.computedData.containers; track container) {
+      <button class="menu-button-with-item-icon" mat-menu-item (click)="putItemInContainer(item, container)"
+        [disabled]="item.containerId === container.id || item.id === container.id">
+        <icon size="24px" [icon]="container.data.icon" [notIdentified]="container.data.notIdentified"></icon> {{container.data.name}}
+      </button>
+    }
+  </ng-template>
 </mat-menu>
 <mat-menu #editItemMenu="matMenu">
-    <ng-template matMenuContent let-item="item">
-        <button mat-menu-item (click)="editItem(item)">
-            Nome & Description
-        </button>
-        <button mat-menu-item (click)="openSelectItemIconDialog(item)">
-            Icone
-        </button>
-    </ng-template>
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item (click)="editItem(item)">
+      Nome & Description
+    </button>
+    <button mat-menu-item (click)="openSelectItemIconDialog(item)">
+      Icone
+    </button>
+  </ng-template>
 </mat-menu>
 <mat-menu #addModifierMenu="matMenu">
-    <ng-template matMenuContent let-item="item">
-        <button *ngIf="isWeapon(item)" mat-menu-item (click)="sharpenWeapon(item)">
-            Aiguiser (+1 PI / 3 combats)
-        </button>
-        <button mat-menu-item (click)="openModifierDialog(item)">
-            Personnalisé...
-        </button>
-    </ng-template>
+  <ng-template matMenuContent let-item="item">
+    @if (isWeapon(item)) {
+      <button mat-menu-item (click)="sharpenWeapon(item)">
+        Aiguiser (+1 PI / 3 combats)
+      </button>
+    }
+    <button mat-menu-item (click)="openModifierDialog(item)">
+      Personnalisé...
+    </button>
+  </ng-template>
 </mat-menu>

@@ -1,20 +1,26 @@
 <mat-form-field><input matInput placeholder="Nom" [(ngModel)]="modifier.name" required>
 </mat-form-field>
-<mat-form-field *ngIf="!options?.noType">
+@if (!options?.noType) {
+  <mat-form-field>
     <input matInput placeholder="Type" [(ngModel)]="modifier.type">
-</mat-form-field>
-<mat-form-field *ngIf="!options?.noDescription">
+  </mat-form-field>
+}
+@if (!options?.noDescription) {
+  <mat-form-field>
     <textarea matInput placeholder="Description"
-              [(ngModel)]="modifier.description"
-              cdkTextareaAutosize
-              cdkAutosizeMinRows="1"
-              cdkAutosizeMaxRows="5">
+      [(ngModel)]="modifier.description"
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="1"
+      cdkAutosizeMaxRows="5">
     </textarea>
-</mat-form-field>
+  </mat-form-field>
+}
 <duration-selector [durable]="modifier"></duration-selector>
-<mat-checkbox *ngIf="reusableToggle" color="primary" [(ngModel)]="modifier.reusable">
+@if (reusableToggle) {
+  <mat-checkbox color="primary" [(ngModel)]="modifier.reusable">
     Ré-utilisable
-</mat-checkbox>
+  </mat-checkbox>
+}
 <mat-card-content>
-    <modifiers-editor [modifiers]="modifier.values"></modifiers-editor>
+  <modifiers-editor [modifiers]="modifier.values"></modifiers-editor>
 </mat-card-content>

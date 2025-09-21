@@ -1,122 +1,130 @@
 <mat-sidenav-container style="min-height: 100vh">
-    <mat-toolbar color="primary">
-        <div class="app-toolbar">
-            <h1>
-                Naheulbook
-            </h1>
-            <a class="home-link" aria-label="Page d'accueil" [routerLink]="['/']">
-                <mat-icon>home</mat-icon>
-            </a>
+  <mat-toolbar color="primary">
+    <div class="app-toolbar">
+      <h1>
+        Naheulbook
+      </h1>
+      <a class="home-link" aria-label="Page d'accueil" [routerLink]="['/']">
+        <mat-icon>home</mat-icon>
+      </a>
+    </div>
+  </mat-toolbar>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Profile</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (profile) {
+        <div>
+          <mat-form-field style="width: 100%">
+            <input matInput
+              placeholder="Nom / Pseudonyme"
+              [(ngModel)]="profile.displayName">
+            <mat-hint>Permet a votre GM d'identifier votre personnage pour vous inviter dans le groupe
+            </mat-hint>
+          </mat-form-field>
+          <mat-checkbox [(ngModel)]="profile.showInSearch"
+            (change)="toggleVisibilityInSearch($event)">Visible dans les recherches utilisateurs / de
+            personnage
+            <mat-hint>Si la case n'est pas coché vous n'apparaitrez pas dans les recherches</mat-hint>
+          </mat-checkbox>
         </div>
-    </mat-toolbar>
+      }
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button color="primary" (click)="updateProfile()">EDITER</button>
+    </mat-card-actions>
+  </mat-card>
 
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Profile</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <div *ngIf="profile">
-                <mat-form-field style="width: 100%">
-                    <input matInput
-                           placeholder="Nom / Pseudonyme"
-                           [(ngModel)]="profile.displayName">
-                    <mat-hint>Permet a votre GM d'identifier votre personnage pour vous inviter dans le groupe
-                    </mat-hint>
-                </mat-form-field>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        Service de connexion
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        Il est recommandé de vous lié au minimum avec 2 services pour vous garantir un accès a votre
+        compte.
+        Certains service change leur règles parfois et il est possible qu'il ne soit pas possible
+        temporairement de se connecter avec un service, le temps que le problème soit corrigé.
+      </p>
+      <div class="linked-account-list">
+        <button mat-raised-button color="primary" (click)="linkTo('facebook')"
+          [disabled]="profile.linkedWithFb">Facebook
+        </button>
+        <button mat-raised-button color="primary" (click)="linkTo('google')"
+          [disabled]="profile.linkedWithGoogle">Google
+        </button>
+        <button mat-raised-button color="primary" (click)="linkTo('twitter')"
+          [disabled]="profile.linkedWithTwitter">Twitter
+        </button>
+        <button mat-raised-button color="primary" (click)="linkTo('microsoft')"
+          [disabled]="profile.linkedWithMicrosoft">Microsoft
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
-                <mat-checkbox [(ngModel)]="profile.showInSearch"
-                              (change)="toggleVisibilityInSearch($event)">Visible dans les recherches utilisateurs / de
-                    personnage
-                    <mat-hint>Si la case n'est pas coché vous n'apparaitrez pas dans les recherches</mat-hint>
-                </mat-checkbox>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        Token d'accès
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (accessTokens !== undefined) {
+        <div>
+          <p>
+            La clé n'est visible que lors de la création du token. Copiez la à l'aide du bouton puis vous pouvez la coller là où vous en avez besoin.
+          </p>
+          <p>
+            Si vous perdez une clé vous pouvez la supprimé et en recrée une nouvelle.
+          </p>
+          @if (accessTokens.length > 0) {
+            <div class="access-token header">
+              <div class="date">Date de création</div>
+              <div class="name">Nom</div>
+              <div class="action">Action</div>
             </div>
-        </mat-card-content>
-        <mat-card-actions align="end">
-            <button mat-button color="primary" (click)="updateProfile()">EDITER</button>
-        </mat-card-actions>
-    </mat-card>
-
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>
-                Service de connexion
-            </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <p>
-                Il est recommandé de vous lié au minimum avec 2 services pour vous garantir un accès a votre
-                compte.
-                Certains service change leur règles parfois et il est possible qu'il ne soit pas possible
-                temporairement de se connecter avec un service, le temps que le problème soit corrigé.
-            </p>
-            <div class="linked-account-list">
-                <button mat-raised-button color="primary" (click)="linkTo('facebook')"
-                        [disabled]="profile.linkedWithFb">Facebook
-                </button>
-                <button mat-raised-button color="primary" (click)="linkTo('google')"
-                        [disabled]="profile.linkedWithGoogle">Google
-                </button>
-                <button mat-raised-button color="primary" (click)="linkTo('twitter')"
-                        [disabled]="profile.linkedWithTwitter">Twitter
-                </button>
-                <button mat-raised-button color="primary" (click)="linkTo('microsoft')"
-                        [disabled]="profile.linkedWithMicrosoft">Microsoft
-                </button>
+          }
+          @for (token of accessTokens; track token) {
+            <div class="access-token">
+              <div class="date">
+                {{token.dateCreated | date:'medium'}}
+              </div>
+              <div class="name">
+                {{token.name}}
+              </div>
+              <div class="key">
+                @if (token['key']) {
+                  <mat-card>
+                    <div>Clé: </div>
+                    <div class="token">{{token['key']}}</div>
+                    <button mat-icon-button (click)="copyKeyToClipboard(token['key'])"><mat-icon>content_copy</mat-icon></button>
+                  </mat-card>
+                }
+              </div>
+              <div class="action">
+                <button [matMenuTriggerFor]="confirmDeleteToken" mat-icon-button><mat-icon>delete</mat-icon></button>
+                <mat-menu #confirmDeleteToken>
+                  <button mat-menu-item (click)="deleteAccessToken(token.id)"><mat-icon>check</mat-icon>Confirmer</button>
+                </mat-menu>
+              </div>
             </div>
-        </mat-card-content>
-    </mat-card>
-
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>
-                Token d'accès
-            </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <div *ngIf="accessTokens !== undefined; else loading">
-                <p>
-                    La clé n'est visible que lors de la création du token. Copiez la à l'aide du bouton puis vous pouvez la coller là où vous en avez besoin.
-                </p>
-                <p>
-                    Si vous perdez une clé vous pouvez la supprimé et en recrée une nouvelle.
-                </p>
-                <div *ngIf="accessTokens.length > 0" class="access-token header">
-                    <div class="date">Date de création</div>
-                    <div class="name">Nom</div>
-                    <div class="action">Action</div>
-                </div>
-                <div class="access-token" *ngFor="let token of accessTokens">
-                    <div class="date">
-                        {{token.dateCreated | date:'medium'}}
-                    </div>
-                    <div class="name">
-                        {{token.name}}
-                    </div>
-                    <div class="key">
-                        <mat-card *ngIf="token['key']">
-                            <div>Clé: </div>
-                            <div class="token">{{token['key']}}</div>
-                            <button mat-icon-button (click)="copyKeyToClipboard(token['key'])"><mat-icon>content_copy</mat-icon></button>
-                        </mat-card>
-                    </div>
-                    <div class="action">
-                        <button [matMenuTriggerFor]="confirmDeleteToken" mat-icon-button><mat-icon>delete</mat-icon></button>
-                        <mat-menu #confirmDeleteToken>
-                            <button mat-menu-item (click)="deleteAccessToken(token.id)"><mat-icon>check</mat-icon>Confirmer</button>
-                        </mat-menu>
-                    </div>
-                </div>
-            </div>
-            <ng-template #loading>
-                <mat-spinner></mat-spinner>
-            </ng-template>
-        </mat-card-content>
-        <mat-card-actions align="end">
-            <button mat-button color="primary" (click)="openCreateAccessTokenDialog()">
-                <mat-icon>add</mat-icon>
-                AJOUTER UN TOKEN
-            </button>
-        </mat-card-actions>
-    </mat-card>
+          }
+        </div>
+      } @else {
+        <mat-spinner></mat-spinner>
+      }
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button color="primary" (click)="openCreateAccessTokenDialog()">
+        <mat-icon>add</mat-icon>
+        AJOUTER UN TOKEN
+      </button>
+    </mat-card-actions>
+  </mat-card>
 
 </mat-sidenav-container>

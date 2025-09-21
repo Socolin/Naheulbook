@@ -1,77 +1,87 @@
 <mat-card>
-    <mat-card-header>
-        <mat-card-title>Ajouter une entrée</mat-card-title>
-    </mat-card-header>
-    <mat-card-content style="display: flex">
-        <mat-form-field style="flex: 1 auto">
-            <input matInput
-                   type="text"
-                   placeholder="Message"
-                   [(ngModel)]="historyNewEntryText"/>
-        </mat-form-field>
-        <mat-checkbox [(ngModel)]=historyNewEntryGm style="flex: 0 auto">
-            Visible par le DM seulement
-        </mat-checkbox>
-    </mat-card-content>
-    <mat-card-actions align="end">
-        <button mat-button
-                color="primary"
-                (click)="addLog()">
-            AJOUTER
-        </button>
-    </mat-card-actions>
+  <mat-card-header>
+    <mat-card-title>Ajouter une entrée</mat-card-title>
+  </mat-card-header>
+  <mat-card-content style="display: flex">
+    <mat-form-field style="flex: 1 auto">
+      <input matInput
+        type="text"
+        placeholder="Message"
+        [(ngModel)]="historyNewEntryText"/>
+    </mat-form-field>
+    <mat-checkbox [(ngModel)]=historyNewEntryGm style="flex: 0 auto">
+      Visible par le DM seulement
+    </mat-checkbox>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-button
+      color="primary"
+      (click)="addLog()">
+      AJOUTER
+    </button>
+  </mat-card-actions>
 </mat-card>
 <mat-card>
-    <mat-card-header>
-        <mat-card-title>Historique</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <div *ngFor="let loggroup of history">
-            {{loggroup.date | date:'mediumDate'}}
-            <div
-                style="padding-bottom: 5px; margin-left: 10px; padding-left: 10px; padding-top: 5px; border-left: 1px solid #E2D7D7">
-                <div *ngFor="let log of loggroup.logs">
-                    {{log.date | date:'shortTime'}}:
-                    <span [ngSwitch]="log.action">
-                    <ng-template [ngSwitchCase]="'EVENT_RP'">
-                        Event: {{log.info}}
-                    </ng-template>
-                    <ng-template [ngSwitchCase]="'TIME_CHANGE'">
-                        Avance temps: {{log.info}}
-                    </ng-template>
-                    <ng-template [ngSwitchCase]="'DEBILIBEUK'">
-                        Débilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
-                    </ng-template>
-                    <ng-template [ngSwitchCase]="'MANKDEBOL'">
-                        Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
-                    </ng-template>
-                    <ng-template [ngSwitchCase]="'END_COMBAT'">
-                        Fin de combat
-                    </ng-template>
-                    <ng-template [ngSwitchCase]="'START_COMBAT'">
-                        Debut d'un combat
-                    </ng-template>
-                    <ng-template [ngSwitchCase]="'ADD_TIME'">
-                        Modification du temps: {{log.data.offset | nhbkDuration}}
-                    </ng-template>
-                    <ng-template [ngSwitchCase]="'CHANGE_DATE'">
-                        Modification de la date
-                        <div *ngIf="log.data.oldValue" style="padding-left: 20px">Ancienne date: <date
-                            [date]="log.data.oldValue"></date></div>
-                        <div style="padding-left: 20px">Nouvelle date: <date [date]="log.data.newValue"></date></div>
-                    </ng-template>
-                    <ng-template *ngSwitchDefault>{{log.action}}</ng-template>
-                </span>
-                </div>
+  <mat-card-header>
+    <mat-card-title>Historique</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    @for (loggroup of history; track loggroup) {
+      <div>
+        {{loggroup.date | date:'mediumDate'}}
+        <div
+          style="padding-bottom: 5px; margin-left: 10px; padding-left: 10px; padding-top: 5px; border-left: 1px solid #E2D7D7">
+          @for (log of loggroup.logs; track log) {
+            <div>
+              {{log.date | date:'shortTime'}}:
+              <span>
+                @switch (log.action) {
+                  @case ('EVENT_RP') {
+                    Event: {{log.info}}
+                  }
+                  @case ('TIME_CHANGE') {
+                    Avance temps: {{log.info}}
+                  }
+                  @case ('DEBILIBEUK') {
+                    Débilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
+                  }
+                  @case ('MANKDEBOL') {
+                    Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
+                  }
+                  @case ('END_COMBAT') {
+                    Fin de combat
+                  }
+                  @case ('START_COMBAT') {
+                    Debut d'un combat
+                  }
+                  @case ('ADD_TIME') {
+                    Modification du temps: {{log.data.offset | nhbkDuration}}
+                  }
+                  @case ('CHANGE_DATE') {
+                    Modification de la date
+                    @if (log.data.oldValue) {
+                      <div style="padding-left: 20px">Ancienne date: <date
+                      [date]="log.data.oldValue"></date></div>
+                    }
+                    <div style="padding-left: 20px">Nouvelle date: <date [date]="log.data.newValue"></date></div>
+                  }
+                  @default {
+                    {{log.action}}
+                  }
+                }
+              </span>
             </div>
+          }
         </div>
-    </mat-card-content>
-    <mat-card-actions align="end">
-        <button mat-button
-                color="primary"
-                [disabled]="!loadMore"
-                (click)="loadHistory(true)">
-            Charger plus
-        </button>
-    </mat-card-actions>
+      </div>
+    }
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-button
+      color="primary"
+      [disabled]="!loadMore"
+      (click)="loadHistory(true)">
+      Charger plus
+    </button>
+  </mat-card-actions>
 </mat-card>

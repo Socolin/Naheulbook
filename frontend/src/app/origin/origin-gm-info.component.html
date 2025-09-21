@@ -1,65 +1,97 @@
 <div class="mat-typography">
-    <div *ngIf="origin.requirements.length > 0">
-        <b>Critères: </b>
-        <span *ngFor="let requirement of origin.requirements; let lastReq=last">
-            <span *ngIf="requirement.min">
-                {{requirement.stat}} minimum: {{requirement.min}}
+  @if (origin.requirements.length > 0) {
+    <div>
+      <b>Critères: </b>
+      @for (requirement of origin.requirements; track requirement; let lastReq = $last) {
+        <span>
+          @if (requirement.min) {
+            <span>
+              {{requirement.stat}} minimum: {{requirement.min}}
             </span>
-            <span *ngIf="requirement.max">
-                {{requirement.stat}} maximum: {{requirement.max}}
+          }
+          @if (requirement.max) {
+            <span>
+              {{requirement.stat}} maximum: {{requirement.max}}
             </span>
-            <span *ngIf="!lastReq"> et </span>
+          }
+          @if (!lastReq) {
+            <span> et </span>
+          }
         </span>
+      }
     </div>
+  }
 
-    <p>{{origin.advantage}}</p>
+  <p>{{origin.advantage}}</p>
 
-    <p [innerHTML]="origin.description"></p>
+  <p [innerHTML]="origin.description"></p>
 
-    <p *ngIf="origin.size">
-        <b>Taille</b>: {{origin.size}}
+  @if (origin.size) {
+    <p>
+      <b>Taille</b>: {{origin.size}}
     </p>
+  }
 
-    <div *ngIf="origin.bonuses && origin.bonuses.length">
-        <b>Bonus:</b>
-        <ul>
-            <li *ngFor="let bonus of origin.bonuses">{{bonus.description}}</li>
-        </ul>
+  @if (origin.bonuses && origin.bonuses.length) {
+    <div>
+      <b>Bonus:</b>
+      <ul>
+        @for (bonus of origin.bonuses; track bonus) {
+          <li>{{bonus.description}}</li>
+        }
+      </ul>
     </div>
+  }
 
-    <div *ngIf="origin.skills.length > 0">
-        Compétences de naissance:
-        <ul>
-            <li *ngFor="let skill of origin.skills">
-                <strong>{{skill.name}}</strong>: {{skill.playerDescription}}
-            </li>
-        </ul>
+  @if (origin.skills.length > 0) {
+    <div>
+      Compétences de naissance:
+      <ul>
+        @for (skill of origin.skills; track skill) {
+          <li>
+            <strong>{{skill.name}}</strong>: {{skill.playerDescription}}
+          </li>
+        }
+      </ul>
     </div>
+  }
 
-    <div *ngIf="origin.availableSkills.length > 0">
-        Compétences au choix:
-        <ul>
-            <li *ngFor="let skill of origin.availableSkills">
-                <strong>{{skill.name}}</strong>: {{skill.playerDescription}}
-            </li>
-        </ul>
+  @if (origin.availableSkills.length > 0) {
+    <div>
+      Compétences au choix:
+      <ul>
+        @for (skill of origin.availableSkills; track skill) {
+          <li>
+            <strong>{{skill.name}}</strong>: {{skill.playerDescription}}
+          </li>
+        }
+      </ul>
     </div>
+  }
 
-    <div *ngIf="origin.restrictions.length > 0">
-        Restrictions:
-        <ul>
-            <li *ngFor="let restrict of origin.restrictions">
-                {{restrict.description}}
-            </li>
-        </ul>
+  @if (origin.restrictions.length > 0) {
+    <div>
+      Restrictions:
+      <ul>
+        @for (restrict of origin.restrictions; track restrict) {
+          <li>
+            {{restrict.description}}
+          </li>
+        }
+      </ul>
     </div>
+  }
 
-    <div *ngIf="origin.information.length > 0">
-        <p *ngFor="let info of origin.information">
-            <b>
-                {{info.title}}:
-            </b>
-            <span [innerHTML]="info.description"></span>
+  @if (origin.information.length > 0) {
+    <div>
+      @for (info of origin.information; track info) {
+        <p>
+          <b>
+            {{info.title}}:
+          </b>
+          <span [innerHTML]="info.description"></span>
         </p>
+      }
     </div>
+  }
 </div>

@@ -1,17 +1,19 @@
 <h2 mat-dialog-title>{{data.trait.name}}</h2>
 <mat-dialog-content>
-    <div class="description">
-        {{data.trait.description}}
-    </div>
-    <ng-container *ngIf="data.trait.levels">
-        <ul *ngFor="let level of data.trait.levels">
-            <li>{{level}}</li>
-        </ul>
-    </ng-container>
+  <div class="description">
+    {{data.trait.description}}
+  </div>
+  @if (data.trait.levels) {
+    @for (level of data.trait.levels; track level) {
+      <ul>
+        <li>{{level}}</li>
+      </ul>
+    }
+  }
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close
-            color="primary">
-        FERMER
-    </button>
+  <button mat-button mat-dialog-close
+    color="primary">
+    FERMER
+  </button>
 </mat-dialog-actions>

@@ -1,70 +1,78 @@
 <mat-card>
-    <mat-toolbar>
-        Effets
-        <span class="toolbar-spacer"></span>
-        <button mat-icon-button (click)="openAddEffectDialog()" aria-label="Ajouter un effet">
-            <mat-icon>add</mat-icon>
-        </button>
-    </mat-toolbar>
-    <mat-card-content>
-        <div class="effect-list">
-            <ng-template ngFor let-modifier [ngForOf]="character.computedData.modifiers">
-                <div *ngIf="!modifier.permanent" class="effect-element">
-                    <div class="toggle">
-                        <mat-checkbox color="primary"
-                                      [aria-label]="modifier.active ? 'Effet activé' : 'Effet inactif'"
-                                      [disabled]="!modifier.reusable"
-                                      [checked]="modifier.active"
-                                      (change)="updateReusableModifier(modifier)">
-                        </mat-checkbox>
-                    </div>
-                    <div class="info" mat-ripple (click)="openModifierDialog(modifier)">
-                        <div class="name">
-                            <div>
-                                {{modifier.name}}
-                            </div>
-                            <div class="modifier-type secondary-text">
-                                {{modifier.type}}
-                            </div>
-                        </div>
-                        <div class="duration">
-                        <span *ngIf="modifier.combatCount">
-                            <span class="ra ra-sword duration-icon"></span>
-                                {{modifier.currentCombatCount}}
-                            </span>
-                            <span *ngIf="modifier.currentTimeDuration">
-                                <span class="ra ra-clockwork duration-icon"></span>
-                                {{modifier.currentTimeDuration | nhbkShortDuration}}
-                            </span>
-                            <span *ngIf="modifier.currentLapCount">
-                                <span class="game-icon game-icon-clockwise-rotation duration-icon"></span>
-                                {{modifier.currentLapCount}}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="actions">
-                        <button mat-icon-button [matMenuTriggerFor]="modifierActions" [matMenuTriggerData]="{modifier: modifier}" aria-label="Afficher le menu de l'effet">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                    </div>
+  <mat-toolbar>
+    Effets
+    <span class="toolbar-spacer"></span>
+    <button mat-icon-button (click)="openAddEffectDialog()" aria-label="Ajouter un effet">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-card-content>
+    <div class="effect-list">
+      @for (modifier of character.computedData.modifiers; track modifier) {
+        @if (!modifier.permanent) {
+          <div class="effect-element">
+            <div class="toggle">
+              <mat-checkbox color="primary"
+                [aria-label]="modifier.active ? 'Effet activé' : 'Effet inactif'"
+                [disabled]="!modifier.reusable"
+                [checked]="modifier.active"
+                (change)="updateReusableModifier(modifier)">
+              </mat-checkbox>
+            </div>
+            <div class="info" mat-ripple (click)="openModifierDialog(modifier)">
+              <div class="name">
+                <div>
+                  {{modifier.name}}
                 </div>
-            </ng-template>
-        </div>
-    </mat-card-content>
-    <mat-menu #modifierActions>
-        <ng-template matMenuContent let-modifier="modifier">
-            <button mat-menu-item [matMenuTriggerFor]="deleteModifierMenu" [matMenuTriggerData]="{modifier: modifier}">
-                <mat-icon>delete</mat-icon>
-                Supprimer
-            </button>
-        </ng-template>
-    </mat-menu>
-    <mat-menu #deleteModifierMenu>
-        <ng-template matMenuContent let-modifier="modifier">
-            <button mat-menu-item (click)="removeModifier(modifier)">
-                <mat-icon>check</mat-icon>
-                Confirmer
-            </button>
-        </ng-template>
-    </mat-menu>
+                <div class="modifier-type secondary-text">
+                  {{modifier.type}}
+                </div>
+              </div>
+              <div class="duration">
+                @if (modifier.combatCount) {
+                  <span>
+                    <span class="ra ra-sword duration-icon"></span>
+                    {{modifier.currentCombatCount}}
+                  </span>
+                }
+                @if (modifier.currentTimeDuration) {
+                  <span>
+                    <span class="ra ra-clockwork duration-icon"></span>
+                    {{modifier.currentTimeDuration | nhbkShortDuration}}
+                  </span>
+                }
+                @if (modifier.currentLapCount) {
+                  <span>
+                    <span class="game-icon game-icon-clockwise-rotation duration-icon"></span>
+                    {{modifier.currentLapCount}}
+                  </span>
+                }
+              </div>
+            </div>
+            <div class="actions">
+              <button mat-icon-button [matMenuTriggerFor]="modifierActions" [matMenuTriggerData]="{modifier: modifier}" aria-label="Afficher le menu de l'effet">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </mat-card-content>
+  <mat-menu #modifierActions>
+    <ng-template matMenuContent let-modifier="modifier">
+      <button mat-menu-item [matMenuTriggerFor]="deleteModifierMenu" [matMenuTriggerData]="{modifier: modifier}">
+        <mat-icon>delete</mat-icon>
+        Supprimer
+      </button>
+    </ng-template>
+  </mat-menu>
+  <mat-menu #deleteModifierMenu>
+    <ng-template matMenuContent let-modifier="modifier">
+      <button mat-menu-item (click)="removeModifier(modifier)">
+        <mat-icon>check</mat-icon>
+        Confirmer
+      </button>
+    </ng-template>
+  </mat-menu>
 </mat-card>
