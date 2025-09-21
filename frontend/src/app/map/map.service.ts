@@ -8,7 +8,7 @@ import {Map, MapLayer, MapMarker, MapMarkerBase, MapMarkerLink} from './map.mode
 
 import {toResponseBody, uploadProgress} from '../utils/operators';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class MapService {
     constructor(private httpClient: HttpClient) {
     }

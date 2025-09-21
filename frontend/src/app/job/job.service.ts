@@ -9,7 +9,7 @@ import {SkillService} from '../skill';
 import {NamesByNumericId} from '../shared/shared,model';
 import {JobResponse} from '../api/responses';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class JobService {
     private jobs: ReplaySubject<Job[]>;
 

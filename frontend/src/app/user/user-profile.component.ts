@@ -3,19 +3,31 @@ import {Component, OnInit} from '@angular/core';
 import {NotificationsService} from '../notifications';
 import {LoginService} from './login.service';
 import {UserAccessTokenResponse, UserInfoResponse} from '../api/responses';
-import {MatCheckboxChange} from '@angular/material/checkbox';
+import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import {NhbkMatDialog} from '../material-workaround';
 import {EnableShowInSearchComponent, EnableShowInSearchResult} from './enable-show-in-search.component';
 import {UserService} from './user.service';
 import {PromptDialogComponent, PromptDialogData, PromptDialogResult} from '../shared';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Clipboard} from '@angular/cdk/clipboard';
+import { MatSidenavContainer } from '@angular/material/sidenav';
+import { MatToolbar } from '@angular/material/toolbar';
+import { RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatFormField, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'user-profile',
     templateUrl: './user-profile.component.html',
     styleUrls: ['./user-profile.component.scss'],
-    standalone: false
+    imports: [MatSidenavContainer, MatToolbar, RouterLink, MatIcon, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatInput, FormsModule, MatHint, MatCheckbox, MatCardActions, MatButton, MatIconButton, MatMenuTrigger, MatMenu, MatMenuItem, MatProgressSpinner, DatePipe]
 })
 export class UserProfileComponent implements OnInit {
     public profile?: UserInfoResponse;

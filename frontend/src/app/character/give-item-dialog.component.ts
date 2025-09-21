@@ -1,8 +1,15 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {Item} from '../item';
 import {Character, CharacterGiveDestination} from './character.model';
 import {CharacterService} from './character.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { IconComponent } from '../shared/icon.component';
+import { ValueEditorComponent } from '../shared/value-editor.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
 
 export interface GiveItemDialogData {
     item: Item;
@@ -17,7 +24,7 @@ export interface GiveItemDialogResult {
 @Component({
     templateUrl: './give-item-dialog.component.html',
     styleUrls: ['./give-item-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, IconComponent, ValueEditorComponent, MatProgressSpinner, MatRadioGroup, FormsModule, MatRadioButton, MatDialogActions, MatButton, MatDialogClose]
 })
 export class GiveItemDialogComponent implements OnInit {
     public giveTarget?: CharacterGiveDestination;

@@ -10,12 +10,13 @@ import {EffectService} from '../effect';
 import {Effect} from '../effect';
 import {duration2text} from '../date/util';
 import {ActiveStatsModifier} from '../shared';
+import { ModifierPipe } from '../shared/modifier.pipe';
 
 @Component({
     selector: 'nhbk-action',
     styleUrls: ['./nhbk-action.component.scss'],
     templateUrl: './nhbk-action.component.html',
-    standalone: false
+    imports: [ModifierPipe]
 })
 export class NhbkActionComponent implements OnInit, OnChanges {
     @Input() action: NhbkAction;

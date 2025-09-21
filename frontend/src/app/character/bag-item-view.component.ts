@@ -4,6 +4,10 @@ import {Item} from '../item';
 
 import {Character} from './character.model';
 import {isChildItemMatchingFilter, ItemSortType, sortItemFn} from '../item/item-utils';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatBadge } from '@angular/material/badge';
+import { ItemLineComponent } from './item-line.component';
 
 function sortItemContainerFirstFn(sortType: ItemSortType, a: Item, b: Item) {
     if (a.data.equiped) {
@@ -25,7 +29,7 @@ function sortItemContainerFirstFn(sortType: ItemSortType, a: Item, b: Item) {
     selector: 'bag-item-view',
     templateUrl: './bag-item-view.component.html',
     styleUrls: ['./bag-item-view.component.scss'],
-    standalone: false
+    imports: [MatIconButton, MatIcon, MatBadge, ItemLineComponent]
 })
 export class BagItemViewComponent {
     @Input() items: Item[];

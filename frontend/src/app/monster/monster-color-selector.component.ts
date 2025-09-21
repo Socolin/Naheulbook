@@ -2,12 +2,15 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 import {Monster} from './monster.model';
 import {tokenColors} from '../shared';
+import { CdkOverlayOrigin, CdkConnectedOverlay } from '@angular/cdk/overlay';
+import { MatRipple } from '@angular/material/core';
+import { MatCard } from '@angular/material/card';
 
 @Component({
     selector: 'monster-color-selector',
     templateUrl: './monster-color-selector.component.html',
     styleUrls: ['./monster-color-selector.component.scss'],
-    standalone: false
+    imports: [CdkOverlayOrigin, MatRipple, CdkConnectedOverlay, MatCard]
 })
 export class MonsterColorSelectorComponent {
     @Input() monster: Monster;

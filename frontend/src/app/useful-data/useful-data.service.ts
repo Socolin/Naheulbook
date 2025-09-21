@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {CriticalData} from './useful-data.model';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UsefulDataService {
 
     public criticData = {
@@ -518,11 +518,11 @@ export class UsefulDataService {
         ]
     };
 
-    public getCriticalData(): {[name: string]: CriticalData[]} {
+    public getCriticalData(): { [name: string]: CriticalData[] } {
         return this.criticData;
     }
 
-    public getEpifailData(): {[name: string]: CriticalData[]} {
+    public getEpifailData(): { [name: string]: CriticalData[] } {
         return this.epicfailData;
     }
 }

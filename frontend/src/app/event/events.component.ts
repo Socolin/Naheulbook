@@ -3,12 +3,15 @@ import {Component, Input, ViewChild} from '@angular/core';
 import {NEvent} from './event.model';
 import {EventService} from './event.service';
 import {EventEditorComponent} from './event-editor.component';
+import { MatCard, MatCardHeader, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatButton } from '@angular/material/button';
+import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 
 @Component({
     selector: 'events',
     styleUrls: ['./events.component.scss'],
     templateUrl: './events.component.html',
-    standalone: false
+    imports: [EventEditorComponent, MatCard, MatCardHeader, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions, MatButton, NhbkDateDurationPipe]
 })
 export class EventsComponent {
     @Input() group: {

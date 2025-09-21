@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 
 import {NEvent} from './event.model';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class EventService {
     constructor(private httpClient: HttpClient) {
     }

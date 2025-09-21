@@ -1,9 +1,12 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {Monster} from '../monster';
 import {Item, ItemService} from '../item';
 import {ItemDialogComponent} from '../item/item-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { ItemListComponent } from '../item/item-list.component';
+import { MatButton } from '@angular/material/button';
 
 export interface MonsterInventoryDialogData {
     monster: Monster;
@@ -13,7 +16,7 @@ export interface MonsterInventoryDialogData {
     selector: 'app-monster-inventory-dialog',
     templateUrl: './monster-inventory-dialog.component.html',
     styleUrls: ['./monster-inventory-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, ItemListComponent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class MonsterInventoryDialogComponent {
 

@@ -1,11 +1,22 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {forkJoin} from 'rxjs';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
 import {MonsterInventoryElement} from './monster.model';
 import {NhbkMatDialog} from '../material-workaround';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatCardContent } from '@angular/material/card';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatActionList, MatListItem } from '@angular/material/list';
+import { IconComponent } from '../shared/icon.component';
+import { MatRipple } from '@angular/material/core';
+import { FormsModule } from '@angular/forms';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 export interface AddMonsterItemDialogData {
     inventoryElement?: MonsterInventoryElement;
@@ -14,7 +25,7 @@ export interface AddMonsterItemDialogData {
 @Component({
     templateUrl: './add-monster-item-dialog.component.html',
     styleUrls: ['./add-monster-item-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatCardContent, MatFormField, MatInput, MatIconButton, MatIcon, MatActionList, MatListItem, IconComponent, MatRipple, FormsModule, MatCheckbox, MatDialogActions, MatButton, MatDialogClose]
 })
 export class AddMonsterItemDialogComponent implements OnInit {
     public filteredItemTemplates?: {

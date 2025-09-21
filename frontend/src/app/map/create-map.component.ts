@@ -1,15 +1,22 @@
 import {Component} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {requiredFileType} from '../utils/required-file-type.validator';
 import {MapService} from './map.service';
 import {Map} from './map.model';
+import { MatFormField, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-create-map',
     templateUrl: './create-map.component.html',
     styleUrls: ['./create-map.component.scss'],
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, MatFormField, MatInput, MatHint, MatCheckbox, MatIconButton, MatIcon, MatButton, MatProgressBar, RouterLink]
 })
 export class CreateMapComponent {
     public form = new UntypedFormGroup({

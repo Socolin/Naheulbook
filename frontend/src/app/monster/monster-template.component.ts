@@ -8,12 +8,21 @@ import {EditMonsterTemplateDialogComponent, EditMonsterTemplateDialogData} from 
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
 import {ItemTemplate} from '../item-template';
 import {NhbkMatDialog} from '../material-workaround';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MonsterTraitComponent } from './monster-trait.component';
+import { MatRipple } from '@angular/material/core';
+import { IconComponent } from '../shared/icon.component';
+import { DecimalPipe } from '@angular/common';
+import { MarkdownPipe } from '../markdown/markdown.pipe';
 
 @Component({
     selector: 'monster-template',
     styleUrls: ['./monster-template.component.scss'],
     templateUrl: './monster-template.component.html',
-    standalone: false
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatCardContent, MonsterTraitComponent, MatRipple, IconComponent, DecimalPipe, MarkdownPipe]
 })
 export class MonsterTemplateComponent implements OnInit {
     @Input() monsterTemplate: MonsterTemplate;

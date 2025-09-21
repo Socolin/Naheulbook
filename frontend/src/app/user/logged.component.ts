@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {Subscription} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
@@ -7,7 +7,7 @@ import {LoginService} from './login.service';
 
 @Component({
     templateUrl: './logged.component.html',
-    standalone: false
+    imports: [RouterLink]
 })
 export class LoggedComponent implements OnInit, OnDestroy {
     public isInErrorState = false;

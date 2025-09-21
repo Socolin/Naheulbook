@@ -1,11 +1,12 @@
+@use "sass:map";
 @use '@angular/material' as mat;
 
 @mixin value-selector-theme($theme) {
     // Extract whichever individual palettes you need from the theme.
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $background: map-get($theme, background);
-    $foreground: map-get($theme, foreground);
+    $primary: map.get($theme, primary);
+    $accent: map.get($theme, accent);
+    $background: map.get($theme, background);
+    $foreground: map.get($theme, foreground);
 
     .ve-value {
         background: linear-gradient(mat.m2-get-color-from-palette($primary, default, 0.12), mat.m2-get-color-from-palette($primary, default, 0.20));

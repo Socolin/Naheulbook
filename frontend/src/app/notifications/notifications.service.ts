@@ -5,7 +5,7 @@ import {ErrorReportService} from '../error-report.service';
 import {ErrorDetailsDialogComponent} from './error-details-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class NotificationsService {
     public notifications: Notification[] = [];
 

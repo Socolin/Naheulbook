@@ -1,14 +1,15 @@
+@use "sass:map";
 @use '@angular/material' as mat;
 
 @mixin group-theme($theme) {
     // Extract whichever individual palettes you need from the theme.
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $warn: map-get($theme, warn);
-    $background: map-get($theme, background);
-    $foreground: map-get($theme, foreground);
+    $primary: map.get($theme, primary);
+    $accent: map.get($theme, accent);
+    $warn: map.get($theme, warn);
+    $background: map.get($theme, background);
+    $foreground: map.get($theme, foreground);
 
-    @if (map_get($theme, is-dark)) {
+    @if (map.get($theme, is-dark)) {
         .text-attack {
             color: #bf3737;
         }
@@ -60,7 +61,7 @@
     }
 
     .event-list {
-        @if (map_get($theme, is-dark)) {
+        @if (map.get($theme, is-dark)) {
             .past-event {
                 background-color: #2c3e30;
             }

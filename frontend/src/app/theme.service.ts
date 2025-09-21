@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ThemeService {
     setTheme(theme: string) {
         localStorage.setItem('theme', theme);

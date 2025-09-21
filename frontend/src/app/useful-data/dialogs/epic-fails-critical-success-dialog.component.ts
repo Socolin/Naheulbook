@@ -1,10 +1,19 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
 import {CriticalData, PanelNames} from '../useful-data.model';
 import {UsefulDataService} from '../useful-data.service';
 import {UsefulDataDialogResult} from './useful-data-dialog-result';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField } from '@angular/material/form-field';
+import { MatSelect, MatSelectTrigger } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatTabGroup, MatTab, MatTabLabel } from '@angular/material/tabs';
+import { DataArrayComponent } from '../data-array.component';
 
 export interface EpicFailsCriticalSuccessDialogData {
     mode: 'epicFails' | 'criticalSuccess';
@@ -14,7 +23,7 @@ export interface EpicFailsCriticalSuccessDialogData {
 @Component({
     templateUrl: './epic-fails-critical-success-dialog.component.html',
     styleUrls: ['../../shared/full-screen-dialog.scss', './epic-fails-critical-success-dialog.component.scss'],
-    standalone: false
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatFormField, MatSelect, FormsModule, MatSelectTrigger, MatOption, MatTabGroup, MatTab, MatTabLabel, DataArrayComponent]
 })
 export class EpicFailsCriticalSuccessDialogComponent implements OnInit {
     public criticalData: { [name: string]: CriticalData[] };

@@ -3,10 +3,11 @@ import {Router} from '@angular/router';
 
 import {QuestService} from './quest.service';
 import {QuestTemplate} from './quest.model';
+import { QuestEditorComponent } from './quest-editor.component';
 
 @Component({
     templateUrl: './create-quest-template.component.html',
-    standalone: false
+    imports: [QuestEditorComponent]
 })
 export class CreateQuestTemplateComponent {
     public quest: QuestTemplate = new QuestTemplate();

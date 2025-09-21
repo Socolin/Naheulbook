@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatTabChangeEvent, MatTabGroup} from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabGroup, MatTab, MatTabLabel } from '@angular/material/tabs';
 import {Overlay} from '@angular/cdk/overlay';
 import {Subscription} from 'rxjs';
 
@@ -26,13 +26,31 @@ import {EffectPanelComponent} from './effect-panel.component';
 import {filter, map} from 'rxjs/operators';
 import {CharacterGroupInviteResponse} from '../api/responses';
 import {InventoryPanelComponent} from './inventory-panel.component';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatButton, MatIconButton, MatFabButton } from '@angular/material/button';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { ValueEditorComponent } from '../shared/value-editor.component';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { FormsModule } from '@angular/forms';
+import { CombatTabComponent } from './combat-tab.component';
+import { MatBadge } from '@angular/material/badge';
+import { CharacterLootPanelComponent } from './character-loot-panel.component';
+import { CharacterHistoryComponent } from './character-history.component';
+import { PlusMinusPipe } from '../shared/plus-minus.pipe';
+import { ItemPricePipe } from '../item-template/item-price.pipe';
+import { MarkdownPipe } from '../markdown/markdown.pipe';
 
 @Component({
     selector: 'character',
     templateUrl: './character.component.html',
     styleUrls: ['./character.component.scss'],
     providers: [ItemActionService],
-    standalone: false
+    imports: [MatTabGroup, MatTab, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions, MatButton, MatToolbar, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, ValueEditorComponent, MatFormField, MatInput, CdkTextareaAutosize, MatButtonToggleGroup, FormsModule, MatButtonToggle, CombatTabComponent, EffectPanelComponent, InventoryPanelComponent, MatTabLabel, MatBadge, CharacterLootPanelComponent, CharacterHistoryComponent, MatFabButton, PlusMinusPipe, ItemPricePipe, MarkdownPipe]
 })
 export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;

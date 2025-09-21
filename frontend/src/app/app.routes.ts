@@ -13,19 +13,19 @@ export const routes: Routes = [
     },
     {
         path: 'gm',
-        loadChildren: () => import('./home-gm/home-gm.module').then(m => m.GmHomeModule)
+        loadChildren: () => import('./home-gm/home-gm.routes').then(m => m.routes)
     },
     {
         path: 'database',
-        loadChildren: () => import('./home-database/home-database.module').then(m => m.DatabaseHomeModule)
+        loadChildren: () => import('./home-database/home-database.routes').then(m => m.routes)
     },
     {
         path: 'player',
-        loadChildren: () => import('./home-player/home-player.module').then(m => m.PlayerHomeModule)
+        loadChildren: () => import('./home-player/home-player.routes').then(m => m.routes)
     },
     {
         path: 'map',
-        loadChildren: () => import('./map/map.module').then(m => m.MapModule)
+        loadChildren: () => import('./map/map.routes').then(m => m.routes)
     },
     {
         path: 'login/:redirect',

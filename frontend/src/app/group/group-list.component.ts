@@ -6,11 +6,16 @@ import {NotificationsService} from '../notifications';
 import {Group} from './group.model';
 import {GroupService} from './group.service';
 import {GroupSummaryResponse} from '../api/responses';
+import { MatCard, MatCardContent, MatCardHeader, MatCardTitle, MatCardSubtitle } from '@angular/material/card';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatRipple } from '@angular/material/core';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
     templateUrl: './group-list.component.html',
     styleUrls: ['./group-list.component.scss'],
-    standalone: false
+    imports: [MatCard, MatProgressSpinner, MatCardContent, MatRipple, MatCardHeader, MatCardTitle, MatCardSubtitle, MatButton, MatIcon]
 })
 export class GroupListComponent implements OnInit {
     public groups: GroupSummaryResponse[];

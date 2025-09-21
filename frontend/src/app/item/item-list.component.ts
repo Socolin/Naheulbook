@@ -12,6 +12,12 @@ import {
 import {ItemService} from './item.service';
 import {NhbkMatDialog} from '../material-workaround';
 import {IItemData} from '../api/shared';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuTrigger, MatMenu, MatMenuItem, MatMenuContent } from '@angular/material/menu';
+import { MatRipple } from '@angular/material/core';
+import { IconComponent } from '../shared/icon.component';
 
 type Actions =
     'delete'
@@ -24,7 +30,7 @@ type Actions =
     selector: 'app-item-list',
     templateUrl: './item-list.component.html',
     styleUrls: ['./item-list.component.scss'],
-    standalone: false
+    imports: [MatCheckbox, MatIconButton, MatTooltip, MatIcon, MatMenuTrigger, MatMenu, MatMenuItem, MatRipple, IconComponent, MatMenuContent]
 })
 export class ItemListComponent implements OnChanges {
     @Input()

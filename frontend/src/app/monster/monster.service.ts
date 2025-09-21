@@ -11,7 +11,7 @@ import {CreateMonsterRequest, MoveMonsterToFightRequest} from '../api/requests';
 import {MonsterResponse} from '../api/responses';
 import {IActiveStatsModifier} from '../api/shared';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class MonsterService {
     constructor(
         private readonly httpClient: HttpClient,

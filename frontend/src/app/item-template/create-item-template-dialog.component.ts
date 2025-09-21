@@ -5,8 +5,13 @@ import {LoginService} from '../user';
 
 import {ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {Guid} from '../api/shared/util';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ItemTemplateEditorComponent } from './item-template-editor.component';
 
 export interface CreateItemTemplateDialogData {
     copyFromItemTemplateId?: Guid;
@@ -15,7 +20,7 @@ export interface CreateItemTemplateDialogData {
 @Component({
     templateUrl: './create-item-template-dialog.component.html',
     styleUrls: ['./create-item-template-dialog.component.scss', '../shared/full-screen-dialog.scss'],
-    standalone: false
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, ItemTemplateEditorComponent]
 })
 export class CreateItemTemplateDialogComponent implements OnInit {
     public item: ItemTemplate = new ItemTemplate();

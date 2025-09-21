@@ -1,9 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
-@Pipe({
-    name: 'itemPrice',
-    standalone: false
-})
+@Pipe({ name: 'itemPrice' })
 export class ItemPricePipe implements PipeTransform {
 
     transform(price?: number, ...args: unknown[]): unknown {

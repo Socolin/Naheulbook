@@ -3,10 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import {LoginService} from './login.service';
 import {Router} from '@angular/router';
 
-@Component({
-    template: `logout`,
-    standalone: false
-})
+@Component({ template: `logout` })
 export class LogoutComponent implements OnInit {
     constructor(
         private readonly loginService: LoginService,

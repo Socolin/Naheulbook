@@ -1,16 +1,19 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {NavigationStart, Router} from '@angular/router';
-import { MatSidenav } from '@angular/material/sidenav';
-
-import {NotificationsService} from '../notifications';
+import {NavigationStart, Router, RouterLink, RouterOutlet} from '@angular/router';
+import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
 
 import {GroupService} from '../group';
 import {GroupSummaryResponse} from '../api/responses';
+import {MatListItem, MatListItemIcon, MatNavList} from '@angular/material/list';
+import {MatIcon} from '@angular/material/icon';
+import {CommonNavComponent} from '../shared/common-nav.component';
+import {MatToolbar, MatToolbarRow} from '@angular/material/toolbar';
+import {MatIconButton} from '@angular/material/button';
 
 @Component({
     templateUrl: './home-gm.component.html',
     styleUrls: ['./home-gm.component.scss'],
-    standalone: false
+    imports: [MatSidenavContainer, MatSidenav, MatNavList, MatListItem, RouterLink, MatIcon, MatListItemIcon, CommonNavComponent, MatSidenavContent, MatToolbar, MatToolbarRow, MatIconButton, RouterOutlet]
 })
 export class HomeGmComponent implements OnInit {
     public groups: GroupSummaryResponse[];

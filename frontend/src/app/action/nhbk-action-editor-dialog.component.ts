@@ -14,8 +14,20 @@ import {Observable} from 'rxjs';
 import {ActiveStatsModifier, AutocompleteValue, MiscService} from '../shared';
 
 import {ItemTemplate} from '../item-template';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogClose } from '@angular/material/dialog';
 import {Effect} from '../effect';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatPrefix, MatSuffix } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { AutocompleteInputComponent } from '../shared/autocomplete-input.component';
+import { MatInput } from '@angular/material/input';
+import { StatModifierEditorComponent } from '../effect/stats-modifier-editor.component';
+import { ActiveEffectEditorComponent } from '../effect/active-effect-editor.component';
+import { MatCardActions } from '@angular/material/card';
+import { MatButton } from '@angular/material/button';
 
 export interface NhbkActionEditorDialogData {
     action?: NhbkAction
@@ -24,7 +36,7 @@ export interface NhbkActionEditorDialogData {
 @Component({
     styleUrls: ['./nhbk-action-editor-dialog.component.scss'],
     templateUrl: './nhbk-action-editor-dialog.component.html',
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatFormField, MatSelect, FormsModule, MatOption, MatCheckbox, AutocompleteInputComponent, MatInput, MatPrefix, MatSuffix, StatModifierEditorComponent, ActiveEffectEditorComponent, MatCardActions, MatButton, MatDialogClose]
 })
 export class NhbkActionEditorDialogComponent {
     action: NhbkAction = NhbkActionFactory.createFromType(NhbkActionType.addEv, {ev: 1});

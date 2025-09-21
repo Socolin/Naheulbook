@@ -1,9 +1,19 @@
 import {Component, Inject} from '@angular/core';
 import {Character} from './character.model';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {Skill} from '../skill';
 import {Job, Speciality} from '../job';
 import {Guid} from '../api/shared/util';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatStepper, MatStep, MatStepLabel, MatStepperNext } from '@angular/material/stepper';
+import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { SkillSelectorComponent } from './skill-selector.component';
+import { SpecialitySelectorComponent } from './speciality-selector.component';
 
 export interface LevelUpDialogData {
     readonly character: Character;
@@ -30,7 +40,7 @@ export class LevelUpInfo {
 @Component({
     templateUrl: './level-up-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './level-up-dialog.component.scss'],
-    standalone: false
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatStepper, MatStep, MatStepLabel, MatButtonToggleGroup, FormsModule, MatButtonToggle, MatFormField, MatInput, MatHint, MatButton, MatStepperNext, SkillSelectorComponent, SpecialitySelectorComponent]
 })
 export class LevelUpDialogComponent {
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();

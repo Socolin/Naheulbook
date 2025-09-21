@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import {ActivatedRouteSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
 
-@Injectable()
-export class CharacterResolve  {
+@Injectable({providedIn: 'root'})
+export class CharacterResolve {
 
     constructor(
         private readonly characterService: CharacterService

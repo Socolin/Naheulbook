@@ -1,8 +1,14 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {DateService} from './date.service';
 import {CalendarDate, NhbkDate} from './date.model';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOptgroup, MatOption } from '@angular/material/autocomplete';
+import { MatButton } from '@angular/material/button';
 
 export interface DateSelectorDialogData {
     date?: NhbkDate;
@@ -17,7 +23,7 @@ export interface DateSelectorDialogResult {
     selector: 'app-date-selector-dialog',
     templateUrl: './date-selector-dialog.component.html',
     styleUrls: ['./date-selector-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatSelect, MatOptgroup, MatOption, MatDialogActions, MatButton, MatDialogClose]
 })
 export class DateSelectorDialogComponent implements OnInit {
     public defaultDate: NhbkDate = new NhbkDate(0, 8, Math.floor(Math.random() * 365), 1498);

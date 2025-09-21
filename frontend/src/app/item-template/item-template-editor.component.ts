@@ -19,12 +19,24 @@ import {IconDescription} from '../shared/icon.model';
 import {AddItemTemplateEditorModuleDialogComponent} from './add-item-template-editor-module-dialog.component';
 import {ItemTypeResponse} from '../api/responses';
 import {NhbkMatDialog} from '../material-workaround';
+import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { IconComponent } from '../shared/icon.component';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { ItemTemplateEditorModuleComponent } from './item-template-editor-module.component';
+import { ItemTemplateComponent } from './item-template.component';
 
 @Component({
     selector: 'item-template-editor',
     styleUrls: ['./item-template-editor.component.scss'],
     templateUrl: './item-template-editor.component.html',
-    standalone: false
+    imports: [MatCard, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, IconComponent, MatIconButton, MatTooltip, MatIcon, MatSelect, MatOption, MatSuffix, MatCardHeader, MatCardTitle, ItemTemplateEditorModuleComponent, MatButton, ItemTemplateComponent]
 })
 export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     @Input() itemTemplate: ItemTemplate;

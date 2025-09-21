@@ -18,7 +18,7 @@ export interface TakeItemResponse {
     remainingQuantity: number;
 }
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ItemService {
     constructor(
         private readonly httpClient: HttpClient,

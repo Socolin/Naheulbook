@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogContent } from '@angular/material/dialog';
 import {Item, ItemData} from './item.model';
 import {forkJoin} from 'rxjs';
 import {ItemTemplateSubCategory, ItemTemplateService} from '../item-template';
@@ -9,6 +9,19 @@ import {OriginService} from '../origin';
 import {ItemService} from './item.service';
 import {IconDescription} from '../shared/icon.model';
 import {NhbkMatDialog} from '../material-workaround';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatCardHeader, MatCardAvatar, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
+import { IconComponent } from '../shared/icon.component';
+import { MatRipple } from '@angular/material/core';
+import { MatIcon } from '@angular/material/icon';
+import { MatChipSet, MatChip } from '@angular/material/chips';
+import { ValueEditorComponent } from '../shared/value-editor.component';
+import { NhbkActionComponent } from '../action/nhbk-action.component';
+import { MatDivider } from '@angular/material/list';
+import { DecimalPipe } from '@angular/common';
+import { ModifierPipe } from '../shared/modifier.pipe';
+import { PlusMinusPipe } from '../shared/plus-minus.pipe';
+import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 
 export interface ItemDialogData {
     readonly item: Item;
@@ -18,7 +31,7 @@ export interface ItemDialogData {
     selector: 'app-item-dialog',
     templateUrl: './item-dialog.component.html',
     styleUrls: ['./item-dialog.component.scss'],
-    standalone: false
+    imports: [CdkScrollable, MatDialogContent, MatCardHeader, IconComponent, MatRipple, MatCardAvatar, MatCardTitle, MatCardSubtitle, MatCardContent, MatIcon, MatChipSet, MatChip, ValueEditorComponent, NhbkActionComponent, MatDivider, DecimalPipe, ModifierPipe, PlusMinusPipe, NhbkDateDurationPipe]
 })
 export class ItemDialogComponent implements OnInit {
     public jobsName?: { [id: number]: string };

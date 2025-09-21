@@ -8,12 +8,16 @@ import {Item, ItemService} from '../item';
 import {WebSocketService} from '../websocket';
 import {TakeLootDialogComponent, TakeLootDialogData, TakeLootDialogResult} from './take-loot-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { ItemLineComponent } from './item-line.component';
+import { MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
     selector: 'character-loot-panel',
     styleUrls: ['./character-loot-panel.component.scss'],
     templateUrl: './character-loot-panel.component.html',
-    standalone: false
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, ItemLineComponent, MatMenu, MatMenuContent, MatMenuItem, MatIcon]
 })
 export class CharacterLootPanelComponent extends LootPanelComponent implements OnInit {
     @Input() character: Character;

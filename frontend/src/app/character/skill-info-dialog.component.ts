@@ -1,6 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Skill} from '../skill';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { NgIf } from '@angular/common';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatButton } from '@angular/material/button';
 
 export interface SkillInfoDialogData {
     skill: Skill;
@@ -10,7 +13,7 @@ export interface SkillInfoDialogData {
 @Component({
     templateUrl: './skill-info-dialog.component.html',
     styleUrls: ['./skill-info-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, NgIf, CdkScrollable, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class SkillInfoDialogComponent implements OnInit {
     public viewGmSkillInfo = false;

@@ -8,12 +8,21 @@ import {AutocompleteValue} from '../shared';
 import {EffectService} from './effect.service';
 import {Effect} from './effect.model';
 import {IDurable} from '../api/shared';
+import { AutocompleteInputComponent } from '../shared/autocomplete-input.component';
+import { MatCard, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardHeader } from '@angular/material/card';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
+import { DurationSelectorComponent } from '../date/duration-selector.component';
+import { ModifierPipe } from '../shared/modifier.pipe';
+import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 
 @Component({
     selector: 'active-effect-editor',
     templateUrl: './active-effect-editor.component.html',
     styleUrls: ['./active-effect-editor.component.scss'],
-    standalone: false
+    imports: [AutocompleteInputComponent, MatCard, MatCardTitle, MatIconButton, MatIcon, MatCardSubtitle, MatCardContent, MatSlideToggle, FormsModule, MatButton, MatCardHeader, DurationSelectorComponent, ModifierPipe, NhbkDateDurationPipe]
 })
 export class ActiveEffectEditorComponent implements DoCheck {
     @Input() reusableToggle = true;

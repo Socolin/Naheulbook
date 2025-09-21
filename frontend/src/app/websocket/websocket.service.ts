@@ -12,7 +12,7 @@ import {WsEvent, WsMessage, WsRegistrable} from './websocket.model';
 import {share} from 'rxjs/operators';
 import {LoginService} from '../user';
 
-@Injectable()
+@Injectable({ providedIn: 'root'})
 export class WebSocketService {
     private pendingMessages: { methodName: string, args: any[] }[] = [];
     public registeredElements: { [type: string]: { [id: number]: Subject<WsEvent> } } = {};

@@ -8,7 +8,7 @@ import {Stat} from './stat.model';
 import {ItemTemplate} from '../item-template';
 import {God, GodByTechName} from './god.model';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class MiscService {
     private stats: ReplaySubject<Stat[]>;
     private gods: ReplaySubject<God[]>;

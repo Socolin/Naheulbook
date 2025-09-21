@@ -3,6 +3,11 @@ import {Component, Input, Output, EventEmitter, OnInit, OnChanges} from '@angula
 import {Origin} from './origin.model';
 import {OriginService} from './origin.service';
 import {generateAllStatsPair, getRandomInt} from '../shared';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelActionRow } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { UpperCasePipe } from '@angular/common';
+import { TextFormatterPipe } from '../shared/text-formatter.pipe';
 
 type OriginAvailability = {
     title: string,
@@ -15,7 +20,7 @@ type OriginAvailability = {
     selector: 'origin-selector',
     templateUrl: './origin-selector.component.html',
     styleUrls: ['./origin-selector.component.scss'],
-    standalone: false
+    imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatIcon, MatExpansionPanelActionRow, MatButton, UpperCasePipe, TextFormatterPipe]
 })
 export class OriginSelectorComponent implements OnInit, OnChanges {
     @Input() cou: number;

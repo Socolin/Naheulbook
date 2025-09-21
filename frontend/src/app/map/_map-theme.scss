@@ -1,9 +1,10 @@
 @use '@angular/material' as mat;
+@use "sass:map";
 
 $config: mat.m2-define-typography-config();
 
 @mixin map-theme($theme) {
-    $background: map-get($theme, background);
+    $background: map.get($theme, background);
 
     .map-marker-tooltip {
         font-size: mat.m2-font-size($config, body-1);

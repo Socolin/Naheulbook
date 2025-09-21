@@ -16,12 +16,19 @@ import {ItemDialogComponent} from '../item/item-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
 import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
 import {Router} from '@angular/router';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { ItemListComponent } from '../item/item-list.component';
 
 @Component({
     selector: 'group-loot-panel',
     styleUrls: ['./group-loot-panel.component.scss'],
     templateUrl: './group-loot-panel.component.html',
-    standalone: false
+    imports: [MatButton, MatToolbar, MatIcon, MatTooltip, MatIconButton, MatMenuTrigger, MatMenu, MatMenuItem, MatCard, MatCardContent, ItemListComponent]
 })
 export class GroupLootPanelComponent extends LootPanelComponent implements OnInit, OnDestroy {
     @Input() group: Group;

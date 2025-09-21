@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import { Portal, CdkPortal } from '@angular/cdk/portal';
 
 import {NhbkDialogService} from '../shared';
 import {DurationSelectorDialogComponent, DurationSelectorDialogData, DurationSelectorDialogResult, NhbkDate, NhbkDateOffset} from '../date';
@@ -9,11 +9,20 @@ import {date2Timestamp, dateOffset2TimeDuration, timestamp2Date} from '../date/u
 import {NEvent} from './event.model';
 import {NhbkMatDialog} from '../material-workaround';
 import {DateSelectorDialogComponent, DateSelectorDialogData, DateSelectorDialogResult} from '../date/date-selector-dialog.component';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { DateComponent } from '../date/date.component';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 
 @Component({
     selector: 'event-editor',
     templateUrl: './event-editor.component.html',
-    standalone: false
+    imports: [CdkPortal, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatInput, FormsModule, MatButtonToggleGroup, MatButtonToggle, DateComponent, MatIconButton, MatIcon, MatCardActions, MatButton, NhbkDateDurationPipe]
 })
 export class EventEditorComponent implements OnInit {
     @Input() group: {

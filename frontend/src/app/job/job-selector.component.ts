@@ -6,6 +6,11 @@ import {Origin} from '../origin';
 
 import {Job} from './job.model';
 import {JobService} from './job.service';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelActionRow } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { UpperCasePipe } from '@angular/common';
+import { TextFormatterPipe } from '../shared/text-formatter.pipe';
 
 type JobAvailability = {
     title: string,
@@ -18,7 +23,7 @@ type JobAvailability = {
     selector: 'job-selector',
     templateUrl: './job-selector.component.html',
     styleUrls: ['./job-selector.component.scss'],
-    standalone: false
+    imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatIcon, MatExpansionPanelActionRow, MatButton, UpperCasePipe, TextFormatterPipe]
 })
 export class JobSelectorComponent implements OnInit, OnChanges {
     @Input() cou: number;

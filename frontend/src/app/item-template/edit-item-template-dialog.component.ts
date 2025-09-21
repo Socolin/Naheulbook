@@ -1,11 +1,16 @@
 import {Component, OnInit, Inject} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 
 import {NotificationsService} from '../notifications';
 
 import {ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 import {Guid} from '../api/shared/util';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ItemTemplateEditorComponent } from './item-template-editor.component';
 
 export interface EditItemTemplateDialogData {
     itemTemplateId: Guid;
@@ -14,7 +19,7 @@ export interface EditItemTemplateDialogData {
 @Component({
     templateUrl: './edit-item-template-dialog.component.html',
     styleUrls: ['./edit-item-template-dialog.component.scss', '../shared/full-screen-dialog.scss'],
-    standalone: false
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, ItemTemplateEditorComponent]
 })
 export class EditItemTemplateDialogComponent implements OnInit {
     public item: ItemTemplate;

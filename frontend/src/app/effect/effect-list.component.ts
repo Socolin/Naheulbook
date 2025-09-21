@@ -8,12 +8,23 @@ import {NhbkMatDialog} from '../material-workaround';
 import {EffectService} from './effect.service';
 import {Effect, EffectSubCategory, EffectType} from './effect.model';
 import {EditEffectDialogComponent, EditEffectDialogData} from './edit-effect-dialog.component';
+import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardAvatar, MatCardTitle } from '@angular/material/card';
+import { MatFormField } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatIconButton, MatFabButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { ModifierPipe } from '../shared/modifier.pipe';
+import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
+import { MarkdownPipe } from '../markdown/markdown.pipe';
 
 @Component({
     selector: 'effect-list',
     templateUrl: './effect-list.component.html',
     styleUrls: ['../shared/number-shadow.scss', './effect-list.component.scss'],
-    standalone: false
+    imports: [MatCard, MatCardContent, MatFormField, MatSelect, FormsModule, MatOption, MatCardHeader, MatCardSubtitle, MatCardAvatar, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatFabButton, ModifierPipe, NhbkDateDurationPipe, MarkdownPipe]
 })
 export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() inputSubCategoryId: number | undefined;

@@ -1,11 +1,22 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Observer, Subject} from 'rxjs';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {Item} from '../item';
 import {ItemTemplateService} from '../item-template';
 import {getRandomInt, IconSelectorComponent, IconSelectorComponentDialogData} from '../shared';
 import {IconDescription} from '../shared/icon.model';
 import {NhbkMatDialog} from '../material-workaround';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { IconComponent } from '../shared/icon.component';
 
 export interface CreateGemDialogDialog {
     onAdd: Observer<any>;
@@ -15,7 +26,7 @@ export interface CreateGemDialogDialog {
     selector: 'app-create-gem-dialog',
     templateUrl: './create-gem-dialog.component.html',
     styleUrls: ['./create-gem-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatFormField, MatLabel, MatInput, FormsModule, MatSelect, MatOption, MatButtonToggleGroup, MatButtonToggle, MatIconButton, MatIcon, MatCheckbox, IconComponent, MatHint, MatDialogActions, MatButton, MatDialogClose]
 })
 export class CreateGemDialogComponent implements OnInit {
     public newItem = new Item();

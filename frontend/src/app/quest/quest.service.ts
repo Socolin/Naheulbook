@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 
 import {QuestTemplate} from './quest.model';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class QuestService {
     constructor(private httpClient: HttpClient) {
     }

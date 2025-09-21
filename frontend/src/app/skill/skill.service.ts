@@ -5,7 +5,7 @@ import {Observable, ReplaySubject} from 'rxjs';
 import {Skill, SkillDictionary} from './skill.model';
 import {SkillResponse} from '../api/responses';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class SkillService {
     private skills: ReplaySubject<Skill[]>;
     private skillsById: ReplaySubject<SkillDictionary>;

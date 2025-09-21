@@ -5,6 +5,7 @@ import {forkJoin} from 'rxjs';
 import {OriginService} from '../origin';
 import {God, MiscService} from '../shared';
 import {JobService} from '../job';
+import { ItemTemplateComponent } from './item-template.component';
 
 export interface ItemTemplateDialogData {
     itemTemplate: ItemTemplate;
@@ -13,7 +14,7 @@ export interface ItemTemplateDialogData {
 @Component({
     templateUrl: './item-template-dialog.component.html',
     styleUrls: ['./item-template-dialog.component.scss'],
-    standalone: false
+    imports: [ItemTemplateComponent]
 })
 export class ItemTemplateDialogComponent implements OnInit {
     public originsName: { [originId: string]: string };

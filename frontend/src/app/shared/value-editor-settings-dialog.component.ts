@@ -1,5 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
 
 export enum ValueEditorModes {
     keyboard = 'keyboard',
@@ -18,7 +22,7 @@ export class ValueEditorSettingsDialogResult {
     selector: 'app-value-editor-settings-dialog',
     templateUrl: './value-editor-settings-dialog.component.html',
     styleUrls: ['./value-editor-settings-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatRadioGroup, FormsModule, MatRadioButton, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ValueEditorSettingsDialogComponent implements OnInit {
     modes = ValueEditorModes;

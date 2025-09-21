@@ -1,14 +1,22 @@
 import {Component, OnInit} from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 
 import {ItemStatModifier, MiscService } from '../shared';
 import {StatModificationOperand} from '../api/shared/enums';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatDivider } from '@angular/material/list';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'app-add-stat-modifier-dialog',
     templateUrl: './add-stat-modifier-dialog.component.html',
     styleUrls: ['./add-stat-modifier-dialog.component.scss'],
-    standalone: false
+    imports: [CdkScrollable, MatDialogContent, MatFormField, MatSelect, FormsModule, MatOption, MatDivider, MatInput, MatDialogActions, MatButton, MatDialogClose]
 })
 export class AddStatModifierDialogComponent implements OnInit {
     public selectedStat?: string;

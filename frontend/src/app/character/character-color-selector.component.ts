@@ -1,11 +1,14 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Character} from './character.model';
 import {tokenColors} from '../shared';
+import { CdkOverlayOrigin, CdkConnectedOverlay } from '@angular/cdk/overlay';
+import { MatRipple } from '@angular/material/core';
+import { MatCard } from '@angular/material/card';
 
 @Component({
     selector: 'character-color-selector',
     templateUrl: './character-color-selector.component.html',
-    standalone: false
+    imports: [CdkOverlayOrigin, MatRipple, CdkConnectedOverlay, MatCard]
 })
 export class CharacterColorSelectorComponent {
     @Input() character: Character;

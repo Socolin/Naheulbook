@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {Overlay, OverlayRef, OverlayConfig} from '@angular/cdk/overlay';
+import {Overlay, OverlayConfig, OverlayRef} from '@angular/cdk/overlay';
 import {Portal} from '@angular/cdk/portal';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class NhbkDialogService {
     constructor(
         private readonly overlay: Overlay

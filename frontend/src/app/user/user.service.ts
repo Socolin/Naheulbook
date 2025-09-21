@@ -4,7 +4,7 @@ import {UserAccessTokenResponse, UserAccessTokenResponseWithKey} from '../api/re
 import {HttpClient} from '@angular/common/http';
 import {CreateAccessTokenRequest} from '../api/requests';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UserService {
     constructor(
         private readonly httpClient: HttpClient

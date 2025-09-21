@@ -22,6 +22,9 @@ import {assertNever} from '../utils/utils';
 import {PanelNames} from './useful-data.model';
 import {MonstersDialogComponent} from '../monster/monsters-dialog.component';
 import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
+import { MatFabButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
 
 class InfoDefinition {
     displayName: string;
@@ -34,7 +37,7 @@ class InfoDefinition {
     selector: 'useful-data',
     styleUrls: ['./useful-data.component.scss'],
     templateUrl: './useful-data.component.html',
-    standalone: false
+    imports: [MatFabButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem]
 })
 export class UsefulDataComponent implements OnInit, OnDestroy {
     @Output() actionTriggered = new EventEmitter<{ action: string, data: any }>();

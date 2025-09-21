@@ -1,9 +1,17 @@
 import {Component, OnInit, Inject} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 
 import {IconService} from './icon.service';
 import {removeDiacritics} from './remove_diacritics';
 import {IconDescription} from './icon.model';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { NgClass } from '@angular/common';
+import { MatDivider } from '@angular/material/list';
+import { IconComponent } from './icon.component';
 
 export interface IconSelectorComponentDialogData {
     icon?: IconDescription;
@@ -13,7 +21,7 @@ export interface IconSelectorComponentDialogData {
     selector: 'icon-selector',
     templateUrl: './icon-selector.component.html',
     styleUrls: ['./icon-selector.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatFormField, MatInput, FormsModule, MatHint, MatIconButton, NgClass, MatDivider, IconComponent, MatButton, MatDialogActions, MatDialogClose]
 })
 export class IconSelectorComponent implements OnInit {
     public filter?: string;

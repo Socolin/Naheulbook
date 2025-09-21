@@ -1,13 +1,13 @@
 import {map, retryWhen, share} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {from, Observable, ReplaySubject} from 'rxjs';
 
 import {genericRetryStrategy} from '../shared/rxjs-retry-strategy';
 import {AuthenticationInitResponse, JwtResponse, UserInfoResponse, UserSearchResponse} from '../api/responses';
 import {UpdateUserRequest} from '../api/requests';
 
-@Injectable()
+@Injectable({ providedIn: 'root'})
 export class LoginService {
     public loggedUser: ReplaySubject<UserInfoResponse | undefined> = new ReplaySubject<UserInfoResponse>(1);
     public currentLoggedUser?: UserInfoResponse;

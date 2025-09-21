@@ -1,5 +1,7 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {IconDescription} from './icon.model';
+import { NgClass } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
 
 const defaultIcon: IconDescription = {
     name: 'uncertainty',
@@ -11,7 +13,7 @@ const defaultIcon: IconDescription = {
     selector: 'icon',
     templateUrl: './icon.component.html',
     styleUrls: ['./icon.component.scss'],
-    standalone: false
+    imports: [NgClass, MatIcon]
 })
 export class IconComponent {
     get displayedIcon() {

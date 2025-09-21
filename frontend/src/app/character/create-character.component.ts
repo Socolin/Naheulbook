@@ -10,16 +10,27 @@ import {Skill} from '../skill';
 import {CharacterService} from './character.service';
 import {SkillSelectorComponent} from './skill-selector.component';
 import { HttpErrorResponse } from '@angular/common/http';
-import {UntypedFormControl, Validators} from '@angular/forms';
+import { UntypedFormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {CreateCharacterRequest} from '../api/requests';
 import {CharacterSex} from '../api/shared/enums';
 import {Guid} from '../api/shared/util';
+import { MatCard, MatCardContent, MatCardActions, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatError } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { OriginSelectorComponent as OriginSelectorComponent_1 } from '../origin/origin-selector.component';
+import { JobSelectorComponent as JobSelectorComponent_1 } from '../job/job-selector.component';
+import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
     selector: 'create-character',
     templateUrl: './create-character.component.html',
     styleUrls: ['./create-character.component.scss'],
-    standalone: false
+    imports: [MatCard, MatToolbar, MatIconButton, MatIcon, MatCardContent, MatFormField, MatInput, FormsModule, ReactiveFormsModule, MatError, MatCardActions, MatButton, OriginSelectorComponent_1, JobSelectorComponent_1, SkillSelectorComponent, MatButtonToggleGroup, MatButtonToggle, MatCardHeader, MatCardTitle, MatRadioGroup, MatRadioButton, MatProgressSpinner]
 })
 export class CreateCharacterComponent implements OnInit {
     public step: number;

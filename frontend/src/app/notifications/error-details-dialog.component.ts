@@ -1,12 +1,15 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatButton } from '@angular/material/button';
+import { JsonPipe } from '@angular/common';
 
 @Component({
     selector: 'app-error-details-dialog',
     templateUrl: './error-details-dialog.component.html',
     styleUrls: ['./error-details-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatDialogActions, MatButton, MatDialogClose, JsonPipe]
 })
 export class ErrorDetailsDialogComponent implements OnInit {
     public readonly errorType: 'ServerError' | 'BadGateway' | 'Forbidden' | 'BadRequest' | undefined;

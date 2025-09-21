@@ -11,7 +11,7 @@ import {ItemSlotResponse, ItemTemplateResponse, ItemTemplateSectionResponse, Ite
 import {ItemTemplateRequest} from '../api/requests';
 import {Guid} from '../api/shared/util';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ItemTemplateService {
     private itemBySection: { [sectionId: number]: ReplaySubject<ItemTemplate[]> } = {};
     private itemsBySubCategoriesName: { [subCategoryName: string]: ReplaySubject<ItemTemplate[]> } = {};

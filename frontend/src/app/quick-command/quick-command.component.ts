@@ -1,15 +1,18 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Portal} from '@angular/cdk/portal';
+import { Portal, CdkPortal } from '@angular/cdk/portal';
 import {Overlay, OverlayConfig, OverlayRef} from '@angular/cdk/overlay';
 import {removeDiacritics} from '../shared';
 import {QuickAction} from './quick-action.model';
 import {QuickCommandService} from './quick-command.service';
+import { MatRipple } from '@angular/material/core';
+import { MatIcon } from '@angular/material/icon';
+import { NgStyle } from '@angular/common';
 
 @Component({
     selector: 'app-quick-command',
     templateUrl: './quick-command.component.html',
     styleUrls: ['./quick-command.component.scss'],
-    standalone: false
+    imports: [CdkPortal, MatRipple, MatIcon, NgStyle]
 })
 export class QuickCommandComponent implements OnInit {
 

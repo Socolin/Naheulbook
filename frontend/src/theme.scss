@@ -1,16 +1,16 @@
 @use '@angular/material' as mat;
 
 // Plus imports for other components in your app.
-@import './app/shared/_value-editor-theme';
-@import './app/shared/_common-nav-theme';
-@import './app/shared/_full-screen-dialog-theme';
-@import './app/_app.theme';
-@import './app/character/character.theme';
-@import './app/group/fighter-panel.theme';
-@import './app/useful-data/useful-data-theme';
-@import './app/item-template/item-template.theme';
-@import './app/group/group-therme';
-@import './app/map/map-theme';
+@use './app/shared/_value-editor-theme' as valueEditorTheme;
+@use './app/shared/_common-nav-theme' as commonNavTheme;
+@use './app/shared/_full-screen-dialog-theme' as fullScreenDialogTheme;
+@use './app/_app.theme' as appTheme;
+@use './app/character/character.theme' as CharacterTheme;
+@use './app/group/fighter-panel.theme' as  fighterPanelTheme;
+@use './app/useful-data/useful-data-theme' as  usefulDataTheme;
+@use './app/item-template/item-template.theme' as itemTemplateTheme;
+@use 'app/group/group-theme' as GroupTheme;
+@use './app/map/map-theme' as MapTheme;
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -39,18 +39,18 @@ $nhbk-theme: mat.m2-define-light-theme((
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($nhbk-theme);
-@include global-theme($nhbk-theme);
+@include appTheme.global-theme($nhbk-theme);
 
 @mixin custom-components-theme($theme) {
-    @include value-selector-theme($theme);
-    @include character-theme($theme);
-    @include useful-data-theme($theme);
-    @include item-theme($theme);
-    @include group-theme($theme);
-    @include fighter-panel-theme($theme);
-    @include map-theme($theme);
-    @include common-nav-theme($theme);
-    @include full-screen-dialog-theme($theme);
+    @include valueEditorTheme.value-selector-theme($theme);
+    @include CharacterTheme.character-theme($theme);
+    @include usefulDataTheme.useful-data-theme($theme);
+    @include itemTemplateTheme.item-theme($theme);
+    @include GroupTheme.group-theme($theme);
+    @include fighterPanelTheme.fighter-panel-theme($theme);
+    @include MapTheme.map-theme($theme);
+    @include commonNavTheme.common-nav-theme($theme);
+    @include fullScreenDialogTheme.full-screen-dialog-theme($theme);
 }
 
 @include custom-components-theme($nhbk-theme);
@@ -73,7 +73,7 @@ $nhbk-theme: mat.m2-define-light-theme((
 
         .#{$name} {
             @include mat.all-component-colors($dark-theme);
-            @include global-theme($dark-theme);
+            @include appTheme.global-theme($dark-theme);
             @include custom-components-theme($dark-theme);
         }
     } @else {
@@ -90,7 +90,7 @@ $nhbk-theme: mat.m2-define-light-theme((
 
         .#{$name} {
             @include mat.all-component-colors($light-theme);
-            @include global-theme($light-theme);
+            @include appTheme.global-theme($light-theme);
             @include custom-components-theme($light-theme);
         }
     }

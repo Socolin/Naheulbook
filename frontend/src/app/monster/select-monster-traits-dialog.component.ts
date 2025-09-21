@@ -1,10 +1,19 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MonsterTrait, TraitInfo} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {MonsterTraitDialogComponent} from './monster-trait-dialog.component';
-import {MatSelectionList} from '@angular/material/list';
+import { MatSelectionList, MatListOption, MatList, MatListItem } from '@angular/material/list';
 import {NhbkMatDialog} from '../material-workaround';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatLine } from '@angular/material/grid-list';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatOption } from '@angular/material/autocomplete';
 
 export interface SelectMonsterTraitsDialogData {
     selectedTraits: TraitInfo[];
@@ -18,7 +27,7 @@ export interface SelectMonsterTraitsDialogResult {
     selector: 'app-select-monster-traits-dialog',
     templateUrl: './select-monster-traits-dialog.component.html',
     styleUrls: ['./select-monster-traits-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatProgressSpinner, MatSelectionList, MatListOption, MatLine, MatIconButton, MatIcon, MatList, MatListItem, MatFormField, MatSelect, FormsModule, MatOption, MatDialogActions, MatButton, MatDialogClose]
 })
 export class SelectMonsterTraitsDialogComponent implements OnInit {
     public traits?: MonsterTrait[];

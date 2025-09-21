@@ -3,6 +3,16 @@ import {ItemTemplate, ItemTemplateSection} from './item-template.model';
 import {GodByTechName} from '../shared';
 import {LoginService} from '../user';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { MatTable, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell } from '@angular/material/table';
+import { IconComponent } from '../shared/icon.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
+import { ItemTemplateDetailsComponent } from './item-template-details.component';
+import { ModifierPipe } from '../shared/modifier.pipe';
+import { ItemTemplateDataProtectionPipe } from './item-template-data-protection.pipe';
+import { ItemPricePipe } from './item-price.pipe';
 
 @Component({
     selector: 'app-item-templates-table-view',
@@ -15,7 +25,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
             transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
         ]),
     ],
-    standalone: false
+    imports: [MatTable, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, IconComponent, MatIcon, MatTooltip, MatIconButton, MatMenuTrigger, ItemTemplateDetailsComponent, MatMenu, MatMenuContent, MatMenuItem, ModifierPipe, ItemTemplateDataProtectionPipe, ItemPricePipe]
 })
 export class ItemTemplatesTableViewComponent implements OnInit, OnChanges {
     @Input()

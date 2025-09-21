@@ -1,12 +1,18 @@
 import {Component, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MapService} from './map.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatFormField, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
     templateUrl: './edit-map.component.html',
     styleUrls: ['./edit-map.component.scss'],
-    standalone: false
+    imports: [MatProgressSpinner, FormsModule, ReactiveFormsModule, MatFormField, MatInput, MatHint, MatCheckbox, MatIconButton, MatIcon, MatButton]
 })
 export class EditMapComponent implements OnInit {
     public saving = false;

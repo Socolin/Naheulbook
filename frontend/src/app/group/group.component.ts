@@ -1,9 +1,9 @@
 import {forkJoin, Subscription} from 'rxjs';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabGroup, MatTab } from '@angular/material/tabs';
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import { Portal, CdkPortal } from '@angular/cdk/portal';
 
 import {LapCountDecrement, NhbkDialogService, PromptDialogComponent} from '../shared';
 import {NotificationsService} from '../notifications';
@@ -35,12 +35,35 @@ import {filter, map} from 'rxjs/operators';
 import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
 import {ItemDialogComponent} from '../item/item-dialog.component';
 import {GroupConfigDialogComponent, GroupConfigDialogData, GroupConfigDialogResult} from './group-config-dialog.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatCard, MatCardTitle, MatCardContent, MatCardActions, MatCardHeader, MatCardSubtitle } from '@angular/material/card';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { ValueEditorComponent } from '../shared/value-editor.component';
+import { DateComponent } from '../date/date.component';
+import { EventsComponent } from '../event/events.component';
+import { ItemListComponent } from '../item/item-list.component';
+import { MatListItemIcon, MatList, MatListItem, MatDivider } from '@angular/material/list';
+import { MatChipSet, MatChip } from '@angular/material/chips';
+import { MatLine } from '@angular/material/grid-list';
+import { MatRipple } from '@angular/material/core';
+import { FighterPanelComponent } from './fighter-panel.component';
+import { GroupLootPanelComponent } from './group-loot-panel.component';
+import { GroupHistoryComponent } from './group-history.component';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { UsefulDataComponent } from '../useful-data/useful-data.component';
+import { MarkdownPipe } from '../markdown/markdown.pipe';
 
 @Component({
     templateUrl: './group.component.html',
     styleUrls: ['./group.component.scss'],
     providers: [GroupActionService],
-    standalone: false
+    imports: [MatProgressSpinner, MatTabGroup, MatTab, MatCard, MatToolbar, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatCardContent, ValueEditorComponent, DateComponent, EventsComponent, MatCardActions, MatButton, MatCardHeader, ItemListComponent, MatListItemIcon, MatChipSet, MatChip, MatList, MatListItem, MatLine, MatRipple, MatDivider, FighterPanelComponent, GroupLootPanelComponent, GroupHistoryComponent, CdkPortal, MatCardSubtitle, MatFormField, MatInput, FormsModule, MatRadioGroup, MatRadioButton, UsefulDataComponent, MarkdownPipe]
 })
 export class GroupComponent implements OnInit, OnDestroy {
     public group: Group;

@@ -5,8 +5,7 @@ import {QuestService} from './quest.service';
 
 @Component({
     selector: 'quest-list',
-    templateUrl: './quest-list.component.html',
-    standalone: false
+    templateUrl: './quest-list.component.html'
 })
 export class QuestListComponent implements OnInit {
     public quests: QuestTemplate[];

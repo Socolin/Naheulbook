@@ -1,12 +1,13 @@
+@use "sass:map";
 @use '@angular/material' as mat;
 
 @mixin character-theme($theme) {
     // Extract whichever individual palettes you need from the theme.
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $warn: map-get($theme, warn);
-    $background: map-get($theme, background);
-    $foreground: map-get($theme, foreground);
+    $primary: map.get($theme, primary);
+    $accent: map.get($theme, accent);
+    $warn: map.get($theme, warn);
+    $background: map.get($theme, background);
+    $foreground: map.get($theme, foreground);
 
     .stat-details {
         .stat-detail-reason {
@@ -57,14 +58,14 @@
 
                 span {
                     &.game-icon-hearts {
-                        @if (map_get($theme, is-dark)) {
+                        @if (map.get($theme, is-dark)) {
                             color: #a01219;
                         } @else {
                             color: #ff0d26;
                         }
                     }
                     &.game-icon-abstract-061 {
-                        @if (map_get($theme, is-dark)) {
+                        @if (map.get($theme, is-dark)) {
                             color: #400a71;
                         } @else {
                             color: blueviolet;

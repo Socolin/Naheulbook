@@ -8,7 +8,7 @@ import {Effect, EffectSubCategory, EffectSubCategoryDictionary, EffectType, Effe
 import {CreateEffectRequest, CreateEffectSubCategoryRequest, EditEffectRequest} from '../api/requests';
 import {EffectResponse, EffectSubCategoryResponse, EffectTypeResponse} from '../api/responses';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class EffectService {
     private effectsBySubCategory: { [subCategoryId: number]: ReplaySubject<Effect[]> } = {};
     private effectTypes?: ReplaySubject<EffectType[]>;

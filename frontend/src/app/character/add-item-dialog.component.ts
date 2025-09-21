@@ -1,11 +1,19 @@
 import {Component, ViewChild} from '@angular/core';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {ItemData} from '../item';
-import {MatDialogRef} from '@angular/material/dialog';
-import {MatStep} from '@angular/material/stepper';
+import { MatDialogRef, MatDialogClose } from '@angular/material/dialog';
+import { MatStep, MatStepper, MatStepLabel } from '@angular/material/stepper';
 import {forkJoin} from 'rxjs';
 import {IconDescription} from '../shared/icon.model';
 import {Guid} from '../api/shared/util';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatActionList, MatListItem } from '@angular/material/list';
+import { IconComponent } from '../shared/icon.component';
+import { FormsModule } from '@angular/forms';
 
 export interface AddItemDialogResult {
     itemTemplateId: Guid;
@@ -16,7 +24,7 @@ export interface AddItemDialogResult {
     selector: 'app-add-item-dialog',
     templateUrl: './add-item-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './add-item-dialog.component.scss'],
-    standalone: false
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatStepper, MatStep, MatStepLabel, MatFormField, MatInput, MatActionList, MatListItem, IconComponent, FormsModule, MatButton]
 })
 export class AddItemDialogComponent {
     @ViewChild('searchStep', {static: true})

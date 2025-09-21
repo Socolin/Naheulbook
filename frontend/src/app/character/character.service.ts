@@ -24,7 +24,7 @@ import {
 } from '../api/responses';
 import {Guid} from '../api/shared/util';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class CharacterService {
     constructor(
         private readonly httpClient: HttpClient,
@@ -94,7 +94,7 @@ export class CharacterService {
 
     addJob(characterId: number, jobId: Guid): Observable<Job> {
         return forkJoin([
-            this.httpClient.post<{jobId: Guid}>(`/api/v2/characters/${characterId}/addJob`, {
+            this.httpClient.post<{ jobId: Guid }>(`/api/v2/characters/${characterId}/addJob`, {
                 jobId: jobId,
             }),
             this.jobService.getJobsById()
@@ -105,7 +105,7 @@ export class CharacterService {
 
     removeJob(characterId: number, jobId: Guid): Observable<Job> {
         return forkJoin([
-            this.httpClient.post<{jobId: Guid}>(`/api/v2/characters/${characterId}/removeJob`, {
+            this.httpClient.post<{ jobId: Guid }>(`/api/v2/characters/${characterId}/removeJob`, {
                 jobId: jobId,
             }),
             this.jobService.getJobsById()

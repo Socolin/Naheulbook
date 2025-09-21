@@ -1,12 +1,24 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {forkJoin, Observer, Subject} from 'rxjs';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {Item} from '../item';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
 import {IconSelectorComponent, IconSelectorComponentDialogData} from '../shared';
 import {NhbkMatDialog} from '../material-workaround';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatCardContent } from '@angular/material/card';
+import { MatFormField, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatActionList, MatListItem } from '@angular/material/list';
+import { IconComponent } from '../shared/icon.component';
+import { MatRipple } from '@angular/material/core';
+import { FormsModule } from '@angular/forms';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { ItemPricePipe } from '../item-template/item-price.pipe';
 
 export interface CreateItemDialogDialog {
     onAdd: Observer<any>;
@@ -18,7 +30,7 @@ export interface CreateItemDialogDialog {
     selector: 'app-create-item-dialog',
     templateUrl: './create-item-dialog.component.html',
     styleUrls: ['./create-item-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatCardContent, MatFormField, MatInput, MatIconButton, MatIcon, MatActionList, MatListItem, IconComponent, MatRipple, FormsModule, MatHint, MatCheckbox, MatDialogActions, MatButton, MatDialogClose, ItemPricePipe]
 })
 export class CreateItemDialogComponent implements OnInit {
     public newItem: Item = new Item();

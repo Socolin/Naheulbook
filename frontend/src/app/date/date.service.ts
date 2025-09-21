@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, ReplaySubject} from 'rxjs';
 import {CalendarDate} from './date.model';
-import {CalendarResponse} from '../api/responses/calendar-response';
+import {CalendarResponse} from '../api/responses';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class DateService {
     private calendarDates: ReplaySubject<CalendarDate[]>;
 

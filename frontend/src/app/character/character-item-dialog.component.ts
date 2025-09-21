@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogContent } from '@angular/material/dialog';
 
 import {Item} from '../item';
 import {Character} from './character.model';
@@ -10,6 +10,24 @@ import {OriginService} from '../origin';
 import {JobService} from '../job';
 import {forkJoin} from 'rxjs';
 import {ItemActionService} from './item-action.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { IconComponent } from '../shared/icon.component';
+import { MatCardContent } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatChipSet, MatChip } from '@angular/material/chips';
+import { ValueEditorComponent } from '../shared/value-editor.component';
+import { NhbkActionComponent } from '../action/nhbk-action.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatDivider } from '@angular/material/list';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { DecimalPipe } from '@angular/common';
+import { ModifierPipe } from '../shared/modifier.pipe';
+import { PlusMinusPipe } from '../shared/plus-minus.pipe';
+import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 
 export interface CharacterItemDialogData {
     item: Item,
@@ -22,7 +40,7 @@ export interface CharacterItemDialogData {
 @Component({
     templateUrl: './character-item-dialog.component.html',
     styleUrls: ['./character-item-dialog.component.scss'],
-    standalone: false
+    imports: [CdkScrollable, MatDialogContent, MatProgressSpinner, IconComponent, MatCardContent, MatIcon, MatChipSet, MatChip, ValueEditorComponent, NhbkActionComponent, MatTooltip, MatButton, MatDivider, MatCheckbox, FormsModule, MatMenu, MatMenuItem, MatIconButton, MatMenuTrigger, DecimalPipe, ModifierPipe, PlusMinusPipe, NhbkDateDurationPipe]
 })
 export class CharacterItemDialogComponent implements OnInit {
     public loading = true;

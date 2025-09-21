@@ -21,18 +21,18 @@ type ActionName = 'change_icon'
     | 'use_charge'
     | 'show_to_gm';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ItemActionService {
     private actionObservers: { [actionName: string]: Observer<{ item: Item, data?: any }> } = {};
 
     public registerAction(actionName: 'change_icon'): Observable<{ item: Item, data: { icon: IconDescription } }>;
     public registerAction(actionName: 'delete'): Observable<{ item: Item }>;
-    public registerAction(actionName: 'edit_item_name'): Observable<{ item: Item, data: {name: string, description?: string} }>;
+    public registerAction(actionName: 'edit_item_name'): Observable<{ item: Item, data: { name: string, description?: string } }>;
     public registerAction(actionName: 'equip'): Observable<{ item: Item, data?: { level?: number } }>;
     public registerAction(actionName: 'give'): Observable<{ item: Item, data: { characterId: number, quantity?: number } }>;
     public registerAction(actionName: 'identify'): Observable<{ item: Item }>;
     public registerAction(actionName: 'ignore_restrictions'): Observable<{ item: Item, data?: boolean }>;
-    public registerAction(actionName: 'move_to_container'): Observable<{ item: Item, data: {containerId?: number} }>;
+    public registerAction(actionName: 'move_to_container'): Observable<{ item: Item, data: { containerId?: number } }>;
     public registerAction(actionName: 'read_skill_book'): Observable<{ item: Item }>;
     public registerAction(actionName: 'unequip'): Observable<{ item: Item }>;
     public registerAction(actionName: 'update_data'): Observable<{ item: Item, data: ItemData }>;
@@ -53,7 +53,7 @@ export class ItemActionService {
     public onAction(actionName: 'give', item: Item, data: { characterId: number, quantity?: number });
     public onAction(actionName: 'identify', item: Item);
     public onAction(actionName: 'ignore_restrictions', item: Item, data?: boolean);
-    public onAction(actionName: 'move_to_container', item: Item, data: {containerId?: number});
+    public onAction(actionName: 'move_to_container', item: Item, data: { containerId?: number });
     public onAction(actionName: 'read_skill_book', item: Item);
     public onAction(actionName: 'unequip', item: Item);
     public onAction(actionName: 'update_data', item: Item, data: ItemData);

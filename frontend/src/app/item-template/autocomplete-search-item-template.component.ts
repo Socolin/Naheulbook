@@ -7,12 +7,13 @@ import {AutocompleteInputComponent, AutocompleteValue} from '../shared';
 
 import {ItemTemplate, ItemTemplateSubCategory} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
+import { AutocompleteInputComponent as AutocompleteInputComponent_1 } from '../shared/autocomplete-input.component';
 
 @Component({
     selector: 'autocomplete-search-item-template',
     templateUrl: './autocomplete-search-item-template.component.html',
     styleUrls: ['./autocomplete-search-item-template.component.scss'],
-    standalone: false
+    imports: [AutocompleteInputComponent_1]
 })
 export class AutocompleteSearchItemTemplateComponent {
     @Input() clearOnSelect: boolean;

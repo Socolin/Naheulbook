@@ -1,5 +1,5 @@
 import {ErrorHandler, Injectable, Injector, NgZone} from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import {HttpErrorResponse} from '@angular/common/http';
 import {ErrorReportService} from './error-report.service';
 
 import * as Sentry from '@sentry/browser';
@@ -27,7 +27,7 @@ if (environment.production) {
     });
 }
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class NhbkErrorHandler extends ErrorHandler {
     private count = 0;
 

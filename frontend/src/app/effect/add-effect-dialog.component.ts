@@ -1,11 +1,19 @@
 import {Component, Inject, ViewChild} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {MatStep, MatStepper} from '@angular/material/stepper';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
+import { MatStep, MatStepper, MatStepLabel } from '@angular/material/stepper';
 
 import {ActiveStatsModifier} from '../shared';
 
 import {Effect} from './effect.model';
 import {EffectService} from './effect.service';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatActionList } from '@angular/material/list';
+import { MatRipple } from '@angular/material/core';
+import { StatModifierEditorComponent } from './stats-modifier-editor.component';
 
 export interface AddEffectDialogData {
     effect?: Effect,
@@ -17,7 +25,7 @@ export interface AddEffectDialogData {
 @Component({
     templateUrl: './add-effect-dialog.component.html',
     styleUrls: ['./add-effect-dialog.component.scss', '../shared/full-screen-dialog.scss'],
-    standalone: false
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, MatStepper, MatStep, MatStepLabel, MatFormField, MatInput, MatActionList, MatRipple, StatModifierEditorComponent]
 })
 export class AddEffectDialogComponent {
     @ViewChild('stepper', {static: true})

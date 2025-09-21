@@ -1,11 +1,19 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {OriginService} from './origin.service';
-import {MatDialogRef} from '@angular/material/dialog';
+import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {Origin} from './origin.model';
-import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {BehaviorSubject, combineLatest, of, Subscription} from 'rxjs';
 import {catchError, distinctUntilChanged, filter, map, switchMap} from 'rxjs/operators';
 import {CharacterSex} from '../api/shared/enums';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 export interface NameGeneratorDialogResult {
     name: string;
@@ -16,7 +24,7 @@ export interface NameGeneratorDialogResult {
 @Component({
     templateUrl: './name-generator-dialog.component.html',
     styleUrls: ['./name-generator-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatSelect, MatOption, MatRadioGroup, MatRadioButton, MatIcon, MatInput, MatButton, MatDialogActions, MatDialogClose]
 })
 export class NameGeneratorDialogComponent implements OnInit, OnDestroy {
     private onClick = new BehaviorSubject<boolean>(true);

@@ -5,12 +5,17 @@ import {Item} from '../item';
 import {ActiveStatsModifier} from '../shared';
 import {ItemSlot, ItemTemplate, ItemTemplateService} from '../item-template';
 import {toDictionaryByKey} from '../utils/utils';
+import { MatCard, MatCardContent, MatCardSubtitle, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { ValueEditorComponent } from '../shared/value-editor.component';
+import { MatIcon } from '@angular/material/icon';
+import { ItemLineComponent } from './item-line.component';
+import { MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
 
 @Component({
     selector: 'app-combat-tab',
     templateUrl: './combat-tab.component.html',
     styleUrls: ['./combat-tab.component.scss'],
-    standalone: false
+    imports: [MatCard, MatCardContent, ValueEditorComponent, MatCardSubtitle, MatIcon, MatCardHeader, MatCardTitle, ItemLineComponent, MatMenu, MatMenuContent, MatMenuItem]
 })
 export class CombatTabComponent implements OnInit {
     @Input() character: Character;

@@ -1,7 +1,7 @@
 import {forkJoin} from 'rxjs';
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
-import {Portal} from '@angular/cdk/portal';
+import { Portal, CdkPortal } from '@angular/cdk/portal';
 
 import {NhbkDialogService} from '../shared';
 import {ItemService} from '../item';
@@ -19,12 +19,21 @@ import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-
 import {Router} from '@angular/router';
 import {DeadMonsterResponse} from '../api/responses/dead-monster-response';
 import {CreateFightDialogComponent, CreateFightDialogResult} from './create-fight-dialog.component';
+import { MatCard, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { FighterComponent } from './fighter.component';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatDivider } from '@angular/material/list';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { FighterIconComponent } from './fighter-icon.component';
 
 @Component({
     selector: 'fighter-panel',
     templateUrl: './fighter-panel.component.html',
     styleUrls: ['./fighter.component.scss', './fighter-panel.component.scss'],
-    standalone: false
+    imports: [MatCard, MatToolbar, MatButton, MatIcon, FighterComponent, MatIconButton, MatMenuTrigger, MatMenu, MatMenuItem, MatDivider, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, FighterIconComponent, MatExpansionPanelDescription, CdkPortal, MatCardTitle, MatCardContent, MatCardActions]
 })
 export class FighterPanelComponent implements OnInit, OnDestroy {
     @Input() group: Group;

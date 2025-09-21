@@ -9,12 +9,19 @@ import {
 import {LoginService} from '../user';
 import {forkJoin} from 'rxjs';
 import {NhbkMatDialog} from '../material-workaround';
+import { MatFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatOption } from '@angular/material/autocomplete';
+import { MonsterTemplateComponent } from './monster-template.component';
 
 @Component({
     selector: 'monster-list',
     templateUrl: './monster-list.component.html',
     styleUrls: ['./monster-list.component.scss'],
-    standalone: false
+    imports: [MatFabButton, MatIcon, MatFormField, MatSelect, FormsModule, MatOption, MonsterTemplateComponent]
 })
 export class MonsterListComponent implements OnInit {
     public monsterTypes: MonsterTemplateType[];

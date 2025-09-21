@@ -1,6 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {ItemTemplateModuleDefinition, itemTemplateModulesDefinitions} from './item-template-modules-definitions';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatRipple } from '@angular/material/core';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
 
 export interface AddItemTemplateEditorModuleDialogData {
     selectedModules: string[]
@@ -9,7 +13,7 @@ export interface AddItemTemplateEditorModuleDialogData {
 @Component({
     templateUrl: './add-item-template-editor-module-dialog.component.html',
     styleUrls: ['./add-item-template-editor-module-dialog.component.scss'],
-    standalone: false
+    imports: [CdkScrollable, MatDialogContent, MatRipple, MatIcon, MatDialogActions, MatButton, MatDialogClose]
 })
 export class AddItemTemplateEditorModuleDialogComponent implements OnInit {
     public availableModules: ItemTemplateModuleDefinition[] = [];

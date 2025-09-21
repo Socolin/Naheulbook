@@ -1,7 +1,7 @@
 import {Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import { MatSidenav } from '@angular/material/sidenav';
+import {ActivatedRoute, ParamMap, Router, RouterLink} from '@angular/router';
+import {FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
+import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
 import {BehaviorSubject, combineLatest, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
@@ -36,19 +36,29 @@ import {
     SelectMarkerTypeDialogData,
     SelectMarkerTypeDialogResult
 } from './select-marker-type-dialog.component';
-import {
-    AddMapMarkerLinkDialogResult,
-    MapMarkerLinkDialogComponent,
-    MapMarkerLinkDialogData
-} from './map-marker-link-dialog.component';
+import {AddMapMarkerLinkDialogResult, MapMarkerLinkDialogComponent, MapMarkerLinkDialogData} from './map-marker-link-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
 import {UserInfoResponse} from '../api/responses';
+import {MatListItem, MatNavList} from '@angular/material/list';
+import {MatIcon, MatIconModule} from '@angular/material/icon';
+import {MatButton, MatIconButton, MatMiniFabButton} from '@angular/material/button';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatFormField} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatTooltip} from '@angular/material/tooltip';
+import {CommonNavComponent} from '../shared/common-nav.component';
+import {CdkTextareaAutosize} from '@angular/cdk/text-field';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {MatRipple} from '@angular/material/core';
+import {AsyncPipe} from '@angular/common';
+import {MarkdownPipe} from '../markdown/markdown.pipe';
 
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.scss'],
-    standalone: false
+    imports: [MatSidenavContainer, MatSidenavContent, MatSidenav, MatNavList, MatListItem, RouterLink, MatIcon, MatIconButton, MatMenuTrigger, MatMenu, MatMenuItem, MatMiniFabButton, MatCheckbox, FormsModule, MatFormField, MatInput, MatTooltip, MatButton, CommonNavComponent, ReactiveFormsModule, CdkTextareaAutosize, MatRadioGroup, MatRadioButton, MatRipple, AsyncPipe, MarkdownPipe, MatIconModule]
 })
 export class MapComponent implements OnInit, OnDestroy {
     @ViewChild('mapElement', {static: true})
@@ -618,7 +628,7 @@ export class MapComponent implements OnInit, OnDestroy {
                 mapMarker.mapLayer.markers[i] = newMapMarker;
                 this.infoSidenav.close();
                 mapMarker.remove();
-                this.map$.next(this.map);
+                this.map$.next(this.map!);
             });
         } else {
             mapMarker.leafletMarker!.clearAllEventListeners();
@@ -627,7 +637,7 @@ export class MapComponent implements OnInit, OnDestroy {
                 this.markerForm.enable();
                 mapMarker.mapLayer.markers.push(newMapMarker);
                 this.infoSidenav.close();
-                this.map$.next(this.map);
+                this.map$.next(this.map!);
             });
         }
     }
@@ -804,7 +814,7 @@ export class MapComponent implements OnInit, OnDestroy {
             const index = this.map!.layers.findIndex(l => l.id === mapLayer.id);
             if (index !== -1) {
                 this.map!.layers.splice(index, 1);
-                this.map$.next(this.map);
+                this.map$.next(this.map!);
             }
         });
     }
@@ -831,7 +841,7 @@ export class MapComponent implements OnInit, OnDestroy {
                 const index = mapInfo.layers.indexOf(mapLayer);
                 if (index !== -1) {
                     mapInfo.layers[index] = editedMapLayer;
-                    this.map$.next(this.map);
+                    this.map$.next(this.map!);
                 }
             });
         })

@@ -1,7 +1,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 
 import {NhbkDateOffset} from './date.model';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { NgStyle, NgClass } from '@angular/common';
+import { NhbkDateDurationPipe } from './nhbk-duration.pipe';
 
 export interface DurationSelectorDialogData {
     duration?: NhbkDateOffset
@@ -35,7 +40,7 @@ const allUnits: { unit: UnitTypes, title: string }[] = [
 @Component({
     styleUrls: ['./duration-selector-dialog.component.scss'],
     templateUrl: './duration-selector-dialog.component.html',
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatIconButton, MatIcon, NgStyle, NgClass, MatDialogActions, MatButton, MatDialogClose, NhbkDateDurationPipe]
 })
 export class DurationSelectorDialogComponent implements OnInit {
     static numberHeight = 19;

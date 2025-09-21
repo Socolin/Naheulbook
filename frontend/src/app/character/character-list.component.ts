@@ -3,12 +3,17 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import {CharacterService} from './character.service';
 import {CharacterSummaryResponse} from '../api/responses';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatRipple } from '@angular/material/core';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
     templateUrl: './character-list.component.html',
     styleUrls: ['./character-list.component.scss'],
     providers: [CharacterService],
-    standalone: false
+    imports: [MatCard, MatProgressSpinner, MatCardHeader, MatRipple, MatCardTitle, MatCardSubtitle, MatProgressBar, MatCardContent, MatIcon]
 })
 export class CharacterListComponent implements OnInit {
     public characters: CharacterSummaryResponse[];

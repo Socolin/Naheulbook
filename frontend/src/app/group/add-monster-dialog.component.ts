@@ -1,12 +1,24 @@
 import {Component, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, FormsModule } from '@angular/forms';
 import {getRandomInt} from '../shared';
 import {Item, ItemData} from '../item';
 import {MonsterTemplate, MonsterTemplateService, MonsterTemplateSubCategory, MonsterTemplateType} from '../monster';
 import {ItemTemplate} from '../item-template';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
-import {MatDialogRef} from '@angular/material/dialog';
+import { MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {NhbkMatDialog} from '../material-workaround';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatStepper, MatStep, MatStepLabel } from '@angular/material/stepper';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatActionList } from '@angular/material/list';
+import { MatRipple } from '@angular/material/core';
+import { MonsterEditorComponent } from './monster-editor.component';
+import { ItemListComponent } from '../item/item-list.component';
 
 
 export interface AddMonsterDialogResult {
@@ -34,7 +46,7 @@ export interface AddMonsterDialogResult {
     selector: 'app-add-monster-dialog',
     templateUrl: './add-monster-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './add-monster-dialog.component.scss'],
-    standalone: false
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, MatStepper, MatStep, MatStepLabel, MatFormField, MatLabel, MatInput, FormsModule, MatSelect, MatOption, MatActionList, MatRipple, MonsterEditorComponent, ItemListComponent]
 })
 export class AddMonsterDialogComponent implements OnInit {
     public monsterTypes: MonsterTemplateType[] = [];

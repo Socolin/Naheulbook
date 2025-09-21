@@ -1,13 +1,17 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ConnectionPositionPair} from '@angular/cdk/overlay';
+import { ConnectionPositionPair, CdkOverlayOrigin, CdkConnectedOverlay } from '@angular/cdk/overlay';
 
 import {Fighter} from './group.model';
+import { MatIcon } from '@angular/material/icon';
+import { MatRipple } from '@angular/material/core';
+import { MatCard } from '@angular/material/card';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
 
 @Component({
     selector: 'target-selector',
     templateUrl: './target-selector.component.html',
     styleUrls: ['./target-selector.component.scss'],
-    standalone: false
+    imports: [CdkOverlayOrigin, MatIcon, MatRipple, CdkConnectedOverlay, MatCard, MatTabGroup, MatTab]
 })
 export class TargetSelectorComponent implements OnInit {
     @Input() fighter: Fighter;

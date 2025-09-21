@@ -1,11 +1,8 @@
-import {Pipe, Injectable, PipeTransform} from '@angular/core';
+import {Injectable, Pipe, PipeTransform} from '@angular/core';
 import {NhbkDateOffset} from './date.model';
 import {duration2shortText, duration2text} from './util';
 
-@Pipe({
-    name: 'nhbkDuration',
-    standalone: false
-})
+@Pipe({name: 'nhbkDuration'})
 @Injectable()
 export class NhbkDateDurationPipe implements PipeTransform {
 
@@ -14,10 +11,7 @@ export class NhbkDateDurationPipe implements PipeTransform {
     }
 }
 
-@Pipe({
-    name: 'nhbkShortDuration',
-    standalone: false
-})
+@Pipe({name: 'nhbkShortDuration'})
 @Injectable()
 export class NhbkDateShortDurationPipe implements PipeTransform {
 

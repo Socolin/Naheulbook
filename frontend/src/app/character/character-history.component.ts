@@ -3,11 +3,15 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
 import {HistoryEntry} from '../shared';
+import { DateComponent } from '../date/date.component';
+import { MatButton } from '@angular/material/button';
+import { DatePipe } from '@angular/common';
+import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 
 @Component({
     selector: 'character-history',
     templateUrl: './character-history.component.html',
-    standalone: false
+    imports: [DateComponent, MatButton, DatePipe, NhbkDateDurationPipe]
 })
 export class CharacterHistoryComponent implements OnInit {
     @Input() character: Character;

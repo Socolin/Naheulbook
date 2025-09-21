@@ -2,12 +2,13 @@ import {Component, OnInit} from '@angular/core';
 
 import {Job} from './job.model';
 import {JobService} from './job.service';
+import { JobComponent } from './job.component';
 
 @Component({
     selector: 'job-list',
     templateUrl: './job-list.component.html',
     styleUrls: ['./job-list.component.scss'],
-    standalone: false
+    imports: [JobComponent]
 })
 export class JobListComponent implements OnInit {
     public jobs: Job[];

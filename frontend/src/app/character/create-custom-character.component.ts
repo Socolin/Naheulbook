@@ -1,7 +1,7 @@
 import {forkJoin} from 'rxjs';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {Job, JobService, Speciality} from '../job';
 import {Origin, OriginService} from '../origin';
@@ -9,11 +9,20 @@ import {Skill, SkillService} from '../skill';
 import {CharacterService} from './character.service';
 import {CreateCustomCharacterRequest} from '../api/requests';
 import {Guid} from '../api/shared/util';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
     templateUrl: './create-custom-character.component.html',
     styleUrls: ['./create-custom-character.component.scss'],
-    standalone: false
+    imports: [MatCard, MatCardHeader, MatCardTitle, FormsModule, ReactiveFormsModule, MatCardContent, MatFormField, MatInput, MatSelect, MatOption, MatIconButton, MatIcon, MatCheckbox, MatRadioGroup, MatRadioButton, MatButton]
 })
 export class CreateCustomCharacterComponent implements OnInit {
     public form = new UntypedFormGroup({

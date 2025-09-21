@@ -1,11 +1,13 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 import {Speciality} from '../job';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelActionRow } from '@angular/material/expansion';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'speciality-selector',
     templateUrl: './speciality-selector.component.html',
-    standalone: false
+    imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelActionRow, MatButton]
 })
 export class SpecialitySelectorComponent {
     @Input() specialities: Speciality[];

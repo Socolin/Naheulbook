@@ -17,13 +17,23 @@ import {ModifierDetailsDialogComponent} from '../effect/modifier-details-dialog.
 import {MonsterInventoryDialogComponent} from './monster-inventory-dialog.component';
 import {NhbkMatDialog} from '../material-workaround';
 import {CreateMonsterRequest} from '../api/requests';
+import { MonsterColorSelectorComponent } from '../monster/monster-color-selector.component';
+import { CharacterColorSelectorComponent } from '../character/character-color-selector.component';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ValueEditorComponent } from '../shared/value-editor.component';
+import { MatRipple } from '@angular/material/core';
+import { NhbkDateShortDurationPipe } from '../date/nhbk-duration.pipe';
+import { MarkdownPipe } from '../markdown/markdown.pipe';
 
 @Component({
     selector: 'fighter',
     templateUrl: './fighter.component.html',
     styleUrls: ['./fighter.component.scss'],
     providers: [ItemActionService],
-    standalone: false
+    imports: [MonsterColorSelectorComponent, CharacterColorSelectorComponent, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatTooltip, ValueEditorComponent, MatRipple, NhbkDateShortDurationPipe, MarkdownPipe]
 })
 export class FighterComponent implements OnInit {
     @Input() group: Group;

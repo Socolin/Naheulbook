@@ -9,12 +9,16 @@ import {Job, JobService} from '../job';
 import {statModifierSpecialsValues} from './stat-modifier-specials.constants';
 import {StatModifierAdvancedDialogComponent, StatModifierAdvancedDialogData} from './stat-modifier-advanced-dialog.component';
 import {AddStatModifierDialogComponent} from './add-stat-modifier-dialog.component';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatDivider } from '@angular/material/list';
+import { ModifierPipe } from '../shared/modifier.pipe';
 
 @Component({
     selector: 'modifiers-editor',
     styleUrls: ['./modifiers-editor.component.scss'],
     templateUrl: './modifiers-editor.component.html',
-    standalone: false
+    imports: [MatIconButton, MatIcon, MatDivider, ModifierPipe]
 })
 export class ModifiersEditorComponent implements OnInit {
     @Input() modifiers: ItemStatModifier[] = [];

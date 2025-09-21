@@ -27,7 +27,7 @@ import {PatchGroupConfigRequest} from '../api/requests/patch-group-config-reques
 import {DeadMonsterResponse} from '../api/responses/dead-monster-response';
 import {Fight} from './fight';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class GroupService {
     constructor(
         private readonly httpClient: HttpClient,

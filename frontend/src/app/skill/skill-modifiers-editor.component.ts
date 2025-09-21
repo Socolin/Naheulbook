@@ -3,12 +3,19 @@ import {Component, OnInit, Input} from '@angular/core';
 import {Skill} from './skill.model';
 import {SkillService} from './skill.service';
 import {Guid} from '../api/shared/util';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
 
 @Component({
     selector: 'skill-modifiers-editor',
     styleUrls: ['./skill-modifiers-editor.component.scss'],
     templateUrl: './skill-modifiers-editor.component.html',
-    standalone: false
+    imports: [MatIconButton, MatIcon, MatFormField, MatSelect, FormsModule, MatOption, MatInput, MatButton]
 })
 export class SkillModifiersEditorComponent implements OnInit {
     @Input() modifiers: any[];

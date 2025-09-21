@@ -5,12 +5,15 @@ import {LoginService} from './login.service';
 import {NhbkMatDialog} from '../material-workaround';
 import {combineLatest, forkJoin, Subscription} from 'rxjs';
 import {share, skip} from 'rxjs/operators';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
-    standalone: false
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatProgressSpinner, MatCardSubtitle, MatCardContent, MatButton, MatCardActions]
 })
 export class LoginComponent implements OnInit, OnDestroy {
     public redirectPage: string;

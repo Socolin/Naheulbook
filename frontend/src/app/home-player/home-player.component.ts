@@ -1,14 +1,19 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {NavigationStart, Router} from '@angular/router';
+import { NavigationStart, Router, RouterLink, RouterOutlet } from '@angular/router';
 
-import { MatSidenav } from '@angular/material/sidenav';
+import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import {CharacterService} from '../character';
 import {CharacterSummaryResponse} from '../api/responses';
+import { MatNavList, MatListItem, MatListItemIcon } from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
+import { CommonNavComponent } from '../shared/common-nav.component';
+import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
     templateUrl: './home-player.component.html',
     styleUrls: ['./home-player.component.scss'],
-    standalone: false
+    imports: [MatSidenavContainer, MatSidenav, MatNavList, MatListItem, RouterLink, MatIcon, MatListItemIcon, CommonNavComponent, MatSidenavContent, MatToolbar, MatToolbarRow, MatIconButton, RouterOutlet]
 })
 export class HomePlayerComponent implements OnInit {
     public characters: CharacterSummaryResponse[];

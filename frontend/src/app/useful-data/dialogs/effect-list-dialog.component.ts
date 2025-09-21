@@ -1,7 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 
 import {UsefulDataDialogResult} from './useful-data-dialog-result';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { EffectListComponent } from '../../effect/effect-list.component';
 
 export interface EffectListDialogData {
     inputSubCategoryId: number
@@ -10,7 +14,7 @@ export interface EffectListDialogData {
 @Component({
     templateUrl: './effect-list-dialog.component.html',
     styleUrls: ['../../shared/full-screen-dialog.scss', './effect-list-dialog.component.scss'],
-    standalone: false
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, EffectListComponent]
 })
 export class EffectListDialogComponent implements OnInit {
 

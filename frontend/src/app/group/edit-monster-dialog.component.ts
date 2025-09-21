@@ -1,7 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {Monster} from '../monster';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MonsterEditorComponent } from './monster-editor.component';
 
 export interface EditMonsterDialogData {
     monster: Monster
@@ -31,7 +35,7 @@ export interface EditMonsterDialogResult {
     selector: 'app-edit-monster-dialog',
     templateUrl: './edit-monster-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './edit-monster-dialog.component.scss'],
-    standalone: false
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, MonsterEditorComponent]
 })
 export class EditMonsterDialogComponent implements OnInit {
     public readonly form: UntypedFormGroup;

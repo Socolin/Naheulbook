@@ -11,7 +11,7 @@ import {NamesByNumericId} from '../shared/shared,model';
 import {Guid} from '../api/shared/util';
 import {CharacterSex} from '../api/shared/enums';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class OriginService {
     private origins: ReplaySubject<Origin[]>;
 

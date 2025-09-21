@@ -1,12 +1,13 @@
+@use "sass:map";
 @use '@angular/material' as mat;
 
 @mixin item-theme($theme) {
     // Extract whichever individual palettes you need from the theme.
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $warn: map-get($theme, warn);
-    $background: map-get($theme, background);
-    $foreground: map-get($theme, foreground);
+    $primary: map.get($theme, primary);
+    $accent: map.get($theme, accent);
+    $warn: map.get($theme, warn);
+    $background: map.get($theme, background);
+    $foreground: map.get($theme, foreground);
 
     .sticky-category-list {
         background-color: mat.m2-get-color-from-palette($background, background);

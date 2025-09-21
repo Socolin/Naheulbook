@@ -1,6 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {IDurable} from '../api/shared';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { DurationSelectorComponent } from '../date/duration-selector.component';
+import { MatButton } from '@angular/material/button';
 
 
 export interface ItemLifetimeEditorDialogData {
@@ -10,7 +13,7 @@ export interface ItemLifetimeEditorDialogData {
 @Component({
     templateUrl: './item-lifetime-editor-dialog.component.html',
     styleUrls: ['./item-lifetime-editor-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DurationSelectorComponent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ItemLifetimeEditorDialogComponent {
     public lifetime: IDurable;

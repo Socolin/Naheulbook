@@ -6,6 +6,12 @@ import {
     ValueEditorSettingsDialogData,
     ValueEditorSettingsDialogResult
 } from './value-editor-settings-dialog.component';
+import { MatRipple } from '@angular/material/core';
+import { CdkOverlayOrigin, CdkConnectedOverlay } from '@angular/cdk/overlay';
+import { MatMiniFabButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { DecimalPipe } from '@angular/common';
 
 interface IRect {
     bottom: number;
@@ -20,7 +26,7 @@ interface IRect {
     selector: 'value-editor',
     styleUrls: ['./value-editor.component.scss'],
     templateUrl: './value-editor.component.html',
-    standalone: false
+    imports: [MatRipple, CdkOverlayOrigin, CdkConnectedOverlay, MatMiniFabButton, MatIcon, MatTooltip, MatButton, DecimalPipe]
 })
 export class ValueEditorComponent implements OnChanges {
     @Input() value: number;

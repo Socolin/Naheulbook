@@ -11,7 +11,7 @@ import {SkillService} from '../skill';
 import {MonsterSubCategoryResponse, MonsterTemplateResponse, MonsterTraitResponse, MonsterTypeResponse} from '../api/responses';
 import {toDictionary} from '../utils/utils';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class MonsterTemplateService {
     private monsterTypes?: ReplaySubject<MonsterTemplateType[]>;
     private monsterTraits?: ReplaySubject<MonsterTrait[]>;

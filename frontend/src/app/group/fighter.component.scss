@@ -4,11 +4,6 @@
     .fighter {
         padding-bottom: 4px;
 
-        @include responsive.for-tablet-portrait-up {
-            padding-right: 8px;
-            padding-left: 8px;
-        }
-
         display: grid;
         align-items: center;
         grid-column-gap: 8px;
@@ -26,6 +21,11 @@
             ". effects effects effects effects effects effects effects effects effects effects"
             ". note note note note note note note note note note"
             ". expd expd expd expd expd expd expd expd expd expd";
+
+        @include responsive.for-tablet-portrait-up {
+            padding-right: 8px;
+            padding-left: 8px;
+        }
 
         @include responsive.for-phone-only {
             grid-template-columns: 48px minmax(20px, 1fr) minmax(64px, 85px) minmax(76px, 92px) 8px;

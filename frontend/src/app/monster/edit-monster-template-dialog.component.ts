@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
     MonsterInventoryElement,
     MonsterTemplate,
@@ -8,7 +8,7 @@ import {
     MonsterTrait,
     TraitInfo
 } from './monster.model';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {PromptDialogComponent, PromptDialogData, PromptDialogResult} from '../shared';
 import {MonsterTemplateService} from './monster-template.service';
 import {forkJoin} from 'rxjs';
@@ -20,6 +20,20 @@ import {
 } from './select-monster-traits-dialog.component';
 import {MonsterTemplateRequest} from '../api/requests';
 import {NhbkMatDialog} from '../material-workaround';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { IconComponent } from '../shared/icon.component';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { DecimalPipe } from '@angular/common';
 
 export interface EditMonsterTemplateDialogData {
     monsterTemplate?: MonsterTemplate;
@@ -30,7 +44,7 @@ export interface EditMonsterTemplateDialogData {
 @Component({
     templateUrl: './edit-monster-template-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './edit-monster-template-dialog.component.scss'],
-    standalone: false
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, MatCard, MatCardContent, MatFormField, MatSelect, FormsModule, MatOption, ReactiveFormsModule, MatLabel, MatInput, MatCheckbox, CdkTextareaAutosize, IconComponent, MatMenuTrigger, MatMenu, MatMenuItem, DecimalPipe]
 })
 export class EditMonsterTemplateDialogComponent implements OnInit {
     public saving = false;

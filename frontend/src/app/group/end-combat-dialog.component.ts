@@ -1,5 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
+import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
 
 export class EndCombatDialogResult {
     decreaseCombatTimer: boolean;
@@ -9,7 +13,7 @@ export class EndCombatDialogResult {
     selector: 'app-end-combat-dialog',
     templateUrl: './end-combat-dialog.component.html',
     styleUrls: ['./end-combat-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatCheckbox, FormsModule, MatDialogActions, MatButton, MatDialogClose]
 })
 export class EndCombatDialogComponent implements OnInit {
     public decreaseCombatTimer = true;
