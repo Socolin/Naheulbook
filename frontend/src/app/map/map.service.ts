@@ -1,13 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {
-    MapLayerResponse,
-    MapMarkerLinkResponse,
-    MapMarkerResponse,
-    MapResponse,
-    MapSummaryResponse
-} from '../api/responses';
+import {MapLayerResponse, MapMarkerLinkResponse, MapMarkerResponse, MapResponse, MapSummaryResponse} from '../api/responses';
 import {MapLayerRequest, MapMarkerLinkRequest, MapMarkerRequest, MapRequest} from '../api/requests';
 import {map} from 'rxjs/operators';
 import {Map, MapLayer, MapMarker, MapMarkerBase, MapMarkerLink} from './map.model';

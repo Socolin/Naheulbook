@@ -1,6 +1,6 @@
 import {map, retryWhen, share} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {from, Observable, ReplaySubject} from 'rxjs';
 
 import {genericRetryStrategy} from '../shared/rxjs-retry-strategy';

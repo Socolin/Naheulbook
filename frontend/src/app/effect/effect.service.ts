@@ -5,8 +5,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 import {Effect, EffectSubCategory, EffectSubCategoryDictionary, EffectType, EffectTypeDictionary} from './effect.model';
-import {CreateEffectSubCategoryRequest, CreateEffectRequest, EditEffectRequest} from '../api/requests';
-import {EffectSubCategoryResponse, EffectResponse, EffectTypeResponse} from '../api/responses';
+import {CreateEffectRequest, CreateEffectSubCategoryRequest, EditEffectRequest} from '../api/requests';
+import {EffectResponse, EffectSubCategoryResponse, EffectTypeResponse} from '../api/responses';
 
 @Injectable()
 export class EffectService {

@@ -1,7 +1,6 @@
-import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ReplaySubject, Observable} from 'rxjs';
+import {Observable, ReplaySubject} from 'rxjs';
 import {CalendarDate} from './date.model';
 import {CalendarResponse} from '../api/responses/calendar-response';
 

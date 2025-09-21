@@ -1,4 +1,4 @@
-import {HttpEvent, HttpEventType} from '@angular/common/http';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 
 import {tap} from 'rxjs/operators';
 

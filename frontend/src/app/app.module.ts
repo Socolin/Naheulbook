@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NhbkMaterialModule } from './nhbk-material.module';
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { HomeModule } from './home/home.module';
 import { UserModule } from './user/user.module';
@@ -20,25 +20,19 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { LoginService } from './user';
 import { QuickCommandModule } from './quick-command/quick-command.module';
 
-@NgModule({
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        RouterModule.forRoot(routes, {}),
-        NhbkMaterialModule,
-        HttpClientModule,
-        HomeModule,
-        UserModule,
-        NotificationsModule,
-        QuickCommandModule
-    ],
-    declarations: [
+@NgModule({ declarations: [
         AppComponent
     ],
     bootstrap: [
         AppComponent
-    ],
-    providers: [
+    ], imports: [BrowserModule,
+        BrowserAnimationsModule,
+        RouterModule.forRoot(routes, {}),
+        NhbkMaterialModule,
+        HomeModule,
+        UserModule,
+        NotificationsModule,
+        QuickCommandModule], providers: [
         ThemeService,
         ErrorReportService,
         {
@@ -60,8 +54,8 @@ import { QuickCommandModule } from './quick-command/quick-command.module';
             multi: true,
             deps: [LoginService]
         },
-    ]
-})
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {
 }
 

@@ -4,22 +4,11 @@ import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {
-    MonsterTemplate,
-    MonsterTemplateSubCategory,
-    MonsterTemplateType,
-    MonsterTrait,
-    MonsterTraitDictionary
-} from './monster.model';
+import {MonsterTemplate, MonsterTemplateSubCategory, MonsterTemplateType, MonsterTrait, MonsterTraitDictionary} from './monster.model';
 
 import {MonsterTemplateRequest} from '../api/requests';
 import {SkillService} from '../skill';
-import {
-    MonsterSubCategoryResponse,
-    MonsterTemplateResponse,
-    MonsterTraitResponse,
-    MonsterTypeResponse
-} from '../api/responses';
+import {MonsterSubCategoryResponse, MonsterTemplateResponse, MonsterTraitResponse, MonsterTypeResponse} from '../api/responses';
 import {toDictionary} from '../utils/utils';
 
 @Injectable()

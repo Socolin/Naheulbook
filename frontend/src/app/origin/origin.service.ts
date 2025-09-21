@@ -1,6 +1,6 @@
-import {forkJoin, Observable, of, ReplaySubject} from 'rxjs';
+import {forkJoin, Observable, ReplaySubject} from 'rxjs';
 
-import {catchError, map} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 

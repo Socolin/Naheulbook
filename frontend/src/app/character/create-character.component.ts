@@ -9,7 +9,7 @@ import {Skill} from '../skill';
 
 import {CharacterService} from './character.service';
 import {SkillSelectorComponent} from './skill-selector.component';
-import {HttpErrorResponse} from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {CreateCharacterRequest} from '../api/requests';
 import {CharacterSex} from '../api/shared/enums';
