@@ -1,4 +1,4 @@
-@import "app/style/responsive-utils";
+@use "../../app/style/responsive-utils" as responsive;
 
 :host {
     .action-button {
@@ -15,7 +15,7 @@
             grid-template-columns: 1fr 1fr;
             align-items: center;
 
-            @include for-phone-only {
+            @include responsive.for-phone-only {
                 grid-template-columns: 1fr;
             }
         }

@@ -1,4 +1,4 @@
-@import "app/style/responsive-utils";
+@use "../../app/style/responsive-utils" as responsive;
 
 :host {
     > p {
@@ -14,7 +14,7 @@
         flex-wrap: wrap;
         gap: 8px;
 
-        @include for-phone-only {
+        @include responsive.for-phone-only {
             flex-direction: column;
         }
 

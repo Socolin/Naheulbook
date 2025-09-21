@@ -1,17 +1,17 @@
-@import "app/style/responsive-utils";
+@use "../../../app/style/responsive-utils" as responsive;
 
 :host {
     .content {
         display: block;
 
         ::ng-deep mat-tab-header {
-            @include for-phone-only {
+            @include responsive.for-phone-only {
                 display: none;
             }
         }
 
         mat-form-field {
-            @include for-tablet-portrait-up {
+            @include responsive.for-tablet-portrait-up {
                 display: none;
             }
         }
@@ -22,7 +22,7 @@
         overflow: hidden;
 
         .label {
-            @include for-phone-only {
+            @include responsive.for-phone-only {
                 display: block;
             }
         }
@@ -31,7 +31,7 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            @include for-phone-only {
+            @include responsive.for-phone-only {
                 padding-left: 16px;
             }
         }

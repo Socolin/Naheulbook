@@ -1,4 +1,4 @@
-@import "app/style/responsive-utils";
+@use "../../app/style/responsive-utils" as responsive;
 
 :host {
     display: flex;
@@ -16,7 +16,7 @@
         gap: 8px;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        @include for-phone-only {
+        @include responsive.for-phone-only {
             grid-template-columns: 1fr;
         }
 

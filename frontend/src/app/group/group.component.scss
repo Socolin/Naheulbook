@@ -1,4 +1,4 @@
-@import "app/style/responsive-utils";
+@use "../../app/style/responsive-utils" as responsive;
 
 :host {
     display: block;
@@ -9,7 +9,7 @@
     /* For safari.. useful-data button is hidden if component is too small. */
     /* So compute viewport height - toolbar - padding */
     min-height: calc(100vh - 64px - 32px - #{$padding-useful-data-button});
-    @include for-phone-only {
+    @include responsive.for-phone-only {
         min-height: calc(100vh - 16px - 56px - #{$padding-useful-data-button});
     }
 }
@@ -96,7 +96,7 @@
         -webkit-user-drag: none;
         -webkit-tap-highlight-color: transparent;
 
-        @include for-phone-only {
+        @include responsive.for-phone-only {
             grid-template-areas: "name" "location" "origin" "note";
             grid-template-columns: 1fr;
         }

@@ -1,9 +1,10 @@
-@import "app/style/responsive-utils";
+@use "../../app/style/responsive-utils" as responsive;
+
 :host {
     .fighter {
         padding-bottom: 4px;
 
-        @include for-tablet-portrait-up {
+        @include responsive.for-tablet-portrait-up {
             padding-right: 8px;
             padding-left: 8px;
         }
@@ -26,7 +27,7 @@
             ". note note note note note note note note note note"
             ". expd expd expd expd expd expd expd expd expd expd";
 
-        @include for-phone-only {
+        @include responsive.for-phone-only {
             grid-template-columns: 48px minmax(20px, 1fr) minmax(64px, 85px) minmax(76px, 92px) 8px;
             grid-template-areas: "icon name name name name"
             "icon . at ev ."
@@ -38,7 +39,7 @@
             "note note note note note";
         }
 
-        @include for-tablet-landscape-up {
+        @include responsive.for-tablet-landscape-up {
             grid-template-areas:
                 "icon name name name name name    name     name   name    name    name"
                 "icon .    at   ev   prd  esq     pr       cou    resm    ea      ."
@@ -54,7 +55,7 @@
             flex-direction: column;
             flex-wrap: nowrap;
 
-            @include for-phone-only {
+            @include responsive.for-phone-only {
                 flex-direction: row;
             }
 
@@ -64,7 +65,7 @@
             }
 
             .label::after {
-                @include for-phone-only {
+                @include responsive.for-phone-only {
                     content: ':';
                 }
             }

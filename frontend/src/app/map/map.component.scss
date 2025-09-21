@@ -1,4 +1,4 @@
-@import "app/style/responsive-utils";
+@use "../../app/style/responsive-utils" as responsive;
 
 :host {
     display: block;
@@ -139,7 +139,7 @@
     .info-panel {
         padding-top: 16px;
         width: 240px;
-        @include for-tablet-portrait-up {
+        @include responsive.for-tablet-portrait-up {
             width: 320px;
         }
 

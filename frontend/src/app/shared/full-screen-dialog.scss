@@ -1,10 +1,10 @@
-@import "app/style/responsive-utils";
+@use "../../app/style/responsive-utils" as responsive;
 
 :host {
     display: block;
     padding-top: 72px;
 
-    @include for-phone-only {
+    @include responsive.for-phone-only {
         padding-top: 64px;
     }
 

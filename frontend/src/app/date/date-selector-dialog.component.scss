@@ -1,4 +1,4 @@
-@import "app/style/responsive-utils";
+@use "../../app/style/responsive-utils" as responsive;
 
 :host {
     .date-selector {
@@ -7,7 +7,7 @@
         grid-template-columns: 80px 80px minmax(40px, 1fr) 100px;
         grid-template-areas: "hour minute . ." "day decade decade year";
 
-        @include for-phone-only {
+        @include responsive.for-phone-only {
             grid-template-columns: minmax(64px, 1fr) minmax(64px, 1fr);
             grid-template-areas: "hour minute" "day year" "decade decade";
         }

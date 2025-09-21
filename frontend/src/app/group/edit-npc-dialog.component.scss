@@ -1,4 +1,4 @@
-@import "app/style/responsive-utils";
+@use "../../app/style/responsive-utils" as responsive;
 
 mat-card-content {
     .name {
@@ -19,13 +19,13 @@ mat-card-content {
         display: flex;
         flex-direction: row;
 
-        @include for-phone-only {
+        @include responsive.for-phone-only {
             flex-direction: column;
         }
 
         mat-radio-button {
             padding: 8px;
-            @include for-phone-only {
+            @include responsive.for-phone-only {
                 padding: 8px 0;
             }
         }

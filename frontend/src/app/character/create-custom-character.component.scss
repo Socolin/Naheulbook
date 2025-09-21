@@ -1,4 +1,4 @@
-@import "app/style/responsive-utils";
+@use "../../app/style/responsive-utils" as responsive;
 
 :host {
     display: grid;
@@ -15,7 +15,7 @@
             grid-template-columns: minmax(80px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr);
             grid-column-gap: 8px;
 
-            @include for-phone-only {
+            @include responsive.for-phone-only {
                 grid-template-columns: minmax(30px, 1fr) minmax(30px, 1fr) minmax(30px, 1fr) minmax(30px, 1fr) minmax(30px, 1fr)  minmax(30px, 1fr);
                 grid-template-areas: "cou cou int int cha cha" "ad ad ad fo fo fo";
                 .cou {
@@ -42,7 +42,7 @@
             grid-column-gap: 8px;
             align-items: center;
 
-            @include for-phone-only {
+            @include responsive.for-phone-only {
                 grid-template-columns: 1fr;
             }
 

@@ -1,7 +1,7 @@
-@import "app/style/responsive-utils";
+@use "../../app/style/responsive-utils" as responsive;
 
 .content {
-    @include for-phone-only {
+    @include responsive.for-phone-only {
         padding: 0!important;
     }
 

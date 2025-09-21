@@ -1,4 +1,4 @@
-@import "app/style/responsive-utils";
+@use "../../app/style/responsive-utils" as responsive;
 
 :host {
     > mat-sidenav-container {
@@ -22,7 +22,7 @@
 
     .app-content {
         padding: 8px 8px 8px;
-        @include for-tablet-portrait-up {
+        @include responsive.for-tablet-portrait-up {
             padding: 8px 32px 32px;
             max-width: 960px;
             margin-left: auto;
