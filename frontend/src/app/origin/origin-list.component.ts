@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 
-import {NotificationsService} from '../notifications';
-
 import {Origin} from './origin.model';
 import {OriginService} from './origin.service';
-import { OriginComponent } from './origin.component';
+import {OriginComponent} from './origin.component';
 
 @Component({
     selector: 'origin-list',
@@ -16,8 +14,7 @@ export class OriginListComponent implements OnInit {
     public origins: Origin[];
 
     constructor(
-        private readonly originService: OriginService,
-        private readonly notification: NotificationsService
+        private readonly originService: OriginService
     ) {
     }
 

@@ -355,7 +355,8 @@ export class MapComponent implements OnInit, OnDestroy {
         if (this.isGridDraggable) {
             for (let x of xCoords.filter(e => e.index % 5 === 0).map(e => e.x)) {
                 for (let y of yCoords.filter(e => e.index % 5 === 0).map(e => e.y)) {
-                    L.circle([y, x], 3, {
+                    L.circle([y, x], {
+                        radius: 3,
                         color: '#000',
                         fillColor: '#000',
                         pane: 'grid',

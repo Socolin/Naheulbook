@@ -2,8 +2,8 @@ import {MapData, MapImageData} from '../api/shared';
 import {MapLayerResponse, MapMarkerLinkResponse, MapMarkerResponse, MapResponse} from '../api/responses';
 
 import * as L from 'leaflet';
-import {assertNever} from '../utils/utils';
 import {LatLng} from 'leaflet';
+import {assertNever} from '../utils/utils';
 import {defaultMarkerIcon, markerIcons} from './icons';
 
 export class Map {
@@ -324,7 +324,7 @@ export class MapMarkerCircle extends MapMarkerBase {
     }
 
     protected createLeafletLayer(): L.Layer {
-        return L.circle(this.center, this.radius, {color: this.color})
+        return L.circle(this.center, {color: this.color, radius: this.radius})
             .bindTooltip(this.name, {direction: 'bottom', className: 'map-marker-tooltip', opacity: 1});
     }
 
