@@ -24,6 +24,7 @@ public class DatabaseInitializer(IObjectContainer objectContainer)
             using var dbContext = new DbContext(dbContextOptions);
             dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
+            dbContext.Database.ExecuteSqlRaw($"ALTER DATABASE `{DefaultTestConfigurations.NaheulbookDbName}` CHARACTER SET UTF8 COLLATE utf8_general_ci");
         }
 
         using (InitializersProfiler.Profile(nameof(InitializeDatabase) + "_Migrate"))

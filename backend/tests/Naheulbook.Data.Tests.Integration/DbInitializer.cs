@@ -17,6 +17,7 @@ public class DbInitializer
             using var dbContext = new DbContext(DbUtils.GetDbContextOptions<DbContext>());
             dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
+            dbContext.Database.ExecuteSqlRaw("ALTER DATABASE `naheulbook_integration` CHARACTER SET UTF8 COLLATE utf8_general_ci");
 
             var services = new ServiceCollection();
             services.AddDatabaseMigrator(DbUtils.GetConnectionString());
