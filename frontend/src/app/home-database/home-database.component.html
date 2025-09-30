@@ -38,6 +38,12 @@
         <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-compass" class="ra-mat-button-icon-24"></mat-icon>
         Cartographie
       </a>
+      @if (gmModeService.gmMode | async) {
+        <a mat-list-item [routerLink]="['/database/aptitudes']">
+          <mat-icon matListItemIcon fontSet="game-icon" fontIcon="game-icon-sensuousness" class="ra-mat-button-icon-24"></mat-icon>
+          Aptitudes Parfois Étranges
+        </a>
+      }
     </mat-nav-list>
     <common-nav></common-nav>
   </mat-sidenav>

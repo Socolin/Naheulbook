@@ -11,6 +11,9 @@ public partial class TestDataUtil
 
     public TestDataUtil AddOrigin(out OriginEntity origin, Action<OriginEntity> customizer = null)
     {
+        var aptitudeGroup = GetLastIfExists<AptitudeGroupEntity>();
+        if (aptitudeGroup is null)
+            AddAptitudeGroup(out aptitudeGroup);
         origin = new OriginEntity
         {
             Name = RngUtil.GetRandomString("some-origin-name"),
@@ -26,6 +29,7 @@ public partial class TestDataUtil
             Requirements = [],
             Restrictions = [],
             Skills = [],
+            AptitudeGroupId = aptitudeGroup.Id,
         };
         return SaveEntity(origin, customizer);
     }

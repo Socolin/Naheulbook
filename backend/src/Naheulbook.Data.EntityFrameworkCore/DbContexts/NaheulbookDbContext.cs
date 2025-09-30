@@ -7,6 +7,8 @@ namespace Naheulbook.Data.EntityFrameworkCore.DbContexts;
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 public class NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options) : DbContext(options)
 {
+    public DbSet<AptitudeEntity> Aptitudes { get; set; } = null!;
+    public DbSet<AptitudeGroupEntity> AptitudeGroups { get; set; } = null!;
     public DbSet<CharacterEntity> Characters { get; set; } = null!;
     public DbSet<CharacterModifierEntity> CharacterModifiers { get; set; } = null!;
     public DbSet<CharacterHistoryEntryEntity> CharacterHistory { get; set; } = null!;

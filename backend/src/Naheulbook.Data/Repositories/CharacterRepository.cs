@@ -37,6 +37,7 @@ public class CharacterRepository(NaheulbookDbContext context) : Repository<Chara
             .Include(c => c.Jobs)
             .Include(c => c.Invites)
             .ThenInclude(i => i.Group)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(x => x.Id == id);
         if (character == null)
             return null;

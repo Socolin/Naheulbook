@@ -1,0 +1,14 @@
+.aptitudes {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    .aptitude {
+    }
+
+    .roll {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+}

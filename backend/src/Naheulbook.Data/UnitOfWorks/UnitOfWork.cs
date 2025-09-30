@@ -5,6 +5,8 @@ namespace Naheulbook.Data.UnitOfWorks;
 
 public interface IUnitOfWork : IDisposable
 {
+    IAptitudeRepository AptitudeRepository { get; }
+    IAptitudeGroupRepository AptitudeGroupRepository { get; }
     ICalendarRepository Calendar { get; }
     ICharacterRepository Characters { get; }
     ICharacterSkillRepository CharacterSkills { get; }
@@ -53,6 +55,8 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
 {
     private readonly NaheulbookDbContext _naheulbookDbContext = naheulbookDbContext ?? throw new ArgumentNullException(nameof(naheulbookDbContext));
 
+    public IAptitudeRepository AptitudeRepository => new AptitudeRepository(_naheulbookDbContext);
+    public IAptitudeGroupRepository AptitudeGroupRepository => new AptitudeGroupRepository(_naheulbookDbContext);
     public ICalendarRepository Calendar => new CalendarRepository(_naheulbookDbContext);
     public ICharacterRepository Characters => new CharacterRepository(_naheulbookDbContext);
     public ICharacterSkillRepository CharacterSkills => new CharacterSkillRepository(_naheulbookDbContext);

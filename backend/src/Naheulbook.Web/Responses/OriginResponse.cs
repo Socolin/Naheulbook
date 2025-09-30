@@ -17,6 +17,7 @@ public class OriginResponse
     public List<FlagResponse>? Flags { get; set; }
     public List<Guid> SkillIds { get; set; } = null!;
     public List<Guid> AvailableSkillIds { get; set; } = null!;
+    public Guid AptitudeGroupId { get; set; }
     public IEnumerable<OriginInformationResponse> Information { get; set; } = null!;
     public ICollection<DescribedFlagResponse> Bonuses { get; set; } = null!;
     public ICollection<OriginRequirementResponse> Requirements { get; set; } = null!;

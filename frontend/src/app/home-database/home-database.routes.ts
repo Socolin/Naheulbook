@@ -9,6 +9,8 @@ import {EffectListComponent} from '../effect';
 import {QuestListComponent} from '../quest';
 import {HomeDatabaseComponent} from './home-database.component';
 import {DatabaseSectionsComponent} from './database-sections.component';
+import {AptitudeListComponent} from '../aptitude/aptitude-list.component';
+import {AptitudeGroupComponent} from '../aptitude/aptitude-group.component';
 
 export const routes: Routes = [
     {
@@ -58,6 +60,14 @@ export const routes: Routes = [
             {
                 path: 'edit-item/:id',
                 component: EditItemTemplateDialogComponent,
+            },
+            {
+                path: 'aptitudes/:aptitudeGroupId',
+                component: AptitudeGroupComponent
+            },
+            {
+                path: 'aptitudes',
+                component: AptitudeListComponent
             }
         ]
     }

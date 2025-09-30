@@ -59,6 +59,16 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
         EquivalencyOptions<T> equivalencyOptions;
         switch (options)
         {
+            case EquivalencyOptions<AptitudeEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.AptitudeGroup)
+                    .As<EquivalencyOptions<T>>();
+                break;
+            case EquivalencyOptions<AptitudeGroupEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.Aptitudes)
+                    .As<EquivalencyOptions<T>>();
+                break;
             case EquivalencyOptions<CharacterJobEntity> entityOptions:
                 equivalencyOptions = entityOptions
                     .Excluding(x => x.Character)
@@ -270,6 +280,7 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
             case EquivalencyOptions<OriginEntity> entityOptions:
                 equivalencyOptions = entityOptions
                     .Excluding(x => x.Bonuses)
+                    .Excluding(x => x.AptitudeGroup)
                     .Excluding(x => x.Information)
                     .Excluding(x => x.Requirements)
                     .Excluding(x => x.Restrictions)

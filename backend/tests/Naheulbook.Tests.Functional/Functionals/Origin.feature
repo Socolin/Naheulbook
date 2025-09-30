@@ -16,6 +16,7 @@ Feature: Origin
         "data": "!{Origin.Data}",
         "advantage": "${Origin.Advantage}",
         "size": "${Origin.Size}",
+        "aptitudeGroupId": "${Origin.AptitudeGroupId}",
         "flags": [
             {
                 "type": "value"

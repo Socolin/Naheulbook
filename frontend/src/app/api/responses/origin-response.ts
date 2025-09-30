@@ -13,6 +13,7 @@ export interface OriginResponse {
     advantage?: string;
     size?: string;
     flags: FlagResponse[];
+    aptitudeGroupId: string;
     skillIds: number[];
     availableSkillIds: number[];
     information: {

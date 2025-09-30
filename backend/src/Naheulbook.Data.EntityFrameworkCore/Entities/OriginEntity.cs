@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Naheulbook.Data.EntityFrameworkCore.Extensions;
 
 namespace Naheulbook.Data.EntityFrameworkCore.Entities;
@@ -14,6 +15,10 @@ public class OriginEntity
     public string? Advantage { get; set; }
     public string? Size { get; set; }
     public string? Flags { get; set; }
+
+    public Guid AptitudeGroupId { get; set; }
+    private AptitudeGroupEntity? _aptitudeGroup;
+    public AptitudeGroupEntity AptitudeGroup { get => _aptitudeGroup.ThrowIfNotLoaded(); set => _aptitudeGroup = value; }
 
     private ICollection<OriginBonusEntity>? _bonuses;
     public ICollection<OriginBonusEntity> Bonuses { get => _bonuses.ThrowIfNotLoaded(); set => _bonuses = value; }

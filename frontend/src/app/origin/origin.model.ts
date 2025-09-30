@@ -20,6 +20,7 @@ export class Origin {
     readonly playerSummary?: string;
     readonly advantage?: string;
     readonly size?: string;
+    readonly aptitudeGroupId: string;
     readonly requirements: StatRequirement[];
     readonly information: OriginInfo[];
     readonly skills: Skill[];
@@ -44,6 +45,7 @@ export class Origin {
         this.data = {...response.data};
         this.size = response.size;
         this.requirements = response.requirements;
+        this.aptitudeGroupId = response.aptitudeGroupId;
         this.information = response.information;
         this.skills = response.skillIds.map(skillId => skillsById[skillId]);
         this.availableSkills = response.availableSkillIds.map(skillId => skillsById[skillId]);

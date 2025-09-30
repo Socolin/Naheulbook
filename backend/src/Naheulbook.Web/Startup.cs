@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Naheulbook.Core.Features.Aptitude;
 using Naheulbook.Core.Features.Calendar;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Effect;
@@ -98,6 +99,7 @@ public class Startup(IConfiguration configuration)
 
         services.AddSingleton<IUnitOfWorkFactory>(sp => new UnitOfWorkFactory(sp.GetRequiredService<DbContextOptions<NaheulbookDbContext>>()));
 
+        services.AddAptitudeService();
         services.AddCalendarService();
         services.AddCharacterService();
         services.AddEffectService();

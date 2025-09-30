@@ -1,0 +1,8 @@
+<mat-card>
+  <mat-nav-list>@for (aptitudeGroup of aptitudeGroups; track aptitudeGroup.id) {
+    <a mat-list-item [routerLink]="['/database/aptitudes', aptitudeGroup.id]">
+      {{ aptitudeGroup.name }}
+    </a>
+  }
+  </mat-nav-list>
+</mat-card>

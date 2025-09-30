@@ -28,6 +28,7 @@ public class OriginRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
             origins,
             config => config
                 .Excluding(o => o.Id)
+                .Excluding(o => o.AptitudeGroup)
                 .Excluding(info => info.Path.EndsWith(".Stat"))
                 .Excluding(info => info.Path.EndsWith(".Skill"))
                 .IgnoringCyclicReferences()
