@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Shared.Clients.Google;
 using Naheulbook.Shared.Utils;
@@ -13,7 +14,7 @@ namespace Naheulbook.Web.Controllers;
 [ApiController]
 [Route("api/v2/authentications/google")]
 public class GoogleAuthenticationController(
-    GoogleOptions options,
+    IOptions<GoogleOptions> options,
     IGoogleClient googleClient,
     IJwtService jwtService,
     IMapper mapper,
@@ -33,7 +34,7 @@ public class GoogleAuthenticationController(
         return new AuthenticationInitResponse
         {
             LoginToken = loginToken,
-            AppKey = options.AppId,
+            AppKey = options.Value.AppId,
         };
     }
 
