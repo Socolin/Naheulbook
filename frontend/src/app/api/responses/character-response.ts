@@ -1,10 +1,11 @@
-import {IActiveStatsModifier, IGroupConfig} from '../shared';
+import {IActiveStatsModifier} from '../shared';
 import {ItemResponse} from './item-response';
 import {SpecialityResponse} from './speciality-response';
 import {CharacterGroupInviteResponse} from './character-group-invite-response';
 import {CharacterSex} from '../shared/enums';
 import {Guid} from '../shared/util';
 import {CharacterGroupResponse} from './character-group-response';
+import {CharacterAptitudeResponse} from './character-aptitude-response';
 
 export interface CharacterResponse {
     id: number;
@@ -30,6 +31,7 @@ export interface CharacterResponse {
     skillIds: Guid[];
     group?: CharacterGroupResponse;
     modifiers: IActiveStatsModifier[];
+    aptitudes: CharacterAptitudeResponse[];
     specialities: SpecialityResponse[];
     items: ItemResponse[];
     invites: CharacterGroupInviteResponse[];

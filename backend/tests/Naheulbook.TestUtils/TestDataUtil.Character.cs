@@ -112,6 +112,7 @@ public partial class TestDataUtil
                 .AddSpeciality().AddCharacterSpeciality()
                 .AddSkill().AddCharacterSkill()
                 .AddSkill().AddCharacterSkill()
+                .AddAptitudeGroup().AddAptitude().AddCharacterAptitude()
             ;
     }
 
@@ -186,6 +187,25 @@ public partial class TestDataUtil
             SkillId = speciality.Id,
         };
         return SaveEntity(characterSkill, customizer);
+    }
+
+    public TestDataUtil AddCharacterAptitude(Action<CharacterAptitudeEntity> customizer = null)
+    {
+        return AddCharacterAptitude(out _, customizer);
+    }
+
+    public TestDataUtil AddCharacterAptitude(out CharacterAptitudeEntity characterAptitude, Action<CharacterAptitudeEntity> customizer = null)
+    {
+        var character = GetLast<CharacterEntity>();
+        var aptitude = GetLast<AptitudeEntity>();
+        characterAptitude = new CharacterAptitudeEntity
+        {
+            CharacterId = character.Id,
+            AptitudeId = aptitude.Id,
+            Count = 1,
+            Active = false,
+        };
+        return SaveEntity(characterAptitude, customizer);
     }
 
     public TestDataUtil AddCharacterModifierValue(

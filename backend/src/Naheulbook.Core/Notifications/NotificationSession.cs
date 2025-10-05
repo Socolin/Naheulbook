@@ -28,6 +28,9 @@ public interface INotificationSession
     void NotifyCharacterLevelUp(int characterId, LevelUpResult levelUpResult);
     void NotifyCharacterAddJob(int characterId, Guid jobId);
     void NotifyCharacterRemoveJob(int characterId, Guid jobId);
+    void NotifyCharacterAddAptitude(int characterId, CharacterAptitudeEntity characterAptitude);
+    void NotifyCharacterRemoveAptitude(int characterId, CharacterAptitudeEntity characterAptitude);
+    void NotifyCharacterUpdateAptitude(int characterId, CharacterAptitudeEntity characterAptitude);
 
     void NotifyCharacterGmChangeColor(CharacterEntity character);
     void NotifyCharacterGmChangeTarget(CharacterEntity character, TargetRequest requestTarget);
@@ -143,6 +146,21 @@ public class NotificationSession(
     public void NotifyCharacterRemoveJob(int characterId, Guid jobId)
     {
         _packets.Add(packetBuilder.BuildCharacterRemoveJob(characterId, jobId));
+    }
+
+    public void NotifyCharacterAddAptitude(int characterId, CharacterAptitudeEntity characterAptitude)
+    {
+        _packets.Add(packetBuilder.BuildCharacterAddAptitude(characterId, characterAptitude));
+    }
+
+    public void NotifyCharacterRemoveAptitude(int characterId, CharacterAptitudeEntity characterAptitude)
+    {
+        _packets.Add(packetBuilder.BuildCharacterRemoveAptitude(characterId, characterAptitude));
+    }
+
+    public void NotifyCharacterUpdateAptitude(int characterId, CharacterAptitudeEntity characterAptitude)
+    {
+        _packets.Add(packetBuilder.BuildCharacterUpdateAptitude(characterId, characterAptitude));
     }
 
     public void NotifyCharacterGmChangeColor(CharacterEntity character)

@@ -26,6 +26,8 @@ public interface ICharacterHistoryUtil
     CharacterHistoryEntryEntity CreateLogReadBook(int characterId, ItemEntity item);
     CharacterHistoryEntryEntity CreateLogIdentifyItem(int characterId, ItemEntity item);
     CharacterHistoryEntryEntity CreateLogLevelUp(int characterId, int characterLevel);
+    CharacterHistoryEntryEntity CreateAddAptitude(int characterId, Guid aptitudeId);
+    CharacterHistoryEntryEntity CreateRemoveAptitude(int characterId, Guid aptitudeId);
 }
 
 public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
@@ -51,6 +53,8 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
     private const string ReadBookActionName = "READ_BOOK";
     private const string IdentifyActionName = "IDENTIFY";
     private const string LevelUpActionName = "LEVEL_UP";
+    private const string AddAptitudeActionName = "ADD_APTITUDE";
+    private const string RemoveAptitudeActionName = "REMOVE_APTITUDE";
 
     public CharacterHistoryEntryEntity CreateLogChangeEv(CharacterEntity character, int? oldValue, int? newValue)
     {
@@ -282,6 +286,28 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
             Action = LevelUpActionName,
             Date = DateTime.Now,
             Info = level.ToString(),
+        };
+    }
+
+    public CharacterHistoryEntryEntity CreateAddAptitude(int characterId, Guid aptitudeId)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = AddAptitudeActionName,
+            Date = DateTime.Now,
+            AptitudeId = aptitudeId,
+        };
+    }
+
+    public CharacterHistoryEntryEntity CreateRemoveAptitude(int characterId, Guid aptitudeId)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = RemoveAptitudeActionName,
+            Date = DateTime.Now,
+            AptitudeId = aptitudeId,
         };
     }
 }

@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable, ReplaySubject} from 'rxjs';
-import {AptitudeGroupResponse, AptitudeGroupsResponse} from '../api/responses/aptitude-response';
+import {AptitudeGroupResponse, AptitudeGroupsResponse, CharacterAddAptitudeResponse} from '../api/responses';
 import {HttpClient} from '@angular/common/http';
+import {AddCharacterAptitudeRequest, UpdateCharacterAptitudeRequest} from '../api/requests';
 
 @Injectable({providedIn: 'root'})
 export class AptitudeService {
@@ -29,21 +30,46 @@ export class AptitudeService {
     }
 
     getAptitudeGroup(aptitudeGroupId: string): Observable<AptitudeGroupResponse> {
-        if (!this.aptitudeGroupCache.has(aptitudeGroupId)) {
-            let aptitudeGroupSubject = new ReplaySubject<AptitudeGroupResponse>(1);
-            this.aptitudeGroupCache.set(aptitudeGroupId, aptitudeGroupSubject);
-
-            this.httpClient.get<AptitudeGroupResponse>(`/api/v2/aptitudeGroups/${aptitudeGroupId}`).subscribe(
-                response => {
-                    aptitudeGroupSubject.next(response);
-                    aptitudeGroupSubject.complete();
-                },
-                error => {
-                    aptitudeGroupSubject.error(error);
-                }
-            );
+        let aptitudeGroupSubject = this.aptitudeGroupCache.get(aptitudeGroupId)
+        if (aptitudeGroupSubject) {
+            return aptitudeGroupSubject;
         }
-        return this.aptitudeGroupCache.get(aptitudeGroupId);
+
+        aptitudeGroupSubject = new ReplaySubject<AptitudeGroupResponse>(1);
+        this.aptitudeGroupCache.set(aptitudeGroupId, aptitudeGroupSubject);
+
+        this.httpClient.get<AptitudeGroupResponse>(`/api/v2/aptitudeGroups/${aptitudeGroupId}`).subscribe(
+            response => {
+                aptitudeGroupSubject.next(response);
+                aptitudeGroupSubject.complete();
+            },
+            error => {
+                aptitudeGroupSubject.error(error);
+            }
+        );
+
+        return aptitudeGroupSubject;
     }
 
+    addCharacterAptitude(
+        characterId: number,
+        request: AddCharacterAptitudeRequest
+    ): Observable<CharacterAddAptitudeResponse> {
+        return this.httpClient.post<CharacterAddAptitudeResponse>(`/api/v2/characters/${characterId}/aptitudes`, request)
+    }
+
+    removeCharacterAptitude(
+        characterId: number,
+        aptitudeId: string,
+    ) {
+        return this.httpClient.delete(`/api/v2/characters/${characterId}/aptitudes/${aptitudeId}`)
+    }
+
+    updateCharacterAptitude(
+        characterId: number,
+        aptitudeId: string,
+        request: UpdateCharacterAptitudeRequest
+    ) {
+        return this.httpClient.put<CharacterAddAptitudeResponse>(`/api/v2/characters/${characterId}/aptitudes/${aptitudeId}`, request)
+    }
 }

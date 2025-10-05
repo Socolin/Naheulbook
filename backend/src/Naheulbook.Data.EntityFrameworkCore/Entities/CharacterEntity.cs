@@ -52,6 +52,9 @@ public class CharacterEntity
     private MonsterEntity? _targetedMonster;
     public MonsterEntity? TargetedMonster { get => _targetedMonster.ThrowIfNotLoadedAndNotNull(TargetedMonsterId); set => _targetedMonster = value; }
 
+    private ICollection<CharacterAptitudeEntity>? _aptitudes;
+    public ICollection<CharacterAptitudeEntity> Aptitudes { get => _aptitudes.ThrowIfNotLoaded(); set => _aptitudes = value; }
+
     private ICollection<CharacterJobEntity>? _jobs;
     public ICollection<CharacterJobEntity> Jobs { get => _jobs.ThrowIfNotLoaded(); set => _jobs = value; }
 

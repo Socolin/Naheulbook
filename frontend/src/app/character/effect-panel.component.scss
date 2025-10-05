@@ -1,13 +1,4 @@
 :host {
-    >mat-card {
-        margin: 5px;
-    }
-    mat-card-title {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
     .effect-list {
         .effect-element {
             display: grid;

@@ -32,6 +32,8 @@ public class CharacterHistoryEntryEntityConfiguration : IEntityTypeConfiguration
             .HasColumnName("item");
         builder.Property(e => e.CharacterModifierId)
             .HasColumnName("modifier");
+        builder.Property(e => e.AptitudeId)
+            .HasColumnName("aptitudeId");
 
         builder.HasOne(e => e.Character)
             .WithMany(g => g.HistoryEntries)
@@ -52,5 +54,10 @@ public class CharacterHistoryEntryEntityConfiguration : IEntityTypeConfiguration
             .WithMany()
             .HasForeignKey(e => e.ItemId)
             .HasConstraintName("FK_character_history_item_item");
+
+        builder.HasOne(e => e.Aptitude)
+            .WithMany()
+            .HasForeignKey(e => e.AptitudeId)
+            .HasConstraintName("FK_character_aptitude");
     }
 }

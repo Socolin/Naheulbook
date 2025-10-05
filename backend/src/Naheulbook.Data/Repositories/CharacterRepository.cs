@@ -10,6 +10,7 @@ public interface ICharacterRepository : IRepository<CharacterEntity>
 {
     Task<CharacterEntity?> GetWithAllDataAsync(int id);
     Task<CharacterEntity?> GetWithGroupAsync(int id);
+    Task<CharacterEntity?> GetWithGroupWithOriginAsync(int id);
     Task<List<CharacterEntity>> GetForSummaryByOwnerIdAsync(int ownerId);
     Task<List<IHistoryEntry>> GetHistoryByCharacterIdAsync(int characterId, int? groupId, int page, bool isGm);
     Task<List<CharacterEntity>> SearchCharacterWithNoGroupByNameWithOriginWithOwner(string filter, int maxCount);
@@ -34,6 +35,8 @@ public class CharacterRepository(NaheulbookDbContext context) : Repository<Chara
             .Include(c => c.Specialities)
             .ThenInclude(s => s.Speciality)
             .ThenInclude(s => s.Modifiers)
+            .Include(c => c.Aptitudes)
+            .ThenInclude(i => i.Aptitude)
             .Include(c => c.Jobs)
             .Include(c => c.Invites)
             .ThenInclude(i => i.Group)
@@ -55,6 +58,14 @@ public class CharacterRepository(NaheulbookDbContext context) : Repository<Chara
     {
         return Context.Characters
             .Include(c => c.Group)
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public Task<CharacterEntity?> GetWithGroupWithOriginAsync(int id)
+    {
+        return Context.Characters
+            .Include(c => c.Group)
+            .Include(c => c.Origin)
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 

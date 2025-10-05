@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Naheulbook.Core.Features.Aptitude;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Character.Backup;
 using Naheulbook.Core.Features.Group;
@@ -19,7 +20,8 @@ namespace Naheulbook.Web.Controllers;
 public class CharactersController(
     ICharacterService characterService,
     IMapper mapper,
-    ICharacterBackupService characterBackupService
+    ICharacterBackupService characterBackupService,
+    ICharacterAptitudeService characterAptitudeService
 ) : ControllerBase
 {
     [HttpGet]
@@ -410,6 +412,7 @@ public class CharactersController(
     }
 
 
+#warning Add cancellation tokens
     [HttpPost("{CharacterId:int:min(1)}/quitGroup")]
     public async Task<ActionResult<CharacterLevelUpResponse>> PostCharacterQuitGroupAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
@@ -422,6 +425,100 @@ public class CharactersController(
             return NoContent();
         }
         catch (CharacterNotInAGroupException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (CharacterNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpPost("{CharacterId:int:min(1)}/aptitudes")]
+    public async Task<ActionResult<CharacterAddAptitudeResponse>> PostCharacterAddAptitudeAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int characterId,
+        [FromBody] CharacterAddAptitudeRequest request,
+        CancellationToken cancellationToken = default
+    )
+    {
+        try
+        {
+            var characterAptitude = await characterAptitudeService.AddAptitudeAsync(executionContext, characterId, request, cancellationToken);
+            return mapper.Map<CharacterAddAptitudeResponse>(characterAptitude);
+        }
+        catch (AptitudeNotAvailableForOriginException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+        }
+        catch (AptitudeNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (CharacterNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpDelete("{CharacterId:int:min(1)}/aptitudes/{AptitudeId:guid}")]
+    public async Task<ActionResult<CharacterAddAptitudeResponse>> PostCharacterDeleteAptitudeAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int characterId,
+        [FromRoute] Guid aptitudeId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        try
+        {
+            await characterAptitudeService.RemoveAptitudeAsync(executionContext, characterId, aptitudeId, cancellationToken);
+            return NoContent();
+        }
+        catch (AptitudeNotAvailableForOriginException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+        }
+        catch (AptitudeNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (CharacterNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
+    [HttpPut("{CharacterId:int:min(1)}/aptitudes/{AptitudeId:guid}")]
+    public async Task<ActionResult<CharacterAddAptitudeResponse>> PatchCharacterAptitudeAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int characterId,
+        [FromRoute] Guid aptitudeId,
+        [FromBody] UpdateCharacterAptitudeRequest request,
+        CancellationToken cancellationToken = default
+    )
+    {
+        try
+        {
+            await characterAptitudeService.UpdateCharacterAptitudeAsync(executionContext, characterId, aptitudeId, request, cancellationToken);
+            return NoContent();
+        }
+        catch (AptitudeNotAvailableForOriginException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+        }
+        catch (AptitudeNotFoundException ex)
         {
             throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
         }

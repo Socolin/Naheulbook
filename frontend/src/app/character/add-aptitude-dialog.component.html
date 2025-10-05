@@ -1,0 +1,80 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+  <span>
+    Aptitude Parfois Étrange
+  </span>
+  <button mat-button (click)="valid()" [disabled]="selection.length === 0">
+    AJOUTER
+  </button>
+</mat-toolbar>
+
+<div class="content">
+  @if (aptitudeGroup) {
+    <h2>Aptitudes des {{ aptitudeGroup.name }}</h2>
+
+    <mat-card class="aptitudes-card">
+      <mat-card-header>
+        <mat-card-title>
+          Sélection
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="selection">
+        <div class="aptitudes">
+          @for (aptitude of selection; track aptitude.id; let last = $last; let i = $index) {
+            <div class="aptitude">
+              <div class="name">{{ aptitude.name }}</div>
+              <div class="roll">{{ aptitude.roll }}</div>
+              <div class="description">{{ aptitude.description }}</div>
+              <div class="effect">{{ aptitude.effect }}</div>
+              <div class="actions">
+                <button matIconButton (click)="removeSelection(i)"><mat-icon>delete</mat-icon></button>
+              </div>
+            </div>
+            @if (!last) {
+              <mat-divider/>
+            }
+          }
+        </div>
+        <button class="random-button" mat-stroked-button (click)="roll()">
+          <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
+          Choisir une aptitude au hasard
+        </button>
+      </mat-card-content>
+      @if (selection.length > 0) {
+        <mat-card-actions align="end">
+          <button matButton color="primary" (click)="valid()" [disabled]="selection.length === 0">
+            Ajouter les {{selection.length}} aptitudes sélectionnées
+          </button>
+        </mat-card-actions>
+      }
+
+    </mat-card>
+
+    <mat-card class="aptitudes-card">
+      @for (aptitudeGroup of aptitudesGroupedByTypes; track $index) {
+        <div class="type-title">
+          <h3>{{aptitudeGroup.type}}</h3>
+        </div>
+        <div class="aptitudes">
+          @for (aptitude of aptitudeGroup.aptitudes; track aptitude.id; let last = $last) {
+            <div class="aptitude">
+              <div class="name">{{ aptitude.name }}</div>
+              <div class="roll">{{ aptitude.roll }}</div>
+              <div class="description">{{ aptitude.description }}</div>
+              <div class="effect">{{ aptitude.effect }}</div>
+              <div class="actions"><button (click)="addAptitude(aptitude)" matIconButton><mat-icon>add</mat-icon></button></div>
+            </div>
+            @if (!last) {
+              <mat-divider/>
+            }
+          }
+        </div>
+      }
+    </mat-card>
+  } @else {
+    <mat-spinner></mat-spinner>
+  }
+
+</div>

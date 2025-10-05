@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Naheulbook.Core.Features.Aptitude;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Shared;
@@ -22,6 +23,7 @@ public class CharactersControllerTest
 
     private CharactersController _controller;
     private ICharacterBackupService _characterBackupService;
+    private ICharacterAptitudeService _characterAptitudeService;
 
     [SetUp]
     public void SetUp()
@@ -29,11 +31,13 @@ public class CharactersControllerTest
         _characterService = Substitute.For<ICharacterService>();
         _mapper = Substitute.For<IMapper>();
         _characterBackupService = Substitute.For<ICharacterBackupService>();
+        _characterAptitudeService = Substitute.For<ICharacterAptitudeService>();
 
         _controller = new CharactersController(
             _characterService,
             _mapper,
-            _characterBackupService
+            _characterBackupService,
+            _characterAptitudeService
         );
 
         _executionContext = new NaheulbookExecutionContext();

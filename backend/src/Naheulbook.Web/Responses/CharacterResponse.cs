@@ -49,6 +49,7 @@ public class CharacterResponse
 
     public CharacterGroupResponse? Group { get; set; }
 
+    public IList<CharacterAptitudeResponse> Aptitudes { get; set; } = null!;
     public IList<ActiveStatsModifier> Modifiers { get; set; } = null!;
     public IList<SpecialityResponse> Specialities { get; set; } = null!;
 

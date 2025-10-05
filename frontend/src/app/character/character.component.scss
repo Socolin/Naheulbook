@@ -99,60 +99,66 @@ mat-card {
 
 .stat-tab {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 8px;
 
-    mat-card {
-        margin: 5px;
-        flex: 1 auto;
-    }
-
-    .stat-header {
-        font-weight: bold;
-        flex-direction: row;
+    .stats-area {
         display: flex;
-    }
+        flex-wrap: wrap;
+        gap: 8px;
 
-    .stat-row {
-        display: flex;
-        flex-direction: row;
-    }
-
-    .stat-element {
-        width: 60px;
-        flex: 1 auto;
-        text-align: center;
-    }
-
-    .stat-element-large {
-        width: 75px;
-        flex: 1 auto;
-        text-align: center;
-    }
-
-    .stat-element-small {
-        width: 48px;
-        flex: 1 1 auto;
-        text-align: center;
-    }
-
-    .stat-details {
-        font-size: smaller;
-        .detail-row {
-            border-top-width: 1px;
-            border-top-style: solid;
+        mat-card {
+            flex: 1 auto;
         }
-    }
 
-    .table-stats > td {
-        line-height: 1;
-    }
-    .stats-detail-name > td {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-    .stats-detail-values > td {
-        padding-top: 0;
-        border-top: 0;
+        .stat-header {
+            font-weight: bold;
+            flex-direction: row;
+            display: flex;
+        }
+
+        .stat-row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .stat-element {
+            width: 60px;
+            flex: 1 auto;
+            text-align: center;
+        }
+
+        .stat-element-large {
+            width: 75px;
+            flex: 1 auto;
+            text-align: center;
+        }
+
+        .stat-element-small {
+            width: 48px;
+            flex: 1 1 auto;
+            text-align: center;
+        }
+
+        .stat-details {
+            font-size: smaller;
+            .detail-row {
+                border-top-width: 1px;
+                border-top-style: solid;
+            }
+        }
+
+        .table-stats > td {
+            line-height: 1;
+        }
+        .stats-detail-name > td {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .stats-detail-values > td {
+            padding-top: 0;
+            border-top: 0;
+        }
     }
 }
 

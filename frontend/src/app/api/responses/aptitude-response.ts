@@ -1,8 +1,8 @@
 export type AptitudeResponse = {
     id: string;
+    name: string;
     roll: number;
     type: string;
-    name: string;
     description: string;
     effect: string;
 }

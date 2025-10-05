@@ -36,6 +36,8 @@ public class MapperProfile : Profile
             .ForMember(x => x.SkillIds, opt => opt.MapFrom(c => c.Skills.Select(x => x.SkillId)))
             .ForMember(x => x.JobIds, opt => opt.MapFrom(c => c.Jobs.Select(x => x.JobId)))
             .ForMember(x => x.Specialities, opt => opt.MapFrom(c => c.Specialities.Select(x => x.Speciality)));
+        CreateMap<CharacterAptitudeEntity, CharacterAddAptitudeResponse>();
+        CreateMap<CharacterAptitudeEntity, CharacterAptitudeResponse>();
         CreateMap<CharacterModifierEntity, ActiveStatsModifier>()
             .ForMember(x => x.Active, opt => opt.MapFrom(x => x.IsActive))
             .ForMember(x => x.Values, opt => opt.MapFrom(x => x.Values.OrderBy(v => v.Id)));

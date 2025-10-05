@@ -36,6 +36,8 @@ public class CharacterRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
         AssertEntityIsLoaded(actualCharacter.Group, group);
         AssertEntitiesAreLoaded(actualCharacter.Invites, [groupInvite]);
         AssertEntitiesAreLoaded(actualCharacter.Modifiers, TestDataUtil.GetAll<CharacterModifierEntity>());
+        AssertEntitiesAreLoaded(actualCharacter.Aptitudes, TestDataUtil.GetAll<CharacterAptitudeEntity>());
+        AssertEntitiesAreLoaded(actualCharacter.Aptitudes.Select(x => x.Aptitude), TestDataUtil.GetAll<AptitudeEntity>());
     }
 
     #endregion

@@ -299,290 +299,33 @@
   <mat-tab label="Stat">
     <!-- Start of stats tab -->
     <div class="stat-tab">
-      <mat-card>
-        <mat-card-content>
-          <div class="stat-header">
-            <div class="stat-element">EV</div>
-            @if (character.hasMagic()) {
-              <div class="stat-element">EA</div>
-            }
-          </div>
-          <div class="stat-values">
-            <div class="stat-row">
-              <div class="stat-element">{{character.computedData.stats['EV']}}</div>
-              @if (character.hasMagic()) {
-                <div class="stat-element">{{character.computedData.stats['EA']}}</div>
-              }
-            </div>
-            @if (character.computedData.details.show.evea) {
-              <div class="stat-details">
-                @for (detail of character.computedData.details.evea; track detail) {
-                  <div class="detail-row">
-                    <div class="stat-detail-reason">
-                      {{detail.name}}
-                    </div>
-                    <div class="stat-row">
-                      <div class="stat-element">{{detail.data.EV}}</div>
-                      @if (character.hasMagic()) {
-                        <div class="stat-element">{{detail.data.EA}}</div>
-                      }
-                    </div>
-                  </div>
-                }
-              </div>
-            }
-          </div>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-button [color]="'primary'" (click)="character.computedData.details.show.evea = !character.computedData.details.show.evea">
-            @if (!character.computedData.details.show.evea) {
-              <span>Voir details</span>
-            }
-            @if (character.computedData.details.show.evea) {
-              <span>Cacher details</span>
-            }
-          </button>
-        </mat-card-actions>
-      </mat-card>
-      <mat-card>
-        <mat-card-content>
-          <div class="stat-header">
-            <div class="stat-element">AT</div>
-            <div class="stat-element">PRD</div>
-            <div class="stat-element">PR</div>
-            @if (character.computedData.stats['PR_MAGIC']) {
-              <div class="stat-element">PR_MAGIC</div>
-            }
-          </div>
-          <div class="stat-values">
-            <div class="stat-row">
-              <div class="stat-element">{{character.computedData.stats['AT']}}</div>
-              <div class="stat-element">{{character.computedData.stats['PRD']}}</div>
-              <div class="stat-element">{{character.computedData.stats['PR']}}</div>
-              @if (character.computedData.stats['PR_MAGIC']) {
-                <div class="stat-element">{{character.computedData.stats['PR_MAGIC']}}</div>
-              }
-            </div>
-            @if (character.computedData.details.show.atprd) {
-              <div class="stat-details">
-                @for (detail of character.computedData.details.atprd; track detail) {
-                  <div class="detail-row">
-                    <div class="stat-detail-reason">
-                      {{detail.name}}
-                    </div>
-                    <div class="stat-row">
-                      <div class="stat-element">{{detail.data.AT}}</div>
-                      <div class="stat-element">{{detail.data.PRD}}</div>
-                      <div class="stat-element">{{detail.data.PR}}</div>
-                      @if (character.computedData.stats['PR_MAGIC']) {
-                        <div class="stat-element">{{detail.data.PR_MAGIC}}</div>
-                      }
-                    </div>
-                  </div>
-                }
-              </div>
-            }
-          </div>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-button [color]="'primary'" (click)="character.computedData.details.show.atprd = !character.computedData.details.show.atprd">
-            @if (!character.computedData.details.show.atprd) {
-              <span>Voir details</span>
-            }
-            @if (character.computedData.details.show.atprd) {
-              <span>Cacher details</span>
-            }
-          </button>
-        </mat-card-actions>
-      </mat-card>
-      <mat-card>
-        <mat-card-content>
-          <div class="stat-header">
-            <div class="stat-element-small">COU</div>
-            <div class="stat-element-small">INT</div>
-            <div class="stat-element-small">CHA</div>
-            <div class="stat-element-small">AD</div>
-            <div class="stat-element-small">FO</div>
-          </div>
-          <div class="stat-values">
-            <div class="stat-row">
-              <div class="stat-element-small">{{character.computedData.stats['COU']}}</div>
-              <div class="stat-element-small">{{character.computedData.stats['INT']}}</div>
-              <div class="stat-element-small">{{character.computedData.stats['CHA']}}</div>
-              <div class="stat-element-small">{{character.computedData.stats['AD']}}</div>
-              <div class="stat-element-small">{{character.computedData.stats['FO']}}</div>
-            </div>
-            @if (character.computedData.details.show.stat) {
-              <div class="stat-details">
-                @for (detail of character.computedData.details.stat; track detail) {
-                  <div class="detail-row">
-                    <div class="stat-detail-reason">
-                      {{detail.name}}
-                    </div>
-                    <div class="stat-row">
-                      <div class="stat-element-small">{{detail.data.COU}}</div>
-                      <div class="stat-element-small">{{detail.data.INT}}</div>
-                      <div class="stat-element-small">{{detail.data.CHA}}</div>
-                      <div class="stat-element-small">{{detail.data.AD}}</div>
-                      <div class="stat-element-small">{{detail.data.FO}}</div>
-                    </div>
-                  </div>
-                }
-              </div>
-            }
-          </div>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-button [color]="'primary'" (click)="character.computedData.details.show.stat = !character.computedData.details.show.stat">
-            @if (!character.computedData.details.show.stat) {
-              <span>Voir details</span>
-            }
-            @if (character.computedData.details.show.stat) {
-              <span>Cacher details</span>
-            }
-          </button>
-        </mat-card-actions>
-      </mat-card>
-
-      <mat-card>
-        <mat-card-content>
-          <div class="stat-header">
-            @if (character.hasMagic()) {
-              <div class="stat-element-large">MagiePhys</div>
-            }
-            @if (character.hasMagic()) {
-              <div class="stat-element-large">MagiePsy</div>
-            }
-            <div class="stat-element-large">RESM</div>
-          </div>
-          <div class="stat-values">
-            <div class="stat-row">
-              @if (character.hasMagic()) {
-                <div class="stat-element-large">{{character.computedData.stats['MPHYS']}}</div>
-              }
-              @if (character.hasMagic()) {
-                <div class="stat-element-large">{{character.computedData.stats['MPSY']}}</div>
-              }
-              <div class="stat-element-large">{{character.computedData.stats['RESM']}}</div>
-            </div>
-            @if (character.computedData.details.show.magic) {
-              <div class="stat-details">
-                @for (detail of character.computedData.details.magic; track detail) {
-                  <div class="detail-row">
-                    <div class="stat-detail-reason">
-                      {{detail.name}}
-                    </div>
-                    <div class="stat-row">
-                      @if (character.hasMagic()) {
-                        <div class="stat-element-large" [innerHTML]="detail.data.MPHYS || ''"></div>
-                      }
-                      @if (character.hasMagic()) {
-                        <div class="stat-element-large" [innerHTML]="detail.data.MPSY || ''"></div>
-                      }
-                      <div class="stat-element-large" [innerHTML]="detail.data.RESM || ''"></div>
-                    </div>
-                  </div>
-                }
-              </div>
-            }
-          </div>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-button [color]="'primary'" (click)="character.computedData.details.show.magic = !character.computedData.details.show.magic">
-            @if (!character.computedData.details.show.magic) {
-              <span>Voir details</span>
-            }
-            @if (character.computedData.details.show.magic) {
-              <span>Cacher details</span>
-            }
-          </button>
-        </mat-card-actions>
-      </mat-card>
-
-      @if (character.computedData.stats['MV'] !== 100
-        || character.computedData.stats['THROW_MODIFIER']
-        || character.computedData.stats['DISCRETION_MODIFIER']
-        || character.computedData.stats['DANSE_MODIFIER']
-        || character.computedData.stats['PI']) {
+      <div class="stats-area">
         <mat-card>
           <mat-card-content>
             <div class="stat-header">
-              @if (character.computedData.stats['MV'] !== 100) {
-                <div class="stat-element">MV</div>
-              }
-              @if (character.computedData.stats['THROW_MODIFIER']) {
-                <div class="stat-element">Lancer</div>
-              }
-              @if (character.computedData.stats['DISCRETION_MODIFIER']) {
-                <div class="stat-element">Discretion</div>
-              }
-              @if (character.computedData.stats['DANSE_MODIFIER']) {
-                <div class="stat-element">Danse</div>
-              }
-              @if (character.computedData.stats['PI']) {
-                <div class="stat-element">PI</div>
+              <div class="stat-element">EV</div>
+              @if (character.hasMagic()) {
+                <div class="stat-element">EA</div>
               }
             </div>
             <div class="stat-values">
               <div class="stat-row">
-                @if (character.computedData.stats['MV'] !== 100) {
-                  <div class="stat-element">
-                    {{character.computedData.stats['MV']}}%
-                  </div>
-                }
-                @if (character.computedData.stats['THROW_MODIFIER']) {
-                  <div class="stat-element">
-                    {{character.computedData.stats['THROW_MODIFIER'] | plusminus}}
-                  </div>
-                }
-                @if (character.computedData.stats['DISCRETION_MODIFIER']) {
-                  <div class="stat-element">
-                    {{character.computedData.stats['DISCRETION_MODIFIER'] | plusminus}}
-                  </div>
-                }
-                @if (character.computedData.stats['DANSE_MODIFIER']) {
-                  <div class="stat-element">
-                    {{character.computedData.stats['DANSE_MODIFIER'] | plusminus}}
-                  </div>
-                }
-                @if (character.computedData.stats['PI']) {
-                  <div class="stat-element">
-                    {{character.computedData.stats['PI']}}
-                  </div>
+                <div class="stat-element">{{character.computedData.stats['EV']}}</div>
+                @if (character.hasMagic()) {
+                  <div class="stat-element">{{character.computedData.stats['EA']}}</div>
                 }
               </div>
-              @if (character.computedData.details.show.other) {
+              @if (character.computedData.details.show.evea) {
                 <div class="stat-details">
-                  @for (detail of character.computedData.details.other; track detail) {
+                  @for (detail of character.computedData.details.evea; track detail) {
                     <div class="detail-row">
                       <div class="stat-detail-reason">
                         {{detail.name}}
                       </div>
                       <div class="stat-row">
-                        @if (character.computedData.stats['MV'] !== 100) {
-                          <div class="stat-element">
-                            {{detail.data.MV}}
-                          </div>
-                        }
-                        @if (character.computedData.stats['THROW_MODIFIER']) {
-                          <div class="stat-element">
-                            {{detail.data.THROW_MODIFIER}}
-                          </div>
-                        }
-                        @if (character.computedData.stats['DISCRETION_MODIFIER']) {
-                          <div class="stat-element">
-                            {{detail.data.DISCRETION_MODIFIER}}
-                          </div>
-                        }
-                        @if (character.computedData.stats['DANSE_MODIFIER']) {
-                          <div class="stat-element">
-                            {{detail.data.DANSE_MODIFIER}}
-                          </div>
-                        }
-                        @if (character.computedData.stats['PI']) {
-                          <div class="stat-element">
-                            {{detail.data.PI}}
-                          </div>
+                        <div class="stat-element">{{detail.data.EV}}</div>
+                        @if (character.hasMagic()) {
+                          <div class="stat-element">{{detail.data.EA}}</div>
                         }
                       </div>
                     </div>
@@ -592,19 +335,279 @@
             </div>
           </mat-card-content>
           <mat-card-actions align="end">
-            <button mat-button [color]="'primary'" (click)="character.computedData.details.show.other = !character.computedData.details.show.other">
-              @if (!character.computedData.details.show.other) {
+            <button mat-button [color]="'primary'" (click)="character.computedData.details.show.evea = !character.computedData.details.show.evea">
+              @if (!character.computedData.details.show.evea) {
                 <span>Voir details</span>
               }
-              @if (character.computedData.details.show.other) {
+              @if (character.computedData.details.show.evea) {
                 <span>Cacher details</span>
               }
             </button>
           </mat-card-actions>
         </mat-card>
-      }
+        <mat-card>
+          <mat-card-content>
+            <div class="stat-header">
+              <div class="stat-element">AT</div>
+              <div class="stat-element">PRD</div>
+              <div class="stat-element">PR</div>
+              @if (character.computedData.stats['PR_MAGIC']) {
+                <div class="stat-element">PR_MAGIC</div>
+              }
+            </div>
+            <div class="stat-values">
+              <div class="stat-row">
+                <div class="stat-element">{{character.computedData.stats['AT']}}</div>
+                <div class="stat-element">{{character.computedData.stats['PRD']}}</div>
+                <div class="stat-element">{{character.computedData.stats['PR']}}</div>
+                @if (character.computedData.stats['PR_MAGIC']) {
+                  <div class="stat-element">{{character.computedData.stats['PR_MAGIC']}}</div>
+                }
+              </div>
+              @if (character.computedData.details.show.atprd) {
+                <div class="stat-details">
+                  @for (detail of character.computedData.details.atprd; track detail) {
+                    <div class="detail-row">
+                      <div class="stat-detail-reason">
+                        {{detail.name}}
+                      </div>
+                      <div class="stat-row">
+                        <div class="stat-element">{{detail.data.AT}}</div>
+                        <div class="stat-element">{{detail.data.PRD}}</div>
+                        <div class="stat-element">{{detail.data.PR}}</div>
+                        @if (character.computedData.stats['PR_MAGIC']) {
+                          <div class="stat-element">{{detail.data.PR_MAGIC}}</div>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-button [color]="'primary'" (click)="character.computedData.details.show.atprd = !character.computedData.details.show.atprd">
+              @if (!character.computedData.details.show.atprd) {
+                <span>Voir details</span>
+              }
+              @if (character.computedData.details.show.atprd) {
+                <span>Cacher details</span>
+              }
+            </button>
+          </mat-card-actions>
+        </mat-card>
+        <mat-card>
+          <mat-card-content>
+            <div class="stat-header">
+              <div class="stat-element-small">COU</div>
+              <div class="stat-element-small">INT</div>
+              <div class="stat-element-small">CHA</div>
+              <div class="stat-element-small">AD</div>
+              <div class="stat-element-small">FO</div>
+            </div>
+            <div class="stat-values">
+              <div class="stat-row">
+                <div class="stat-element-small">{{character.computedData.stats['COU']}}</div>
+                <div class="stat-element-small">{{character.computedData.stats['INT']}}</div>
+                <div class="stat-element-small">{{character.computedData.stats['CHA']}}</div>
+                <div class="stat-element-small">{{character.computedData.stats['AD']}}</div>
+                <div class="stat-element-small">{{character.computedData.stats['FO']}}</div>
+              </div>
+              @if (character.computedData.details.show.stat) {
+                <div class="stat-details">
+                  @for (detail of character.computedData.details.stat; track detail) {
+                    <div class="detail-row">
+                      <div class="stat-detail-reason">
+                        {{detail.name}}
+                      </div>
+                      <div class="stat-row">
+                        <div class="stat-element-small">{{detail.data.COU}}</div>
+                        <div class="stat-element-small">{{detail.data.INT}}</div>
+                        <div class="stat-element-small">{{detail.data.CHA}}</div>
+                        <div class="stat-element-small">{{detail.data.AD}}</div>
+                        <div class="stat-element-small">{{detail.data.FO}}</div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-button [color]="'primary'" (click)="character.computedData.details.show.stat = !character.computedData.details.show.stat">
+              @if (!character.computedData.details.show.stat) {
+                <span>Voir details</span>
+              }
+              @if (character.computedData.details.show.stat) {
+                <span>Cacher details</span>
+              }
+            </button>
+          </mat-card-actions>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-content>
+            <div class="stat-header">
+              @if (character.hasMagic()) {
+                <div class="stat-element-large">MagiePhys</div>
+              }
+              @if (character.hasMagic()) {
+                <div class="stat-element-large">MagiePsy</div>
+              }
+              <div class="stat-element-large">RESM</div>
+            </div>
+            <div class="stat-values">
+              <div class="stat-row">
+                @if (character.hasMagic()) {
+                  <div class="stat-element-large">{{character.computedData.stats['MPHYS']}}</div>
+                }
+                @if (character.hasMagic()) {
+                  <div class="stat-element-large">{{character.computedData.stats['MPSY']}}</div>
+                }
+                <div class="stat-element-large">{{character.computedData.stats['RESM']}}</div>
+              </div>
+              @if (character.computedData.details.show.magic) {
+                <div class="stat-details">
+                  @for (detail of character.computedData.details.magic; track detail) {
+                    <div class="detail-row">
+                      <div class="stat-detail-reason">
+                        {{detail.name}}
+                      </div>
+                      <div class="stat-row">
+                        @if (character.hasMagic()) {
+                          <div class="stat-element-large" [innerHTML]="detail.data.MPHYS || ''"></div>
+                        }
+                        @if (character.hasMagic()) {
+                          <div class="stat-element-large" [innerHTML]="detail.data.MPSY || ''"></div>
+                        }
+                        <div class="stat-element-large" [innerHTML]="detail.data.RESM || ''"></div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-button [color]="'primary'" (click)="character.computedData.details.show.magic = !character.computedData.details.show.magic">
+              @if (!character.computedData.details.show.magic) {
+                <span>Voir details</span>
+              }
+              @if (character.computedData.details.show.magic) {
+                <span>Cacher details</span>
+              }
+            </button>
+          </mat-card-actions>
+        </mat-card>
+
+        @if (character.computedData.stats['MV'] !== 100
+          || character.computedData.stats['THROW_MODIFIER']
+          || character.computedData.stats['DISCRETION_MODIFIER']
+          || character.computedData.stats['DANSE_MODIFIER']
+          || character.computedData.stats['PI']) {
+          <mat-card>
+            <mat-card-content>
+              <div class="stat-header">
+                @if (character.computedData.stats['MV'] !== 100) {
+                  <div class="stat-element">MV</div>
+                }
+                @if (character.computedData.stats['THROW_MODIFIER']) {
+                  <div class="stat-element">Lancer</div>
+                }
+                @if (character.computedData.stats['DISCRETION_MODIFIER']) {
+                  <div class="stat-element">Discretion</div>
+                }
+                @if (character.computedData.stats['DANSE_MODIFIER']) {
+                  <div class="stat-element">Danse</div>
+                }
+                @if (character.computedData.stats['PI']) {
+                  <div class="stat-element">PI</div>
+                }
+              </div>
+              <div class="stat-values">
+                <div class="stat-row">
+                  @if (character.computedData.stats['MV'] !== 100) {
+                    <div class="stat-element">
+                      {{character.computedData.stats['MV']}}%
+                    </div>
+                  }
+                  @if (character.computedData.stats['THROW_MODIFIER']) {
+                    <div class="stat-element">
+                      {{character.computedData.stats['THROW_MODIFIER'] | plusminus}}
+                    </div>
+                  }
+                  @if (character.computedData.stats['DISCRETION_MODIFIER']) {
+                    <div class="stat-element">
+                      {{character.computedData.stats['DISCRETION_MODIFIER'] | plusminus}}
+                    </div>
+                  }
+                  @if (character.computedData.stats['DANSE_MODIFIER']) {
+                    <div class="stat-element">
+                      {{character.computedData.stats['DANSE_MODIFIER'] | plusminus}}
+                    </div>
+                  }
+                  @if (character.computedData.stats['PI']) {
+                    <div class="stat-element">
+                      {{character.computedData.stats['PI']}}
+                    </div>
+                  }
+                </div>
+                @if (character.computedData.details.show.other) {
+                  <div class="stat-details">
+                    @for (detail of character.computedData.details.other; track detail) {
+                      <div class="detail-row">
+                        <div class="stat-detail-reason">
+                          {{detail.name}}
+                        </div>
+                        <div class="stat-row">
+                          @if (character.computedData.stats['MV'] !== 100) {
+                            <div class="stat-element">
+                              {{detail.data.MV}}
+                            </div>
+                          }
+                          @if (character.computedData.stats['THROW_MODIFIER']) {
+                            <div class="stat-element">
+                              {{detail.data.THROW_MODIFIER}}
+                            </div>
+                          }
+                          @if (character.computedData.stats['DISCRETION_MODIFIER']) {
+                            <div class="stat-element">
+                              {{detail.data.DISCRETION_MODIFIER}}
+                            </div>
+                          }
+                          @if (character.computedData.stats['DANSE_MODIFIER']) {
+                            <div class="stat-element">
+                              {{detail.data.DANSE_MODIFIER}}
+                            </div>
+                          }
+                          @if (character.computedData.stats['PI']) {
+                            <div class="stat-element">
+                              {{detail.data.PI}}
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            </mat-card-content>
+            <mat-card-actions align="end">
+              <button mat-button [color]="'primary'" (click)="character.computedData.details.show.other = !character.computedData.details.show.other">
+                @if (!character.computedData.details.show.other) {
+                  <span>Voir details</span>
+                }
+                @if (character.computedData.details.show.other) {
+                  <span>Cacher details</span>
+                }
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+      <effect-panel #effectPanel [character]="character"></effect-panel>
+      <aptitude-panel #aptitudePanel [character]="character" />
     </div>
-    <effect-panel #effectPanel [character]="character"></effect-panel>
     <!-- End of stats tab -->
   </mat-tab>
   <mat-tab label="Inventaire">

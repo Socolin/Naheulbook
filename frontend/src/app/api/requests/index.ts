@@ -1,3 +1,4 @@
+export * from './add-character-aptitude-request';
 export * from './character-level-up-request';
 export * from './create-access-token-request';
 export * from './create-character-request';
@@ -17,3 +18,4 @@ export * from './npc-request';
 export * from './monster-template-request';
 export * from './move-monster-to-fight-request';
 export * from './update-user-request';
+export * from './update-character-aptitude-request';

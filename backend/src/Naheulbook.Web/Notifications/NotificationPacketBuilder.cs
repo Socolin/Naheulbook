@@ -76,6 +76,21 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
         return BuildCharacterChange(characterId, "removeJob", new CharacterRemoveJobResponse {JobId = jobId});
     }
 
+    public INotificationPacket BuildCharacterAddAptitude(int characterId, CharacterAptitudeEntity characterAptitude)
+    {
+        return BuildCharacterChange(characterId, "addAptitude", mapper.Map<CharacterAddAptitudeResponse>(characterAptitude));
+    }
+
+    public INotificationPacket BuildCharacterRemoveAptitude(int characterId, CharacterAptitudeEntity characterAptitude)
+    {
+        return BuildCharacterChange(characterId, "removeAptitude", mapper.Map<CharacterAptitudeResponse>(characterAptitude));
+    }
+
+    public INotificationPacket BuildCharacterUpdateAptitude(int characterId, CharacterAptitudeEntity characterAptitude)
+    {
+        return BuildCharacterChange(characterId, "updateAptitude", mapper.Map<CharacterAptitudeResponse>(characterAptitude));
+    }
+
     public INotificationPacket BuildCharacterChangeColor(CharacterEntity character)
     {
         return BuildCharacterGmChange(character.Id, "changeColor", character.Color);

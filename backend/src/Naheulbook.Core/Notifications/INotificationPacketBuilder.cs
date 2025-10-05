@@ -28,6 +28,9 @@ public interface INotificationPacketBuilder
     INotificationPacket BuildCharacterLevelUp(int characterId, LevelUpResult levelUpResult);
     INotificationPacket BuildCharacterAddJob(int characterId, Guid jobId);
     INotificationPacket BuildCharacterRemoveJob(int characterId, Guid jobId);
+    INotificationPacket BuildCharacterAddAptitude(int characterId, CharacterAptitudeEntity characterAptitude);
+    INotificationPacket BuildCharacterRemoveAptitude(int characterId, CharacterAptitudeEntity characterAptitude);
+    INotificationPacket BuildCharacterUpdateAptitude(int characterId, CharacterAptitudeEntity characterAptitude);
 
     INotificationPacket BuildCharacterChangeColor(CharacterEntity character);
     INotificationPacket BuildCharacterChangeTarget(CharacterEntity character, TargetRequest requestTarget);

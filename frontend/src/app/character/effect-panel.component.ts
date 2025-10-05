@@ -6,14 +6,14 @@ import {AddEffectDialogComponent, ModifierDetailsDialogComponent, ModifierDetail
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
-import { MatCard, MatCardContent } from '@angular/material/card';
-import { MatToolbar } from '@angular/material/toolbar';
-import { MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { MatRipple } from '@angular/material/core';
-import { MatMenuTrigger, MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
-import { NhbkDateShortDurationPipe } from '../date/nhbk-duration.pipe';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatToolbar} from '@angular/material/toolbar';
+import {MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatRipple} from '@angular/material/core';
+import {MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {NhbkDateShortDurationPipe} from '../date';
 
 @Component({
     selector: 'effect-panel',

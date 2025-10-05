@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Naheulbook.Core.Features.Character;
 using Naheulbook.Shared.Extensions;
 
 namespace Naheulbook.Core.Features.Aptitude;
@@ -11,5 +12,7 @@ public static class ServiceCollectionExtensions
             return;
 
         services.AddSingleton<IAptitudeGroupService, AptitudeGroupService>();
+        services.AddSingleton<ICharacterAptitudeFactory, CharacterAptitudeFactory>();
+        services.AddSingleton<ICharacterAptitudeService, CharacterAptitudeService>();
     }
 }

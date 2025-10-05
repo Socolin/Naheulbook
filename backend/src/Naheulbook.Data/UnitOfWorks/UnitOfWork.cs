@@ -9,6 +9,7 @@ public interface IUnitOfWork : IDisposable
     IAptitudeGroupRepository AptitudeGroupRepository { get; }
     ICalendarRepository Calendar { get; }
     ICharacterRepository Characters { get; }
+    ICharacterAptitudeRepository CharacterAptitudes { get; }
     ICharacterSkillRepository CharacterSkills { get; }
     ICharacterSpecialityRepository CharacterSpecialities { get; }
     ICharacterModifierRepository CharacterModifiers { get; }
@@ -59,6 +60,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public IAptitudeGroupRepository AptitudeGroupRepository => new AptitudeGroupRepository(_naheulbookDbContext);
     public ICalendarRepository Calendar => new CalendarRepository(_naheulbookDbContext);
     public ICharacterRepository Characters => new CharacterRepository(_naheulbookDbContext);
+    public ICharacterAptitudeRepository CharacterAptitudes => new CharacterAptitudeRepository(_naheulbookDbContext);
     public ICharacterSkillRepository CharacterSkills => new CharacterSkillRepository(_naheulbookDbContext);
     public ICharacterSpecialityRepository CharacterSpecialities => new CharacterSpecialityRepository(_naheulbookDbContext);
     public ICharacterModifierRepository CharacterModifiers => new CharacterModifierRepository(_naheulbookDbContext);

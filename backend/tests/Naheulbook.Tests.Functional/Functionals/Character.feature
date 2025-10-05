@@ -247,6 +247,20 @@ Feature: Character
             }}
           }
         ],
+        "aptitudes": [
+          {
+            "active": false,
+            "count": 1,
+            "aptitude": {
+              "id": "${Aptitude.Id}",
+              "name": "${Aptitude.Name}",
+              "roll": "!{Aptitude.Roll}",
+              "type": "${Aptitude.Type}",
+              "description": "${Aptitude.Description}",
+              "effect": "${Aptitude.Effect}"
+            }
+          }
+        ],
         "items": [
           {
             "id": "!{Item.Id}",

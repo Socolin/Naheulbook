@@ -1,0 +1,107 @@
+mat-toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.selection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    .random-button {
+        width: 100%;
+        align-self: center;
+    }
+}
+
+.aptitudes-card {
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+    align-self: center;
+
+    .type-title {
+        text-align: center;
+    }
+
+    .aptitudes {
+        container-type: inline-size;
+        display: flex;
+        flex-direction: column;
+
+
+        .aptitude {
+            padding: 8px;
+            display: grid;
+            gap: 8px;
+            align-items: center;
+            grid-template-areas:
+                "roll name actions"
+                "roll description actions"
+                "roll effect actions";
+            grid-template-columns: 40px 1fr 48px;
+
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.2);
+            }
+
+            .name {
+                grid-area: name;
+                font-size: 1.3rem;
+            }
+
+            .roll {
+                grid-area: roll;
+                justify-self: center;
+            }
+
+            .type {
+                grid-area: type;
+            }
+
+            .description {
+                grid-area: description;
+            }
+
+            .effect {
+                grid-area: effect;
+            }
+
+            .actions {
+                grid-area: actions;
+            }
+
+            @container (width > 650px) {
+                grid-template-areas: "roll name description actions" "roll . effect actions";
+                grid-template-columns: 40px 1fr 2fr 48px;
+
+                .name {
+                    font-size: unset;
+                }
+            }
+
+            @container (width > 900px) {
+                grid-template-areas: "roll name description effect actions";
+                grid-template-columns: 40px 1fr 2fr 2fr 48px;
+
+                .name {
+                    font-size: unset;
+                }
+            }
+        }
+    }
+}
+
+
+

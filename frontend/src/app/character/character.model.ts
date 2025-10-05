@@ -1,13 +1,6 @@
 import {Subject} from 'rxjs';
 
-import {
-    ActiveStatsModifier,
-    DurationChange,
-    FlagData,
-    formatModifierValue,
-    ItemStatModifier,
-    StatModifier
-} from '../shared';
+import {ActiveStatsModifier, DurationChange, FlagData, formatModifierValue, ItemStatModifier, StatModifier} from '../shared';
 
 import {Origin} from '../origin';
 import {Job, Speciality} from '../job';
@@ -21,6 +14,8 @@ import {TargetJsonData} from '../group/target.model';
 
 import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
 import {
+    AptitudeResponse,
+    CharacterAptitudeResponse,
     CharacterFoGmResponse,
     CharacterGroupInviteResponse,
     CharacterGroupResponse,
@@ -265,6 +260,7 @@ export class Character extends WsRegistrable {
     color: string;
     gmData: any;
     group?: CharacterGroupResponse;
+    aptitudes: CharacterAptitudeResponse[];
     invites: CharacterGroupInviteResponse[];
     isNpc: boolean;
 
@@ -289,6 +285,7 @@ export class Character extends WsRegistrable {
         Object.assign(character, response, {
             skills: [],
             items: [],
+            aptitudes: response.aptitudes,
             modifiers: ActiveStatsModifier.modifiersFromJson(response.modifiers),
             specialities: Speciality.fromResponses(response.specialities)
         });
@@ -1485,6 +1482,27 @@ export class Character extends WsRegistrable {
         return changes;
     }
 
+    updateAptitude(aptitude: AptitudeResponse, count: number, active: boolean) {
+        if (count == 0) {
+            let existingAptitudeIndex = this.aptitudes.findIndex(x => x.aptitude.id === aptitude.id);
+            if (existingAptitudeIndex !== -1) {
+                this.aptitudes.splice(existingAptitudeIndex, 1);
+            }
+        } else {
+            let existingAptitude = this.aptitudes.find(x => x.aptitude.id === aptitude.id);
+            if (existingAptitude) {
+                existingAptitude.count = count;
+                existingAptitude.active = active;
+            } else {
+                this.aptitudes.push({
+                    aptitude,
+                    active,
+                    count
+                })
+            }
+        }
+    }
+
     handleWebsocketEvent(opcode: string, data: any, services: WsEventServices) {
         switch (opcode) {
             case 'showLoot': {
@@ -1555,6 +1573,18 @@ export class Character extends WsRegistrable {
                 this.onRemoveModifier(data);
                 break;
             }
+            case 'addAptitude': {
+                this.updateAptitude(data.aptitude, data.count, data.active);
+                break;
+            }
+            case 'removeAptitude': {
+                this.updateAptitude(data.aptitude, data.count, data.active);
+                break;
+            }
+            case 'updateAptitude': {
+                this.updateAptitude(data.aptitude, data.count, data.active);
+                break;
+            }
             case 'updateModifier': {
                 this.onUpdateModifier(ActiveStatsModifier.fromJson(data));
                 break;
@@ -1596,4 +1626,5 @@ export class Character extends WsRegistrable {
     dispose() {
 
     }
+
 }

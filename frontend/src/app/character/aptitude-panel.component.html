@@ -1,0 +1,51 @@
+<mat-card>
+  <mat-toolbar>
+    Aptitudes Parfois Étranges (APE)
+    <span class="toolbar-spacer"></span>
+    <button mat-icon-button (click)="openAddAptitudeDialog()" aria-label="Ajouter un effet">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-toolbar>
+  @if (character.aptitudes.length > 0) {
+    <mat-card-content class="aptitudes-list">
+      <p>
+        Les statistiques des APE ne sont pas automatiquement calculé. Vous pouvez cocher les case pour vous aider à
+        suivre les compétences qui s'applique selon la situation. Une APE ne devrait pas être cumulé plus que 3 fois.
+      </p>
+      @for (characterAptitude of character.aptitudes; track characterAptitude) {
+        <div class="character-aptitude">
+          <div class="active"><mat-checkbox [checked]="characterAptitude.active" (change)="updateActiveAptitude(characterAptitude, $event.checked)" aria-label="Activé l'aptitude {{characterAptitude.aptitude.name}}"></mat-checkbox></div>
+          <div class="name">{{ characterAptitude.aptitude.name }}</div>
+          <div class="count">x {{ characterAptitude.count }}</div>
+          <div class="description">{{ characterAptitude.aptitude.description }}</div>
+          <div class="effect">{{ characterAptitude.aptitude.effect }}</div>
+          <div class="actions">
+            <button mat-icon-button
+                    [matMenuTriggerFor]="characterAptitudeAction"
+                    [matMenuTriggerData]="{characterAptitude: characterAptitude}"
+                    aria-label="Afficher le menu de l'aptitude">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </div>
+        </div>
+      }
+    </mat-card-content>
+  }
+</mat-card>
+
+<mat-menu #characterAptitudeAction>
+  <ng-template matMenuContent let-characterAptitude="characterAptitude">
+    <button mat-menu-item [matMenuTriggerFor]="deleteCharacterAptitudeMenu" [matMenuTriggerData]="{characterAptitude: characterAptitude}">
+      <mat-icon>delete</mat-icon>
+      Supprimer
+    </button>
+  </ng-template>
+</mat-menu>
+<mat-menu #deleteCharacterAptitudeMenu>
+  <ng-template matMenuContent let-characterAptitude="characterAptitude">
+    <button mat-menu-item (click)="removeCharacterAptitude(characterAptitude)">
+      <mat-icon>check</mat-icon>
+      Confirmer
+    </button>
+  </ng-template>
+</mat-menu>
