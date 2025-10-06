@@ -1,8 +1,7 @@
-import {ActiveStatsModifier, DurationChange, IMetadata} from '../shared';
+import {ActiveStatsModifier, DurationChange, IFighter, IMetadata} from '../shared';
 import {ItemTemplate} from '../item-template';
 import {IconDescription} from '../shared/icon.model';
 import {SkillDictionary} from '../skill';
-import {Fighter} from '../group';
 import {IDurable, IItemData} from '../api/shared';
 import {ItemPartialResponse, ItemResponse} from '../api/responses';
 
@@ -85,7 +84,7 @@ export class Item {
         return true;
     }
 
-    updateTime(type: string, data: number | { previous: Fighter; next: Fighter }): DurationChange[] {
+    updateTime(type: string, data: number | { previous: IFighter; next: IFighter }): DurationChange[] {
         let changes: DurationChange[] = [];
         for (let i = 0; i < this.modifiers.length; i++) {
             let modifier = this.modifiers[i];

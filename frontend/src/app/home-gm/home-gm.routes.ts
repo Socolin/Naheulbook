@@ -1,20 +1,15 @@
 import {Routes} from '@angular/router';
-import {CreateCharacterComponent} from '../character';
-import {CharacterListComponent} from '../character';
-import {CharacterComponent} from '../character';
-import {CharacterResolve} from '../character';
-import {GroupComponent} from '../group';
+import {CharacterComponent, CharacterListComponent, CharacterResolve, CreateCharacterComponent} from '../character';
+import {CreateGroupComponent, GroupComponent, GroupListComponent} from '../group';
 import {SkillListComponent} from '../skill';
 import {OriginListComponent} from '../origin';
 import {JobListComponent} from '../job';
-import {ItemTemplateListComponent} from '../item-template';
 import {EffectListComponent} from '../effect';
 import {MonsterListComponent} from '../monster';
 import {QuestListComponent} from '../quest';
-import {CreateGroupComponent} from '../group';
-import {GroupListComponent} from '../group';
 import {AuthGuard} from '../user/auth-guard';
 import {HomeGmComponent} from './home-gm.component';
+import {ItemTemplateListComponent} from '../item-template/item-template-list.component';
 
 export const routes: Routes = [
     {

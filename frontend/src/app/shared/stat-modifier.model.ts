@@ -1,8 +1,26 @@
-import {Effect} from '../effect';
-import {Fighter} from '../group';
 import {IActiveStatsModifier, IDurable} from '../api/shared';
 import {DurationType, StatModificationOperand} from '../api/shared/enums';
 import {Guid} from '../api/shared/util';
+
+
+export interface IFighter {
+    id: number;
+    isMonster: boolean;
+}
+
+export interface IEffect {
+    name: string;
+    description: string;
+    subCategory: {
+        name: string;
+    };
+    durationType: DurationType;
+    combatCount?: number;
+    lapCount?: number;
+    duration?: string;
+    timeDuration?: number;
+    modifiers: StatModifier[];
+}
 
 export class StatModifier {
     stat: string;
@@ -90,7 +108,7 @@ export class ActiveStatsModifier extends StatsModifier {
         return modifiers;
     }
 
-    static fromEffect(effect: Effect, data: any): ActiveStatsModifier {
+    static fromEffect(effect: IEffect, data: any): ActiveStatsModifier {
         let modifier = new ActiveStatsModifier();
         modifier.name = effect.name;
         modifier.description = effect.description;
@@ -134,7 +152,7 @@ export class ActiveStatsModifier extends StatsModifier {
         return modifier;
     }
 
-    public updateDuration(durationType: string, data: number | { previous: Fighter, next: Fighter }): boolean {
+    public updateDuration(durationType: string, data: number | { previous: IFighter, next: IFighter }): boolean {
         if (!this.active) {
             return false;
         }
@@ -185,12 +203,12 @@ export class ActiveStatsModifier extends StatsModifier {
                     throw new Error('currentTimeDuration should not be undefined');
                 }
                 if (this.currentLapCount > 0) {
-                    let testFighter: Fighter;
+                    let testFighter: IFighter;
                     if (!this.lapCountDecrement) {
                         return false;
                     }
 
-                    let lapDecrement: { previous: Fighter, next: Fighter };
+                    let lapDecrement: { previous: IFighter, next: IFighter };
                     if (typeof (data) !== 'number') {
                         lapDecrement = data;
                     } else {
@@ -222,7 +240,7 @@ export class ActiveStatsModifier extends StatsModifier {
         return false;
     }
 
-    updateLapDecrement(data: { deleted: Fighter; previous: Fighter; next: Fighter }): boolean {
+    updateLapDecrement(data: { deleted: IFighter; previous: IFighter; next: IFighter }): boolean {
         if (this.durationType !== 'lap') {
             return false;
         }

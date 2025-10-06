@@ -11,23 +11,19 @@ import {
 } from './nhbk-action.model';
 import {Observable} from 'rxjs';
 
-import {ActiveStatsModifier, AutocompleteValue, MiscService} from '../shared';
+import {ActiveStatsModifier, AutocompleteInputComponent, AutocompleteValue} from '../shared';
 
-import {ItemTemplate} from '../item-template';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogClose } from '@angular/material/dialog';
-import {Effect} from '../effect';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatFormField, MatPrefix, MatSuffix } from '@angular/material/form-field';
-import { MatSelect } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { AutocompleteInputComponent } from '../shared/autocomplete-input.component';
-import { MatInput } from '@angular/material/input';
-import { StatModifierEditorComponent } from '../effect/stats-modifier-editor.component';
-import { ActiveEffectEditorComponent } from '../effect/active-effect-editor.component';
-import { MatCardActions } from '@angular/material/card';
-import { MatButton } from '@angular/material/button';
+import {ItemTemplate, ItemTemplateService} from '../item-template';
+import {MAT_DIALOG_DATA, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
+import {ActiveEffectEditorComponent, Effect, StatModifierEditorComponent} from '../effect';
+import {MatFormField, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatSelect} from '@angular/material/select';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatInput} from '@angular/material/input';
+import {MatCardActions} from '@angular/material/card';
+import {MatButton} from '@angular/material/button';
 
 export interface NhbkActionEditorDialogData {
     action?: NhbkAction
@@ -36,7 +32,7 @@ export interface NhbkActionEditorDialogData {
 @Component({
     styleUrls: ['./nhbk-action-editor-dialog.component.scss'],
     templateUrl: './nhbk-action-editor-dialog.component.html',
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatFormField, MatSelect, FormsModule, MatOption, MatCheckbox, AutocompleteInputComponent, MatInput, MatPrefix, MatSuffix, StatModifierEditorComponent, ActiveEffectEditorComponent, MatCardActions, MatButton, MatDialogClose]
+    imports: [MatDialogTitle, MatDialogContent, MatFormField, MatSelect, FormsModule, MatOption, MatCheckbox, AutocompleteInputComponent, MatInput, MatPrefix, MatSuffix, StatModifierEditorComponent, ActiveEffectEditorComponent, MatCardActions, MatButton, MatDialogClose]
 })
 export class NhbkActionEditorDialogComponent {
     action: NhbkAction = NhbkActionFactory.createFromType(NhbkActionType.addEv, {ev: 1});
@@ -56,7 +52,7 @@ export class NhbkActionEditorDialogComponent {
     public selectedItemTemplate: ItemTemplate;
 
     constructor(
-        private readonly miscService: MiscService,
+        private readonly itemTemplateService: ItemTemplateService,
         private readonly dialogRef: MatDialogRef<NhbkActionEditorDialogComponent, NhbkAction>,
         @Inject(MAT_DIALOG_DATA) public data: NhbkActionEditorDialogData
     ) {
@@ -92,7 +88,7 @@ export class NhbkActionEditorDialogComponent {
     }
 
     updateAutocompleteItem(filter: string): Observable<AutocompleteValue[]> {
-        return this.miscService.searchItem(filter).pipe(map(
+        return this.itemTemplateService.searchItem(filter).pipe(map(
             list => list.map(e => new AutocompleteValue(e, e.name))
         ));
     }

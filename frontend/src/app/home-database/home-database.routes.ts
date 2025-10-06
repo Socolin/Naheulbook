@@ -3,7 +3,6 @@ import {Routes} from '@angular/router';
 import {SkillListComponent} from '../skill';
 import {OriginListComponent} from '../origin';
 import {JobListComponent} from '../job';
-import {EditItemTemplateDialogComponent, ItemTemplateListComponent} from '../item-template';
 import {MonsterListComponent} from '../monster';
 import {EffectListComponent} from '../effect';
 import {QuestListComponent} from '../quest';
@@ -11,6 +10,8 @@ import {HomeDatabaseComponent} from './home-database.component';
 import {DatabaseSectionsComponent} from './database-sections.component';
 import {AptitudeListComponent} from '../aptitude/aptitude-list.component';
 import {AptitudeGroupComponent} from '../aptitude/aptitude-group.component';
+import {EditItemTemplateDialogComponent} from '../item-template/edit-item-template-dialog.component';
+import {ItemTemplateListComponent} from '../item-template/item-template-list.component';
 
 export const routes: Routes = [
     {

@@ -1,42 +1,35 @@
 import {forkJoin} from 'rxjs';
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
-import {God, IconSelectorComponent, IconSelectorComponentDialogData, MiscService, NhbkDialogService} from '../shared';
+import {God, IconComponent, IconSelectorComponent, IconSelectorComponentDialogData, MiscService, NhbkDialogService} from '../shared';
 import {LoginService} from '../user';
 import {Skill, SkillService} from '../skill';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
 
-import {
-    ItemSlot,
-    ItemTemplate,
-    ItemTemplateGunData,
-    ItemTemplateInstrumentData,
-    ItemTemplateSection
-} from './item-template.model';
+import {ItemSlot, ItemTemplate, ItemTemplateGunData, ItemTemplateInstrumentData, ItemTemplateSection} from './item-template.model';
 import {ItemTemplateService} from './item-template.service'
 import {IconDescription} from '../shared/icon.model';
 import {AddItemTemplateEditorModuleDialogComponent} from './add-item-template-editor-module-dialog.component';
 import {ItemTypeResponse} from '../api/responses';
 import {NhbkMatDialog} from '../material-workaround';
-import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
-import { IconComponent } from '../shared/icon.component';
-import { MatIconButton, MatButton } from '@angular/material/button';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { ItemTemplateEditorModuleComponent } from './item-template-editor-module.component';
-import { ItemTemplateComponent } from './item-template.component';
+import {MatCard, MatCardAvatar, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
+import {MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {FormsModule} from '@angular/forms';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MatIcon} from '@angular/material/icon';
+import {MatSelect} from '@angular/material/select';
+import {MatOption} from '@angular/material/autocomplete';
+import {ItemTemplateEditorModuleComponent} from './item-template-editor-module.component';
+import {ItemTemplateDetailsComponent} from './item-template-details.component';
 
 @Component({
     selector: 'item-template-editor',
     styleUrls: ['./item-template-editor.component.scss'],
     templateUrl: './item-template-editor.component.html',
-    imports: [MatCard, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, IconComponent, MatIconButton, MatTooltip, MatIcon, MatSelect, MatOption, MatSuffix, MatCardHeader, MatCardTitle, ItemTemplateEditorModuleComponent, MatButton, ItemTemplateComponent]
+    imports: [MatCard, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, IconComponent, MatIconButton, MatTooltip, MatIcon, MatSelect, MatOption, MatSuffix, MatCardHeader, MatCardTitle, ItemTemplateEditorModuleComponent, MatButton, ItemTemplateDetailsComponent, MatCardAvatar, MatCardSubtitle]
 })
 export class ItemTemplateEditorComponent implements OnInit, OnChanges {
     @Input() itemTemplate: ItemTemplate;

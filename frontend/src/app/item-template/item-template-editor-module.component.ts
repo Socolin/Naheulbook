@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
-import { Portal, CdkPortal } from '@angular/cdk/portal';
+import {CdkPortal, Portal} from '@angular/cdk/portal';
 
-import {God, NhbkDialogService, removeDiacritics} from '../shared';
-import {Skill} from '../skill';
-import {NhbkAction, NhbkActionEditorDialogComponent, NhbkActionEditorDialogData} from '../action';
+import {God, NhbkDialogService, removeDiacritics, StatRequirementsEditorComponent} from '../shared';
+import {Skill, SkillModifiersEditorComponent} from '../skill';
+import {NhbkAction} from '../action';
 import {LoginService} from '../user';
 
 import {ItemSlot, ItemTemplate} from './item-template.model';
@@ -12,25 +12,24 @@ import {ItemTemplateService} from './item-template.service';
 import {itemTemplateModulesDefinitions} from './item-template-modules-definitions';
 import {ItemTypeResponse} from '../api/responses';
 import {NhbkMatDialog} from '../material-workaround';
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardSubtitle, MatCardActions } from '@angular/material/card';
-import { NgSwitch, NgSwitchCase, NgFor, NgIf, NgSwitchDefault } from '@angular/common';
-import { MatIconButton, MatButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel, MatSuffix, MatPrefix } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
-import { NhbkActionComponent } from '../action/nhbk-action.component';
-import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
-import { MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatDivider } from '@angular/material/list';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { DurationSelectorComponent } from '../date/duration-selector.component';
-import { ModifiersEditorComponent } from '../effect/modifiers-editor.component';
-import { StatRequirementsEditorComponent } from '../shared/stat-requirements-editor.component';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { SkillModifiersEditorComponent } from '../skill/skill-modifiers-editor.component';
-import { MatExpansionPanelActionRow } from '@angular/material/expansion';
+import {MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
+import {NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {FormsModule} from '@angular/forms';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatSelect} from '@angular/material/select';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatDivider} from '@angular/material/list';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {DurationSelectorComponent} from '../date';
+import {ModifiersEditorComponent} from '../effect';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {MatExpansionPanelActionRow} from '@angular/material/expansion';
+import {NhbkActionEditorDialogComponent, NhbkActionEditorDialogData} from '../action/nhbk-action-editor-dialog.component';
+import {NhbkActionComponent} from '../action/nhbk-action.component';
 
 @Component({
     selector: 'item-template-editor-module',

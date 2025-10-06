@@ -1,17 +1,16 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 
-import {God} from '../shared';
+import {God, IconComponent} from '../shared';
 import {CreateItemTemplateDialogComponent, CreateItemTemplateDialogData} from './create-item-template-dialog.component';
 import {EditItemTemplateDialogComponent, EditItemTemplateDialogData} from './edit-item-template-dialog.component';
 
 import {ItemTemplate} from './item-template.model';
 import {NhbkMatDialog} from '../material-workaround';
-import { MatCard, MatCardSubtitle, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardContent } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
-import { IconComponent } from '../shared/icon.component';
-import { MatIconButton } from '@angular/material/button';
-import { MatMenuTrigger, MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
-import { ItemTemplateDetailsComponent } from './item-template-details.component';
+import {MatCard, MatCardAvatar, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
+import {MatIcon} from '@angular/material/icon';
+import {MatIconButton} from '@angular/material/button';
+import {MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {ItemTemplateDetailsComponent} from './item-template-details.component';
 
 @Component({
     selector: 'item-template',

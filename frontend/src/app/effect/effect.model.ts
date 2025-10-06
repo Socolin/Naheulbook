@@ -1,7 +1,7 @@
-import {StatModifier} from '../shared';
+import {IEffect, StatModifier} from '../shared';
 import {IDurable} from '../api/shared';
 import {DurationType} from '../api/shared/enums';
-import {EffectSubCategoryResponse, EffectResponse, EffectTypeResponse} from '../api/responses';
+import {EffectResponse, EffectSubCategoryResponse, EffectTypeResponse} from '../api/responses';
 
 export type EffectSubCategoryDictionary = { [id: number]: EffectSubCategory };
 
@@ -46,7 +46,7 @@ export class EffectType {
     }
 }
 
-export class Effect implements IDurable {
+export class Effect implements IDurable, IEffect {
     id: number;
     name: string;
     subCategory: EffectSubCategory;

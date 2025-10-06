@@ -1,11 +1,10 @@
-import {from as observableFrom, Observable, ReplaySubject} from 'rxjs';
+import {Observable, ReplaySubject} from 'rxjs';
 
 import {map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 import {Stat} from './stat.model';
-import {ItemTemplate} from '../item-template';
 import {God, GodByTechName} from './god.model';
 
 @Injectable({providedIn: 'root'})
@@ -58,13 +57,6 @@ export class MiscService {
             gods.map(g => godsByTechName[g.techName] = g);
             return godsByTechName;
         }));
-    }
-
-    searchItem(filter): Observable<ItemTemplate[]> {
-        if (!filter) {
-            return observableFrom([]);
-        }
-        return this.httpClient.get<ItemTemplate[]>('/api/v2/itemTemplates/search?filter=' + encodeURIComponent(filter));
     }
 
     postError(url, error) {

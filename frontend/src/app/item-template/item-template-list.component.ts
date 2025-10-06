@@ -17,20 +17,20 @@ import {NhbkMatDialog} from '../material-workaround';
 import {Guid} from '../api/shared/util';
 import {EditItemTemplateDialogComponent, EditItemTemplateDialogData} from './edit-item-template-dialog.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import { UntypedFormBuilder, UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl} from '@angular/forms';
 import {debounceTime, map, startWith, switchMap, tap} from 'rxjs/operators';
-import { MatCard, MatCardContent, MatCardActions, MatCardSubtitle, MatCardHeader, MatCardTitle } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
-import { MatAutocompleteTrigger, MatAutocomplete, MatOptgroup, MatOption } from '@angular/material/autocomplete';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { ItemTemplatesTableViewComponent } from './item-templates-table-view.component';
-import { ItemTemplateComponent } from './item-template.component';
-import { AsyncPipe } from '@angular/common';
-import { TextFormatterPipe } from '../shared/text-formatter.pipe';
+import {MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
+import {MatIcon} from '@angular/material/icon';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatAutocomplete, MatAutocompleteTrigger, MatOptgroup, MatOption} from '@angular/material/autocomplete';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {ItemTemplatesTableViewComponent} from './item-templates-table-view.component';
+import {ItemTemplateComponent} from './item-template.component';
+import {AsyncPipe} from '@angular/common';
+import {TextFormatterPipe} from '../shared/text-formatter.pipe';
 
 @Component({
     selector: 'item-template-list',

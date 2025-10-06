@@ -117,9 +117,45 @@
   <mat-icon>add</mat-icon> Ajouter un module
 </button>
 
-<item-template [jobsName]="jobsName"
-  [originsName]="originsName"
-  [godsByTechName]="godsByTechName"
-  [itemTemplate]="itemTemplate">
-</item-template>
-
+<mat-card>
+  @if (itemTemplate.source === 'community') {
+    <mat-card-subtitle style="display: flex; align-items: center">
+      <mat-icon>group</mat-icon>Object communautaire@if (itemTemplate.sourceUser) {
+      <span>&nbsp;créé par {{itemTemplate.sourceUser}}</span>
+    }
+    </mat-card-subtitle>
+  }
+  @if (itemTemplate.source === 'private') {
+    <mat-card-subtitle style="display: flex; align-items: center">
+      <mat-icon>lock</mat-icon> Object privé
+    </mat-card-subtitle>
+  }
+  <mat-card-header>
+    <icon matCardAvatar [enchanted]="itemTemplate.data.enchantment !== undefined" [icon]="itemTemplate.data.icon" [size]="'40px'"></icon>
+    <mat-card-title>
+      {{itemTemplate.name}}
+      @if (itemTemplate.data.enchantment !== undefined) {
+        <span>(Ench. {{itemTemplate.data.enchantment}})</span>
+      }
+    </mat-card-title>
+    <mat-card-subtitle>
+      @if (itemTemplate.data.enchantment !== undefined) {
+        <span>Enchanté </span>
+      }
+      @if (itemTemplate.data.requireLevel) {
+        <span>Niveau {{itemTemplate.data.requireLevel}} </span>
+      }
+      @if (itemTemplate.data.relic) {
+        <span>Relique </span>
+      }
+    </mat-card-subtitle>
+    <span class="padding"></span>
+  </mat-card-header>
+  <mat-card-content>
+    <app-item-template-details [itemTemplate]="itemTemplate"
+                               [jobsName]="jobsName"
+                               [godsByTechName]="godsByTechName"
+                               [originsName]="originsName">
+    </app-item-template-details>
+  </mat-card-content>
+</mat-card>
