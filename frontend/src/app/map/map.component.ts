@@ -1,3 +1,9 @@
+import 'leaflet';
+import 'leaflet.path.drag';
+import 'leaflet-editable';
+import 'leaflet-geometryutil';
+import 'leaflet-almostover';
+
 import {Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router, RouterLink} from '@angular/router';
 import {FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
