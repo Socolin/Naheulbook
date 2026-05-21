@@ -28,8 +28,8 @@ public class EffectRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
 
         var actualEffectCategories = await _effectRepository.GetCategoriesAsync();
 
-        AssertEntitiesAreLoaded(actualEffectCategories, new[] {effectCategory});
-        AssertEntitiesAreLoaded(actualEffectCategories.Single().SubCategories, new[] {effectSubCategory1, effectSubCategory2});
+        AssertEntitiesAreLoaded(actualEffectCategories, [effectCategory]);
+        AssertEntitiesAreLoaded(actualEffectCategories.Single().SubCategories, [effectSubCategory1, effectSubCategory2]);
     }
 
     #endregion
@@ -48,8 +48,8 @@ public class EffectRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
 
         var actualEffects = await _effectRepository.GetBySubCategoryWithModifiersAsync(effectSubCategory.Id);
 
-        AssertEntitiesAreLoaded(actualEffects, new[] {effect});
-        AssertEntitiesAreLoaded(actualEffects.Single().Modifiers, new[] {effectModifier});
+        AssertEntitiesAreLoaded(actualEffects, [effect]);
+        AssertEntitiesAreLoaded(actualEffects.Single().Modifiers, [effectModifier]);
     }
 
     #endregion

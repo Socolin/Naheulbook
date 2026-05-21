@@ -32,14 +32,14 @@ public class JobRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
 
         var actualJobs = await _jobRepository.GetAllWithAllDataAsync();
 
-        AssertEntitiesAreLoaded(actualJobs, new[] {job});
+        AssertEntitiesAreLoaded(actualJobs, [job]);
         var actualJob = actualJobs.Single();
-        AssertEntitiesAreLoaded(actualJob.Bonuses, new[] {jobBonus});
-        AssertEntitiesAreLoaded(actualJob.Requirements, new[] {jobRequirement});
-        AssertEntitiesAreLoaded(actualJob.Restrictions, new[] {jobRestriction});
-        AssertEntitiesAreLoaded(actualJob.Skills, new[] {jobSkill1, jobSkill2});
+        AssertEntitiesAreLoaded(actualJob.Bonuses, [jobBonus]);
+        AssertEntitiesAreLoaded(actualJob.Requirements, [jobRequirement]);
+        AssertEntitiesAreLoaded(actualJob.Restrictions, [jobRestriction]);
+        AssertEntitiesAreLoaded(actualJob.Skills, [jobSkill1, jobSkill2]);
         AssertEntityIsLoaded(actualJob.Skills.Single(x => x.SkillId == jobSkill1.SkillId), jobSkill1);
         AssertEntityIsLoaded(actualJob.Skills.Single(x => x.SkillId == jobSkill2.SkillId), jobSkill2);
-        AssertEntitiesAreLoaded(actualJob.Specialities, new[] {speciality});
+        AssertEntitiesAreLoaded(actualJob.Specialities, [speciality]);
     }
 }

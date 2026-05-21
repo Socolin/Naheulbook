@@ -109,8 +109,7 @@ public class ItemTemplateUtilTests
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
 
-        itemTemplate.Slots.Should().BeEquivalentTo(new[]
-        {
+        itemTemplate.Slots.Should().BeEquivalentTo([
             new ItemTemplateSlotEntity
             {
                 SlotId = 2,
@@ -119,7 +118,8 @@ public class ItemTemplateUtilTests
             {
                 SlotId = 3,
             },
-        });
+            ]
+        );
     }
 
     [Test]
@@ -172,8 +172,7 @@ public class ItemTemplateUtilTests
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
 
-        itemTemplate.Requirements.Should().BeEquivalentTo(new[]
-        {
+        itemTemplate.Requirements.Should().BeEquivalentTo([
             new ItemTemplateRequirementEntity
             {
                 StatName = "some-stat-name-2",
@@ -186,7 +185,8 @@ public class ItemTemplateUtilTests
                 MinValue = 4,
                 MaxValue = 12,
             },
-        });
+            ]
+        );
     }
 
 
@@ -243,8 +243,7 @@ public class ItemTemplateUtilTests
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
 
-        itemTemplate.Modifiers.Should().BeEquivalentTo(new[]
-        {
+        itemTemplate.Modifiers.Should().BeEquivalentTo([
             new ItemTemplateModifierEntity
             {
                 StatName = "some-stat-name-2",
@@ -261,7 +260,8 @@ public class ItemTemplateUtilTests
                 Value = 3,
                 Special = "some-special-3",
             },
-        });
+            ]
+        );
     }
 
     [Test]
@@ -300,16 +300,16 @@ public class ItemTemplateUtilTests
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
 
-        itemTemplate.Skills.Should().BeEquivalentTo(new[]
-        {
+        itemTemplate.Skills.Should().BeEquivalentTo([
             new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000004")},
             new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000005")},
-        });
-        itemTemplate.UnSkills.Should().BeEquivalentTo(new[]
-        {
+            ]
+        );
+        itemTemplate.UnSkills.Should().BeEquivalentTo([
             new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000006")},
             new ItemTemplateSkillEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000007")},
-        });
+            ]
+        );
     }
 
 
@@ -339,11 +339,11 @@ public class ItemTemplateUtilTests
 
         _util.ApplyChangesFromRequest(itemTemplate, request);
 
-        itemTemplate.SkillModifiers.Should().BeEquivalentTo(new[]
-        {
+        itemTemplate.SkillModifiers.Should().BeEquivalentTo([
             new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000004"), Value = 3},
             new ItemTemplateSkillModifierEntity {SkillId = new Guid("00000000-0000-0000-0000-000000000005"), Value = 4},
-        });
+            ]
+        );
     }
 
     [Test]

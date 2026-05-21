@@ -39,12 +39,12 @@ public class ItemTemplateRepositoryTests : RepositoryTestsBase<NaheulbookDbConte
         var actual = await _itemTemplateRepository.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplate.Id);
 
         AssertEntityIsLoaded(actual, itemTemplate);
-        AssertEntitiesAreLoaded(actual.Requirements, new[] {itemTemplateRequirement});
-        AssertEntitiesAreLoaded(actual.Modifiers, new[] {itemTemplateModifier});
-        AssertEntitiesAreLoaded(actual.Skills, new[] {itemTemplateSkill});
-        AssertEntitiesAreLoaded(actual.UnSkills, new[] {itemTemplateUnSkill});
-        AssertEntitiesAreLoaded(actual.SkillModifiers, new[] {itemTemplateSkillModifier});
-        AssertEntitiesAreLoaded(actual.Slots, new[] {itemTemplateSlot});
+        AssertEntitiesAreLoaded(actual.Requirements, [itemTemplateRequirement]);
+        AssertEntitiesAreLoaded(actual.Modifiers, [itemTemplateModifier]);
+        AssertEntitiesAreLoaded(actual.Skills, [itemTemplateSkill]);
+        AssertEntitiesAreLoaded(actual.UnSkills, [itemTemplateUnSkill]);
+        AssertEntitiesAreLoaded(actual.SkillModifiers, [itemTemplateSkillModifier]);
+        AssertEntitiesAreLoaded(actual.Slots, [itemTemplateSlot]);
         AssertEntityIsLoaded(actual.Slots.Single().Slot, itemSlot);
     }
 
@@ -95,16 +95,16 @@ public class ItemTemplateRepositoryTests : RepositoryTestsBase<NaheulbookDbConte
             .AddItemTemplateSkillModifier(out var itemTemplateSkillModifier, modifiedSkill)
             .AddItemTemplateSlot(out var itemTemplateSlot);
 
-        var actualEntities = await _itemTemplateRepository.GetByIdsAsync(new[] {itemTemplate.Id});
+        var actualEntities = await _itemTemplateRepository.GetByIdsAsync([itemTemplate.Id]);
 
         var actualItemTemplate = actualEntities.Single();
         AssertEntityIsLoaded(actualItemTemplate, itemTemplate);
-        AssertEntitiesAreLoaded(actualItemTemplate.Requirements, new[] {itemTemplateRequirement});
-        AssertEntitiesAreLoaded(actualItemTemplate.Modifiers, new[] {itemTemplateModifier});
-        AssertEntitiesAreLoaded(actualItemTemplate.Skills, new[] {itemTemplateSkill});
-        AssertEntitiesAreLoaded(actualItemTemplate.UnSkills, new[] {itemTemplateUnSkill});
-        AssertEntitiesAreLoaded(actualItemTemplate.SkillModifiers, new[] {itemTemplateSkillModifier});
-        AssertEntitiesAreLoaded(actualItemTemplate.Slots, new[] {itemTemplateSlot});
+        AssertEntitiesAreLoaded(actualItemTemplate.Requirements, [itemTemplateRequirement]);
+        AssertEntitiesAreLoaded(actualItemTemplate.Modifiers, [itemTemplateModifier]);
+        AssertEntitiesAreLoaded(actualItemTemplate.Skills, [itemTemplateSkill]);
+        AssertEntitiesAreLoaded(actualItemTemplate.UnSkills, [itemTemplateUnSkill]);
+        AssertEntitiesAreLoaded(actualItemTemplate.SkillModifiers, [itemTemplateSkillModifier]);
+        AssertEntitiesAreLoaded(actualItemTemplate.Slots, [itemTemplateSlot]);
         AssertEntityIsLoaded(actualItemTemplate.Slots.Single().Slot, itemSlot);
     }
 
@@ -118,9 +118,9 @@ public class ItemTemplateRepositoryTests : RepositoryTestsBase<NaheulbookDbConte
             .AddItemTemplate(out var itemTemplate2)
             .AddItemTemplate();
 
-        var actualEntities = await _itemTemplateRepository.GetByIdsAsync(new[] {itemTemplate1.Id, itemTemplate2.Id});
+        var actualEntities = await _itemTemplateRepository.GetByIdsAsync([itemTemplate1.Id, itemTemplate2.Id]);
 
-        AssertEntitiesAreLoaded(actualEntities, new[] {itemTemplate1, itemTemplate2});
+        AssertEntitiesAreLoaded(actualEntities, [itemTemplate1, itemTemplate2]);
     }
 
     #endregion

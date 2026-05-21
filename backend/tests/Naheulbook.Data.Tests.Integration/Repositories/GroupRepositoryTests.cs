@@ -34,9 +34,9 @@ public class GroupRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
 
         var groups = await _repository.GetGroupsOwnedByAsync(user.Id);
 
-        AssertEntitiesAreLoaded(groups, new[] {group1, group2});
-        AssertEntitiesAreLoaded(groups.Single(x => x.Id == group1.Id).Characters, new[] {character1, character2});
-        AssertEntitiesAreLoaded(groups.Single(x => x.Id == group2.Id).Characters, new[] {character3, character4});
+        AssertEntitiesAreLoaded(groups, [group1, group2]);
+        AssertEntitiesAreLoaded(groups.Single(x => x.Id == group1.Id).Characters, [character1, character2]);
+        AssertEntitiesAreLoaded(groups.Single(x => x.Id == group2.Id).Characters, [character3, character4]);
     }
 
     [Test]
@@ -78,17 +78,17 @@ public class GroupRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
         var actualGroup = await _repository.GetGroupsWithDetailsAsync(group.Id);
 
         AssertEntityIsLoaded(actualGroup, group);
-        AssertEntitiesAreLoaded(actualGroup.Characters, new[] {characterInGroup});
-        AssertEntitiesAreLoaded(actualGroup.Invites, new[] {groupInvite1, groupInvite2});
+        AssertEntitiesAreLoaded(actualGroup.Characters, [characterInGroup]);
+        AssertEntitiesAreLoaded(actualGroup.Invites, [groupInvite1, groupInvite2]);
         var actualInvitedCharacter1 = actualGroup.Invites.Single(x => x.CharacterId == invitedCharacter1.Id).Character;
         AssertEntityIsLoaded(actualInvitedCharacter1, invitedCharacter1);
         AssertEntityIsLoaded(actualInvitedCharacter1.Origin, origin);
-        AssertEntitiesAreLoaded(actualInvitedCharacter1.Jobs, new [] {characterJob1});
+        AssertEntitiesAreLoaded(actualInvitedCharacter1.Jobs, [characterJob1]);
         AssertEntityIsLoaded(actualInvitedCharacter1.Jobs.Single().Job, job);
         var actualInvitedCharacter2 = actualGroup.Invites.Single(x => x.CharacterId == invitedCharacter2.Id).Character;
         AssertEntityIsLoaded(actualInvitedCharacter2, invitedCharacter2);
         AssertEntityIsLoaded(actualInvitedCharacter2.Origin, origin);
-        AssertEntitiesAreLoaded(actualInvitedCharacter2.Jobs, new [] {characterJob2});
+        AssertEntitiesAreLoaded(actualInvitedCharacter2.Jobs, [characterJob2]);
         AssertEntityIsLoaded(actualInvitedCharacter2.Jobs.Single().Job, job);
     }
 

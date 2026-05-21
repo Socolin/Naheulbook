@@ -103,8 +103,8 @@ public class AutoFillTests
     {
         var element = AutoFill<TestList>.One();
 
-        Assert.That(element.IntValues, Is.EquivalentTo(new[] {1, 2, 3}));
-        Assert.That(element.StringValues, Is.EquivalentTo(new[] {"some-string-values0", "some-string-values1", "some-string-values2"}));
+        Assert.That(element.IntValues, Is.EquivalentTo([1, 2, 3]));
+        Assert.That(element.StringValues, Is.EquivalentTo(["some-string-values0", "some-string-values1", "some-string-values2"]));
     }
 
 

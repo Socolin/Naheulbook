@@ -44,12 +44,12 @@ public class ItemRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
 
         AssertEntityIsLoaded(actualItem, item);
         AssertEntityIsLoaded(actualItem.ItemTemplate, itemTemplate);
-        AssertEntitiesAreLoaded(actualItem.ItemTemplate.Requirements, new[] {itemTemplateRequirement});
-        AssertEntitiesAreLoaded(actualItem.ItemTemplate.Modifiers, new[] {itemTemplateModifier});
-        AssertEntitiesAreLoaded(actualItem.ItemTemplate.Skills, new[] {itemTemplateSkill});
-        AssertEntitiesAreLoaded(actualItem.ItemTemplate.UnSkills, new[] {itemTemplateUnSkill});
-        AssertEntitiesAreLoaded(actualItem.ItemTemplate.SkillModifiers, new[] {itemTemplateSkillModifier});
-        AssertEntitiesAreLoaded(actualItem.ItemTemplate.Slots, new[] {itemTemplateSlot});
+        AssertEntitiesAreLoaded(actualItem.ItemTemplate.Requirements, [itemTemplateRequirement]);
+        AssertEntitiesAreLoaded(actualItem.ItemTemplate.Modifiers, [itemTemplateModifier]);
+        AssertEntitiesAreLoaded(actualItem.ItemTemplate.Skills, [itemTemplateSkill]);
+        AssertEntitiesAreLoaded(actualItem.ItemTemplate.UnSkills, [itemTemplateUnSkill]);
+        AssertEntitiesAreLoaded(actualItem.ItemTemplate.SkillModifiers, [itemTemplateSkillModifier]);
+        AssertEntitiesAreLoaded(actualItem.ItemTemplate.Slots, [itemTemplateSlot]);
         AssertEntityIsLoaded(actualItem.ItemTemplate.Slots.Single().Slot, itemSlot);
     }
 

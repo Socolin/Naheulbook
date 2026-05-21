@@ -250,7 +250,7 @@ public class ItemTemplateServiceTests
 
         var actualItemTemplates = await _service.SearchItemTemplateAsync(filter, 40, null);
 
-        actualItemTemplates.Should().BeEquivalentTo(new[] {item1, item2, item3});
+        actualItemTemplates.Should().BeEquivalentTo([item1, item2, item3]);
     }
 
     [Test]

@@ -65,7 +65,7 @@ public class UserRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
 
         var actualEntities = await _userRepository.SearchUsersAsync(user.DisplayName!);
 
-        AssertEntitiesAreLoaded(actualEntities, new[] {user});
+        AssertEntitiesAreLoaded(actualEntities, [user]);
     }
 
     [Test]

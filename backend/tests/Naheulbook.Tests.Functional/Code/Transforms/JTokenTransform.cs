@@ -29,7 +29,7 @@ public class JTokenTransform(
         }
         catch (JsonReaderException ex)
         {
-            var splitJson = expandedJson.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+            var splitJson = expandedJson.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
 
             var showErrorOutput = new StringBuilder();
             var contextSize = 3;

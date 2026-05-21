@@ -22,8 +22,8 @@ public class MapStep(TestDataUtil testDataUtil)
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
             testDataUtil.AddMap(x =>
             {
-                x.Layers = new[]
-                {
+                x.Layers =
+                [
                     new MapLayerEntity
                     {
                         Name = "some-layer-name",
@@ -48,7 +48,7 @@ public class MapStep(TestDataUtil testDataUtil)
                             },
                         },
                     },
-                };
+                ];
             });
     }
 
@@ -58,8 +58,8 @@ public class MapStep(TestDataUtil testDataUtil)
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
             testDataUtil.AddMap(x =>
             {
-                x.Layers = new[]
-                {
+                x.Layers =
+                [
                     new MapLayerEntity
                     {
                         Name = "some-layer-name",
@@ -77,7 +77,7 @@ public class MapStep(TestDataUtil testDataUtil)
                             },
                         },
                     },
-                };
+                ];
             });
     }
 
@@ -87,14 +87,14 @@ public class MapStep(TestDataUtil testDataUtil)
         for (var i = 0; i < StepArgumentUtil.ParseQuantity(amount); i++)
             testDataUtil.AddMap(x =>
             {
-                x.Layers = new[]
-                {
+                x.Layers =
+                [
                     new MapLayerEntity
                     {
                         Name = "some-layer-name",
                         Source = "official",
                     },
-                };
+                ];
             });
     }
 }
