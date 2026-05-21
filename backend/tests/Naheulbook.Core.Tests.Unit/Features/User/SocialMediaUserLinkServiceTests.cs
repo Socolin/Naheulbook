@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Data.EntityFrameworkCore.Entities;

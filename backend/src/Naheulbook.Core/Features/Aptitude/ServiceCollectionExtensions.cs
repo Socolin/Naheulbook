@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Naheulbook.Core.Features.Character;
 using Naheulbook.Shared.Extensions;
 
 namespace Naheulbook.Core.Features.Aptitude;

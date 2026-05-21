@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using Naheulbook.Core.Features.Group;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Loot;

@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using Naheulbook.Core.Features.Effect;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;

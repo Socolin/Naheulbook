@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <IsPackable>false</IsPackable>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
@@ -20,6 +20,10 @@
         <ProjectReference Include="..\..\src\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" />
         <ProjectReference Include="..\..\src\Naheulbook.Data\Naheulbook.Data.csproj" />
         <ProjectReference Include="..\Naheulbook.TestUtils\Naheulbook.TestUtils.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageVersion Update="nunit" Version="4.6.1" />
     </ItemGroup>
 
 </Project>

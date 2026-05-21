@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using Naheulbook.Data.EntityFrameworkCore.DbContexts;
 using Naheulbook.Data.Repositories;
 using NUnit.Framework;

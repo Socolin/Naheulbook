@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using Naheulbook.Core.Features.Monster;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Tests.Unit.TestUtils;

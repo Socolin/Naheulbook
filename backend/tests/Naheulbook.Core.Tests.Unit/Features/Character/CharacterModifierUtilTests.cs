@@ -1,5 +1,5 @@
-using FluentAssertions;
-using FluentAssertions.Execution;
+using AwesomeAssertions;
+using AwesomeAssertions.Execution;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using NSubstitute;

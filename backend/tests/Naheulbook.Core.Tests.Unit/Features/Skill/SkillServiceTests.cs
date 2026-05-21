@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using Naheulbook.Core.Features.Skill;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.Repositories;

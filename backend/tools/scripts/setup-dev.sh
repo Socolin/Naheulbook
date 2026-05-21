@@ -105,7 +105,7 @@ GRANT  ALL PRIVILEGES ON `naheulbook_integration`.* TO 'naheulbook_integration'@
 FLUSH PRIVILEGES;
 EOF
 
-MYSQL_CONNECTION_STRING="Server=localhost;Database=naheulbook;Uid=naheulbook;Pwd=naheulbook;SslMode=None;CharSet=utf8;AllowPublicKeyRetrieval=True;Port=${MYSQL_PORT}"
+MYSQL_CONNECTION_STRING="Server=localhost;Database=naheulbook;Uid=naheulbook;Pwd=naheulbook;SslMode=Disabled;CharSet=utf8;AllowPublicKeyRetrieval=True;Port=${MYSQL_PORT}"
 sudo -H -u "${user}" -i bash -c "cd ${NAHEULBOOK_ROOT_PATH}; dotnet run --project tools/Naheulbook.DatabaseMigrator.Cli -- --ConnectionStrings:DefaultConnection='${MYSQL_CONNECTION_STRING}' --operation=migrate"
 mysql -u root --password=naheulbook --host localhost --protocol=TCP --port "${MYSQL_PORT}" naheulbook  <"${NAHEULBOOK_ROOT_PATH}/src/Naheulbook.DatabaseMigrator/init_data.sql"
 

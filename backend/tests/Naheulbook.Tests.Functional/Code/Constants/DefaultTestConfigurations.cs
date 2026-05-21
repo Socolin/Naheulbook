@@ -12,7 +12,7 @@ public static class DefaultTestConfigurations
                                                            $"Uid={NaheulbookDbUserName};" +
                                                            $"Port={DockerServicePortFinder.GetPortForServiceInDocker("scripts-naheulbook_dev_env_mysql-1", "3306/tcp")?.ToString() ?? Environment.GetEnvironmentVariable("MYSQL_PORT") ?? "3306"};" +
                                                            "Pwd=naheulbook;" +
-                                                           "SslMode=None;" +
+                                                           "SslMode=Disabled;" +
                                                            "CharSet=utf8;" +
                                                            "AllowPublicKeyRetrieval=True;" +
                                                            "Allow User Variables=True";

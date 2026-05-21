@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using Naheulbook.Data.EntityFrameworkCore.Extensions;
 
 namespace Naheulbook.Data.EntityFrameworkCore.Entities;

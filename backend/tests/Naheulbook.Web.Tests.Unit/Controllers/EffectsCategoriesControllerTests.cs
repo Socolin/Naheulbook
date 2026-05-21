@@ -1,5 +1,5 @@
 using AutoMapper;
-using FluentAssertions;
+using AwesomeAssertions;
 using Microsoft.AspNetCore.Http;
 using Naheulbook.Core.Features.Effect;
 using Naheulbook.Core.Features.Shared;

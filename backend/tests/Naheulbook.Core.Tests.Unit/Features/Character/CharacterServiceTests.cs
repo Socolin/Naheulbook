@@ -1,5 +1,5 @@
 using AutoMapper;
-using FluentAssertions;
+using AwesomeAssertions;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Job;

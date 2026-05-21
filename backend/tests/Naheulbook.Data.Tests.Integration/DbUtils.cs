@@ -53,6 +53,6 @@ public static class DbUtils
                "Database=naheulbook_integration;" +
                "User=naheulbook;" +
                "Password=naheulbook;" +
-               "SslMode=None";
+               "SslMode=Disabled";
     }
 }

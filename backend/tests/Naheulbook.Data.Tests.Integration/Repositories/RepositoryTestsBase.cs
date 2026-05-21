@@ -1,7 +1,7 @@
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
-using FluentAssertions;
-using FluentAssertions.Equivalency;
+using AwesomeAssertions;
+using AwesomeAssertions.Equivalency;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.EntityFrameworkCore.DbContexts;
 using Naheulbook.Data.EntityFrameworkCore.Entities;

@@ -27,4 +27,4 @@ FLUSH PRIVILEGES;
 
 ### Apply migration
 
-* `dotnet fm migrate -p mysql -c "Server=localhost;Database=naheulbook;Uid=naheulbook;Pwd=naheulbook;SslMode=None" -a bin/Debug/Naheulbook.DatabaseMigrator.dll`
+* `dotnet fm migrate -p mysql -c "Server=localhost;Database=naheulbook;Uid=naheulbook;Pwd=naheulbook;SslMode=Disabled" -a bin/Debug/Naheulbook.DatabaseMigrator.dll`
