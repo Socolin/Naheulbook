@@ -49,11 +49,11 @@ jobs:
        GRANT  ALL PRIVILEGES ON `naheulbook_integration`.* TO 'naheulbook'@'%';
        FLUSH PRIVILEGES;
        EOF
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: 10.0.x
     - name: Restore dependencies
       run: dotnet restore
       working-directory: backend
@@ -70,7 +70,7 @@ jobs:
         MYSQL_HOST: 127.0.0.1
         MYSQL_PORT: ${{ job.services.mysql.ports['3306'] }}
     - name: Publish Unit Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v1.19
+      uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
         files: "backend/tests/*/TestResults/TestResults.xml"
@@ -87,16 +87,16 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Extract metadata (tags, labels) for Docker - Web
       id: meta
-      uses: docker/metadata-action@v4
+      uses: docker/metadata-action@v6
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
     - name: Extract metadata (tags, labels) for Docker - Db migrator
       id: meta-db-migrator
-      uses: docker/metadata-action@v4
+      uses: docker/metadata-action@v6
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-db-migrator
     - name: Build and push Docker - Web
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v7
       with:
         context: backend/src/Naheulbook.Web/bin/Release/publish/
         file: backend/src/Naheulbook.Web/Dockerfile
@@ -104,7 +104,7 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
     - name: Build and push Docker - Db migrator
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v7
       with:
         context: backend/tools/Naheulbook.DatabaseMigrator.Cli/bin/Release/publish/
         file: backend/tools/Naheulbook.DatabaseMigrator.Cli/Dockerfile
