@@ -5,11 +5,11 @@
         align-items: center;
         grid-gap: 8px;
         grid-template-areas: "name name name"
-        "at prd esq"
+        "prd esq ."
         "ev maxEv ."
         "ea maxEa . "
         "pr pr_magic resm"
-        "dmg dmg dmg"
+        "attacks attacks attacks"
         "cou chercheNoise chercheNoise"
         "xp sex sex"
         "note note note";
@@ -23,8 +23,8 @@
         grid-area: name;
     }
 
-    .at {
-        grid-area: at;
+    .attacks {
+        grid-area: attacks;
     }
 
     .prd {
@@ -57,10 +57,6 @@
 
     .pr_magic {
         grid-area: pr_magic;
-    }
-
-    .dmg {
-        grid-area: dmg;
     }
 
     .cou {

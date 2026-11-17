@@ -198,7 +198,7 @@ public class MonsterServiceTests
         return new CreateMonsterRequest
         {
             Name = "some-monster-name",
-            Data = new MonsterData {At = 8, Prd = 10},
+            Data = new MonsterData {Attacks = [new MonsterAttack {At = 8, Dmg = "1D+2"}], Prd = 10},
             Items = new List<CreateItemRequest>(),
             Modifiers = new List<ActiveStatsModifier>(),
         };

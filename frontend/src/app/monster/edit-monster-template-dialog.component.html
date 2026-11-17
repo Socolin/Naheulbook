@@ -74,17 +74,6 @@
 
         <ng-container formGroupName="data">
 
-          <div class="at">
-            <mat-form-field>
-              <mat-label>Attaque</mat-label>
-              <input matInput
-                autocomplete="off"
-                autocapitalize="off"
-                type="number"
-                formControlName="at"
-                />
-            </mat-form-field>
-          </div>
           <div class="prd">
             <mat-form-field>
               <mat-label>Parade</mat-label>
@@ -173,16 +162,6 @@
                 />
             </mat-form-field>
           </div>
-          <div class="dmg">
-            <mat-form-field>
-              <mat-label>Dégats</mat-label>
-              <input matInput
-                autocomplete="off"
-                autocapitalize="off"
-                formControlName="dmg"
-                />
-            </mat-form-field>
-          </div>
           <div class="cou">
             <mat-form-field>
               <mat-label>Courage</mat-label>
@@ -225,12 +204,26 @@
         </ng-container>
       </form>
 
+      <h2>Attaques</h2>
+      <app-monster-attacks-editor [attacks]="attacksFormArray"></app-monster-attacks-editor>
+
       <h2>Traits</h2>
       <div class="traits">
-        @for (trait of selectedTraits; track trait) {
-          <div>
-            {{traitsById[trait.traitId].name}}{{traitsById[trait.traitId].levels ? ' - ' + trait.level :''}}
+        @if (selectedTraits.length) {
+          <div class="traits-list">
+            @for (trait of selectedTraits; track trait.traitId) {
+              @if (traitsById[trait.traitId]; as monsterTrait) {
+                <monster-trait class="trait-tile"
+                               matRipple
+                               [trait]="monsterTrait"
+                               [traitInfo]="trait"
+                               (click)="openTraitInfo(monsterTrait)">
+                </monster-trait>
+              }
+            }
           </div>
+        } @else {
+          <div class="no-traits">Aucun trait</div>
         }
         <button mat-raised-button (click)="openSelectTraitsDialog()">
           <mat-icon>edit</mat-icon>

@@ -10,17 +10,6 @@
         </mat-form-field>
     </div>
 
-    <div class="at">
-        <mat-form-field>
-            <mat-label>Attaque</mat-label>
-            <input matInput
-                   autocomplete="off"
-                   autocapitalize="off"
-                   type="number"
-                   formControlName="at"
-            />
-        </mat-form-field>
-    </div>
     <div class="prd">
         <mat-form-field>
             <mat-label>Parade</mat-label>
@@ -120,15 +109,8 @@
             />
         </mat-form-field>
     </div>
-    <div class="dmg">
-        <mat-form-field>
-            <mat-label>Dégats</mat-label>
-            <input matInput
-                   autocomplete="off"
-                   autocapitalize="off"
-                   formControlName="dmg"
-            />
-        </mat-form-field>
+    <div class="attacks">
+        <app-monster-attacks-editor [attacks]="attacksFormArray"></app-monster-attacks-editor>
     </div>
     <div class="cou">
         <mat-form-field>

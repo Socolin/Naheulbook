@@ -1,0 +1,41 @@
+@for (attackGroup of attackGroups; track attackGroup; let i = $index) {
+  <div class="attack" [formGroup]="attackGroup">
+    <mat-form-field class="attack-name">
+      <mat-label>Nom de l'attaque</mat-label>
+      <input matInput
+        autocomplete="off"
+        formControlName="name"
+        />
+    </mat-form-field>
+    <mat-form-field class="attack-at">
+      <mat-label>Attaque</mat-label>
+      <input matInput
+        autocomplete="off"
+        autocapitalize="off"
+        type="number"
+        formControlName="at"
+        />
+    </mat-form-field>
+    <mat-form-field class="attack-dmg">
+      <mat-label>Dégâts</mat-label>
+      <input matInput
+        autocomplete="off"
+        autocapitalize="off"
+        formControlName="dmg"
+        placeholder="1D+6"
+        />
+      <mat-hint>Format : 1D+6</mat-hint>
+    </mat-form-field>
+    <button mat-icon-button
+      type="button"
+      matTooltip="Supprimer l'attaque"
+      [disabled]="attackGroups.length <= 1"
+      (click)="removeAttack(i)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+}
+<button mat-button type="button" class="add-attack" (click)="addAttack()">
+  <mat-icon>add</mat-icon>
+  Ajouter une attaque
+</button>

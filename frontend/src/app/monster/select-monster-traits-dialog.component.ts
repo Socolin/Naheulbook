@@ -1,19 +1,15 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MonsterTrait, TraitInfo} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {MonsterTraitDialogComponent} from './monster-trait-dialog.component';
-import { MatSelectionList, MatListOption, MatList, MatListItem } from '@angular/material/list';
 import {NhbkMatDialog} from '../material-workaround';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { MatLine } from '@angular/material/grid-list';
-import { MatIconButton, MatButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField } from '@angular/material/form-field';
-import { MatSelect } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
-import { MatOption } from '@angular/material/autocomplete';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {MatIcon} from '@angular/material/icon';
+import {FormsModule} from '@angular/forms';
+import {MatCheckbox} from '@angular/material/checkbox';
 
 export interface SelectMonsterTraitsDialogData {
     selectedTraits: TraitInfo[];
@@ -27,7 +23,7 @@ export interface SelectMonsterTraitsDialogResult {
     selector: 'app-select-monster-traits-dialog',
     templateUrl: './select-monster-traits-dialog.component.html',
     styleUrls: ['./select-monster-traits-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatProgressSpinner, MatSelectionList, MatListOption, MatLine, MatIconButton, MatIcon, MatList, MatListItem, MatFormField, MatSelect, FormsModule, MatOption, MatDialogActions, MatButton, MatDialogClose]
+    imports: [MatDialogTitle, MatDialogContent, MatProgressSpinner, MatCheckbox, MatIconButton, MatIcon, MatButtonToggleGroup, MatButtonToggle, FormsModule, MatDialogActions, MatButton, MatDialogClose]
 })
 export class SelectMonsterTraitsDialogComponent implements OnInit {
     public traits?: MonsterTrait[];
@@ -35,9 +31,7 @@ export class SelectMonsterTraitsDialogComponent implements OnInit {
     public powerTraits: MonsterTrait[] = [];
     public selectedSimpleTraits: { [id: number]: boolean } = {};
     public selectedPowerTraits: { [id: number]: number } = {};
-
-    @ViewChild('simpleTraitsSelector')
-    public simpleTraitsSelector: MatSelectionList;
+    public readonly levels = [0, 1, 2, 3];
 
     constructor(
         private readonly dialog: NhbkMatDialog,
@@ -66,9 +60,9 @@ export class SelectMonsterTraitsDialogComponent implements OnInit {
 
     save() {
         const selectedTraits: TraitInfo[] = [];
-        for (const traitId of this.simpleTraitsSelector.selectedOptions.selected.map(x => x.value)) {
+        for (const trait of this.simpleTraits.filter(t => this.selectedSimpleTraits[t.id])) {
             selectedTraits.push({
-                traitId: traitId,
+                traitId: trait.id,
                 level: 1
             });
         }

@@ -17,8 +17,14 @@ import {Fight} from './fight';
 export class FighterStat {
     private fighter: Fighter;
 
-    get at(): number {
-        return this.fighter.isMonster ? this.fighter.monster.computedData.at : this.fighter.character.computedData.stats['AT'];
+    /**
+     * For monster with multiple attacks, all AT values are joined with a `/`
+     */
+    get at(): number | string {
+        if (this.fighter.isMonster) {
+            return this.fighter.monster.computedData.attacks.map(attack => attack.at).join('/');
+        }
+        return this.fighter.character.computedData.stats['AT'];
     }
 
     get ad(): number {

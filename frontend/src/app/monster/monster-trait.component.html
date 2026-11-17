@@ -1,13 +1,13 @@
 <div class="trait">
   <div>
     <div class="trait-levels">
-      @if (trait.levels && traitInfo.level > 0) {
+      @if (trait.levels?.length && traitInfo.level > 0) {
         <div class="trait-level monster-trait-image trait-level-1"></div>
       }
-      @if (trait.levels && traitInfo.level > 1) {
+      @if (trait.levels?.length && traitInfo.level > 1) {
         <div class="trait-level monster-trait-image trait-level-2"></div>
       }
-      @if (trait.levels && traitInfo.level > 2) {
+      @if (trait.levels?.length && traitInfo.level > 2) {
         <div class="trait-level monster-trait-image trait-level-3"></div>
       }
     </div>

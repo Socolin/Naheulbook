@@ -25,16 +25,35 @@
             }
         }
 
+        .monster-attacks {
+            display: grid;
+            grid-gap: 8px;
+
+            .monster-attack {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: baseline;
+                gap: 16px;
+
+                .attack-name {
+                    font-weight: 500;
+                }
+
+                .field {
+                    flex-direction: row;
+                    gap: 4px;
+                }
+            }
+        }
+
         .monster-stats-row {
             display: grid;
-            grid-gap: 16px;
-            grid-template-columns: minmax(15px, 150px)  minmax(15px, 150px)  minmax(15px, 150px) minmax(15px, 150px)
-            minmax(15px, 150px) minmax(26px, 150px) minmax(15px, 150px) minmax(15px, 150px);
-            grid-template-areas: "at prd esq ev ea pr cou xp";
+            column-gap: 16px;
+            row-gap: 8px;
+            justify-content: start;
+            grid-template-columns: repeat(4, 48px) 64px repeat(2, 48px);
+            grid-template-areas: "prd esq ev ea pr cou xp";
 
-            .at {
-                grid-area: at;
-            }
             .prd {
                 grid-area: prd;
             }
@@ -56,8 +75,10 @@
             .xp {
                 grid-area: xp;
             }
-            .xp {
-                grid-area: xp;
+
+            @include responsive.for-phone-only {
+                grid-template-columns: repeat(4, 48px);
+                grid-template-areas: "prd esq ev ea" "pr cou xp .";
             }
         }
     }
@@ -70,6 +91,7 @@
 
     .section-content {
         margin-left: 16px;
+        margin-bottom: 16px;
     }
 
     .inventory-element {
@@ -83,11 +105,20 @@
     .monster-traits-row {
         display: flex;
         flex-wrap: wrap;
+        gap: 8px;
 
-        > div {
+        .trait-tile {
+            display: block;
+            position: relative;
             flex: 0 0 auto;
-            margin-left: 5px;
-            margin-right: 5px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 8px;
+            transition: background-color 120ms;
+
+            &:hover {
+                background-color: rgba(127, 127, 127, 0.12);
+            }
         }
     }
 }

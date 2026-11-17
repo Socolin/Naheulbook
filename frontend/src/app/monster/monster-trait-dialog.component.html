@@ -3,12 +3,15 @@
   <div class="description">
     {{data.trait.description}}
   </div>
-  @if (data.trait.levels) {
-    @for (level of data.trait.levels; track level) {
-      <ul>
-        <li>{{level}}</li>
-      </ul>
-    }
+  @if (levels.length) {
+    <div class="levels">
+      @for (level of levels; track level.level) {
+        <div class="level">
+          <span class="level-number">Niveau {{level.level}}</span>
+          <span class="level-description">{{level.description}}</span>
+        </div>
+      }
+    </div>
   }
 </mat-dialog-content>
 <mat-dialog-actions align="end">

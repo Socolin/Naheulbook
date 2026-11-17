@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, FormsModule } from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule } from '@angular/forms';
 import {getRandomInt} from '../shared';
 import {Item, ItemData} from '../item';
 import {MonsterTemplate, MonsterTemplateService, MonsterTemplateSubCategory, MonsterTemplateType} from '../monster';
@@ -19,11 +19,17 @@ import { MatActionList } from '@angular/material/list';
 import { MatRipple } from '@angular/material/core';
 import { MonsterEditorComponent } from './monster-editor.component';
 import { ItemListComponent } from '../item/item-list.component';
+import {MonsterAttackData} from '../api/shared';
+import {
+    cleanMonsterAttacks,
+    createMonsterAttacksFormArray,
+    setMonsterAttacksFormArrayValue
+} from '../monster/monster-attacks-editor.component';
 
 
 export interface AddMonsterDialogResult {
     name: string;
-    at: number;
+    attacks: MonsterAttackData[];
     prd: number;
     esq: number;
     ev: number;
@@ -32,7 +38,6 @@ export interface AddMonsterDialogResult {
     maxEa: number;
     pr: number;
     pr_magic: number;
-    dmg: string;
     cou: number;
     chercheNoise: boolean;
     resm: number;
@@ -60,7 +65,7 @@ export class AddMonsterDialogComponent implements OnInit {
 
     public form = new UntypedFormGroup({
         name: new UntypedFormControl(),
-        at: new UntypedFormControl(),
+        attacks: createMonsterAttacksFormArray(),
         prd: new UntypedFormControl(),
         esq: new UntypedFormControl(),
         ev: new UntypedFormControl(),
@@ -69,7 +74,6 @@ export class AddMonsterDialogComponent implements OnInit {
         maxEa: new UntypedFormControl(),
         pr: new UntypedFormControl(),
         pr_magic: new UntypedFormControl(),
-        dmg: new UntypedFormControl(),
         cou: new UntypedFormControl(),
         chercheNoise: new UntypedFormControl(),
         resm: new UntypedFormControl(),
@@ -86,7 +90,7 @@ export class AddMonsterDialogComponent implements OnInit {
     }
 
     addMonster() {
-        this.dialogRef.close({...this.form.value, items: this.items});
+        this.dialogRef.close({...this.form.value, attacks: cleanMonsterAttacks(this.form.value.attacks), items: this.items});
     }
 
     randomMonsterInventory() {
@@ -150,9 +154,10 @@ export class AddMonsterDialogComponent implements OnInit {
     selectMonsterInAutocompleteList(monster: MonsterTemplate) {
         this.selectedMonsterTemplate = monster;
 
+        setMonsterAttacksFormArrayValue(this.form.get('attacks') as UntypedFormArray, monster.data.attacks);
         this.form.reset({
             name: monster.name,
-            at: monster.data.at,
+            attacks: monster.data.attacks?.length ? monster.data.attacks : [{}],
             prd: monster.data.prd,
             esq: monster.data.esq,
             ev: monster.data.ev,
@@ -162,7 +167,6 @@ export class AddMonsterDialogComponent implements OnInit {
             pr: monster.data.pr,
             pr_magic: monster.data.pr_magic,
             cou: monster.data.cou,
-            dmg: monster.data.dmg,
             xp: monster.data.xp,
             resm: monster.data.resm || 0,
             note: monster.data.note,

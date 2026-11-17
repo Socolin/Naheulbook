@@ -1,54 +1,48 @@
-<h2 mat-dialog-title></h2>
+<h2 mat-dialog-title>Traits du monstre</h2>
 <mat-dialog-content>
   @if (!traits) {
-    <mat-spinner></mat-spinner>
-  }
-  @if (traits) {
-    <div>
-      <mat-selection-list #simpleTraitsSelector>
-        @for (trait of simpleTraits; track trait) {
-          <mat-list-option [value]="trait.id" [selected]="selectedSimpleTraits[trait.id]">
-            <h4 mat-line class="trait-line">
-              {{trait.name}}
-              <button mat-icon-button (click)="showTraitInfo($event, trait)">
-                <mat-icon>info</mat-icon>
-              </button>
-            </h4>
-          </mat-list-option>
-        }
-      </mat-selection-list>
-      <mat-list>
-        @for (trait of powerTraits; track trait) {
-          <mat-list-item>
-            <div class="power-trait">
-              {{trait.name}}
-              <button mat-icon-button (click)="showTraitInfo($event, trait)">
-                <mat-icon>info</mat-icon>
-              </button>
-              <mat-form-field>
-                <mat-select [(ngModel)]="selectedPowerTraits[trait.id]">
-                  <mat-option [value]="0">0</mat-option>
-                  <mat-option [value]="1">1</mat-option>
-                  <mat-option [value]="2">2</mat-option>
-                  <mat-option [value]="3">3</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </mat-list-item>
-        }
-      </mat-list>
+    <mat-spinner class="spinner" diameter="48"></mat-spinner>
+  } @else {
+    <div class="section-title">Traits</div>
+    <div class="trait-list">
+      @for (trait of simpleTraits; track trait.id) {
+        <div class="trait-row clickable"
+             [class.active]="selectedSimpleTraits[trait.id]"
+             (click)="selectedSimpleTraits[trait.id] = !selectedSimpleTraits[trait.id]">
+          <mat-checkbox [checked]="selectedSimpleTraits[trait.id]"
+                        (click)="$event.stopPropagation()"
+                        (change)="selectedSimpleTraits[trait.id] = $event.checked">
+          </mat-checkbox>
+          <span class="trait-name">{{trait.name}}</span>
+          <button mat-icon-button class="info-button" (click)="showTraitInfo($event, trait)" aria-label="Description du trait">
+            <mat-icon>info_outline</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="section-title">Traits à niveaux</div>
+    <div class="trait-list">
+      @for (trait of powerTraits; track trait.id) {
+        <div class="trait-row" [class.active]="selectedPowerTraits[trait.id]">
+          <span class="trait-name">{{trait.name}}</span>
+          <button mat-icon-button class="info-button" (click)="showTraitInfo($event, trait)" aria-label="Description du trait">
+            <mat-icon>info_outline</mat-icon>
+          </button>
+          <mat-button-toggle-group class="level-toggle"
+                                   hideSingleSelectionIndicator
+                                   [ngModel]="selectedPowerTraits[trait.id] ?? 0"
+                                   (ngModelChange)="selectedPowerTraits[trait.id] = $event">
+            @for (level of levels; track level) {
+              <mat-button-toggle [value]="level">{{level}}</mat-button-toggle>
+            }
+          </mat-button-toggle-group>
+        </div>
+      }
     </div>
   }
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button
-    mat-dialog-close
-    color="primary">
-    ANNULER
-  </button>
-  <button mat-button
-    color="primary"
-    (click)=save()>
-    SAUVEGARDER
-  </button>
+  <button mat-button mat-dialog-close>ANNULER</button>
+  <button mat-flat-button color="primary" (click)="save()">SAUVEGARDER</button>
 </mat-dialog-actions>

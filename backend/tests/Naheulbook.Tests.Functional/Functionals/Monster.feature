@@ -10,11 +10,10 @@ Feature: Monster
     {
       "name": "some-monster-name",
       "data": {
-        "at": 8,
+        "attacks": [{"name": "some-attack-name", "at": 8, "dmg": "1D+2"}],
         "chercheNoise": false,
         "color": null,
         "cou": 0,
-        "dmg": null,
         "ea": 0,
         "esq": null,
         "ev": 0,
@@ -71,7 +70,7 @@ Feature: Monster
       "id": {"__match": {"type": "integer"}},
       "name": "some-monster-name",
       "data": {
-        "at": 8,
+        "attacks": [{"name": "some-attack-name", "at": 8, "dmg": "1D+2"}],
         "chercheNoise": false,
         "cou": 0,
         "ea": 0,
@@ -383,7 +382,7 @@ Feature: Monster
     When performing a PUT to the url "/api/v2/monsters/${Monster.Id}/data" with the following json content and the current jwt
     """json
     {
-      "at": 5,
+      "attacks": [{"at": 5, "dmg": "1D+1"}, {"name": "some-attack-name", "at": 7}],
       "prd": 8
     }
     """

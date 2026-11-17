@@ -5,7 +5,7 @@ namespace Naheulbook.Shared.TransientModels;
 [Serializable]
 public class MonsterData
 {
-    public int At { get; set; }
+    public List<MonsterAttack>? Attacks { get; set; }
     public int? Prd { get; set; }
     public int? Esq { get; set; }
     public int Ev { get; set; }
@@ -17,7 +17,6 @@ public class MonsterData
     [JsonProperty("pr_magic")]
     public int PrMagic { get; set; }
 
-    public string? Dmg { get; set; }
     public int Cou { get; set; }
     public int? Int { get; set; }
     public bool ChercheNoise { get; set; }
@@ -28,7 +27,12 @@ public class MonsterData
     public int Number { get; set; }
     public string? Sex { get; set; }
     public int? Page { get; set; }
-    public List<MonsterAlternativeWeapon>? AlternativeWeapon { get; set; }
 }
 
-public class MonsterAlternativeWeapon;
+[Serializable]
+public class MonsterAttack
+{
+    public string? Name { get; set; }
+    public int At { get; set; }
+    public string? Dmg { get; set; }
+}

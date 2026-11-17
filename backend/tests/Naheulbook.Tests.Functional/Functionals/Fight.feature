@@ -55,11 +55,10 @@ Feature: Fight Preparation
       "name": "some-monster-name",
       "fightId": "!{FightId}",
       "data": {
-        "at": 8,
+        "attacks": [{"name": "some-attack-name", "at": 8, "dmg": "1D+2"}],
         "chercheNoise": false,
         "color": null,
         "cou": 0,
-        "dmg": null,
         "ea": 0,
         "esq": null,
         "ev": 0,
@@ -117,7 +116,7 @@ Feature: Fight Preparation
       "fightId": "!{FightId}",
       "name": "some-monster-name",
       "data": {
-        "at": 8,
+        "attacks": [{"name": "some-attack-name", "at": 8, "dmg": "1D+2"}],
         "chercheNoise": false,
         "cou": 0,
         "ea": 0,

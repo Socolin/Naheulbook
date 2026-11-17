@@ -14,7 +14,7 @@ Feature: MonsterTemplates
       "subCategoryId": "!{MonsterSubCategory.Id}",
       "name": "some-monster-name",
       "data": {
-        "at": 1,
+        "attacks": [{"at": 1, "dmg": "1D+1"}],
         "note": "some-note"
       },
       "inventory": [
@@ -35,7 +35,7 @@ Feature: MonsterTemplates
         "name": "some-monster-name",
         "subCategoryId": "!{MonsterSubCategory.Id}",
         "data": {
-          "at": 1,
+          "attacks": [{"at": 1, "dmg": "1D+1"}],
           "note": "some-note"
         },
         "inventory": [
@@ -205,7 +205,7 @@ Feature: MonsterTemplates
       "subCategoryId": "!{MonsterSubCategory.[1].Id}",
       "name": "some-new-monster-name",
       "data": {
-        "at": 2,
+        "attacks": [{"at": 2, "dmg": "1D+2"}],
         "prd": 3,
         "note": "some-new-note"
       },
@@ -227,7 +227,7 @@ Feature: MonsterTemplates
       "name": "some-new-monster-name",
       "subCategoryId": "!{MonsterSubCategory.[1].Id}",
       "data": {
-        "at": 2,
+        "attacks": [{"at": 2, "dmg": "1D+2"}],
         "prd": 3,
         "note": "some-new-note"
       },

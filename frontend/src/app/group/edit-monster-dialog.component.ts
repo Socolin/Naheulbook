@@ -2,6 +2,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {Monster} from '../monster';
+import {MonsterAttackData} from '../api/shared';
+import {cleanMonsterAttacks, createMonsterAttacksFormArray} from '../monster/monster-attacks-editor.component';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -13,7 +15,7 @@ export interface EditMonsterDialogData {
 
 export interface EditMonsterDialogResult {
     name: string;
-    at: number;
+    attacks: MonsterAttackData[];
     prd: number;
     esq: number;
     ev: number;
@@ -22,7 +24,6 @@ export interface EditMonsterDialogResult {
     maxEa: number;
     pr: number;
     pr_magic: number;
-    dmg: string;
     cou: number;
     chercheNoise: boolean;
     resm: number;
@@ -46,7 +47,7 @@ export class EditMonsterDialogComponent implements OnInit {
     ) {
         this.form = new UntypedFormGroup({
             name: new UntypedFormControl(data.monster.name),
-            at: new UntypedFormControl(data.monster.data.at),
+            attacks: createMonsterAttacksFormArray(data.monster.data.attacks),
             prd: new UntypedFormControl(data.monster.data.prd),
             esq: new UntypedFormControl(data.monster.data.esq),
             ev: new UntypedFormControl(data.monster.data.ev),
@@ -55,7 +56,6 @@ export class EditMonsterDialogComponent implements OnInit {
             maxEa: new UntypedFormControl(data.monster.data.maxEa),
             pr: new UntypedFormControl(data.monster.data.pr),
             pr_magic: new UntypedFormControl(data.monster.data.pr_magic),
-            dmg: new UntypedFormControl(data.monster.data.dmg),
             cou: new UntypedFormControl(data.monster.data.cou),
             chercheNoise: new UntypedFormControl(data.monster.data.chercheNoise),
             resm: new UntypedFormControl(data.monster.data.resm),
@@ -67,7 +67,8 @@ export class EditMonsterDialogComponent implements OnInit {
 
 
     edit() {
-        this.dialogRef.close(this.form.getRawValue())
+        const value = this.form.getRawValue();
+        this.dialogRef.close({...value, attacks: cleanMonsterAttacks(value.attacks)});
     }
 
     ngOnInit() {

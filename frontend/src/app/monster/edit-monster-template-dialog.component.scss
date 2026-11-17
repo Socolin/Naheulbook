@@ -23,10 +23,9 @@
         align-items: center;
         grid-gap: 8px;
         grid-template-areas: "name name name"
-        "at prd esq"
+        "prd esq ."
         "ev ea xp"
         "pr pr_magic resm"
-        "dmg dmg dmg"
         "cou chercheNoise page"
         "note note note";
 
@@ -37,10 +36,6 @@
 
     .name {
         grid-area: name;
-    }
-
-    .at {
-        grid-area: at;
     }
 
     .prd {
@@ -73,10 +68,6 @@
 
     .pr_magic {
         grid-area: pr_magic;
-    }
-
-    .dmg {
-        grid-area: dmg;
     }
 
     .cou {
@@ -113,6 +104,34 @@
         grid-template-columns: auto;
         button {
             justify-self: end;
+        }
+    }
+
+    .traits {
+        gap: 8px;
+
+        .traits-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .trait-tile {
+            display: block;
+            position: relative;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 8px;
+            transition: background-color 120ms;
+
+            &:hover {
+                background-color: rgba(127, 127, 127, 0.12);
+            }
+        }
+
+        .no-traits {
+            font-style: italic;
+            opacity: 0.6;
         }
     }
 

@@ -6,6 +6,8 @@ import { MatButton } from '@angular/material/button';
 
 export interface MonsterTraitDialogData {
     trait: MonsterTrait;
+    /** When set, only the description of this level (1-based) is shown */
+    level?: number;
 }
 
 @Component({
@@ -20,7 +22,15 @@ export class MonsterTraitDialogComponent implements OnInit {
     ) {
     }
 
+    public levels: { level: number, description: string }[] = [];
+
     ngOnInit() {
+        const levels = (this.data.trait.levels || []).map((description, i) => ({level: i + 1, description}));
+        if (this.data.level) {
+            this.levels = levels.filter(l => l.level === this.data.level);
+        } else {
+            this.levels = levels;
+        }
     }
 
 }

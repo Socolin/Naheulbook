@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
     MonsterInventoryElement,
     MonsterTemplate,
@@ -20,6 +20,9 @@ import {
 } from './select-monster-traits-dialog.component';
 import {MonsterTemplateRequest} from '../api/requests';
 import {NhbkMatDialog} from '../material-workaround';
+import {MonsterTraitComponent} from './monster-trait.component';
+import {MonsterTraitDialogComponent} from './monster-trait-dialog.component';
+import {MatRipple} from '@angular/material/core';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -34,6 +37,12 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { IconComponent } from '../shared/icon.component';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { DecimalPipe } from '@angular/common';
+import {
+    cleanMonsterAttacks,
+    createMonsterAttacksFormArray,
+    MonsterAttacksEditorComponent,
+    setMonsterAttacksFormArrayValue
+} from './monster-attacks-editor.component';
 
 export interface EditMonsterTemplateDialogData {
     monsterTemplate?: MonsterTemplate;
@@ -44,21 +53,20 @@ export interface EditMonsterTemplateDialogData {
 @Component({
     templateUrl: './edit-monster-template-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './edit-monster-template-dialog.component.scss'],
-    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, MatCard, MatCardContent, MatFormField, MatSelect, FormsModule, MatOption, ReactiveFormsModule, MatLabel, MatInput, MatCheckbox, CdkTextareaAutosize, IconComponent, MatMenuTrigger, MatMenu, MatMenuItem, DecimalPipe]
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, MatCard, MatCardContent, MatFormField, MatSelect, FormsModule, MatOption, ReactiveFormsModule, MatLabel, MatInput, MatCheckbox, CdkTextareaAutosize, IconComponent, MatMenuTrigger, MatMenu, MatMenuItem, DecimalPipe, MonsterAttacksEditorComponent, MonsterTraitComponent, MatRipple]
 })
 export class EditMonsterTemplateDialogComponent implements OnInit {
     public saving = false;
     public form = new UntypedFormGroup({
         name: new UntypedFormControl(undefined, [Validators.required]),
         data: new UntypedFormGroup({
-            at: new UntypedFormControl(),
+            attacks: createMonsterAttacksFormArray(),
             prd: new UntypedFormControl(),
             esq: new UntypedFormControl(),
             ev: new UntypedFormControl(),
             ea: new UntypedFormControl(),
             pr: new UntypedFormControl(),
             pr_magic: new UntypedFormControl(),
-            dmg: new UntypedFormControl(),
             cou: new UntypedFormControl(),
             chercheNoise: new UntypedFormControl(),
             resm: new UntypedFormControl(),
@@ -83,7 +91,12 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
         private readonly monsterTemplateService: MonsterTemplateService,
         private readonly dialog: NhbkMatDialog,
     ) {
+        setMonsterAttacksFormArrayValue(this.attacksFormArray, data.monsterTemplate?.data.attacks);
         this.form.reset(data.monsterTemplate);
+    }
+
+    get attacksFormArray(): UntypedFormArray {
+        return this.form.get('data.attacks') as UntypedFormArray;
     }
 
     openCreateSubCategoryDialog() {
@@ -194,6 +207,10 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
         }
     }
 
+    openTraitInfo(trait: MonsterTrait) {
+        this.dialog.open(MonsterTraitDialogComponent, {data: {trait}});
+    }
+
     openSelectTraitsDialog() {
         const dialogRef = this.dialog.open<SelectMonsterTraitsDialogComponent, SelectMonsterTraitsDialogData,
             SelectMonsterTraitsDialogResult>(
@@ -249,6 +266,7 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
             subCategoryId: this.selectedSubCategory.id,
             data: {
                 ...this.form.value.data,
+                attacks: cleanMonsterAttacks(this.form.value.data.attacks),
                 traits: this.selectedTraits
             },
             name: this.form.value.name,

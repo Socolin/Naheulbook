@@ -1,0 +1,19 @@
+:host {
+    display: grid;
+    grid-template-columns: 100%;
+
+    .attack {
+        display: grid;
+        grid-template-columns: minmax(70px, 2fr) minmax(60px, 1fr) minmax(70px, 2fr) 40px;
+        grid-gap: 8px;
+        align-items: center;
+
+        mat-form-field {
+            width: 100%;
+        }
+    }
+
+    .add-attack {
+        justify-self: end;
+    }
+}

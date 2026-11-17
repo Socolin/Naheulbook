@@ -9,10 +9,10 @@ import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
 import {TargetJsonData} from '../group/target.model';
 import {Fighter} from '../group';
 import {MonsterResponse, MonsterSubCategoryResponse, MonsterTemplateResponse, MonsterTypeResponse} from '../api/responses';
-import {IMonsterData, MonsterTemplateData} from '../api/shared';
+import {IMonsterData, MonsterAttackData, MonsterTemplateData} from '../api/shared';
 
 export class MonsterData implements IMonsterData {
-    at: number;
+    attacks: MonsterAttackData[] = [];
     prd?: number;
     esq?: number;
     ev: number;
@@ -21,7 +21,6 @@ export class MonsterData implements IMonsterData {
     maxEa: number;
     pr: number;
     pr_magic: number;
-    dmg: string;
     cou: number;
     chercheNoise: boolean;
     resm: number;
@@ -35,19 +34,27 @@ export class MonsterData implements IMonsterData {
     static fromJson(jsonData: IMonsterData): MonsterData {
         let monsterData = new MonsterData();
         Object.assign(monsterData, jsonData);
+        monsterData.attacks = jsonData.attacks || [];
         return monsterData;
     }
 
     constructor(monsterData?: MonsterData) {
         if (monsterData) {
             Object.assign(this, monsterData);
+            this.attacks = (monsterData.attacks || []).map(attack => ({...attack}));
         }
     }
 }
 
+export function formatMonsterAttacks(attacks?: MonsterAttackData[]): string {
+    return (attacks || [])
+        .map(attack => [attack.name, 'AT ' + attack.at, attack.dmg].filter(x => x !== undefined && x !== null && x !== '').join(' '))
+        .join(' / ');
+}
+
 
 export class MonsterComputedData {
-    at: number;
+    attacks: MonsterAttackData[] = [];
     prd: number;
     esq: number;
     pr: number;
@@ -187,6 +194,15 @@ export class Monster extends WsRegistrable {
             if (!data.hasOwnProperty(fieldName)) {
                 continue;
             }
+            if (fieldName === 'attacks') {
+                if (JSON.stringify(data.attacks || []) !== JSON.stringify(this.data.attacks || [])) {
+                    this.notify('changeData',
+                        'Modification: ATTAQUES: ' + formatMonsterAttacks(this.data.attacks) + ' -> ' + formatMonsterAttacks(data.attacks),
+                        {fieldName: fieldName, value: data.attacks});
+                    this.onChange.next({action: 'changeData', fieldName: fieldName, value: data.attacks});
+                }
+                continue;
+            }
             if (data[fieldName] !== this.data[fieldName]) {
                 this.notify('changeData',
                     'Modification: ' + fieldName.toUpperCase() + ': ' + this.data[fieldName] + ' -> ' + data[fieldName],
@@ -249,7 +265,9 @@ export class Monster extends WsRegistrable {
 
     private applyStatModifier(mod: StatModifier) {
         if (mod.stat === 'AT') {
-            this.computedData.at = StatModifier.apply(this.computedData.at, mod);
+            for (const attack of this.computedData.attacks) {
+                attack.at = StatModifier.apply(attack.at, mod);
+            }
         }
         if (mod.stat === 'PRD' && this.computedData.prd !== undefined) {
             this.computedData.prd = StatModifier.apply(this.computedData.prd, mod);
@@ -284,7 +302,7 @@ export class Monster extends WsRegistrable {
     }
 
     update() {
-        this.computedData.at = this.data.at;
+        this.computedData.attacks = (this.data.attacks || []).map(attack => ({...attack}));
         this.computedData.prd = this.data.prd ? this.data.prd : 0;
         this.computedData.esq = this.data.esq ? this.data.esq : 0;
         this.computedData.pr = this.data.pr;
@@ -292,7 +310,6 @@ export class Monster extends WsRegistrable {
         if (!this.computedData.pr_magic) {
             this.computedData.pr_magic = 0;
         }
-        this.computedData.dmg = [{name: 'base', damage: this.data.dmg}];
         this.computedData.cou = this.data.cou;
         this.computedData.chercheNoise = this.data.chercheNoise;
         this.computedData.resm = this.data.resm;
@@ -304,6 +321,9 @@ export class Monster extends WsRegistrable {
                 }
             }
         }
+        this.computedData.dmg = this.computedData.attacks
+            .filter(attack => attack.dmg)
+            .map(attack => ({name: attack.name || 'base', damage: attack.dmg!}));
         for (let item of this.items) {
             if (item.data.equiped) {
                 this.computedData.dmg.push({

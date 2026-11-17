@@ -2,7 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 
-import {MonsterTemplate, MonsterTraitDictionary} from './monster.model';
+import {MonsterTemplate, MonsterTrait, MonsterTraitDictionary} from './monster.model';
+import {MonsterTraitDialogComponent} from './monster-trait-dialog.component';
 import {MonsterTemplateService} from './monster-template.service';
 import {EditMonsterTemplateDialogComponent, EditMonsterTemplateDialogData} from './edit-monster-template-dialog.component';
 import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog.component';
@@ -66,5 +67,9 @@ export class MonsterTemplateComponent implements OnInit {
             data: {itemTemplate},
             autoFocus: false
         });
+    }
+
+    openTraitInfo(trait: MonsterTrait, level?: number) {
+        this.dialog.open(MonsterTraitDialogComponent, {data: {trait, level}});
     }
 }
