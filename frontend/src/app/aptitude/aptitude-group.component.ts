@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {AptitudeGroupResponse, AptitudeResponse} from '../api/responses/aptitude-response';
 import {AptitudeService} from './aptitude.service';
 import {ActivatedRoute} from '@angular/router';
@@ -15,6 +15,7 @@ import {MatCardModule} from '@angular/material/card';
         MatCardModule
     ],
     templateUrl: './aptitude-group.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './aptitude-group.component.scss'
 })
 export class AptitudeGroupComponent implements OnInit, OnDestroy {

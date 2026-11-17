@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
 import { Portal, CdkPortal } from '@angular/cdk/portal';
 
@@ -22,6 +22,7 @@ import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 @Component({
     selector: 'event-editor',
     templateUrl: './event-editor.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, CdkPortal, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatInput, FormsModule, MatButtonToggleGroup, MatButtonToggle, DateComponent, MatIconButton, MatIcon, MatCardActions, MatButton, NhbkDateDurationPipe]
 })
 export class EventEditorComponent implements OnInit {

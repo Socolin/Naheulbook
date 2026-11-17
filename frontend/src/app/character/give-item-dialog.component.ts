@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {Item} from '../item';
 import {Character, CharacterGiveDestination} from './character.model';
@@ -24,6 +24,7 @@ export interface GiveItemDialogResult {
 @Component({
     templateUrl: './give-item-dialog.component.html',
     styleUrls: ['./give-item-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, IconComponent, ValueEditorComponent, MatProgressSpinner, MatRadioGroup, FormsModule, MatRadioButton, MatDialogActions, MatButton, MatDialogClose]
 })
 export class GiveItemDialogComponent implements OnInit {

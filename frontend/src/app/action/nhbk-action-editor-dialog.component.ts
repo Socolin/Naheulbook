@@ -1,5 +1,5 @@
 import {map} from 'rxjs/operators';
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {
     NhbkAction,
     NhbkActionFactory,
@@ -32,6 +32,7 @@ export interface NhbkActionEditorDialogData {
 @Component({
     styleUrls: ['./nhbk-action-editor-dialog.component.scss'],
     templateUrl: './nhbk-action-editor-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatDialogTitle, MatDialogContent, MatFormField, MatSelect, FormsModule, MatOption, MatCheckbox, AutocompleteInputComponent, MatInput, MatPrefix, MatSuffix, StatModifierEditorComponent, ActiveEffectEditorComponent, MatCardActions, MatButton, MatDialogClose]
 })
 export class NhbkActionEditorDialogComponent {

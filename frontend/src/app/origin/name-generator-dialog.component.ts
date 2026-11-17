@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {OriginService} from './origin.service';
 import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {Origin} from './origin.model';
@@ -23,6 +23,7 @@ export interface NameGeneratorDialogResult {
 @Component({
     templateUrl: './name-generator-dialog.component.html',
     styleUrls: ['./name-generator-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatSelect, MatOption, MatRadioGroup, MatRadioButton, MatIcon, MatInput, MatButton, MatDialogActions, MatDialogClose, MatSuffix, MatLabel]
 })
 export class NameGeneratorDialogComponent implements OnInit, OnDestroy {

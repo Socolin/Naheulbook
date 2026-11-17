@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {Monster} from '../monster';
 import {Item, ItemService} from '../item';
@@ -16,6 +16,7 @@ export interface MonsterInventoryDialogData {
     selector: 'app-monster-inventory-dialog',
     templateUrl: './monster-inventory-dialog.component.html',
     styleUrls: ['./monster-inventory-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, ItemListComponent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class MonsterInventoryDialogComponent {

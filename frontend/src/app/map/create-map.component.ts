@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {requiredFileType} from '../utils/required-file-type.validator';
@@ -16,6 +16,7 @@ import { RouterLink } from '@angular/router';
     selector: 'app-create-map',
     templateUrl: './create-map.component.html',
     styleUrls: ['./create-map.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, FormsModule, ReactiveFormsModule, MatFormField, MatInput, MatHint, MatCheckbox, MatIconButton, MatIcon, MatButton, MatProgressBar, RouterLink]
 })
 export class CreateMapComponent {

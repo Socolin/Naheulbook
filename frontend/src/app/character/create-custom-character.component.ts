@@ -1,5 +1,5 @@
 import {forkJoin} from 'rxjs';
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -22,6 +22,7 @@ import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 @Component({
     templateUrl: './create-custom-character.component.html',
     styleUrls: ['./create-custom-character.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatCard, MatCardHeader, MatCardTitle, FormsModule, ReactiveFormsModule, MatCardContent, MatFormField, MatInput, MatSelect, MatOption, MatIconButton, MatIcon, MatCheckbox, MatRadioGroup, MatRadioButton, MatButton]
 })
 export class CreateCustomCharacterComponent implements OnInit {

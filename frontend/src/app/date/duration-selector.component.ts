@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 
 import {dateOffset2TimeDuration, timeDuration2DateOffset2} from './util';
 import {NhbkDateOffset} from './date.model';
@@ -23,6 +23,7 @@ import { NhbkDateDurationPipe } from './nhbk-duration.pipe';
     selector: 'duration-selector',
     styleUrls: ['./duration-selector.component.scss'],
     templateUrl: './duration-selector.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatFormField, MatSelect, FormsModule, MatOption, MatInput, MatIconButton, MatIcon, NhbkDateDurationPipe]
 })
 export class DurationSelectorComponent implements OnChanges {

@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {NhbkMatDialog} from '../material-workaround';
@@ -25,6 +25,7 @@ export interface EditNpcDialogResult {
 @Component({
     templateUrl: './edit-npc-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './edit-npc-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatSuffix, MatRadioGroup, MatRadioButton, CdkTextareaAutosize]
 })
 export class EditNpcDialogComponent {

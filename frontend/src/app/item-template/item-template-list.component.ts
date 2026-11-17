@@ -1,5 +1,5 @@
 import {forkJoin, Observable, of, Subject, Subscription} from 'rxjs';
-import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Overlay} from '@angular/cdk/overlay';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -50,6 +50,7 @@ import {TextFormatterPipe} from '../shared/text-formatter.pipe';
             transition('0 => 1', animate(200, style({ height: '*', visibility: 'visible', overflow: 'hidden' })))
         ])
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatCardContent, MatIcon, MatCardActions, MatButton, MatFormField, MatLabel, MatInput, FormsModule, MatAutocompleteTrigger, ReactiveFormsModule, MatAutocomplete, MatOptgroup, MatOption, MatCardSubtitle, MatIconButton, MatSuffix, MatProgressSpinner, MatCheckbox, MatCardHeader, MatCardTitle, ItemTemplatesTableViewComponent, ItemTemplateComponent, AsyncPipe, TextFormatterPipe]
 })
 export class ItemTemplateListComponent implements OnInit, OnDestroy {

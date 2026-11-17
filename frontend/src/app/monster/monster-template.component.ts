@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 
@@ -23,6 +23,7 @@ import { MarkdownPipe } from '../markdown/markdown.pipe';
     selector: 'monster-template',
     styleUrls: ['./monster-template.component.scss'],
     templateUrl: './monster-template.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatCardHeader, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatCardContent, MonsterTraitComponent, MatRipple, IconComponent, DecimalPipe, MarkdownPipe]
 })
 export class MonsterTemplateComponent implements OnInit {

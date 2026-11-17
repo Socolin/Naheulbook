@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MonsterTrait, TraitInfo} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
 import {MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
@@ -23,6 +23,7 @@ export interface SelectMonsterTraitsDialogResult {
     selector: 'app-select-monster-traits-dialog',
     templateUrl: './select-monster-traits-dialog.component.html',
     styleUrls: ['./select-monster-traits-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, MatDialogContent, MatProgressSpinner, MatCheckbox, MatIconButton, MatIcon, MatButtonToggleGroup, MatButtonToggle, FormsModule, MatDialogActions, MatButton, MatDialogClose]
 })
 export class SelectMonsterTraitsDialogComponent implements OnInit {

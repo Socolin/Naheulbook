@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {UsefulDataDialogResult} from './useful-data-dialog-result';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -9,6 +9,7 @@ import { ItemTemplateListComponent } from '../../item-template/item-template-lis
 @Component({
     templateUrl: './item-templates-dialog.component.html',
     styleUrls: ['../../shared/full-screen-dialog.scss', './item-templates-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, ItemTemplateListComponent]
 })
 export class ItemTemplatesDialogComponent implements OnInit {

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {ItemTemplate} from './item-template.model';
 import {God} from '../shared';
 import { MatIcon } from '@angular/material/icon';
@@ -15,6 +15,7 @@ import { ItemPricePipe } from './item-price.pipe';
     selector: 'app-item-template-details',
     templateUrl: './item-template-details.component.html',
     styleUrls: ['./item-template-details.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatIcon, MatChipSet, MatChip, NhbkActionComponent, MatDivider, ModifierPipe, PlusMinusPipe, NhbkDateDurationPipe, ItemTemplateDataProtectionPipe, ItemPricePipe]
 })
 export class ItemTemplateDetailsComponent implements OnInit {

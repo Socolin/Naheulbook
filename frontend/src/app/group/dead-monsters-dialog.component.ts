@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
 import {MatDivider} from '@angular/material/list';
@@ -18,6 +18,7 @@ const COLLAPSED_NOTE_MAX_LENGTH = 200;
     selector: 'app-dead-monsters-dialog',
     templateUrl: './dead-monsters-dialog.component.html',
     styleUrls: ['./dead-monsters-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButton, MatDivider, MatProgressSpinner]
 })
 export class DeadMonstersDialogComponent implements OnInit {

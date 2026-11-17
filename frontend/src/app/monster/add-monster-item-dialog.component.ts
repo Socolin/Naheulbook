@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {forkJoin} from 'rxjs';
 import {MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
@@ -24,6 +24,7 @@ export interface AddMonsterItemDialogData {
 @Component({
     templateUrl: './add-monster-item-dialog.component.html',
     styleUrls: ['./add-monster-item-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatDialogTitle, MatDialogContent, MatCardContent, MatFormField, MatInput, MatIconButton, MatIcon, MatActionList, MatListItem, IconComponent, MatRipple, FormsModule, MatCheckbox, MatDialogActions, MatButton, MatDialogClose]
 })
 export class AddMonsterItemDialogComponent implements OnInit {

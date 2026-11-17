@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 import {LoginService} from '../user';
@@ -20,6 +20,7 @@ export interface CreateItemTemplateDialogData {
 @Component({
     templateUrl: './create-item-template-dialog.component.html',
     styleUrls: ['./create-item-template-dialog.component.scss', '../shared/full-screen-dialog.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, ItemTemplateEditorComponent]
 })
 export class CreateItemTemplateDialogComponent implements OnInit {

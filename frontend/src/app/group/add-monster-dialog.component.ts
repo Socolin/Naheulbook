@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule } from '@angular/forms';
 import {getRandomInt} from '../shared';
 import {Item, ItemData} from '../item';
@@ -51,6 +51,7 @@ export interface AddMonsterDialogResult {
     selector: 'app-add-monster-dialog',
     templateUrl: './add-monster-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './add-monster-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, MatStepper, MatStep, MatStepLabel, MatFormField, MatLabel, MatInput, FormsModule, MatSelect, MatOption, MatActionList, MatRipple, MonsterEditorComponent, ItemListComponent]
 })
 export class AddMonsterDialogComponent implements OnInit {

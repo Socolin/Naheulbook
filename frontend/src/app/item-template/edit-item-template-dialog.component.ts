@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit, Inject, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 
 import {NotificationsService} from '../notifications';
@@ -19,6 +19,7 @@ export interface EditItemTemplateDialogData {
 @Component({
     templateUrl: './edit-item-template-dialog.component.html',
     styleUrls: ['./edit-item-template-dialog.component.scss', '../shared/full-screen-dialog.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, ItemTemplateEditorComponent]
 })
 export class EditItemTemplateDialogComponent implements OnInit {

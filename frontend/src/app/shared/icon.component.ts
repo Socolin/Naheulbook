@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {IconDescription} from './icon.model';
 import { NgClass } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
@@ -13,6 +13,7 @@ const defaultIcon: IconDescription = {
     selector: 'icon',
     templateUrl: './icon.component.html',
     styleUrls: ['./icon.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [NgClass, MatIcon]
 })
 export class IconComponent {

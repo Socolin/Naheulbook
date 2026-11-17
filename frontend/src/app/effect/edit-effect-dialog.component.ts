@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {Effect, EffectSubCategory, EffectType} from './effect.model';
 import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -27,6 +27,7 @@ export interface EditEffectDialogData {
 @Component({
     templateUrl: './edit-effect-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './edit-effect-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, MatFormField, MatSelect, FormsModule, MatOption, ReactiveFormsModule, MatInput, CdkTextareaAutosize, DurationSelectorComponent, ModifiersEditorComponent]
 })
 export class EditEffectDialogComponent implements OnInit {

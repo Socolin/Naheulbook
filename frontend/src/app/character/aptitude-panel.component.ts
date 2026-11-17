@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -23,6 +23,7 @@ import {CharacterAptitudeResponse} from '../api/responses';
         MatMenuModule,
     ],
     templateUrl: './aptitude-panel.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './aptitude-panel.component.scss'
 })
 export class AptitudePanelComponent {

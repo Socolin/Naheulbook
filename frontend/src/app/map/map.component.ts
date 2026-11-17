@@ -4,7 +4,7 @@ import 'leaflet-editable';
 import 'leaflet-geometryutil';
 import 'leaflet-almostover';
 
-import {Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router, RouterLink} from '@angular/router';
 import {FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
@@ -64,6 +64,7 @@ import {MarkdownPipe} from '../markdown/markdown.pipe';
     selector: 'app-map',
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatSidenavContainer, MatSidenavContent, MatSidenav, MatNavList, MatListItem, RouterLink, MatIcon, MatIconButton, MatMenuTrigger, MatMenu, MatMenuItem, MatMiniFabButton, MatCheckbox, FormsModule, MatFormField, MatInput, MatTooltip, MatButton, CommonNavComponent, ReactiveFormsModule, CdkTextareaAutosize, MatRadioGroup, MatRadioButton, MatRipple, AsyncPipe, MarkdownPipe, MatIconModule]
 })
 export class MapComponent implements OnInit, OnDestroy {

@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit, Inject, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 
 import {IconService} from './icon.service';
@@ -21,6 +21,7 @@ export interface IconSelectorComponentDialogData {
     selector: 'icon-selector',
     templateUrl: './icon-selector.component.html',
     styleUrls: ['./icon-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatDialogTitle, CdkScrollable, MatDialogContent, MatFormField, MatInput, FormsModule, MatHint, MatIconButton, NgClass, MatDivider, IconComponent, MatButton, MatDialogActions, MatDialogClose]
 })
 export class IconSelectorComponent implements OnInit {

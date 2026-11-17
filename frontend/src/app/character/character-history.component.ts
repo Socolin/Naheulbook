@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
@@ -11,6 +11,7 @@ import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 @Component({
     selector: 'character-history',
     templateUrl: './character-history.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [DateComponent, MatButton, DatePipe, NhbkDateDurationPipe]
 })
 export class CharacterHistoryComponent implements OnInit {

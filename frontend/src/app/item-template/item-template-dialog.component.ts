@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ItemTemplate} from './item-template.model';
 import {forkJoin} from 'rxjs';
@@ -14,6 +14,7 @@ export interface ItemTemplateDialogData {
 @Component({
     templateUrl: './item-template-dialog.component.html',
     styleUrls: ['./item-template-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ItemTemplateComponent]
 })
 export class ItemTemplateDialogComponent implements OnInit {

@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {CharacterSex} from '../api/shared/enums/character-sex';
 import { CdkScrollable } from '@angular/cdk/scrolling';
@@ -14,6 +14,7 @@ export interface ChangeSexDialogData {
 @Component({
     templateUrl: './change-sex-dialog.component.html',
     styleUrls: ['./change-sex-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatRadioGroup, FormsModule, MatRadioButton, MatIcon, MatDialogActions, MatButton, MatDialogClose]
 })
 export class ChangeSexDialogComponent {

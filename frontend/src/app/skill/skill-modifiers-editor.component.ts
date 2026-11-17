@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
 
 import {Skill} from './skill.model';
 import {SkillService} from './skill.service';
@@ -15,6 +15,7 @@ import { MatInput } from '@angular/material/input';
     selector: 'skill-modifiers-editor',
     styleUrls: ['./skill-modifiers-editor.component.scss'],
     templateUrl: './skill-modifiers-editor.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatIconButton, MatIcon, MatFormField, MatSelect, FormsModule, MatOption, MatInput, MatButton]
 })
 export class SkillModifiersEditorComponent implements OnInit {

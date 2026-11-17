@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {Job} from '../job';
 import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -13,6 +13,7 @@ export interface JobPlayerDialogData {
 @Component({
     templateUrl: './job-player-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './job-player-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, JobPlayerInfoComponent]
 })
 export class JobPlayerDialogComponent {

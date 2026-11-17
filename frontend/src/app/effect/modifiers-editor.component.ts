@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 
 import {ItemStatModifier} from '../shared';
@@ -18,6 +18,7 @@ import { ModifierPipe } from '../shared/modifier.pipe';
     selector: 'modifiers-editor',
     styleUrls: ['./modifiers-editor.component.scss'],
     templateUrl: './modifiers-editor.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatIconButton, MatIcon, MatDivider, ModifierPipe]
 })
 export class ModifiersEditorComponent implements OnInit {

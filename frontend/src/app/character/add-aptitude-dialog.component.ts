@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef} from '@angular/material/dialog';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatToolbar} from '@angular/material/toolbar';
@@ -33,6 +33,7 @@ type AptitudeTypeGrouping = { type: string, aptitudes: AptitudeResponse[] }
         MatDivider,
     ],
     templateUrl: './add-aptitude-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './add-aptitude-dialog.component.scss'
 })
 export class AddAptitudeDialogComponent implements OnInit {

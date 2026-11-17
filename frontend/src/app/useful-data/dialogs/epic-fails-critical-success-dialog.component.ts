@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
@@ -23,6 +23,7 @@ export interface EpicFailsCriticalSuccessDialogData {
 @Component({
     templateUrl: './epic-fails-critical-success-dialog.component.html',
     styleUrls: ['../../shared/full-screen-dialog.scss', './epic-fails-critical-success-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatFormField, MatSelect, FormsModule, MatSelectTrigger, MatOption, MatTabGroup, MatTab, MatTabLabel, DataArrayComponent]
 })
 export class EpicFailsCriticalSuccessDialogComponent implements OnInit {

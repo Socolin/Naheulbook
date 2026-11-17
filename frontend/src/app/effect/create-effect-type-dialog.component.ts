@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MatDialogRef, MatDialogTitle, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
@@ -17,6 +17,7 @@ export interface CreateEffectTypeDialogResult {
     selector: 'app-create-effect-type-dialog',
     templateUrl: './create-effect-type-dialog.component.html',
     styleUrls: ['./create-effect-type-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatDialogTitle, MatDialogActions, FormsModule, ReactiveFormsModule, MatFormField, MatInput, CdkTextareaAutosize, MatButton, MatDialogClose]
 })
 export class CreateEffectTypeDialogComponent implements OnInit {

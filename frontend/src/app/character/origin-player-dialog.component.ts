@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import {Origin} from '../origin';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -13,6 +13,7 @@ export interface OriginPlayerDialogData {
 @Component({
     templateUrl: './origin-player-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './origin-player-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, OriginPlayerInfoComponent]
 })
 export class OriginPlayerDialogComponent {

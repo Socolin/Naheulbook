@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatFormField } from '@angular/material/form-field';
@@ -15,6 +15,7 @@ export class EnableShowInSearchResult {
     selector: 'app-enable-show-in-search',
     templateUrl: './enable-show-in-search.component.html',
     styleUrls: ['./enable-show-in-search.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CdkScrollable, MatDialogContent, MatFormField, MatSelect, FormsModule, MatOption, MatDialogActions, MatButton, MatDialogClose]
 })
 export class EnableShowInSearchComponent implements OnInit {

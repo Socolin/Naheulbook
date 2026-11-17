@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import { NavigationStart, Router, RouterLink, RouterOutlet } from '@angular/router';
 
 import { MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
@@ -14,6 +14,7 @@ import { AsyncPipe } from '@angular/common';
 @Component({
     templateUrl: './home-database.component.html',
     styleUrls: ['./home-database.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatSidenavContainer, MatSidenav, MatNavList, MatListItem, RouterLink, MatIcon, MatListItemIcon, CommonNavComponent, MatToolbar, MatToolbarRow, MatIconButton, RouterOutlet, AsyncPipe]
 })
 export class HomeDatabaseComponent implements OnInit, OnDestroy {

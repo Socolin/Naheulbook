@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {ReactiveFormsModule, UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {MatFormField, MatHint, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
@@ -45,6 +45,7 @@ export function cleanMonsterAttacks(attacks?: Partial<MonsterAttackData>[]): Mon
     selector: 'app-monster-attacks-editor',
     templateUrl: './monster-attacks-editor.component.html',
     styleUrls: ['./monster-attacks-editor.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ReactiveFormsModule, MatFormField, MatHint, MatLabel, MatInput, MatIconButton, MatButton, MatIcon, MatTooltip]
 })
 export class MonsterAttacksEditorComponent {

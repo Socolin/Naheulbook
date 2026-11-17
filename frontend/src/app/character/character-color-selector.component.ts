@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 import {Character} from './character.model';
 import {tokenColors} from '../shared';
 import { CdkOverlayOrigin, CdkConnectedOverlay } from '@angular/cdk/overlay';
@@ -8,6 +8,7 @@ import { MatCard } from '@angular/material/card';
 @Component({
     selector: 'character-color-selector',
     templateUrl: './character-color-selector.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CdkOverlayOrigin, MatRipple, CdkConnectedOverlay, MatCard]
 })
 export class CharacterColorSelectorComponent {

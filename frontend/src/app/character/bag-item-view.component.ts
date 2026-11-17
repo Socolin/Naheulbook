@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {MatMenuPanel} from '@angular/material/menu';
 import {Item} from '../item';
 
@@ -29,6 +29,7 @@ function sortItemContainerFirstFn(sortType: ItemSortType, a: Item, b: Item) {
     selector: 'bag-item-view',
     templateUrl: './bag-item-view.component.html',
     styleUrls: ['./bag-item-view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatIconButton, MatIcon, MatBadge, ItemLineComponent]
 })
 export class BagItemViewComponent {

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {NhbkDateOffset} from './date.model';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
@@ -40,6 +40,7 @@ const allUnits: { unit: UnitTypes, title: string }[] = [
 @Component({
     styleUrls: ['./duration-selector-dialog.component.scss'],
     templateUrl: './duration-selector-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatIconButton, MatIcon, NgStyle, NgClass, MatDialogActions, MatButton, MatDialogClose, NhbkDateDurationPipe]
 })
 export class DurationSelectorDialogComponent implements OnInit {

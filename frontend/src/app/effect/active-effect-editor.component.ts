@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
 
 import {map} from 'rxjs/operators';
-import {Component, DoCheck, EventEmitter, Input, Output} from '@angular/core';
+import {Component, DoCheck, EventEmitter, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 
 import {AutocompleteValue} from '../shared';
 
@@ -22,6 +22,7 @@ import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
     selector: 'active-effect-editor',
     templateUrl: './active-effect-editor.component.html',
     styleUrls: ['./active-effect-editor.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AutocompleteInputComponent, MatCard, MatCardTitle, MatIconButton, MatIcon, MatCardSubtitle, MatCardContent, MatSlideToggle, FormsModule, MatButton, MatCardHeader, DurationSelectorComponent, ModifierPipe, NhbkDateDurationPipe]
 })
 export class ActiveEffectEditorComponent implements DoCheck {

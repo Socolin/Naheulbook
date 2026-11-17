@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {Item} from '../item';
 import { CdkScrollable } from '@angular/cdk/scrolling';
@@ -17,6 +17,7 @@ export interface TakeLootDialogResult {
 @Component({
     templateUrl: './take-loot-dialog.component.html',
     styleUrls: ['./take-loot-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, IconComponent, ValueEditorComponent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class TakeLootDialogComponent implements OnInit {

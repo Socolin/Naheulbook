@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {ItemTemplateModuleDefinition, itemTemplateModulesDefinitions} from './item-template-modules-definitions';
 import { CdkScrollable } from '@angular/cdk/scrolling';
@@ -13,6 +13,7 @@ export interface AddItemTemplateEditorModuleDialogData {
 @Component({
     templateUrl: './add-item-template-editor-module-dialog.component.html',
     styleUrls: ['./add-item-template-editor-module-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CdkScrollable, MatDialogContent, MatRipple, MatIcon, MatDialogActions, MatButton, MatDialogClose]
 })
 export class AddItemTemplateEditorModuleDialogComponent implements OnInit {

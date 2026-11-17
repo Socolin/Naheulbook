@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 
 import {QuestService} from './quest.service';
 import {QuestTemplate} from './quest.model';
@@ -9,6 +9,7 @@ import { TextFormatterPipe } from '../shared/text-formatter.pipe';
 @Component({
     selector: 'quest-editor',
     templateUrl: './quest-editor.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [FormsModule, TextareaAutosizeDirective, TextFormatterPipe]
 })
 export class QuestEditorComponent {

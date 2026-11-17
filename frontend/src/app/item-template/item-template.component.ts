@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 
 import {God, IconComponent} from '../shared';
 import {CreateItemTemplateDialogComponent, CreateItemTemplateDialogData} from './create-item-template-dialog.component';
@@ -16,6 +16,7 @@ import {ItemTemplateDetailsComponent} from './item-template-details.component';
     selector: 'item-template',
     styleUrls: ['./item-template.component.scss'],
     templateUrl: './item-template.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatCardSubtitle, MatIcon, MatCardHeader, IconComponent, MatCardAvatar, MatCardTitle, MatIconButton, MatMenuTrigger, MatMenu, MatMenuContent, MatMenuItem, MatCardContent, ItemTemplateDetailsComponent]
 })
 export class ItemTemplateComponent {

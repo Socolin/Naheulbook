@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import { NavigationStart, Router, RouterLink, RouterOutlet } from '@angular/router';
 
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
@@ -13,6 +13,7 @@ import { MatIconButton } from '@angular/material/button';
 @Component({
     templateUrl: './home-player.component.html',
     styleUrls: ['./home-player.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatSidenavContainer, MatSidenav, MatNavList, MatListItem, RouterLink, MatIcon, MatListItemIcon, CommonNavComponent, MatSidenavContent, MatToolbar, MatToolbarRow, MatIconButton, RouterOutlet]
 })
 export class HomePlayerComponent implements OnInit {

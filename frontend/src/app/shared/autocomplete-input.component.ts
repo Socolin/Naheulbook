@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {IconDescription} from './icon.model';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { CdkOverlayOrigin, CdkConnectedOverlay } from '@angular/cdk/overlay';
@@ -28,6 +28,7 @@ export class AutocompleteValue {
     selector: 'autocomplete-input',
     templateUrl: './autocomplete-input.component.html',
     styleUrls: ['./autocomplete-input.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatFormField, CdkOverlayOrigin, MatInput, FormsModule, CdkConnectedOverlay, MatNavList, MatListItem, MatListItemAvatar, MatListItemTitle, MatListItemLine, IconComponent, MatIcon]
 })
 export class AutocompleteInputComponent {

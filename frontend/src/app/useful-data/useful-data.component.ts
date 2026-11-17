@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ComponentType} from '@angular/cdk/overlay';
 
@@ -37,6 +37,7 @@ class InfoDefinition {
     selector: 'useful-data',
     styleUrls: ['./useful-data.component.scss'],
     templateUrl: './useful-data.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatFabButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem]
 })
 export class UsefulDataComponent implements OnInit, OnDestroy {

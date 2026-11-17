@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {QuestTemplate} from './quest.model';
 import {QuestService} from './quest.service';
 
 @Component({
     selector: 'quest-list',
+    changeDetection: ChangeDetectionStrategy.Eager,
     templateUrl: './quest-list.component.html'
 })
 export class QuestListComponent implements OnInit {

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {Monster} from '../monster';
@@ -36,6 +36,7 @@ export interface EditMonsterDialogResult {
     selector: 'app-edit-monster-dialog',
     templateUrl: './edit-monster-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './edit-monster-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, MonsterEditorComponent]
 })
 export class EditMonsterDialogComponent implements OnInit {

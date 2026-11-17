@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {Character} from './character.model';
 import {ItemActionService} from './item-action.service';
 import {Item} from '../item';
@@ -15,6 +15,7 @@ import { MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
     selector: 'app-combat-tab',
     templateUrl: './combat-tab.component.html',
     styleUrls: ['./combat-tab.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatCardContent, ValueEditorComponent, MatCardSubtitle, MatIcon, MatCardHeader, MatCardTitle, ItemLineComponent, MatMenu, MatMenuContent, MatMenuItem]
 })
 export class CombatTabComponent implements OnInit {

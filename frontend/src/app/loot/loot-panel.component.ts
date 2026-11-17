@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, ChangeDetectionStrategy} from '@angular/core';
 import {Subscription} from 'rxjs';
 
 import {NotificationsService} from '../notifications';
@@ -10,6 +10,7 @@ import {CharacterSummaryResponse} from '../api/responses';
 
 @Component({
     template: ``,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LootPanelComponent implements OnDestroy {

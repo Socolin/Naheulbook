@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {Origin} from './origin.model';
 import {GmModeService} from '../shared';
 import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
@@ -10,6 +10,7 @@ import { AsyncPipe } from '@angular/common';
     selector: 'origin',
     templateUrl: './origin.component.html',
     styleUrls: ['./origin.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatExpansionPanel, MatExpansionPanelHeader, OriginPlayerInfoComponent, OriginGmInfoComponent, AsyncPipe]
 })
 export class OriginComponent {

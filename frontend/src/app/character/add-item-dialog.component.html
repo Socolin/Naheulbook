@@ -36,7 +36,7 @@
       @if (selectedItemTemplate) {
         <div class="customize-step">
           <div class="name-line">
-            <icon [icon]="selectedItemTemplate?.data?.icon"></icon>
+            <icon [icon]="$safeNavigationMigration(selectedItemTemplate?.data?.icon)"></icon>
             <mat-form-field>
               <mat-label>Nom personnalisé</mat-label>
               <input matInput type="text"

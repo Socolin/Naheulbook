@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {CharacterService} from '../character';
@@ -12,6 +12,7 @@ import { MatButton } from '@angular/material/button';
 @Component({
     templateUrl: './create-group.component.html',
     providers: [CharacterService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatCard, MatCardTitle, MatCardContent, MatFormField, MatInput, FormsModule, MatCardActions, MatButton]
 })
 export class CreateGroupComponent {

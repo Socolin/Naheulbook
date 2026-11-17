@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {DateService} from './date.service';
 import {CalendarDate, NhbkDate} from './date.model';
@@ -23,6 +23,7 @@ export interface DateSelectorDialogResult {
     selector: 'app-date-selector-dialog',
     templateUrl: './date-selector-dialog.component.html',
     styleUrls: ['./date-selector-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatSelect, MatOptgroup, MatOption, MatDialogActions, MatButton, MatDialogClose]
 })
 export class DateSelectorDialogComponent implements OnInit {

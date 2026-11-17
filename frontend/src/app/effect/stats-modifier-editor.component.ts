@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {StatsModifier} from '../shared';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -13,6 +13,7 @@ import { ModifiersEditorComponent } from './modifiers-editor.component';
     selector: 'stats-modifier-editor',
     templateUrl: './stats-modifier-editor.component.html',
     styleUrls: ['./stats-modifier-editor.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatFormField, MatInput, FormsModule, CdkTextareaAutosize, DurationSelectorComponent, MatCheckbox, MatCardContent, ModifiersEditorComponent]
 })
 export class StatModifierEditorComponent {

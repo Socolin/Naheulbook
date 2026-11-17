@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 import {LoginService} from './login.service';
@@ -27,6 +27,7 @@ import { DatePipe } from '@angular/common';
     selector: 'user-profile',
     templateUrl: './user-profile.component.html',
     styleUrls: ['./user-profile.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatSidenavContainer, MatToolbar, RouterLink, MatIcon, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatInput, FormsModule, MatHint, MatCheckbox, MatCardActions, MatButton, MatIconButton, MatMenuTrigger, MatMenu, MatMenuItem, MatProgressSpinner, DatePipe]
 })
 export class UserProfileComponent implements OnInit {

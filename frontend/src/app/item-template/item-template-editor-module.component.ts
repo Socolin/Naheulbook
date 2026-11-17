@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {CdkPortal, Portal} from '@angular/cdk/portal';
 
@@ -35,6 +35,7 @@ import {NhbkActionComponent} from '../action/nhbk-action.component';
     selector: 'item-template-editor-module',
     styleUrls: ['./item-template-editor-module.component.scss'],
     templateUrl: './item-template-editor-module.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, NgSwitch, MatIconButton, MatIcon, NgSwitchCase, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatHint, MatInput, FormsModule, NgFor, NgIf, NhbkActionComponent, MatMenuTrigger, MatMenu, MatMenuItem, MatButton, MatSuffix, MatSelect, MatOption, MatDivider, MatCardSubtitle, MatCheckbox, MatCardActions, DurationSelectorComponent, ModifiersEditorComponent, StatRequirementsEditorComponent, MatRadioGroup, MatRadioButton, SkillModifiersEditorComponent, NgSwitchDefault, CdkPortal, MatExpansionPanelActionRow]
 })
 export class ItemTemplateEditorModuleComponent implements OnInit {

@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {NhbkMatDialog} from '../material-workaround';
 import {
     ValueEditorModes,
@@ -26,6 +26,7 @@ interface IRect {
     selector: 'value-editor',
     styleUrls: ['./value-editor.component.scss'],
     templateUrl: './value-editor.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatRipple, CdkOverlayOrigin, CdkConnectedOverlay, MatIconButton, MatIcon, MatTooltip, MatButton, DecimalPipe]
 })
 export class ValueEditorComponent implements OnChanges {

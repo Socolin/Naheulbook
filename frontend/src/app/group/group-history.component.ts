@@ -1,4 +1,4 @@
-import {Input, Component, OnInit} from '@angular/core';
+import {Input, Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 import {HistoryEntry} from '../shared';
@@ -19,6 +19,7 @@ import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
     selector: 'group-history',
     templateUrl: './group-history.component.html',
     styleUrls: ['./group-history.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, MatCheckbox, MatCardActions, MatButton, DateComponent, DatePipe, NhbkDateDurationPipe]
 })
 export class GroupHistoryComponent implements OnInit {

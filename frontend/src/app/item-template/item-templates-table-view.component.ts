@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {ItemTemplate, ItemTemplateSection} from './item-template.model';
 import {GodByTechName} from '../shared';
 import {LoginService} from '../user';
@@ -25,6 +25,7 @@ import { ItemPricePipe } from './item-price.pipe';
             transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
         ]),
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatTable, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, IconComponent, MatIcon, MatTooltip, MatIconButton, MatMenuTrigger, ItemTemplateDetailsComponent, MatMenu, MatMenuContent, MatMenuItem, ModifierPipe, ItemTemplateDataProtectionPipe, ItemPricePipe]
 })
 export class ItemTemplatesTableViewComponent implements OnInit, OnChanges {

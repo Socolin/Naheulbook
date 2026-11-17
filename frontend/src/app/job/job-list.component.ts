@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {Job} from './job.model';
 import {JobService} from './job.service';
@@ -8,6 +8,7 @@ import { JobComponent } from './job.component';
     selector: 'job-list',
     templateUrl: './job-list.component.html',
     styleUrls: ['./job-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [JobComponent]
 })
 export class JobListComponent implements OnInit {

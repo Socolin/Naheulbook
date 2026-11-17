@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {LoginService} from './login.service';
@@ -13,6 +13,7 @@ import { MatButton } from '@angular/material/button';
     selector: 'login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatCardHeader, MatCardTitle, MatProgressSpinner, MatCardSubtitle, MatCardContent, MatButton, MatCardActions]
 })
 export class LoginComponent implements OnInit, OnDestroy {

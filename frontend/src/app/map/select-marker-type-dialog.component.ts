@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {MapMarkerType} from './map.model';
 import { CdkScrollable } from '@angular/cdk/scrolling';
@@ -16,6 +16,7 @@ export interface SelectMarkerTypeDialogResult {
 @Component({
     templateUrl: './select-marker-type-dialog.component.html',
     styleUrls: ['./select-marker-type-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatRadioGroup, FormsModule, MatRadioButton, MatDialogActions, MatButton, MatDialogClose]
 })
 export class SelectMarkerTypeDialogComponent {

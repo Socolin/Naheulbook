@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -13,6 +13,7 @@ export class EndCombatDialogResult {
     selector: 'app-end-combat-dialog',
     templateUrl: './end-combat-dialog.component.html',
     styleUrls: ['./end-combat-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatCheckbox, FormsModule, MatDialogActions, MatButton, MatDialogClose]
 })
 export class EndCombatDialogComponent implements OnInit {

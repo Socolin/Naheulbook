@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {LoginService} from '../user';
 import { Router, RouterLink } from '@angular/router';
@@ -16,6 +16,7 @@ import { AsyncPipe } from '@angular/common';
     selector: 'common-nav',
     templateUrl: './common-nav.component.html',
     styleUrls: ['./common-nav.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatNavList, MatSlideToggle, FormsModule, MatListItem, RouterLink, MatIcon, MatListItemIcon, AsyncPipe]
 })
 export class CommonNavComponent implements OnInit {

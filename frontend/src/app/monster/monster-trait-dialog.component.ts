@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {MonsterTrait} from './monster.model';
 import { CdkScrollable } from '@angular/cdk/scrolling';
@@ -13,6 +13,7 @@ export interface MonsterTraitDialogData {
 @Component({
     templateUrl: './monster-trait-dialog.component.html',
     styleUrls: ['./monster-trait-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class MonsterTraitDialogComponent implements OnInit {

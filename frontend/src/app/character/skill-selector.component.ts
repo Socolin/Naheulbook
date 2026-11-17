@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 
 import {FlagData, getRandomInt} from '../shared';
 
@@ -13,6 +13,7 @@ import {Guid} from '../api/shared/util';
     selector: 'skill-selector',
     templateUrl: './skill-selector.component.html',
     styleUrls: ['./skill-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatSelectionList, MatListOption, MatListItemTitle, MatListItemLine]
 })
 export class SkillSelectorComponent implements OnInit {

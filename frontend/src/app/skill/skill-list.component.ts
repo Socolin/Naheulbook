@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {Skill} from './skill.model';
 import {SkillService} from './skill.service';
@@ -13,6 +13,7 @@ import { SkillComponent } from './skill.component';
 @Component({
     selector: 'skill-list',
     templateUrl: './skill-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatFormField, MatLabel, MatInput, FormsModule, MatCard, SkillComponent]
 })
 export class SkillListComponent implements OnInit {

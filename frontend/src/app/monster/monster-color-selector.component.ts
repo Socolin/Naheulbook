@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 
 import {Monster} from './monster.model';
 import {tokenColors} from '../shared';
@@ -10,6 +10,7 @@ import { MatCard } from '@angular/material/card';
     selector: 'monster-color-selector',
     templateUrl: './monster-color-selector.component.html',
     styleUrls: ['./monster-color-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CdkOverlayOrigin, MatRipple, CdkConnectedOverlay, MatCard]
 })
 export class MonsterColorSelectorComponent {

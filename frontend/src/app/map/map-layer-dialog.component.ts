@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {MapLayer} from './map.model';
@@ -23,6 +23,7 @@ export interface MapLayerDialogResult {
 @Component({
     templateUrl: './map-layer-dialog.component.html',
     styleUrls: ['./map-layer-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatInput, MatSelect, MatOption, MatCheckbox, MatDialogActions, MatButton, MatDialogClose]
 })
 export class MapLayerDialogComponent {

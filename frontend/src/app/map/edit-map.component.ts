@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MapService} from './map.service';
@@ -12,6 +12,7 @@ import { MatIcon } from '@angular/material/icon';
 @Component({
     templateUrl: './edit-map.component.html',
     styleUrls: ['./edit-map.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatProgressSpinner, FormsModule, ReactiveFormsModule, MatFormField, MatInput, MatHint, MatCheckbox, MatIconButton, MatIcon, MatButton]
 })
 export class EditMapComponent implements OnInit {

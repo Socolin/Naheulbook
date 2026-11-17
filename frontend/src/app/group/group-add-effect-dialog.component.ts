@@ -1,4 +1,4 @@
-import {Component, Inject, ViewChild} from '@angular/core';
+import {Component, Inject, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import { MatStep, MatStepper, MatStepLabel } from '@angular/material/stepper';
 
@@ -29,6 +29,7 @@ export interface GroupAddEffectDialogResult {
 @Component({
     templateUrl: './group-add-effect-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './group-add-effect-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, MatStepper, MatStep, MatStepLabel, MatFormField, MatInput, MatActionList, MatRipple, StatModifierEditorComponent, MatSelectionList, MatListOption, FighterIconComponent]
 })
 export class GroupAddEffectDialogComponent {

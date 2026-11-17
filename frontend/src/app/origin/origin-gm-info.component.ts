@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {Origin} from './origin.model';
 import {MatButtonModule} from '@angular/material/button';
 import {RouterModule} from '@angular/router';
@@ -10,6 +10,7 @@ import {RouterModule} from '@angular/router';
         MatButtonModule,
         RouterModule
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./origin-gm-info.component.scss']
 })
 export class OriginGmInfoComponent {

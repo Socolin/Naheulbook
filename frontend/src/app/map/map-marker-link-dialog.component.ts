@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MapService} from './map.service';
 import {MapSummaryResponse} from '../api/responses';
 import {FormsModule, ReactiveFormsModule, UntypedFormControl, Validators} from '@angular/forms';
@@ -27,6 +27,7 @@ export interface AddMapMarkerLinkDialogResult {
 @Component({
     templateUrl: './map-marker-link-dialog.component.html',
     styleUrls: ['./map-marker-link-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatDialogTitle, MatDialogContent, MatProgressSpinner, MatFormField, MatInput, MatAutocompleteTrigger, FormsModule, ReactiveFormsModule, MatAutocomplete, MatOption, MatHint, MatDialogActions, MatButton, MatDialogClose, AsyncPipe]
 })
 export class MapMarkerLinkDialogComponent implements OnInit {

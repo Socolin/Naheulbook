@@ -6,7 +6,7 @@ import {ThemeService} from './app/theme.service';
 import {ErrorReportService} from './app/error-report.service';
 import {NhbkErrorHandler} from './app/nhbk-error-handler';
 import {bootstrapApplication, BrowserModule} from '@angular/platform-browser';
-import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withXhr} from '@angular/common/http';
 import {AuthenticationInterceptor} from './app/user/authentication.interceptor';
 import {LoginService} from './app/user';
 import {provideAnimations} from '@angular/platform-browser/animations';
@@ -36,7 +36,7 @@ bootstrapApplication(AppComponent, {
             const initializerFn = (onAppInit)(inject(LoginService));
             return initializerFn();
         }),
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideAnimations(),
         provideRouter(routes)
     ]

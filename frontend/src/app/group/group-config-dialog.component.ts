@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {IGroupConfig} from '../api/shared';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogClose } from '@angular/material/dialog';
 import { CdkScrollable } from '@angular/cdk/scrolling';
@@ -19,6 +19,7 @@ export class GroupConfigDialogResult {
     selector: 'app-group-config-dialog',
     templateUrl: './group-config-dialog.component.html',
     styleUrls: ['./group-config-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatCheckbox, FormsModule, MatCardActions, MatButton, MatDialogClose]
 })
 export class GroupConfigDialogComponent implements OnInit {

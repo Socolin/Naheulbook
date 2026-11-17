@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {
     NhbkAction,
     NhbkActionType, NhbkAddCustomModifierAction, NhbkAddEaAction,
@@ -16,6 +16,7 @@ import { ModifierPipe } from '../shared/modifier.pipe';
     selector: 'nhbk-action',
     styleUrls: ['./nhbk-action.component.scss'],
     templateUrl: './nhbk-action.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ModifierPipe]
 })
 export class NhbkActionComponent implements OnInit, OnChanges {

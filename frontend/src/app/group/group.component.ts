@@ -1,5 +1,5 @@
 import {forkJoin, Subscription} from 'rxjs';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { MatTabChangeEvent, MatTabGroup, MatTab } from '@angular/material/tabs';
 import {Overlay, OverlayRef} from '@angular/cdk/overlay';
@@ -62,6 +62,7 @@ import { MarkdownPipe } from '../markdown/markdown.pipe';
     templateUrl: './group.component.html',
     styleUrls: ['./group.component.scss'],
     providers: [GroupActionService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatProgressSpinner, MatTabGroup, MatTab, MatCard, MatToolbar, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatCardContent, ValueEditorComponent, DateComponent, EventsComponent, MatCardActions, MatButton, MatCardHeader, ItemListComponent, MatListItemIcon, MatChipSet, MatChip, MatList, MatListItem, MatListItemTitle, MatListItemLine, MatListItemMeta, MatRipple, MatDivider, FighterPanelComponent, GroupLootPanelComponent, GroupHistoryComponent, CdkPortal, MatCardSubtitle, MatFormField, MatInput, FormsModule, MatRadioGroup, MatRadioButton, UsefulDataComponent, MarkdownPipe]
 })
 export class GroupComponent implements OnInit, OnDestroy {

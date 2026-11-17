@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {Subscription} from 'rxjs';
 
@@ -7,6 +7,7 @@ import {LoginService} from './login.service';
 
 @Component({
     templateUrl: './logged.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [RouterLink]
 })
 export class LoggedComponent implements OnInit, OnDestroy {

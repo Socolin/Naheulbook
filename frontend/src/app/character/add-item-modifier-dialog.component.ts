@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActiveStatsModifier} from '../shared';
 import { MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -10,6 +10,7 @@ import { StatModifierEditorComponent } from '../effect/stats-modifier-editor.com
     selector: 'app-add-item-modifier-dialog',
     templateUrl: './add-item-modifier-dialog.component.html',
     styleUrls: ['./add-item-modifier-dialog.component.scss', '../shared/full-screen-dialog.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, StatModifierEditorComponent]
 })
 export class AddItemModifierDialogComponent implements OnInit {

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {UsefulDataDialogResult} from './useful-data-dialog-result';
 import {PanelNames} from '../useful-data.model';
@@ -9,6 +9,7 @@ import { MatIcon } from '@angular/material/icon';
 @Component({
     templateUrl: './entropic-spells-dialog.component.html',
     styleUrls: ['../../shared/full-screen-dialog.scss', './entropic-spells-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon]
 })
 export class EntropicSpellsDialogComponent implements OnInit {

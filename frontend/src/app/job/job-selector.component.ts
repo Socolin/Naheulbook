@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 
 import {generateAllStatsPair, getRandomInt} from '../shared';
 
@@ -23,6 +23,7 @@ type JobAvailability = {
     selector: 'job-selector',
     templateUrl: './job-selector.component.html',
     styleUrls: ['./job-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatIcon, MatExpansionPanelActionRow, MatButton, UpperCasePipe, TextFormatterPipe]
 })
 export class JobSelectorComponent implements OnInit, OnChanges {

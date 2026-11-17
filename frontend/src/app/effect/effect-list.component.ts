@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges,} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 
@@ -24,6 +24,7 @@ import { MarkdownPipe } from '../markdown/markdown.pipe';
     selector: 'effect-list',
     templateUrl: './effect-list.component.html',
     styleUrls: ['../shared/number-shadow.scss', './effect-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatCardContent, MatFormField, MatSelect, FormsModule, MatOption, MatCardHeader, MatCardSubtitle, MatCardAvatar, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatFabButton, ModifierPipe, NhbkDateDurationPipe, MarkdownPipe]
 })
 export class EffectListComponent implements OnInit, OnChanges, OnDestroy {

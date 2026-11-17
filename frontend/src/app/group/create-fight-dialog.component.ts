@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -23,6 +23,7 @@ export type CreateFightDialogResult = {
         MatDialogClose
     ],
     templateUrl: './create-fight-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './create-fight-dialog.component.scss'
 })
 export class CreateFightDialogComponent {

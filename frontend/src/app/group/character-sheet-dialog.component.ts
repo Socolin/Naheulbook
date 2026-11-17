@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import {Character} from '../character';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -14,6 +14,7 @@ export interface CharacterSheetDialogData {
     selector: 'app-character-sheet-dialog',
     templateUrl: './character-sheet-dialog.component.html',
     styleUrls: ['./character-sheet-dialog.component.scss', '../shared/full-screen-dialog.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, CharacterComponent]
 })
 export class CharacterSheetDialogComponent implements OnInit {

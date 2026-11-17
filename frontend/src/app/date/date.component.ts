@@ -1,9 +1,10 @@
-import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, OnInit, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {NhbkDate, CalendarDate} from './date.model';
 import {DateService} from './date.service';
 
 @Component({
     selector: 'date',
+    changeDetection: ChangeDetectionStrategy.Eager,
     templateUrl: './date.component.html'
 })
 export class DateComponent implements OnInit, OnChanges {

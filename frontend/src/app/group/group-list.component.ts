@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {NotificationsService} from '../notifications';
@@ -15,6 +15,7 @@ import { MatIcon } from '@angular/material/icon';
 @Component({
     templateUrl: './group-list.component.html',
     styleUrls: ['./group-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatProgressSpinner, MatCardContent, MatRipple, MatCardHeader, MatCardTitle, MatCardSubtitle, MatButton, MatIcon]
 })
 export class GroupListComponent implements OnInit {

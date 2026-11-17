@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {Stat} from './stat.model';
 import {MiscService} from './misc.service';
@@ -15,6 +15,7 @@ import { MatDivider } from '@angular/material/list';
     selector: 'stat-requirements-editor',
     styleUrls: ['./stat-requirements-editor.component.scss'],
     templateUrl: './stat-requirements-editor.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatIconButton, MatIcon, MatFormField, MatInput, FormsModule, MatSelect, MatOption, MatDivider, MatButton]
 })
 export class StatRequirementsEditorComponent implements OnInit {

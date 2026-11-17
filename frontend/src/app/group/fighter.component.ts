@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 import {CharacterService, ItemActionService} from '../character';
@@ -33,6 +33,7 @@ import { MarkdownPipe } from '../markdown/markdown.pipe';
     templateUrl: './fighter.component.html',
     styleUrls: ['./fighter.component.scss'],
     providers: [ItemActionService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MonsterColorSelectorComponent, CharacterColorSelectorComponent, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatTooltip, ValueEditorComponent, MatRipple, NhbkDateShortDurationPipe, MarkdownPipe]
 })
 export class FighterComponent implements OnInit {

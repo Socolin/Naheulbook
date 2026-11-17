@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {Character} from './character.model';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {Skill} from '../skill';
@@ -40,6 +40,7 @@ export class LevelUpInfo {
 @Component({
     templateUrl: './level-up-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './level-up-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatStepper, MatStep, MatStepLabel, MatButtonToggleGroup, FormsModule, MatButtonToggle, MatFormField, MatInput, MatHint, MatButton, MatStepperNext, SkillSelectorComponent, SpecialitySelectorComponent]
 })
 export class LevelUpDialogComponent {

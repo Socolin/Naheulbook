@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {Origin} from './origin.model';
 import {OriginService} from './origin.service';
@@ -8,6 +8,7 @@ import {OriginComponent} from './origin.component';
     selector: 'origin-list',
     templateUrl: './origin-list.component.html',
     styleUrls: ['./origin-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [OriginComponent]
 })
 export class OriginListComponent implements OnInit {

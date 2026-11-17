@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
@@ -21,6 +21,7 @@ export class ValueEditorSettingsDialogResult {
     selector: 'app-value-editor-settings-dialog',
     templateUrl: './value-editor-settings-dialog.component.html',
     styleUrls: ['./value-editor-settings-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose, MatIcon, MatRipple]
 })
 export class ValueEditorSettingsDialogComponent implements OnInit {

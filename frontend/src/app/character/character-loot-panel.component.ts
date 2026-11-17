@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {NotificationsService} from '../notifications';
 import {Loot, LootPanelComponent} from '../loot';
 import {Monster} from '../monster';
@@ -17,6 +17,7 @@ import { MatIcon } from '@angular/material/icon';
     selector: 'character-loot-panel',
     styleUrls: ['./character-loot-panel.component.scss'],
     templateUrl: './character-loot-panel.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, ItemLineComponent, MatMenu, MatMenuContent, MatMenuItem, MatIcon]
 })
 export class CharacterLootPanelComponent extends LootPanelComponent implements OnInit {

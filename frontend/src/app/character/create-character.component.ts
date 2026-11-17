@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {getRandomInt} from '../shared';
@@ -30,6 +30,7 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
     selector: 'create-character',
     templateUrl: './create-character.component.html',
     styleUrls: ['./create-character.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatToolbar, MatIconButton, MatIcon, MatCardContent, MatFormField, MatInput, FormsModule, ReactiveFormsModule, MatError, MatCardActions, MatButton, OriginSelectorComponent_1, JobSelectorComponent_1, SkillSelectorComponent, MatButtonToggleGroup, MatButtonToggle, MatCardHeader, MatCardTitle, MatRadioGroup, MatRadioButton, MatProgressSpinner, MatLabel, MatSuffix]
 })
 export class CreateCharacterComponent implements OnInit {

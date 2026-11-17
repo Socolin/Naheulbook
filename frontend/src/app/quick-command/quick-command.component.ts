@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import { Portal, CdkPortal } from '@angular/cdk/portal';
 import {Overlay, OverlayConfig, OverlayRef} from '@angular/cdk/overlay';
 import {removeDiacritics} from '../shared';
@@ -12,6 +12,7 @@ import { NgStyle } from '@angular/common';
     selector: 'app-quick-command',
     templateUrl: './quick-command.component.html',
     styleUrls: ['./quick-command.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CdkPortal, MatRipple, MatIcon, NgStyle]
 })
 export class QuickCommandComponent implements OnInit {

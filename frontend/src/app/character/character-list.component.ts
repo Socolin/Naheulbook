@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {CharacterService} from './character.service';
@@ -13,6 +13,7 @@ import { MatIcon } from '@angular/material/icon';
     templateUrl: './character-list.component.html',
     styleUrls: ['./character-list.component.scss'],
     providers: [CharacterService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatProgressSpinner, MatCardHeader, MatRipple, MatCardTitle, MatCardSubtitle, MatProgressBar, MatCardContent, MatIcon]
 })
 export class CharacterListComponent implements OnInit {

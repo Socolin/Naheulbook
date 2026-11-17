@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
 
@@ -28,6 +28,7 @@ import { ItemListComponent } from '../item/item-list.component';
     selector: 'group-loot-panel',
     styleUrls: ['./group-loot-panel.component.scss'],
     templateUrl: './group-loot-panel.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatButton, MatToolbar, MatIcon, MatTooltip, MatIconButton, MatMenuTrigger, MatMenu, MatMenuItem, MatCard, MatCardContent, ItemListComponent]
 })
 export class GroupLootPanelComponent extends LootPanelComponent implements OnInit, OnDestroy {

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
     MonsterInventoryElement,
@@ -53,6 +53,7 @@ export interface EditMonsterTemplateDialogData {
 @Component({
     templateUrl: './edit-monster-template-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './edit-monster-template-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, MatCard, MatCardContent, MatFormField, MatSelect, FormsModule, MatOption, ReactiveFormsModule, MatLabel, MatInput, MatCheckbox, CdkTextareaAutosize, IconComponent, MatMenuTrigger, MatMenu, MatMenuItem, DecimalPipe, MonsterAttacksEditorComponent, MonsterTraitComponent, MatRipple]
 })
 export class EditMonsterTemplateDialogComponent implements OnInit {

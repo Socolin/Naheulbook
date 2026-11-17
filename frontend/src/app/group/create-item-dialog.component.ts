@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {forkJoin, Observer, Subject} from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {Item} from '../item';
@@ -30,6 +30,7 @@ export interface CreateItemDialogDialog {
     selector: 'app-create-item-dialog',
     templateUrl: './create-item-dialog.component.html',
     styleUrls: ['./create-item-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatDialogTitle, CdkScrollable, MatDialogContent, MatCardContent, MatFormField, MatInput, MatIconButton, MatIcon, MatActionList, MatListItem, IconComponent, MatRipple, FormsModule, MatHint, MatCheckbox, MatDialogActions, MatButton, MatDialogClose, ItemPricePipe]
 })
 export class CreateItemDialogComponent implements OnInit {

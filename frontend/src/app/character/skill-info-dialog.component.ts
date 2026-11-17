@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Skill} from '../skill';
 import { MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { NgIf } from '@angular/common';
@@ -13,6 +13,7 @@ export interface SkillInfoDialogData {
 @Component({
     templateUrl: './skill-info-dialog.component.html',
     styleUrls: ['./skill-info-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, NgIf, CdkScrollable, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class SkillInfoDialogComponent implements OnInit {

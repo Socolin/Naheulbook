@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 
 import {NhbkMatDialog} from '../material-workaround';
 import {ActiveStatsModifier, LapCountDecrement} from '../shared';
@@ -19,6 +19,7 @@ import {NhbkDateShortDurationPipe} from '../date';
     selector: 'effect-panel',
     templateUrl: './effect-panel.component.html',
     styleUrls: ['./effect-panel.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatToolbar, MatIconButton, MatIcon, MatCardContent, MatCheckbox, MatRipple, MatMenuTrigger, MatMenu, MatMenuContent, MatMenuItem, NhbkDateShortDurationPipe]
 })
 export class EffectPanelComponent {

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 
 import {MonsterTrait, TraitInfo} from './monster.model';
 import {removeDiacritics} from '../shared';
@@ -6,6 +6,7 @@ import {removeDiacritics} from '../shared';
 @Component({
     selector: 'monster-trait',
     styleUrls: ['./monster-trait.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     templateUrl: './monster-trait.component.html'
 })
 export class MonsterTraitComponent {

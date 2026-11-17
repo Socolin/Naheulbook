@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {AptitudeService} from './aptitude.service';
 import {SummaryAptitudeGroupResponse} from '../api/responses/aptitude-response';
 import {MatCard} from '@angular/material/card';
@@ -14,6 +14,7 @@ import {RouterModule} from '@angular/router';
         RouterModule
     ],
     templateUrl: './aptitude-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './aptitude-list.component.scss'
 })
 export class AptitudeListComponent {

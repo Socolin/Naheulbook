@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {Item, ItemData} from './item.model';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {IconDescription} from '../shared/icon.model';
@@ -30,6 +30,7 @@ type Actions =
     selector: 'app-item-list',
     templateUrl: './item-list.component.html',
     styleUrls: ['./item-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCheckbox, MatIconButton, MatTooltip, MatIcon, MatMenuTrigger, MatMenu, MatMenuItem, MatRipple, IconComponent, MatMenuContent]
 })
 export class ItemListComponent implements OnChanges {

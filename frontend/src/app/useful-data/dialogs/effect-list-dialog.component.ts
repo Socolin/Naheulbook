@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 
 import {UsefulDataDialogResult} from './useful-data-dialog-result';
@@ -14,6 +14,7 @@ export interface EffectListDialogData {
 @Component({
     templateUrl: './effect-list-dialog.component.html',
     styleUrls: ['../../shared/full-screen-dialog.scss', './effect-list-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, EffectListComponent]
 })
 export class EffectListDialogComponent implements OnInit {

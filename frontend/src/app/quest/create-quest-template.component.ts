@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {QuestService} from './quest.service';
@@ -7,6 +7,7 @@ import { QuestEditorComponent } from './quest-editor.component';
 
 @Component({
     templateUrl: './create-quest-template.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [QuestEditorComponent]
 })
 export class CreateQuestTemplateComponent {

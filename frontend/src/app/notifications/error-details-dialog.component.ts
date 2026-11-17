@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, Optional} from '@angular/core';
+import {Component, Inject, OnInit, Optional, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CdkScrollable } from '@angular/cdk/scrolling';
@@ -9,6 +9,7 @@ import { JsonPipe } from '@angular/common';
     selector: 'app-error-details-dialog',
     templateUrl: './error-details-dialog.component.html',
     styleUrls: ['./error-details-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatDialogActions, MatButton, MatDialogClose, JsonPipe]
 })
 export class ErrorDetailsDialogComponent implements OnInit {

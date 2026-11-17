@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 
 import {ItemStatModifier, MiscService} from '../shared';
@@ -16,6 +16,7 @@ import {MatTooltip} from '@angular/material/tooltip';
     selector: 'app-add-stat-modifier-dialog',
     templateUrl: './add-stat-modifier-dialog.component.html',
     styleUrls: ['./add-stat-modifier-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatFormField, MatLabel, MatSelect, FormsModule, MatOptgroup, MatOption, MatInput, MatButton, MatButtonToggleGroup, MatButtonToggle, MatTooltip, MatHint]
 })
 export class AddStatModifierDialogComponent implements OnInit {

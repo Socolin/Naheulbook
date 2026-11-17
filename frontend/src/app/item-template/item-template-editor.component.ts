@@ -1,5 +1,5 @@
 import {forkJoin} from 'rxjs';
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 
 import {God, IconComponent, IconSelectorComponent, IconSelectorComponentDialogData, MiscService, NhbkDialogService} from '../shared';
 import {LoginService} from '../user';
@@ -29,6 +29,7 @@ import {ItemTemplateDetailsComponent} from './item-template-details.component';
     selector: 'item-template-editor',
     styleUrls: ['./item-template-editor.component.scss'],
     templateUrl: './item-template-editor.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, IconComponent, MatIconButton, MatTooltip, MatIcon, MatSelect, MatOption, MatSuffix, MatCardHeader, MatCardTitle, ItemTemplateEditorModuleComponent, MatButton, ItemTemplateDetailsComponent, MatCardAvatar, MatCardSubtitle]
 })
 export class ItemTemplateEditorComponent implements OnInit, OnChanges {

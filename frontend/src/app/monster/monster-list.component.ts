@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {MonsterTemplate, MonsterTemplateSubCategory, MonsterTemplateType} from './monster.model';
 import {MonsterTemplateService} from './monster-template.service';
@@ -21,6 +21,7 @@ import { MonsterTemplateComponent } from './monster-template.component';
     selector: 'monster-list',
     templateUrl: './monster-list.component.html',
     styleUrls: ['./monster-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatFabButton, MatIcon, MatFormField, MatSelect, FormsModule, MatOption, MonsterTemplateComponent]
 })
 export class MonsterListComponent implements OnInit {

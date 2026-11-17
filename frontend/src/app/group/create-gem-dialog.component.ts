@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Observer, Subject} from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {Item} from '../item';
@@ -26,6 +26,7 @@ export interface CreateGemDialogDialog {
     selector: 'app-create-gem-dialog',
     templateUrl: './create-gem-dialog.component.html',
     styleUrls: ['./create-gem-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatFormField, MatLabel, MatInput, FormsModule, MatSelect, MatOption, MatButtonToggleGroup, MatButtonToggle, MatIconButton, MatIcon, MatCheckbox, IconComponent, MatHint, MatDialogActions, MatButton, MatDialogClose]
 })
 export class CreateGemDialogComponent implements OnInit {

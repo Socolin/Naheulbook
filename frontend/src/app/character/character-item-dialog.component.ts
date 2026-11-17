@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogContent } from '@angular/material/dialog';
 
 import {Item} from '../item';
@@ -40,6 +40,7 @@ export interface CharacterItemDialogData {
 @Component({
     templateUrl: './character-item-dialog.component.html',
     styleUrls: ['./character-item-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CdkScrollable, MatDialogContent, MatProgressSpinner, IconComponent, MatCardContent, MatIcon, MatChipSet, MatChip, ValueEditorComponent, NhbkActionComponent, MatTooltip, MatButton, MatDivider, MatCheckbox, FormsModule, MatMenu, MatMenuItem, MatIconButton, MatMenuTrigger, DecimalPipe, ModifierPipe, PlusMinusPipe, NhbkDateDurationPipe]
 })
 export class CharacterItemDialogComponent implements OnInit {

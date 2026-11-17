@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import { ConnectionPositionPair, CdkOverlayOrigin, CdkConnectedOverlay } from '@angular/cdk/overlay';
 
 import {Fighter} from './group.model';
@@ -11,6 +11,7 @@ import { MatTabGroup, MatTab } from '@angular/material/tabs';
     selector: 'target-selector',
     templateUrl: './target-selector.component.html',
     styleUrls: ['./target-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CdkOverlayOrigin, MatIcon, MatRipple, CdkConnectedOverlay, MatCard, MatTabGroup, MatTab]
 })
 export class TargetSelectorComponent implements OnInit {

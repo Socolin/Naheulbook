@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 
 import {Job} from './job.model';
 import {GmModeService} from '../shared';
@@ -11,6 +11,7 @@ import { AsyncPipe } from '@angular/common';
     selector: 'job',
     templateUrl: './job.component.html',
     styleUrls: ['./job.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatExpansionPanel, MatExpansionPanelHeader, JobPlayerInfoComponent, JobGmInfoComponent, AsyncPipe]
 })
 export class JobComponent {

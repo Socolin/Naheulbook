@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import { MatMenuPanel, MatMenuTrigger } from '@angular/material/menu';
 
 import {Item} from '../item';
@@ -16,6 +16,7 @@ import { MatBadge } from '@angular/material/badge';
     selector: 'app-item-line',
     templateUrl: './item-line.component.html',
     styleUrls: ['./item-line.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatRipple, IconComponent, MatIcon, MatIconButton, MatMenuTrigger, MatBadge]
 })
 export class ItemLineComponent {

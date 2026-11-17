@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, OnInit, OnChanges} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, OnChanges, ChangeDetectionStrategy} from '@angular/core';
 
 import {Origin} from './origin.model';
 import {OriginService} from './origin.service';
@@ -20,6 +20,7 @@ type OriginAvailability = {
     selector: 'origin-selector',
     templateUrl: './origin-selector.component.html',
     styleUrls: ['./origin-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatIcon, MatExpansionPanelActionRow, MatButton, UpperCasePipe, TextFormatterPipe]
 })
 export class OriginSelectorComponent implements OnInit, OnChanges {

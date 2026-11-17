@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatTab, MatTabChangeEvent, MatTabGroup, MatTabLabel} from '@angular/material/tabs';
 import {Overlay} from '@angular/cdk/overlay';
@@ -20,7 +20,7 @@ import {JobPlayerDialogComponent} from './job-player-dialog.component';
 import {ChangeJobDialogComponent, ChangeJobDialogData, ChangeJobDialogResult} from './change-job-dialog.component';
 import {SkillInfoDialogComponent, SkillInfoDialogData} from './skill-info-dialog.component';
 import {LevelUpDialogComponent, LevelUpDialogData, LevelUpDialogResult} from './level-up-dialog.component';
-import {NhbkMatDialog} from 'app/material-workaround';
+import {NhbkMatDialog} from '../material-workaround';
 import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
 import {EffectPanelComponent} from './effect-panel.component';
 import {filter, map} from 'rxjs/operators';
@@ -49,6 +49,7 @@ import {AptitudePanelComponent} from './aptitude-panel.component';
     templateUrl: './character.component.html',
     styleUrls: ['./character.component.scss'],
     providers: [ItemActionService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatTabGroup, MatTab, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions, MatButton, MatToolbar, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, ValueEditorComponent, MatFormField, MatInput, CdkTextareaAutosize, MatButtonToggleGroup, FormsModule, MatButtonToggle, CombatTabComponent, EffectPanelComponent, InventoryPanelComponent, MatTabLabel, MatBadge, CharacterLootPanelComponent, CharacterHistoryComponent, MatFabButton, PlusMinusPipe, ItemPricePipe, MarkdownPipe, AptitudePanelComponent]
 })
 export class CharacterComponent implements OnInit, OnDestroy {

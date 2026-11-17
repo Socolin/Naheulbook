@@ -1,4 +1,4 @@
-import {Component, Inject, ViewChild} from '@angular/core';
+import {Component, Inject, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { MatSelectionList, MatListOption } from '@angular/material/list';
 
@@ -20,6 +20,7 @@ export interface FighterSelectorDialogData {
 @Component({
     templateUrl: 'fighter-selector.component.html',
     styleUrls: ['fighter-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCardHeader, IconComponent, MatCardAvatar, MatCardTitle, MatCardSubtitle, CdkScrollable, MatDialogContent, MatSelectionList, MatListOption, FighterIconComponent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class FighterSelectorComponent {

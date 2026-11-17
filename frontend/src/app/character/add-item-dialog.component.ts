@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {ItemData} from '../item';
 import { MatDialogRef, MatDialogClose } from '@angular/material/dialog';
@@ -24,6 +24,7 @@ export interface AddItemDialogResult {
     selector: 'app-add-item-dialog',
     templateUrl: './add-item-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './add-item-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatStepper, MatStep, MatStepLabel, MatFormField, MatInput, MatActionList, MatListItem, IconComponent, FormsModule, MatButton]
 })
 export class AddItemDialogComponent {

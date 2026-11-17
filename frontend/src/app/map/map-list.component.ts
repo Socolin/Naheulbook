@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {MapService} from './map.service';
 import {MapSummaryResponse} from '../api/responses';
@@ -15,6 +15,7 @@ import { MatNavList, MatListItem } from '@angular/material/list';
 @Component({
     templateUrl: './map-list.component.html',
     styleUrls: ['./map-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatButton, MatIcon, MatFormField, MatInput, FormsModule, ReactiveFormsModule, MatNavList, MatListItem, RouterLink]
 })
 export class MapListComponent implements OnInit, OnDestroy {

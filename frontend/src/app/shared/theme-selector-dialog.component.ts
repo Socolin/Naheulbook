@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
@@ -9,6 +9,7 @@ import {ThemeInfo, ThemeService} from '../theme.service';
     selector: 'app-theme-selector-dialog',
     templateUrl: './theme-selector-dialog.component.html',
     styleUrls: ['./theme-selector-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButton, MatIcon, MatRipple]
 })
 export class ThemeSelectorDialogComponent {

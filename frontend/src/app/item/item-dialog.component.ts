@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogContent } from '@angular/material/dialog';
 import {Item, ItemData} from './item.model';
 import {forkJoin} from 'rxjs';
@@ -31,6 +31,7 @@ export interface ItemDialogData {
     selector: 'app-item-dialog',
     templateUrl: './item-dialog.component.html',
     styleUrls: ['./item-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CdkScrollable, MatDialogContent, MatCardHeader, IconComponent, MatRipple, MatCardAvatar, MatCardTitle, MatCardSubtitle, MatCardContent, MatIcon, MatChipSet, MatChip, ValueEditorComponent, NhbkActionComponent, MatDivider, DecimalPipe, ModifierPipe, PlusMinusPipe, NhbkDateDurationPipe]
 })
 export class ItemDialogComponent implements OnInit {

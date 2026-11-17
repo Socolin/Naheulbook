@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { UntypedFormArray, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -12,6 +12,7 @@ import { MonsterAttacksEditorComponent } from '../monster/monster-attacks-editor
     selector: 'app-monster-editor',
     templateUrl: './monster-editor.component.html',
     styleUrls: ['./monster-editor.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatCheckbox, MatSelect, MatOption, CdkTextareaAutosize, MonsterAttacksEditorComponent]
 })
 export class MonsterEditorComponent implements OnInit {

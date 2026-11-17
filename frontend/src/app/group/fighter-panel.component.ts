@@ -1,5 +1,5 @@
 import {forkJoin} from 'rxjs';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {ItemService} from '../item';
 import {Monster, MonsterService, MonsterTemplateService} from '../monster';
@@ -30,6 +30,7 @@ import { FighterIconComponent } from './fighter-icon.component';
     selector: 'fighter-panel',
     templateUrl: './fighter-panel.component.html',
     styleUrls: ['./fighter.component.scss', './fighter-panel.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatCard, MatToolbar, MatButton, MatIcon, FighterComponent, MatIconButton, MatMenuTrigger, MatMenu, MatMenuItem, MatDivider, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, FighterIconComponent, MatExpansionPanelDescription]
 })
 export class FighterPanelComponent implements OnInit, OnDestroy {

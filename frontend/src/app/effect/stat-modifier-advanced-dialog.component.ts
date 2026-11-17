@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatOption} from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { MatSelectionList, MatListOption } from '@angular/material/list';
@@ -24,6 +24,7 @@ export interface StatModifierAdvancedDialogData {
     selector: 'app-stat-modifier-advanced-dialog',
     templateUrl: './stat-modifier-advanced-dialog.component.html',
     styleUrls: ['./stat-modifier-advanced-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatLabel, MatDialogTitle, CdkScrollable, MatDialogContent, MatFormField, MatSelect, FormsModule, MatOption_1, MatSelectionList, MatListOption, MatDialogActions, MatButton, MatDialogClose]
 })
 export class StatModifierAdvancedDialogComponent implements OnInit {
