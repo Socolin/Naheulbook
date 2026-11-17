@@ -1,4 +1,3 @@
-using AutoMapper;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Notifications;
@@ -33,7 +32,7 @@ public class GroupService(
     IUnitOfWorkFactory unitOfWorkFactory,
     IAuthorizationUtil authorizationUtil,
     INotificationSessionFactory notificationSessionFactory,
-    IMapper mapper,
+    IDurationChangeMapper durationChangeMapper,
     IDurationUtil durationUtil,
     IGroupUtil groupUtil,
     IGroupHistoryUtil groupHistoryUtil,
@@ -257,7 +256,7 @@ public class GroupService(
             authorizationUtil.EnsureIsGroupOwner(executionContext, group);
         }
 
-        await durationUtil.UpdateDurationAsync(groupId, mapper.Map<IList<FighterDurationChanges>>(request));
+        await durationUtil.UpdateDurationAsync(groupId, request.Select(durationChangeMapper.ToFighterDurationChanges).ToList());
     }
 
     public async Task<IEnumerable<CharacterEntity>> ListActiveCharactersAsync(NaheulbookExecutionContext executionContext, int groupId)

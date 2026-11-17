@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IMerchantService>())
             return;
 
+        services.AddSingleton<IMerchantMapper, MerchantMapper>();
+
         services.AddSingleton<IMerchantService, MerchantService>();
 
         services.AddSingleton<IMerchantFactory, MerchantFactory>();

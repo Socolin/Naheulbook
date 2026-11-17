@@ -1,17 +1,16 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/items")]
 [ApiController]
-public class ItemsController(IItemService itemTemplate, IMapper mapper) : ControllerBase
+public class ItemsController(IItemService itemTemplate, IItemMapper itemMapper) : ControllerBase
 {
     [HttpPut("{ItemId}/data")]
     public async Task<ActionResult<ItemPartialResponse>> PutEditItemDataAsync(
@@ -24,7 +23,7 @@ public class ItemsController(IItemService itemTemplate, IMapper mapper) : Contro
         {
             var item = await itemTemplate.UpdateItemDataAsync(executionContext, itemId, itemData);
 
-            return mapper.Map<ItemPartialResponse>(item);
+            return itemMapper.ToPartialResponse(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -67,7 +66,7 @@ public class ItemsController(IItemService itemTemplate, IMapper mapper) : Contro
         try
         {
             var item = await itemTemplate.UseChargeAsync(executionContext, itemId, request);
-            return mapper.Map<ItemPartialResponse>(item);
+            return itemMapper.ToPartialResponse(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -90,7 +89,7 @@ public class ItemsController(IItemService itemTemplate, IMapper mapper) : Contro
         {
             var item = await itemTemplate.UpdateItemModifiersAsync(executionContext, itemId, itemModifiers);
 
-            return mapper.Map<ItemPartialResponse>(item);
+            return itemMapper.ToPartialResponse(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -113,7 +112,7 @@ public class ItemsController(IItemService itemTemplate, IMapper mapper) : Contro
         {
             var item = await itemTemplate.EquipItemAsync(executionContext, itemId, request);
 
-            return mapper.Map<ItemPartialResponse>(item);
+            return itemMapper.ToPartialResponse(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -136,7 +135,7 @@ public class ItemsController(IItemService itemTemplate, IMapper mapper) : Contro
         {
             var item = await itemTemplate.ChangeItemContainerAsync(executionContext, itemId, request);
 
-            return mapper.Map<ItemPartialResponse>(item);
+            return itemMapper.ToPartialResponse(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -162,7 +161,7 @@ public class ItemsController(IItemService itemTemplate, IMapper mapper) : Contro
             return new TakeItemResponse
             {
                 RemainingQuantity = remainingQuantity,
-                TakenItem = mapper.Map<ItemResponse>(takenItem),
+                TakenItem = itemMapper.ToResponse(takenItem),
             };
         }
         catch (ForbiddenAccessException ex)

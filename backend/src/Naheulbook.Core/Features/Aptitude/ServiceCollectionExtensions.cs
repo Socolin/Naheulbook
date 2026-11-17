@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IAptitudeGroupService>())
             return;
 
+        services.AddSingleton<IAptitudeMapper, AptitudeMapper>();
+
         services.AddSingleton<IAptitudeGroupService, AptitudeGroupService>();
         services.AddSingleton<ICharacterAptitudeFactory, CharacterAptitudeFactory>();
         services.AddSingleton<ICharacterAptitudeService, CharacterAptitudeService>();

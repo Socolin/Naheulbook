@@ -1,13 +1,12 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Monster;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
@@ -15,7 +14,8 @@ namespace Naheulbook.Web.Controllers;
 [Route("api/v2/monsters")]
 public class MonsterController(
     IMonsterService monsterService,
-    IMapper mapper
+    IItemMapper itemMapper,
+    IMonsterMapper monsterMapper
 ) : ControllerBase
 {
     [HttpGet("{MonsterId}")]
@@ -27,7 +27,7 @@ public class MonsterController(
         try
         {
             var monster = await monsterService.GetMonsterAsync(executionContext, monsterId);
-            return mapper.Map<MonsterResponse>(monster);
+            return monsterMapper.ToResponse(monster);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -231,7 +231,7 @@ public class MonsterController(
         try
         {
             var item = await monsterService.AddItemToMonsterAsync(executionContext, monsterId, request);
-            return mapper.Map<ItemResponse>(item);
+            return itemMapper.ToResponse(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -257,7 +257,7 @@ public class MonsterController(
         try
         {
             var item = await monsterService.AddRandomItemToMonsterAsync(executionContext, monsterId, request);
-            return mapper.Map<ItemResponse>(item);
+            return itemMapper.ToResponse(item);
         }
         catch (ForbiddenAccessException ex)
         {

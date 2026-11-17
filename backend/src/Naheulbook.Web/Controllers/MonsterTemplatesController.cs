@@ -1,22 +1,21 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Monster;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/monsterTemplates")]
 [ApiController]
-public class MonsterTemplatesController(IMapper mapper, IMonsterTemplateService monsterTemplateService)
+public class MonsterTemplatesController(IMonsterTemplateMapper monsterTemplateMapper, IMonsterTemplateService monsterTemplateService)
 {
     [HttpGet]
     public async Task<ActionResult<List<MonsterTemplateResponse>>> GetMonsterListAsync()
     {
         var monsters = await monsterTemplateService.GetAllMonstersAsync();
-        return mapper.Map<List<MonsterTemplateResponse>>(monsters);
+        return monsters.Select(monsterTemplateMapper.ToResponse).ToList();
     }
 
     [HttpPost]
@@ -29,7 +28,7 @@ public class MonsterTemplatesController(IMapper mapper, IMonsterTemplateService 
         {
             var createdMonster = await monsterTemplateService.CreateMonsterTemplateAsync(executionContext, request);
 
-            var result = mapper.Map<MonsterTemplateResponse>(createdMonster);
+            var result = monsterTemplateMapper.ToResponse(createdMonster);
             return new JsonResult(result) {StatusCode = StatusCodes.Status201Created};
         }
         catch (MonsterSubCategoryNotFoundException ex)
@@ -53,7 +52,7 @@ public class MonsterTemplatesController(IMapper mapper, IMonsterTemplateService 
         {
             var monster = await monsterTemplateService.EditMonsterTemplateAsync(executionContext, monsterTemplateId, request);
 
-            var result = mapper.Map<MonsterTemplateResponse>(monster);
+            var result = monsterTemplateMapper.ToResponse(monster);
             return new JsonResult(result);
         }
         catch (MonsterSubCategoryNotFoundException ex)
@@ -78,6 +77,6 @@ public class MonsterTemplatesController(IMapper mapper, IMonsterTemplateService 
     )
     {
         var monsterTemplates = await monsterTemplateService.SearchMonsterAsync(filter, monsterTypeId, monsterSubCategoryId);
-        return mapper.Map<List<MonsterTemplateResponse>>(monsterTemplates);
+        return monsterTemplates.Select(monsterTemplateMapper.ToResponse).ToList();
     }
 }

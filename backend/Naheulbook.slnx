@@ -5,6 +5,7 @@
     <Project Path="src\Naheulbook.DatabaseMigrator\Naheulbook.DatabaseMigrator.csproj" Type="Classic C#" />
     <Project Path="src\Naheulbook.Data\Naheulbook.Data.csproj" Type="Classic C#" />
     <Project Path="src\Naheulbook.Requests\Naheulbook.Requests.csproj" Type="Classic C#" />
+    <Project Path="src\Naheulbook.Responses\Naheulbook.Responses.csproj" Type="Classic C#" />
     <Project Path="src\Naheulbook.Shared\Naheulbook.Shared.csproj" Type="Classic C#" />
     <Project Path="src\Naheulbook.Web\Naheulbook.Web.csproj" Type="Classic C#" />
   </Folder>

@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<ISkillService>())
             return;
 
+        services.AddSingleton<ISkillMapper, SkillMapper>();
+
         services.AddSingleton<ISkillService, SkillService>();
     }
 }

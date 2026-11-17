@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<INpcService>())
             return;
 
+        services.AddSingleton<INpcMapper, NpcMapper>();
+
         services.AddSingleton<INpcService, NpcService>();
     }
 }

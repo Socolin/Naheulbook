@@ -1,14 +1,13 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Stat;
-using Naheulbook.Web.Responses;
+using Naheulbook.Responses.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/stats")]
 [ApiController]
 public class StatsController(
-    IMapper mapper,
+    IStatMapper statMapper,
     IStatService statService
 ) : ControllerBase
 {
@@ -16,6 +15,6 @@ public class StatsController(
     public async Task<ActionResult<List<StatResponse>>> GetAllStatsAsync()
     {
         var stats = await statService.GetAllStatsAsync();
-        return mapper.Map<List<StatResponse>>(stats);
+        return stats.Select(statMapper.ToResponse).ToList();
     }
 }

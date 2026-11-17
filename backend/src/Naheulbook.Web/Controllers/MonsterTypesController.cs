@@ -1,23 +1,22 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Monster;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/monsterTypes")]
 [ApiController]
-public class MonsterTypesController(IMapper mapper, IMonsterTypeService monsterTypeService)
+public class MonsterTypesController(IMonsterTemplateMapper monsterTemplateMapper, IMonsterTypeService monsterTypeService)
 {
     [HttpGet]
     public async Task<ActionResult<List<MonsterTypeResponse>>> GetMonsterTypesAsync()
     {
         var monsterTypes = await monsterTypeService.GetMonsterTypesWithCategoriesAsync();
-        return mapper.Map<List<MonsterTypeResponse>>(monsterTypes);
+        return monsterTypes.Select(monsterTemplateMapper.ToResponse).ToList();
     }
 
 
@@ -30,7 +29,7 @@ public class MonsterTypesController(IMapper mapper, IMonsterTypeService monsterT
         try
         {
             var monsterType = await monsterTypeService.CreateMonsterTypeAsync(executionContext, request);
-            return mapper.Map<MonsterTypeResponse>(monsterType);
+            return monsterTemplateMapper.ToResponse(monsterType);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -48,7 +47,7 @@ public class MonsterTypesController(IMapper mapper, IMonsterTypeService monsterT
         try
         {
             var monsterSubCategory = await monsterTypeService.CreateMonsterSubCategoryAsync(executionContext, monsterTypeId, request);
-            return mapper.Map<MonsterSubCategoryResponse>(monsterSubCategory);
+            return monsterTemplateMapper.ToResponse(monsterSubCategory);
         }
         catch (ForbiddenAccessException ex)
         {

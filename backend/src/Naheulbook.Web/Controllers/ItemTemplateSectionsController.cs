@@ -1,23 +1,22 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/itemTemplateSections")]
 [ApiController]
-public class ItemTemplateSectionsController(IItemTemplateSectionService itemTemplateSectionService, IMapper mapper)
+public class ItemTemplateSectionsController(IItemTemplateSectionService itemTemplateSectionService, IItemTemplateMapper itemTemplateMapper)
     : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<ItemTemplateSectionResponse>>> GetItemTemplateSectionsAsync()
     {
         var sections = await itemTemplateSectionService.GetAllSectionsAsync();
-        return mapper.Map<List<ItemTemplateSectionResponse>>(sections);
+        return sections.Select(itemTemplateMapper.ToResponse).ToList();
     }
 
     [HttpPost]
@@ -29,7 +28,7 @@ public class ItemTemplateSectionsController(IItemTemplateSectionService itemTemp
         try
         {
             var itemTemplateSection = await itemTemplateSectionService.CreateItemTemplateSectionAsync(executionContext, request);
-            var itemTemplateSectionResponse = mapper.Map<ItemTemplateSectionResponse>(itemTemplateSection);
+            var itemTemplateSectionResponse = itemTemplateMapper.ToResponse(itemTemplateSection);
             return new JsonResult(itemTemplateSectionResponse)
             {
                 StatusCode = StatusCodes.Status201Created,
@@ -48,6 +47,6 @@ public class ItemTemplateSectionsController(IItemTemplateSectionService itemTemp
     )
     {
         var sections = await itemTemplateSectionService.GetItemTemplatesBySectionAsync(sectionId, executionContext.ExecutionExecutionContext?.UserId);
-        return mapper.Map<List<ItemTemplateResponse>>(sections);
+        return sections.Select(itemTemplateMapper.ToResponse).ToList();
     }
 }

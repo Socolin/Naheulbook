@@ -11,6 +11,9 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IItemService>())
             return;
 
+        services.AddSingleton<IItemMapper, ItemMapper>();
+        services.AddSingleton<IItemTemplateMapper, ItemTemplateMapper>();
+
         services.AddSingleton<IItemService, ItemService>();
         services.AddSingleton<IItemTemplateSectionService, ItemTemplateSectionService>();
         services.AddSingleton<IItemTemplateService, ItemTemplateService>();

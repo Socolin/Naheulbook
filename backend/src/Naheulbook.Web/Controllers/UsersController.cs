@@ -1,19 +1,18 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
 using Naheulbook.Web.Extensions;
-using Naheulbook.Web.Responses;
 using Naheulbook.Web.Services;
 
 namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/users")]
 [ApiController]
-public class UsersController(IUserService userService, IJwtService jwtService, IMapper mapper, IUserAccessTokenService userAccessTokenService)
+public class UsersController(IUserService userService, IJwtService jwtService, IUserMapper userMapper, IUserAccessTokenService userAccessTokenService)
     : ControllerBase
 {
     [HttpPost]
@@ -79,7 +78,7 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
             return StatusCode(StatusCodes.Status401Unauthorized);
 
         var user = await userService.GetUserInfoAsync(userId.Value);
-        return mapper.Map<UserInfoResponse>(user);
+        return userMapper.ToInfoResponse(user);
     }
 
     [HttpGet("me/jwt")]
@@ -96,7 +95,7 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
         return new UserJwtResponse
         {
             Token = token,
-            UserInfo = mapper.Map<UserInfoResponse>(userInfo),
+            UserInfo = userMapper.ToInfoResponse(userInfo),
         };
     }
 
@@ -109,7 +108,7 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
             return StatusCode(StatusCodes.Status401Unauthorized);
 
         var accessTokens = await userAccessTokenService.GetUserAccessTokensAsync(userId.Value);
-        return mapper.Map<List<UserAccessTokenResponse>>(accessTokens);
+        return accessTokens.Select(userMapper.ToResponse).ToList();
     }
 
     [HttpPost("me/accessTokens")]
@@ -124,7 +123,7 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
 
         var accessToken= await userAccessTokenService.CreateUserAccessTokenAsync(userId.Value, request);
 
-        return mapper.Map<UserAccessTokenResponseWithKey>(accessToken);
+        return userMapper.ToResponseWithKey(accessToken);
     }
 
     [HttpDelete("me/accessTokens/{UserAccessTokenId}")]
@@ -164,7 +163,7 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
         try
         {
             var users = await userService.SearchUserAsync(executionContext, request.Filter);
-            return mapper.Map<List<UserSearchResponse>>(users);
+            return users.Select(userMapper.ToSearchResponse).ToList();
         }
         catch (ForbiddenAccessException ex)
         {

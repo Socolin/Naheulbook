@@ -1,8 +1,7 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Aptitude;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
@@ -10,7 +9,7 @@ namespace Naheulbook.Web.Controllers;
 [ApiController]
 public class AptitudeGroupController(
     IAptitudeGroupService aptitudeGroupService,
-    IMapper mapper
+    IAptitudeMapper aptitudeMapper
 ) : ControllerBase
 {
     [HttpGet]
@@ -21,7 +20,7 @@ public class AptitudeGroupController(
         var aptitudeGroups = await aptitudeGroupService.GetAptitudeGroupListAsync(cancellationToken);
         return new AptitudeGroupsResponse
         {
-            AptitudeGroups = mapper.Map<List<SummaryAptitudeGroupResponse>>(aptitudeGroups),
+            AptitudeGroups = aptitudeGroups.Select(aptitudeMapper.ToSummaryResponse).ToList(),
         };
     }
 
@@ -34,7 +33,7 @@ public class AptitudeGroupController(
         try
         {
             var aptitudeGroup = await aptitudeGroupService.GetAptitudeGroupAsync(aptitudeGroupId, cancellationToken);
-            return mapper.Map<AptitudeGroupResponse>(aptitudeGroup);
+            return aptitudeMapper.ToResponse(aptitudeGroup);
         }
         catch (AptitudeGroupNotFoundException ex)
         {

@@ -1,12 +1,11 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Loot;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
@@ -14,7 +13,7 @@ namespace Naheulbook.Web.Controllers;
 [ApiController]
 public class LootController(
     ILootService lootService,
-    IMapper mapper
+    IItemMapper itemMapper
 ) : ControllerBase
 {
     [HttpPut("{LootId:int:min(1)}/visibility")]
@@ -70,7 +69,7 @@ public class LootController(
         try
         {
             var item = await lootService.AddItemToLootAsync(executionContext, lootId, request);
-            return mapper.Map<ItemResponse>(item);
+            return itemMapper.ToResponse(item);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -96,7 +95,7 @@ public class LootController(
         try
         {
             var item = await lootService.AddRandomItemToLootAsync(executionContext, lootId, request);
-            return mapper.Map<ItemResponse>(item);
+            return itemMapper.ToResponse(item);
         }
         catch (ForbiddenAccessException ex)
         {

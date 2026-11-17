@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<ILootService>())
             return;
 
+        services.AddSingleton<ILootMapper, LootMapper>();
+
         services.AddSingleton<ILootService, LootService>();
     }
 }

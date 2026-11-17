@@ -1,24 +1,23 @@
-using AutoMapper;
 using AwesomeAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NSubstitute;
+using NUnit.Framework;
 using Naheulbook.Core.Features.Effect;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
-using NSubstitute;
-using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers;
 
 public class EffectsControllerTests
 {
     private IEffectService _effectService;
-    private IMapper _mapper;
+    private IEffectMapper _effectMapper;
     private EffectsController _effectsController;
     private NaheulbookExecutionContext _executionContext;
 
@@ -26,8 +25,8 @@ public class EffectsControllerTests
     public void SetUp()
     {
         _effectService = Substitute.For<IEffectService>();
-        _mapper = Substitute.For<IMapper>();
-        _effectsController = new EffectsController(_effectService, _mapper);
+        _effectMapper = Substitute.For<IEffectMapper>();
+        _effectsController = new EffectsController(_effectService, _effectMapper);
         _executionContext = new NaheulbookExecutionContext();
     }
 
@@ -40,7 +39,7 @@ public class EffectsControllerTests
 
         _effectService.EditEffectAsync(_executionContext, 42, editEffectRequest)
             .Returns(effect);
-        _mapper.Map<EffectResponse>(effect)
+        _effectMapper.ToResponse(effect)
             .Returns(expectedEffectResponse);
 
         var result = await _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest);
@@ -84,7 +83,7 @@ public class EffectsControllerTests
 
         _effectService.GetEffectAsync(42)
             .Returns(effect);
-        _mapper.Map<EffectResponse>(effect)
+        _effectMapper.ToResponse(effect)
             .Returns(expectedEffectResponse);
 
         var result = await _effectsController.GetEffectAsync(42);

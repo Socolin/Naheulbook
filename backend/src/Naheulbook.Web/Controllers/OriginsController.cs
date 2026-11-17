@@ -1,9 +1,8 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Origin;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
@@ -11,7 +10,7 @@ namespace Naheulbook.Web.Controllers;
 [ApiController]
 public class OriginsController(
     IOriginService originService,
-    IMapper mapper,
+    IOriginMapper originMapper,
     ICharacterRandomNameService characterRandomNameService
 ) : ControllerBase
 {
@@ -20,7 +19,7 @@ public class OriginsController(
     {
         var skills = await originService.GetOriginsAsync();
 
-        return mapper.Map<List<OriginResponse>>(skills);
+        return skills.Select(originMapper.ToResponse).ToList();
     }
 
     [HttpGet("{OriginId:guid}/randomCharacterName")]

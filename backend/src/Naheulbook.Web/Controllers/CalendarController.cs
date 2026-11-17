@@ -1,7 +1,6 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Calendar;
-using Naheulbook.Web.Responses;
+using Naheulbook.Responses.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
@@ -9,13 +8,13 @@ namespace Naheulbook.Web.Controllers;
 [ApiController]
 public class CalendarController(
     ICalendarService calendarService,
-    IMapper mapper
+    ICalendarMapper calendarMapper
 )
 {
     [HttpGet]
     public async Task<ActionResult<List<CalendarResponse>>> GetCalendarAsync()
     {
         var calendar = await calendarService.GetCalendarAsync();
-        return mapper.Map<List<CalendarResponse>>(calendar);
+        return calendar.Select(calendarMapper.ToResponse).ToList();
     }
 }

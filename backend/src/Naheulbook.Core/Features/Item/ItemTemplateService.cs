@@ -1,4 +1,3 @@
-using AutoMapper;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.UnitOfWorks;
@@ -19,7 +18,7 @@ public interface IItemTemplateService
 public class ItemTemplateService(
     IUnitOfWorkFactory unitOfWorkFactory,
     IAuthorizationUtil authorizationUtil,
-    IMapper mapper,
+    IItemTemplateMapper itemTemplateMapper,
     IItemTemplateUtil itemTemplateUtil,
     IStringCleanupUtil stringCleanupUtil
 ) : IItemTemplateService
@@ -38,7 +37,7 @@ public class ItemTemplateService(
         if (request.Source == "official")
             await authorizationUtil.EnsureAdminAccessAsync(executionContext);
 
-        var itemTemplate = mapper.Map<ItemTemplateEntity>(request);
+        var itemTemplate = itemTemplateMapper.ToEntity(request);
 
         if (request.Source != "official")
             itemTemplate.SourceUserId = executionContext.UserId;

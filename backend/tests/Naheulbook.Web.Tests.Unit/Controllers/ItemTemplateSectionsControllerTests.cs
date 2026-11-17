@@ -1,22 +1,21 @@
-using AutoMapper;
 using AwesomeAssertions;
 using Microsoft.AspNetCore.Http;
+using NSubstitute;
+using NUnit.Framework;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
-using NSubstitute;
-using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers;
 
 public class ItemTemplateSectionsControllerTests
 {
     private IItemTemplateSectionService _itemTemplateSectionService;
-    private IMapper _mapper;
+    private IItemTemplateMapper _itemTemplateMapper;
     private ItemTemplateSectionsController _itemTemplateSectionsController;
     private NaheulbookExecutionContext _executionContext;
 
@@ -24,8 +23,8 @@ public class ItemTemplateSectionsControllerTests
     public void SetUp()
     {
         _itemTemplateSectionService = Substitute.For<IItemTemplateSectionService>();
-        _mapper = Substitute.For<IMapper>();
-        _itemTemplateSectionsController = new ItemTemplateSectionsController(_itemTemplateSectionService, _mapper);
+        _itemTemplateMapper = Substitute.For<IItemTemplateMapper>();
+        _itemTemplateSectionsController = new ItemTemplateSectionsController(_itemTemplateSectionService, _itemTemplateMapper);
         _executionContext = new NaheulbookExecutionContext();
     }
 
@@ -38,7 +37,7 @@ public class ItemTemplateSectionsControllerTests
 
         _itemTemplateSectionService.CreateItemTemplateSectionAsync(_executionContext, createItemTemplateSectionRequest)
             .Returns(itemTemplateSection);
-        _mapper.Map<ItemTemplateSectionResponse>(itemTemplateSection)
+        _itemTemplateMapper.ToResponse(itemTemplateSection)
             .Returns(itemTemplateSectionResponse);
 
         var result = await _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, createItemTemplateSectionRequest);

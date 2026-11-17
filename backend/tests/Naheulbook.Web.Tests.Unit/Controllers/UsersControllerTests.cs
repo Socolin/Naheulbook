@@ -1,14 +1,13 @@
-using AutoMapper;
 using AwesomeAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NSubstitute;
+using NUnit.Framework;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Services;
-using NSubstitute;
-using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers;
 
@@ -32,7 +31,7 @@ public class UsersControllerTests
         _httpContext = Substitute.For<HttpContext>();
         _httpContext.Session.Returns(_session);
 
-        _usersController = new UsersController(_userService, _jwtService, Substitute.For<IMapper>(), Substitute.For<IUserAccessTokenService>())
+        _usersController = new UsersController(_userService, _jwtService, Substitute.For<IUserMapper>(), Substitute.For<IUserAccessTokenService>())
         {
             ControllerContext = new ControllerContext
             {

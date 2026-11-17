@@ -10,6 +10,9 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IGroupService>())
             return;
 
+        services.AddSingleton<IGroupMapper, GroupMapper>();
+        services.AddSingleton<IDurationChangeMapper, DurationChangeMapper>();
+
         services.AddSingleton<IGroupService, GroupService>();
 
         services.AddSingleton<IDurationUtil, DurationUtil>();

@@ -3,6 +3,7 @@ using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Core.Features.Character;

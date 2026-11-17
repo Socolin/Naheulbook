@@ -10,6 +10,9 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IMonsterService>())
             return;
 
+        services.AddSingleton<IMonsterMapper, MonsterMapper>();
+        services.AddSingleton<IMonsterTemplateMapper, MonsterTemplateMapper>();
+
         services.AddSingleton<IMonsterService, MonsterService>();
         services.AddSingleton<IMonsterTemplateService, MonsterTemplateService>();
         services.AddSingleton<IMonsterTraitService, MonsterTraitService>();

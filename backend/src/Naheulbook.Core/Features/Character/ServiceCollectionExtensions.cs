@@ -11,6 +11,10 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<ICharacterService>())
             return;
 
+        services.AddSingleton<ICharacterMapper, CharacterMapper>();
+        services.AddSingleton<ICharacterModifierMapper, CharacterModifierMapper>();
+        services.AddSingleton<ICharacterBackupMapper, CharacterBackupMapper>();
+
         services.AddSingleton<ICharacterBackupService, CharacterBackupService>();
         services.AddSingleton<ICharacterRandomNameService, CharacterRandomNameService>();
         services.AddSingleton<ICharacterService, CharacterService>();

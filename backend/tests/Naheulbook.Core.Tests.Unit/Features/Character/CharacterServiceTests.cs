@@ -1,5 +1,6 @@
-using AutoMapper;
 using AwesomeAssertions;
+using NSubstitute;
+using NUnit.Framework;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Job;
@@ -7,8 +8,6 @@ using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
-using NSubstitute;
-using NUnit.Framework;
 
 namespace Naheulbook.Core.Tests.Unit.Features.Character;
 
@@ -21,7 +20,7 @@ public class CharacterServiceTests
     private IItemService _itemService;
     private IAuthorizationUtil _authorizationUtil;
     private ICharacterHistoryUtil _characterHistoryUtil;
-    private IMapper _mapper;
+    private ICharacterModifierMapper _characterModifierMapper;
     private ICharacterModifierUtil _characterModifierUtil;
     private FakeNotificationSessionFactory _notificationSessionFactory;
     private ICharacterUtil _characterUtil;
@@ -36,7 +35,7 @@ public class CharacterServiceTests
         _itemService = Substitute.For<IItemService>();
         _authorizationUtil = Substitute.For<IAuthorizationUtil>();
         _characterHistoryUtil = Substitute.For<ICharacterHistoryUtil>();
-        _mapper = Substitute.For<IMapper>();
+        _characterModifierMapper = Substitute.For<ICharacterModifierMapper>();
         _characterModifierUtil = Substitute.For<ICharacterModifierUtil>();
         _notificationSessionFactory = new FakeNotificationSessionFactory();
         _characterUtil = Substitute.For<ICharacterUtil>();
@@ -48,7 +47,7 @@ public class CharacterServiceTests
             _itemService,
             _authorizationUtil,
             _characterHistoryUtil,
-            _mapper,
+            _characterModifierMapper,
             _characterModifierUtil,
             _notificationSessionFactory,
             _characterUtil,
@@ -408,7 +407,7 @@ public class CharacterServiceTests
         var request = new AddCharacterModifierRequest {Name = string.Empty, DurationType = string.Empty};
         var characterModifier = new CharacterModifierEntity();
 
-        _mapper.Map<CharacterModifierEntity>(request)
+        _characterModifierMapper.ToEntity(request)
             .Returns(characterModifier);
         _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
             .Returns(character);
@@ -431,7 +430,7 @@ public class CharacterServiceTests
         var characterModifier = new CharacterModifierEntity();
         var request = new AddCharacterModifierRequest {Name = string.Empty, DurationType = string.Empty};
 
-        _mapper.Map<CharacterModifierEntity>(Arg.Any<AddCharacterModifierRequest>())
+        _characterModifierMapper.ToEntity(Arg.Any<AddCharacterModifierRequest>())
             .Returns(characterModifier);
         _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
             .Returns(character);
@@ -454,7 +453,7 @@ public class CharacterServiceTests
         var request = new AddCharacterModifierRequest {Name = string.Empty, DurationType = string.Empty};
         var characterModifier = new CharacterModifierEntity();
 
-        _mapper.Map<CharacterModifierEntity>(request)
+        _characterModifierMapper.ToEntity(request)
             .Returns(characterModifier);
 
         _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)

@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IStatService>())
             return;
 
+        services.AddSingleton<IStatMapper, StatMapper>();
+
         services.AddSingleton<IStatService, StatService>();
     }
 }

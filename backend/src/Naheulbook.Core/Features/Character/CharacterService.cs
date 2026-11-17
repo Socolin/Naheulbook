@@ -1,4 +1,3 @@
-using AutoMapper;
 using Naheulbook.Core.Features.Group;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Job;
@@ -39,7 +38,7 @@ public class CharacterService(
     IItemService itemService,
     IAuthorizationUtil authorizationUtil,
     ICharacterHistoryUtil characterHistoryUtil,
-    IMapper mapper,
+    ICharacterModifierMapper characterModifierMapper,
     ICharacterModifierUtil characterModifierUtil,
     INotificationSessionFactory notificationSessionFactory,
     ICharacterUtil characterUtil,
@@ -233,7 +232,7 @@ public class CharacterService(
 
         authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-        var characterModifier = mapper.Map<CharacterModifierEntity>(request);
+        var characterModifier = characterModifierMapper.ToEntity(request);
         characterModifier.Character = character;
 
         uow.CharacterModifiers.Add(characterModifier);

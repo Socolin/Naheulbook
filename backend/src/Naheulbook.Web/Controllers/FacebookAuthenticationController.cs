@@ -1,12 +1,11 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Naheulbook.Core.Features.Users;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Shared.Clients.Facebook;
 using Naheulbook.Shared.Utils;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Requests;
-using Naheulbook.Web.Responses;
 using Naheulbook.Web.Services;
 
 namespace Naheulbook.Web.Controllers;
@@ -17,7 +16,7 @@ public class FacebookAuthenticationController(
     IOptions<FacebookOptions> options,
     IFacebookClient facebookClient,
     IJwtService jwtService,
-    IMapper mapper,
+    IUserMapper userMapper,
     IRngUtil rngUtil,
     ISocialMediaUserLinkService socialMediaUserLinkService
 ) : ControllerBase
@@ -63,7 +62,7 @@ public class FacebookAuthenticationController(
         return new UserJwtResponse
         {
             Token = token,
-            UserInfo = mapper.Map<UserInfoResponse>(user),
+            UserInfo = userMapper.ToInfoResponse(user),
         };
     }
 }

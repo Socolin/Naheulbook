@@ -1,16 +1,15 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Map;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
 [Route("/api/v2/mapMarkerLinks")]
 [ApiController]
-public class MapMarkerLinksController(IMapService mapService, IMapper mapper) : ControllerBase
+public class MapMarkerLinksController(IMapService mapService, IMapMapper mapMapper) : ControllerBase
 {
     [HttpPut("{MapMarkerLinkId}")]
     public async Task<ActionResult<MapMarkerLinkResponse>> PutEditMapMarkerLinkAsync(
@@ -22,7 +21,7 @@ public class MapMarkerLinksController(IMapService mapService, IMapper mapper) : 
         try
         {
             var mapMarkerLink = await mapService.EditMapMarkerLinkAsync(executionContext, mapMarkerLinkId, request);
-            return mapper.Map<MapMarkerLinkResponse>(mapMarkerLink);
+            return mapMapper.ToResponse(mapMarkerLink);
         }
         catch (MapMarkerNotFoundException ex)
         {

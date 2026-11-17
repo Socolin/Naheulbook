@@ -5,7 +5,7 @@ using Naheulbook.Data.EntityFrameworkCore.DbContexts;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Tests.Functional.Code.Steps;
 using Naheulbook.TestUtils;
-using Naheulbook.Web.Responses;
+using Naheulbook.Responses.Responses;
 using NUnit.Framework;
 using Socolin.TestUtils.FakeSmtp;
 

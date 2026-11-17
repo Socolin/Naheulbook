@@ -1,16 +1,15 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Map;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
-using Naheulbook.Web.Responses;
+using Naheulbook.Responses.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
 [Route("/api/v2/mapLayers")]
 [ApiController]
 public class MapLayerController(
-    IMapper mapper,
+    IMapMapper mapMapper,
     IMapService mapService
 ) : ControllerBase
 {
@@ -23,7 +22,7 @@ public class MapLayerController(
     {
         var map = await mapService.CreateMapMarkerAsync(executionContext, mapLayerId, request);
 
-        return mapper.Map<MapMarkerResponse>(map);
+        return mapMapper.ToResponse(map);
     }
 
     [HttpPut("{MapLayerId:int:min(1)}")]
@@ -35,7 +34,7 @@ public class MapLayerController(
     {
         var map = await mapService.EditMapLayerAsync(executionContext, mapLayerId, request);
 
-        return mapper.Map<MapLayerResponse>(map);
+        return mapMapper.ToResponse(map);
     }
 
     [HttpDelete("{MapLayerId:int:min(1)}")]

@@ -1,22 +1,21 @@
-using AutoMapper;
 using AwesomeAssertions;
 using AwesomeAssertions.Execution;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using NUnit.Framework;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 using Newtonsoft.Json.Linq;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
-using NUnit.Framework;
 
 namespace Naheulbook.Core.Tests.Unit.Features.Item;
 
 public class ItemTemplateServiceTests
 {
     private IAuthorizationUtil _authorizationUtil;
-    private IMapper _mapper;
+    private IItemTemplateMapper _itemTemplateMapper;
     private FakeUnitOfWorkFactory _unitOfWorkFactory;
     private IItemTemplateUtil _itemTemplateUtil;
     private IStringCleanupUtil _stringCleanupUtil;
@@ -27,13 +26,13 @@ public class ItemTemplateServiceTests
     {
         _unitOfWorkFactory = new FakeUnitOfWorkFactory();
         _authorizationUtil = Substitute.For<IAuthorizationUtil>();
-        _mapper = Substitute.For<IMapper>();
+        _itemTemplateMapper = Substitute.For<IItemTemplateMapper>();
         _itemTemplateUtil = Substitute.For<IItemTemplateUtil>();
         _stringCleanupUtil = Substitute.For<IStringCleanupUtil>();
         _service = new ItemTemplateService(
             _unitOfWorkFactory,
             _authorizationUtil,
-            _mapper,
+            _itemTemplateMapper,
             _itemTemplateUtil,
             _stringCleanupUtil
         );
@@ -73,7 +72,7 @@ public class ItemTemplateServiceTests
         var fullyLoadedItemTemplate = new ItemTemplateEntity {Id = itemTemplateId};
         var createItemTemplateRequest = new ItemTemplateRequest {Name = string.Empty, Source = string.Empty, Data = new JObject()};
 
-        _mapper.Map<ItemTemplateEntity>(createItemTemplateRequest)
+        _itemTemplateMapper.ToEntity(createItemTemplateRequest)
             .Returns(newItemTemplateEntity);
         _unitOfWorkFactory.GetUnitOfWork().ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId)
             .Returns(fullyLoadedItemTemplate);
@@ -112,7 +111,7 @@ public class ItemTemplateServiceTests
         var createItemTemplateRequest = new ItemTemplateRequest {Source = "non-official", Name = string.Empty, Data = new JObject()};
         var newItemTemplateEntity = new ItemTemplateEntity {Id = itemTemplateId};
 
-        _mapper.Map<ItemTemplateEntity>(createItemTemplateRequest)
+        _itemTemplateMapper.ToEntity(createItemTemplateRequest)
             .Returns(newItemTemplateEntity);
         _unitOfWorkFactory.GetUnitOfWork().When(x => x.SaveChangesAsync())
             .Do(_ => newItemTemplateEntity.SourceUserId.Should().Be(42));

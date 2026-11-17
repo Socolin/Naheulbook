@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IEventService>())
             return;
 
+        services.AddSingleton<IEventMapper, EventMapper>();
+
         services.AddSingleton<IEventService, EventService>();
     }
 }

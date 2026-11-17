@@ -1,23 +1,22 @@
-using AutoMapper;
 using AwesomeAssertions;
 using Microsoft.AspNetCore.Http;
+using NSubstitute;
+using NUnit.Framework;
 using Naheulbook.Core.Features.Effect;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
-using NSubstitute;
-using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers;
 
 public class EffectControllerTests
 {
     private IEffectService _effectService;
-    private IMapper _mapper;
+    private IEffectMapper _effectMapper;
     private EffectSubCategoriesController _effectSubCategoriesController;
     private NaheulbookExecutionContext _executionContext;
 
@@ -25,8 +24,8 @@ public class EffectControllerTests
     public void SetUp()
     {
         _effectService = Substitute.For<IEffectService>();
-        _mapper = Substitute.For<IMapper>();
-        _effectSubCategoriesController = new EffectSubCategoriesController(_effectService, _mapper);
+        _effectMapper = Substitute.For<IEffectMapper>();
+        _effectSubCategoriesController = new EffectSubCategoriesController(_effectService, _effectMapper);
         _executionContext = new NaheulbookExecutionContext();
     }
 
@@ -40,7 +39,7 @@ public class EffectControllerTests
 
         _effectService.CreateEffectAsync(_executionContext, subCategoryId, createEffectRequest)
             .Returns(effect);
-        _mapper.Map<EffectResponse>(effect)
+        _effectMapper.ToResponse(effect)
             .Returns(expectedEffectResponse);
 
         var result = await _effectSubCategoriesController.PostCreateEffectAsync(_executionContext, subCategoryId, createEffectRequest);
@@ -65,17 +64,22 @@ public class EffectControllerTests
     [Test]
     public async Task GetEffects_CallEffectService()
     {
-        var effects = new List<EffectEntity>();
-        var expectedResponse = new List<EffectResponse>();
+        var entity1 = new EffectEntity();
+        var entity2 = new EffectEntity();
+        var effects = new List<EffectEntity> {entity1, entity2};
+        var response1 = new EffectResponse();
+        var response2 = new EffectResponse();
 
         _effectService.GetEffectsBySubCategoryAsync(42)
             .Returns(effects);
-        _mapper.Map<List<EffectResponse>>(effects)
-            .Returns(expectedResponse);
+        _effectMapper.ToResponse(entity1)
+            .Returns(response1);
+        _effectMapper.ToResponse(entity2)
+            .Returns(response2);
 
         var result = await _effectSubCategoriesController.GetEffectsAsync(42);
 
-        result.Value.Should().BeSameAs(expectedResponse);
+        result.Value.Should().Equal(response1, response2);
     }
 
     [Test]
@@ -87,7 +91,7 @@ public class EffectControllerTests
 
         _effectService.CreateEffectSubCategoryAsync(_executionContext, request)
             .Returns(effectSubCategory);
-        _mapper.Map<EffectSubCategoryResponse>(effectSubCategory)
+        _effectMapper.ToResponse(effectSubCategory)
             .Returns(expectedEffectSubCategoryResponse);
 
         var result = await _effectSubCategoriesController.PostCreateEffectSubCategoryAsync(_executionContext, request);

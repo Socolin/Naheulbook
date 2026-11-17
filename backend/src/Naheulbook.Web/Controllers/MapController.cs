@@ -1,18 +1,17 @@
-using AutoMapper;
 using BrunoZell.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Map;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
 [Route("/api/v2/maps")]
 [ApiController]
 public class MapController(
-    IMapper mapper,
+    IMapMapper mapMapper,
     IMapService mapService
 ) : ControllerBase
 {
@@ -21,7 +20,7 @@ public class MapController(
     {
         var maps = await mapService.GetMapsAsync();
 
-        return mapper.Map<List<MapSummaryResponse>>(maps);
+        return maps.Select(mapMapper.ToSummaryResponse).ToList();
     }
 
     [HttpGet("{MapId:int:min(1)}")]
@@ -34,7 +33,7 @@ public class MapController(
         {
             var map = await mapService.GetMapAsync(mapId, executionContext.ExecutionExecutionContext?.UserId);
 
-            return mapper.Map<MapResponse>(map);
+            return mapMapper.ToResponse(map);
         }
         catch (MapNotFoundException ex)
         {
@@ -56,7 +55,7 @@ public class MapController(
         var imageStream = image.OpenReadStream();
         var map = await mapService.CreateMapAsync(executionContext, request, imageStream);
 
-        return mapper.Map<MapResponse>(map);
+        return mapMapper.ToResponse(map);
     }
 
     [HttpPut("{MapId:int:min(1)}")]
@@ -68,7 +67,7 @@ public class MapController(
     {
         var map = await mapService.UpdateMapAsync(executionContext, mapId, request);
 
-        return mapper.Map<MapSummaryResponse>(map);
+        return mapMapper.ToSummaryResponse(map);
     }
 
 
@@ -81,6 +80,6 @@ public class MapController(
     {
         var map = await mapService.CreateMapLayerAsync(executionContext, mapId, request);
 
-        return mapper.Map<MapLayerResponse>(map);
+        return mapMapper.ToResponse(map);
     }
 }

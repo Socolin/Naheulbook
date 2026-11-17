@@ -1,6 +1,6 @@
 using Naheulbook.Requests.Requests;
 using Naheulbook.Tests.Functional.Code.HttpClients;
-using Naheulbook.Web.Responses;
+using Naheulbook.Responses.Responses;
 
 namespace Naheulbook.Tests.Functional.Code.TestServices;
 

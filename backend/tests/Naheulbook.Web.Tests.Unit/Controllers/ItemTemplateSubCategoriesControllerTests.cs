@@ -1,22 +1,21 @@
-using AutoMapper;
 using AwesomeAssertions;
 using Microsoft.AspNetCore.Http;
+using NSubstitute;
+using NUnit.Framework;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
-using NSubstitute;
-using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers;
 
 public class ItemTemplateSubCategoriesControllerTests
 {
     private IItemTemplateSubCategoryService _itemTemplateSubCategoryService;
-    private IMapper _mapper;
+    private IItemTemplateMapper _itemTemplateMapper;
     private ItemTemplateSubCategoriesController _itemTemplateSubCategoriesController;
     private NaheulbookExecutionContext _executionContext;
 
@@ -24,8 +23,8 @@ public class ItemTemplateSubCategoriesControllerTests
     public void SetUp()
     {
         _itemTemplateSubCategoryService = Substitute.For<IItemTemplateSubCategoryService>();
-        _mapper = Substitute.For<IMapper>();
-        _itemTemplateSubCategoriesController = new ItemTemplateSubCategoriesController(_itemTemplateSubCategoryService, _mapper);
+        _itemTemplateMapper = Substitute.For<IItemTemplateMapper>();
+        _itemTemplateSubCategoriesController = new ItemTemplateSubCategoriesController(_itemTemplateSubCategoryService, _itemTemplateMapper);
         _executionContext = new NaheulbookExecutionContext();
     }
 
@@ -38,7 +37,7 @@ public class ItemTemplateSubCategoriesControllerTests
 
         _itemTemplateSubCategoryService.CreateItemTemplateSubCategoryAsync(_executionContext, createItemTemplateSubCategoryRequest)
             .Returns(itemTemplateSubCategory);
-        _mapper.Map<ItemTemplateSubCategoryResponse>(itemTemplateSubCategory)
+        _itemTemplateMapper.ToResponse(itemTemplateSubCategory)
             .Returns(itemTemplateSubCategoryResponse);
 
         var result = await _itemTemplateSubCategoriesController.PostCreateItemTemplateSubCategoryAsync(_executionContext, createItemTemplateSubCategoryRequest);

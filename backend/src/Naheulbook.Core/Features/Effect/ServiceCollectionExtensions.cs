@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IEffectService>())
             return;
 
+        services.AddSingleton<IEffectMapper, EffectMapper>();
+
         services.AddSingleton<IEffectService, EffectService>();
     }
 }

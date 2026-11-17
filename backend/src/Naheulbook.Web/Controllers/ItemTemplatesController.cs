@@ -1,16 +1,15 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/itemTemplates")]
 [ApiController]
-public class ItemTemplatesController(IItemTemplateService itemTemplateService, IMapper mapper) : ControllerBase
+public class ItemTemplatesController(IItemTemplateService itemTemplateService, IItemTemplateMapper itemTemplateMapper) : ControllerBase
 {
     [HttpGet("{itemTemplateId:guid}")]
     public async Task<ActionResult<ItemTemplateResponse>> GetItemTemplateAsync(Guid itemTemplateId)
@@ -19,7 +18,7 @@ public class ItemTemplatesController(IItemTemplateService itemTemplateService, I
         {
             var itemTemplate = await itemTemplateService.GetItemTemplateAsync(itemTemplateId);
 
-            return mapper.Map<ItemTemplateResponse>(itemTemplate);
+            return itemTemplateMapper.ToResponse(itemTemplate);
         }
         catch (ItemTemplateNotFoundException ex)
         {
@@ -42,7 +41,7 @@ public class ItemTemplatesController(IItemTemplateService itemTemplateService, I
                 request
             );
 
-            return mapper.Map<ItemTemplateResponse>(itemTemplate);
+            return itemTemplateMapper.ToResponse(itemTemplate);
         }
         catch (ItemTemplateNotFoundException ex)
         {
@@ -61,7 +60,7 @@ public class ItemTemplatesController(IItemTemplateService itemTemplateService, I
     )
     {
         var itemTemplates= await itemTemplateService.SearchItemTemplateAsync(filter, 40, executionContext.ExecutionExecutionContext?.UserId);
-        return mapper.Map<List<ItemTemplateResponse>>(itemTemplates);
+        return itemTemplates.Select(itemTemplateMapper.ToResponse).ToList();
     }
 
     [HttpPost]
@@ -73,7 +72,7 @@ public class ItemTemplatesController(IItemTemplateService itemTemplateService, I
         try
         {
             var itemTemplate = await itemTemplateService.CreateItemTemplateAsync(executionContext, request);
-            var itemTemplateResponse = mapper.Map<ItemTemplateResponse>(itemTemplate);
+            var itemTemplateResponse = itemTemplateMapper.ToResponse(itemTemplate);
             return new JsonResult(itemTemplateResponse)
             {
                 StatusCode = StatusCodes.Status201Created,

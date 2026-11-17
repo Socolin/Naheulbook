@@ -1,4 +1,3 @@
-using AutoMapper;
 using Naheulbook.Core.Features.Character.Backup;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.UnitOfWorks;
@@ -13,7 +12,7 @@ public interface ICharacterBackupService
 public class CharacterBackupService(
     IUnitOfWorkFactory unitOfWorkFactory,
     IAuthorizationUtil authorizationUtil,
-    IMapper mapper
+    ICharacterBackupMapper characterBackupMapper
 ) : ICharacterBackupService
 {
     public async Task<BackupCharacter> GetBackupCharacterAsync(NaheulbookExecutionContext executionContext, int characterId)
@@ -26,6 +25,6 @@ public class CharacterBackupService(
 
         authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-        return mapper.Map<Backup.V1.BackupCharacter>(character);
+        return characterBackupMapper.ToBackup(character);
     }
 }

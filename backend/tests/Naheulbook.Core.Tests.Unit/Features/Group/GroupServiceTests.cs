@@ -1,5 +1,6 @@
-using AutoMapper;
 using AwesomeAssertions;
+using NSubstitute;
+using NUnit.Framework;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Group;
 using Naheulbook.Core.Features.Shared;
@@ -7,8 +8,6 @@ using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
-using NSubstitute;
-using NUnit.Framework;
 
 namespace Naheulbook.Core.Tests.Unit.Features.Group;
 
@@ -17,7 +16,7 @@ public class GroupServiceTests
     private FakeUnitOfWorkFactory _unitOfWorkFactory;
     private IAuthorizationUtil _authorizationUtil;
     private FakeNotificationSessionFactory _notificationSessionFactory;
-    private IMapper _mapper;
+    private IDurationChangeMapper _durationChangeMapper;
     private IGroupUtil _groupUtil;
     private GroupService _service;
     private IDurationUtil _durationUtil;
@@ -30,7 +29,7 @@ public class GroupServiceTests
         _unitOfWorkFactory = new FakeUnitOfWorkFactory();
         _authorizationUtil = Substitute.For<IAuthorizationUtil>();
         _notificationSessionFactory = new FakeNotificationSessionFactory();
-        _mapper = Substitute.For<IMapper>();
+        _durationChangeMapper = Substitute.For<IDurationChangeMapper>();
         _groupUtil = Substitute.For<IGroupUtil>();
         _durationUtil = Substitute.For<IDurationUtil>();
         _groupHistoryUtil = Substitute.For<IGroupHistoryUtil>();
@@ -40,7 +39,7 @@ public class GroupServiceTests
             _unitOfWorkFactory,
             _authorizationUtil,
             _notificationSessionFactory,
-            _mapper,
+            _durationChangeMapper,
             _durationUtil,
             _groupUtil,
             _groupHistoryUtil,
@@ -468,17 +467,22 @@ public class GroupServiceTests
     {
         const int groupId = 42;
         var group = new GroupEntity();
-        var fighters = new List<FighterDurationChanges>();
-        var request = new List<PostGroupUpdateDurationsRequest>();
+        var request1 = new PostGroupUpdateDurationsRequest {CharacterId = 1, Changes = []};
+        var request2 = new PostGroupUpdateDurationsRequest {MonsterId = 2, Changes = []};
+        var request = new List<PostGroupUpdateDurationsRequest> {request1, request2};
+        var fighter1 = new CharacterUpdateDuration();
+        var fighter2 = new MonsterUpdateDuration();
 
         _unitOfWorkFactory.GetUnitOfWork().Groups.GetAsync(groupId)
             .Returns(group);
-        _mapper.Map<IList<FighterDurationChanges>>(request)
-            .Returns(fighters);
+        _durationChangeMapper.ToFighterDurationChanges(request1)
+            .Returns(fighter1);
+        _durationChangeMapper.ToFighterDurationChanges(request2)
+            .Returns(fighter2);
 
         await _service.UpdateDurationsAsync(new NaheulbookExecutionContext(), groupId, request);
 
-        await _durationUtil.Received(1).UpdateDurationAsync(groupId, fighters);
+        await _durationUtil.Received(1).UpdateDurationAsync(groupId, Arg.Is<IList<FighterDurationChanges>>(x => x.SequenceEqual(new FighterDurationChanges[] {fighter1, fighter2})));
     }
 
     [Test]

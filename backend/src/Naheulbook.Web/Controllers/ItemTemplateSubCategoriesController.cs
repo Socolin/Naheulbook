@@ -1,17 +1,16 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.ActionResults;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/itemTemplateSubCategories")]
 [ApiController]
-public class ItemTemplateSubCategoriesController(IItemTemplateSubCategoryService itemTemplateSubSubCategoryService, IMapper mapper)
+public class ItemTemplateSubCategoriesController(IItemTemplateSubCategoryService itemTemplateSubSubCategoryService, IItemTemplateMapper itemTemplateMapper)
     : ControllerBase
 {
     [HttpPost]
@@ -23,7 +22,7 @@ public class ItemTemplateSubCategoriesController(IItemTemplateSubCategoryService
         try
         {
             var itemTemplateSubCategory = await itemTemplateSubSubCategoryService.CreateItemTemplateSubCategoryAsync(executionContext, request);
-            return mapper.Map<ItemTemplateSubCategoryResponse>(itemTemplateSubCategory);
+            return itemTemplateMapper.ToResponse(itemTemplateSubCategory);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -45,7 +44,7 @@ public class ItemTemplateSubCategoriesController(IItemTemplateSubCategoryService
                 executionContext.ExecutionExecutionContext?.UserId,
                 includeCommunityItems
             );
-            return mapper.Map<List<ItemTemplateResponse>>(itemTemplates);
+            return itemTemplates.Select(itemTemplateMapper.ToResponse).ToList();
         }
         catch (ItemTemplateSubCategoryNotFoundException ex)
         {

@@ -1,6 +1,8 @@
-using AutoMapper;
 using AwesomeAssertions;
 using Microsoft.AspNetCore.Http;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using NUnit.Framework;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Event;
 using Naheulbook.Core.Features.Fight;
@@ -12,12 +14,9 @@ using Naheulbook.Core.Features.Npc;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
-using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers;
 
@@ -27,7 +26,14 @@ public class GroupsControllerTests
     private ILootService _lootService;
     private IMonsterService _monsterService;
     private IEventService _eventService;
-    private IMapper _mapper;
+    private ICharacterMapper _characterMapper;
+    private IEventMapper _eventMapper;
+    private IFightMapper _fightMapper;
+    private IGroupMapper _groupMapper;
+    private ILootMapper _lootMapper;
+    private IMerchantMapper _merchantMapper;
+    private IMonsterMapper _monsterMapper;
+    private INpcMapper _npcMapper;
     private INpcService _npcService;
     private NaheulbookExecutionContext _executionContext;
     private IFightService _fightService;
@@ -42,7 +48,14 @@ public class GroupsControllerTests
         _lootService = Substitute.For<ILootService>();
         _monsterService = Substitute.For<IMonsterService>();
         _eventService = Substitute.For<IEventService>();
-        _mapper = Substitute.For<IMapper>();
+        _characterMapper = Substitute.For<ICharacterMapper>();
+        _eventMapper = Substitute.For<IEventMapper>();
+        _fightMapper = Substitute.For<IFightMapper>();
+        _groupMapper = Substitute.For<IGroupMapper>();
+        _lootMapper = Substitute.For<ILootMapper>();
+        _merchantMapper = Substitute.For<IMerchantMapper>();
+        _monsterMapper = Substitute.For<IMonsterMapper>();
+        _npcMapper = Substitute.For<INpcMapper>();
         _npcService = Substitute.For<INpcService>();
         _fightService = Substitute.For<IFightService>();
         _merchantService = Substitute.For<IMerchantService>();
@@ -54,7 +67,14 @@ public class GroupsControllerTests
             _eventService,
             _fightService,
             _merchantService,
-            _mapper,
+            _characterMapper,
+            _eventMapper,
+            _fightMapper,
+            _groupMapper,
+            _lootMapper,
+            _merchantMapper,
+            _monsterMapper,
+            _npcMapper,
             _npcService
         );
 
@@ -70,7 +90,7 @@ public class GroupsControllerTests
 
         _groupService.CreateGroupAsync(_executionContext, createGroupRequest)
             .Returns(createdGroup);
-        _mapper.Map<GroupResponse>(createdGroup)
+        _groupMapper.ToResponse(createdGroup)
             .Returns(groupResponse);
 
         var result = await _controller.PostCreateGroupAsync(_executionContext, createGroupRequest);
@@ -89,7 +109,7 @@ public class GroupsControllerTests
 
         _lootService.CreateLootAsync(_executionContext, groupId, createLootRequest)
             .Returns(createdLoot);
-        _mapper.Map<LootResponse>(createdLoot)
+        _lootMapper.ToResponse(createdLoot)
             .Returns(lootResponse);
 
         var result = await _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest);
@@ -123,7 +143,7 @@ public class GroupsControllerTests
 
         _monsterService.CreateMonsterAsync(_executionContext, groupId, createMonsterRequest)
             .Returns(createdMonster);
-        _mapper.Map<MonsterResponse>(createdMonster)
+        _monsterMapper.ToResponse(createdMonster)
             .Returns(monsterResponse);
 
         var result = await _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest);
@@ -157,7 +177,7 @@ public class GroupsControllerTests
 
         _groupService.CreateInviteAsync(_executionContext, groupId, createInviteRequest)
             .Returns(createdInvite);
-        _mapper.Map<GroupInviteResponse>(createdInvite)
+        _groupMapper.ToInviteResponse(createdInvite)
             .Returns(groupInviteResponse);
 
         var result = await _controller.PostCreateInviteAsync(_executionContext, groupId, createInviteRequest);
@@ -188,7 +208,7 @@ public class GroupsControllerTests
 
         _groupService.CancelOrRejectInviteAsync(_executionContext, groupId, characterId)
             .Returns(groupInvite);
-        _mapper.Map<DeleteInviteResponse>(groupInvite)
+        _groupMapper.ToDeleteInviteResponse(groupInvite)
             .Returns(response);
 
         var result = await _controller.DeleteInviteAsync(_executionContext, groupId, characterId);
@@ -229,7 +249,7 @@ public class GroupsControllerTests
 
         _groupService.GetGroupDetailsAsync(_executionContext, groupId)
             .Returns(group);
-        _mapper.Map<GroupResponse>(group)
+        _groupMapper.ToResponse(group)
             .Returns(groupResponse);
 
         var result = await _controller.GetGroupDetailsAsync(_executionContext, groupId);
@@ -255,17 +275,22 @@ public class GroupsControllerTests
     public async Task GetEventListAsync_LoadEventThenMapTheResponse()
     {
         const int groupId = 8;
-        var events = new List<EventEntity>();
-        var eventsResponse = new List<EventResponse>();
+        var entity1 = new EventEntity();
+        var entity2 = new EventEntity();
+        var events = new List<EventEntity> {entity1, entity2};
+        var response1 = new EventResponse();
+        var response2 = new EventResponse();
 
         _eventService.GetEventsForGroupAsync(_executionContext, groupId)
             .Returns(events);
-        _mapper.Map<List<EventResponse>>(events)
-            .Returns(eventsResponse);
+        _eventMapper.ToResponse(entity1)
+            .Returns(response1);
+        _eventMapper.ToResponse(entity2)
+            .Returns(response2);
 
         var result = await _controller.GetEventListAsync(_executionContext, groupId);
 
-        result.Value.Should().BeSameAs(eventsResponse);
+        result.Value.Should().Equal(response1, response2);
     }
 
     [Test]
@@ -286,17 +311,22 @@ public class GroupsControllerTests
     public async Task GetEventListAsync_LoadLootThenMapTheResponse()
     {
         const int groupId = 8;
-        var loots = new List<LootEntity>();
-        var lootsResponse = new List<LootResponse>();
+        var entity1 = new LootEntity();
+        var entity2 = new LootEntity();
+        var loots = new List<LootEntity> {entity1, entity2};
+        var response1 = new LootResponse();
+        var response2 = new LootResponse();
 
         _lootService.GetLootsForGroupAsync(_executionContext, groupId)
             .Returns(loots);
-        _mapper.Map<List<LootResponse>>(loots)
-            .Returns(lootsResponse);
+        _lootMapper.ToResponse(entity1)
+            .Returns(response1);
+        _lootMapper.ToResponse(entity2)
+            .Returns(response2);
 
         var result = await _controller.GetLootListAsync(_executionContext, groupId);
 
-        result.Value.Should().BeSameAs(lootsResponse);
+        result.Value.Should().Equal(response1, response2);
     }
 
     [Test]
@@ -334,17 +364,22 @@ public class GroupsControllerTests
     public async Task GetMonsterListAsync_LoadMonsterThenMapTheResponse()
     {
         const int groupId = 8;
-        var monsters = new List<MonsterEntity>();
-        var monstersResponse = new List<MonsterResponse>();
+        var entity1 = new MonsterEntity();
+        var entity2 = new MonsterEntity();
+        var monsters = new List<MonsterEntity> {entity1, entity2};
+        var response1 = new MonsterResponse();
+        var response2 = new MonsterResponse();
 
         _monsterService.GetMonstersForGroupAsync(_executionContext, groupId)
             .Returns(monsters);
-        _mapper.Map<List<MonsterResponse>>(monsters)
-            .Returns(monstersResponse);
+        _monsterMapper.ToResponse(entity1)
+            .Returns(response1);
+        _monsterMapper.ToResponse(entity2)
+            .Returns(response2);
 
         var result = await _controller.GetMonsterListAsync(_executionContext, groupId);
 
-        result.Value.Should().BeSameAs(monstersResponse);
+        result.Value.Should().Equal(response1, response2);
     }
 
     [Test]
@@ -378,7 +413,7 @@ public class GroupsControllerTests
 
         _merchantService.CreateAsync(_executionContext, groupId, request)
             .Returns(merchant);
-        _mapper.Map<MerchantResponse>(merchant)
+        _merchantMapper.ToResponse(merchant)
             .Returns(expectedResponse);
 
         var actual = await _controller.CreateMerchantAsync(_executionContext, groupId, request);

@@ -1,10 +1,9 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Npc;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
@@ -12,7 +11,7 @@ namespace Naheulbook.Web.Controllers;
 [Route("/api/v2/npcs")]
 public class NpcController(
     INpcService npcService,
-    IMapper mapper
+    INpcMapper npcMapper
 ) : ControllerBase
 {
     [HttpPut("{NpcId:int:min(1)}")]
@@ -25,7 +24,7 @@ public class NpcController(
         try
         {
             var npc = await npcService.EditNpcAsync(executionContext, npcId, request);
-            return mapper.Map<NpcResponse>(npc);
+            return npcMapper.ToResponse(npc);
         }
         catch (ForbiddenAccessException ex)
         {

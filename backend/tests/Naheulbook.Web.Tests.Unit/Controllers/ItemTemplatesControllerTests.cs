@@ -1,25 +1,24 @@
-using AutoMapper;
 using AwesomeAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using NUnit.Framework;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 using Newtonsoft.Json.Linq;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
-using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers;
 
 public class ItemTemplatesControllerTests
 {
     private IItemTemplateService _itemTemplateService;
-    private IMapper _mapper;
+    private IItemTemplateMapper _itemTemplateMapper;
     private ItemTemplatesController _itemTemplatesController;
     private NaheulbookExecutionContext _executionContext;
 
@@ -27,8 +26,8 @@ public class ItemTemplatesControllerTests
     public void SetUp()
     {
         _itemTemplateService = Substitute.For<IItemTemplateService>();
-        _mapper = Substitute.For<IMapper>();
-        _itemTemplatesController = new ItemTemplatesController(_itemTemplateService, _mapper);
+        _itemTemplateMapper = Substitute.For<IItemTemplateMapper>();
+        _itemTemplatesController = new ItemTemplatesController(_itemTemplateService, _itemTemplateMapper);
         _executionContext = new NaheulbookExecutionContext();
     }
 
@@ -41,7 +40,7 @@ public class ItemTemplatesControllerTests
 
         _itemTemplateService.GetItemTemplateAsync(itemTemplateId)
             .Returns(itemTemplate);
-        _mapper.Map<ItemTemplateResponse>(itemTemplate)
+        _itemTemplateMapper.ToResponse(itemTemplate)
             .Returns(itemTemplateResponse);
 
         var result = await _itemTemplatesController.GetItemTemplateAsync(itemTemplateId);
@@ -70,7 +69,7 @@ public class ItemTemplatesControllerTests
 
         _itemTemplateService.EditItemTemplateAsync(_executionContext, itemTemplateId, itemTemplateRequest)
             .Returns(itemTemplate);
-        _mapper.Map<ItemTemplateResponse>(itemTemplate)
+        _itemTemplateMapper.ToResponse(itemTemplate)
             .Returns(itemTemplateResponse);
 
         var result = await _itemTemplatesController.PutItemTemplateAsync(_executionContext, itemTemplateId, itemTemplateRequest);
@@ -114,7 +113,7 @@ public class ItemTemplatesControllerTests
 
         _itemTemplateService.CreateItemTemplateAsync(_executionContext, itemTemplateRequest)
             .Returns(itemTemplate);
-        _mapper.Map<ItemTemplateResponse>(itemTemplate)
+        _itemTemplateMapper.ToResponse(itemTemplate)
             .Returns(itemTemplateResponse);
 
         var result = await _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, itemTemplateRequest);

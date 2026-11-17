@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IOriginService>())
             return;
 
+        services.AddSingleton<IOriginMapper, OriginMapper>();
+
         services.AddSingleton<IOriginService, OriginService>();
 
         services.AddSingleton<IOriginUtil, OriginUtil>();

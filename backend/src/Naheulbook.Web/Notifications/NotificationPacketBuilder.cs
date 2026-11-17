@@ -1,16 +1,21 @@
-using AutoMapper;
+using Naheulbook.Core.Features.Aptitude;
 using Naheulbook.Core.Features.Character;
+using Naheulbook.Core.Features.Fight;
 using Naheulbook.Core.Features.Group;
+using Naheulbook.Core.Features.Item;
+using Naheulbook.Core.Features.Loot;
+using Naheulbook.Core.Features.Merchant;
+using Naheulbook.Core.Features.Monster;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Shared.TransientModels;
-using Naheulbook.Web.Responses;
 using Naheulbook.Web.Services;
 
 namespace Naheulbook.Web.Notifications;
 
-public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUtil) : INotificationPacketBuilder
+public class NotificationPacketBuilder(IAptitudeMapper aptitudeMapper, ICharacterMapper characterMapper, ICharacterModifierMapper characterModifierMapper, IFightMapper fightMapper, IGroupMapper groupMapper, IItemMapper itemMapper, ILootMapper lootMapper, IMerchantMapper merchantMapper, IMonsterMapper monsterMapper, IHubGroupUtil hubGroupUtil) : INotificationPacketBuilder
 {
     private enum ElementType
     {
@@ -58,12 +63,12 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     public INotificationPacket BuildCharacterAddItem(int characterId, ItemEntity item)
     {
-        return BuildCharacterChange(characterId, "addItem", mapper.Map<ItemResponse>(item));
+        return BuildCharacterChange(characterId, "addItem", itemMapper.ToResponse(item));
     }
 
     public INotificationPacket BuildCharacterLevelUp(int characterId, LevelUpResult levelUpResult)
     {
-        return BuildCharacterChange(characterId, "levelUp", mapper.Map<CharacterLevelUpResponse>(levelUpResult));
+        return BuildCharacterChange(characterId, "levelUp", characterMapper.ToResponse(levelUpResult));
     }
 
     public INotificationPacket BuildCharacterAddJob(int characterId, Guid jobId)
@@ -78,17 +83,17 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     public INotificationPacket BuildCharacterAddAptitude(int characterId, CharacterAptitudeEntity characterAptitude)
     {
-        return BuildCharacterChange(characterId, "addAptitude", mapper.Map<CharacterAddAptitudeResponse>(characterAptitude));
+        return BuildCharacterChange(characterId, "addAptitude", aptitudeMapper.ToAddResponse(characterAptitude));
     }
 
     public INotificationPacket BuildCharacterRemoveAptitude(int characterId, CharacterAptitudeEntity characterAptitude)
     {
-        return BuildCharacterChange(characterId, "removeAptitude", mapper.Map<CharacterAptitudeResponse>(characterAptitude));
+        return BuildCharacterChange(characterId, "removeAptitude", aptitudeMapper.ToResponse(characterAptitude));
     }
 
     public INotificationPacket BuildCharacterUpdateAptitude(int characterId, CharacterAptitudeEntity characterAptitude)
     {
-        return BuildCharacterChange(characterId, "updateAptitude", mapper.Map<CharacterAptitudeResponse>(characterAptitude));
+        return BuildCharacterChange(characterId, "updateAptitude", aptitudeMapper.ToResponse(characterAptitude));
     }
 
     public INotificationPacket BuildCharacterChangeColor(CharacterEntity character)
@@ -114,11 +119,11 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
     public INotificationPacket BuildItemDataChanged(ItemEntity item)
     {
         if (item.CharacterId != null)
-            return BuildCharacterChange(item.CharacterId.Value, "updateItem", mapper.Map<ItemPartialResponse>(item));
+            return BuildCharacterChange(item.CharacterId.Value, "updateItem", itemMapper.ToPartialResponse(item));
         if (item.MonsterId != null)
-            return BuildMonsterChange(item.MonsterId.Value, "updateItem", mapper.Map<ItemPartialResponse>(item));
+            return BuildMonsterChange(item.MonsterId.Value, "updateItem", itemMapper.ToPartialResponse(item));
         if (item.LootId != null)
-            return BuildLootChange(item.LootId.Value, "updateItem", mapper.Map<ItemPartialResponse>(item));
+            return BuildLootChange(item.LootId.Value, "updateItem", itemMapper.ToPartialResponse(item));
 
         throw new NotSupportedException();
     }
@@ -126,11 +131,11 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
     public INotificationPacket BuildItemModifiersChanged(ItemEntity item)
     {
         if (item.CharacterId != null)
-            return BuildCharacterChange(item.CharacterId.Value, "updateItemModifiers", mapper.Map<ItemPartialResponse>(item));
+            return BuildCharacterChange(item.CharacterId.Value, "updateItemModifiers", itemMapper.ToPartialResponse(item));
         if (item.MonsterId != null)
-            return BuildMonsterChange(item.MonsterId.Value, "updateItemModifiers", mapper.Map<ItemPartialResponse>(item));
+            return BuildMonsterChange(item.MonsterId.Value, "updateItemModifiers", itemMapper.ToPartialResponse(item));
         if (item.LootId != null)
-            return BuildLootChange(item.LootId.Value, "updateItemModifiers", mapper.Map<ItemPartialResponse>(item));
+            return BuildLootChange(item.LootId.Value, "updateItemModifiers", itemMapper.ToPartialResponse(item));
 
         throw new NotSupportedException();
     }
@@ -138,11 +143,11 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
     public INotificationPacket BuildEquipItem(ItemEntity item)
     {
         if (item.CharacterId != null)
-            return BuildCharacterChange(item.CharacterId.Value, "equipItem", mapper.Map<ItemPartialResponse>(item));
+            return BuildCharacterChange(item.CharacterId.Value, "equipItem", itemMapper.ToPartialResponse(item));
         if (item.MonsterId != null)
-            return BuildMonsterChange(item.MonsterId.Value, "equipItem", mapper.Map<ItemPartialResponse>(item));
+            return BuildMonsterChange(item.MonsterId.Value, "equipItem", itemMapper.ToPartialResponse(item));
         if (item.LootId != null)
-            return BuildLootChange(item.LootId.Value, "equipItem", mapper.Map<ItemPartialResponse>(item));
+            return BuildLootChange(item.LootId.Value, "equipItem", itemMapper.ToPartialResponse(item));
 
         throw new NotSupportedException();
     }
@@ -150,11 +155,11 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
     public INotificationPacket BuildItemChangeContainer(ItemEntity item)
     {
         if (item.CharacterId != null)
-            return BuildCharacterChange(item.CharacterId.Value, "changeContainer", mapper.Map<ItemPartialResponse>(item));
+            return BuildCharacterChange(item.CharacterId.Value, "changeContainer", itemMapper.ToPartialResponse(item));
         if (item.MonsterId != null)
-            return BuildMonsterChange(item.MonsterId.Value, "changeContainer", mapper.Map<ItemPartialResponse>(item));
+            return BuildMonsterChange(item.MonsterId.Value, "changeContainer", itemMapper.ToPartialResponse(item));
         if (item.LootId != null)
-            return BuildLootChange(item.LootId.Value, "changeContainer", mapper.Map<ItemPartialResponse>(item));
+            return BuildLootChange(item.LootId.Value, "changeContainer", itemMapper.ToPartialResponse(item));
 
         throw new NotSupportedException();
     }
@@ -162,11 +167,11 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
     public INotificationPacket BuildItemUpdateModifier(ItemEntity item)
     {
         if (item.CharacterId != null)
-            return BuildCharacterChange(item.CharacterId.Value, "updateItemModifiers", mapper.Map<ItemPartialResponse>(item));
+            return BuildCharacterChange(item.CharacterId.Value, "updateItemModifiers", itemMapper.ToPartialResponse(item));
         if (item.MonsterId != null)
-            return BuildMonsterChange(item.MonsterId.Value, "updateItemModifiers", mapper.Map<ItemPartialResponse>(item));
+            return BuildMonsterChange(item.MonsterId.Value, "updateItemModifiers", itemMapper.ToPartialResponse(item));
         if (item.LootId != null)
-            return BuildLootChange(item.LootId.Value, "updateItemModifiers", mapper.Map<ItemPartialResponse>(item));
+            return BuildLootChange(item.LootId.Value, "updateItemModifiers", itemMapper.ToPartialResponse(item));
 
         throw new NotSupportedException();
     }
@@ -186,11 +191,11 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
     public INotificationPacket BuildItemTakeItem(ItemEntity item, CharacterEntity character, int? remainingQuantity)
     {
         if (item.CharacterId != null)
-            return BuildCharacterChange(item.CharacterId.Value, "tookItem", new {Character = mapper.Map<NamedIdResponse>(character), remainingQuantity, OriginalItem = mapper.Map<ItemPartialResponse>(item)});
+            return BuildCharacterChange(item.CharacterId.Value, "tookItem", new {Character = characterMapper.ToNamedIdResponse(character), remainingQuantity, OriginalItem = itemMapper.ToPartialResponse(item)});
         if (item.MonsterId != null)
-            return BuildMonsterChange(item.MonsterId.Value, "tookItem", new {Character = mapper.Map<NamedIdResponse>(character), remainingQuantity, OriginalItem = mapper.Map<ItemPartialResponse>(item)});
+            return BuildMonsterChange(item.MonsterId.Value, "tookItem", new {Character = characterMapper.ToNamedIdResponse(character), remainingQuantity, OriginalItem = itemMapper.ToPartialResponse(item)});
         if (item.LootId != null)
-            return BuildLootChange(item.LootId.Value, "tookItem", new {Character = mapper.Map<NamedIdResponse>(character), remainingQuantity, OriginalItem = mapper.Map<ItemPartialResponse>(item)});
+            return BuildLootChange(item.LootId.Value, "tookItem", new {Character = characterMapper.ToNamedIdResponse(character), remainingQuantity, OriginalItem = itemMapper.ToPartialResponse(item)});
 
         throw new NotSupportedException();
     }
@@ -202,7 +207,7 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     public INotificationPacket BuildCharacterAddModifier(int characterId, CharacterModifierEntity characterModifier)
     {
-        return BuildCharacterChange(characterId, "addModifier", mapper.Map<ActiveStatsModifier>(characterModifier));
+        return BuildCharacterChange(characterId, "addModifier", characterModifierMapper.ToResponse(characterModifier));
     }
 
     public INotificationPacket BuildCharacterRemoveModifier(int characterId, int characterModifierId)
@@ -212,27 +217,27 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     public INotificationPacket BuildCharacterUpdateModifier(int characterId, CharacterModifierEntity characterModifier)
     {
-        return BuildCharacterChange(characterId, "updateModifier", mapper.Map<ActiveStatsModifier>(characterModifier));
+        return BuildCharacterChange(characterId, "updateModifier", characterModifierMapper.ToResponse(characterModifier));
     }
 
     public INotificationPacket BuildCharacterGroupInvite(int characterId, GroupInviteEntity groupInvite)
     {
-        return BuildCharacterChange(characterId, "groupInvite", mapper.Map<CharacterGroupInviteResponse>(groupInvite));
+        return BuildCharacterChange(characterId, "groupInvite", groupMapper.ToCharacterInviteResponse(groupInvite));
     }
 
     public INotificationPacket BuildCharacterCancelGroupInvite(int characterId, GroupInviteEntity groupInvite)
     {
-        return BuildCharacterChange(characterId, "cancelInvite", mapper.Map<DeleteInviteResponse>(groupInvite));
+        return BuildCharacterChange(characterId, "cancelInvite", groupMapper.ToDeleteInviteResponse(groupInvite));
     }
 
     public INotificationPacket BuildCharacterAcceptGroupInvite(int characterId, GroupInviteEntity groupInvite)
     {
-        return BuildCharacterChange(characterId, "joinGroup", mapper.Map<CharacterGroupResponse>(groupInvite.Group));
+        return BuildCharacterChange(characterId, "joinGroup", groupMapper.ToCharacterGroupResponse(groupInvite.Group));
     }
 
     public INotificationPacket BuildCharacterShowLoot(int characterId, LootEntity loot)
     {
-        return BuildCharacterChange(characterId, "showLoot", mapper.Map<LootResponse>(loot));
+        return BuildCharacterChange(characterId, "showLoot", lootMapper.ToResponse(loot));
     }
 
     public INotificationPacket BuildCharacterHideLoot(int characterId, int lootId)
@@ -242,12 +247,12 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     public INotificationPacket BuildGroupCharacterInvite(int groupId, GroupInviteEntity groupInvite)
     {
-        return BuildGroupChange(groupId, "groupInvite", mapper.Map<GroupGroupInviteResponse>(groupInvite));
+        return BuildGroupChange(groupId, "groupInvite", groupMapper.ToGroupInviteResponse(groupInvite));
     }
 
     public INotificationPacket BuildGroupCancelGroupInvite(int groupId, GroupInviteEntity groupInvite)
     {
-        return BuildGroupChange(groupId, "cancelInvite", mapper.Map<DeleteInviteResponse>(groupInvite));
+        return BuildGroupChange(groupId, "cancelInvite", groupMapper.ToDeleteInviteResponse(groupInvite));
     }
 
     public INotificationPacket BuildGroupAcceptGroupInvite(int groupId, GroupInviteEntity groupInvite)
@@ -262,7 +267,7 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     public INotificationPacket BuildGroupAddLoot(int groupId, LootEntity loot)
     {
-        return BuildGroupChange(groupId, "addLoot", mapper.Map<LootResponse>(loot));
+        return BuildGroupChange(groupId, "addLoot", lootMapper.ToResponse(loot));
     }
 
     public INotificationPacket BuildGroupDeleteLoot(int groupId, int lootId)
@@ -272,7 +277,7 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     public INotificationPacket BuildGroupAddFight(int groupId, FightEntity fight)
     {
-        return BuildGroupChange(groupId, "addFight", mapper.Map<FightResponse>(fight));
+        return BuildGroupChange(groupId, "addFight", fightMapper.ToResponse(fight));
     }
 
     public INotificationPacket BuildGroupDeleteFight(int groupId, int fightId)
@@ -287,12 +292,12 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     public INotificationPacket BuildGroupAddMerchant(int groupId, MerchantEntity merchant)
     {
-        return BuildGroupChange(groupId, "addMerchant", mapper.Map<MerchantResponse>(merchant));
+        return BuildGroupChange(groupId, "addMerchant", merchantMapper.ToResponse(merchant));
     }
 
     public INotificationPacket BuildGroupAddMonster(int groupId, MonsterEntity monster)
     {
-        return BuildGroupChange(groupId, "addMonster", mapper.Map<MonsterResponse>(monster));
+        return BuildGroupChange(groupId, "addMonster", monsterMapper.ToResponse(monster));
     }
 
     public INotificationPacket BuildGroupKillMonster(int groupId, int monsterId)
@@ -312,12 +317,12 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     public INotificationPacket BuildLootAddMonster(int lootId, MonsterEntity monster)
     {
-        return BuildLootChange(lootId, "addMonster", mapper.Map<MonsterResponse>(monster));
+        return BuildLootChange(lootId, "addMonster", monsterMapper.ToResponse(monster));
     }
 
     public INotificationPacket BuildLootAddItem(int lootId, ItemEntity item)
     {
-        return BuildLootChange(lootId, "addItem", mapper.Map<ItemResponse>(item));
+        return BuildLootChange(lootId, "addItem", itemMapper.ToResponse(item));
     }
 
     public INotificationPacket BuildLootDeleteMonster(int lootId, int monsterId)
@@ -342,7 +347,7 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     public INotificationPacket BuildMonsterAddItem(int monsterId, ItemEntity item)
     {
-        return BuildMonsterChange(monsterId, "addItem", mapper.Map<ItemResponse>(item));
+        return BuildMonsterChange(monsterId, "addItem", itemMapper.ToResponse(item));
     }
 
     public INotificationPacket BuildMonsterUpdateData(int monsterId, MonsterData monsterData)
@@ -362,7 +367,7 @@ public class NotificationPacketBuilder(IMapper mapper, IHubGroupUtil hubGroupUti
 
     public INotificationPacket BuildFightAddMonster(int fightId, MonsterEntity monster)
     {
-        return BuildFightChange(fightId, "addMonster", mapper.Map<MonsterResponse>(monster));
+        return BuildFightChange(fightId, "addMonster", monsterMapper.ToResponse(monster));
     }
 
     public INotificationPacket BuildFightRemoveMonster(int fightId, int monsterId)

@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<ICalendarService>())
             return;
 
+        services.AddSingleton<ICalendarMapper, CalendarMapper>();
+
         services.AddSingleton<ICalendarService, CalendarService>();
     }
 }

@@ -1,6 +1,7 @@
-using AutoMapper;
 using AwesomeAssertions;
 using Microsoft.AspNetCore.Http;
+using NSubstitute;
+using NUnit.Framework;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
@@ -8,15 +9,13 @@ using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.TransientModels;
 using Naheulbook.Web.Controllers;
 using Naheulbook.Web.Exceptions;
-using NSubstitute;
-using NUnit.Framework;
 
 namespace Naheulbook.Web.Tests.Unit.Controllers;
 
 public class ItemsControllerTests
 {
     private IItemService _itemService;
-    private IMapper _mapper;
+    private IItemMapper _itemMapper;
     private ItemsController _controller;
     private NaheulbookExecutionContext _executionContext;
 
@@ -24,8 +23,8 @@ public class ItemsControllerTests
     public void SetUp()
     {
         _itemService = Substitute.For<IItemService>();
-        _mapper = Substitute.For<IMapper>();
-        _controller = new ItemsController(_itemService, _mapper);
+        _itemMapper = Substitute.For<IItemMapper>();
+        _controller = new ItemsController(_itemService, _itemMapper);
         _executionContext = new NaheulbookExecutionContext();
     }
 

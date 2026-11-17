@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IGodService>())
             return;
 
+        services.AddSingleton<IGodMapper, GodMapper>();
+
         services.AddSingleton<IGodService, GodService>();
     }
 }

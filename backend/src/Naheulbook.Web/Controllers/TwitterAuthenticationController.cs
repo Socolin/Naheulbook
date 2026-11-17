@@ -1,10 +1,9 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Users;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Shared.Clients.Twitter;
 using Naheulbook.Web.Extensions;
 using Naheulbook.Web.Requests;
-using Naheulbook.Web.Responses;
 using Naheulbook.Web.Services;
 
 namespace Naheulbook.Web.Controllers;
@@ -14,7 +13,7 @@ namespace Naheulbook.Web.Controllers;
 public class TwitterAuthenticationController(
     ITwitterClient twitterClient,
     IJwtService jwtService,
-    IMapper mapper,
+    IUserMapper userMapper,
     ISocialMediaUserLinkService socialMediaUserLinkService
 ) : ControllerBase
 {
@@ -57,7 +56,7 @@ public class TwitterAuthenticationController(
         return new UserJwtResponse
         {
             Token = token,
-            UserInfo = mapper.Map<UserInfoResponse>(user),
+            UserInfo = userMapper.ToInfoResponse(user),
         };
     }
 }

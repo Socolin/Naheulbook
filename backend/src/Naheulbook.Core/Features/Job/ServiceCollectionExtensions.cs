@@ -10,6 +10,9 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IJobService>())
             return;
 
+        services.AddSingleton<IJobMapper, JobMapper>();
+        services.AddSingleton<ISpecialityMapper, SpecialityMapper>();
+
         services.AddSingleton<IJobService, JobService>();
     }
 }

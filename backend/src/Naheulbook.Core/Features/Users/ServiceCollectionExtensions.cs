@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IUserService>())
             return;
 
+        services.AddSingleton<IUserMapper, UserMapper>();
+
         services.AddSingleton<IUserService, UserService>();
         services.AddSingleton<IMailService, MailService>();
         services.AddSingleton<IPasswordHashingService, PasswordHashingService>();

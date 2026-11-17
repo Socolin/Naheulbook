@@ -9,11 +9,11 @@
     <ItemGroup>
         <ProjectReference Include="..\Naheulbook.Data\Naheulbook.Data.csproj" />
         <ProjectReference Include="..\Naheulbook.Requests\Naheulbook.Requests.csproj" />
+        <ProjectReference Include="..\Naheulbook.Responses\Naheulbook.Responses.csproj" />
         <ProjectReference Include="..\Naheulbook.Shared\Naheulbook.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper" />
         <PackageReference Include="Magick.NET-Q8-x64" />
         <PackageReference Include="Microsoft.Extensions.Http" />
         <PackageReference Include="Serilog" />

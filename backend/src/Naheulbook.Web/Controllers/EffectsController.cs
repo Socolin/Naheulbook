@@ -1,16 +1,15 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Effect;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Responses.Responses;
 using Naheulbook.Web.Exceptions;
-using Naheulbook.Web.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
 [ApiController]
 [Route("api/v2/effects")]
-public class EffectsController(IEffectService effectService, IMapper mapper) : ControllerBase
+public class EffectsController(IEffectService effectService, IEffectMapper effectMapper) : ControllerBase
 {
     [HttpPut("{effectId:int:min(1)}")]
     public async Task<ActionResult<EffectResponse>> PutEditEffectAsync(
@@ -22,7 +21,7 @@ public class EffectsController(IEffectService effectService, IMapper mapper) : C
         try
         {
             var effect = await effectService.EditEffectAsync(executionContext, effectId, request);
-            var effectResponse = mapper.Map<EffectResponse>(effect);
+            var effectResponse = effectMapper.ToResponse(effect);
             return effectResponse;
         }
         catch (ForbiddenAccessException ex)
@@ -43,7 +42,7 @@ public class EffectsController(IEffectService effectService, IMapper mapper) : C
         try
         {
             var effect = await effectService.GetEffectAsync(effectId);
-            var effectResponse = mapper.Map<EffectResponse>(effect);
+            var effectResponse = effectMapper.ToResponse(effect);
             return effectResponse;
         }
         catch (EffectNotFoundException ex)
@@ -58,6 +57,6 @@ public class EffectsController(IEffectService effectService, IMapper mapper) : C
     )
     {
         var effects = await effectService.SearchEffectsAsync(filter);
-        return mapper.Map<List<EffectResponse>>(effects);
+        return effects.Select(effectMapper.ToResponse).ToList();
     }
 }

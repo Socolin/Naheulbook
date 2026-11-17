@@ -1,14 +1,13 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Naheulbook.Core.Features.Item;
-using Naheulbook.Web.Responses;
+using Naheulbook.Responses.Responses;
 
 namespace Naheulbook.Web.Controllers;
 
 [Route("api/v2/itemTypes")]
 [ApiController]
 public class ItemTypesController(
-    IMapper mapper,
+    IItemTemplateMapper itemTemplateMapper,
     IItemTypeService itemTypeService
 )
 {
@@ -16,6 +15,6 @@ public class ItemTypesController(
     public async Task<ActionResult<List<ItemTypeResponse>>> GetAllItemTypesAsync()
     {
         var itemTypes = await itemTypeService.GetAllItemTypesAsync();
-        return mapper.Map<List<ItemTypeResponse>>(itemTypes);
+        return itemTypes.Select(itemTemplateMapper.ToResponse).ToList();
     }
 }

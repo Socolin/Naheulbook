@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
         if (services.IsRegistered<IMapService>())
             return;
 
+        services.AddSingleton<IMapMapper, MapMapper>();
+
         services.AddSingleton<IMapService, MapService>();
 
         services.AddSingleton<IMapImageUtil, MapImageUtil>();
