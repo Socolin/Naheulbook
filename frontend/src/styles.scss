@@ -130,3 +130,15 @@ hr {
     font: var(--mat-sys-body-small);
     letter-spacing: var(--mat-sys-body-small-tracking);
 }
+
+// Icon colors (game-icons): set `--nhbk-icon-color` and add this class.
+// In dark themes, the perceptual lightness (OKLCH `l`) of the color is remapped from [0, 1] to [0.55, 1],
+// so dark colors stay readable on dark backgrounds while keeping their hue and their relative order.
+// Light themes keep the original color.
+.nhbk-icon-color {
+    color: var(--nhbk-icon-color);
+
+    @supports (color: oklch(from red l c h)) {
+        color: oklch(from var(--nhbk-icon-color) calc(l + var(--nhbk-dark-scheme, 0) * 0.55 * (1 - l)) c h);
+    }
+}

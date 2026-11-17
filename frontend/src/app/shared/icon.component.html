@@ -1,9 +1,9 @@
-<span class="game-icon icon"
+<span class="game-icon icon nhbk-icon-color"
   [class.not-identified]="notIdentified"
   [style.font-size]="size"
   [class.enchanted-item]="enchanted"
   [ngClass]="['game-icon-' + displayedIcon.name, 'rotate' + displayedIcon.rotation]"
-  [style.color]="displayedIcon.color">
+  [style.--nhbk-icon-color]="displayedIcon.color">
 </span>
 @if (notIdentified) {
   <span class="not-identified-layer mat-typography"

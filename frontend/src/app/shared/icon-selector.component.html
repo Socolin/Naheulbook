@@ -31,9 +31,9 @@
   <div class="icon-list">
     @for (color of colors; track color) {
       <button mat-icon-button (click)="selectColor(color)">
-        <span class="game-icon"
+        <span class="game-icon nhbk-icon-color"
           [ngClass]="'game-icon-' + newIcon.name"
-          [style.color]="color">
+          [style.--nhbk-icon-color]="color">
         </span>
       </button>
     }
