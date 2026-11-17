@@ -1,50 +1,80 @@
-<h2>Personnages</h2>
-@if (loading) {
-  <mat-card class="loading-characters">
-    <mat-spinner></mat-spinner>
-  </mat-card>
-}
-@if (!loading && (!characters || characters.length === 0)) {
-  <mat-card>
-    Vous ne possédez aucun personnage.
-  </mat-card>
-}
-@for (character of characters; track character) {
-  <mat-card
-    (click)="selectCharacter(character)"
-    [class.clickable]="!loadingCharacterId">
-    <mat-card-header matRipple [matRippleDisabled]="!!loadingCharacterId">
-      <mat-card-title>{{ character.name }} - lvl {{ character.level }}</mat-card-title>
-      <mat-card-subtitle>{{ character.origin }}@for (job of character.jobs; track job) {
-        <span>&nbsp;{{ job }}</span>
-      }
-    </mat-card-subtitle>
-  </mat-card-header>
-  @if (loadingCharacterId === character.id) {
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+<div class="characters">
+  <h2>Personnages</h2>
+
+  @if (loading) {
+    <div class="loading-characters">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else {
+    @if (!characters?.length) {
+      <mat-card appearance="outlined" class="empty-state">
+        <mat-card-content>
+          <mat-icon class="empty-icon">person_off</mat-icon>
+          <p>Vous ne possédez aucun personnage.</p>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    @for (character of characters; track character.id) {
+      <mat-card
+        appearance="outlined"
+        class="character-card"
+        [class.clickable]="!loadingCharacterId"
+        [class.disabled]="loadingCharacterId && loadingCharacterId !== character.id"
+        matRipple
+        [matRippleDisabled]="!!loadingCharacterId"
+        (click)="selectCharacter(character)">
+        <div class="character-avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <div class="character-info">
+          <div class="character-name">{{ character.name }}</div>
+          <div class="character-details">
+            {{ character.origin }}@if (character.jobs.length) { · {{ character.jobs.join(', ') }} }
+          </div>
+        </div>
+        <span class="level-badge">Niv. {{ character.level }}</span>
+        <mat-icon class="chevron">chevron_right</mat-icon>
+        @if (loadingCharacterId === character.id) {
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+      </mat-card>
+    }
+
+    <h3 class="create-title">Nouveau personnage</h3>
+    <div class="create-options">
+      <mat-card
+        appearance="outlined"
+        class="create-card"
+        [class.clickable]="!loadingCharacterId"
+        matRipple
+        [matRippleDisabled]="!!loadingCharacterId"
+        (click)="createCharacter()">
+        <div class="create-icon">
+          <mat-icon>add</mat-icon>
+        </div>
+        <div class="create-info">
+          <div class="create-name">Créer un personnage</div>
+          <div class="create-description">Création guidée d'un personnage niveau 1</div>
+        </div>
+      </mat-card>
+      <mat-card
+        appearance="outlined"
+        class="create-card"
+        [class.clickable]="!loadingCharacterId"
+        matRipple
+        [matRippleDisabled]="!!loadingCharacterId"
+        (click)="createCustomCharacter()">
+        <div class="create-icon">
+          <mat-icon>edit</mat-icon>
+        </div>
+        <div class="create-info">
+          <div class="create-name">Créer un personnage personnalisé</div>
+          <div class="create-description">
+            Création libre (pour importer un personnage, utiliser d'anciennes règles ou en ignorer certaines)
+          </div>
+        </div>
+      </mat-card>
+    </div>
   }
-  <mat-card-content></mat-card-content>
-</mat-card>
-}
-<mat-card (click)="createCharacter()"
-  [class.clickable]="!loadingCharacterId">
-  <mat-card-content matRipple [matRippleDisabled]="!!loadingCharacterId" class="create-character">
-    <mat-icon>add</mat-icon>
-    <div style="display: flex; flex-direction: column">
-      <div>Créer un personnage</div>
-      <div class="mat-caption secondary-text">Création guidé d'un personnage niveau 1</div>
-    </div>
-  </mat-card-content>
-</mat-card>
-<mat-card (click)="createCustomCharacter()"
-  [class.clickable]="!loadingCharacterId">
-  <mat-card-content matRipple [matRippleDisabled]="!!loadingCharacterId" class="create-character">
-    <mat-icon>create</mat-icon>
-    <div style="display: flex; flex-direction: column">
-      <div>Créer un personnage personnalisé</div>
-      <div class="mat-caption secondary-text">Création libre d'un personnage (pour importer des personnages, basé
-        sur des vielle règles ou ignorant certaines règles)
-      </div>
-    </div>
-  </mat-card-content>
-</mat-card>
+</div>

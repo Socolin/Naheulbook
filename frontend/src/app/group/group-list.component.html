@@ -1,26 +1,46 @@
 <div class="groups">
-  <h2>Groupes</h2>
+  <div class="groups-header">
+    <h2>Groupes</h2>
+    @if (!loading && groups?.length) {
+      <button mat-flat-button (click)="createGroup()">
+        <mat-icon>add</mat-icon>Créer un groupe
+      </button>
+    }
+  </div>
+
   @if (loading) {
-    <mat-card class="loading-groups">
-      <mat-spinner></mat-spinner>
-    </mat-card>
-  }
-  @if (!loading && (!groups || groups.length === 0)) {
-    <mat-card>
+    <div class="loading-groups">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (!groups?.length) {
+    <mat-card appearance="outlined" class="empty-state">
       <mat-card-content>
-        Vous ne possédez aucun group.
+        <mat-icon class="empty-icon">groups</mat-icon>
+        <p>Vous ne possédez aucun groupe.</p>
+        <button mat-flat-button (click)="createGroup()">
+          <mat-icon>add</mat-icon>Créer votre premier groupe
+        </button>
       </mat-card-content>
     </mat-card>
+  } @else {
+    @for (group of groups; track group.id) {
+      <mat-card matRipple appearance="outlined" class="group-card" (click)="selectGroup(group)">
+        <div class="group-avatar">
+          <mat-icon>groups</mat-icon>
+        </div>
+        <div class="group-info">
+          <div class="group-name">{{group.name}}</div>
+          <div class="group-count">
+            <mat-icon inline>person</mat-icon>
+            @switch (group.characterCount) {
+              @case (0) { Aucun joueur }
+              @case (1) { 1 joueur }
+              @default { {{group.characterCount}} joueurs }
+            }
+          </div>
+        </div>
+        <mat-icon class="chevron">chevron_right</mat-icon>
+      </mat-card>
+    }
   }
-  @for (group of groups; track group) {
-    <mat-card matRipple (click)="selectGroup(group)" class="clickable">
-      <mat-card-header>
-        <mat-card-title>{{group.name}}</mat-card-title>
-        <mat-card-subtitle>{{group.characterCount}} joueurs</mat-card-subtitle>
-      </mat-card-header>
-    </mat-card>
-  }
-  <button mat-raised-button (click)="createGroup()">
-    <mat-icon>add</mat-icon>Créer un groupe
-  </button>
 </div>
