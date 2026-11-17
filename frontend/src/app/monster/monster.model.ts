@@ -59,7 +59,6 @@ export class MonsterComputedData {
     esq: number;
     pr: number;
     pr_magic: number;
-    dmg: { name: string, damage: string, incompatible?: boolean }[] = [];
     cou: number;
     chercheNoise: boolean;
     resm: number;
@@ -321,14 +320,12 @@ export class Monster extends WsRegistrable {
                 }
             }
         }
-        this.computedData.dmg = this.computedData.attacks
-            .filter(attack => attack.dmg)
-            .map(attack => ({name: attack.name || 'base', damage: attack.dmg!}));
         for (let item of this.items) {
             if (item.data.equiped) {
-                this.computedData.dmg.push({
+                this.computedData.attacks.push({
                     name: item.data.name || item.template.name,
-                    damage: item.getDamageString()
+                    dmg: item.getDamageString(),
+                    at: this.computedData.attacks[0].at,
                 });
             }
             if (item.data.equiped && item.template.modifiers) {

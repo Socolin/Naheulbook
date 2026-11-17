@@ -118,7 +118,25 @@
 
   <div class="field-with-label at">
     <span class="label" matTooltip="Attaque">AT</span>
-    <span>{{fighter.stats.at}}</span>
+    <span>
+      @for (attack of fighter.stats.attacks; track $index) {
+        <div class="equiped-weapons-damages monster-attack">
+          <span>
+            <div>
+              <span class="attack-at">{{attack.at}}</span>
+              @if (attack.dmg) {
+                <span> - {{attack.dmg}}</span>
+              }
+            </div>
+            @if (attack.name) {
+              <div class="secondary-text damage-weapon-name">
+                {{attack.name}}
+              </div>
+            }
+          </span>
+        </div>
+      }
+    </span>
   </div>
   <div class="field-with-label prd">
     <span class="label" matTooltip="Parade">PRD</span>

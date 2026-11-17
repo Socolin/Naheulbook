@@ -11,7 +11,7 @@ import {date2Timestamp} from '../date/util';
 import {TargetJsonData} from './target.model';
 import {FighterDurationChanges, tokenColors} from '../shared';
 import {DeleteInviteResponse, GroupResponse, NpcResponse} from '../api/responses';
-import {IGroupConfig, IGroupData, INpcData} from '../api/shared';
+import {IGroupConfig, IGroupData, INpcData, MonsterAttackData} from '../api/shared';
 import {Fight} from './fight';
 
 export class FighterStat {
@@ -22,7 +22,8 @@ export class FighterStat {
      */
     get at(): number | string {
         if (this.fighter.isMonster) {
-            return this.fighter.monster.computedData.attacks.map(attack => attack.at).join('/');
+            const attacks = this.fighter.monster.computedData.attacks;
+            return attacks.length ? attacks.map(attack => attack.at).join('/') : '-';
         }
         return this.fighter.character.computedData.stats['AT'];
     }
@@ -61,6 +62,10 @@ export class FighterStat {
 
     get pr_magic(): number {
         return this.fighter.isMonster ? this.fighter.monster.computedData.pr_magic : this.fighter.character.computedData.stats['PR_MAGIC'];
+    }
+
+    get attacks(): MonsterAttackData[] {
+        return this.fighter.isMonster ? this.fighter.monster.computedData.attacks : [{at: this.fighter.character.computedData.stats['AT']}];
     }
 
     get dmg(): { name: string, damage: string, incompatible?: boolean }[] {
