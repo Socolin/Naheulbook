@@ -20,7 +20,7 @@
   </mat-form-field>
   @if (selectedMonsterType) {
     <mat-form-field>
-      <mat-select [(ngModel)]="selectedMonsterSubCategory">
+      <mat-select [(ngModel)]="selectedMonsterSubCategory" (selectionChange)="selectMonsterSubCategory($event.value)">
         @for (monsterSubCategory of selectedMonsterType.subCategories; track monsterSubCategory) {
           <mat-option [value]="monsterSubCategory">
             {{monsterSubCategory.name}}

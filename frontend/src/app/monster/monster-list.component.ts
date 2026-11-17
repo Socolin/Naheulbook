@@ -8,6 +8,7 @@ import {
 } from './edit-monster-template-dialog.component';
 import {LoginService} from '../user';
 import {forkJoin} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
 import {NhbkMatDialog} from '../material-workaround';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -37,14 +38,61 @@ export class MonsterListComponent implements OnInit {
         private readonly dialog: NhbkMatDialog,
         private readonly loginService: LoginService,
         private readonly monsterTemplateService: MonsterTemplateService,
+        private readonly route: ActivatedRoute,
+        private readonly router: Router,
     ) {
+    }
+
+    /**
+     * The component is also displayed inside a dialog, in that case the url must not be changed.
+     */
+    private get isRoutedComponent(): boolean {
+        return this.route.component === MonsterListComponent;
     }
 
     selectMonsterType(monsterType: MonsterTemplateType) {
         this.selectedMonsterType = monsterType;
         if (monsterType.subCategories.length) {
             this.selectedMonsterSubCategory = monsterType.subCategories[0];
+        } else {
+            this.selectedMonsterSubCategory = undefined;
         }
+        this.updateUrl();
+    }
+
+    selectMonsterSubCategory(subCategory: MonsterTemplateSubCategory) {
+        this.selectedMonsterSubCategory = subCategory;
+        this.updateUrl();
+    }
+
+    private updateUrl() {
+        if (!this.isRoutedComponent) {
+            return;
+        }
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {
+                type: this.selectedMonsterType?.id,
+                subCategory: this.selectedMonsterSubCategory?.id,
+            },
+            queryParamsHandling: 'merge',
+            replaceUrl: true,
+        });
+    }
+
+    private restoreSelectionFromUrl(monsterTypes: MonsterTemplateType[]) {
+        if (!monsterTypes.length) {
+            return;
+        }
+        const queryParams = this.isRoutedComponent ? this.route.snapshot.queryParamMap : undefined;
+        const typeId = Number(queryParams?.get('type'));
+        const subCategoryId = Number(queryParams?.get('subCategory'));
+
+        const monsterType = monsterTypes.find(x => x.id === typeId) ?? monsterTypes[0];
+        this.selectedMonsterType = monsterType;
+        this.selectedMonsterSubCategory = monsterType.subCategories.find(x => x.id === subCategoryId)
+            ?? monsterType.subCategories[0];
+        this.updateUrl();
     }
 
     sortMonsterBySubCategory() {
@@ -102,6 +150,7 @@ export class MonsterListComponent implements OnInit {
             const monsterSubCategory = this.selectedMonsterType.subCategories.find(x => x.id === monsterTemplate.subCategory.id);
             if (monsterSubCategory) {
                 this.selectedMonsterSubCategory = monsterSubCategory;
+                this.updateUrl();
             } else {
                 this.selectMonsterType(this.selectedMonsterType);
             }
@@ -115,8 +164,8 @@ export class MonsterListComponent implements OnInit {
             this.monsterTemplateService.getMonsterList()
         ]).subscribe(
             ([monsterTypes, monsters]) => {
-                this.selectMonsterType(monsterTypes[0]);
                 this.monsterTypes = monsterTypes;
+                this.restoreSelectionFromUrl(monsterTypes);
                 this.monsters = monsters;
                 this.sortMonsterBySubCategory();
             }
