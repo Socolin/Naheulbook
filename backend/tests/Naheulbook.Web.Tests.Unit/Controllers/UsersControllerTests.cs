@@ -43,7 +43,7 @@ public class UsersControllerTests
     [Test]
     public async Task WhenCreatingUser_Return201Created()
     {
-        var response = await _usersController.PostAsync(new CreateUserRequest {Password = string.Empty, Username = string.Empty});
+        var response = await _usersController.PostAsync(new CreateUserRequest {Password = string.Empty, Username = string.Empty}, CancellationToken.None);
 
         response.StatusCode.Should().Be(StatusCodes.Status201Created);
     }
@@ -53,7 +53,7 @@ public class UsersControllerTests
     {
         var request = CreateUserRequest();
 
-        await _usersController.PostAsync(request);
+        await _usersController.PostAsync(request, CancellationToken.None);
 
         await _userService.Received(1)
             .CreateUserAsync(SomeUsername, SomePassword);
@@ -67,7 +67,7 @@ public class UsersControllerTests
         _userService.CreateUserAsync(SomeUsername, SomePassword)
             .Returns(Task.FromException(new UserAlreadyExistsException()));
 
-        var response = await _usersController.PostAsync(request);
+        var response = await _usersController.PostAsync(request, CancellationToken.None);
 
         response.StatusCode.Should().Be(StatusCodes.Status409Conflict);
     }
@@ -77,7 +77,7 @@ public class UsersControllerTests
     {
         var validateUserRequest = ValidateUserRequest();
 
-        var response = await _usersController.PostValidateUserAsync(SomeUsername, validateUserRequest);
+        var response = await _usersController.PostValidateUserAsync(SomeUsername, validateUserRequest, CancellationToken.None);
 
         response.StatusCode.Should().Be(StatusCodes.Status204NoContent);
     }
@@ -87,7 +87,7 @@ public class UsersControllerTests
     {
         var validateUserRequest = ValidateUserRequest();
 
-        await _usersController.PostValidateUserAsync(SomeUsername, validateUserRequest);
+        await _usersController.PostValidateUserAsync(SomeUsername, validateUserRequest, CancellationToken.None);
 
         await _userService.Received(1)
             .ValidateUserAsync(SomeUsername, SomeActivationCode);
@@ -101,7 +101,7 @@ public class UsersControllerTests
         _userService.ValidateUserAsync(SomeUsername, SomeActivationCode)
             .Returns(Task.FromException(new UserNotFoundException()));
 
-        var response = await _usersController.PostValidateUserAsync(SomeUsername, validateUserRequest);
+        var response = await _usersController.PostValidateUserAsync(SomeUsername, validateUserRequest, CancellationToken.None);
 
         response.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }
@@ -114,7 +114,7 @@ public class UsersControllerTests
         _userService.ValidateUserAsync(SomeUsername, SomeActivationCode)
             .Returns(Task.FromException(new InvalidUserActivationCodeException()));
 
-        var response = await _usersController.PostValidateUserAsync(SomeUsername, validateUserRequest);
+        var response = await _usersController.PostValidateUserAsync(SomeUsername, validateUserRequest, CancellationToken.None);
 
         response.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }
@@ -130,7 +130,7 @@ public class UsersControllerTests
         _jwtService.GenerateJwtToken(user.Id)
             .Returns("some-jwt");
 
-        var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
+        var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest, CancellationToken.None);
 
         response.Value.Token.Should().Be("some-jwt");
     }
@@ -149,7 +149,7 @@ public class UsersControllerTests
         _jwtService.GenerateJwtToken(user.Id)
             .Returns("some-jwt");
 
-        await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
+        await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest, CancellationToken.None);
 
         _session.Received(1).Set("userId", Arg.Is<byte[]>(x => x.SequenceEqual(new byte[] {0, 0, 0, 1})));
     }
@@ -162,7 +162,7 @@ public class UsersControllerTests
         _userService.CheckPasswordAsync(SomeUsername, SomePassword)
             .Returns(Task.FromException<UserEntity>(new InvalidPasswordException()));
 
-        var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
+        var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest, CancellationToken.None);
 
         response.Result.Should().BeOfType<StatusCodeResult>().Subject.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
     }
@@ -175,7 +175,7 @@ public class UsersControllerTests
         _userService.CheckPasswordAsync(SomeUsername, SomePassword)
             .Returns(Task.FromException<UserEntity>(new UserNotFoundException()));
 
-        var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest);
+        var response = await _usersController.PostGenerateJwtAsync(SomeUsername, generateJwtRequest, CancellationToken.None);
 
         response.Result.Should().BeOfType<StatusCodeResult>().Subject.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
     }

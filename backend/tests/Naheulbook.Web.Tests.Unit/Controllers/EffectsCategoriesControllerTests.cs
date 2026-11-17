@@ -42,7 +42,7 @@ public class EffectControllerTests
         _effectMapper.ToResponse(effect)
             .Returns(expectedEffectResponse);
 
-        var result = await _effectSubCategoriesController.PostCreateEffectAsync(_executionContext, subCategoryId, createEffectRequest);
+        var result = await _effectSubCategoriesController.PostCreateEffectAsync(_executionContext, subCategoryId, createEffectRequest, CancellationToken.None);
 
         result.StatusCode.Should().Be(201);
         result.Value.Should().Be(expectedEffectResponse);
@@ -56,7 +56,7 @@ public class EffectControllerTests
         _effectService.CreateEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateEffectRequest>())
             .Returns(Task.FromException<EffectEntity>(new ForbiddenAccessException()));
 
-        Func<Task> act = () => _effectSubCategoriesController.PostCreateEffectAsync(_executionContext, 12, createEffectRequest);
+        Func<Task> act = () => _effectSubCategoriesController.PostCreateEffectAsync(_executionContext, 12, createEffectRequest, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }
@@ -77,7 +77,7 @@ public class EffectControllerTests
         _effectMapper.ToResponse(entity2)
             .Returns(response2);
 
-        var result = await _effectSubCategoriesController.GetEffectsAsync(42);
+        var result = await _effectSubCategoriesController.GetEffectsAsync(42, CancellationToken.None);
 
         result.Value.Should().Equal(response1, response2);
     }
@@ -94,7 +94,7 @@ public class EffectControllerTests
         _effectMapper.ToResponse(effectSubCategory)
             .Returns(expectedEffectSubCategoryResponse);
 
-        var result = await _effectSubCategoriesController.PostCreateEffectSubCategoryAsync(_executionContext, request);
+        var result = await _effectSubCategoriesController.PostCreateEffectSubCategoryAsync(_executionContext, request, CancellationToken.None);
 
         result.StatusCode.Should().Be(201);
         result.Value.Should().Be(expectedEffectSubCategoryResponse);
@@ -106,7 +106,7 @@ public class EffectControllerTests
         _effectService.CreateEffectSubCategoryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectSubCategoryRequest>())
             .Returns(Task.FromException<EffectSubCategoryEntity>(new ForbiddenAccessException()));
 
-        Func<Task> act = () => _effectSubCategoriesController.PostCreateEffectSubCategoryAsync(_executionContext, CreateEffectSubCategoryRequest());
+        Func<Task> act = () => _effectSubCategoriesController.PostCreateEffectSubCategoryAsync(_executionContext, CreateEffectSubCategoryRequest(), CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }

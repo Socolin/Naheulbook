@@ -7,57 +7,57 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IUserRepository : IRepository<UserEntity>
 {
-    Task<UserEntity?> GetByUsernameAsync(string username);
-    Task<UserEntity?> GetByFacebookIdAsync(string facebookId);
-    Task<UserEntity?> GetByGoogleIdAsync(string googleId);
-    Task<UserEntity?> GetByTwitterIdAsync(string twitterId);
-    Task<UserEntity?> GetByMicrosoftIdAsync(string microsoftId);
-    Task<List<UserEntity>> SearchUsersAsync(string filter);
+    Task<UserEntity?> GetByUsernameAsync(string username, CancellationToken cancellationToken = default);
+    Task<UserEntity?> GetByFacebookIdAsync(string facebookId, CancellationToken cancellationToken = default);
+    Task<UserEntity?> GetByGoogleIdAsync(string googleId, CancellationToken cancellationToken = default);
+    Task<UserEntity?> GetByTwitterIdAsync(string twitterId, CancellationToken cancellationToken = default);
+    Task<UserEntity?> GetByMicrosoftIdAsync(string microsoftId, CancellationToken cancellationToken = default);
+    Task<List<UserEntity>> SearchUsersAsync(string filter, CancellationToken cancellationToken = default);
 }
 
 public class UserRepository(NaheulbookDbContext naheulbookDbContext) : Repository<UserEntity, NaheulbookDbContext>(naheulbookDbContext), IUserRepository
 {
-    public Task<UserEntity?> GetByUsernameAsync(string username)
+    public Task<UserEntity?> GetByUsernameAsync(string username, CancellationToken cancellationToken = default)
     {
         return Context.Users
             .Where(u => u.Username == username)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public Task<UserEntity?> GetByFacebookIdAsync(string facebookId)
+    public Task<UserEntity?> GetByFacebookIdAsync(string facebookId, CancellationToken cancellationToken = default)
     {
         return Context.Users
             .Where(u => u.FbId == facebookId)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public Task<UserEntity?> GetByGoogleIdAsync(string googleId)
+    public Task<UserEntity?> GetByGoogleIdAsync(string googleId, CancellationToken cancellationToken = default)
     {
         return Context.Users
             .Where(u => u.GoogleId == googleId)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public Task<UserEntity?> GetByTwitterIdAsync(string twitterId)
+    public Task<UserEntity?> GetByTwitterIdAsync(string twitterId, CancellationToken cancellationToken = default)
     {
         return Context.Users
             .Where(u => u.TwitterId == twitterId)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public Task<UserEntity?> GetByMicrosoftIdAsync(string microsoftId)
+    public Task<UserEntity?> GetByMicrosoftIdAsync(string microsoftId, CancellationToken cancellationToken = default)
     {
         return Context.Users
             .Where(u => u.MicrosoftId == microsoftId)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public Task<List<UserEntity>> SearchUsersAsync(string filter)
+    public Task<List<UserEntity>> SearchUsersAsync(string filter, CancellationToken cancellationToken = default)
     {
         return Context.Users
             .Where(u => u.DisplayName != null && u.DisplayName.ToLower().Contains(filter.ToLower()))
             .Where(u => u.ShowInSearchUntil > DateTime.UtcNow)
             .Take(10)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

@@ -7,22 +7,22 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IGroupRepository : IRepository<GroupEntity>
 {
-    Task<List<GroupEntity>> GetGroupsOwnedByAsync(int userId);
-    Task<GroupEntity?> GetGroupsWithDetailsAsync(int groupId);
-    Task<GroupEntity?> GetGroupsWithCharactersAsync(int groupId);
+    Task<List<GroupEntity>> GetGroupsOwnedByAsync(int userId, CancellationToken cancellationToken = default);
+    Task<GroupEntity?> GetGroupsWithDetailsAsync(int groupId, CancellationToken cancellationToken = default);
+    Task<GroupEntity?> GetGroupsWithCharactersAsync(int groupId, CancellationToken cancellationToken = default);
 }
 
 public class GroupRepository(NaheulbookDbContext context) : Repository<GroupEntity, NaheulbookDbContext>(context), IGroupRepository
 {
-    public Task<List<GroupEntity>> GetGroupsOwnedByAsync(int userId)
+    public Task<List<GroupEntity>> GetGroupsOwnedByAsync(int userId, CancellationToken cancellationToken = default)
     {
         return Context.Groups
             .Include(g => g.Characters)
             .Where(g => g.MasterId == userId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<GroupEntity?> GetGroupsWithDetailsAsync(int groupId)
+    public Task<GroupEntity?> GetGroupsWithDetailsAsync(int groupId, CancellationToken cancellationToken = default)
     {
         return Context.Groups
             .Include(g => g.Characters)
@@ -34,14 +34,14 @@ public class GroupRepository(NaheulbookDbContext context) : Repository<GroupEnti
             .ThenInclude(g => g.Jobs)
             .ThenInclude(g => g.Job)
             .Where(g => g.Id == groupId)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public Task<GroupEntity?> GetGroupsWithCharactersAsync(int groupId)
+    public Task<GroupEntity?> GetGroupsWithCharactersAsync(int groupId, CancellationToken cancellationToken = default)
     {
         return Context.Groups
             .Include(g => g.Characters)
             .Where(g => g.Id == groupId)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(cancellationToken);
     }
 }

@@ -30,22 +30,24 @@ public class CharactersController(
 {
     [HttpGet]
     public async Task<ActionResult<List<CharacterSummaryResponse>>> GetCharactersListAsync(
-        [FromServices] NaheulbookExecutionContext executionContext
+        [FromServices] NaheulbookExecutionContext executionContext,
+        CancellationToken cancellationToken
     )
     {
-        var characters = await characterService.GetCharacterListAsync(executionContext);
+        var characters = await characterService.GetCharacterListAsync(executionContext, cancellationToken);
         return characters.Select(characterMapper.ToSummaryResponse).ToList();
     }
 
     [HttpGet("{CharacterId:int:min(1)}")]
     public async Task<ActionResult<CharacterResponse>> GetCharacterDetailsAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        [FromRoute] int characterId
+        [FromRoute] int characterId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var character = await characterService.LoadCharacterDetailsAsync(executionContext, characterId);
+            var character = await characterService.LoadCharacterDetailsAsync(executionContext, characterId, cancellationToken);
 
             if (executionContext.UserId == character.Group?.MasterId)
                 return characterMapper.ToGmResponse(character);
@@ -65,22 +67,24 @@ public class CharactersController(
     [HttpGet("search")]
     public async Task<ActionResult<List<CharacterSearchResponse>>> GetSearchCharacterAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        [FromQuery] string filter
+        [FromQuery] string filter,
+        CancellationToken cancellationToken
     )
     {
-        var characters = await characterService.SearchCharactersAsync(filter);
+        var characters = await characterService.SearchCharactersAsync(filter, cancellationToken);
         return characters.Select(characterMapper.ToSearchResponse).ToList();
     }
 
     [HttpPost]
     public async Task<CreatedActionResult<CreateCharacterResponse>> PostCreateCharacterAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        CreateCharacterRequest request
+        CreateCharacterRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var character = await characterService.CreateCharacterAsync(executionContext, request);
+            var character = await characterService.CreateCharacterAsync(executionContext, request, cancellationToken);
             return characterMapper.ToCreateResponse(character);
         }
         catch (ForbiddenAccessException ex)
@@ -96,12 +100,13 @@ public class CharactersController(
     [HttpPost("custom")]
     public async Task<CreatedActionResult<CreateCharacterResponse>> PostCreateCustomCharacterAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        CreateCustomCharacterRequest request
+        CreateCustomCharacterRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var character = await characterService.CreateCustomCharacterAsync(executionContext, request);
+            var character = await characterService.CreateCustomCharacterAsync(executionContext, request, cancellationToken);
             return characterMapper.ToCreateResponse(character);
         }
         catch (ForbiddenAccessException ex)
@@ -118,12 +123,13 @@ public class CharactersController(
     public async Task<CreatedActionResult<ItemResponse>> PostAddItemToCharacterInventoryAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int characterId,
-        CreateItemRequest request
+        CreateItemRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var item = await characterService.AddItemToCharacterAsync(executionContext, characterId, request);
+            var item = await characterService.AddItemToCharacterAsync(executionContext, characterId, request, cancellationToken);
             return itemMapper.ToResponse(item);
         }
         catch (ForbiddenAccessException ex)
@@ -144,12 +150,13 @@ public class CharactersController(
     public async Task<CreatedActionResult<ActiveStatsModifier>> PostAddModifiersAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int characterId,
-        AddCharacterModifierRequest request
+        AddCharacterModifierRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var item = await characterService.AddModifiersAsync(executionContext, characterId, request);
+            var item = await characterService.AddModifiersAsync(executionContext, characterId, request, cancellationToken);
             return characterModifierMapper.ToResponse(item);
         }
         catch (ForbiddenAccessException ex)
@@ -166,12 +173,13 @@ public class CharactersController(
     public async Task<IActionResult> DeleteModifiersAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int characterId,
-        [FromRoute] int characterModifierId
+        [FromRoute] int characterModifierId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await characterService.DeleteModifiersAsync(executionContext, characterId, characterModifierId);
+            await characterService.DeleteModifiersAsync(executionContext, characterId, characterModifierId, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -192,12 +200,13 @@ public class CharactersController(
     public async Task<ActionResult<ActiveStatsModifier>> PostToggleModifiersAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int characterId,
-        [FromRoute] int characterModifierId
+        [FromRoute] int characterModifierId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var characterModifier = await characterService.ToggleModifiersAsync(executionContext, characterId, characterModifierId);
+            var characterModifier = await characterService.ToggleModifiersAsync(executionContext, characterId, characterModifierId, cancellationToken);
             return characterModifierMapper.ToResponse(characterModifier);
         }
         catch (ForbiddenAccessException ex)
@@ -221,12 +230,13 @@ public class CharactersController(
     [HttpGet("{CharacterId:int:min(1)}/loots")]
     public async Task<ActionResult<List<LootResponse>>> GetCharacterLootsAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        [FromRoute] int characterId
+        [FromRoute] int characterId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var loots = await characterService.GetCharacterLootsAsync(executionContext, characterId);
+            var loots = await characterService.GetCharacterLootsAsync(executionContext, characterId, cancellationToken);
             return loots.Select(lootMapper.ToResponse).ToList();
         }
         catch (ForbiddenAccessException ex)
@@ -242,12 +252,13 @@ public class CharactersController(
     [HttpGet("{CharacterId:int:min(1)}/backup")]
     public async Task<ActionResult<BackupCharacter>> GetBackupCharacterAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        [FromRoute] int characterId
+        [FromRoute] int characterId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            return await characterBackupService.GetBackupCharacterAsync(executionContext, characterId);
+            return await characterBackupService.GetBackupCharacterAsync(executionContext, characterId, cancellationToken);
         }
         catch (ForbiddenAccessException ex)
         {
@@ -263,12 +274,13 @@ public class CharactersController(
     public async Task<ActionResult<List<IHistoryEntryResponse>>> GetCharacterHistoryEntryAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int characterId,
-        [FromQuery] int page
+        [FromQuery] int page,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var loots = await characterService.GetCharacterHistoryEntryAsync(executionContext, characterId, page);
+            var loots = await characterService.GetCharacterHistoryEntryAsync(executionContext, characterId, page, cancellationToken);
             return loots.Select(characterMapper.ToResponse).ToList();
         }
         catch (ForbiddenAccessException ex)
@@ -285,12 +297,13 @@ public class CharactersController(
     public async Task<IActionResult> PatchCharacterAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int characterId,
-        PatchCharacterRequest request
+        PatchCharacterRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await characterService.UpdateCharacterAsync(executionContext, characterId, request);
+            await characterService.UpdateCharacterAsync(executionContext, characterId, request, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -307,12 +320,13 @@ public class CharactersController(
     public async Task<IActionResult> PutStatBonusAdAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int characterId,
-        PutStatBonusAdRequest request
+        PutStatBonusAdRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await characterService.SetCharacterAdBonusStatAsync(executionContext, characterId, request);
+            await characterService.SetCharacterAdBonusStatAsync(executionContext, characterId, request, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -329,12 +343,13 @@ public class CharactersController(
     public async Task<ActionResult<CharacterLevelUpResponse>> PostCharacterLevelUpAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int characterId,
-        CharacterLevelUpRequest request
+        CharacterLevelUpRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var levelUpResult = await characterService.LevelUpCharacterAsync(executionContext, characterId, request);
+            var levelUpResult = await characterService.LevelUpCharacterAsync(executionContext, characterId, request, cancellationToken);
             return characterMapper.ToResponse(levelUpResult);
         }
         catch (SpecialityNotFoundException ex)
@@ -359,12 +374,13 @@ public class CharactersController(
     public async Task<ActionResult<CharacterAddJobResponse>> PostCharacterAddJobAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int characterId,
-        CharacterAddJobRequest request
+        CharacterAddJobRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await characterService.AddJobAsync(executionContext, characterId, request);
+            await characterService.AddJobAsync(executionContext, characterId, request, cancellationToken);
             return new CharacterAddJobResponse {JobId = request.JobId};
         }
         catch (CharacterAlreadyKnowThisJobException ex)
@@ -389,12 +405,13 @@ public class CharactersController(
     public async Task<ActionResult<CharacterRemoveJobResponse>> PostCharacterRemoveJobAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int characterId,
-        CharacterRemoveJobRequest request
+        CharacterRemoveJobRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await characterService.RemoveJobAsync(executionContext, characterId, request);
+            await characterService.RemoveJobAsync(executionContext, characterId, request, cancellationToken);
             return new CharacterRemoveJobResponse {JobId = request.JobId};
         }
         catch (CharacterAlreadyKnowThisJobException ex)
@@ -416,16 +433,16 @@ public class CharactersController(
     }
 
 
-#warning Add cancellation tokens
     [HttpPost("{CharacterId:int:min(1)}/quitGroup")]
     public async Task<ActionResult<CharacterLevelUpResponse>> PostCharacterQuitGroupAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        [FromRoute] int characterId
+        [FromRoute] int characterId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await characterService.QuitGroupAsync(executionContext, characterId);
+            await characterService.QuitGroupAsync(executionContext, characterId, cancellationToken);
             return NoContent();
         }
         catch (CharacterNotInAGroupException ex)
@@ -447,7 +464,7 @@ public class CharactersController(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int characterId,
         [FromBody] CharacterAddAptitudeRequest request,
-        CancellationToken cancellationToken = default
+        CancellationToken cancellationToken
     )
     {
         try
@@ -478,7 +495,7 @@ public class CharactersController(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int characterId,
         [FromRoute] Guid aptitudeId,
-        CancellationToken cancellationToken = default
+        CancellationToken cancellationToken
     )
     {
         try
@@ -510,7 +527,7 @@ public class CharactersController(
         [FromRoute] int characterId,
         [FromRoute] Guid aptitudeId,
         [FromBody] UpdateCharacterAptitudeRequest request,
-        CancellationToken cancellationToken = default
+        CancellationToken cancellationToken
     )
     {
         try

@@ -6,12 +6,12 @@ namespace Naheulbook.Core.Features.Users;
 
 public interface IMailService
 {
-    Task SendCreateUserMailAsync(string email, string activationCode);
+    Task SendCreateUserMailAsync(string email, string activationCode, CancellationToken cancellationToken = default);
 }
 
 public class MailService(IOptions<MailOptions> mailOptions) : IMailService
 {
-    public async Task SendCreateUserMailAsync(string email, string activationCode)
+    public async Task SendCreateUserMailAsync(string email, string activationCode, CancellationToken cancellationToken = default)
     {
         var client = new SmtpClient(mailOptions.Value.Smtp.Host, mailOptions.Value.Smtp.Port)
         {
@@ -28,6 +28,6 @@ public class MailService(IOptions<MailOptions> mailOptions) : IMailService
         };
         mailMessage.To.Add(email);
 
-        await client.SendMailAsync(mailMessage);
+        await client.SendMailAsync(mailMessage, cancellationToken);
     }
 }

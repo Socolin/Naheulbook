@@ -42,7 +42,7 @@ public class EffectsControllerTests
         _effectMapper.ToResponse(effect)
             .Returns(expectedEffectResponse);
 
-        var result = await _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest);
+        var result = await _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest, CancellationToken.None);
 
         result.Value.Should().Be(expectedEffectResponse);
         await _effectService.Received(1)
@@ -57,7 +57,7 @@ public class EffectsControllerTests
         _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
             .Returns(Task.FromException<EffectEntity>(new ForbiddenAccessException()));
 
-        Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest);
+        Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }
@@ -70,7 +70,7 @@ public class EffectsControllerTests
         _effectService.EditEffectAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EditEffectRequest>())
             .Returns(Task.FromException<EffectEntity>(new EffectNotFoundException()));
 
-        Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest);
+        Func<Task> act = () => _effectsController.PutEditEffectAsync(_executionContext, 42, editEffectRequest, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
     }
@@ -86,7 +86,7 @@ public class EffectsControllerTests
         _effectMapper.ToResponse(effect)
             .Returns(expectedEffectResponse);
 
-        var result = await _effectsController.GetEffectAsync(42);
+        var result = await _effectsController.GetEffectAsync(42, CancellationToken.None);
 
         result.Value.Should().Be(expectedEffectResponse);
     }
@@ -97,7 +97,7 @@ public class EffectsControllerTests
         _effectService.GetEffectAsync(Arg.Any<int>())
             .Returns(Task.FromException<EffectEntity>(new EffectNotFoundException()));
 
-        Func<Task<ActionResult<EffectResponse>>> act = () => _effectsController.GetEffectAsync(42);
+        Func<Task<ActionResult<EffectResponse>>> act = () => _effectsController.GetEffectAsync(42, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
     }

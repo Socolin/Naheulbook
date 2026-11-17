@@ -21,12 +21,13 @@ public class MonsterController(
     [HttpGet("{MonsterId}")]
     public async Task<ActionResult<MonsterResponse>> GetMonsterAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        [FromRoute] int monsterId
+        [FromRoute] int monsterId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var monster = await monsterService.GetMonsterAsync(executionContext, monsterId);
+            var monster = await monsterService.GetMonsterAsync(executionContext, monsterId, cancellationToken);
             return monsterMapper.ToResponse(monster);
         }
         catch (ForbiddenAccessException ex)
@@ -42,12 +43,13 @@ public class MonsterController(
     [HttpDelete("{MonsterId}")]
     public async Task<CreatedActionResult<ActiveStatsModifier>> DeleteMonsterAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        [FromRoute] int monsterId
+        [FromRoute] int monsterId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await monsterService.DeleteMonsterAsync(executionContext, monsterId);
+            await monsterService.DeleteMonsterAsync(executionContext, monsterId, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -63,12 +65,13 @@ public class MonsterController(
     [HttpPost("{MonsterId}/kill")]
     public async Task<CreatedActionResult<ActiveStatsModifier>> PostKillMonsterAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        [FromRoute] int monsterId
+        [FromRoute] int monsterId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await monsterService.KillMonsterAsync(executionContext, monsterId);
+            await monsterService.KillMonsterAsync(executionContext, monsterId, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -85,12 +88,13 @@ public class MonsterController(
     public async Task<CreatedActionResult<ActiveStatsModifier>> PostMoveMonsterToFightAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int monsterId,
-        [FromBody] MoveMonsterToFightRequest request
+        [FromBody] MoveMonsterToFightRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await monsterService.MoveMonsterToFightAsync(executionContext, monsterId, request.FightId);
+            await monsterService.MoveMonsterToFightAsync(executionContext, monsterId, request.FightId, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -107,12 +111,13 @@ public class MonsterController(
     public async Task<CreatedActionResult<ActiveStatsModifier>> PostAddModifierAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int monsterId,
-        ActiveStatsModifier statsModifier
+        ActiveStatsModifier statsModifier,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var modifier = await monsterService.AddModifierAsync(executionContext, monsterId, statsModifier);
+            var modifier = await monsterService.AddModifierAsync(executionContext, monsterId, statsModifier, cancellationToken);
             return modifier;
         }
         catch (ForbiddenAccessException ex)
@@ -129,12 +134,13 @@ public class MonsterController(
     public async Task<CreatedActionResult<ActiveStatsModifier>> DeleteModifierAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int monsterId,
-        [FromRoute] int modifierId
+        [FromRoute] int modifierId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await monsterService.RemoveModifierAsync(executionContext, monsterId, modifierId);
+            await monsterService.RemoveModifierAsync(executionContext, monsterId, modifierId, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -155,12 +161,13 @@ public class MonsterController(
     public async Task<CreatedActionResult<ItemResponse>> PutMonsterDataAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int monsterId,
-        MonsterData request
+        MonsterData request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await monsterService.UpdateMonsterDataAsync(executionContext, monsterId, request);
+            await monsterService.UpdateMonsterDataAsync(executionContext, monsterId, request, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -177,12 +184,13 @@ public class MonsterController(
     public async Task<CreatedActionResult<ItemResponse>> PutMonsterTargetAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int monsterId,
-        TargetRequest request
+        TargetRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await monsterService.UpdateMonsterTargetAsync(executionContext, monsterId, request);
+            await monsterService.UpdateMonsterTargetAsync(executionContext, monsterId, request, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -203,12 +211,13 @@ public class MonsterController(
     public async Task<CreatedActionResult<ItemResponse>> PatchMonsterAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int monsterId,
-        PatchMonsterRequest request
+        PatchMonsterRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await monsterService.UpdateMonsterAsync(executionContext, monsterId, request);
+            await monsterService.UpdateMonsterAsync(executionContext, monsterId, request, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -225,12 +234,13 @@ public class MonsterController(
     public async Task<CreatedActionResult<ItemResponse>> PostAddItemToMonsterInventoryAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int monsterId,
-        CreateItemRequest request
+        CreateItemRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var item = await monsterService.AddItemToMonsterAsync(executionContext, monsterId, request);
+            var item = await monsterService.AddItemToMonsterAsync(executionContext, monsterId, request, cancellationToken);
             return itemMapper.ToResponse(item);
         }
         catch (ForbiddenAccessException ex)
@@ -251,12 +261,13 @@ public class MonsterController(
     public async Task<CreatedActionResult<ItemResponse>> PostAddRandomItemToMonsterInventoryAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int monsterId,
-        CreateRandomItemRequest request
+        CreateRandomItemRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var item = await monsterService.AddRandomItemToMonsterAsync(executionContext, monsterId, request);
+            var item = await monsterService.AddRandomItemToMonsterAsync(executionContext, monsterId, request, cancellationToken);
             return itemMapper.ToResponse(item);
         }
         catch (ForbiddenAccessException ex)

@@ -16,9 +16,9 @@ public class MapController(
 ) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<MapSummaryResponse>>> GetMapListAsync()
+    public async Task<ActionResult<List<MapSummaryResponse>>> GetMapListAsync(CancellationToken cancellationToken)
     {
-        var maps = await mapService.GetMapsAsync();
+        var maps = await mapService.GetMapsAsync(cancellationToken);
 
         return maps.Select(mapMapper.ToSummaryResponse).ToList();
     }
@@ -26,12 +26,13 @@ public class MapController(
     [HttpGet("{MapId:int:min(1)}")]
     public async Task<ActionResult<MapResponse>> GetMapAsync(
         [FromServices] OptionalNaheulbookExecutionContext executionContext,
-        [FromRoute] int mapId
+        [FromRoute] int mapId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var map = await mapService.GetMapAsync(mapId, executionContext.ExecutionExecutionContext?.UserId);
+            var map = await mapService.GetMapAsync(mapId, executionContext.ExecutionExecutionContext?.UserId, cancellationToken);
 
             return mapMapper.ToResponse(map);
         }
@@ -46,14 +47,15 @@ public class MapController(
         [FromServices] NaheulbookExecutionContext executionContext,
         [ModelBinder(BinderType = typeof(JsonModelBinder), Name = "request")]
         CreateMapRequest request,
-        [FromForm(Name = "image")] IFormFile image
+        [FromForm(Name = "image")] IFormFile image,
+        CancellationToken cancellationToken
     )
     {
         if (!image.ContentType.StartsWith("image/"))
             return BadRequest();
 
         var imageStream = image.OpenReadStream();
-        var map = await mapService.CreateMapAsync(executionContext, request, imageStream);
+        var map = await mapService.CreateMapAsync(executionContext, request, imageStream, cancellationToken);
 
         return mapMapper.ToResponse(map);
     }
@@ -62,10 +64,11 @@ public class MapController(
     public async Task<ActionResult<MapSummaryResponse>> PutUpdateMapAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int mapId,
-        [FromBody] CreateMapRequest request
+        [FromBody] CreateMapRequest request,
+        CancellationToken cancellationToken
     )
     {
-        var map = await mapService.UpdateMapAsync(executionContext, mapId, request);
+        var map = await mapService.UpdateMapAsync(executionContext, mapId, request, cancellationToken);
 
         return mapMapper.ToSummaryResponse(map);
     }
@@ -75,10 +78,11 @@ public class MapController(
     public async Task<ActionResult<MapLayerResponse>> PostCreateMapLayerAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int mapId,
-        [FromBody] MapLayerRequest request
+        [FromBody] MapLayerRequest request,
+        CancellationToken cancellationToken
     )
     {
-        var map = await mapService.CreateMapLayerAsync(executionContext, mapId, request);
+        var map = await mapService.CreateMapLayerAsync(executionContext, mapId, request, cancellationToken);
 
         return mapMapper.ToResponse(map);
     }

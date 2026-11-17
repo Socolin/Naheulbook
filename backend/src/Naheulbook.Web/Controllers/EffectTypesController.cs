@@ -14,12 +14,13 @@ public class EffectTypesController(IEffectService effectService, IEffectMapper e
     [HttpPost]
     public async Task<JsonResult> PostCreateTypeAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        CreateEffectTypeRequest request
+        CreateEffectTypeRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var effectType = await effectService.CreateEffectTypeAsync(executionContext, request);
+            var effectType = await effectService.CreateEffectTypeAsync(executionContext, request, cancellationToken);
             return new JsonResult(effectMapper.ToResponse(effectType))
             {
                 StatusCode = 201,

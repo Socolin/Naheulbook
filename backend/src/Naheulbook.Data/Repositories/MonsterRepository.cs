@@ -8,49 +8,49 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IMonsterRepository : IRepository<MonsterEntity>
 {
-    Task<List<MonsterEntity>> GetByGroupIdWithInventoryAsync(int groupId);
-    Task<List<MonsterEntity>> GetDeadMonstersByGroupIdAsync(int groupId, int startIndex, int count);
-    Task<List<MonsterEntity>> GetWithItemsByGroupAndByIdAsync(int groupId, IEnumerable<int> monsterIds);
-    Task<MonsterEntity?> GetWithGroupAsync(int monsterId);
-    Task<MonsterEntity?> GetWithGroupWithItemsAsync(int monsterId);
+    Task<List<MonsterEntity>> GetByGroupIdWithInventoryAsync(int groupId, CancellationToken cancellationToken = default);
+    Task<List<MonsterEntity>> GetDeadMonstersByGroupIdAsync(int groupId, int startIndex, int count, CancellationToken cancellationToken = default);
+    Task<List<MonsterEntity>> GetWithItemsByGroupAndByIdAsync(int groupId, IEnumerable<int> monsterIds, CancellationToken cancellationToken = default);
+    Task<MonsterEntity?> GetWithGroupAsync(int monsterId, CancellationToken cancellationToken = default);
+    Task<MonsterEntity?> GetWithGroupWithItemsAsync(int monsterId, CancellationToken cancellationToken = default);
 }
 
 public class MonsterRepository(NaheulbookDbContext context) : Repository<MonsterEntity, NaheulbookDbContext>(context), IMonsterRepository
 {
-    public Task<List<MonsterEntity>> GetByGroupIdWithInventoryAsync(int groupId)
+    public Task<List<MonsterEntity>> GetByGroupIdWithInventoryAsync(int groupId, CancellationToken cancellationToken = default)
     {
         return Context.Monsters
             .IncludeItemDetails(m => m.Items)
             .Where(g => g.GroupId == groupId && g.FightId == null && g.Dead == null)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<List<MonsterEntity>> GetDeadMonstersByGroupIdAsync(int groupId, int startIndex, int count)
+    public Task<List<MonsterEntity>> GetDeadMonstersByGroupIdAsync(int groupId, int startIndex, int count, CancellationToken cancellationToken = default)
     {
         return Context.Monsters
             .Where(g => g.GroupId == groupId && g.Dead != null)
             .OrderByDescending(d => d.Dead)
             .Skip(startIndex)
             .Take(count)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<List<MonsterEntity>> GetWithItemsByGroupAndByIdAsync(int groupId, IEnumerable<int> monsterIds)
+    public Task<List<MonsterEntity>> GetWithItemsByGroupAndByIdAsync(int groupId, IEnumerable<int> monsterIds, CancellationToken cancellationToken = default)
     {
         return Context.Monsters
             .Include(m => m.Items)
             .Where(m => m.GroupId == groupId && monsterIds.Contains(m.Id))
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<MonsterEntity?> GetWithGroupAsync(int monsterId)
+    public Task<MonsterEntity?> GetWithGroupAsync(int monsterId, CancellationToken cancellationToken = default)
     {
         return Context.Monsters
             .Include(m => m.Group)
-            .SingleOrDefaultAsync(m => m.Id == monsterId);
+            .SingleOrDefaultAsync(m => m.Id == monsterId, cancellationToken);
     }
 
-    public Task<MonsterEntity?> GetWithGroupWithItemsAsync(int monsterId)
+    public Task<MonsterEntity?> GetWithGroupWithItemsAsync(int monsterId, CancellationToken cancellationToken = default)
     {
         return Context.Monsters
             .Include(m => m.Group)
@@ -76,6 +76,6 @@ public class MonsterRepository(NaheulbookDbContext context) : Repository<Monster
             .Include(m => m.Items)
             .ThenInclude(i => i.ItemTemplate)
             .ThenInclude(i => i.Modifiers)
-            .SingleOrDefaultAsync(m => m.Id == monsterId);
+            .SingleOrDefaultAsync(m => m.Id == monsterId, cancellationToken);
     }
 }

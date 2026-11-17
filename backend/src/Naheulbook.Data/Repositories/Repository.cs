@@ -12,19 +12,19 @@ public class Repository<TEntity, TContext> : IRepository<TEntity> where TEntity 
         Context = context;
     }
 
-    public ValueTask<TEntity?> GetAsync(int id)
+    public ValueTask<TEntity?> GetAsync(int id, CancellationToken cancellationToken = default)
     {
-        return Context.Set<TEntity>().FindAsync(id);
+        return Context.Set<TEntity>().FindAsync([id], cancellationToken);
     }
 
-    public ValueTask<TEntity?> GetAsync(Guid id)
+    public ValueTask<TEntity?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return Context.Set<TEntity>().FindAsync(id);
+        return Context.Set<TEntity>().FindAsync([id], cancellationToken);
     }
 
-    public Task<List<TEntity>> GetAllAsync()
+    public Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return Context.Set<TEntity>().ToListAsync();
+        return Context.Set<TEntity>().ToListAsync(cancellationToken);
     }
 
     public void Add(TEntity entity)

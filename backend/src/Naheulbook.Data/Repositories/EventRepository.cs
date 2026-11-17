@@ -6,15 +6,15 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IEventRepository : IRepository<EventEntity>
 {
-    Task<List<EventEntity>> GetByGroupIdAsync(int groupId);
+    Task<List<EventEntity>> GetByGroupIdAsync(int groupId, CancellationToken cancellationToken = default);
 }
 
 public class EventRepository(NaheulbookDbContext context) : Repository<EventEntity, NaheulbookDbContext>(context), IEventRepository
 {
-    public Task<List<EventEntity>> GetByGroupIdAsync(int groupId)
+    public Task<List<EventEntity>> GetByGroupIdAsync(int groupId, CancellationToken cancellationToken = default)
     {
         return Context.Events
             .Where(g => g.GroupId == groupId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

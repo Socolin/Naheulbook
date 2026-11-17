@@ -9,9 +9,9 @@ namespace Naheulbook.Core.Features.Npc;
 
 public interface INpcService
 {
-    Task<List<NpcEntity>> LoadNpcsAsync(NaheulbookExecutionContext executionContext, int groupId);
-    Task<NpcEntity> CreateNpcAsync(NaheulbookExecutionContext executionContext, int groupId, NpcRequest request);
-    Task<NpcEntity> EditNpcAsync(NaheulbookExecutionContext executionContext, int npcId, NpcRequest request);
+    Task<List<NpcEntity>> LoadNpcsAsync(NaheulbookExecutionContext executionContext, int groupId, CancellationToken cancellationToken = default);
+    Task<NpcEntity> CreateNpcAsync(NaheulbookExecutionContext executionContext, int groupId, NpcRequest request, CancellationToken cancellationToken = default);
+    Task<NpcEntity> EditNpcAsync(NaheulbookExecutionContext executionContext, int npcId, NpcRequest request, CancellationToken cancellationToken = default);
 }
 
 public class NpcService(
@@ -20,24 +20,24 @@ public class NpcService(
     IJsonUtil jsonUtil
 ) : INpcService
 {
-    public async Task<List<NpcEntity>> LoadNpcsAsync(NaheulbookExecutionContext executionContext, int groupId)
+    public async Task<List<NpcEntity>> LoadNpcsAsync(NaheulbookExecutionContext executionContext, int groupId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var group = await uow.Groups.GetAsync(groupId);
+        var group = await uow.Groups.GetAsync(groupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
         authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-        return await uow.Npcs.GetByGroupIdAsync(groupId);
+        return await uow.Npcs.GetByGroupIdAsync(groupId, cancellationToken);
     }
 
-    public async Task<NpcEntity> CreateNpcAsync(NaheulbookExecutionContext executionContext, int groupId, NpcRequest request)
+    public async Task<NpcEntity> CreateNpcAsync(NaheulbookExecutionContext executionContext, int groupId, NpcRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var group = await uow.Groups.GetAsync(groupId);
+        var group = await uow.Groups.GetAsync(groupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
@@ -52,16 +52,16 @@ public class NpcService(
 
         uow.Npcs.Add(npc);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         return npc;
     }
 
-    public async Task<NpcEntity> EditNpcAsync(NaheulbookExecutionContext executionContext, int npcId, NpcRequest request)
+    public async Task<NpcEntity> EditNpcAsync(NaheulbookExecutionContext executionContext, int npcId, NpcRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var npc = await uow.Npcs.GetWitGroupAsync(npcId);
+        var npc = await uow.Npcs.GetWitGroupAsync(npcId, cancellationToken);
         if (npc == null)
             throw new NpcNotFoundException(npcId);
 
@@ -70,7 +70,7 @@ public class NpcService(
         npc.Name = request.Name;
         npc.Data = jsonUtil.SerializeNonNull(request.Data);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         return npc;
     }

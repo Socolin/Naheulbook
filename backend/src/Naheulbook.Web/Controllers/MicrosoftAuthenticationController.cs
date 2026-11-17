@@ -39,7 +39,8 @@ public class MicrosoftAuthenticationController(
 
     [HttpPost("completeAuthentication")]
     public async Task<ActionResult<UserJwtResponse>> CompleteMicrosoftAuthenticationAsync(
-        [FromBody] CompleteMicrosoftAuthenticationRequest request
+        [FromBody] CompleteMicrosoftAuthenticationRequest request,
+        CancellationToken cancellationToken
     )
     {
         var loginToken = HttpContext.Session.GetString(MicrosoftLoginTokenKey);
@@ -52,9 +53,9 @@ public class MicrosoftAuthenticationController(
 
         var currentUserId = HttpContext.Session.GetCurrentUserId();
         if (currentUserId.HasValue)
-            await socialMediaUserLinkService.AssociateUserToMicrosoftIdAsync(currentUserId.Value, profile.Id);
+            await socialMediaUserLinkService.AssociateUserToMicrosoftIdAsync(currentUserId.Value, profile.Id, cancellationToken);
 
-        var user = await socialMediaUserLinkService.GetOrCreateUserFromMicrosoftAsync(profile.Name, profile.Id);
+        var user = await socialMediaUserLinkService.GetOrCreateUserFromMicrosoftAsync(profile.Name, profile.Id, cancellationToken);
 
         HttpContext.Session.SetCurrentUserId(user.Id);
         var token = jwtService.GenerateJwtToken(user.Id);

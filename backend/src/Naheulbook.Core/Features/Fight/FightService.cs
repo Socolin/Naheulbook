@@ -4,15 +4,16 @@ using Naheulbook.Core.Notifications;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Core.Features.Fight;
 
 public interface IFightService
 {
-    Task<List<FightEntity>> GetFightsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
-    Task<FightEntity> CreateFightAsync(NaheulbookExecutionContext executionContext, int groupId, CreateFightRequest request);
-    Task DeleteFightAsync(NaheulbookExecutionContext executionContext, int groupId, int fightId);
-    Task StartFightAsync(NaheulbookExecutionContext executionContext, int groupId, int fightId);
+    Task<List<FightEntity>> GetFightsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, CancellationToken cancellationToken = default);
+    Task<FightEntity> CreateFightAsync(NaheulbookExecutionContext executionContext, int groupId, CreateFightRequest request, CancellationToken cancellationToken = default);
+    Task DeleteFightAsync(NaheulbookExecutionContext executionContext, int groupId, int fightId, CancellationToken cancellationToken = default);
+    Task StartFightAsync(NaheulbookExecutionContext executionContext, int groupId, int fightId, CancellationToken cancellationToken = default);
 }
 
 public class FightService(
@@ -21,23 +22,23 @@ public class FightService(
     INotificationSessionFactory notificationSessionFactory
 ) : IFightService
 {
-    public async Task<List<FightEntity>> GetFightsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
+    public async Task<List<FightEntity>> GetFightsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var group = await uow.Groups.GetAsync(groupId);
+        var group = await uow.Groups.GetAsync(groupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
         authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-        return await uow.Fights.GetByGroupIdWithMonstersAsync(groupId);
+        return await uow.Fights.GetByGroupIdWithMonstersAsync(groupId, cancellationToken);
     }
 
-    public async Task<FightEntity> CreateFightAsync(NaheulbookExecutionContext executionContext, int groupId, CreateFightRequest request)
+    public async Task<FightEntity> CreateFightAsync(NaheulbookExecutionContext executionContext, int groupId, CreateFightRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var group = await uow.Groups.GetAsync(groupId);
+        var group = await uow.Groups.GetAsync(groupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
@@ -51,7 +52,7 @@ public class FightService(
         };
 
         uow.Fights.Add(fight);
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyGroupAddFight(groupId, fight);
@@ -60,17 +61,17 @@ public class FightService(
         return fight;
     }
 
-    public async Task DeleteFightAsync(NaheulbookExecutionContext executionContext, int groupId, int fightId)
+    public async Task DeleteFightAsync(NaheulbookExecutionContext executionContext, int groupId, int fightId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var group = await uow.Groups.GetAsync(groupId);
+        var group = await uow.Groups.GetAsync(groupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
         authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-        var fight = await uow.Fights.GetAsync(fightId);
+        var fight = await uow.Fights.GetAsync(fightId, cancellationToken);
         if (fight == null || fight.GroupId != group.Id)
             throw new FightNotFoundException(fightId);
 
@@ -78,21 +79,21 @@ public class FightService(
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyGroupDeleteFight(groupId, fightId);
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await session.CommitAsync();
     }
 
-    public async Task StartFightAsync(NaheulbookExecutionContext executionContext, int groupId, int fightId)
+    public async Task StartFightAsync(NaheulbookExecutionContext executionContext, int groupId, int fightId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var group = await uow.Groups.GetAsync(groupId);
+        var group = await uow.Groups.GetAsync(groupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
         authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-        var fight = await uow.Fights.GetWithMonstersAsync(fightId);
+        var fight = await uow.Fights.GetWithMonstersAsync(fightId, cancellationToken);
         if (fight == null || fight.GroupId != group.Id)
             throw new FightNotFoundException(fightId);
 
@@ -106,7 +107,7 @@ public class FightService(
 
         uow.Fights.Remove(fight);
         session.NotifyGroupDeleteFight(groupId, fightId);
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await session.CommitAsync();
     }
 }

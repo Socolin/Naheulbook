@@ -5,14 +5,14 @@ namespace Naheulbook.Core.Features.Calendar;
 
 public interface ICalendarService
 {
-    Task<List<CalendarEntity>> GetCalendarAsync();
+    Task<List<CalendarEntity>> GetCalendarAsync(CancellationToken cancellationToken = default);
 }
 
 public class CalendarService(IUnitOfWorkFactory unitOfWorkFactory) : ICalendarService
 {
-    public async Task<List<CalendarEntity>> GetCalendarAsync()
+    public async Task<List<CalendarEntity>> GetCalendarAsync(CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        return await uow.Calendar.GetAllAsync();
+        return await uow.Calendar.GetAllAsync(cancellationToken);
     }
 }

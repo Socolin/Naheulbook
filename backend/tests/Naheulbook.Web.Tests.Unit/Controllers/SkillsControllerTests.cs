@@ -38,7 +38,7 @@ public class SkillsControllerTests
         _skillMapper.ToResponse(entity2)
             .Returns(response2);
 
-        var result = await _skillsController.GetAsync();
+        var result = await _skillsController.GetAsync(CancellationToken.None);
 
         result.Value.Should().Equal(response1, response2);
     }

@@ -6,16 +6,16 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IMapRepository : IRepository<MapEntity>
 {
-    Task<MapEntity?> GetMapDetailsForCurrentUserAsync(int mapId, int? userId);
+    Task<MapEntity?> GetMapDetailsForCurrentUserAsync(int mapId, int? userId, CancellationToken cancellationToken = default);
 }
 
 public class MapRepository(NaheulbookDbContext context) : Repository<MapEntity, NaheulbookDbContext>(context), IMapRepository
 {
-    public async Task<MapEntity?> GetMapDetailsForCurrentUserAsync(int mapId, int? userId)
+    public async Task<MapEntity?> GetMapDetailsForCurrentUserAsync(int mapId, int? userId, CancellationToken cancellationToken = default)
     {
         var map = await Context.Maps
             .Where(m => m.Id == mapId)
-            .SingleAsync();
+            .SingleAsync(cancellationToken);
 
         map.Layers = await Context.MapLayers
             .Where(x => x.MapId == mapId)
@@ -23,7 +23,7 @@ public class MapRepository(NaheulbookDbContext context) : Repository<MapEntity, 
             .Include(x => x.Markers)
             .ThenInclude(x => x.Links)
             .ThenInclude(x => x.TargetMap)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return map;
     }

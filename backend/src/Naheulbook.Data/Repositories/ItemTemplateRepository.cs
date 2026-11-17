@@ -8,53 +8,53 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IItemTemplateRepository : IRepository<ItemTemplateEntity>
 {
-    Task<ItemTemplateEntity?> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(Guid id);
-    Task<List<ItemTemplateEntity>> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(int sectionId);
-    Task<List<ItemTemplateEntity>> GetWithAllDataByCategoryIdAsync(int subCategoryId, int? currentUserId, bool includeCommunityItems);
-    Task<List<ItemTemplateEntity>> GetByIdsAsync(IEnumerable<Guid> ids);
-    Task<List<ItemTemplateEntity>> GetItemByCleanNameWithAllDataAsync(string name, int maxResultCount, int? currentUserId, bool includeCommunityItems);
-    Task<List<ItemTemplateEntity>> GetItemByPartialCleanNameWithAllDataAsync(string name, int maxResultCount, IEnumerable<Guid> excludedIds, int? currentUserId, bool includeCommunityItems);
-    Task<List<ItemTemplateEntity>> GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(string name, int maxResultCount, IEnumerable<Guid> excludedIds, int? currentUserId, bool includeCommunityItems);
-    Task<ItemTemplateEntity> GetPurseItemTemplateBasedOnMoneyAsync(int money);
-    Task<ItemTemplateEntity> GetGoldCoinItemTemplate();
+    Task<ItemTemplateEntity?> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<List<ItemTemplateEntity>> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(int sectionId, CancellationToken cancellationToken = default);
+    Task<List<ItemTemplateEntity>> GetWithAllDataByCategoryIdAsync(int subCategoryId, int? currentUserId, bool includeCommunityItems, CancellationToken cancellationToken = default);
+    Task<List<ItemTemplateEntity>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default);
+    Task<List<ItemTemplateEntity>> GetItemByCleanNameWithAllDataAsync(string name, int maxResultCount, int? currentUserId, bool includeCommunityItems, CancellationToken cancellationToken = default);
+    Task<List<ItemTemplateEntity>> GetItemByPartialCleanNameWithAllDataAsync(string name, int maxResultCount, IEnumerable<Guid> excludedIds, int? currentUserId, bool includeCommunityItems, CancellationToken cancellationToken = default);
+    Task<List<ItemTemplateEntity>> GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(string name, int maxResultCount, IEnumerable<Guid> excludedIds, int? currentUserId, bool includeCommunityItems, CancellationToken cancellationToken = default);
+    Task<ItemTemplateEntity> GetPurseItemTemplateBasedOnMoneyAsync(int money, CancellationToken cancellationToken = default);
+    Task<ItemTemplateEntity> GetGoldCoinItemTemplate(CancellationToken cancellationToken = default);
 }
 
 public class ItemTemplateRepository(NaheulbookDbContext context) : Repository<ItemTemplateEntity, NaheulbookDbContext>(context), IItemTemplateRepository
 {
-    public Task<ItemTemplateEntity?> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(Guid id)
+    public Task<ItemTemplateEntity?> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return Context.ItemTemplates
             .IncludeItemTemplateDetails()
             .Where(x => x.Id == id)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public Task<List<ItemTemplateEntity>> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(int sectionId)
+    public Task<List<ItemTemplateEntity>> GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsBySectionIdAsync(int sectionId, CancellationToken cancellationToken = default)
     {
         return Context.ItemTemplates
             .IncludeItemTemplateDetails()
             .Where(x => x.SubCategory.SectionId == sectionId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<List<ItemTemplateEntity>> GetWithAllDataByCategoryIdAsync(int subCategoryId, int? currentUserId, bool includeCommunityItems)
+    public Task<List<ItemTemplateEntity>> GetWithAllDataByCategoryIdAsync(int subCategoryId, int? currentUserId, bool includeCommunityItems, CancellationToken cancellationToken = default)
     {
         return Context.ItemTemplates
             .IncludeItemTemplateDetails()
             .FilterCommunityAndPrivateItemTemplates(currentUserId, includeCommunityItems)
             .Where(x => x.SubCategoryId == subCategoryId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<List<ItemTemplateEntity>> GetByIdsAsync(IEnumerable<Guid> ids)
+    public Task<List<ItemTemplateEntity>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
     {
         return Context.ItemTemplates
             .IncludeItemTemplateDetails()
             .Where(x => ids.Contains(x.Id))
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<List<ItemTemplateEntity>> GetItemByCleanNameWithAllDataAsync(string name, int maxResultCount, int? currentUserId, bool includeCommunityItems)
+    public Task<List<ItemTemplateEntity>> GetItemByCleanNameWithAllDataAsync(string name, int maxResultCount, int? currentUserId, bool includeCommunityItems, CancellationToken cancellationToken = default)
     {
         return Context.ItemTemplates
             .Where(x => x.CleanName!.ToUpper() == name)
@@ -62,10 +62,10 @@ public class ItemTemplateRepository(NaheulbookDbContext context) : Repository<It
             .IncludeItemTemplateDetails()
             .OrderByDescending(x => x.Source)
             .Take(maxResultCount)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<List<ItemTemplateEntity>> GetItemByPartialCleanNameWithAllDataAsync(string name, int maxResultCount, IEnumerable<Guid> excludedIds, int? currentUserId, bool includeCommunityItems)
+    public Task<List<ItemTemplateEntity>> GetItemByPartialCleanNameWithAllDataAsync(string name, int maxResultCount, IEnumerable<Guid> excludedIds, int? currentUserId, bool includeCommunityItems, CancellationToken cancellationToken = default)
     {
         return Context.ItemTemplates
             .Where(x => x.CleanName!.ToUpper().Contains(name))
@@ -74,10 +74,10 @@ public class ItemTemplateRepository(NaheulbookDbContext context) : Repository<It
             .IncludeItemTemplateDetails()
             .FilterCommunityAndPrivateItemTemplates(currentUserId, includeCommunityItems)
             .OrderByDescending(x => x.Source)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<List<ItemTemplateEntity>> GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(string name, int maxResultCount, IEnumerable<Guid> excludedIds, int? currentUserId, bool includeCommunityItems)
+    public Task<List<ItemTemplateEntity>> GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(string name, int maxResultCount, IEnumerable<Guid> excludedIds, int? currentUserId, bool includeCommunityItems, CancellationToken cancellationToken = default)
     {
         return Context.ItemTemplates
             .Where(x => x.CleanName!
@@ -92,10 +92,10 @@ public class ItemTemplateRepository(NaheulbookDbContext context) : Repository<It
             .OrderByDescending(x => x.Source)
             .Take(maxResultCount)
             .IncludeItemTemplateDetails()
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<ItemTemplateEntity> GetPurseItemTemplateBasedOnMoneyAsync(int money)
+    public Task<ItemTemplateEntity> GetPurseItemTemplateBasedOnMoneyAsync(int money, CancellationToken cancellationToken = default)
     {
         string techName;
         if (money <= 50)
@@ -107,13 +107,13 @@ public class ItemTemplateRepository(NaheulbookDbContext context) : Repository<It
 
         return Context.ItemTemplates
             .Where(x => x.TechName == techName)
-            .FirstAsync();
+            .FirstAsync(cancellationToken);
     }
 
-    public Task<ItemTemplateEntity> GetGoldCoinItemTemplate()
+    public Task<ItemTemplateEntity> GetGoldCoinItemTemplate(CancellationToken cancellationToken = default)
     {
         return Context.ItemTemplates
             .Where(x => x.TechName == "MONEY")
-            .FirstAsync();
+            .FirstAsync(cancellationToken);
     }
 }

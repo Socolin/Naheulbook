@@ -7,37 +7,37 @@ namespace Naheulbook.Data.Repositories;
 
 public interface ILootRepository : IRepository<LootEntity>
 {
-    Task<List<LootEntity>> GetByGroupIdAsync(int groupId);
-    Task<List<LootEntity>> GetLootsVisibleByCharactersOfGroupAsync(int groupId);
-    Task<LootEntity?> GetWithAllDataAsync(int lootId);
+    Task<List<LootEntity>> GetByGroupIdAsync(int groupId, CancellationToken cancellationToken = default);
+    Task<List<LootEntity>> GetLootsVisibleByCharactersOfGroupAsync(int groupId, CancellationToken cancellationToken = default);
+    Task<LootEntity?> GetWithAllDataAsync(int lootId, CancellationToken cancellationToken = default);
 }
 
 public class LootRepository(NaheulbookDbContext context) : Repository<LootEntity, NaheulbookDbContext>(context), ILootRepository
 {
-    public Task<List<LootEntity>> GetByGroupIdAsync(int groupId)
+    public Task<List<LootEntity>> GetByGroupIdAsync(int groupId, CancellationToken cancellationToken = default)
     {
         return Context.Loots
             .IncludeItemDetails(l => l.Items)
             .IncludeChildWithItemDetails(m => m.Monsters, l => l.Items)
             .Where(l => l.GroupId == groupId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<List<LootEntity>> GetLootsVisibleByCharactersOfGroupAsync(int groupId)
+    public Task<List<LootEntity>> GetLootsVisibleByCharactersOfGroupAsync(int groupId, CancellationToken cancellationToken = default)
     {
         return Context.Loots
             .IncludeItemDetails(l => l.Items)
             .IncludeChildWithItemDetails(m => m.Monsters, l => l.Items)
             .Where(l => l.IsVisibleForPlayer)
             .Where(l => l.GroupId == groupId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<LootEntity?> GetWithAllDataAsync(int lootId)
+    public Task<LootEntity?> GetWithAllDataAsync(int lootId, CancellationToken cancellationToken = default)
     {
         return Context.Loots
             .IncludeItemDetails(l => l.Items)
             .IncludeChildWithItemDetails(m => m.Monsters, l => l.Items)
-            .FirstOrDefaultAsync(l => l.Id == lootId);
+            .FirstOrDefaultAsync(l => l.Id == lootId, cancellationToken);
     }
 }

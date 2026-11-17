@@ -13,21 +13,22 @@ public class ItemTemplateSectionsController(IItemTemplateSectionService itemTemp
     : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<ItemTemplateSectionResponse>>> GetItemTemplateSectionsAsync()
+    public async Task<ActionResult<List<ItemTemplateSectionResponse>>> GetItemTemplateSectionsAsync(CancellationToken cancellationToken)
     {
-        var sections = await itemTemplateSectionService.GetAllSectionsAsync();
+        var sections = await itemTemplateSectionService.GetAllSectionsAsync(cancellationToken);
         return sections.Select(itemTemplateMapper.ToResponse).ToList();
     }
 
     [HttpPost]
     public async Task<JsonResult> PostCreateSectionAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        CreateItemTemplateSectionRequest request
+        CreateItemTemplateSectionRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var itemTemplateSection = await itemTemplateSectionService.CreateItemTemplateSectionAsync(executionContext, request);
+            var itemTemplateSection = await itemTemplateSectionService.CreateItemTemplateSectionAsync(executionContext, request, cancellationToken);
             var itemTemplateSectionResponse = itemTemplateMapper.ToResponse(itemTemplateSection);
             return new JsonResult(itemTemplateSectionResponse)
             {
@@ -43,10 +44,11 @@ public class ItemTemplateSectionsController(IItemTemplateSectionService itemTemp
     [HttpGet("{SectionId}")]
     public async Task<ActionResult<List<ItemTemplateResponse>>> GetItemTemplatesAsync(
         [FromServices] OptionalNaheulbookExecutionContext executionContext,
-        int sectionId
+        int sectionId,
+        CancellationToken cancellationToken
     )
     {
-        var sections = await itemTemplateSectionService.GetItemTemplatesBySectionAsync(sectionId, executionContext.ExecutionExecutionContext?.UserId);
+        var sections = await itemTemplateSectionService.GetItemTemplatesBySectionAsync(sectionId, executionContext.ExecutionExecutionContext?.UserId, cancellationToken);
         return sections.Select(itemTemplateMapper.ToResponse).ToList();
     }
 }

@@ -4,6 +4,7 @@ using Naheulbook.Core.Notifications;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Core.Features.Merchant;
 
@@ -33,7 +34,7 @@ public class MerchantService(
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var group = await uow.Groups.GetAsync(groupId);
+        var group = await uow.Groups.GetAsync(groupId, cancellationToken);
         authorizationUtil.EnsureIsGroupOwner(executionContext, group);
         if (group is null)
             throw new GroupNotFoundException(groupId);
@@ -43,7 +44,7 @@ public class MerchantService(
         uow.Merchants.Add(merchant);
         notificationSession.NotifyGroupAddMerchant(groupId, merchant);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         await notificationSession.CommitAsync();
 

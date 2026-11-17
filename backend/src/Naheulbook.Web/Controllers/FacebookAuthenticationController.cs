@@ -39,7 +39,8 @@ public class FacebookAuthenticationController(
 
     [HttpPost("completeAuthentication")]
     public async Task<ActionResult<UserJwtResponse>> CompleteFacebookAuthenticationAsync(
-        [FromBody] CompleteFacebookAuthenticationRequest request
+        [FromBody] CompleteFacebookAuthenticationRequest request,
+        CancellationToken cancellationToken
     )
     {
         var loginToken = HttpContext.Session.GetString(FacebookLoginTokenKey);
@@ -52,9 +53,9 @@ public class FacebookAuthenticationController(
 
         var currentUserId = HttpContext.Session.GetCurrentUserId();
         if (currentUserId.HasValue)
-            await socialMediaUserLinkService.AssociateUserToFacebookIdAsync(currentUserId.Value, profile.Id);
+            await socialMediaUserLinkService.AssociateUserToFacebookIdAsync(currentUserId.Value, profile.Id, cancellationToken);
 
-        var user = await socialMediaUserLinkService.GetOrCreateUserFromFacebookAsync(profile.Name, profile.Id);
+        var user = await socialMediaUserLinkService.GetOrCreateUserFromFacebookAsync(profile.Name, profile.Id, cancellationToken);
 
         HttpContext.Session.SetCurrentUserId(user.Id);
         var token = jwtService.GenerateJwtToken(user.Id);

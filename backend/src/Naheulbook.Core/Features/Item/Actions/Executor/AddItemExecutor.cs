@@ -12,7 +12,8 @@ public class AddItemExecutor(IItemFactory itemFactory) : IAddItemExecutor
     public async Task ExecuteAsync(
         NhbkAction action,
         ActionContext context,
-        INotificationSession notificationSession
+        INotificationSession notificationSession,
+        CancellationToken cancellationToken = default
     )
     {
         if (action.Type != ActionType)
@@ -22,7 +23,7 @@ public class AddItemExecutor(IItemFactory itemFactory) : IAddItemExecutor
         if (!action.Data.TemplateId.HasValue)
             throw new InvalidActionDataException(action.Type);
 
-        var itemTemplate = await context.UnitOfWork.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(action.Data.TemplateId.Value);
+        var itemTemplate = await context.UnitOfWork.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(action.Data.TemplateId.Value, cancellationToken);
         if (itemTemplate == null)
             throw new ItemTemplateNotFoundException(action.Data.TemplateId.Value);
 

@@ -6,7 +6,7 @@ namespace Naheulbook.Core.Features.Character;
 
 public interface ILaPageAMelkorClient
 {
-    Task<ICollection<string>> GetRandomNameAsync(string url);
+    Task<ICollection<string>> GetRandomNameAsync(string url, CancellationToken cancellationToken = default);
 }
 
 public class LaPageAMelkorClient(HttpClient client) : ILaPageAMelkorClient
@@ -18,10 +18,10 @@ public class LaPageAMelkorClient(HttpClient client) : ILaPageAMelkorClient
         public required string Url { get; set; }
     }
 
-    public async Task<ICollection<string>> GetRandomNameAsync(string url)
+    public async Task<ICollection<string>> GetRandomNameAsync(string url, CancellationToken cancellationToken = default)
     {
-        var response = await client.GetAsync(url);
-        var responseContent = await response.Content.ReadAsStringAsync();
+        var response = await client.GetAsync(url, cancellationToken);
+        var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
         if (!response.IsSuccessStatusCode)
         {
             throw new GenericHttpClientException(url, (int) response.StatusCode, responseContent);

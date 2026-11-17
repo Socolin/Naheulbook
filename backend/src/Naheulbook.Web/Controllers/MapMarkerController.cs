@@ -14,12 +14,13 @@ public class MapMarkerController(IMapService mapService, IMapMapper mapMapper) :
     [HttpDelete("{MapMarkerId}")]
     public async Task<IActionResult> DeleteMarkerAsync(
         [FromServices] NaheulbookExecutionContext naheulbookExecutionContext,
-        [FromRoute] int mapMarkerId
+        [FromRoute] int mapMarkerId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await mapService.DeleteMapMarkerAsync(naheulbookExecutionContext, mapMarkerId);
+            await mapService.DeleteMapMarkerAsync(naheulbookExecutionContext, mapMarkerId, cancellationToken);
         }
         catch (MapMarkerNotFoundException ex)
         {
@@ -33,12 +34,13 @@ public class MapMarkerController(IMapService mapService, IMapMapper mapMapper) :
     public async Task<ActionResult<MapMarkerResponse>> PutMarkerAsync(
         [FromServices] NaheulbookExecutionContext naheulbookExecutionContext,
         [FromRoute] int mapMarkerId,
-        [FromBody] MapMarkerRequest request
+        [FromBody] MapMarkerRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var marker = await mapService.EditMapMarkerAsync(naheulbookExecutionContext, mapMarkerId, request);
+            var marker = await mapService.EditMapMarkerAsync(naheulbookExecutionContext, mapMarkerId, request, cancellationToken);
             return mapMapper.ToResponse(marker);
         }
         catch (MapMarkerNotFoundException ex)
@@ -51,12 +53,13 @@ public class MapMarkerController(IMapService mapService, IMapMapper mapMapper) :
     public async Task<ActionResult<MapMarkerLinkResponse>> CreateMapMarkerLinkAsync(
         [FromServices] NaheulbookExecutionContext naheulbookExecutionContext,
         [FromRoute] int mapMarkerId,
-        [FromBody] MapMarkerLinkRequest request
+        [FromBody] MapMarkerLinkRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var marker = await mapService.CreateMapMarkerLinkAsync(naheulbookExecutionContext, mapMarkerId, request);
+            var marker = await mapService.CreateMapMarkerLinkAsync(naheulbookExecutionContext, mapMarkerId, request, cancellationToken);
             return mapMapper.ToResponse(marker);
         }
         catch (MapMarkerNotFoundException ex)

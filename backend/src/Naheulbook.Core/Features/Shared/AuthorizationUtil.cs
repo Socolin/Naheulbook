@@ -5,8 +5,8 @@ namespace Naheulbook.Core.Features.Shared;
 
 public interface IAuthorizationUtil
 {
-    Task EnsureAdminAccessAsync(NaheulbookExecutionContext executionContext);
-    Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateEntity itemTemplate);
+    Task EnsureAdminAccessAsync(NaheulbookExecutionContext executionContext, CancellationToken cancellationToken = default);
+    Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateEntity itemTemplate, CancellationToken cancellationToken = default);
     void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, GroupEntity? group);
     bool IsGroupOwner(NaheulbookExecutionContext executionContext, GroupEntity group);
     void EnsureCharacterAccess(NaheulbookExecutionContext executionContext, CharacterEntity character);
@@ -17,25 +17,25 @@ public interface IAuthorizationUtil
     void EnsureCanDeleteGroupInvite(NaheulbookExecutionContext executionContext, GroupInviteEntity groupInvite);
     void EnsureCanAcceptGroupInvite(NaheulbookExecutionContext executionContext, GroupInviteEntity groupInvite);
     void EnsureCanEditUser(NaheulbookExecutionContext executionContext, UserEntity user);
-    Task EnsureCanEditMapLayerAsync(NaheulbookExecutionContext executionContext, MapLayerEntity mapLayer);
+    Task EnsureCanEditMapLayerAsync(NaheulbookExecutionContext executionContext, MapLayerEntity mapLayer, CancellationToken cancellationToken = default);
 }
 
 public class AuthorizationUtil(IUnitOfWorkFactory unitOfWorkFactory) : IAuthorizationUtil
 {
-    public async Task EnsureAdminAccessAsync(NaheulbookExecutionContext executionContext)
+    public async Task EnsureAdminAccessAsync(NaheulbookExecutionContext executionContext, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var user = await uow.Users.GetAsync(executionContext.UserId);
+        var user = await uow.Users.GetAsync(executionContext.UserId, cancellationToken);
         if (user?.Admin != true)
             throw new ForbiddenAccessException();
     }
 
-    public async Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateEntity itemTemplate)
+    public async Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateEntity itemTemplate, CancellationToken cancellationToken = default)
     {
         switch (itemTemplate.Source)
         {
             case "official":
-                await EnsureAdminAccessAsync(executionContext);
+                await EnsureAdminAccessAsync(executionContext, cancellationToken);
                 break;
             case "private":
             case "community":
@@ -152,13 +152,13 @@ public class AuthorizationUtil(IUnitOfWorkFactory unitOfWorkFactory) : IAuthoriz
         throw new ForbiddenAccessException();
     }
 
-    public async Task EnsureCanEditMapLayerAsync(NaheulbookExecutionContext executionContext, MapLayerEntity mapLayer)
+    public async Task EnsureCanEditMapLayerAsync(NaheulbookExecutionContext executionContext, MapLayerEntity mapLayer, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
         if (mapLayer.Source == "official")
         {
-            var user = await uow.Users.GetAsync(executionContext.UserId);
+            var user = await uow.Users.GetAsync(executionContext.UserId, cancellationToken);
             if (user?.Admin == true)
                 return;
         }

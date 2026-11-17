@@ -9,9 +9,9 @@ namespace Naheulbook.Web.Controllers;
 public class MonsterTraitsController(IMonsterTraitService monsterTraitService, IMonsterTemplateMapper monsterTemplateMapper)
 {
     [HttpGet]
-    public async Task<ActionResult<List<MonsterTraitResponse>>> GetMonsterTraitsAsync()
+    public async Task<ActionResult<List<MonsterTraitResponse>>> GetMonsterTraitsAsync(CancellationToken cancellationToken)
     {
-        var monsterTraits = await monsterTraitService.GetMonsterTraitsAsync();
+        var monsterTraits = await monsterTraitService.GetMonsterTraitsAsync(cancellationToken);
 
         return monsterTraits.Select(monsterTemplateMapper.ToResponse).ToList();
     }

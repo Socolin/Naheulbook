@@ -12,9 +12,9 @@ public class StatsController(
 ) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<StatResponse>>> GetAllStatsAsync()
+    public async Task<ActionResult<List<StatResponse>>> GetAllStatsAsync(CancellationToken cancellationToken)
     {
-        var stats = await statService.GetAllStatsAsync();
+        var stats = await statService.GetAllStatsAsync(cancellationToken);
         return stats.Select(statMapper.ToResponse).ToList();
     }
 }

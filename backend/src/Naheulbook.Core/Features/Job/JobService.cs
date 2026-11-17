@@ -5,14 +5,14 @@ namespace Naheulbook.Core.Features.Job;
 
 public interface IJobService
 {
-    Task<ICollection<JobEntity>> GetJobsAsync();
+    Task<ICollection<JobEntity>> GetJobsAsync(CancellationToken cancellationToken = default);
 }
 
 public class JobService(IUnitOfWorkFactory unitOfWorkFactory) : IJobService
 {
-    public async Task<ICollection<JobEntity>> GetJobsAsync()
+    public async Task<ICollection<JobEntity>> GetJobsAsync(CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        return await uow.Jobs.GetAllWithAllDataAsync();
+        return await uow.Jobs.GetAllWithAllDataAsync(cancellationToken);
     }
 }

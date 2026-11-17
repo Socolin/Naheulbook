@@ -10,19 +10,19 @@ namespace Naheulbook.Core.Features.Map;
 
 public interface IMapService
 {
-    Task<MapEntity> GetMapAsync(int mapId, int? userId);
-    Task<MapEntity> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream);
-    Task<MapEntity> UpdateMapAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapRequest request);
-    Task<MapLayerEntity> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, MapLayerRequest request);
-    Task<MapLayerEntity> EditMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapLayerRequest request);
-    Task<MapMarkerEntity> CreateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapMarkerRequest request);
-    Task DeleteMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId);
-    Task<MapMarkerEntity> EditMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request);
-    Task DeleteMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId);
-    Task<List<MapEntity>> GetMapsAsync();
-    Task<MapMarkerLinkEntity> CreateMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerLinkRequest request);
-    Task<MapMarkerLinkEntity> EditMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId, MapMarkerLinkRequest request);
-    Task DeleteMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId);
+    Task<MapEntity> GetMapAsync(int mapId, int? userId, CancellationToken cancellationToken = default);
+    Task<MapEntity> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream, CancellationToken cancellationToken = default);
+    Task<MapEntity> UpdateMapAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapRequest request, CancellationToken cancellationToken = default);
+    Task<MapLayerEntity> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, MapLayerRequest request, CancellationToken cancellationToken = default);
+    Task<MapLayerEntity> EditMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapLayerRequest request, CancellationToken cancellationToken = default);
+    Task<MapMarkerEntity> CreateMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapMarkerRequest request, CancellationToken cancellationToken = default);
+    Task DeleteMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, CancellationToken cancellationToken = default);
+    Task<MapMarkerEntity> EditMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request, CancellationToken cancellationToken = default);
+    Task DeleteMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, CancellationToken cancellationToken = default);
+    Task<List<MapEntity>> GetMapsAsync(CancellationToken cancellationToken = default);
+    Task<MapMarkerLinkEntity> CreateMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerLinkRequest request, CancellationToken cancellationToken = default);
+    Task<MapMarkerLinkEntity> EditMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId, MapMarkerLinkRequest request, CancellationToken cancellationToken = default);
+    Task DeleteMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId, CancellationToken cancellationToken = default);
 }
 
 public class MapService(
@@ -33,19 +33,19 @@ public class MapService(
     ILogger logger
 ) : IMapService
 {
-    public async Task<MapEntity> GetMapAsync(int mapId, int? userId)
+    public async Task<MapEntity> GetMapAsync(int mapId, int? userId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var map = await uow.Maps.GetMapDetailsForCurrentUserAsync(mapId, userId);
+        var map = await uow.Maps.GetMapDetailsForCurrentUserAsync(mapId, userId, cancellationToken);
         if (map == null)
             throw new MapNotFoundException(mapId);
 
         return map;
     }
 
-    public async Task<MapEntity> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream)
+    public async Task<MapEntity> CreateMapAsync(NaheulbookExecutionContext executionContext, CreateMapRequest request, Stream imageStream, CancellationToken cancellationToken = default)
     {
-        await authorizationUtil.EnsureAdminAccessAsync(executionContext);
+        await authorizationUtil.EnsureAdminAccessAsync(executionContext, cancellationToken);
 
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
         var mapData = new MapData
@@ -66,7 +66,7 @@ public class MapService(
         };
 
         uow.Maps.Add(map);
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         map.Data = jsonUtil.SerializeNonNull(mapData);
 
         try
@@ -80,36 +80,36 @@ public class MapService(
             uow.Maps.Remove(map);
         }
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         return map;
     }
 
-    public async Task<MapEntity> UpdateMapAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapRequest request)
+    public async Task<MapEntity> UpdateMapAsync(NaheulbookExecutionContext executionContext, int mapId, CreateMapRequest request, CancellationToken cancellationToken = default)
     {
-        await authorizationUtil.EnsureAdminAccessAsync(executionContext);
+        await authorizationUtil.EnsureAdminAccessAsync(executionContext, cancellationToken);
 
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var map = await uow.Maps.GetAsync(mapId);
+        var map = await uow.Maps.GetAsync(mapId, cancellationToken);
         if (map == null)
             throw new MapNotFoundException(mapId);
 
         map.Name = request.Name;
         map.Data = jsonUtil.SerializeNonNull(request.Data);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         return map;
     }
 
-    public async Task<MapLayerEntity> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, MapLayerRequest request)
+    public async Task<MapLayerEntity> CreateMapLayerAsync(NaheulbookExecutionContext executionContext, int mapId, MapLayerRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
         switch (request.Source)
         {
             case "official":
-                await authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                await authorizationUtil.EnsureAdminAccessAsync(executionContext, cancellationToken);
                 break;
             case "private":
                 break;
@@ -117,7 +117,7 @@ public class MapService(
                 throw new InvalidSourceException(request.Source);
         }
 
-        var map = await uow.Maps.GetAsync(mapId);
+        var map = await uow.Maps.GetAsync(mapId, cancellationToken);
         if (map == null)
             throw new MapNotFoundException(mapId);
 
@@ -131,22 +131,22 @@ public class MapService(
         };
 
         uow.MapLayers.Add(mapLayer);
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         return mapLayer;
     }
 
-    public async Task<MapLayerEntity> EditMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapLayerRequest request)
+    public async Task<MapLayerEntity> EditMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, MapLayerRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var mapLayer = await uow.MapLayers.GetAsync(mapLayerId);
+        var mapLayer = await uow.MapLayers.GetAsync(mapLayerId, cancellationToken);
         if (mapLayer == null)
             throw new MapLayerNotFoundException(mapLayerId);
 
         switch (mapLayer.Source)
         {
             case "official":
-                await authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                await authorizationUtil.EnsureAdminAccessAsync(executionContext, cancellationToken);
                 break;
             case "private":
                 break;
@@ -157,7 +157,7 @@ public class MapService(
         switch (request.Source)
         {
             case "official":
-                await authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                await authorizationUtil.EnsureAdminAccessAsync(executionContext, cancellationToken);
                 break;
             case "private":
                 break;
@@ -170,8 +170,8 @@ public class MapService(
         mapLayer.IsGm = request.IsGm;
         mapLayer.UserId = request.Source == "official" ? null : executionContext.UserId;
 
-        await uow.SaveChangesAsync();
-        await uow.MapLayers.LoadMarkersForResponseAsync(mapLayer);
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
+        await uow.MapLayers.LoadMarkersForResponseAsync(mapLayer, cancellationToken);
 
         return mapLayer;
     }
@@ -179,16 +179,17 @@ public class MapService(
     public async Task<MapMarkerEntity> CreateMapMarkerAsync(
         NaheulbookExecutionContext executionContext,
         int mapLayerId,
-        MapMarkerRequest request
+        MapMarkerRequest request,
+        CancellationToken cancellationToken = default
     )
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var mapLayer = await uow.MapLayers.GetAsync(mapLayerId);
+        var mapLayer = await uow.MapLayers.GetAsync(mapLayerId, cancellationToken);
         if (mapLayer == null)
             throw new MapLayerNotFoundException(mapLayerId);
 
-        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapLayer);
+        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapLayer, cancellationToken);
 
         var mapMarker = new MapMarkerEntity
         {
@@ -202,67 +203,67 @@ public class MapService(
 
         uow.MapMarkers.Add(mapMarker);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         return mapMarker;
     }
 
-    public async Task DeleteMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId)
+    public async Task DeleteMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var mapMarker = await uow.MapMarkers.GetWithLayerAsync(mapMarkerId);
+        var mapMarker = await uow.MapMarkers.GetWithLayerAsync(mapMarkerId, cancellationToken);
         if (mapMarker == null)
             throw new MapMarkerNotFoundException(mapMarkerId);
 
-        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarker.Layer);
+        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarker.Layer, cancellationToken);
 
         uow.MapMarkers.Remove(mapMarker);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
     }
 
-    public async Task<MapMarkerEntity> EditMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request)
+    public async Task<MapMarkerEntity> EditMapMarkerAsync(NaheulbookExecutionContext executionContext, int mapMarkerId, MapMarkerRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var mapMarker = await uow.MapMarkers.GetWithLayerAsync(mapMarkerId);
+        var mapMarker = await uow.MapMarkers.GetWithLayerAsync(mapMarkerId, cancellationToken);
         if (mapMarker == null)
             throw new MapMarkerNotFoundException(mapMarkerId);
 
-        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarker.Layer);
+        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarker.Layer, cancellationToken);
 
         mapMarker.Name = request.Name;
         mapMarker.Description = request.Description;
         mapMarker.Type = request.Type;
         mapMarker.MarkerInfo = jsonUtil.SerializeNonNull(request.MarkerInfo);
 
-        await uow.SaveChangesAsync();
-        await uow.MapMarkers.LoadLinksAsync(mapMarker);
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
+        await uow.MapMarkers.LoadLinksAsync(mapMarker, cancellationToken);
 
         return mapMarker;
     }
 
-    public async Task DeleteMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId)
+    public async Task DeleteMapLayerAsync(NaheulbookExecutionContext executionContext, int mapLayerId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var mapLayer = await uow.MapLayers.GetAsync(mapLayerId);
+        var mapLayer = await uow.MapLayers.GetAsync(mapLayerId, cancellationToken);
         if (mapLayer == null)
             throw new MapLayerNotFoundException(mapLayerId);
 
-        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapLayer);
+        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapLayer, cancellationToken);
 
         uow.MapLayers.Remove(mapLayer);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
     }
 
-    public async Task<List<MapEntity>> GetMapsAsync()
+    public async Task<List<MapEntity>> GetMapsAsync(CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var maps = await uow.Maps.GetAllAsync();
+        var maps = await uow.Maps.GetAllAsync(cancellationToken);
 
         return maps;
     }
@@ -270,28 +271,29 @@ public class MapService(
     public async Task<MapMarkerLinkEntity> CreateMapMarkerLinkAsync(
         NaheulbookExecutionContext executionContext,
         int mapMarkerId,
-        MapMarkerLinkRequest request
+        MapMarkerLinkRequest request,
+        CancellationToken cancellationToken = default
     )
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var mapMarker = await uow.MapMarkers.GetWithLayerAsync(mapMarkerId);
+        var mapMarker = await uow.MapMarkers.GetWithLayerAsync(mapMarkerId, cancellationToken);
         if (mapMarker == null)
             throw new MapMarkerNotFoundException(mapMarkerId);
 
-        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarker.Layer);
+        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarker.Layer, cancellationToken);
 
-        var targetMap = await uow.Maps.GetAsync(request.TargetMapId);
+        var targetMap = await uow.Maps.GetAsync(request.TargetMapId, cancellationToken);
         if (targetMap == null)
             throw new MapNotFoundException(request.TargetMapId);
 
         if (request.TargetMapMarkerId.HasValue)
         {
-            var targetMapMarker = await uow.MapMarkers.GetWithLayerAsync(request.TargetMapMarkerId.Value);
+            var targetMapMarker = await uow.MapMarkers.GetWithLayerAsync(request.TargetMapMarkerId.Value, cancellationToken);
             if (targetMapMarker == null)
                 throw new MapMarkerNotFoundException(request.TargetMapMarkerId.Value);
 
-            await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, targetMapMarker.Layer);
+            await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, targetMapMarker.Layer, cancellationToken);
         }
 
         var mapMarkerLink = new MapMarkerLinkEntity
@@ -305,44 +307,44 @@ public class MapService(
 
         uow.MapMarkerLinks.Add(mapMarkerLink);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         return mapMarkerLink;
     }
 
-    public async Task<MapMarkerLinkEntity> EditMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId, MapMarkerLinkRequest request)
+    public async Task<MapMarkerLinkEntity> EditMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId, MapMarkerLinkRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var mapMarkerLink = await uow.MapMarkerLinks.GetWithLayerAsync(mapMarkerLinkId);
+        var mapMarkerLink = await uow.MapMarkerLinks.GetWithLayerAsync(mapMarkerLinkId, cancellationToken);
         if (mapMarkerLink == null)
             throw new MapMarkerNotFoundException(mapMarkerLinkId);
 
-        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarkerLink.MapMarker.Layer);
+        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarkerLink.MapMarker.Layer, cancellationToken);
 
         mapMarkerLink.Name = request.Name;
         mapMarkerLink.TargetMapId = request.TargetMapId;
         mapMarkerLink.TargetMapMarkerId = request.TargetMapMarkerId;
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
-        await uow.MapMarkerLinks.LoadTargetMapAsync(mapMarkerLink);
+        await uow.MapMarkerLinks.LoadTargetMapAsync(mapMarkerLink, cancellationToken);
 
         return mapMarkerLink;
     }
 
-    public async Task DeleteMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId)
+    public async Task DeleteMapMarkerLinkAsync(NaheulbookExecutionContext executionContext, int mapMarkerLinkId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var mapMarkerLink = await uow.MapMarkerLinks.GetWithLayerAsync(mapMarkerLinkId);
+        var mapMarkerLink = await uow.MapMarkerLinks.GetWithLayerAsync(mapMarkerLinkId, cancellationToken);
         if (mapMarkerLink == null)
             throw new MapMarkerNotFoundException(mapMarkerLinkId);
 
-        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarkerLink.MapMarker.Layer);
+        await authorizationUtil.EnsureCanEditMapLayerAsync(executionContext, mapMarkerLink.MapMarker.Layer, cancellationToken);
 
         uow.MapMarkerLinks.Remove(mapMarkerLink);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
     }
 }

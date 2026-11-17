@@ -39,7 +39,8 @@ public class GoogleAuthenticationController(
 
     [HttpPost("completeAuthentication")]
     public async Task<ActionResult<UserJwtResponse>> CompleteGoogleAuthenticationAsync(
-        [FromBody] CompleteGoogleAuthenticationRequest request
+        [FromBody] CompleteGoogleAuthenticationRequest request,
+        CancellationToken cancellationToken
     )
     {
         var loginToken = HttpContext.Session.GetString(GoogleLoginTokenKey);
@@ -52,9 +53,9 @@ public class GoogleAuthenticationController(
 
         var currentUserId = HttpContext.Session.GetCurrentUserId();
         if (currentUserId.HasValue)
-            await socialMediaUserLinkService.AssociateUserToGoogleIdAsync(currentUserId.Value, profile.Id);
+            await socialMediaUserLinkService.AssociateUserToGoogleIdAsync(currentUserId.Value, profile.Id, cancellationToken);
 
-        var user = await socialMediaUserLinkService.GetOrCreateUserFromGoogleAsync(profile.DisplayName, profile.Id);
+        var user = await socialMediaUserLinkService.GetOrCreateUserFromGoogleAsync(profile.DisplayName, profile.Id, cancellationToken);
 
         HttpContext.Session.SetCurrentUserId(user.Id);
         var token = jwtService.GenerateJwtToken(user.Id);

@@ -40,7 +40,7 @@ public class ItemTemplateSectionsControllerTests
         _itemTemplateMapper.ToResponse(itemTemplateSection)
             .Returns(itemTemplateSectionResponse);
 
-        var result = await _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, createItemTemplateSectionRequest);
+        var result = await _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, createItemTemplateSectionRequest, CancellationToken.None);
 
         result.StatusCode.Should().Be(201);
         result.Value.Should().Be(itemTemplateSectionResponse);
@@ -54,7 +54,7 @@ public class ItemTemplateSectionsControllerTests
         _itemTemplateSectionService.CreateItemTemplateSectionAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateSectionRequest>())
             .Returns(Task.FromException<ItemTemplateSectionEntity>(new ForbiddenAccessException()));
 
-        var act = () => _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, createItemTemplateSectionRequest);
+        var act = () => _itemTemplateSectionsController.PostCreateSectionAsync(_executionContext, createItemTemplateSectionRequest, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }

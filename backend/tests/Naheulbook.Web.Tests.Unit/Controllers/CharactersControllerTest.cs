@@ -71,7 +71,7 @@ public class CharactersControllerTest
         _characterMapper.ToSummaryResponse(entity2)
             .Returns(response2);
 
-        var result = await _controller.GetCharactersListAsync(_executionContext);
+        var result = await _controller.GetCharactersListAsync(_executionContext, CancellationToken.None);
 
         result.Value.Should().Equal(response1, response2);
     }
@@ -89,7 +89,7 @@ public class CharactersControllerTest
         _characterMapper.ToResponse(character)
             .Returns(characterResponse);
 
-        var result = await _controller.GetCharacterDetailsAsync(_executionContext, characterId);
+        var result = await _controller.GetCharacterDetailsAsync(_executionContext, characterId, CancellationToken.None);
 
         result.Value.Should().BeSameAs(characterResponse);
     }
@@ -106,7 +106,7 @@ public class CharactersControllerTest
         _characterMapper.ToResponse(character)
             .Returns(characterResponse);
 
-        var result = await _controller.GetCharacterDetailsAsync(_executionContext, characterId);
+        var result = await _controller.GetCharacterDetailsAsync(_executionContext, characterId, CancellationToken.None);
 
         result.Value.Should().BeSameAs(characterResponse);
     }
@@ -125,7 +125,7 @@ public class CharactersControllerTest
         _characterMapper.ToGmResponse(character)
             .Returns(characterResponse);
 
-        var result = await _controller.GetCharacterDetailsAsync(_executionContext, characterId);
+        var result = await _controller.GetCharacterDetailsAsync(_executionContext, characterId, CancellationToken.None);
 
         result.Value.Should().BeSameAs(characterResponse);
     }
@@ -137,7 +137,7 @@ public class CharactersControllerTest
         _characterService.LoadCharacterDetailsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
             .Returns(Task.FromException<CharacterEntity>(new ForbiddenAccessException()));
 
-        Func<Task> act = () => _controller.GetCharacterDetailsAsync(_executionContext, characterId);
+        Func<Task> act = () => _controller.GetCharacterDetailsAsync(_executionContext, characterId, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }
@@ -149,7 +149,7 @@ public class CharactersControllerTest
         _characterService.LoadCharacterDetailsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
             .Returns(Task.FromException<CharacterEntity>(new CharacterNotFoundException(characterId)));
 
-        Func<Task> act = () => _controller.GetCharacterDetailsAsync(_executionContext, characterId);
+        Func<Task> act = () => _controller.GetCharacterDetailsAsync(_executionContext, characterId, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
     }
@@ -166,7 +166,7 @@ public class CharactersControllerTest
         _characterMapper.ToCreateResponse(createdCharacter)
             .Returns(characterResponse);
 
-        var result = await _controller.PostCreateCharacterAsync(_executionContext, createCharacterRequest);
+        var result = await _controller.PostCreateCharacterAsync(_executionContext, createCharacterRequest, CancellationToken.None);
 
         result.Value.Should().BeSameAs(characterResponse);
         result.StatusCode.Should().Be(StatusCodes.Status201Created);
@@ -185,7 +185,7 @@ public class CharactersControllerTest
         _itemMapper.ToResponse(item)
             .Returns(itemResponse);
 
-        var result = await _controller.PostAddItemToCharacterInventoryAsync(_executionContext, characterId, request);
+        var result = await _controller.PostAddItemToCharacterInventoryAsync(_executionContext, characterId, request, CancellationToken.None);
 
         result.Value.Should().BeSameAs(itemResponse);
     }
@@ -200,7 +200,7 @@ public class CharactersControllerTest
         _characterService.AddItemToCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
             .Returns(Task.FromException<ItemEntity>(exception));
 
-        Func<Task> act = () => _controller.PostAddItemToCharacterInventoryAsync(_executionContext, characterId, request);
+        Func<Task> act = () => _controller.PostAddItemToCharacterInventoryAsync(_executionContext, characterId, request, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -215,7 +215,7 @@ public class CharactersControllerTest
         _characterService.AddItemToCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<CreateItemRequest>())
             .Returns(Task.FromException<ItemEntity>(new ItemTemplateNotFoundException(itemTemplateId)));
 
-        Func<Task> act = () => _controller.PostAddItemToCharacterInventoryAsync(_executionContext, characterId, request);
+        Func<Task> act = () => _controller.PostAddItemToCharacterInventoryAsync(_executionContext, characterId, request, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
     }
@@ -237,7 +237,7 @@ public class CharactersControllerTest
         _lootMapper.ToResponse(entity2)
             .Returns(response2);
 
-        var result = await _controller.GetCharacterLootsAsync(_executionContext, characterId);
+        var result = await _controller.GetCharacterLootsAsync(_executionContext, characterId, CancellationToken.None);
 
         result.Value.Should().Equal(response1, response2);
     }
@@ -249,7 +249,7 @@ public class CharactersControllerTest
         _characterService.GetCharacterLootsAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>())
             .Returns(Task.FromException<List<LootEntity>>(exception));
 
-        Func<Task> act = () => _controller.GetCharacterLootsAsync(_executionContext, 2);
+        Func<Task> act = () => _controller.GetCharacterLootsAsync(_executionContext, 2, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -263,7 +263,7 @@ public class CharactersControllerTest
         _characterService.AddModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<AddCharacterModifierRequest>())
             .Returns(Task.FromException<CharacterModifierEntity>(exception));
 
-        Func<Task> act = () => _controller.PostAddModifiersAsync(_executionContext, 2, request);
+        Func<Task> act = () => _controller.PostAddModifiersAsync(_executionContext, 2, request, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -275,7 +275,7 @@ public class CharactersControllerTest
         _characterService.DeleteModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<int>())
             .Returns(Task.FromException<CharacterModifierEntity>(exception));
 
-        Func<Task> act = () => _controller.DeleteModifiersAsync(_executionContext, 2, 4);
+        Func<Task> act = () => _controller.DeleteModifiersAsync(_executionContext, 2, 4, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -287,7 +287,7 @@ public class CharactersControllerTest
         _characterService.ToggleModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<int>())
             .Returns(Task.FromException<CharacterModifierEntity>(exception));
 
-        Func<Task> act = () => _controller.PostToggleModifiersAsync(_executionContext, 2, 4);
+        Func<Task> act = () => _controller.PostToggleModifiersAsync(_executionContext, 2, 4, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -309,7 +309,7 @@ public class CharactersControllerTest
         _characterMapper.ToResponse(entity2)
             .Returns(response2);
 
-        var result = await _controller.GetCharacterHistoryEntryAsync(_executionContext, characterId, 8);
+        var result = await _controller.GetCharacterHistoryEntryAsync(_executionContext, characterId, 8, CancellationToken.None);
 
         result.Value.Should().Equal(response1, response2);
     }
@@ -321,7 +321,7 @@ public class CharactersControllerTest
         _characterService.GetCharacterHistoryEntryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<int>())
             .Returns(Task.FromException<List<IHistoryEntry>>(exception));
 
-        Func<Task> act = () => _controller.GetCharacterHistoryEntryAsync(_executionContext, 42, 0);
+        Func<Task> act = () => _controller.GetCharacterHistoryEntryAsync(_executionContext, 42, 0, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -334,7 +334,7 @@ public class CharactersControllerTest
         _characterService.UpdateCharacterAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<PatchCharacterRequest>())
             .Returns(Task.FromException<List<LootEntity>>(exception));
 
-        Func<Task> act = () => _controller.PatchCharacterAsync(_executionContext, 2, new PatchCharacterRequest());
+        Func<Task> act = () => _controller.PatchCharacterAsync(_executionContext, 2, new PatchCharacterRequest(), CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -346,7 +346,7 @@ public class CharactersControllerTest
         _characterService.SetCharacterAdBonusStatAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<PutStatBonusAdRequest>())
             .Returns(Task.FromException<List<LootEntity>>(exception));
 
-        Func<Task> act = () => _controller.PutStatBonusAdAsync(_executionContext, 2, new PutStatBonusAdRequest {Stat = string.Empty});
+        Func<Task> act = () => _controller.PutStatBonusAdAsync(_executionContext, 2, new PutStatBonusAdRequest {Stat = string.Empty}, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }

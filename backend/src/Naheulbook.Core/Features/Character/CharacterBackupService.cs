@@ -6,7 +6,7 @@ namespace Naheulbook.Core.Features.Character;
 
 public interface ICharacterBackupService
 {
-    Task<BackupCharacter> GetBackupCharacterAsync(NaheulbookExecutionContext executionContext, int characterId);
+    Task<BackupCharacter> GetBackupCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CancellationToken cancellationToken = default);
 }
 
 public class CharacterBackupService(
@@ -15,11 +15,11 @@ public class CharacterBackupService(
     ICharacterBackupMapper characterBackupMapper
 ) : ICharacterBackupService
 {
-    public async Task<BackupCharacter> GetBackupCharacterAsync(NaheulbookExecutionContext executionContext, int characterId)
+    public async Task<BackupCharacter> GetBackupCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithAllDataAsync(characterId);
+        var character = await uow.Characters.GetWithAllDataAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 

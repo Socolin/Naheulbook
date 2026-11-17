@@ -8,22 +8,22 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IMonsterTemplateRepository : IRepository<MonsterTemplateEntity>
 {
-    Task<List<MonsterTemplateEntity>> GetAllWithItemsFullDataAsync();
-    Task<List<MonsterTemplateEntity>> SearchByNameAndSubCategoryAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId, int maxResult);
-    Task<MonsterTemplateEntity?> GetByIdWithItemsAsync(int monsterTemplateId);
-    Task<MonsterTemplateEntity?> GetByIdWithItemsFullDataAsync(int monsterTemplateId);
+    Task<List<MonsterTemplateEntity>> GetAllWithItemsFullDataAsync(CancellationToken cancellationToken = default);
+    Task<List<MonsterTemplateEntity>> SearchByNameAndSubCategoryAsync(string filter, int? monsterTypeId, int? monsterSubCategoryId, int maxResult, CancellationToken cancellationToken = default);
+    Task<MonsterTemplateEntity?> GetByIdWithItemsAsync(int monsterTemplateId, CancellationToken cancellationToken = default);
+    Task<MonsterTemplateEntity?> GetByIdWithItemsFullDataAsync(int monsterTemplateId, CancellationToken cancellationToken = default);
 }
 
 public class MonsterTemplateRepository(NaheulbookDbContext context) : Repository<MonsterTemplateEntity, NaheulbookDbContext>(context), IMonsterTemplateRepository
 {
-    public Task<List<MonsterTemplateEntity>> GetAllWithItemsFullDataAsync()
+    public Task<List<MonsterTemplateEntity>> GetAllWithItemsFullDataAsync(CancellationToken cancellationToken = default)
     {
         return Context.MonsterTemplates
             .IncludeChildWithItemTemplateDetails(x => x.Items, x => x.ItemTemplate)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<List<MonsterTemplateEntity>> SearchByNameAndSubCategoryAsync(string partialName, int? monsterTypeId, int? monsterSubCategoryId, int maxResult)
+    public Task<List<MonsterTemplateEntity>> SearchByNameAndSubCategoryAsync(string partialName, int? monsterTypeId, int? monsterSubCategoryId, int maxResult, CancellationToken cancellationToken = default)
     {
         var query = Context.MonsterTemplates
             .Include(m => m.Items)
@@ -41,20 +41,20 @@ public class MonsterTemplateRepository(NaheulbookDbContext context) : Repository
 
         return query
             .Take(maxResult)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<MonsterTemplateEntity?> GetByIdWithItemsAsync(int monsterTemplateId)
+    public Task<MonsterTemplateEntity?> GetByIdWithItemsAsync(int monsterTemplateId, CancellationToken cancellationToken = default)
     {
         return Context.MonsterTemplates
             .Include(x => x.Items)
-            .SingleOrDefaultAsync(x => x.Id == monsterTemplateId);
+            .SingleOrDefaultAsync(x => x.Id == monsterTemplateId, cancellationToken);
     }
 
-    public Task<MonsterTemplateEntity?> GetByIdWithItemsFullDataAsync(int monsterTemplateId)
+    public Task<MonsterTemplateEntity?> GetByIdWithItemsFullDataAsync(int monsterTemplateId, CancellationToken cancellationToken = default)
     {
         return Context.MonsterTemplates
             .IncludeChildWithItemTemplateDetails(x => x.Items, x => x.ItemTemplate)
-            .SingleOrDefaultAsync(x => x.Id == monsterTemplateId);
+            .SingleOrDefaultAsync(x => x.Id == monsterTemplateId, cancellationToken);
     }
 }

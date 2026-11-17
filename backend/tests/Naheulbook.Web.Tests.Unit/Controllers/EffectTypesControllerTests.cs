@@ -41,7 +41,7 @@ public class EffectTypesControllerTests
         _effectMapper.ToResponse(effectType)
             .Returns(effectTypeResponse);
 
-        var result = await _effectTypesController.PostCreateTypeAsync(_executionContext, createEffectTypeRequest);
+        var result = await _effectTypesController.PostCreateTypeAsync(_executionContext, createEffectTypeRequest, CancellationToken.None);
 
         result.StatusCode.Should().Be(201);
         result.Value.Should().Be(effectTypeResponse);
@@ -55,7 +55,7 @@ public class EffectTypesControllerTests
         _effectService.CreateEffectTypeAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateEffectTypeRequest>())
             .Returns(Task.FromException<EffectTypeEntity>(new ForbiddenAccessException()));
 
-        Func<Task<JsonResult>> act = () => _effectTypesController.PostCreateTypeAsync(_executionContext, request);
+        Func<Task<JsonResult>> act = () => _effectTypesController.PostCreateTypeAsync(_executionContext, request, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }

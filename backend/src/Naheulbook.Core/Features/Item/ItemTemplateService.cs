@@ -2,17 +2,18 @@ using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Core.Features.Item;
 
 public interface IItemTemplateService
 {
-    Task<ItemTemplateEntity> GetItemTemplateAsync(Guid itemTemplateId);
-    Task<ItemTemplateEntity> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request);
-    Task<ItemTemplateEntity> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, Guid itemTemplateId, ItemTemplateRequest request);
-    Task<List<ItemTemplateEntity>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId);
+    Task<ItemTemplateEntity> GetItemTemplateAsync(Guid itemTemplateId, CancellationToken cancellationToken = default);
+    Task<ItemTemplateEntity> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request, CancellationToken cancellationToken = default);
+    Task<ItemTemplateEntity> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, Guid itemTemplateId, ItemTemplateRequest request, CancellationToken cancellationToken = default);
+    Task<List<ItemTemplateEntity>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId, CancellationToken cancellationToken = default);
 
-    Task<ICollection<SlotEntity>> GetItemSlotsAsync();
+    Task<ICollection<SlotEntity>> GetItemSlotsAsync(CancellationToken cancellationToken = default);
 }
 
 public class ItemTemplateService(
@@ -23,19 +24,19 @@ public class ItemTemplateService(
     IStringCleanupUtil stringCleanupUtil
 ) : IItemTemplateService
 {
-    public async Task<ItemTemplateEntity> GetItemTemplateAsync(Guid itemTemplateId)
+    public async Task<ItemTemplateEntity> GetItemTemplateAsync(Guid itemTemplateId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var itemTemplate = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
+        var itemTemplate = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId, cancellationToken);
         if (itemTemplate == null)
             throw new ItemTemplateNotFoundException(itemTemplateId);
         return itemTemplate;
     }
 
-    public async Task<ItemTemplateEntity> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request)
+    public async Task<ItemTemplateEntity> CreateItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateRequest request, CancellationToken cancellationToken = default)
     {
         if (request.Source == "official")
-            await authorizationUtil.EnsureAdminAccessAsync(executionContext);
+            await authorizationUtil.EnsureAdminAccessAsync(executionContext, cancellationToken);
 
         var itemTemplate = itemTemplateMapper.ToEntity(request);
 
@@ -44,26 +45,26 @@ public class ItemTemplateService(
 
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
         uow.ItemTemplates.Add(itemTemplate);
-        await uow.SaveChangesAsync();
-        itemTemplate = (await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplate.Id))!;
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
+        itemTemplate = (await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplate.Id, cancellationToken))!;
 
         return itemTemplate;
     }
 
-    public async Task<ItemTemplateEntity> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, Guid itemTemplateId, ItemTemplateRequest request)
+    public async Task<ItemTemplateEntity> EditItemTemplateAsync(NaheulbookExecutionContext executionContext, Guid itemTemplateId, ItemTemplateRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var itemTemplate = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId);
+        var itemTemplate = await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId, cancellationToken);
         if (itemTemplate == null)
             throw new ItemTemplateNotFoundException(itemTemplateId);
 
-        await authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, itemTemplate);
+        await authorizationUtil.EnsureCanEditItemTemplateAsync(executionContext, itemTemplate, cancellationToken);
 
         if (itemTemplate.Source != request.Source)
         {
             if (request.Source == "official")
             {
-                await authorizationUtil.EnsureAdminAccessAsync(executionContext);
+                await authorizationUtil.EnsureAdminAccessAsync(executionContext, cancellationToken);
                 itemTemplate.SourceUserId = null;
             }
             else
@@ -72,12 +73,12 @@ public class ItemTemplateService(
 
         itemTemplateUtil.ApplyChangesFromRequest(itemTemplate, request);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
-        return (await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId))!;
+        return (await uow.ItemTemplates.GetWithModifiersWithRequirementsWithSkillsWithSkillModifiersWithSlotsWithUnSkillsAsync(itemTemplateId, cancellationToken))!;
     }
 
-    public async Task<List<ItemTemplateEntity>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId)
+    public async Task<List<ItemTemplateEntity>> SearchItemTemplateAsync(string filter, int maxResultCount, int? currentUserId, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(filter))
             return new List<ItemTemplateEntity>();
@@ -86,22 +87,22 @@ public class ItemTemplateService(
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
         var cleanFilter = stringCleanupUtil.RemoveAccents(filter).ToUpperInvariant();
 
-        var exactMatchingItems = await uow.ItemTemplates.GetItemByCleanNameWithAllDataAsync(cleanFilter, maxResultCount, currentUserId, true);
+        var exactMatchingItems = await uow.ItemTemplates.GetItemByCleanNameWithAllDataAsync(cleanFilter, maxResultCount, currentUserId, true, cancellationToken);
         matchingItemTemplates.AddRange(exactMatchingItems);
 
-        var partialMatchingItems = await uow.ItemTemplates.GetItemByPartialCleanNameWithAllDataAsync(cleanFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id), currentUserId, true);
+        var partialMatchingItems = await uow.ItemTemplates.GetItemByPartialCleanNameWithAllDataAsync(cleanFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id), currentUserId, true, cancellationToken);
         matchingItemTemplates.AddRange(partialMatchingItems);
 
         var noSeparatorFilter = stringCleanupUtil.RemoveSeparators(cleanFilter);
-        var partialMatchingIgnoreSpacesItems = await uow.ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(noSeparatorFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id), currentUserId, true);
+        var partialMatchingIgnoreSpacesItems = await uow.ItemTemplates.GetItemByPartialCleanNameWithoutSeparatorWithAllDataAsync(noSeparatorFilter, maxResultCount - matchingItemTemplates.Count, matchingItemTemplates.Select(i => i.Id), currentUserId, true, cancellationToken);
         matchingItemTemplates.AddRange(partialMatchingIgnoreSpacesItems);
 
         return matchingItemTemplates;
     }
 
-    public async Task<ICollection<SlotEntity>> GetItemSlotsAsync()
+    public async Task<ICollection<SlotEntity>> GetItemSlotsAsync(CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        return await uow.Slots.GetAllAsync();
+        return await uow.Slots.GetAllAsync(cancellationToken);
     }
 }

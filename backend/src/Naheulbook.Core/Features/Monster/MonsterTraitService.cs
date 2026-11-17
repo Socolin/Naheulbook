@@ -5,14 +5,14 @@ namespace Naheulbook.Core.Features.Monster;
 
 public interface IMonsterTraitService
 {
-    Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync();
+    Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync(CancellationToken cancellationToken = default);
 }
 
 public class MonsterTraitService(IUnitOfWorkFactory unitOfWorkFactory) : IMonsterTraitService
 {
-    public async Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync()
+    public async Task<List<MonsterTraitEntity>> GetMonsterTraitsAsync(CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        return await uow.MonsterTraits.GetAllAsync();
+        return await uow.MonsterTraits.GetAllAsync(cancellationToken);
     }
 }

@@ -12,9 +12,9 @@ public class ItemTypesController(
 )
 {
     [HttpGet]
-    public async Task<ActionResult<List<ItemTypeResponse>>> GetAllItemTypesAsync()
+    public async Task<ActionResult<List<ItemTypeResponse>>> GetAllItemTypesAsync(CancellationToken cancellationToken)
     {
-        var itemTypes = await itemTypeService.GetAllItemTypesAsync();
+        var itemTypes = await itemTypeService.GetAllItemTypesAsync(cancellationToken);
         return itemTypes.Select(itemTemplateMapper.ToResponse).ToList();
     }
 }

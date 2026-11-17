@@ -20,7 +20,7 @@ public class TwitterAuthenticationController(
     private const string TwitterOauthTokenKey = "twitterOauthToken";
 
     [HttpGet("initOAuthAuthentication")]
-    public async Task<ActionResult<TwitterAuthenticationInitResponse>> PostInitOauthAuthenticationAsync()
+    public async Task<ActionResult<TwitterAuthenticationInitResponse>> PostInitOauthAuthenticationAsync(CancellationToken cancellationToken)
     {
         var requestToken =  await twitterClient.GetRequestTokenAsync();
 
@@ -34,7 +34,8 @@ public class TwitterAuthenticationController(
 
     [HttpPost("completeAuthentication")]
     public async Task<ActionResult<UserJwtResponse>> CompleteTwitterAuthenticationAsync(
-        [FromBody] CompleteTwitterAuthenticationRequest request
+        [FromBody] CompleteTwitterAuthenticationRequest request,
+        CancellationToken cancellationToken
     )
     {
         var loginToken = HttpContext.Session.GetString(TwitterOauthTokenKey);
@@ -46,9 +47,9 @@ public class TwitterAuthenticationController(
 
         var currentUserId = HttpContext.Session.GetCurrentUserId();
         if (currentUserId.HasValue)
-            await socialMediaUserLinkService.AssociateUserToTwitterIdAsync(currentUserId.Value, accessToken.UserId);
+            await socialMediaUserLinkService.AssociateUserToTwitterIdAsync(currentUserId.Value, accessToken.UserId, cancellationToken);
 
-        var user = await socialMediaUserLinkService.GetOrCreateUserFromTwitterAsync(accessToken.ScreenName, accessToken.UserId);
+        var user = await socialMediaUserLinkService.GetOrCreateUserFromTwitterAsync(accessToken.ScreenName, accessToken.UserId, cancellationToken);
 
         HttpContext.Session.SetCurrentUserId(user.Id);
         var token = jwtService.GenerateJwtToken(user.Id);

@@ -49,7 +49,7 @@ public interface IUnitOfWork : IDisposable
     IUserRepository Users { get; }
     IUserAccessTokenRepository UserAccessTokenRepository { get; }
 
-    Task<int> SaveChangesAsync();
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
 
 public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
@@ -100,9 +100,9 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public IUserRepository Users => new UserRepository(_naheulbookDbContext);
     public IUserAccessTokenRepository UserAccessTokenRepository => new UserAccessTokenRepository(_naheulbookDbContext);
 
-    public Task<int> SaveChangesAsync()
+    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return _naheulbookDbContext.SaveChangesAsync();
+        return _naheulbookDbContext.SaveChangesAsync(cancellationToken);
     }
 
     public void Dispose()

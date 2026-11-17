@@ -7,29 +7,30 @@ using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Extensions;
+using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Core.Features.Character;
 
 public interface ICharacterService
 {
-    Task<List<CharacterEntity>> GetCharacterListAsync(NaheulbookExecutionContext executionContext);
-    Task<CharacterEntity> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request);
-    Task<CharacterEntity> CreateCustomCharacterAsync(NaheulbookExecutionContext executionContext, CreateCustomCharacterRequest request);
-    Task<CharacterEntity> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId);
-    Task<ItemEntity> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request);
-    Task<List<LootEntity>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId);
-    Task<List<IHistoryEntry>> GetCharacterHistoryEntryAsync(NaheulbookExecutionContext executionContext, int characterId, int page);
-    Task<bool> EnsureUserCanAccessCharacterAndGetIfIsGroupMasterAsync(NaheulbookExecutionContext executionContext, int characterId);
-    Task UpdateCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, PatchCharacterRequest request);
-    Task SetCharacterAdBonusStatAsync(NaheulbookExecutionContext executionContext, int characterId, PutStatBonusAdRequest request);
-    Task<CharacterModifierEntity> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request);
-    Task DeleteModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
-    Task<CharacterModifierEntity> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId);
-    Task<List<CharacterEntity>> SearchCharactersAsync(string filter);
-    Task<LevelUpResult> LevelUpCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterLevelUpRequest request);
-    Task AddJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterAddJobRequest request);
-    Task RemoveJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterRemoveJobRequest request);
-    Task QuitGroupAsync(NaheulbookExecutionContext executionContext, int characterId);
+    Task<List<CharacterEntity>> GetCharacterListAsync(NaheulbookExecutionContext executionContext, CancellationToken cancellationToken = default);
+    Task<CharacterEntity> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request, CancellationToken cancellationToken = default);
+    Task<CharacterEntity> CreateCustomCharacterAsync(NaheulbookExecutionContext executionContext, CreateCustomCharacterRequest request, CancellationToken cancellationToken = default);
+    Task<CharacterEntity> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId, CancellationToken cancellationToken = default);
+    Task<ItemEntity> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request, CancellationToken cancellationToken = default);
+    Task<List<LootEntity>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId, CancellationToken cancellationToken = default);
+    Task<List<IHistoryEntry>> GetCharacterHistoryEntryAsync(NaheulbookExecutionContext executionContext, int characterId, int page, CancellationToken cancellationToken = default);
+    Task<bool> EnsureUserCanAccessCharacterAndGetIfIsGroupMasterAsync(NaheulbookExecutionContext executionContext, int characterId, CancellationToken cancellationToken = default);
+    Task UpdateCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, PatchCharacterRequest request, CancellationToken cancellationToken = default);
+    Task SetCharacterAdBonusStatAsync(NaheulbookExecutionContext executionContext, int characterId, PutStatBonusAdRequest request, CancellationToken cancellationToken = default);
+    Task<CharacterModifierEntity> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request, CancellationToken cancellationToken = default);
+    Task DeleteModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId, CancellationToken cancellationToken = default);
+    Task<CharacterModifierEntity> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId, CancellationToken cancellationToken = default);
+    Task<List<CharacterEntity>> SearchCharactersAsync(string filter, CancellationToken cancellationToken = default);
+    Task<LevelUpResult> LevelUpCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterLevelUpRequest request, CancellationToken cancellationToken = default);
+    Task AddJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterAddJobRequest request, CancellationToken cancellationToken = default);
+    Task RemoveJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterRemoveJobRequest request, CancellationToken cancellationToken = default);
+    Task QuitGroupAsync(NaheulbookExecutionContext executionContext, int characterId, CancellationToken cancellationToken = default);
 }
 
 public class CharacterService(
@@ -45,13 +46,13 @@ public class CharacterService(
     IItemUtil itemUtil
 ) : ICharacterService
 {
-    public async Task<List<CharacterEntity>> GetCharacterListAsync(NaheulbookExecutionContext executionContext)
+    public async Task<List<CharacterEntity>> GetCharacterListAsync(NaheulbookExecutionContext executionContext, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        return await uow.Characters.GetForSummaryByOwnerIdAsync(executionContext.UserId);
+        return await uow.Characters.GetForSummaryByOwnerIdAsync(executionContext.UserId, cancellationToken);
     }
 
-    public async Task<CharacterEntity> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request)
+    public async Task<CharacterEntity> CreateCharacterAsync(NaheulbookExecutionContext executionContext, CreateCharacterRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
@@ -59,7 +60,7 @@ public class CharacterService(
 
         if (request.GroupId.HasValue)
         {
-            var group = await uow.Groups.GetAsync(request.GroupId.Value);
+            var group = await uow.Groups.GetAsync(request.GroupId.Value, cancellationToken);
             if (group == null)
                 throw new GroupNotFoundException(request.GroupId.Value);
             authorizationUtil.EnsureIsGroupOwner(executionContext, group);
@@ -67,16 +68,16 @@ public class CharacterService(
         }
 
         character.OwnerId = executionContext.UserId;
-        character.Items = await itemUtil.CreateInitialPlayerInventoryAsync(request.Money);
+        character.Items = await itemUtil.CreateInitialPlayerInventoryAsync(request.Money, cancellationToken);
 
         uow.Characters.Add(character);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         return character;
     }
 
-    public async Task<CharacterEntity> CreateCustomCharacterAsync(NaheulbookExecutionContext executionContext, CreateCustomCharacterRequest request)
+    public async Task<CharacterEntity> CreateCustomCharacterAsync(NaheulbookExecutionContext executionContext, CreateCustomCharacterRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
@@ -84,7 +85,7 @@ public class CharacterService(
 
         if (request.GroupId.HasValue)
         {
-            var group = await uow.Groups.GetAsync(request.GroupId.Value);
+            var group = await uow.Groups.GetAsync(request.GroupId.Value, cancellationToken);
             if (group == null)
                 throw new GroupNotFoundException(request.GroupId.Value);
             authorizationUtil.EnsureIsGroupOwner(executionContext, @group);
@@ -94,16 +95,16 @@ public class CharacterService(
         character.OwnerId = executionContext.UserId;
         uow.Characters.Add(character);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         return character;
     }
 
-    public async Task<CharacterEntity> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId)
+    public async Task<CharacterEntity> LoadCharacterDetailsAsync(NaheulbookExecutionContext executionContext, int characterId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithAllDataAsync(characterId);
+        var character = await uow.Characters.GetWithAllDataAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
@@ -112,23 +113,23 @@ public class CharacterService(
         return character;
     }
 
-    public async Task<ItemEntity> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request)
+    public async Task<ItemEntity> AddItemToCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CreateItemRequest request, CancellationToken cancellationToken = default)
     {
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var character = await uow.Characters.GetWithGroupAsync(characterId);
+            var character = await uow.Characters.GetWithGroupAsync(characterId, cancellationToken);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
             authorizationUtil.EnsureCharacterAccess(executionContext, character);
         }
 
-        var item = await itemService.AddItemToAsync(ItemOwnerType.Character, characterId, request);
+        var item = await itemService.AddItemToAsync(ItemOwnerType.Character, characterId, request, cancellationToken);
 
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
             uow.CharacterHistoryEntries.Add(characterHistoryUtil.CreateLogAddItem(characterId, item));
-            await uow.SaveChangesAsync();
+            await uow.SaveChangesAsync(DoNotInterrupt.Token);
         }
 
         var session = notificationSessionFactory.CreateSession();
@@ -138,11 +139,11 @@ public class CharacterService(
         return item;
     }
 
-    public async Task<List<LootEntity>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId)
+    public async Task<List<LootEntity>> GetCharacterLootsAsync(NaheulbookExecutionContext executionContext, int characterId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupAsync(characterId);
+        var character = await uow.Characters.GetWithGroupAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
@@ -151,27 +152,27 @@ public class CharacterService(
         if (!character.GroupId.HasValue)
             return [];
 
-        return await uow.Loots.GetLootsVisibleByCharactersOfGroupAsync(character.GroupId.Value);
+        return await uow.Loots.GetLootsVisibleByCharactersOfGroupAsync(character.GroupId.Value, cancellationToken);
     }
 
-    public async Task<List<IHistoryEntry>> GetCharacterHistoryEntryAsync(NaheulbookExecutionContext executionContext, int characterId, int page)
+    public async Task<List<IHistoryEntry>> GetCharacterHistoryEntryAsync(NaheulbookExecutionContext executionContext, int characterId, int page, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupAsync(characterId);
+        var character = await uow.Characters.GetWithGroupAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
         authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-        return await uow.Characters.GetHistoryByCharacterIdAsync(character.Id, character.GroupId, page, character.Group?.MasterId == characterId);
+        return await uow.Characters.GetHistoryByCharacterIdAsync(character.Id, character.GroupId, page, character.Group?.MasterId == characterId, cancellationToken);
     }
 
-    public async Task<bool> EnsureUserCanAccessCharacterAndGetIfIsGroupMasterAsync(NaheulbookExecutionContext executionContext, int characterId)
+    public async Task<bool> EnsureUserCanAccessCharacterAndGetIfIsGroupMasterAsync(NaheulbookExecutionContext executionContext, int characterId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupAsync(characterId);
+        var character = await uow.Characters.GetWithGroupAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
@@ -183,13 +184,13 @@ public class CharacterService(
         return authorizationUtil.IsGroupOwner(executionContext, character.Group);
     }
 
-    public async Task UpdateCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, PatchCharacterRequest request)
+    public async Task UpdateCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, PatchCharacterRequest request, CancellationToken cancellationToken = default)
     {
         var notificationSession = notificationSessionFactory.CreateSession();
 
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var character = await uow.Characters.GetWithGroupAsync(characterId);
+            var character = await uow.Characters.GetWithGroupAsync(characterId, cancellationToken);
             if (character == null)
                 throw new CharacterNotFoundException(characterId);
 
@@ -197,17 +198,17 @@ public class CharacterService(
 
             characterUtil.ApplyCharactersChange(executionContext, request, character, notificationSession);
 
-            await uow.SaveChangesAsync();
+            await uow.SaveChangesAsync(DoNotInterrupt.Token);
         }
 
         await notificationSession.CommitAsync();
     }
 
-    public async Task SetCharacterAdBonusStatAsync(NaheulbookExecutionContext executionContext, int characterId, PutStatBonusAdRequest request)
+    public async Task SetCharacterAdBonusStatAsync(NaheulbookExecutionContext executionContext, int characterId, PutStatBonusAdRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupAsync(characterId);
+        var character = await uow.Characters.GetWithGroupAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
@@ -215,18 +216,18 @@ public class CharacterService(
 
         character.StatBonusAd = request.Stat;
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyCharacterSetStatBonusAd(characterId, request.Stat);
         await session.CommitAsync();
     }
 
-    public async Task<CharacterModifierEntity> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request)
+    public async Task<CharacterModifierEntity> AddModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, AddCharacterModifierRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupAsync(characterId);
+        var character = await uow.Characters.GetWithGroupAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
@@ -238,7 +239,7 @@ public class CharacterService(
         uow.CharacterModifiers.Add(characterModifier);
         uow.CharacterHistoryEntries.Add(characterHistoryUtil.CreateLogAddModifier(character, characterModifier));
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyCharacterAddModifier(characterId, characterModifier);
@@ -247,17 +248,17 @@ public class CharacterService(
         return characterModifier;
     }
 
-    public async Task DeleteModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId)
+    public async Task DeleteModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupAsync(characterId);
+        var character = await uow.Characters.GetWithGroupAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
         authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-        var characterModifier = await uow.CharacterModifiers.GetByIdAndCharacterIdAsync(characterId, characterModifierId);
+        var characterModifier = await uow.CharacterModifiers.GetByIdAndCharacterIdAsync(characterId, characterModifierId, cancellationToken);
         if (characterModifier == null)
             throw new CharacterModifierNotFoundException(characterModifierId);
 
@@ -266,30 +267,30 @@ public class CharacterService(
         // uow.CharacterModifiers.Remove(characterModifier);
         uow.CharacterHistoryEntries.Add(characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId));
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyCharacterRemoveModifier(characterId, characterModifierId);
         await session.CommitAsync();
     }
 
-    public async Task<CharacterModifierEntity> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId)
+    public async Task<CharacterModifierEntity> ToggleModifiersAsync(NaheulbookExecutionContext executionContext, int characterId, int characterModifierId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupAsync(characterId);
+        var character = await uow.Characters.GetWithGroupAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
         authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-        var characterModifier = await uow.CharacterModifiers.GetByIdAndCharacterIdAsync(characterId, characterModifierId);
+        var characterModifier = await uow.CharacterModifiers.GetByIdAndCharacterIdAsync(characterId, characterModifierId, cancellationToken);
         if (characterModifier == null)
             throw new CharacterModifierNotFoundException(characterModifierId);
 
         characterModifierUtil.ToggleModifier(character, characterModifier);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyCharacterUpdateModifier(characterId, characterModifier);
@@ -298,20 +299,20 @@ public class CharacterService(
         return characterModifier;
     }
 
-    public async Task<List<CharacterEntity>> SearchCharactersAsync(string filter)
+    public async Task<List<CharacterEntity>> SearchCharactersAsync(string filter, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(filter))
             return [];
 
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        return await uow.Characters.SearchCharacterWithNoGroupByNameWithOriginWithOwner(filter, 10);
+        return await uow.Characters.SearchCharacterWithNoGroupByNameWithOriginWithOwner(filter, 10, cancellationToken);
     }
 
-    public async Task<LevelUpResult> LevelUpCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterLevelUpRequest request)
+    public async Task<LevelUpResult> LevelUpCharacterAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterLevelUpRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupAsync(characterId);
+        var character = await uow.Characters.GetWithGroupAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
@@ -320,11 +321,11 @@ public class CharacterService(
         if (character.Level + 1 != request.TargetLevelUp)
             throw new InvalidTargetLevelUpRequestedException(character.Level, request.TargetLevelUp);
 
-        var specialities = await uow.CharacterSpecialities.GetWithModiferWithSpecialByIdsAsync(request.SpecialityIds);
+        var specialities = await uow.CharacterSpecialities.GetWithModiferWithSpecialByIdsAsync(request.SpecialityIds, cancellationToken);
         if (specialities.Count < request.SpecialityIds.Distinct().Count())
             throw new SpecialityNotFoundException();
 
-        var origin = await uow.Origins.GetWithAllDataAsync(character.OriginId);
+        var origin = await uow.Origins.GetWithAllDataAsync(character.OriginId, cancellationToken);
 
         var levelUpResult = characterUtil.LevelUpCharacter(character, origin.NotNull(), specialities, request);
 
@@ -336,17 +337,17 @@ public class CharacterService(
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyCharacterLevelUp(character.Id, levelUpResult);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await notificationSession.CommitAsync();
 
         return levelUpResult;
     }
 
-    public async Task AddJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterAddJobRequest request)
+    public async Task AddJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterAddJobRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupWithJobsWithOriginAsync(characterId);
+        var character = await uow.Characters.GetWithGroupWithJobsWithOriginAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
@@ -355,7 +356,7 @@ public class CharacterService(
         if (character.Jobs.Any(x => x.JobId == request.JobId))
             throw new CharacterAlreadyKnowThisJobException(character.Id, request.JobId);
 
-        var job = await uow.Jobs.GetAsync(request.JobId);
+        var job = await uow.Jobs.GetAsync(request.JobId, cancellationToken);
         if (job == null)
             throw new JobNotFoundException(request.JobId);
 
@@ -368,15 +369,15 @@ public class CharacterService(
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyCharacterAddJob(character.Id, job.Id);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await notificationSession.CommitAsync();
     }
 
-    public async Task RemoveJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterRemoveJobRequest request)
+    public async Task RemoveJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterRemoveJobRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupWithJobsWithOriginAsync(characterId);
+        var character = await uow.Characters.GetWithGroupWithJobsWithOriginAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
@@ -391,15 +392,15 @@ public class CharacterService(
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyCharacterRemoveJob(character.Id, request.JobId);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await notificationSession.CommitAsync();
     }
 
-    public async Task QuitGroupAsync(NaheulbookExecutionContext executionContext, int characterId)
+    public async Task QuitGroupAsync(NaheulbookExecutionContext executionContext, int characterId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupAsync(characterId);
+        var character = await uow.Characters.GetWithGroupAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
@@ -407,6 +408,6 @@ public class CharacterService(
 
         character.GroupId = null;
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
     }
 }

@@ -7,7 +7,7 @@ namespace Naheulbook.Core.Features.Item;
 
 public interface IActionsUtil
 {
-    Task ExecuteActionAsync(NhbkAction action, ActionContext context, INotificationSession notificationSession);
+    Task ExecuteActionAsync(NhbkAction action, ActionContext context, INotificationSession notificationSession, CancellationToken cancellationToken = default);
 }
 
 public class ActionsUtil(
@@ -22,23 +22,24 @@ public class ActionsUtil(
     public Task ExecuteActionAsync(
         NhbkAction action,
         ActionContext context,
-        INotificationSession notificationSession
+        INotificationSession notificationSession,
+        CancellationToken cancellationToken = default
     )
     {
         switch (action.Type)
         {
             case "addEv":
-                return addEvExecutor.ExecuteAsync(action, context, notificationSession);
+                return addEvExecutor.ExecuteAsync(action, context, notificationSession, cancellationToken);
             case "addEa":
-                return addEaExecutor.ExecuteAsync(action, context, notificationSession);
+                return addEaExecutor.ExecuteAsync(action, context, notificationSession, cancellationToken);
             case "addItem":
-                return addItemExecutor.ExecuteAsync(action, context, notificationSession);
+                return addItemExecutor.ExecuteAsync(action, context, notificationSession, cancellationToken);
             case "removeItem":
-                return removeItemExecutor.ExecuteAsync(action, context, notificationSession);
+                return removeItemExecutor.ExecuteAsync(action, context, notificationSession, cancellationToken);
             case "addEffect":
-                return addEffectExecutor.ExecuteAsync(action, context, notificationSession);
+                return addEffectExecutor.ExecuteAsync(action, context, notificationSession, cancellationToken);
             case "addCustomModifier":
-                return addCustomModifierExecutor.ExecuteAsync(action, context, notificationSession);
+                return addCustomModifierExecutor.ExecuteAsync(action, context, notificationSession, cancellationToken);
             default:
                 return Task.CompletedTask;
         }

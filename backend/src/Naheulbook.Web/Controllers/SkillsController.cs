@@ -9,9 +9,9 @@ namespace Naheulbook.Web.Controllers;
 public class SkillsController(ISkillService skillService, ISkillMapper skillMapper) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<SkillResponse>>> GetAsync()
+    public async Task<ActionResult<List<SkillResponse>>> GetAsync(CancellationToken cancellationToken)
     {
-        var skills = await skillService.GetSkillsAsync();
+        var skills = await skillService.GetSkillsAsync(cancellationToken);
 
         return skills.Select(skillMapper.ToResponse).ToList();
     }

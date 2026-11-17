@@ -3,17 +3,18 @@ using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Core.Features.Users;
 
 public interface IUserService
 {
-    Task CreateUserAsync(string username, string password);
-    Task ValidateUserAsync(string username, string activationCode);
-    Task<UserEntity> CheckPasswordAsync(string username, string password);
-    Task<UserEntity> GetUserInfoAsync(int userId);
-    Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request);
-    Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter);
+    Task CreateUserAsync(string username, string password, CancellationToken cancellationToken = default);
+    Task ValidateUserAsync(string username, string activationCode, CancellationToken cancellationToken = default);
+    Task<UserEntity> CheckPasswordAsync(string username, string password, CancellationToken cancellationToken = default);
+    Task<UserEntity> GetUserInfoAsync(int userId, CancellationToken cancellationToken = default);
+    Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request, CancellationToken cancellationToken = default);
+    Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter, CancellationToken cancellationToken = default);
 }
 
 public class UserService(
@@ -23,13 +24,13 @@ public class UserService(
     IAuthorizationUtil authorizationUtil
 ) : IUserService
 {
-    public async Task CreateUserAsync(string username, string password)
+    public async Task CreateUserAsync(string username, string password, CancellationToken cancellationToken = default)
     {
         string activationCode;
 
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var alreadyExistingUser = await uow.Users.GetByUsernameAsync(username);
+            var alreadyExistingUser = await uow.Users.GetByUsernameAsync(username, cancellationToken);
             if (alreadyExistingUser != null)
                 throw new UserAlreadyExistsException();
 
@@ -48,28 +49,28 @@ public class UserService(
             };
 
             uow.Users.Add(user);
-            await uow.SaveChangesAsync();
+            await uow.SaveChangesAsync(DoNotInterrupt.Token);
         }
 
-        await mailService.SendCreateUserMailAsync(username, activationCode);
+        await mailService.SendCreateUserMailAsync(username, activationCode, cancellationToken);
     }
 
-    public async Task ValidateUserAsync(string username, string activationCode)
+    public async Task ValidateUserAsync(string username, string activationCode, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var user = await uow.Users.GetByUsernameAsync(username);
+        var user = await uow.Users.GetByUsernameAsync(username, cancellationToken);
         if (user == null)
             throw new UserNotFoundException();
         if (user.ActivationCode != activationCode)
             throw new InvalidUserActivationCodeException();
         user.ActivationCode = null;
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
     }
 
-    public async Task<UserEntity> CheckPasswordAsync(string username, string password)
+    public async Task<UserEntity> CheckPasswordAsync(string username, string password, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var user = await uow.Users.GetByUsernameAsync(username);
+        var user = await uow.Users.GetByUsernameAsync(username, cancellationToken);
         if (user == null)
             throw new UserNotFoundException();
         if (user.HashedPassword == null)
@@ -80,19 +81,19 @@ public class UserService(
         return user;
     }
 
-    public async Task<UserEntity> GetUserInfoAsync(int userId)
+    public async Task<UserEntity> GetUserInfoAsync(int userId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var user = await uow.Users.GetAsync(userId);
+        var user = await uow.Users.GetAsync(userId, cancellationToken);
         if (user == null)
             throw new UserNotFoundException(userId);
         return user;
     }
 
-    public async Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request)
+    public async Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var user = await uow.Users.GetAsync(userId);
+        var user = await uow.Users.GetAsync(userId, cancellationToken);
         if (user == null)
             throw new UserNotFoundException();
 
@@ -109,15 +110,15 @@ public class UserService(
         }
 
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
     }
 
-    public async Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter)
+    public async Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(filter))
             return new List<UserEntity>();
 
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        return await uow.Users.SearchUsersAsync(filter);
+        return await uow.Users.SearchUsersAsync(filter, cancellationToken);
     }
 }

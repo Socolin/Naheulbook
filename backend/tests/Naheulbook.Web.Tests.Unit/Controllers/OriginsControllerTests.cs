@@ -43,7 +43,7 @@ public class OriginsControllerTests
         _originMapper.ToResponse(entity2)
             .Returns(response2);
 
-        var result = await _originsController.GetAsync();
+        var result = await _originsController.GetAsync(CancellationToken.None);
 
         result.Value.Should().Equal(response1, response2);
     }

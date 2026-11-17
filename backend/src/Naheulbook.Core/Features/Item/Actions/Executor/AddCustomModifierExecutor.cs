@@ -14,7 +14,8 @@ public class AddCustomModifierExecutor(ICharacterHistoryUtil characterHistoryUti
     public Task ExecuteAsync(
         NhbkAction action,
         ActionContext context,
-        INotificationSession notificationSession
+        INotificationSession notificationSession,
+        CancellationToken cancellationToken = default
     )
     {
         if (action.Type != ActionType)

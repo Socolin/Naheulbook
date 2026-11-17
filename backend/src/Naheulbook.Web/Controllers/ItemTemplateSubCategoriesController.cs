@@ -16,12 +16,13 @@ public class ItemTemplateSubCategoriesController(IItemTemplateSubCategoryService
     [HttpPost]
     public async Task<CreatedActionResult<ItemTemplateSubCategoryResponse>> PostCreateItemTemplateSubCategoryAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        CreateItemTemplateSubCategoryRequest request
+        CreateItemTemplateSubCategoryRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var itemTemplateSubCategory = await itemTemplateSubSubCategoryService.CreateItemTemplateSubCategoryAsync(executionContext, request);
+            var itemTemplateSubCategory = await itemTemplateSubSubCategoryService.CreateItemTemplateSubCategoryAsync(executionContext, request, cancellationToken);
             return itemTemplateMapper.ToResponse(itemTemplateSubCategory);
         }
         catch (ForbiddenAccessException ex)
@@ -34,6 +35,7 @@ public class ItemTemplateSubCategoriesController(IItemTemplateSubCategoryService
     public async Task<ActionResult<List<ItemTemplateResponse>>> GetItemTemplatesBySubCategoryTechNameAsync(
         [FromServices] OptionalNaheulbookExecutionContext executionContext,
         [FromRoute] string itemTemplateSubCategoryName,
+        CancellationToken cancellationToken,
         [FromQuery] bool includeCommunityItems = true
     )
     {
@@ -42,7 +44,8 @@ public class ItemTemplateSubCategoriesController(IItemTemplateSubCategoryService
             var itemTemplates = await itemTemplateSubSubCategoryService.GetItemTemplatesBySubCategoryTechNameAsync(
                 itemTemplateSubCategoryName,
                 executionContext.ExecutionExecutionContext?.UserId,
-                includeCommunityItems
+                includeCommunityItems,
+                cancellationToken
             );
             return itemTemplates.Select(itemTemplateMapper.ToResponse).ToList();
         }

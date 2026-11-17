@@ -35,7 +35,7 @@ public class ItemsControllerTests
         _itemService.UpdateItemDataAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<ItemData>())
             .Returns(Task.FromException<ItemEntity>(exception));
 
-        Func<Task> act = () => _controller.PutEditItemDataAsync(_executionContext, 2, new ItemData());
+        Func<Task> act = () => _controller.PutEditItemDataAsync(_executionContext, 2, new ItemData(), CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -47,7 +47,7 @@ public class ItemsControllerTests
         _itemService.UpdateItemModifiersAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<List<ActiveStatsModifier>>())
             .Returns(Task.FromException<ItemEntity>(exception));
 
-        Func<Task> act = () => _controller.PutEditItemModifiersAsync(_executionContext, 2, new List<ActiveStatsModifier>());
+        Func<Task> act = () => _controller.PutEditItemModifiersAsync(_executionContext, 2, new List<ActiveStatsModifier>(), CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -59,7 +59,7 @@ public class ItemsControllerTests
         _itemService.EquipItemAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<EquipItemRequest>())
             .Returns(Task.FromException<ItemEntity>(exception));
 
-        Func<Task> act = () => _controller.PostEquipItemAsync(_executionContext, 2, new EquipItemRequest());
+        Func<Task> act = () => _controller.PostEquipItemAsync(_executionContext, 2, new EquipItemRequest(), CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -71,7 +71,7 @@ public class ItemsControllerTests
         _itemService.ChangeItemContainerAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<int>(), Arg.Any<ChangeItemContainerRequest>())
             .Returns(Task.FromException<ItemEntity>(exception));
 
-        Func<Task> act = () => _controller.PutChangeItemContainerAsync(_executionContext, 2, new ChangeItemContainerRequest());
+        Func<Task> act = () => _controller.PutChangeItemContainerAsync(_executionContext, 2, new ChangeItemContainerRequest(), CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }

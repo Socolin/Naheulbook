@@ -7,14 +7,14 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IOriginRandomNameUrlRepository : IRepository<OriginRandomNameUrlEntity>
 {
-    Task<OriginRandomNameUrlEntity?> GetByOriginIdAndSexAsync(string sex, Guid originId);
+    Task<OriginRandomNameUrlEntity?> GetByOriginIdAndSexAsync(string sex, Guid originId, CancellationToken cancellationToken = default);
 }
 
 public class OriginRandomNameUrlRepository(NaheulbookDbContext context) : Repository<OriginRandomNameUrlEntity, NaheulbookDbContext>(context), IOriginRandomNameUrlRepository
 {
-    public Task<OriginRandomNameUrlEntity?> GetByOriginIdAndSexAsync(string sex, Guid originId)
+    public Task<OriginRandomNameUrlEntity?> GetByOriginIdAndSexAsync(string sex, Guid originId, CancellationToken cancellationToken = default)
     {
         return Context.OriginRandomNameUrls
-            .SingleOrDefaultAsync(x => x.Sex == sex && x.OriginId == originId);
+            .SingleOrDefaultAsync(x => x.Sex == sex && x.OriginId == originId, cancellationToken);
     }
 }

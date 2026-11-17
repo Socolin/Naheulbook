@@ -6,15 +6,15 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IMonsterTypeRepository : IRepository<MonsterTypeEntity>
 {
-    Task<List<MonsterTypeEntity>> GetAllWithCategoriesAsync();
+    Task<List<MonsterTypeEntity>> GetAllWithCategoriesAsync(CancellationToken cancellationToken = default);
 }
 
 public class MonsterTypeRepository(NaheulbookDbContext context) : Repository<MonsterTypeEntity, NaheulbookDbContext>(context), IMonsterTypeRepository
 {
-    public Task<List<MonsterTypeEntity>> GetAllWithCategoriesAsync()
+    public Task<List<MonsterTypeEntity>> GetAllWithCategoriesAsync(CancellationToken cancellationToken = default)
     {
         return Context.MonsterTypes
             .Include(x => x.SubCategories)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

@@ -93,7 +93,7 @@ public class GroupsControllerTests
         _groupMapper.ToResponse(createdGroup)
             .Returns(groupResponse);
 
-        var result = await _controller.PostCreateGroupAsync(_executionContext, createGroupRequest);
+        var result = await _controller.PostCreateGroupAsync(_executionContext, createGroupRequest, CancellationToken.None);
 
         result.Value.Should().BeSameAs(groupResponse);
         result.StatusCode.Should().Be(StatusCodes.Status201Created);
@@ -112,7 +112,7 @@ public class GroupsControllerTests
         _lootMapper.ToResponse(createdLoot)
             .Returns(lootResponse);
 
-        var result = await _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest);
+        var result = await _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest, CancellationToken.None);
 
         result.Value.Should().BeSameAs(lootResponse);
         result.StatusCode.Should().Be(StatusCodes.Status201Created);
@@ -128,7 +128,7 @@ public class GroupsControllerTests
         _lootService.CreateLootAsync(_executionContext, groupId, createLootRequest)
             .Returns(Task.FromException<LootEntity>(exception));
 
-        Func<Task> act = () => _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest);
+        Func<Task> act = () => _controller.PostCreateLootAsync(_executionContext, groupId, createLootRequest, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -146,7 +146,7 @@ public class GroupsControllerTests
         _monsterMapper.ToResponse(createdMonster)
             .Returns(monsterResponse);
 
-        var result = await _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest);
+        var result = await _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest, CancellationToken.None);
 
         result.Value.Should().BeSameAs(monsterResponse);
         result.StatusCode.Should().Be(StatusCodes.Status201Created);
@@ -162,7 +162,7 @@ public class GroupsControllerTests
         _monsterService.CreateMonsterAsync(_executionContext, groupId, createMonsterRequest)
             .Returns(Task.FromException<MonsterEntity>(exception));
 
-        Func<Task> act = () => _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest);
+        Func<Task> act = () => _controller.PostCreateMonsterAsync(_executionContext, groupId, createMonsterRequest, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -180,7 +180,7 @@ public class GroupsControllerTests
         _groupMapper.ToInviteResponse(createdInvite)
             .Returns(groupInviteResponse);
 
-        var result = await _controller.PostCreateInviteAsync(_executionContext, groupId, createInviteRequest);
+        var result = await _controller.PostCreateInviteAsync(_executionContext, groupId, createInviteRequest, CancellationToken.None);
 
         result.Value.Should().BeSameAs(groupInviteResponse);
         result.StatusCode.Should().Be(StatusCodes.Status201Created);
@@ -193,7 +193,7 @@ public class GroupsControllerTests
         _groupService.CreateInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<CreateInviteRequest>())
             .Returns(Task.FromException<GroupInviteEntity>(exception));
 
-        Func<Task> act = () => _controller.PostCreateInviteAsync(_executionContext, 8, new CreateInviteRequest());
+        Func<Task> act = () => _controller.PostCreateInviteAsync(_executionContext, 8, new CreateInviteRequest(), CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -211,7 +211,7 @@ public class GroupsControllerTests
         _groupMapper.ToDeleteInviteResponse(groupInvite)
             .Returns(response);
 
-        var result = await _controller.DeleteInviteAsync(_executionContext, groupId, characterId);
+        var result = await _controller.DeleteInviteAsync(_executionContext, groupId, characterId, CancellationToken.None);
 
         result.Value.Should().BeSameAs(response);
     }
@@ -223,7 +223,7 @@ public class GroupsControllerTests
         _groupService.CancelOrRejectInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<int>())
             .Returns(Task.FromException<GroupInviteEntity>(exception));
 
-        Func<Task> act = () => _controller.DeleteInviteAsync(_executionContext, 8, 12);
+        Func<Task> act = () => _controller.DeleteInviteAsync(_executionContext, 8, 12, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -235,7 +235,7 @@ public class GroupsControllerTests
         _groupService.AcceptInviteAsync(_executionContext, Arg.Any<int>(), Arg.Any<int>())
             .Returns(Task.FromException<GroupInviteEntity>(exception));
 
-        Func<Task> act = () => _controller.PostAcceptInviteAsync(_executionContext, 8, 12);
+        Func<Task> act = () => _controller.PostAcceptInviteAsync(_executionContext, 8, 12, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -252,7 +252,7 @@ public class GroupsControllerTests
         _groupMapper.ToResponse(group)
             .Returns(groupResponse);
 
-        var result = await _controller.GetGroupDetailsAsync(_executionContext, groupId);
+        var result = await _controller.GetGroupDetailsAsync(_executionContext, groupId, CancellationToken.None);
 
         result.Value.Should().BeSameAs(groupResponse);
     }
@@ -266,7 +266,7 @@ public class GroupsControllerTests
         _groupService.GetGroupDetailsAsync(_executionContext, groupId)
             .Returns(Task.FromException<GroupEntity>(exception));
 
-        Func<Task> act = () => _controller.GetGroupDetailsAsync(_executionContext, groupId);
+        Func<Task> act = () => _controller.GetGroupDetailsAsync(_executionContext, groupId, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -288,7 +288,7 @@ public class GroupsControllerTests
         _eventMapper.ToResponse(entity2)
             .Returns(response2);
 
-        var result = await _controller.GetEventListAsync(_executionContext, groupId);
+        var result = await _controller.GetEventListAsync(_executionContext, groupId, CancellationToken.None);
 
         result.Value.Should().Equal(response1, response2);
     }
@@ -302,7 +302,7 @@ public class GroupsControllerTests
         _eventService.GetEventsForGroupAsync(_executionContext, groupId)
             .Returns(Task.FromException<List<EventEntity>>(exception));
 
-        Func<Task> act = () => _controller.GetEventListAsync(_executionContext, groupId);
+        Func<Task> act = () => _controller.GetEventListAsync(_executionContext, groupId, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -324,7 +324,7 @@ public class GroupsControllerTests
         _lootMapper.ToResponse(entity2)
             .Returns(response2);
 
-        var result = await _controller.GetLootListAsync(_executionContext, groupId);
+        var result = await _controller.GetLootListAsync(_executionContext, groupId, CancellationToken.None);
 
         result.Value.Should().Equal(response1, response2);
     }
@@ -338,7 +338,7 @@ public class GroupsControllerTests
         _lootService.GetLootsForGroupAsync(_executionContext, groupId)
             .Returns(Task.FromException<List<LootEntity>>(exception));
 
-        Func<Task> act = () => _controller.GetLootListAsync(_executionContext, groupId);
+        Func<Task> act = () => _controller.GetLootListAsync(_executionContext, groupId, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -353,7 +353,7 @@ public class GroupsControllerTests
         _groupService.EditGroupPropertiesAsync(_executionContext, groupId, request)
             .Returns(Task.FromException<List<LootEntity>>(exception));
 
-        Func<Task> act = () => _controller.PatchGroupAsync(_executionContext, groupId, request);
+        Func<Task> act = () => _controller.PatchGroupAsync(_executionContext, groupId, request, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -377,7 +377,7 @@ public class GroupsControllerTests
         _monsterMapper.ToResponse(entity2)
             .Returns(response2);
 
-        var result = await _controller.GetMonsterListAsync(_executionContext, groupId);
+        var result = await _controller.GetMonsterListAsync(_executionContext, groupId, CancellationToken.None);
 
         result.Value.Should().Equal(response1, response2);
     }
@@ -391,7 +391,7 @@ public class GroupsControllerTests
         _monsterService.GetMonstersForGroupAsync(_executionContext, groupId)
             .Returns(Task.FromException<List<MonsterEntity>>(exception));
 
-        Func<Task> act = () => _controller.GetMonsterListAsync(_executionContext, groupId);
+        Func<Task> act = () => _controller.GetMonsterListAsync(_executionContext, groupId, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(expectedStatusCode);
     }
@@ -416,7 +416,7 @@ public class GroupsControllerTests
         _merchantMapper.ToResponse(merchant)
             .Returns(expectedResponse);
 
-        var actual = await _controller.CreateMerchantAsync(_executionContext, groupId, request);
+        var actual = await _controller.CreateMerchantAsync(_executionContext, groupId, request, CancellationToken.None);
 
         actual.Value.Should().BeEquivalentTo(expectedResponse);
     }
@@ -430,7 +430,7 @@ public class GroupsControllerTests
         _merchantService.CreateAsync(_executionContext, groupId, request)
             .ThrowsAsync(new GroupNotFoundException(groupId));
 
-        var act = () => _controller.CreateMerchantAsync(_executionContext, groupId, request);
+        var act = () => _controller.CreateMerchantAsync(_executionContext, groupId, request, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>())
             .Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);

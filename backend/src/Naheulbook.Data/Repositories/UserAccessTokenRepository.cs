@@ -7,29 +7,29 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IUserAccessTokenRepository : IRepository<UserAccessTokenEntity>
 {
-    Task<List<UserAccessTokenEntity>> GetUserAccessTokensForUser(int userId);
-    Task<UserAccessTokenEntity?> GetByKeyAsync(string accessKey);
-    Task<UserAccessTokenEntity?> GetByUserIdAndTokenIdAsync(int userId, Guid userAccessTokenId);
+    Task<List<UserAccessTokenEntity>> GetUserAccessTokensForUser(int userId, CancellationToken cancellationToken = default);
+    Task<UserAccessTokenEntity?> GetByKeyAsync(string accessKey, CancellationToken cancellationToken = default);
+    Task<UserAccessTokenEntity?> GetByUserIdAndTokenIdAsync(int userId, Guid userAccessTokenId, CancellationToken cancellationToken = default);
 }
 
 public class UserAccessTokenRepository(NaheulbookDbContext context) : Repository<UserAccessTokenEntity, NaheulbookDbContext>(context), IUserAccessTokenRepository
 {
-    public Task<List<UserAccessTokenEntity>> GetUserAccessTokensForUser(int userId)
+    public Task<List<UserAccessTokenEntity>> GetUserAccessTokensForUser(int userId, CancellationToken cancellationToken = default)
     {
         return Context.UserAccessTokens
             .Where(x => x.UserId == userId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<UserAccessTokenEntity?> GetByKeyAsync(string accessKey)
+    public Task<UserAccessTokenEntity?> GetByKeyAsync(string accessKey, CancellationToken cancellationToken = default)
     {
         return Context.UserAccessTokens
-            .FirstOrDefaultAsync(x => x.Key == accessKey);
+            .FirstOrDefaultAsync(x => x.Key == accessKey, cancellationToken);
     }
 
-    public Task<UserAccessTokenEntity?> GetByUserIdAndTokenIdAsync(int userId, Guid userAccessTokenId)
+    public Task<UserAccessTokenEntity?> GetByUserIdAndTokenIdAsync(int userId, Guid userAccessTokenId, CancellationToken cancellationToken = default)
     {
         return Context.UserAccessTokens
-            .FirstOrDefaultAsync(x => x.UserId == userId && x.Id == userAccessTokenId);
+            .FirstOrDefaultAsync(x => x.UserId == userId && x.Id == userAccessTokenId, cancellationToken);
     }
 }

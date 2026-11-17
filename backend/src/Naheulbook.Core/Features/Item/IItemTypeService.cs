@@ -5,14 +5,14 @@ namespace Naheulbook.Core.Features.Item;
 
 public interface IItemTypeService
 {
-    Task<List<ItemTypeEntity>> GetAllItemTypesAsync();
+    Task<List<ItemTypeEntity>> GetAllItemTypesAsync(CancellationToken cancellationToken = default);
 }
 
 public class ItemTypeService(IUnitOfWorkFactory unitOfWorkFactory) : IItemTypeService
 {
-    public async Task<List<ItemTypeEntity>> GetAllItemTypesAsync()
+    public async Task<List<ItemTypeEntity>> GetAllItemTypesAsync(CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        return await uow.ItemTypes.GetAllAsync();
+        return await uow.ItemTypes.GetAllAsync(cancellationToken);
     }
 }

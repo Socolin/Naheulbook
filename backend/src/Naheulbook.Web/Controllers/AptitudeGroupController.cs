@@ -14,7 +14,7 @@ public class AptitudeGroupController(
 {
     [HttpGet]
     public async Task<ActionResult<AptitudeGroupsResponse>> GetAptitudeGroupsAsync(
-        CancellationToken cancellationToken = default
+        CancellationToken cancellationToken
     )
     {
         var aptitudeGroups = await aptitudeGroupService.GetAptitudeGroupListAsync(cancellationToken);
@@ -27,7 +27,7 @@ public class AptitudeGroupController(
     [HttpGet("{aptitudeGroupId:guid}")]
     public async Task<ActionResult<AptitudeGroupResponse>> GetAptitudeGroupsAsync(
         [FromRoute] Guid aptitudeGroupId,
-        CancellationToken cancellationToken = default
+        CancellationToken cancellationToken
     )
     {
         try

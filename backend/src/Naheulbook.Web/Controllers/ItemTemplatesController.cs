@@ -12,11 +12,11 @@ namespace Naheulbook.Web.Controllers;
 public class ItemTemplatesController(IItemTemplateService itemTemplateService, IItemTemplateMapper itemTemplateMapper) : ControllerBase
 {
     [HttpGet("{itemTemplateId:guid}")]
-    public async Task<ActionResult<ItemTemplateResponse>> GetItemTemplateAsync(Guid itemTemplateId)
+    public async Task<ActionResult<ItemTemplateResponse>> GetItemTemplateAsync(Guid itemTemplateId, CancellationToken cancellationToken)
     {
         try
         {
-            var itemTemplate = await itemTemplateService.GetItemTemplateAsync(itemTemplateId);
+            var itemTemplate = await itemTemplateService.GetItemTemplateAsync(itemTemplateId, cancellationToken);
 
             return itemTemplateMapper.ToResponse(itemTemplate);
         }
@@ -30,16 +30,13 @@ public class ItemTemplatesController(IItemTemplateService itemTemplateService, I
     public async Task<ActionResult<ItemTemplateResponse>> PutItemTemplateAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] Guid itemTemplateId,
-        ItemTemplateRequest request
+        ItemTemplateRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var itemTemplate = await itemTemplateService.EditItemTemplateAsync(
-                executionContext,
-                itemTemplateId,
-                request
-            );
+            var itemTemplate = await itemTemplateService.EditItemTemplateAsync(executionContext, itemTemplateId, request, cancellationToken);
 
             return itemTemplateMapper.ToResponse(itemTemplate);
         }
@@ -56,22 +53,24 @@ public class ItemTemplatesController(IItemTemplateService itemTemplateService, I
     [HttpGet("search")]
     public async Task<ActionResult<List<ItemTemplateResponse>>> GetSearchItemTemplateAsync(
         [FromServices] OptionalNaheulbookExecutionContext executionContext,
-        [FromQuery] string filter
+        [FromQuery] string filter,
+        CancellationToken cancellationToken
     )
     {
-        var itemTemplates= await itemTemplateService.SearchItemTemplateAsync(filter, 40, executionContext.ExecutionExecutionContext?.UserId);
+        var itemTemplates= await itemTemplateService.SearchItemTemplateAsync(filter, 40, executionContext.ExecutionExecutionContext?.UserId, cancellationToken);
         return itemTemplates.Select(itemTemplateMapper.ToResponse).ToList();
     }
 
     [HttpPost]
     public async Task<JsonResult> PostCreateItemTemplateAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        ItemTemplateRequest request
+        ItemTemplateRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var itemTemplate = await itemTemplateService.CreateItemTemplateAsync(executionContext, request);
+            var itemTemplate = await itemTemplateService.CreateItemTemplateAsync(executionContext, request, cancellationToken);
             var itemTemplateResponse = itemTemplateMapper.ToResponse(itemTemplate);
             return new JsonResult(itemTemplateResponse)
             {

@@ -15,7 +15,8 @@ public class AddEffectExecutor(ICharacterHistoryUtil characterHistoryUtil) : IAd
     public async Task ExecuteAsync(
         NhbkAction action,
         ActionContext context,
-        INotificationSession notificationSession
+        INotificationSession notificationSession,
+        CancellationToken cancellationToken = default
     )
     {
         if (action.Type != ActionType)
@@ -27,7 +28,7 @@ public class AddEffectExecutor(ICharacterHistoryUtil characterHistoryUtil) : IAd
         if (action.Data.EffectData == null)
             throw new InvalidActionDataException(action.Type);
 
-        var effect = await context.UnitOfWork.Effects.GetWithEffectWithModifiersAsync(action.Data.EffectId.Value);
+        var effect = await context.UnitOfWork.Effects.GetWithEffectWithModifiersAsync(action.Data.EffectId.Value, cancellationToken);
         if (effect == null)
             throw new EffectNotFoundException();
 

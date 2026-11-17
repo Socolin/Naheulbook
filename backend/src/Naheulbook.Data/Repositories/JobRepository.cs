@@ -6,12 +6,12 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IJobRepository : IRepository<JobEntity>
 {
-    Task<ICollection<JobEntity>> GetAllWithAllDataAsync();
+    Task<ICollection<JobEntity>> GetAllWithAllDataAsync(CancellationToken cancellationToken = default);
 }
 
 public class JobRepository(NaheulbookDbContext context) : Repository<JobEntity, NaheulbookDbContext>(context), IJobRepository
 {
-    public async Task<ICollection<JobEntity>> GetAllWithAllDataAsync()
+    public async Task<ICollection<JobEntity>> GetAllWithAllDataAsync(CancellationToken cancellationToken = default)
     {
         return await Context.Jobs
             .Include(j => j.Bonuses)
@@ -20,6 +20,6 @@ public class JobRepository(NaheulbookDbContext context) : Repository<JobEntity, 
             .Include(j => j.Skills)
             .Include(j => j.Specialities).ThenInclude(s => s.Specials)
             .Include(j => j.Specialities).ThenInclude(s => s.Modifiers)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

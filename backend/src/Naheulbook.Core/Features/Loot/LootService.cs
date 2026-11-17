@@ -6,18 +6,19 @@ using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Extensions;
+using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Core.Features.Loot;
 
 public interface ILootService
 {
-    Task<LootEntity> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request);
-    Task<List<LootEntity>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
-    Task EnsureUserCanAccessLootAsync(NaheulbookExecutionContext executionContext, int lootId);
-    Task UpdateLootVisibilityAsync(NaheulbookExecutionContext executionContext, int lootId, PutLootVisibilityRequest request);
-    Task DeleteLootAsync(NaheulbookExecutionContext executionContext, int lootId);
-    Task<ItemEntity> AddItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateItemRequest request);
-    Task<ItemEntity> AddRandomItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateRandomItemRequest request);
+    Task<LootEntity> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request, CancellationToken cancellationToken = default);
+    Task<List<LootEntity>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, CancellationToken cancellationToken = default);
+    Task EnsureUserCanAccessLootAsync(NaheulbookExecutionContext executionContext, int lootId, CancellationToken cancellationToken = default);
+    Task UpdateLootVisibilityAsync(NaheulbookExecutionContext executionContext, int lootId, PutLootVisibilityRequest request, CancellationToken cancellationToken = default);
+    Task DeleteLootAsync(NaheulbookExecutionContext executionContext, int lootId, CancellationToken cancellationToken = default);
+    Task<ItemEntity> AddItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateItemRequest request, CancellationToken cancellationToken = default);
+    Task<ItemEntity> AddRandomItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateRandomItemRequest request, CancellationToken cancellationToken = default);
 }
 
 public class LootService(
@@ -27,10 +28,10 @@ public class LootService(
     IItemService itemService
 ) : ILootService
 {
-    public async Task<LootEntity> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request)
+    public async Task<LootEntity> CreateLootAsync(NaheulbookExecutionContext executionContext, int groupId, CreateLootRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var group = await uow.Groups.GetAsync(groupId);
+        var group = await uow.Groups.GetAsync(groupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
@@ -46,45 +47,45 @@ public class LootService(
         };
 
         uow.Loots.Add(loot);
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         return loot;
     }
 
-    public async Task<List<LootEntity>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
+    public async Task<List<LootEntity>> GetLootsForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var group = await uow.Groups.GetAsync(groupId);
+        var group = await uow.Groups.GetAsync(groupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
         authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-        return await uow.Loots.GetByGroupIdAsync(groupId);
+        return await uow.Loots.GetByGroupIdAsync(groupId, cancellationToken);
     }
 
-    public async Task EnsureUserCanAccessLootAsync(NaheulbookExecutionContext executionContext, int lootId)
+    public async Task EnsureUserCanAccessLootAsync(NaheulbookExecutionContext executionContext, int lootId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var loot = await uow.Loots.GetAsync(lootId);
+        var loot = await uow.Loots.GetAsync(lootId, cancellationToken);
         if (loot == null)
             throw new LootNotFoundException(lootId);
 
-        var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
+        var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(loot.GroupId);
 
         authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
     }
 
-    public async Task UpdateLootVisibilityAsync(NaheulbookExecutionContext executionContext, int lootId, PutLootVisibilityRequest request)
+    public async Task UpdateLootVisibilityAsync(NaheulbookExecutionContext executionContext, int lootId, PutLootVisibilityRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var loot = await uow.Loots.GetAsync(lootId);
+        var loot = await uow.Loots.GetAsync(lootId, cancellationToken);
         if (loot == null)
             throw new LootNotFoundException(lootId);
 
-        var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
+        var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(loot.GroupId);
 
@@ -97,7 +98,7 @@ public class LootService(
 
         if (loot.IsVisibleForPlayer)
         {
-            var fullLootData = await uow.Loots.GetWithAllDataAsync(lootId);
+            var fullLootData = await uow.Loots.GetWithAllDataAsync(lootId, cancellationToken);
             foreach (var character in group.Characters)
                 session.NotifyCharacterShowLoot(character.Id, fullLootData.NotNull());
         }
@@ -107,25 +108,25 @@ public class LootService(
                 session.NotifyCharacterHideLoot(character.Id, loot.Id);
         }
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await session.CommitAsync();
     }
 
-    public async Task DeleteLootAsync(NaheulbookExecutionContext executionContext, int lootId)
+    public async Task DeleteLootAsync(NaheulbookExecutionContext executionContext, int lootId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var loot = await uow.Loots.GetAsync(lootId);
+        var loot = await uow.Loots.GetAsync(lootId, cancellationToken);
         if (loot == null)
             throw new LootNotFoundException(lootId);
 
-        var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
+        var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(loot.GroupId);
 
         authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
 
         uow.Loots.Remove(loot);
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyGroupDeleteLoot(group.Id, lootId);
@@ -138,22 +139,22 @@ public class LootService(
         await session.CommitAsync();
     }
 
-    public async Task<ItemEntity> AddItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateItemRequest request)
+    public async Task<ItemEntity> AddItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateItemRequest request, CancellationToken cancellationToken = default)
     {
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var loot = await uow.Loots.GetAsync(lootId);
+            var loot = await uow.Loots.GetAsync(lootId, cancellationToken);
             if (loot == null)
                 throw new LootNotFoundException(lootId);
 
-            var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
+            var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId, cancellationToken);
             if (group == null)
                 throw new GroupNotFoundException(loot.GroupId);
 
             authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
         }
 
-        var item = await itemService.AddItemToAsync(ItemOwnerType.Loot, lootId, request);
+        var item = await itemService.AddItemToAsync(ItemOwnerType.Loot, lootId, request, cancellationToken);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyLootAddItem(lootId, item);
@@ -162,22 +163,22 @@ public class LootService(
         return item;
     }
 
-    public async Task<ItemEntity> AddRandomItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateRandomItemRequest request)
+    public async Task<ItemEntity> AddRandomItemToLootAsync(NaheulbookExecutionContext executionContext, int lootId, CreateRandomItemRequest request, CancellationToken cancellationToken = default)
     {
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var loot = await uow.Loots.GetAsync(lootId);
+            var loot = await uow.Loots.GetAsync(lootId, cancellationToken);
             if (loot == null)
                 throw new LootNotFoundException(lootId);
 
-            var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId);
+            var group = await uow.Groups.GetGroupsWithCharactersAsync(loot.GroupId, cancellationToken);
             if (group == null)
                 throw new GroupNotFoundException(loot.GroupId);
 
             authorizationUtil.EnsureIsGroupOwner(executionContext, loot.Group);
         }
 
-        var item = await itemService.AddRandomItemToAsync(ItemOwnerType.Loot, lootId, request, executionContext.UserId);
+        var item = await itemService.AddRandomItemToAsync(ItemOwnerType.Loot, lootId, request, executionContext.UserId, cancellationToken);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyLootAddItem(lootId, item);

@@ -20,12 +20,13 @@ public class LootController(
     public async Task<IActionResult> PutLootVisibilityAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int lootId,
-        PutLootVisibilityRequest request
+        PutLootVisibilityRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await lootService.UpdateLootVisibilityAsync(executionContext, lootId, request);
+            await lootService.UpdateLootVisibilityAsync(executionContext, lootId, request, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -41,12 +42,13 @@ public class LootController(
     [HttpDelete("{LootId:int:min(1)}")]
     public async Task<IActionResult> DeleteLootAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        [FromRoute] int lootId
+        [FromRoute] int lootId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await lootService.DeleteLootAsync(executionContext, lootId);
+            await lootService.DeleteLootAsync(executionContext, lootId, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -63,12 +65,13 @@ public class LootController(
     public async Task<CreatedActionResult<ItemResponse>> PostAddItemToLootInventoryAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int lootId,
-        CreateItemRequest request
+        CreateItemRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var item = await lootService.AddItemToLootAsync(executionContext, lootId, request);
+            var item = await lootService.AddItemToLootAsync(executionContext, lootId, request, cancellationToken);
             return itemMapper.ToResponse(item);
         }
         catch (ForbiddenAccessException ex)
@@ -89,12 +92,13 @@ public class LootController(
     public async Task<CreatedActionResult<ItemResponse>> PostAddRandomItemToLootInventoryAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int lootId,
-        CreateRandomItemRequest request
+        CreateRandomItemRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var item = await lootService.AddRandomItemToLootAsync(executionContext, lootId, request);
+            var item = await lootService.AddRandomItemToLootAsync(executionContext, lootId, request, cancellationToken);
             return itemMapper.ToResponse(item);
         }
         catch (ForbiddenAccessException ex)

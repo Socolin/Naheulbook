@@ -38,7 +38,7 @@ public class JobsControllerTests
         _jobMapper.ToResponse(entity2)
             .Returns(response2);
 
-        var result = await _jobsController.GetAsync();
+        var result = await _jobsController.GetAsync(CancellationToken.None);
 
         result.Value.Should().Equal(response1, response2);
     }

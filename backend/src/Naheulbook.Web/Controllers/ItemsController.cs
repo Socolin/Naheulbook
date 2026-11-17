@@ -16,12 +16,13 @@ public class ItemsController(IItemService itemTemplate, IItemMapper itemMapper) 
     public async Task<ActionResult<ItemPartialResponse>> PutEditItemDataAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int itemId,
-        ItemData itemData
+        ItemData itemData,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var item = await itemTemplate.UpdateItemDataAsync(executionContext, itemId, itemData);
+            var item = await itemTemplate.UpdateItemDataAsync(executionContext, itemId, itemData, cancellationToken);
 
             return itemMapper.ToPartialResponse(item);
         }
@@ -38,12 +39,13 @@ public class ItemsController(IItemService itemTemplate, IItemMapper itemMapper) 
     [HttpDelete("{ItemId}")]
     public async Task<ActionResult<ItemPartialResponse>> DeleteItemAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        [FromRoute] int itemId
+        [FromRoute] int itemId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await itemTemplate.DeleteItemAsync(executionContext, itemId);
+            await itemTemplate.DeleteItemAsync(executionContext, itemId, cancellationToken);
             return NoContent();
         }
         catch (ForbiddenAccessException ex)
@@ -60,12 +62,13 @@ public class ItemsController(IItemService itemTemplate, IItemMapper itemMapper) 
     public async Task<ActionResult<ItemPartialResponse>> PostUseChargeAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int itemId,
-        [FromBody] UseChargeItemRequest request
+        [FromBody] UseChargeItemRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var item = await itemTemplate.UseChargeAsync(executionContext, itemId, request);
+            var item = await itemTemplate.UseChargeAsync(executionContext, itemId, request, cancellationToken);
             return itemMapper.ToPartialResponse(item);
         }
         catch (ForbiddenAccessException ex)
@@ -82,12 +85,13 @@ public class ItemsController(IItemService itemTemplate, IItemMapper itemMapper) 
     public async Task<ActionResult<ItemPartialResponse>> PutEditItemModifiersAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int itemId,
-        IList<ActiveStatsModifier> itemModifiers
+        IList<ActiveStatsModifier> itemModifiers,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var item = await itemTemplate.UpdateItemModifiersAsync(executionContext, itemId, itemModifiers);
+            var item = await itemTemplate.UpdateItemModifiersAsync(executionContext, itemId, itemModifiers, cancellationToken);
 
             return itemMapper.ToPartialResponse(item);
         }
@@ -105,12 +109,13 @@ public class ItemsController(IItemService itemTemplate, IItemMapper itemMapper) 
     public async Task<ActionResult<ItemPartialResponse>> PostEquipItemAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int itemId,
-        EquipItemRequest request
+        EquipItemRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var item = await itemTemplate.EquipItemAsync(executionContext, itemId, request);
+            var item = await itemTemplate.EquipItemAsync(executionContext, itemId, request, cancellationToken);
 
             return itemMapper.ToPartialResponse(item);
         }
@@ -128,12 +133,13 @@ public class ItemsController(IItemService itemTemplate, IItemMapper itemMapper) 
     public async Task<ActionResult<ItemPartialResponse>> PutChangeItemContainerAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int itemId,
-        ChangeItemContainerRequest request
+        ChangeItemContainerRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var item = await itemTemplate.ChangeItemContainerAsync(executionContext, itemId, request);
+            var item = await itemTemplate.ChangeItemContainerAsync(executionContext, itemId, request, cancellationToken);
 
             return itemMapper.ToPartialResponse(item);
         }
@@ -151,12 +157,13 @@ public class ItemsController(IItemService itemTemplate, IItemMapper itemMapper) 
     public async Task<ActionResult<TakeItemResponse>> PostTakeItemAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int itemId,
-        TakeItemRequest request
+        TakeItemRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var (takenItem, remainingQuantity) = await itemTemplate.TakeItemAsync(executionContext, itemId, request);
+            var (takenItem, remainingQuantity) = await itemTemplate.TakeItemAsync(executionContext, itemId, request, cancellationToken);
 
             return new TakeItemResponse
             {
@@ -179,12 +186,13 @@ public class ItemsController(IItemService itemTemplate, IItemMapper itemMapper) 
     public async Task<ActionResult<GiveItemResponse>> PostGiveItemAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int itemId,
-        GiveItemRequest request
+        GiveItemRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var remainingQuantity = await itemTemplate.GiveItemAsync(executionContext, itemId, request);
+            var remainingQuantity = await itemTemplate.GiveItemAsync(executionContext, itemId, request, cancellationToken);
 
             return new GiveItemResponse
             {

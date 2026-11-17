@@ -13,22 +13,22 @@ namespace Naheulbook.Core.Features.Monster;
 
 public interface IMonsterService
 {
-    Task<MonsterEntity> GetMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
-    Task<MonsterEntity> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request);
-    Task<List<MonsterEntity>> GetMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId);
-    Task<List<MonsterEntity>> GetDeadMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, int startIndex, int count);
-    Task EnsureUserCanAccessMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
-    Task EnsureUserCanAccessFightAsync(NaheulbookExecutionContext executionContext, int fightId);
-    Task<ActiveStatsModifier> AddModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, ActiveStatsModifier statsModifier);
-    Task RemoveModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, int modifierId);
-    Task DeleteMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
-    Task KillMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId);
-    Task<ItemEntity> AddItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateItemRequest request);
-    Task<ItemEntity> AddRandomItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateRandomItemRequest request);
-    Task UpdateMonsterDataAsync(NaheulbookExecutionContext executionContext, int monsterId, MonsterData monsterData);
-    Task UpdateMonsterTargetAsync(NaheulbookExecutionContext executionContext, int monsterId, TargetRequest request);
-    Task UpdateMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, PatchMonsterRequest request);
-    Task MoveMonsterToFightAsync(NaheulbookExecutionContext executionContext, int monsterId, int? fightId);
+    Task<MonsterEntity> GetMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CancellationToken cancellationToken = default);
+    Task<MonsterEntity> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request, CancellationToken cancellationToken = default);
+    Task<List<MonsterEntity>> GetMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, CancellationToken cancellationToken = default);
+    Task<List<MonsterEntity>> GetDeadMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, int startIndex, int count, CancellationToken cancellationToken = default);
+    Task EnsureUserCanAccessMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CancellationToken cancellationToken = default);
+    Task EnsureUserCanAccessFightAsync(NaheulbookExecutionContext executionContext, int fightId, CancellationToken cancellationToken = default);
+    Task<ActiveStatsModifier> AddModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, ActiveStatsModifier statsModifier, CancellationToken cancellationToken = default);
+    Task RemoveModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, int modifierId, CancellationToken cancellationToken = default);
+    Task DeleteMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CancellationToken cancellationToken = default);
+    Task KillMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CancellationToken cancellationToken = default);
+    Task<ItemEntity> AddItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateItemRequest request, CancellationToken cancellationToken = default);
+    Task<ItemEntity> AddRandomItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateRandomItemRequest request, CancellationToken cancellationToken = default);
+    Task UpdateMonsterDataAsync(NaheulbookExecutionContext executionContext, int monsterId, MonsterData monsterData, CancellationToken cancellationToken = default);
+    Task UpdateMonsterTargetAsync(NaheulbookExecutionContext executionContext, int monsterId, TargetRequest request, CancellationToken cancellationToken = default);
+    Task UpdateMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, PatchMonsterRequest request, CancellationToken cancellationToken = default);
+    Task MoveMonsterToFightAsync(NaheulbookExecutionContext executionContext, int monsterId, int? fightId, CancellationToken cancellationToken = default);
 }
 
 public class MonsterService(
@@ -41,11 +41,11 @@ public class MonsterService(
     IItemService itemService
 ) : IMonsterService
 {
-    public async Task<MonsterEntity> GetMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId)
+    public async Task<MonsterEntity> GetMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId);
+        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId, cancellationToken);
         if (monster == null)
             throw new MonsterNotFoundException(monsterId);
 
@@ -54,10 +54,10 @@ public class MonsterService(
         return monster;
     }
 
-    public async Task<MonsterEntity> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request)
+    public async Task<MonsterEntity> CreateMonsterAsync(NaheulbookExecutionContext executionContext, int groupId, CreateMonsterRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var group = await uow.Groups.GetAsync(groupId);
+        var group = await uow.Groups.GetAsync(groupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
@@ -65,7 +65,7 @@ public class MonsterService(
 
         if (request.FightId is not null)
         {
-            var fight = await uow.Fights.GetAsync(request.FightId.Value);
+            var fight = await uow.Fights.GetAsync(request.FightId.Value, cancellationToken);
             if (fight?.GroupId != group.Id)
                 throw new ForbiddenAccessException();
         }
@@ -83,10 +83,10 @@ public class MonsterService(
 
         // FIXME: test this
         uow.Monsters.Add(monster);
-        monster.Items = await itemService.CreateItemsAsync(request.Items);
-        await uow.SaveChangesAsync();
+        monster.Items = await itemService.CreateItemsAsync(request.Items, cancellationToken);
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
-        monster.Items = await uow.Items.GetWithAllDataByIdsAsync(monster.Items.Select(x => x.Id));
+        monster.Items = await uow.Items.GetWithAllDataByIdsAsync(monster.Items.Select(x => x.Id), cancellationToken);
 
         var notificationSession = notificationSessionFactory.CreateSession();
 
@@ -99,38 +99,38 @@ public class MonsterService(
         return monster;
     }
 
-    public async Task<List<MonsterEntity>> GetMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId)
+    public async Task<List<MonsterEntity>> GetMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var group = await uow.Groups.GetAsync(groupId);
+        var group = await uow.Groups.GetAsync(groupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
         authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-        return await uow.Monsters.GetByGroupIdWithInventoryAsync(groupId);
+        return await uow.Monsters.GetByGroupIdWithInventoryAsync(groupId, cancellationToken);
     }
 
-    public async Task<List<MonsterEntity>> GetDeadMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, int startIndex, int count)
+    public async Task<List<MonsterEntity>> GetDeadMonstersForGroupAsync(NaheulbookExecutionContext executionContext, int groupId, int startIndex, int count, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var group = await uow.Groups.GetAsync(groupId);
+        var group = await uow.Groups.GetAsync(groupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(groupId);
 
         authorizationUtil.EnsureIsGroupOwner(executionContext, group);
 
-        return await uow.Monsters.GetDeadMonstersByGroupIdAsync(groupId, startIndex, count);
+        return await uow.Monsters.GetDeadMonstersByGroupIdAsync(groupId, startIndex, count, cancellationToken);
     }
 
-    public async Task EnsureUserCanAccessMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId)
+    public async Task EnsureUserCanAccessMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var monster = await uow.Monsters.GetAsync(monsterId);
+        var monster = await uow.Monsters.GetAsync(monsterId, cancellationToken);
         if (monster == null)
             throw new MonsterNotFoundException(monsterId);
 
-        var group = await uow.Groups.GetGroupsWithCharactersAsync(monster.GroupId);
+        var group = await uow.Groups.GetGroupsWithCharactersAsync(monster.GroupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(monster.GroupId);
 
@@ -138,28 +138,28 @@ public class MonsterService(
         authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
     }
 
-    public async Task EnsureUserCanAccessFightAsync(NaheulbookExecutionContext executionContext, int fightId)
+    public async Task EnsureUserCanAccessFightAsync(NaheulbookExecutionContext executionContext, int fightId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var fight = await uow.Fights.GetAsync(fightId);
+        var fight = await uow.Fights.GetAsync(fightId, cancellationToken);
         if (fight == null)
             throw new FightNotFoundException(fightId);
 
-        var group = await uow.Groups.GetGroupsWithCharactersAsync(fight.GroupId);
+        var group = await uow.Groups.GetGroupsWithCharactersAsync(fight.GroupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(fight.GroupId);
 
         authorizationUtil.EnsureIsGroupOwnerOrMember(executionContext, group);
     }
 
-    public async Task<ActiveStatsModifier> AddModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, ActiveStatsModifier statsModifier)
+    public async Task<ActiveStatsModifier> AddModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, ActiveStatsModifier statsModifier, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var monster = await uow.Monsters.GetAsync(monsterId);
+        var monster = await uow.Monsters.GetAsync(monsterId, cancellationToken);
         if (monster == null)
             throw new MonsterNotFoundException(monsterId);
 
-        var group = await uow.Groups.GetAsync(monster.GroupId);
+        var group = await uow.Groups.GetAsync(monster.GroupId, cancellationToken);
         if (group == null)
             throw new GroupNotFoundException(monster.GroupId);
 
@@ -169,7 +169,7 @@ public class MonsterService(
         activeStatsModifierUtil.AddModifier(modifiers, statsModifier);
         monster.Modifiers = jsonUtil.Serialize(modifiers);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyMonsterAddModifier(monster.Id, statsModifier);
@@ -178,10 +178,10 @@ public class MonsterService(
         return statsModifier;
     }
 
-    public async Task RemoveModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, int modifierId)
+    public async Task RemoveModifierAsync(NaheulbookExecutionContext executionContext, int monsterId, int modifierId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var monster = await uow.Monsters.GetWithGroupAsync(monsterId);
+        var monster = await uow.Monsters.GetWithGroupAsync(monsterId, cancellationToken);
         if (monster == null)
             throw new MonsterNotFoundException(monsterId);
 
@@ -191,17 +191,17 @@ public class MonsterService(
         activeStatsModifierUtil.RemoveModifier(modifiers, modifierId);
         monster.Modifiers = jsonUtil.Serialize(modifiers);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyMonsterRemoveModifier(monster.Id, modifierId);
         await notificationSession.CommitAsync();
     }
 
-    public async Task DeleteMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId)
+    public async Task DeleteMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var monster = await uow.Monsters.GetWithGroupAsync(monsterId);
+        var monster = await uow.Monsters.GetWithGroupAsync(monsterId, cancellationToken);
         if (monster == null)
             throw new MonsterNotFoundException(monsterId);
 
@@ -216,13 +216,13 @@ public class MonsterService(
             notificationSession.NotifyGroupDeleteMonster(monster);
         uow.Monsters.Remove(monster);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
     }
 
-    public async Task KillMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId)
+    public async Task KillMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId);
+        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId, cancellationToken);
         if (monster == null)
             throw new MonsterNotFoundException(monsterId);
 
@@ -240,25 +240,25 @@ public class MonsterService(
             await notificationSession.CommitAsync();
         }
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
     }
 
-    public async Task<ItemEntity> AddItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateItemRequest request)
+    public async Task<ItemEntity> AddItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateItemRequest request, CancellationToken cancellationToken = default)
     {
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var monster = await uow.Monsters.GetAsync(monsterId);
+            var monster = await uow.Monsters.GetAsync(monsterId, cancellationToken);
             if (monster == null)
                 throw new MonsterNotFoundException(monsterId);
 
-            var group = await uow.Groups.GetGroupsWithCharactersAsync(monster.GroupId);
+            var group = await uow.Groups.GetGroupsWithCharactersAsync(monster.GroupId, cancellationToken);
             if (group == null)
                 throw new GroupNotFoundException(monster.GroupId);
 
             authorizationUtil.EnsureIsGroupOwner(executionContext, monster.Group);
         }
 
-        var item = await itemService.AddItemToAsync(ItemOwnerType.Monster, monsterId, request);
+        var item = await itemService.AddItemToAsync(ItemOwnerType.Monster, monsterId, request, cancellationToken);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyMonsterAddItem(monsterId, item);
@@ -267,22 +267,22 @@ public class MonsterService(
         return item;
     }
 
-    public async Task<ItemEntity> AddRandomItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateRandomItemRequest request)
+    public async Task<ItemEntity> AddRandomItemToMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, CreateRandomItemRequest request, CancellationToken cancellationToken = default)
     {
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var monster = await uow.Monsters.GetAsync(monsterId);
+            var monster = await uow.Monsters.GetAsync(monsterId, cancellationToken);
             if (monster == null)
                 throw new MonsterNotFoundException(monsterId);
 
-            var group = await uow.Groups.GetGroupsWithCharactersAsync(monster.GroupId);
+            var group = await uow.Groups.GetGroupsWithCharactersAsync(monster.GroupId, cancellationToken);
             if (group == null)
                 throw new GroupNotFoundException(monster.GroupId);
 
             authorizationUtil.EnsureIsGroupOwner(executionContext, monster.Group);
         }
 
-        var item = await itemService.AddRandomItemToAsync(ItemOwnerType.Monster, monsterId, request, executionContext.UserId);
+        var item = await itemService.AddRandomItemToAsync(ItemOwnerType.Monster, monsterId, request, executionContext.UserId, cancellationToken);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyMonsterAddItem(monsterId, item);
@@ -291,10 +291,10 @@ public class MonsterService(
         return item;
     }
 
-    public async Task UpdateMonsterDataAsync(NaheulbookExecutionContext executionContext, int monsterId, MonsterData monsterData)
+    public async Task UpdateMonsterDataAsync(NaheulbookExecutionContext executionContext, int monsterId, MonsterData monsterData, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId);
+        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId, cancellationToken);
         if (monster == null)
             throw new MonsterNotFoundException(monsterId);
 
@@ -305,14 +305,14 @@ public class MonsterService(
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyMonsterUpdateData(monster.Id, monsterData);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await notificationSession.CommitAsync();
     }
 
-    public async Task UpdateMonsterTargetAsync(NaheulbookExecutionContext executionContext, int monsterId, TargetRequest request)
+    public async Task UpdateMonsterTargetAsync(NaheulbookExecutionContext executionContext, int monsterId, TargetRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId);
+        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId, cancellationToken);
         if (monster == null)
             throw new MonsterNotFoundException(monsterId);
 
@@ -320,7 +320,7 @@ public class MonsterService(
 
         if (request.IsMonster)
         {
-            var targetedMonster = await uow.Monsters.GetAsync(request.Id);
+            var targetedMonster = await uow.Monsters.GetAsync(request.Id, cancellationToken);
             if (targetedMonster == null)
                 throw new TargetNotFoundException();
             if (targetedMonster.GroupId != monster.GroupId)
@@ -331,7 +331,7 @@ public class MonsterService(
         }
         else
         {
-            var targetedCharacter = await uow.Characters.GetAsync(request.Id);
+            var targetedCharacter = await uow.Characters.GetAsync(request.Id, cancellationToken);
             if (targetedCharacter == null)
                 throw new TargetNotFoundException();
             if (targetedCharacter.GroupId != monster.GroupId)
@@ -344,14 +344,14 @@ public class MonsterService(
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyMonsterChangeTarget(monster.Id, request);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await notificationSession.CommitAsync();
     }
 
-    public async Task UpdateMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, PatchMonsterRequest request)
+    public async Task UpdateMonsterAsync(NaheulbookExecutionContext executionContext, int monsterId, PatchMonsterRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId);
+        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId, cancellationToken);
         if (monster == null)
             throw new MonsterNotFoundException(monsterId);
 
@@ -362,14 +362,14 @@ public class MonsterService(
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyMonsterChangeName(monster.Id, request.Name);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await notificationSession.CommitAsync();
     }
 
-    public async Task MoveMonsterToFightAsync(NaheulbookExecutionContext executionContext, int monsterId, int? fightId)
+    public async Task MoveMonsterToFightAsync(NaheulbookExecutionContext executionContext, int monsterId, int? fightId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId);
+        var monster = await uow.Monsters.GetWithGroupWithItemsAsync(monsterId, cancellationToken);
         if (monster == null)
             throw new MonsterNotFoundException(monsterId);
 
@@ -377,7 +377,7 @@ public class MonsterService(
 
         if (fightId is not null)
         {
-            var fight = await uow.Fights.GetAsync(fightId.Value);
+            var fight = await uow.Fights.GetAsync(fightId.Value, cancellationToken);
             if (fight?.GroupId != monster.GroupId)
                 throw new ForbiddenAccessException();
         }
@@ -401,7 +401,7 @@ public class MonsterService(
             notificationSession.NotifyFightRemoveMonster(previousFightId.Value, monster.Id);
         }
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await notificationSession.CommitAsync();
     }
 }

@@ -13,16 +13,16 @@ namespace Naheulbook.Web.Controllers;
 public class EffectSubCategoriesController(IEffectService effectService, IEffectMapper effectMapper) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<EffectTypeResponse>>> GetEffectSubCategoriesAsync()
+    public async Task<ActionResult<List<EffectTypeResponse>>> GetEffectSubCategoriesAsync(CancellationToken cancellationToken)
     {
-        var effectSubCategories = await effectService.GetEffectSubCategoriesAsync();
+        var effectSubCategories = await effectService.GetEffectSubCategoriesAsync(cancellationToken);
         return effectSubCategories.Select(effectMapper.ToResponse).ToList();
     }
 
     [HttpGet("{subCategoryId:int:min(1)}/effects")]
-    public async Task<ActionResult<List<EffectResponse>>> GetEffectsAsync(long subCategoryId)
+    public async Task<ActionResult<List<EffectResponse>>> GetEffectsAsync(long subCategoryId, CancellationToken cancellationToken)
     {
-        var effects = await effectService.GetEffectsBySubCategoryAsync(subCategoryId);
+        var effects = await effectService.GetEffectsBySubCategoryAsync(subCategoryId, cancellationToken);
         return effects.Select(effectMapper.ToResponse).ToList();
     }
 
@@ -30,12 +30,13 @@ public class EffectSubCategoriesController(IEffectService effectService, IEffect
     public async Task<CreatedActionResult<EffectResponse>> PostCreateEffectAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int subCategoryId,
-        CreateEffectRequest request
+        CreateEffectRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var effect = await effectService.CreateEffectAsync(executionContext, subCategoryId, request);
+            var effect = await effectService.CreateEffectAsync(executionContext, subCategoryId, request, cancellationToken);
             return effectMapper.ToResponse(effect);
         }
         catch (ForbiddenAccessException ex)
@@ -47,12 +48,13 @@ public class EffectSubCategoriesController(IEffectService effectService, IEffect
     [HttpPost]
     public async Task<CreatedActionResult<EffectSubCategoryResponse>> PostCreateEffectSubCategoryAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        CreateEffectSubCategoryRequest request
+        CreateEffectSubCategoryRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var effectSubCategory = await effectService.CreateEffectSubCategoryAsync(executionContext, request);
+            var effectSubCategory = await effectService.CreateEffectSubCategoryAsync(executionContext, request, cancellationToken);
             return effectMapper.ToResponse(effectSubCategory);
         }
         catch (ForbiddenAccessException ex)

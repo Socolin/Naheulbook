@@ -18,12 +18,13 @@ public class NpcController(
     public async Task<ActionResult<NpcResponse>> PutEditNpcAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int npcId,
-        NpcRequest request
+        NpcRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var npc = await npcService.EditNpcAsync(executionContext, npcId, request);
+            var npc = await npcService.EditNpcAsync(executionContext, npcId, request, cancellationToken);
             return npcMapper.ToResponse(npc);
         }
         catch (ForbiddenAccessException ex)

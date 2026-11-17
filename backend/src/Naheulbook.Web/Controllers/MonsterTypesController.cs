@@ -13,9 +13,9 @@ namespace Naheulbook.Web.Controllers;
 public class MonsterTypesController(IMonsterTemplateMapper monsterTemplateMapper, IMonsterTypeService monsterTypeService)
 {
     [HttpGet]
-    public async Task<ActionResult<List<MonsterTypeResponse>>> GetMonsterTypesAsync()
+    public async Task<ActionResult<List<MonsterTypeResponse>>> GetMonsterTypesAsync(CancellationToken cancellationToken)
     {
-        var monsterTypes = await monsterTypeService.GetMonsterTypesWithCategoriesAsync();
+        var monsterTypes = await monsterTypeService.GetMonsterTypesWithCategoriesAsync(cancellationToken);
         return monsterTypes.Select(monsterTemplateMapper.ToResponse).ToList();
     }
 
@@ -23,12 +23,13 @@ public class MonsterTypesController(IMonsterTemplateMapper monsterTemplateMapper
     [HttpPost]
     public async Task<CreatedActionResult<MonsterTypeResponse>> PostCreateMonsterTypeAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        CreateMonsterTypeRequest request
+        CreateMonsterTypeRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var monsterType = await monsterTypeService.CreateMonsterTypeAsync(executionContext, request);
+            var monsterType = await monsterTypeService.CreateMonsterTypeAsync(executionContext, request, cancellationToken);
             return monsterTemplateMapper.ToResponse(monsterType);
         }
         catch (ForbiddenAccessException ex)
@@ -41,12 +42,13 @@ public class MonsterTypesController(IMonsterTemplateMapper monsterTemplateMapper
     public async Task<CreatedActionResult<MonsterSubCategoryResponse>> PostCreateMonsterSubCategoryAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int monsterTypeId,
-        CreateMonsterSubCategoryRequest request
+        CreateMonsterSubCategoryRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var monsterSubCategory = await monsterTypeService.CreateMonsterSubCategoryAsync(executionContext, monsterTypeId, request);
+            var monsterSubCategory = await monsterTypeService.CreateMonsterSubCategoryAsync(executionContext, monsterTypeId, request, cancellationToken);
             return monsterTemplateMapper.ToResponse(monsterSubCategory);
         }
         catch (ForbiddenAccessException ex)

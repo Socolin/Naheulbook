@@ -7,15 +7,15 @@ namespace Naheulbook.Data.Repositories;
 
 public interface ICharacterModifierRepository : IRepository<CharacterModifierEntity>
 {
-    Task<CharacterModifierEntity?> GetByIdAndCharacterIdAsync(int characterId, int characterModifierId);
+    Task<CharacterModifierEntity?> GetByIdAndCharacterIdAsync(int characterId, int characterModifierId, CancellationToken cancellationToken = default);
 }
 
 public class CharacterModifierRepository(NaheulbookDbContext naheulbookDbContext) : Repository<CharacterModifierEntity, NaheulbookDbContext>(naheulbookDbContext), ICharacterModifierRepository
 {
-    public Task<CharacterModifierEntity?> GetByIdAndCharacterIdAsync(int characterId, int characterModifierId)
+    public Task<CharacterModifierEntity?> GetByIdAndCharacterIdAsync(int characterId, int characterModifierId, CancellationToken cancellationToken = default)
     {
         return Context.CharacterModifiers
             .Include(x => x.Values)
-            .SingleOrDefaultAsync(m => m.CharacterId == characterId && m.Id == characterModifierId);
+            .SingleOrDefaultAsync(m => m.CharacterId == characterId && m.Id == characterModifierId, cancellationToken);
     }
 }

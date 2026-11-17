@@ -6,15 +6,15 @@ namespace Naheulbook.Data.Repositories;
 
 public interface ISkillRepository : IRepository<SkillEntity>
 {
-    Task<ICollection<SkillEntity>> GetAllWithEffectsAsync();
+    Task<ICollection<SkillEntity>> GetAllWithEffectsAsync(CancellationToken cancellationToken = default);
 }
 
 public class SkillRepository(NaheulbookDbContext context) : Repository<SkillEntity, NaheulbookDbContext>(context), ISkillRepository
 {
-    public async Task<ICollection<SkillEntity>> GetAllWithEffectsAsync()
+    public async Task<ICollection<SkillEntity>> GetAllWithEffectsAsync(CancellationToken cancellationToken = default)
     {
         return await Context.Skills
             .Include(s => s.SkillEffects)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

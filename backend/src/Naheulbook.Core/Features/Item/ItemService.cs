@@ -12,17 +12,17 @@ namespace Naheulbook.Core.Features.Item;
 
 public interface IItemService
 {
-    Task<ItemEntity> AddItemToAsync(ItemOwnerType ownerType, int ownerId, CreateItemRequest request);
-    Task<ItemEntity> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request, int? currentUserId);
-    Task<ItemEntity> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData);
-    Task<ItemEntity> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers);
-    Task<ItemEntity> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request);
-    Task<ItemEntity> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request);
-    Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId);
-    Task<(ItemEntity takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request);
-    Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, GiveItemRequest request);
-    Task<IList<ItemEntity>> CreateItemsAsync(IList<CreateItemRequest>? requestItems);
-    Task<ItemEntity> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request);
+    Task<ItemEntity> AddItemToAsync(ItemOwnerType ownerType, int ownerId, CreateItemRequest request, CancellationToken cancellationToken = default);
+    Task<ItemEntity> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request, int? currentUserId, CancellationToken cancellationToken = default);
+    Task<ItemEntity> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData, CancellationToken cancellationToken = default);
+    Task<ItemEntity> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers, CancellationToken cancellationToken = default);
+    Task<ItemEntity> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request, CancellationToken cancellationToken = default);
+    Task<ItemEntity> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request, CancellationToken cancellationToken = default);
+    Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId, CancellationToken cancellationToken = default);
+    Task<(ItemEntity takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request, CancellationToken cancellationToken = default);
+    Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, GiveItemRequest request, CancellationToken cancellationToken = default);
+    Task<IList<ItemEntity>> CreateItemsAsync(IList<CreateItemRequest>? requestItems, CancellationToken cancellationToken = default);
+    Task<ItemEntity> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request, CancellationToken cancellationToken = default);
 }
 
 public class ItemService(
@@ -42,27 +42,28 @@ public class ItemService(
     public async Task<ItemEntity> AddItemToAsync(
         ItemOwnerType ownerType,
         int ownerId,
-        CreateItemRequest request
+        CreateItemRequest request,
+        CancellationToken cancellationToken = default
     )
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var itemTemplate = await uow.ItemTemplates.GetAsync(request.ItemTemplateId);
+        var itemTemplate = await uow.ItemTemplates.GetAsync(request.ItemTemplateId, cancellationToken);
         if (itemTemplate == null)
             throw new ItemTemplateNotFoundException(request.ItemTemplateId);
 
         var item = itemFactory.CreateItem(ownerType, ownerId, itemTemplate, request.ItemData);
 
         uow.Items.Add(item);
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
-        return (await uow.Items.GetWithAllDataAsync(item.Id))!;
+        return (await uow.Items.GetWithAllDataAsync(item.Id, cancellationToken))!;
     }
 
-    public async Task<ItemEntity> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request, int? currentUserId)
+    public async Task<ItemEntity> AddRandomItemToAsync(ItemOwnerType ownerType, int ownerId, CreateRandomItemRequest request, int? currentUserId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var itemTemplateSubCategory = await uow.ItemTemplateSubCategories.GetWithItemTemplatesByTechNameAsync(request.SubCategoryTechName);
+        var itemTemplateSubCategory = await uow.ItemTemplateSubCategories.GetWithItemTemplatesByTechNameAsync(request.SubCategoryTechName, cancellationToken);
         if (itemTemplateSubCategory == null)
             throw new ItemTemplateSubCategoryNotFoundException(request.SubCategoryTechName);
 
@@ -76,15 +77,15 @@ public class ItemService(
         var item = itemFactory.CreateItem(ownerType, ownerId, itemTemplate, new ItemData());
 
         uow.Items.Add(item);
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
-        return (await uow.Items.GetWithAllDataAsync(item.Id))!;
+        return (await uow.Items.GetWithAllDataAsync(item.Id, cancellationToken))!;
     }
 
-    public async Task<ItemEntity> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData)
+    public async Task<ItemEntity> UpdateItemDataAsync(NaheulbookExecutionContext executionContext, int itemId, ItemData itemData, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var item = await uow.Items.GetWithOwnerAsync(itemId);
+        var item = await uow.Items.GetWithOwnerAsync(itemId, cancellationToken);
         if (item == null)
             throw new ItemNotFoundException(itemId);
 
@@ -103,7 +104,7 @@ public class ItemService(
 
         itemDataUtil.SetItemData(item, itemData);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyItemDataChanged(item);
@@ -112,10 +113,10 @@ public class ItemService(
         return item;
     }
 
-    public async Task<ItemEntity> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers)
+    public async Task<ItemEntity> UpdateItemModifiersAsync(NaheulbookExecutionContext executionContext, int itemId, IList<ActiveStatsModifier> itemModifiers, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var item = await uow.Items.GetWithOwnerAsync(itemId);
+        var item = await uow.Items.GetWithOwnerAsync(itemId, cancellationToken);
         if (item == null)
             throw new ItemNotFoundException(itemId);
 
@@ -123,7 +124,7 @@ public class ItemService(
 
         item.Modifiers = jsonUtil.Serialize(itemModifiers);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyItemModifiersChanged(item);
@@ -132,10 +133,10 @@ public class ItemService(
         return item;
     }
 
-    public async Task<ItemEntity> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request)
+    public async Task<ItemEntity> EquipItemAsync(NaheulbookExecutionContext executionContext, int itemId, EquipItemRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var item = await uow.Items.GetWithOwnerAsync(itemId);
+        var item = await uow.Items.GetWithOwnerAsync(itemId, cancellationToken);
         if (item == null)
             throw new ItemNotFoundException(itemId);
 
@@ -143,7 +144,7 @@ public class ItemService(
 
         itemUtil.EquipItem(item, request.Level);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyEquipItem(item);
@@ -152,10 +153,10 @@ public class ItemService(
         return item;
     }
 
-    public async Task<ItemEntity> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request)
+    public async Task<ItemEntity> ChangeItemContainerAsync(NaheulbookExecutionContext executionContext, int itemId, ChangeItemContainerRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var item = await uow.Items.GetWithOwnerAsync(itemId);
+        var item = await uow.Items.GetWithOwnerAsync(itemId, cancellationToken);
         if (item == null)
             throw new ItemNotFoundException(itemId);
 
@@ -163,7 +164,7 @@ public class ItemService(
 
         item.ContainerId = request.ContainerId;
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
 
         var session = notificationSessionFactory.CreateSession();
         session.NotifyItemChangeContainer(item);
@@ -172,10 +173,10 @@ public class ItemService(
         return item;
     }
 
-    public async Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId)
+    public async Task DeleteItemAsync(NaheulbookExecutionContext executionContext, int itemId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var item = await uow.Items.GetWithOwnerAsync(itemId);
+        var item = await uow.Items.GetWithOwnerAsync(itemId, cancellationToken);
         if (item == null)
             throw new ItemNotFoundException(itemId);
 
@@ -195,21 +196,21 @@ public class ItemService(
             uow.Items.Remove(item);
         }
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await session.CommitAsync();
     }
 
-    public async Task<(ItemEntity takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request)
+    public async Task<(ItemEntity takenItem, int remainingQuantity)> TakeItemAsync(NaheulbookExecutionContext executionContext, int itemId, TakeItemRequest request, CancellationToken cancellationToken = default)
     {
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var item = await uow.Items.GetWithOwnerWitGroupCharactersAsync(itemId);
+            var item = await uow.Items.GetWithOwnerWitGroupCharactersAsync(itemId, cancellationToken);
             if (item == null)
                 throw new ItemNotFoundException(itemId);
 
             authorizationUtil.EnsureCanTakeItem(executionContext, item);
 
-            var character = await uow.Characters.GetWithGroupAsync(request.CharacterId);
+            var character = await uow.Characters.GetWithGroupAsync(request.CharacterId, cancellationToken);
             if (character == null)
                 throw new CharacterNotFoundException(request.CharacterId);
 
@@ -217,14 +218,14 @@ public class ItemService(
         }
 
 
-        return await itemUtil.MoveItemToAsync(itemId, request.CharacterId, request.Quantity, MoveItemTrigger.TakeItemFromLoot);
+        return await itemUtil.MoveItemToAsync(itemId, request.CharacterId, request.Quantity, MoveItemTrigger.TakeItemFromLoot, cancellationToken);
     }
 
-    public async Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, GiveItemRequest request)
+    public async Task<int> GiveItemAsync(NaheulbookExecutionContext executionContext, int itemId, GiveItemRequest request, CancellationToken cancellationToken = default)
     {
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var item = await uow.Items.GetWithOwnerWitGroupCharactersAsync(itemId);
+            var item = await uow.Items.GetWithOwnerWitGroupCharactersAsync(itemId, cancellationToken);
             if (item == null)
                 throw new ItemNotFoundException(itemId);
             if (item.CharacterId == null)
@@ -237,12 +238,12 @@ public class ItemService(
         }
 
 
-        var (_, remainingQuantity) = await itemUtil.MoveItemToAsync(itemId, request.CharacterId, request.Quantity, MoveItemTrigger.GiveItem);
+        var (_, remainingQuantity) = await itemUtil.MoveItemToAsync(itemId, request.CharacterId, request.Quantity, MoveItemTrigger.GiveItem, cancellationToken);
 
         return remainingQuantity;
     }
 
-    public async Task<IList<ItemEntity>> CreateItemsAsync(IList<CreateItemRequest>? requestItems)
+    public async Task<IList<ItemEntity>> CreateItemsAsync(IList<CreateItemRequest>? requestItems, CancellationToken cancellationToken = default)
     {
         if (requestItems == null)
             return new List<ItemEntity>();
@@ -252,7 +253,7 @@ public class ItemService(
         Dictionary<Guid, ItemTemplateEntity> itemTemplatesById;
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(requestItems.Select(x => x.ItemTemplateId));
+            var itemTemplates = await uow.ItemTemplates.GetByIdsAsync(requestItems.Select(x => x.ItemTemplateId), cancellationToken);
             itemTemplatesById = itemTemplates.ToDictionary(itemTemplate => itemTemplate.Id, itemTemplate => itemTemplate);
         }
 
@@ -268,10 +269,10 @@ public class ItemService(
         return items;
     }
 
-    public async Task<ItemEntity> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request)
+    public async Task<ItemEntity> UseChargeAsync(NaheulbookExecutionContext executionContext, int itemId, UseChargeItemRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var usedItem = await uow.Items.GetWithAllDataWithCharacterAsync(itemId);
+        var usedItem = await uow.Items.GetWithAllDataWithCharacterAsync(itemId, cancellationToken);
         if (usedItem == null)
             throw new ItemNotFoundException(itemId);
         if (!usedItem.CharacterId.HasValue)
@@ -279,8 +280,8 @@ public class ItemService(
 
         authorizationUtil.EnsureItemAccess(executionContext, usedItem);
 
-        var sourceCharacter = await uow.Characters.GetWithAllDataAsync(usedItem.CharacterId.Value);
-        var targetCharacter = await uow.Characters.GetWithAllDataAsync(usedItem.CharacterId.Value);
+        var sourceCharacter = await uow.Characters.GetWithAllDataAsync(usedItem.CharacterId.Value, cancellationToken);
+        var targetCharacter = await uow.Characters.GetWithAllDataAsync(usedItem.CharacterId.Value, cancellationToken);
 
         if (sourceCharacter == null)
             throw new CharacterNotFoundException(usedItem.CharacterId.Value);
@@ -304,10 +305,10 @@ public class ItemService(
             throw new InvalidItemTemplateActionsDataException(usedItem.ItemTemplateId);
         foreach (var action in itemTemplateData.Actions)
         {
-            await actionsUtil.ExecuteActionAsync(action, context, notificationSession);
+            await actionsUtil.ExecuteActionAsync(action, context, notificationSession, cancellationToken);
         }
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await notificationSession.CommitAsync();
 
         return usedItem;

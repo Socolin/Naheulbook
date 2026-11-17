@@ -23,6 +23,6 @@ public class AptitudeGroupRepository(NaheulbookDbContext context)
         return await Context.AptitudeGroups
             .Where(x => x.Id == aptitudeGroupId)
             .Include(x => x.Aptitudes)
-            .SingleOrDefaultAsync(cancellationToken: cancellationToken);
+            .SingleOrDefaultAsync(cancellationToken);
     }
 }

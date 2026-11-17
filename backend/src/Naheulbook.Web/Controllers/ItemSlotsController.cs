@@ -9,9 +9,9 @@ namespace Naheulbook.Web.Controllers;
 public class ItemSlotsController(IItemTemplateService itemTemplateService, IItemTemplateMapper itemTemplateMapper)
 {
     [HttpGet]
-    public async Task<ActionResult<List<ItemSlotResponse>>> GetAsync()
+    public async Task<ActionResult<List<ItemSlotResponse>>> GetAsync(CancellationToken cancellationToken)
     {
-        var skills = await itemTemplateService.GetItemSlotsAsync();
+        var skills = await itemTemplateService.GetItemSlotsAsync(cancellationToken);
 
         return skills.Select(itemTemplateMapper.ToResponse).ToList();
     }

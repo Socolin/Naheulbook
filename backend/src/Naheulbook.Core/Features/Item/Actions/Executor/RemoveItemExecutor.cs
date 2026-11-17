@@ -12,7 +12,8 @@ public class RemoveItemExecutor(IItemUtil itemUtil) : IRemoveItemExecutor
     public Task ExecuteAsync(
         NhbkAction action,
         ActionContext context,
-        INotificationSession notificationSession
+        INotificationSession notificationSession,
+        CancellationToken cancellationToken = default
     )
     {
         if (action.Type != ActionType)

@@ -7,22 +7,22 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IItemTemplateSubCategoryRepository : IRepository<ItemTemplateSubCategoryEntity>
 {
-    Task<ItemTemplateSubCategoryEntity?> GetWithItemTemplatesByTechNameAsync(string techName);
-    Task<ItemTemplateSubCategoryEntity?> GetByTechNameAsync(string techName);
+    Task<ItemTemplateSubCategoryEntity?> GetWithItemTemplatesByTechNameAsync(string techName, CancellationToken cancellationToken = default);
+    Task<ItemTemplateSubCategoryEntity?> GetByTechNameAsync(string techName, CancellationToken cancellationToken = default);
 }
 
 public class ItemTemplateSubCategoryRepository(NaheulbookDbContext context) : Repository<ItemTemplateSubCategoryEntity, NaheulbookDbContext>(context), IItemTemplateSubCategoryRepository
 {
-    public Task<ItemTemplateSubCategoryEntity?> GetWithItemTemplatesByTechNameAsync(string techName)
+    public Task<ItemTemplateSubCategoryEntity?> GetWithItemTemplatesByTechNameAsync(string techName, CancellationToken cancellationToken = default)
     {
         return Context.ItemTemplateSubCategories
             .Include(c => c.ItemTemplates)
-            .SingleOrDefaultAsync(c => c.TechName == techName);
+            .SingleOrDefaultAsync(c => c.TechName == techName, cancellationToken);
     }
 
-    public Task<ItemTemplateSubCategoryEntity?> GetByTechNameAsync(string techName)
+    public Task<ItemTemplateSubCategoryEntity?> GetByTechNameAsync(string techName, CancellationToken cancellationToken = default)
     {
         return Context.ItemTemplateSubCategories
-            .SingleOrDefaultAsync(c => c.TechName == techName);
+            .SingleOrDefaultAsync(c => c.TechName == techName, cancellationToken);
     }
 }

@@ -5,14 +5,14 @@ namespace Naheulbook.Core.Features.Stat;
 
 public interface IStatService
 {
-    Task<List<StatEntity>> GetAllStatsAsync();
+    Task<List<StatEntity>> GetAllStatsAsync(CancellationToken cancellationToken = default);
 }
 
 public class StatService(IUnitOfWorkFactory unitOfWorkFactory) : IStatService
 {
-    public async Task<List<StatEntity>> GetAllStatsAsync()
+    public async Task<List<StatEntity>> GetAllStatsAsync(CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        return await uow.Stats.GetAllAsync();
+        return await uow.Stats.GetAllAsync(cancellationToken);
     }
 }

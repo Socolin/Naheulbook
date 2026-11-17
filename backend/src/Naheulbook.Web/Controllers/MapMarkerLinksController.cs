@@ -15,12 +15,13 @@ public class MapMarkerLinksController(IMapService mapService, IMapMapper mapMapp
     public async Task<ActionResult<MapMarkerLinkResponse>> PutEditMapMarkerLinkAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int mapMarkerLinkId,
-        MapMarkerLinkRequest request
+        MapMarkerLinkRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var mapMarkerLink = await mapService.EditMapMarkerLinkAsync(executionContext, mapMarkerLinkId, request);
+            var mapMarkerLink = await mapService.EditMapMarkerLinkAsync(executionContext, mapMarkerLinkId, request, cancellationToken);
             return mapMapper.ToResponse(mapMarkerLink);
         }
         catch (MapMarkerNotFoundException ex)
@@ -32,12 +33,13 @@ public class MapMarkerLinksController(IMapService mapService, IMapMapper mapMapp
     [HttpDelete("{MapMarkerLinkId}")]
     public async Task<IActionResult> DeleteMarkerLinkAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        [FromRoute] int mapMarkerLinkId
+        [FromRoute] int mapMarkerLinkId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await mapService.DeleteMapMarkerLinkAsync(executionContext, mapMarkerLinkId);
+            await mapService.DeleteMapMarkerLinkAsync(executionContext, mapMarkerLinkId, cancellationToken);
         }
         catch (MapMarkerNotFoundException ex)
         {

@@ -4,6 +4,7 @@ using Naheulbook.Core.Notifications;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Core.Features.Aptitude;
 
@@ -48,13 +49,13 @@ public class CharacterAptitudeService(
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupWithOriginAsync(characterId);
+        var character = await uow.Characters.GetWithGroupWithOriginAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
         authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-        var aptitude = await uow.AptitudeRepository.GetAsync(request.AptitudeId);
+        var aptitude = await uow.AptitudeRepository.GetAsync(request.AptitudeId, cancellationToken);
         if (aptitude == null)
             throw new AptitudeNotFoundException(request.AptitudeId);
 
@@ -82,7 +83,7 @@ public class CharacterAptitudeService(
 
         notificationSession.NotifyCharacterAddAptitude(characterId, characterAptitude);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await notificationSession.CommitAsync();
 
         return characterAptitude;
@@ -97,7 +98,7 @@ public class CharacterAptitudeService(
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupWithOriginAsync(characterId);
+        var character = await uow.Characters.GetWithGroupWithOriginAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
@@ -116,7 +117,7 @@ public class CharacterAptitudeService(
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyCharacterRemoveAptitude(characterId, characterAptitude);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await notificationSession.CommitAsync();
     }
 
@@ -130,7 +131,7 @@ public class CharacterAptitudeService(
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
 
-        var character = await uow.Characters.GetWithGroupWithOriginAsync(characterId);
+        var character = await uow.Characters.GetWithGroupWithOriginAsync(characterId, cancellationToken);
         if (character == null)
             throw new CharacterNotFoundException(characterId);
 
@@ -145,7 +146,7 @@ public class CharacterAptitudeService(
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyCharacterUpdateAptitude(characterId, characterAptitude);
 
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await notificationSession.CommitAsync();
     }
 }

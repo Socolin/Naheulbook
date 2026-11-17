@@ -9,9 +9,9 @@ namespace Naheulbook.Web.Controllers;
 public class JobsController(IJobService jobService, IJobMapper jobMapper) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<JobResponse>>> GetAsync()
+    public async Task<ActionResult<List<JobResponse>>> GetAsync(CancellationToken cancellationToken)
     {
-        var jobs = await jobService.GetJobsAsync();
+        var jobs = await jobService.GetJobsAsync(cancellationToken);
 
         return jobs.Select(jobMapper.ToResponse).ToList();
     }

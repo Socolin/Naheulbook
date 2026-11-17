@@ -5,5 +5,5 @@ namespace Naheulbook.Core.Features.Item.Actions;
 
 public interface IActionExecutor
 {
-    Task ExecuteAsync(NhbkAction action, ActionContext context, INotificationSession notificationSession);
+    Task ExecuteAsync(NhbkAction action, ActionContext context, INotificationSession notificationSession, CancellationToken cancellationToken = default);
 }

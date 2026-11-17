@@ -15,9 +15,9 @@ public class OriginsController(
 ) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<OriginResponse>>> GetAsync()
+    public async Task<ActionResult<List<OriginResponse>>> GetAsync(CancellationToken cancellationToken)
     {
-        var skills = await originService.GetOriginsAsync();
+        var skills = await originService.GetOriginsAsync(cancellationToken);
 
         return skills.Select(originMapper.ToResponse).ToList();
     }
@@ -25,12 +25,13 @@ public class OriginsController(
     [HttpGet("{OriginId:guid}/randomCharacterName")]
     public async Task<RandomCharacterNameResponse> GetRandomCharacterNameAsync(
         [FromRoute] Guid originId,
-        [FromQuery] string sex
+        [FromQuery] string sex,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var randomName = await characterRandomNameService.GenerateRandomCharacterNameAsync(originId, sex);
+            var randomName = await characterRandomNameService.GenerateRandomCharacterNameAsync(originId, sex, cancellationToken);
             return new RandomCharacterNameResponse
             {
                 Name = randomName,

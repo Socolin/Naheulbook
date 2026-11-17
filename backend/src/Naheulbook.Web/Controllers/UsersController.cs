@@ -16,11 +16,11 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
     : ControllerBase
 {
     [HttpPost]
-    public async Task<StatusCodeResult> PostAsync(CreateUserRequest request)
+    public async Task<StatusCodeResult> PostAsync(CreateUserRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            await userService.CreateUserAsync(request.Username, request.Password);
+            await userService.CreateUserAsync(request.Username, request.Password, cancellationToken);
         }
         catch (UserAlreadyExistsException)
         {
@@ -31,11 +31,11 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
     }
 
     [HttpPost("{Username}/validate")]
-    public async Task<StatusCodeResult> PostValidateUserAsync(string username, ValidateUserRequest request)
+    public async Task<StatusCodeResult> PostValidateUserAsync(string username, ValidateUserRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            await userService.ValidateUserAsync(username, request.ActivationCode);
+            await userService.ValidateUserAsync(username, request.ActivationCode, cancellationToken);
         }
         catch (UserNotFoundException)
         {
@@ -50,11 +50,11 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
     }
 
     [HttpPost("{Username}/jwt")]
-    public async Task<ActionResult<UserJwtResponse>> PostGenerateJwtAsync(string username, GenerateJwtRequest request)
+    public async Task<ActionResult<UserJwtResponse>> PostGenerateJwtAsync(string username, GenerateJwtRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            var user = await userService.CheckPasswordAsync(username, request.Password);
+            var user = await userService.CheckPasswordAsync(username, request.Password, cancellationToken);
             HttpContext.Session.SetCurrentUserId(user.Id);
             var token = jwtService.GenerateJwtToken(user.Id);
             return new UserJwtResponse {Token = token};
@@ -70,26 +70,26 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
     }
 
     [HttpGet("me")]
-    public async Task<ActionResult<UserInfoResponse>> GetCurrentUserInfoAsync()
+    public async Task<ActionResult<UserInfoResponse>> GetCurrentUserInfoAsync(CancellationToken cancellationToken)
     {
         // FIXME: userSession if userId is not found, check in db if long duration session still valid
         var userId = HttpContext.Session.GetCurrentUserId();
         if (!userId.HasValue)
             return StatusCode(StatusCodes.Status401Unauthorized);
 
-        var user = await userService.GetUserInfoAsync(userId.Value);
+        var user = await userService.GetUserInfoAsync(userId.Value, cancellationToken);
         return userMapper.ToInfoResponse(user);
     }
 
     [HttpGet("me/jwt")]
-    public async Task<ActionResult<UserJwtResponse>> GetAJwtAsync()
+    public async Task<ActionResult<UserJwtResponse>> GetAJwtAsync(CancellationToken cancellationToken)
     {
         // FIXME: userSession if userId is not found, check in db if long duration session still valid
         var userId = HttpContext.Session.GetCurrentUserId();
         if (!userId.HasValue)
             return StatusCode(StatusCodes.Status401Unauthorized);
 
-        var userInfo = await userService.GetUserInfoAsync(userId.Value);
+        var userInfo = await userService.GetUserInfoAsync(userId.Value, cancellationToken);
         var token = jwtService.GenerateJwtToken(userId.Value);
 
         return new UserJwtResponse
@@ -100,20 +100,21 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
     }
 
     [HttpGet("me/accessTokens")]
-    public async Task<ActionResult<List<UserAccessTokenResponse>>> GetUserAccessTokens()
+    public async Task<ActionResult<List<UserAccessTokenResponse>>> GetUserAccessTokens(CancellationToken cancellationToken)
     {
         // FIXME: userSession if userId is not found, check in db if long duration session still valid
         var userId = HttpContext.Session.GetCurrentUserId();
         if (!userId.HasValue)
             return StatusCode(StatusCodes.Status401Unauthorized);
 
-        var accessTokens = await userAccessTokenService.GetUserAccessTokensAsync(userId.Value);
+        var accessTokens = await userAccessTokenService.GetUserAccessTokensAsync(userId.Value, cancellationToken);
         return accessTokens.Select(userMapper.ToResponse).ToList();
     }
 
     [HttpPost("me/accessTokens")]
     public async Task<CreatedActionResult<UserAccessTokenResponseWithKey>> PostCreateUserAccessToken(
-        [FromBody] CreateAccessTokenRequest request
+        [FromBody] CreateAccessTokenRequest request,
+        CancellationToken cancellationToken
     )
     {
         // FIXME: userSession if userId is not found, check in db if long duration session still valid
@@ -121,14 +122,15 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
         if (!userId.HasValue)
             return StatusCode(StatusCodes.Status401Unauthorized);
 
-        var accessToken= await userAccessTokenService.CreateUserAccessTokenAsync(userId.Value, request);
+        var accessToken= await userAccessTokenService.CreateUserAccessTokenAsync(userId.Value, request, cancellationToken);
 
         return userMapper.ToResponseWithKey(accessToken);
     }
 
     [HttpDelete("me/accessTokens/{UserAccessTokenId}")]
     public async Task<ActionResult<List<UserAccessTokenResponse>>> DeleteUserAccessToken(
-        [FromRoute] Guid userAccessTokenId
+        [FromRoute] Guid userAccessTokenId,
+        CancellationToken cancellationToken
     )
     {
         // FIXME: userSession if userId is not found, check in db if long duration session still valid
@@ -138,7 +140,7 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
 
         try
         {
-            await userAccessTokenService.DeleteUserAccessTokensAsync(userId.Value, userAccessTokenId);
+            await userAccessTokenService.DeleteUserAccessTokensAsync(userId.Value, userAccessTokenId, cancellationToken);
             return NoContent();
         }
         catch (UserAccessTokenNotFoundException ex)
@@ -157,12 +159,13 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
     [HttpPost("search")]
     public async Task<ActionResult<List<UserSearchResponse>>> PostSearchAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        SearchUserRequest request
+        SearchUserRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var users = await userService.SearchUserAsync(executionContext, request.Filter);
+            var users = await userService.SearchUserAsync(executionContext, request.Filter, cancellationToken);
             return users.Select(userMapper.ToSearchResponse).ToList();
         }
         catch (ForbiddenAccessException ex)
@@ -175,12 +178,13 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
     public async Task<IActionResult> PatchUserIdAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int userId,
-        UpdateUserRequest request
+        UpdateUserRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            await userService.UpdateUserAsync(executionContext, userId, request);
+            await userService.UpdateUserAsync(executionContext, userId, request, cancellationToken);
             return NoContent();
         }
         catch (UserNotFoundException ex)

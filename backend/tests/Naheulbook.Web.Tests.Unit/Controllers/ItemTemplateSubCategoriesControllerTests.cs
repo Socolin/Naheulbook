@@ -40,7 +40,7 @@ public class ItemTemplateSubCategoriesControllerTests
         _itemTemplateMapper.ToResponse(itemTemplateSubCategory)
             .Returns(itemTemplateSubCategoryResponse);
 
-        var result = await _itemTemplateSubCategoriesController.PostCreateItemTemplateSubCategoryAsync(_executionContext, createItemTemplateSubCategoryRequest);
+        var result = await _itemTemplateSubCategoriesController.PostCreateItemTemplateSubCategoryAsync(_executionContext, createItemTemplateSubCategoryRequest, CancellationToken.None);
 
         result.StatusCode.Should().Be(201);
         result.Value.Should().Be(itemTemplateSubCategoryResponse);
@@ -54,7 +54,7 @@ public class ItemTemplateSubCategoriesControllerTests
         _itemTemplateSubCategoryService.CreateItemTemplateSubCategoryAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<CreateItemTemplateSubCategoryRequest>())
             .Returns(Task.FromException<ItemTemplateSubCategoryEntity>(new ForbiddenAccessException()));
 
-        Func<Task> act = () => _itemTemplateSubCategoriesController.PostCreateItemTemplateSubCategoryAsync(_executionContext, createItemTemplateSubCategoryRequest);
+        Func<Task> act = () => _itemTemplateSubCategoriesController.PostCreateItemTemplateSubCategoryAsync(_executionContext, createItemTemplateSubCategoryRequest, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }

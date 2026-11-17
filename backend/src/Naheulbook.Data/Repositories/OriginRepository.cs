@@ -6,13 +6,13 @@ namespace Naheulbook.Data.Repositories;
 
 public interface IOriginRepository : IRepository<OriginEntity>
 {
-    Task<ICollection<OriginEntity>> GetAllWithAllDataAsync();
-    Task<OriginEntity?> GetWithAllDataAsync(Guid originId);
+    Task<ICollection<OriginEntity>> GetAllWithAllDataAsync(CancellationToken cancellationToken = default);
+    Task<OriginEntity?> GetWithAllDataAsync(Guid originId, CancellationToken cancellationToken = default);
 }
 
 public class OriginRepository(NaheulbookDbContext context) : Repository<OriginEntity, NaheulbookDbContext>(context), IOriginRepository
 {
-    public async Task<ICollection<OriginEntity>> GetAllWithAllDataAsync()
+    public async Task<ICollection<OriginEntity>> GetAllWithAllDataAsync(CancellationToken cancellationToken = default)
     {
         return await Context.Origins
             .Include(o => o.Requirements)
@@ -20,10 +20,10 @@ public class OriginRepository(NaheulbookDbContext context) : Repository<OriginEn
             .Include(o => o.Restrictions)
             .Include(o => o.Bonuses)
             .Include(o => o.Skills)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<OriginEntity?> GetWithAllDataAsync(Guid originId)
+    public Task<OriginEntity?> GetWithAllDataAsync(Guid originId, CancellationToken cancellationToken = default)
     {
         return Context.Origins
             .Include(o => o.Requirements)
@@ -31,6 +31,6 @@ public class OriginRepository(NaheulbookDbContext context) : Repository<OriginEn
             .Include(o => o.Restrictions)
             .Include(o => o.Bonuses)
             .Include(o => o.Skills)
-            .SingleOrDefaultAsync(o => o.Id == originId);
+            .SingleOrDefaultAsync(o => o.Id == originId, cancellationToken);
     }
 }

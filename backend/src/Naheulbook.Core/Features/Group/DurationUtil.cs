@@ -10,7 +10,7 @@ namespace Naheulbook.Core.Features.Group;
 
 public interface IDurationUtil
 {
-    Task UpdateDurationAsync(int groupId, IList<FighterDurationChanges> fighters);
+    Task UpdateDurationAsync(int groupId, IList<FighterDurationChanges> fighters, CancellationToken cancellationToken = default);
 }
 
 public class DurationUtil(
@@ -19,7 +19,7 @@ public class DurationUtil(
     INotificationSessionFactory notificationSessionFactory
 ) : IDurationUtil
 {
-    public async Task UpdateDurationAsync(int groupId, IList<FighterDurationChanges> request)
+    public async Task UpdateDurationAsync(int groupId, IList<FighterDurationChanges> request, CancellationToken cancellationToken = default)
     {
         var notificationSession = notificationSessionFactory.CreateSession();
 
@@ -27,13 +27,13 @@ public class DurationUtil(
         {
             var monsterUpdateDurations = request.OfType<MonsterUpdateDuration>().ToList();
             var monsterIds = monsterUpdateDurations.Select(f => f.MonsterId).ToList();
-            var monsters = await uow.Monsters.GetWithItemsByGroupAndByIdAsync(groupId, monsterIds);
+            var monsters = await uow.Monsters.GetWithItemsByGroupAndByIdAsync(groupId, monsterIds, cancellationToken);
             if (monsterIds.Count != monsters.Count)
                 throw new MonsterNotFoundException(monsters.First(x => !monsterIds.Contains(x.Id)).Id);
 
             var characterUpdateDurations = request.OfType<CharacterUpdateDuration>().ToList();
             var characterIds = characterUpdateDurations.Select(f => f.CharacterId).ToList();
-            var characters = await uow.Characters.GetWithItemsWithModifiersByGroupAndByIdAsync(groupId, characterIds);
+            var characters = await uow.Characters.GetWithItemsWithModifiersByGroupAndByIdAsync(groupId, characterIds, cancellationToken);
             if (characterIds.Count != characters.Count)
                 throw new CharacterNotFoundException(characters.First(x => !characterIds.Contains(x.Id)).Id);
 
@@ -43,7 +43,7 @@ public class DurationUtil(
             foreach (var (monster, changes) in monsters.Join(monsterUpdateDurations, c => c.Id, c => c.MonsterId, (monster, updateDuration) => (monster, updateDuration.Changes)))
                 UpdateMonsterDuration(monster, changes, notificationSession);
 
-            await uow.SaveChangesAsync();
+            await uow.SaveChangesAsync(DoNotInterrupt.Token);
         }
 
         await notificationSession.CommitAsync();

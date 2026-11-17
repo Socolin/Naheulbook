@@ -10,8 +10,8 @@ namespace Naheulbook.Core.Features.Item;
 public interface IItemUtil
 {
     void EquipItem(ItemEntity item, int? level);
-    Task<(ItemEntity takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger);
-    Task<IList<ItemEntity>> CreateInitialPlayerInventoryAsync(int money);
+    Task<(ItemEntity takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger, CancellationToken cancellationToken = default);
+    Task<IList<ItemEntity>> CreateInitialPlayerInventoryAsync(int money, CancellationToken cancellationToken = default);
     bool DecrementQuantityOrDeleteItem(ItemEntity contextUsedItem);
 }
 
@@ -39,7 +39,7 @@ public class ItemUtil(
         }
     }
 
-    public async Task<(ItemEntity takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger)
+    public async Task<(ItemEntity takenItem, int remainingQuantity)> MoveItemToAsync(int itemId, int characterId, int? quantity, MoveItemTrigger trigger, CancellationToken cancellationToken = default)
     {
         var notificationSession = notificationSessionFactory.CreateSession();
 
@@ -48,10 +48,10 @@ public class ItemUtil(
 
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            var targetCharacter = await uow.Characters.GetAsync(characterId);
+            var targetCharacter = await uow.Characters.GetAsync(characterId, cancellationToken);
             if (targetCharacter == null)
                 throw new CharacterNotFoundException(characterId);
-            var originalItem = await uow.Items.GetWithAllDataWithCharacterAsync(itemId);
+            var originalItem = await uow.Items.GetWithAllDataWithCharacterAsync(itemId, cancellationToken);
             if (originalItem == null)
                 throw new ItemNotFoundException(itemId);
             var originalItemData = itemDataUtil.GetItemData(originalItem);
@@ -107,7 +107,7 @@ public class ItemUtil(
                 notificationSession.NotifyCharacterAddItem(targetCharacter.Id, splitItem, true);
             }
 
-            await uow.SaveChangesAsync();
+            await uow.SaveChangesAsync(DoNotInterrupt.Token);
         }
 
         await notificationSession.CommitAsync();
@@ -115,15 +115,15 @@ public class ItemUtil(
         return (takenItem, remainingQuantity);
     }
 
-    public async Task<IList<ItemEntity>> CreateInitialPlayerInventoryAsync(int money)
+    public async Task<IList<ItemEntity>> CreateInitialPlayerInventoryAsync(int money, CancellationToken cancellationToken = default)
     {
         ItemTemplateEntity purseItemTemplate;
         ItemTemplateEntity goldCoinItemTemplate;
 
         using (var uow = unitOfWorkFactory.CreateUnitOfWork())
         {
-            purseItemTemplate = await uow.ItemTemplates.GetPurseItemTemplateBasedOnMoneyAsync(money);
-            goldCoinItemTemplate = await uow.ItemTemplates.GetGoldCoinItemTemplate();
+            purseItemTemplate = await uow.ItemTemplates.GetPurseItemTemplateBasedOnMoneyAsync(money, cancellationToken);
+            goldCoinItemTemplate = await uow.ItemTemplates.GetGoldCoinItemTemplate(cancellationToken);
         }
 
         var purseItem = itemFactory.CreateItem(purseItemTemplate, new ItemData {Equipped = 1});

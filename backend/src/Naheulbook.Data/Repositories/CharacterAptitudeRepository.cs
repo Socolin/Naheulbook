@@ -25,6 +25,6 @@ public class CharacterAptitudeRepository(NaheulbookDbContext naheulbookDbContext
         return Context.CharacterAptitudes
             .Include(x => x.Aptitude)
             .Where(x => x.CharacterId == characterId && x.AptitudeId == aptitudeId)
-            .SingleOrDefaultAsync(cancellationToken: cancellationToken);
+            .SingleOrDefaultAsync(cancellationToken);
     }
 }

@@ -20,11 +20,11 @@ public class AptitudeGroupService(
 ) : IAptitudeGroupService
 {
     public async Task<List<AptitudeGroupEntity>> GetAptitudeGroupListAsync(
-        CancellationToken cancellationToken
+        CancellationToken cancellationToken = default
     )
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        return await uow.AptitudeGroupRepository.GetAllAsync();
+        return await uow.AptitudeGroupRepository.GetAllAsync(cancellationToken);
     }
 
     public async Task<AptitudeGroupEntity> GetAptitudeGroupAsync(

@@ -12,9 +12,9 @@ public class CalendarController(
 )
 {
     [HttpGet]
-    public async Task<ActionResult<List<CalendarResponse>>> GetCalendarAsync()
+    public async Task<ActionResult<List<CalendarResponse>>> GetCalendarAsync(CancellationToken cancellationToken)
     {
-        var calendar = await calendarService.GetCalendarAsync();
+        var calendar = await calendarService.GetCalendarAsync(cancellationToken);
         return calendar.Select(calendarMapper.ToResponse).ToList();
     }
 }

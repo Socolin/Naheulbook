@@ -12,9 +12,9 @@ public class GodsController(
 ) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<GodResponse>>> GetAllGodsAsync()
+    public async Task<ActionResult<List<GodResponse>>> GetAllGodsAsync(CancellationToken cancellationToken)
     {
-        var gods = await godService.GetAllGodsAsync();
+        var gods = await godService.GetAllGodsAsync(cancellationToken);
         return gods.Select(godMapper.ToResponse).ToList();
     }
 }

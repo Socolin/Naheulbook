@@ -17,10 +17,11 @@ public class MapLayerController(
     public async Task<ActionResult<MapMarkerResponse>> PostCreateMapMarkerAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int mapLayerId,
-        [FromBody] MapMarkerRequest request
+        [FromBody] MapMarkerRequest request,
+        CancellationToken cancellationToken
     )
     {
-        var map = await mapService.CreateMapMarkerAsync(executionContext, mapLayerId, request);
+        var map = await mapService.CreateMapMarkerAsync(executionContext, mapLayerId, request, cancellationToken);
 
         return mapMapper.ToResponse(map);
     }
@@ -29,10 +30,11 @@ public class MapLayerController(
     public async Task<ActionResult<MapLayerResponse>> PutEditMapMarkerAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int mapLayerId,
-        [FromBody] MapLayerRequest request
+        [FromBody] MapLayerRequest request,
+        CancellationToken cancellationToken
     )
     {
-        var map = await mapService.EditMapLayerAsync(executionContext, mapLayerId, request);
+        var map = await mapService.EditMapLayerAsync(executionContext, mapLayerId, request, cancellationToken);
 
         return mapMapper.ToResponse(map);
     }
@@ -40,10 +42,11 @@ public class MapLayerController(
     [HttpDelete("{MapLayerId:int:min(1)}")]
     public async Task<IActionResult> DeleteMapLayerAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
-        [FromRoute] int mapLayerId
+        [FromRoute] int mapLayerId,
+        CancellationToken cancellationToken
     )
     {
-        await mapService.DeleteMapLayerAsync(executionContext, mapLayerId);
+        await mapService.DeleteMapLayerAsync(executionContext, mapLayerId, cancellationToken);
 
         return NoContent();
     }

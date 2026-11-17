@@ -43,7 +43,7 @@ public class ItemTemplatesControllerTests
         _itemTemplateMapper.ToResponse(itemTemplate)
             .Returns(itemTemplateResponse);
 
-        var result = await _itemTemplatesController.GetItemTemplateAsync(itemTemplateId);
+        var result = await _itemTemplatesController.GetItemTemplateAsync(itemTemplateId, CancellationToken.None);
 
         result.Value.Should().Be(itemTemplateResponse);
     }
@@ -55,7 +55,7 @@ public class ItemTemplatesControllerTests
         _itemTemplateService.GetItemTemplateAsync(Arg.Any<Guid>())
             .Throws(new ItemTemplateNotFoundException(itemTemplateId));
 
-        Func<Task> act = () => _itemTemplatesController.GetItemTemplateAsync(itemTemplateId);
+        Func<Task> act = () => _itemTemplatesController.GetItemTemplateAsync(itemTemplateId, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
     }
@@ -72,7 +72,7 @@ public class ItemTemplatesControllerTests
         _itemTemplateMapper.ToResponse(itemTemplate)
             .Returns(itemTemplateResponse);
 
-        var result = await _itemTemplatesController.PutItemTemplateAsync(_executionContext, itemTemplateId, itemTemplateRequest);
+        var result = await _itemTemplatesController.PutItemTemplateAsync(_executionContext, itemTemplateId, itemTemplateRequest, CancellationToken.None);
 
         result.Value.Should().Be(itemTemplateResponse);
     }
@@ -86,7 +86,7 @@ public class ItemTemplatesControllerTests
         _itemTemplateService.EditItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<Guid>(), Arg.Any<ItemTemplateRequest>())
             .Throws(new ItemTemplateNotFoundException(itemTemplateId));
 
-        Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, itemTemplateId, itemTemplateRequest);
+        Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, itemTemplateId, itemTemplateRequest, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status404NotFound);
     }
@@ -99,7 +99,7 @@ public class ItemTemplatesControllerTests
         _itemTemplateService.EditItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<Guid>(), Arg.Any<ItemTemplateRequest>())
             .Throws(new ForbiddenAccessException());
 
-        Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, Guid.NewGuid(), itemTemplateRequest);
+        Func<Task> act = () => _itemTemplatesController.PutItemTemplateAsync(_executionContext, Guid.NewGuid(), itemTemplateRequest, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }
@@ -116,7 +116,7 @@ public class ItemTemplatesControllerTests
         _itemTemplateMapper.ToResponse(itemTemplate)
             .Returns(itemTemplateResponse);
 
-        var result = await _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, itemTemplateRequest);
+        var result = await _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, itemTemplateRequest, CancellationToken.None);
 
         result.StatusCode.Should().Be(201);
         result.Value.Should().Be(itemTemplateResponse);
@@ -130,7 +130,7 @@ public class ItemTemplatesControllerTests
         _itemTemplateService.CreateItemTemplateAsync(Arg.Any<NaheulbookExecutionContext>(), Arg.Any<ItemTemplateRequest>())
             .Returns(Task.FromException<ItemTemplateEntity>(new ForbiddenAccessException()));
 
-        Func<Task<JsonResult>> act = () => _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, itemTemplateRequest);
+        Func<Task<JsonResult>> act = () => _itemTemplatesController.PostCreateItemTemplateAsync(_executionContext, itemTemplateRequest, CancellationToken.None);
 
         (await act.Should().ThrowAsync<HttpErrorException>()).Which.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
     }

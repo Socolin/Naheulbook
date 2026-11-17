@@ -7,22 +7,22 @@ namespace Naheulbook.Core.Features.Users;
 
 public interface IUserAccessTokenService
 {
-    Task<IList<UserAccessTokenEntity>> GetUserAccessTokensAsync(int userId);
-    Task<UserAccessTokenEntity> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request);
-    Task<UserAccessTokenEntity?> ValidateTokenAsync(string token);
-    Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId);
+    Task<IList<UserAccessTokenEntity>> GetUserAccessTokensAsync(int userId, CancellationToken cancellationToken = default);
+    Task<UserAccessTokenEntity> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request, CancellationToken cancellationToken = default);
+    Task<UserAccessTokenEntity?> ValidateTokenAsync(string token, CancellationToken cancellationToken = default);
+    Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId, CancellationToken cancellationToken = default);
 }
 
 public class UserAccessTokenService(IUnitOfWorkFactory unitOfWorkFactory, ITimeService timeService)
     : IUserAccessTokenService
 {
-    public async Task<IList<UserAccessTokenEntity>> GetUserAccessTokensAsync(int userId)
+    public async Task<IList<UserAccessTokenEntity>> GetUserAccessTokensAsync(int userId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        return await uow.UserAccessTokenRepository.GetUserAccessTokensForUser(userId);
+        return await uow.UserAccessTokenRepository.GetUserAccessTokensForUser(userId, cancellationToken);
     }
 
-    public async Task<UserAccessTokenEntity> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request)
+    public async Task<UserAccessTokenEntity> CreateUserAccessTokenAsync(int userId, CreateAccessTokenRequest request, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
         var token = new UserAccessTokenEntity
@@ -34,24 +34,24 @@ public class UserAccessTokenService(IUnitOfWorkFactory unitOfWorkFactory, ITimeS
             DateCreated = timeService.UtcNow,
         };
         uow.UserAccessTokenRepository.Add(token);
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
         return token;
     }
 
-    public async Task<UserAccessTokenEntity?> ValidateTokenAsync(string accessKey)
+    public async Task<UserAccessTokenEntity?> ValidateTokenAsync(string accessKey, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var token = await uow.UserAccessTokenRepository.GetByKeyAsync(accessKey);
+        var token = await uow.UserAccessTokenRepository.GetByKeyAsync(accessKey, cancellationToken);
         return token;
     }
 
-    public async Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId)
+    public async Task DeleteUserAccessTokensAsync(int userId, Guid userAccessTokenId, CancellationToken cancellationToken = default)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
-        var token = await uow.UserAccessTokenRepository.GetByUserIdAndTokenIdAsync(userId, userAccessTokenId);
+        var token = await uow.UserAccessTokenRepository.GetByUserIdAndTokenIdAsync(userId, userAccessTokenId, cancellationToken);
         if (token == null)
             throw new UserAccessTokenNotFoundException(userId, userAccessTokenId);
         uow.UserAccessTokenRepository.Remove(token);
-        await uow.SaveChangesAsync();
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
     }
 }

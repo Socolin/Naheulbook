@@ -15,12 +15,13 @@ public class EffectsController(IEffectService effectService, IEffectMapper effec
     public async Task<ActionResult<EffectResponse>> PutEditEffectAsync(
         [FromServices] NaheulbookExecutionContext executionContext,
         [FromRoute] int effectId,
-        EditEffectRequest request
+        EditEffectRequest request,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var effect = await effectService.EditEffectAsync(executionContext, effectId, request);
+            var effect = await effectService.EditEffectAsync(executionContext, effectId, request, cancellationToken);
             var effectResponse = effectMapper.ToResponse(effect);
             return effectResponse;
         }
@@ -36,12 +37,13 @@ public class EffectsController(IEffectService effectService, IEffectMapper effec
 
     [HttpGet("{effectId:int:min(1)}")]
     public async Task<ActionResult<EffectResponse>> GetEffectAsync(
-        [FromRoute] int effectId
+        [FromRoute] int effectId,
+        CancellationToken cancellationToken
     )
     {
         try
         {
-            var effect = await effectService.GetEffectAsync(effectId);
+            var effect = await effectService.GetEffectAsync(effectId, cancellationToken);
             var effectResponse = effectMapper.ToResponse(effect);
             return effectResponse;
         }
@@ -53,10 +55,11 @@ public class EffectsController(IEffectService effectService, IEffectMapper effec
 
     [HttpGet("search")]
     public async Task<ActionResult<List<EffectResponse>>> GetSearchEffectAsync(
-        [FromQuery] string filter
+        [FromQuery] string filter,
+        CancellationToken cancellationToken
     )
     {
-        var effects = await effectService.SearchEffectsAsync(filter);
+        var effects = await effectService.SearchEffectsAsync(filter, cancellationToken);
         return effects.Select(effectMapper.ToResponse).ToList();
     }
 }
