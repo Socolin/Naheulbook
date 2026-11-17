@@ -22,21 +22,23 @@
         <mat-label>&#x2063;Nom quand non identifié</mat-label>
         <!-- label starts with an invisible character so chrome does not autocomplete this field with user name -->
         <input matInput
-          autocomplete="off"
-          [(ngModel)]="itemTemplate.data.notIdentifiedName"/>
+               autocomplete="off"
+               [(ngModel)]="itemTemplate.data.notIdentifiedName"/>
+        <button mat-icon-button
+                matSuffix
+                [disabled]="!itemTemplate.name"
+                (click)="itemTemplate.data.notIdentifiedName = itemTemplate.name"
+                matTooltip="Copier le nom de l'objet">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+        <button mat-icon-button
+                matSuffix
+                [disabled]="!itemTemplate.name"
+                (click)="automaticNotIdentifiedName()"
+                matTooltip="Mettre un nom générique">
+          <mat-icon>refresh</mat-icon>
+        </button>
       </mat-form-field>
-      <button mat-icon-button
-        [disabled]="!itemTemplate.name"
-        (click)="itemTemplate.data.notIdentifiedName = itemTemplate.name"
-        matTooltip="Copier le nom de l'objet">
-        <mat-icon>content_copy</mat-icon>
-      </button>
-      <button mat-icon-button
-        [disabled]="!itemTemplate.name"
-        (click)="automaticNotIdentifiedName()"
-        matTooltip="Mettre un nom générique">
-        <mat-icon>refresh</mat-icon>
-      </button>
     </div>
     <div class="source-line">
       <mat-form-field>

@@ -20,10 +20,6 @@
     }
 
     .not-identified-name-line {
-        display: grid;
-        grid-template-columns: minmax(150px, 1fr) 40px 40px;
-        grid-gap: 8px;
-        align-items: center;
         > mat-form-field {
             width: 100%;
         }
