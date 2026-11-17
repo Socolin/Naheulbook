@@ -13,7 +13,6 @@ import {itemTemplateModulesDefinitions} from './item-template-modules-definition
 import {ItemTypeResponse} from '../api/responses';
 import {NhbkMatDialog} from '../material-workaround';
 import {MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
-import {NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
@@ -36,7 +35,7 @@ import {NhbkActionComponent} from '../action/nhbk-action.component';
     styleUrls: ['./item-template-editor-module.component.scss'],
     templateUrl: './item-template-editor-module.component.html',
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [MatCard, NgSwitch, MatIconButton, MatIcon, NgSwitchCase, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatHint, MatInput, FormsModule, NgFor, NgIf, NhbkActionComponent, MatMenuTrigger, MatMenu, MatMenuItem, MatButton, MatSuffix, MatSelect, MatOption, MatDivider, MatCardSubtitle, MatCheckbox, MatCardActions, DurationSelectorComponent, ModifiersEditorComponent, StatRequirementsEditorComponent, MatRadioGroup, MatRadioButton, SkillModifiersEditorComponent, NgSwitchDefault, CdkPortal, MatExpansionPanelActionRow]
+    imports: [MatCard, MatIconButton, MatIcon, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatHint, MatInput, FormsModule, NhbkActionComponent, MatMenuTrigger, MatMenu, MatMenuItem, MatButton, MatSuffix, MatSelect, MatOption, MatDivider, MatCardSubtitle, MatCheckbox, MatCardActions, DurationSelectorComponent, ModifiersEditorComponent, StatRequirementsEditorComponent, MatRadioGroup, MatRadioButton, SkillModifiersEditorComponent, CdkPortal, MatExpansionPanelActionRow]
 })
 export class ItemTemplateEditorModuleComponent implements OnInit {
     @Input() itemTemplate: ItemTemplate;
