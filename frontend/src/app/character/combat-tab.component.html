@@ -82,7 +82,9 @@
 
 @if (character.computedData.weaponsDamages.length) {
   <mat-card class="equiped-weapons-stats stats-card">
-    <mat-card-subtitle>Dégât des armes (bonus compris)</mat-card-subtitle>
+    <mat-card-header>
+      <mat-card-subtitle>Dégâts des armes (bonus compris)</mat-card-subtitle>
+    </mat-card-header>
     <mat-card-content>
       @for (dmg of character.computedData.weaponsDamages; track dmg) {
         <div class="equiped-weapons-damages">

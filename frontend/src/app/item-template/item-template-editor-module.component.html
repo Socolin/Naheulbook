@@ -97,44 +97,43 @@
         <mat-card-header>
             <mat-card-title>
                 <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
-                Dégât de l'objet
+                Dégâts de l'objet
             </mat-card-title>
+            <mat-card-subtitle>
+                @if (damageSummary) {
+                    Inflige <strong>{{damageSummary}}</strong>
+                    @if (itemTemplate.data.damageType) {
+                        ({{itemTemplate.data.damageType}})
+                    }
+                } @else {
+                    Aucun dégât défini
+                }
+            </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <div>
-                Cet objet permet d'infliger
-                <span *ngIf="itemTemplate.data.damageDice">{{itemTemplate.data.damageDice}}
-                    <span class="ra ra-perspective-dice-random"></span>
-                </span>
-                <span *ngIf="itemTemplate.data.damageDice && itemTemplate.data.bonusDamage > 0">+</span>
-                <span *ngIf="itemTemplate.data.bonusDamage">{{itemTemplate.data.bonusDamage}}</span>
-                points de dégât
-                <span *ngIf="itemTemplate.data.damageType">de {{itemTemplate.data.damageType}}</span>.
-            </div>
             <div class="damage-line">
                 <mat-form-field>
-                    <mat-label>Dé(s)</mat-label>
+                    <mat-label>Dés</mat-label>
                     <input matInput
-                           class="input-center-align"
                            [(ngModel)]="itemTemplate.data.damageDice"
-                           type="number"/>
-                    <span matSuffix>D6</span>
+                           type="number"
+                           min="0"/>
+                    <span matTextSuffix>D6</span>
                 </mat-form-field>
 
                 <mat-form-field>
-                    <mat-label>Dégât fixe</mat-label>
+                    <mat-label>Dégâts fixes</mat-label>
                     <input matInput
-                           class="input-center-align"
                            [(ngModel)]="itemTemplate.data.bonusDamage"
                            type="number"/>
                 </mat-form-field>
 
                 <mat-form-field>
-                    <mat-label>Type de dégât</mat-label>
+                    <mat-label>Type de dégâts</mat-label>
                     <input matInput
-                           class="input-center-align"
                            [(ngModel)]="itemTemplate.data.damageType"
                            type="text"/>
+                    <mat-hint>Ex : feu, électrique, tranchant…</mat-hint>
                 </mat-form-field>
             </div>
         </mat-card-content>
@@ -310,10 +309,10 @@
                 <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
                 Type d'objet
             </mat-card-title>
+            <mat-card-subtitle>
+                Utilisé pour vérifier si un personnage peut se servir de l'objet (cf. restriction métier/origine)
+            </mat-card-subtitle>
         </mat-card-header>
-        <mat-card-subtitle>
-            Utilisé pour vérifier si un personnage peut se servir de l'objet (cf. restriction métier/origine)
-        </mat-card-subtitle>
         <mat-card-content>
             <div class="slots-list">
                 <mat-checkbox *ngFor="let itemType of itemTypes" [checked]="itemTemplate.data.isItemType(itemType)" (change)="itemTemplate.data.toggleItemType(itemType)">
@@ -344,7 +343,8 @@
         <mat-card-content>
             Cet objet est utilisable a partir du niveaux:
             <mat-form-field>
-                <input matInput placeholder="Niveau requis" [(ngModel)]="itemTemplate.data.requireLevel" />
+                <mat-label>Niveau requis</mat-label>
+                <input matInput [(ngModel)]="itemTemplate.data.requireLevel" />
             </mat-form-field>
         </mat-card-content>
     </ng-template>
@@ -366,12 +366,12 @@
                 <mat-icon fontSet="game-icon" [fontIcon]="'game-icon-' + moduleDefinitionByName[moduleName].icon"></mat-icon>
                 Origine
             </mat-card-title>
+            <mat-card-subtitle>Méthode d'obtention</mat-card-subtitle>
         </mat-card-header>
-        <mat-card-subtitle>Méthode d'obtention</mat-card-subtitle>
         <mat-card-content>
             <mat-form-field style="width: 100%">
+                <mat-label>Origine</mat-label>
                 <input matInput
-                       placeholder="Origine"
                        [(ngModel)]="itemTemplate.data.origin"/>
             </mat-form-field>
         </mat-card-content>
@@ -406,32 +406,32 @@
             </div>
             <div>
                 <mat-form-field>
+                    <mat-label>Protection</mat-label>
                     <input matInput
                            class="input-center-align"
-                           placeholder="Protection"
                            [(ngModel)]="itemTemplate.data.protection"
                            type="number"/>
                 </mat-form-field>
                 <mat-form-field>
+                    <mat-label>Protection magique</mat-label>
                     <input matInput
                            class="input-center-align"
-                           placeholder="Protection magique"
                            [(ngModel)]="itemTemplate.data.magicProtection"
                            type="number"/>
                 </mat-form-field>
             </div>
             <div>
                 <mat-form-field>
+                    <mat-label>Protection contre une magie</mat-label>
                     <input matInput
                            class="input-center-align"
-                           placeholder="Protection contre une magie"
                            [(ngModel)]="itemTemplate.data.protectionAgainstMagic"
                            type="number"/>
                 </mat-form-field>
                 <mat-form-field>
+                    <mat-label>Type de protection</mat-label>
                     <input matInput
                            class="input-center-align"
-                           placeholder="Type de protection"
                            [(ngModel)]="itemTemplate.data.protectionAgainstType"
                            type="number"/>
                 </mat-form-field>
@@ -458,8 +458,8 @@
         </mat-card-header>
         <mat-card-content>
             <mat-form-field style="width: 100%">
+                <mat-label>Indice de rareté</mat-label>
                 <input matInput
-                       placeholder="Indice de rareté"
                        [(ngModel)]="itemTemplate.data.rarityIndicator"/>
             </mat-form-field>
         </mat-card-content>
@@ -624,13 +624,13 @@
         </mat-card-header>
         <mat-card-content>
             <mat-form-field>
+                <mat-label>Poids</mat-label>
                 <input matInput
-                       class="input-center-align"
-                       placeholder="Poids"
                        [(ngModel)]="itemTemplate.data.weight"
-                       type="number"/>
-                <span matPrefix>Cet objet pèse </span>
-                <span matSuffix>Kg</span>
+                       type="number"
+                       min="0"
+                       step="0.1"/>
+                <span matTextSuffix>kg</span>
             </mat-form-field>
         </mat-card-content>
     </ng-template>
@@ -642,17 +642,19 @@
 <ng-template cdkPortal #createItemTypeDialog="cdkPortal">
     <mat-card>
         <mat-form-field>
+            <mat-label>Nom</mat-label>
             <input matInput
                    [ngModel]="newItemTypeDisplayName"
                    (ngModelChange)="updateNewItemTypeDisplayName($event)"
                    class="form-control"
-                   placeholder="Nom"/>
+/>
         </mat-form-field>
         <mat-form-field>
+            <mat-label>Nom technique</mat-label>
             <input matInput
                    [(ngModel)]="newItemTypeTechName"
                    class="form-control"
-                   placeholder="Nom technique"/>
+/>
         </mat-form-field>
         <mat-action-row align="end">
             <button color="primary" mat-button (click)="closeCreateItemTypeDialog()">FERMER</button>

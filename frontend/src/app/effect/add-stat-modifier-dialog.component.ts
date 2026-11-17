@@ -1,22 +1,22 @@
 import {Component, OnInit} from '@angular/core';
-import { MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 
-import {ItemStatModifier, MiscService } from '../shared';
+import {ItemStatModifier, MiscService} from '../shared';
 import {StatModificationOperand} from '../api/shared/enums';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatFormField } from '@angular/material/form-field';
-import { MatSelect } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatDivider } from '@angular/material/list';
-import { MatInput } from '@angular/material/input';
-import { MatButton } from '@angular/material/button';
+import {MatFormField, MatHint, MatLabel} from '@angular/material/form-field';
+import {MatSelect} from '@angular/material/select';
+import {FormsModule} from '@angular/forms';
+import {MatOptgroup, MatOption} from '@angular/material/core';
+import {MatInput} from '@angular/material/input';
+import {MatButton} from '@angular/material/button';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {MatTooltip} from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-add-stat-modifier-dialog',
     templateUrl: './add-stat-modifier-dialog.component.html',
     styleUrls: ['./add-stat-modifier-dialog.component.scss'],
-    imports: [CdkScrollable, MatDialogContent, MatFormField, MatSelect, FormsModule, MatOption, MatDivider, MatInput, MatDialogActions, MatButton, MatDialogClose]
+    imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatFormField, MatLabel, MatSelect, FormsModule, MatOptgroup, MatOption, MatInput, MatButton, MatButtonToggleGroup, MatButtonToggle, MatTooltip, MatHint]
 })
 export class AddStatModifierDialogComponent implements OnInit {
     public selectedStat?: string;
@@ -28,6 +28,27 @@ export class AddStatModifierDialogComponent implements OnInit {
     public combatStats: string[] = ['AT', 'PRD', 'PR', 'PR_MAGIC', 'ESQ'];
     public lifeStats: string[] = ['EA', 'EV'];
     public magicStats: string[] = ['MPHYS', 'MPSY', 'RESM'];
+
+    public readonly operations: { type: StatModificationOperand, symbol: string, label: string }[] = [
+        {type: 'ADD', symbol: '+', label: 'Ajouter / Soustraire'},
+        {type: 'MUL', symbol: '×', label: 'Multiplier'},
+        {type: 'DIV', symbol: '÷', label: 'Diviser'},
+        {type: 'SET', symbol: '=', label: 'Remplacer par'},
+    ];
+
+    get statGroups(): { label: string, stats: string[] }[] {
+        return [
+            {label: 'Caractéristiques', stats: this.basicStats},
+            {label: 'Énergie', stats: this.lifeStats},
+            {label: 'Combat', stats: this.combatStats},
+            {label: 'Magie', stats: this.magicStats},
+            {label: 'Autres', stats: this.stats ?? []},
+        ];
+    }
+
+    get operationSymbol(): string {
+        return this.operations.find(o => o.type === this.selectedType)?.symbol ?? '';
+    }
 
     constructor(
         private readonly dialogRef: MatDialogRef<AddStatModifierDialogComponent>,
@@ -49,7 +70,7 @@ export class AddStatModifierDialogComponent implements OnInit {
     }
 
     canAddModifier(): boolean {
-        return this.selectedStat !== undefined  && this.value !== undefined;
+        return this.selectedStat !== undefined && this.value !== undefined && this.value !== null;
     }
 
     addModifier() {

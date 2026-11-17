@@ -1,9 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { FormsModule } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatRipple} from '@angular/material/core';
 
 export enum ValueEditorModes {
     keyboard = 'keyboard',
@@ -22,10 +21,23 @@ export class ValueEditorSettingsDialogResult {
     selector: 'app-value-editor-settings-dialog',
     templateUrl: './value-editor-settings-dialog.component.html',
     styleUrls: ['./value-editor-settings-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatRadioGroup, FormsModule, MatRadioButton, MatDialogActions, MatButton, MatDialogClose]
+    imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose, MatIcon, MatRipple]
 })
 export class ValueEditorSettingsDialogComponent implements OnInit {
-    modes = ValueEditorModes;
+    readonly options = [
+        {
+            mode: ValueEditorModes.mobile,
+            icon: 'touch_app',
+            title: 'Tactile',
+            description: 'Un pavé de boutons (+1, +5, -50…), adapté aux écrans tactiles.'
+        },
+        {
+            mode: ValueEditorModes.keyboard,
+            icon: 'keyboard',
+            title: 'Clavier',
+            description: 'Un champ texte : saisissez la nouvelle valeur, ou une valeur relative commençant par + ou - (ex : +8, -16).'
+        },
+    ];
     mode?: ValueEditorModes;
 
     constructor(

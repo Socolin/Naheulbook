@@ -5,8 +5,7 @@ import {Job} from '../job';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatList, MatListItem } from '@angular/material/list';
-import { MatLine } from '@angular/material/grid-list';
+import {MatList, MatListItem, MatListItemMeta, MatListItemTitle} from '@angular/material/list';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { JobSelectorComponent } from '../job/job-selector.component';
 
@@ -22,7 +21,7 @@ export interface ChangeJobDialogResult {
 @Component({
     templateUrl: './change-job-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './change-job-dialog.component.scss'],
-    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, MatList, MatListItem, MatLine, MatMenuTrigger, MatMenu, MatMenuItem, JobSelectorComponent]
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, MatList, MatListItem, MatListItemTitle, MatListItemMeta, MatMenuTrigger, MatMenu, MatMenuItem, JobSelectorComponent]
 })
 export class ChangeJobDialogComponent {
     public jobs: readonly Job[];

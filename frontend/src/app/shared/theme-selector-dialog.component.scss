@@ -1,5 +1,139 @@
-mat-dialog-content {
+.themes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+
+    @media (min-width: 600px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.theme-option {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 8px;
+    padding: 8px;
+    border: 2px solid var(--mat-sys-outline-variant);
+    border-radius: var(--mat-sys-corner-medium);
+    background: none;
+    color: var(--mat-sys-on-surface);
+    font: inherit;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover {
+        background: color-mix(in srgb, var(--mat-sys-on-surface) 8%, transparent);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--mat-sys-primary);
+        outline-offset: 2px;
+    }
+
+    &.selected {
+        border-color: var(--mat-sys-primary);
+        background: var(--mat-sys-secondary-container);
+        color: var(--mat-sys-on-secondary-container);
+    }
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 24px;
+    font: var(--mat-sys-label-large);
+
+    mat-icon {
+        color: var(--mat-sys-primary);
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+    }
+}
+
+// Miniature of the application, rendered with the colors of the previewed theme
+.preview {
+    display: flex;
+    flex-direction: column;
+    height: 96px;
+    border-radius: var(--mat-sys-corner-small);
+    overflow: hidden;
+    background: var(--mat-sys-surface);
+    box-shadow: var(--mat-sys-level1);
+
+    .preview-toolbar {
+        display: flex;
+        align-items: center;
+        height: 20px;
+        padding: 0 8px;
+        background: var(--mat-sys-primary);
+
+        .preview-line {
+            background: var(--mat-sys-on-primary);
+        }
+    }
+
+    .preview-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 6px;
+    }
+
+    .preview-card {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 6px;
+        border-radius: 4px;
+        background: var(--mat-sys-surface-container-low);
+
+        .preview-line {
+            background: var(--mat-sys-on-surface-variant);
+        }
+    }
+
+    .preview-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 4px;
+    }
+
+    .preview-line {
+        display: block;
+        height: 4px;
+        width: 100%;
+        border-radius: 2px;
+        opacity: 0.8;
+
+        &.medium {
+            width: 60%;
+        }
+
+        &.short {
+            width: 40%;
+        }
+    }
+
+    .preview-chip,
+    .preview-button {
+        display: block;
+        height: 10px;
+        border-radius: 5px;
+    }
+
+    .preview-chip {
+        width: 16px;
+        background: var(--mat-sys-tertiary);
+    }
+
+    .preview-button {
+        width: 28px;
+        background: var(--mat-sys-primary);
+    }
 }

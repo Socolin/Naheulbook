@@ -3,36 +3,40 @@
     <form [formGroup]="form">
         <div class="name">
             <mat-form-field>
+                <mat-label>Nom</mat-label>
                 <input matInput
                        autocomplete="off"
                        formControlName="name"
-                       placeholder="Nom"/>
+/>
             </mat-form-field>
         </div>
         <div class="dice">
             <mat-form-field>
+                <mat-label>Taille des dé</mat-label>
                 <input matInput
                        autocomplete="off"
                        type="number"
                        formControlName="diceSize"
-                       placeholder="Taille des dé"/>
+/>
             </mat-form-field>
             <mat-form-field>
+                <mat-label>Nombre de dé</mat-label>
                 <input matInput
                        autocomplete="off"
                        type="number"
                        formControlName="diceCount"
-                       placeholder="Nombre de dé"/>
+/>
             </mat-form-field>
         </div>
         <div class="note">
             <mat-form-field>
+                <mat-label>Note</mat-label>
                 <textarea matInput
                           cdkTextareaAutosize
                           cdkAutosizeMinRows="1"
                           cdkAutosizeMaxRows="5"
                           formControlName="note"
-                          placeholder="Note">
+>
                 </textarea>
             </mat-form-field>
         </div>

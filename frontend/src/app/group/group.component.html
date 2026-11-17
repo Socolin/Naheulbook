@@ -211,6 +211,15 @@
                     }
                   </mat-menu>
                 </div>
+              } @empty {
+                <div class="empty-state">
+                  <mat-icon>groups</mat-icon>
+                  <p>Aucun joueur dans le groupe pour le moment</p>
+                  <button mat-button (click)="openInviteCharacterModal()">
+                    <mat-icon>group_add</mat-icon>
+                    Inviter un joueur
+                  </button>
+                </div>
               }
             </mat-card-content>
           </mat-card>
@@ -225,15 +234,15 @@
                     <div>Invitations à valider:</div>
                     <mat-list>
                       @for (invite of group.invites; track invite) {
-                        <mat-list-item>
-                          <h3 matLine>{{invite.name}}</h3>
-                          <p matLine>
+                        <mat-list-item lines="2">
+                          <span matListItemTitle>{{invite.name}}</span>
+                          <span matListItemLine>
                             {{invite.origin}} @if (invite.jobs && invite.jobs.length) {
                             <span
                             >- {{invite.jobs.join()}}</span>
                           }
-                        </p>
-                        <button mat-icon-button [matMenuTriggerFor]="invitesActions" aria-label="Afficher le menu de l'invitation">
+                        </span>
+                        <button mat-icon-button matListItemMeta [matMenuTriggerFor]="invitesActions" aria-label="Afficher le menu de l'invitation">
                           <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu xPosition="before" #invitesActions="matMenu">
@@ -250,15 +259,15 @@
                   <div>Invitations en attente:</div>
                   <mat-list>
                     @for (invite of group.invited; track invite) {
-                      <mat-list-item>
-                        <h3 matLine>{{invite.name}}</h3>
-                        <p matLine>
+                      <mat-list-item lines="2">
+                        <span matListItemTitle>{{invite.name}}</span>
+                        <span matListItemLine>
                           {{invite.origin}} @if (invite.jobs && invite.jobs.length) {
                           <span
                           >- {{invite.jobs.join()}}</span>
                         }
-                      </p>
-                      <button mat-icon-button [matMenuTriggerFor]="invitedActions" aria-label="Afficher le menu de l'invitation">
+                      </span>
+                      <button mat-icon-button matListItemMeta [matMenuTriggerFor]="invitedActions" aria-label="Afficher le menu de l'invitation">
                         <mat-icon>more_vert</mat-icon>
                       </button>
                       <mat-menu xPosition="before" #invitedActions="matMenu">
@@ -318,6 +327,15 @@
               @if (!last) {
                 <mat-divider></mat-divider>
               }
+            } @empty {
+              <div class="empty-state">
+                <mat-icon>person_outline</mat-icon>
+                <p>Aucun PNJ dans le groupe pour le moment</p>
+                <button mat-button (click)="openCreateNpcDialog()">
+                  <mat-icon>add</mat-icon>
+                  Ajouter un PNJ
+                </button>
+              </div>
             }
           </div>
         </mat-card-content>
@@ -347,8 +365,8 @@
     <mat-card-content>
       <div class="modal-body">
         <mat-form-field>
+          <mat-label>Chercher un utilisateur</mat-label>
           <input matInput
-            placeholder="Chercher un utilisateur"
             type="text"
             [(ngModel)]="filterSearchUser"
             (ngModelChange)="updateSearchUser()"/>
@@ -394,10 +412,11 @@
         <mat-icon matListItemIcon>account_box</mat-icon> profile.
       </p>
       <mat-form-field>
+        <mat-label>Nom du personnage</mat-label>
         <input matInput
           [(ngModel)]="searchNameInvite"
           (ngModelChange)="updateFilteredPlayer()"
-          placeholder="Nom du personnage"/>
+/>
       </mat-form-field>
 
       @if (!filteredInvitePlayers?.length) {

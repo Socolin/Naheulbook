@@ -16,7 +16,7 @@ import {ActiveStatsModifier, AutocompleteInputComponent, AutocompleteValue} from
 import {ItemTemplate, ItemTemplateService} from '../item-template';
 import {MAT_DIALOG_DATA, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {ActiveEffectEditorComponent, Effect, StatModifierEditorComponent} from '../effect';
-import {MatFormField, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatFormField, MatPrefix, MatSuffix, MatLabel} from '@angular/material/form-field';
 import {MatSelect} from '@angular/material/select';
 import {FormsModule} from '@angular/forms';
 import {MatOption} from '@angular/material/autocomplete';
@@ -32,7 +32,7 @@ export interface NhbkActionEditorDialogData {
 @Component({
     styleUrls: ['./nhbk-action-editor-dialog.component.scss'],
     templateUrl: './nhbk-action-editor-dialog.component.html',
-    imports: [MatDialogTitle, MatDialogContent, MatFormField, MatSelect, FormsModule, MatOption, MatCheckbox, AutocompleteInputComponent, MatInput, MatPrefix, MatSuffix, StatModifierEditorComponent, ActiveEffectEditorComponent, MatCardActions, MatButton, MatDialogClose]
+    imports: [MatLabel, MatDialogTitle, MatDialogContent, MatFormField, MatSelect, FormsModule, MatOption, MatCheckbox, AutocompleteInputComponent, MatInput, MatPrefix, MatSuffix, StatModifierEditorComponent, ActiveEffectEditorComponent, MatCardActions, MatButton, MatDialogClose]
 })
 export class NhbkActionEditorDialogComponent {
     action: NhbkAction = NhbkActionFactory.createFromType(NhbkActionType.addEv, {ev: 1});

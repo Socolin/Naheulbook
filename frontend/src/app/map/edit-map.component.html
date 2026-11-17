@@ -5,15 +5,18 @@
   <h2 class="mat-h2">Informations</h2>
   <form [formGroup]="form">
     <mat-form-field>
-      <input matInput placeholder="Nom de la carte" autocomplete="false" formControlName="name" required>
+      <mat-label>Nom de la carte</mat-label>
+      <input matInput autocomplete="false" formControlName="name" required>
     </mat-form-field>
     <div class="unit">
       <mat-form-field>
-        <input matInput placeholder="Unité" autocomplete="false" formControlName="unitName" required>
+        <mat-label>Unité</mat-label>
+        <input matInput autocomplete="false" formControlName="unitName" required>
         <mat-hint>m/km etc...</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Nombre de pixel pour une unité" autocomplete="false" formControlName="pixelPerUnit" type="number" required>
+        <mat-label>Nombre de pixel pour une unité</mat-label>
+        <input matInput autocomplete="false" formControlName="pixelPerUnit" type="number" required>
         <mat-hint>Pour calculer des distance, peut être un nombre a virgule</mat-hint>
       </mat-form-field>
     </div>
@@ -25,10 +28,12 @@
   @for (attribution of attributions; track attribution; let i = $index) {
     <div class="attribution">
       <mat-form-field>
-        <input matInput placeholder="Nom" [(ngModel)]="attribution.name">
+        <mat-label>Nom</mat-label>
+        <input matInput [(ngModel)]="attribution.name">
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Url" [(ngModel)]="attribution.url">
+        <mat-label>Url</mat-label>
+        <input matInput [(ngModel)]="attribution.url">
       </mat-form-field>
       <button mat-icon-button (click)="removeAttribution(i)">
         <mat-icon>delete</mat-icon>

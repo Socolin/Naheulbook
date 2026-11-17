@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
-import {MatFormField} from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInput} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
@@ -11,7 +11,7 @@ export type CreateFightDialogResult = {
 
 @Component({
     selector: 'app-create-fight-dialog',
-    imports: [
+    imports: [MatLabel, 
         MatDialogContent,
         MatDialogTitle,
         MatDialogActions,

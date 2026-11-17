@@ -10,7 +10,7 @@ import { MatSelectionList, MatActionList, MatListOption } from '@angular/materia
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatRipple } from '@angular/material/core';
 import { StatModifierEditorComponent } from '../effect/stats-modifier-editor.component';
@@ -29,7 +29,7 @@ export interface GroupAddEffectDialogResult {
 @Component({
     templateUrl: './group-add-effect-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './group-add-effect-dialog.component.scss'],
-    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, MatStepper, MatStep, MatStepLabel, MatFormField, MatInput, MatActionList, MatRipple, StatModifierEditorComponent, MatSelectionList, MatListOption, FighterIconComponent]
+    imports: [MatLabel, MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, MatStepper, MatStep, MatStepLabel, MatFormField, MatInput, MatActionList, MatRipple, StatModifierEditorComponent, MatSelectionList, MatListOption, FighterIconComponent]
 })
 export class GroupAddEffectDialogComponent {
     @ViewChild('stepper', {static: true})

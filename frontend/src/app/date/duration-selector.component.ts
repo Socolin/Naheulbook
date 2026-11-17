@@ -11,7 +11,7 @@ import {
 } from './duration-selector-dialog.component';
 import {IDurable} from '../api/shared';
 import {NhbkMatDialog} from '../material-workaround';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatInput } from '@angular/material/input';
@@ -23,7 +23,7 @@ import { NhbkDateDurationPipe } from './nhbk-duration.pipe';
     selector: 'duration-selector',
     styleUrls: ['./duration-selector.component.scss'],
     templateUrl: './duration-selector.component.html',
-    imports: [MatFormField, MatSelect, FormsModule, MatOption, MatInput, MatIconButton, MatIcon, NhbkDateDurationPipe]
+    imports: [MatLabel, MatFormField, MatSelect, FormsModule, MatOption, MatInput, MatIconButton, MatIcon, NhbkDateDurationPipe]
 })
 export class DurationSelectorComponent implements OnChanges {
     @Input() durable: IDurable;

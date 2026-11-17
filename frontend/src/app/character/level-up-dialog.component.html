@@ -37,7 +37,8 @@
 
     <div class="level-up-ea-ev">
       <mat-form-field align="end">
-        <input matInput placeholder="Valeur" type="number" [(ngModel)]="levelUpInfo.evOrEaValue">
+        <mat-label>Valeur</mat-label>
+        <input matInput type="number" [(ngModel)]="levelUpInfo.evOrEaValue">
         @if (levelUpInfo.evOrEa === 'EV') {
           <mat-hint align="end">
             Lancer 1D{{data.character.origin.data.diceEvLevelUp}}@if (characterHasToken('LEVELUP_DICE_EV_-1')) {

@@ -18,8 +18,8 @@
       @if (profile) {
         <div>
           <mat-form-field style="width: 100%">
+            <mat-label>Nom / Pseudonyme</mat-label>
             <input matInput
-              placeholder="Nom / Pseudonyme"
               [(ngModel)]="profile.displayName">
             <mat-hint>Permet a votre GM d'identifier votre personnage pour vous inviter dans le groupe
             </mat-hint>

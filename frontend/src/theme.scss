@@ -1,104 +1,54 @@
 @use '@angular/material' as mat;
 
-// Plus imports for other components in your app.
-@use './app/shared/_value-editor-theme' as valueEditorTheme;
-@use './app/shared/_common-nav-theme' as commonNavTheme;
-@use './app/shared/_full-screen-dialog-theme' as fullScreenDialogTheme;
-@use './app/_app.theme' as appTheme;
-@use './app/character/character.theme' as CharacterTheme;
-@use './app/group/fighter-panel.theme' as  fighterPanelTheme;
-@use './app/useful-data/useful-data-theme' as  usefulDataTheme;
-@use './app/item-template/item-template.theme' as itemTemplateTheme;
-@use 'app/group/group-theme' as GroupTheme;
-@use './app/map/map-theme' as MapTheme;
-@use './app/monster/monster-trait-theme' as MonsterTraitTheme;
+// Default theme (light, violet / rose).
+// `theme-type` defaults to `color-scheme`: every color token is emitted with `light-dark()`,
+// so switching between light and dark only requires changing the `color-scheme` property.
+html {
+    color-scheme: light;
+    --nhbk-dark-scheme: 0;
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// **Be sure that you only ever include this mixin once!**
-@include mat.all-component-typographies();
-@include mat.elevation-classes();
-@include mat.app-background();
-
-// Define the default theme
-$nhbk-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
-$nhbk-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
-$nhbk-warn: mat.m2-define-palette(mat.$m2-red-palette);
-
-// Create the theme object (a Sass map containing all of the palettes).
-$nhbk-theme: mat.m2-define-light-theme((
-    color: (
-        primary: $nhbk-primary,
-        accent: $nhbk-accent,
-        warn: $nhbk-warn,
-    ),
-    typography: mat.m2-define-typography-config(),
-    density: 0,
-));
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($nhbk-theme);
-@include appTheme.global-theme($nhbk-theme);
-
-@mixin custom-components-theme($theme) {
-    @include valueEditorTheme.value-selector-theme($theme);
-    @include CharacterTheme.character-theme($theme);
-    @include usefulDataTheme.useful-data-theme($theme);
-    @include itemTemplateTheme.item-theme($theme);
-    @include GroupTheme.group-theme($theme);
-    @include fighterPanelTheme.fighter-panel-theme($theme);
-    @include MapTheme.map-theme($theme);
-    @include MonsterTraitTheme.monster-trait-theme($theme);
-    @include commonNavTheme.common-nav-theme($theme);
-    @include fullScreenDialogTheme.full-screen-dialog-theme($theme);
+    @include mat.theme((
+        color: (
+            primary: mat.$violet-palette,
+            tertiary: mat.$rose-palette,
+        ),
+        typography: Roboto,
+        density: 0,
+    ));
 }
 
-@include custom-components-theme($nhbk-theme);
-
-@mixin add-theme($isDark, $primary, $accent, $warn, $name) {
-    $theme-primary: mat.m2-define-palette($primary);
-    $theme-accent: mat.m2-define-palette($accent, A200, A100, A400);
-    $theme-warn: mat.m2-define-palette($warn);
-
-    @if ($isDark) {
-        $dark-theme: mat.m2-define-dark-theme((
-            color: (
-                primary: $theme-primary,
-                accent: $theme-accent,
-                warn: $theme-warn
-            ),
-            typography: mat.m2-define-typography-config(),
-            density: 0,
-        ));
-
-        .#{$name} {
-            @include mat.all-component-colors($dark-theme);
-            @include appTheme.global-theme($dark-theme);
-            @include custom-components-theme($dark-theme);
+// Themes, selected by ThemeService which sets the class on <body>.
+// The classes can be applied on any element (e.g. the previews of the theme selector):
+// only the color tokens are overridden, typography and density are inherited from <html>.
+@mixin theme-class($name, $color-scheme, $primary, $tertiary) {
+    .#{$name} {
+        color-scheme: $color-scheme;
+        // `light-dark()` only accepts colors, so expose the scheme for non-color properties.
+        @if $color-scheme == dark {
+            --nhbk-dark-scheme: 1;
+        } @else {
+            --nhbk-dark-scheme: 0;
         }
-    } @else {
 
-        $light-theme: mat.m2-define-light-theme((
+        @include mat.theme((
             color: (
-                primary: $theme-primary,
-                accent: $theme-accent,
-                warn: $theme-warn
+                primary: $primary,
+                tertiary: $tertiary,
             ),
-            typography: mat.m2-define-typography-config(),
-            density: 0,
         ));
-
-        .#{$name} {
-            @include mat.all-component-colors($light-theme);
-            @include appTheme.global-theme($light-theme);
-            @include custom-components-theme($light-theme);
-        }
     }
 }
 
-@include add-theme(true, mat.$m2-blue-grey-palette, mat.$m2-amber-palette, mat.$m2-deep-orange-palette, 'nhbk-dark-theme');
-@include add-theme(true, mat.$m2-green-palette, mat.$m2-teal-palette, mat.$m2-deep-orange-palette, 'nhbk-dark2-theme');
+@include theme-class('nhbk-light-theme', light, mat.$violet-palette, mat.$rose-palette);
+@include theme-class('nhbk-light2-theme', light, mat.$cyan-palette, mat.$orange-palette);
+@include theme-class('nhbk-dark-theme', dark, mat.$azure-palette, mat.$yellow-palette);
+@include theme-class('nhbk-dark2-theme', dark, mat.$green-palette, mat.$cyan-palette);
 
-@include add-theme(false, mat.$m2-teal-palette, mat.$m2-orange-palette, mat.$m2-deep-orange-palette, 'nhbk-light2-theme');
+// Keep support for the `color="primary|accent|warn"` input used in templates.
+// In M3 `accent` maps to the tertiary palette and `warn` to the error palette.
+// Using system variables makes these styles follow whichever theme is active.
+@include mat.color-variants-backwards-compatibility(mat.define-theme((
+    color: (
+        use-system-variables: true,
+    ),
+)));

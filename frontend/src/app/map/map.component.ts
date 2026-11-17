@@ -50,7 +50,7 @@ import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatButton, MatIconButton, MatMiniFabButton} from '@angular/material/button';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatCheckbox} from '@angular/material/checkbox';
-import {MatFormField} from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatTooltip} from '@angular/material/tooltip';
 import {CommonNavComponent} from '../shared/common-nav.component';
@@ -64,7 +64,7 @@ import {MarkdownPipe} from '../markdown/markdown.pipe';
     selector: 'app-map',
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.scss'],
-    imports: [MatSidenavContainer, MatSidenavContent, MatSidenav, MatNavList, MatListItem, RouterLink, MatIcon, MatIconButton, MatMenuTrigger, MatMenu, MatMenuItem, MatMiniFabButton, MatCheckbox, FormsModule, MatFormField, MatInput, MatTooltip, MatButton, CommonNavComponent, ReactiveFormsModule, CdkTextareaAutosize, MatRadioGroup, MatRadioButton, MatRipple, AsyncPipe, MarkdownPipe, MatIconModule]
+    imports: [MatLabel, MatSidenavContainer, MatSidenavContent, MatSidenav, MatNavList, MatListItem, RouterLink, MatIcon, MatIconButton, MatMenuTrigger, MatMenu, MatMenuItem, MatMiniFabButton, MatCheckbox, FormsModule, MatFormField, MatInput, MatTooltip, MatButton, CommonNavComponent, ReactiveFormsModule, CdkTextareaAutosize, MatRadioGroup, MatRadioButton, MatRipple, AsyncPipe, MarkdownPipe, MatIconModule]
 })
 export class MapComponent implements OnInit, OnDestroy {
     @ViewChild('mapElement', {static: true})

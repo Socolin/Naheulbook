@@ -3,7 +3,7 @@ import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, Reactive
 import {ActivatedRoute, Router} from '@angular/router';
 import {MapService} from './map.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { MatFormField, MatHint } from '@angular/material/form-field';
+import {MatFormField, MatHint, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIconButton, MatButton } from '@angular/material/button';
@@ -12,7 +12,7 @@ import { MatIcon } from '@angular/material/icon';
 @Component({
     templateUrl: './edit-map.component.html',
     styleUrls: ['./edit-map.component.scss'],
-    imports: [MatProgressSpinner, FormsModule, ReactiveFormsModule, MatFormField, MatInput, MatHint, MatCheckbox, MatIconButton, MatIcon, MatButton]
+    imports: [MatLabel, MatProgressSpinner, FormsModule, ReactiveFormsModule, MatFormField, MatInput, MatHint, MatCheckbox, MatIconButton, MatIcon, MatButton]
 })
 export class EditMapComponent implements OnInit {
     public saving = false;

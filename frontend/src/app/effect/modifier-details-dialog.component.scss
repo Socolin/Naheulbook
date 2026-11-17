@@ -1,11 +1,9 @@
 :host {
-    > h2 {
-        margin-bottom: 0;
+    .subtitle {
+        display: block;
+        font: var(--mat-sys-title-small);
+        color: var(--mat-sys-on-surface-variant);
     }
-    > .secondary-text {
-        margin-bottom: 8px;
-    }
-
 
     .icon-label {
         margin: 8px 0;

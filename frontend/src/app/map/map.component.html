@@ -41,8 +41,8 @@
         <div class="toggle-size">
           <mat-checkbox [ngModel]="gridDisplayed" (change)="toggleGrid($event.checked)">Activé</mat-checkbox>
           <mat-form-field>
+            <mat-label>Espacement</mat-label>
             <input matInput
-              placeholder="Espacement"
               (ngModelChange)="changeGridSize($event)"
               [(ngModel)]="gridSize"
               type="number"
@@ -52,8 +52,8 @@
         </div>
         <div class="offset">
           <mat-form-field>
+            <mat-label>Offset X</mat-label>
             <input matInput
-              placeholder="Offset X"
               [(ngModel)]="gridOffsetX"
               (ngModelChange)="changeGridOffsetX($event)"
               type="number"
@@ -62,8 +62,8 @@
               autocapitalize="off"/>
           </mat-form-field>
           <mat-form-field>
+            <mat-label>Offset Y</mat-label>
             <input matInput
-              placeholder="Offset Y"
               [(ngModel)]="gridOffsetY"
               (ngModelChange)="changeGridOffsetY($event)"
               type="number"
@@ -193,13 +193,15 @@
         <div class="marker-editor side-panel-block">
           <div class="name" [formGroup]="markerForm">
             <mat-form-field>
-              <input #markerNameInput matInput formControlName="name" placeholder="Nom"/>
+              <mat-label>Nom</mat-label>
+              <input #markerNameInput matInput formControlName="name"/>
             </mat-form-field>
           </div>
           <div class="description" [formGroup]="markerForm">
             <mat-form-field>
+              <mat-label>Description</mat-label>
               <textarea cdkTextareaAutosize [cdkAutosizeMinRows]="4" [cdkAutosizeMaxRows]="10"
-              matInput formControlName="description" placeholder="Description"></textarea>
+              matInput formControlName="description"></textarea>
             </mat-form-field>
           </div>
           @if (selectedMarker.useColor()) {

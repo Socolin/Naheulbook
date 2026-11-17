@@ -9,7 +9,7 @@ import {IconSelectorComponent, IconSelectorComponentDialogData} from '../shared'
 import {NhbkMatDialog} from '../material-workaround';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatCardContent } from '@angular/material/card';
-import { MatFormField, MatHint } from '@angular/material/form-field';
+import {MatFormField, MatHint, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -30,7 +30,7 @@ export interface CreateItemDialogDialog {
     selector: 'app-create-item-dialog',
     templateUrl: './create-item-dialog.component.html',
     styleUrls: ['./create-item-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatCardContent, MatFormField, MatInput, MatIconButton, MatIcon, MatActionList, MatListItem, IconComponent, MatRipple, FormsModule, MatHint, MatCheckbox, MatDialogActions, MatButton, MatDialogClose, ItemPricePipe]
+    imports: [MatLabel, MatDialogTitle, CdkScrollable, MatDialogContent, MatCardContent, MatFormField, MatInput, MatIconButton, MatIcon, MatActionList, MatListItem, IconComponent, MatRipple, FormsModule, MatHint, MatCheckbox, MatDialogActions, MatButton, MatDialogClose, ItemPricePipe]
 })
 export class CreateItemDialogComponent implements OnInit {
     public newItem: Item = new Item();

@@ -10,7 +10,7 @@ import {NEvent} from './event.model';
 import {NhbkMatDialog} from '../material-workaround';
 import {DateSelectorDialogComponent, DateSelectorDialogData, DateSelectorDialogResult} from '../date/date-selector-dialog.component';
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
@@ -22,7 +22,7 @@ import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 @Component({
     selector: 'event-editor',
     templateUrl: './event-editor.component.html',
-    imports: [CdkPortal, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatInput, FormsModule, MatButtonToggleGroup, MatButtonToggle, DateComponent, MatIconButton, MatIcon, MatCardActions, MatButton, NhbkDateDurationPipe]
+    imports: [MatLabel, CdkPortal, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatInput, FormsModule, MatButtonToggleGroup, MatButtonToggle, DateComponent, MatIconButton, MatIcon, MatCardActions, MatButton, NhbkDateDurationPipe]
 })
 export class EventEditorComponent implements OnInit {
     @Input() group: {

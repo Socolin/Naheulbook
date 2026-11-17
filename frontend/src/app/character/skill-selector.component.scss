@@ -1,9 +1,3 @@
-:host {
-    p.mat-line {
-        white-space: normal;
-    }
-
-    p.mat-line::first-letter {
-        text-transform: capitalize;
-    }
+.description::first-letter {
+    text-transform: capitalize;
 }

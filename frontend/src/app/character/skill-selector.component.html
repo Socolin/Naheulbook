@@ -1,8 +1,8 @@
 <mat-selection-list (selectionChange)="selectionChange($event)">
   @for (skill of skills; track skill) {
-    <mat-list-option [value]="skill">
-      <h4 mat-line>{{skill.name}}</h4>
-      <p mat-line>{{skill.playerDescription}}</p>
+    <mat-list-option [value]="skill" lines="3">
+      <span matListItemTitle>{{ skill.name }}</span>
+      <span matListItemLine class="description">{{ skill.playerDescription }}</span>
     </mat-list-option>
   }
 </mat-selection-list>

@@ -26,81 +26,82 @@
 </mat-toolbar>
 
 <div class="content mat-typography">
-  <mat-card>
-    <mat-card-content>
-      <h2>Catégorie</h2>
+  <h2>Catégorie</h2>
 
-      @if (effectTypes) {
-        <div class="category">
-          <mat-form-field class="category-selector">
-            <mat-select [ngModel]="selectedType"
-              (selectionChange)="selectType($event.value)"
-              placeholder="Catégorie">
-              @for (type of effectTypes; track type) {
-                <mat-option [value]="type">{{type.name}}</mat-option>
-              }
-              <mat-option [value]="'new'">
-                <span class="secondary-text">
-                  Ajouter...
-                </span>
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          @if (selectedType) {
-            <mat-form-field class="sub-category-selector">
-              <mat-select [ngModel]="selectedSubCategory"
-                (selectionChange)="selectSubCategory($event.value)"
-                placeholder="Sous-catégorie">
-                @for (subCategory of selectedType.subCategories; track subCategory) {
-                  <mat-option [value]="subCategory">
-                    {{subCategory.name}}
-                  </mat-option>
-                }
-                <mat-option [value]="'new'">
-                  <span class="secondary-text">
-                    Ajouter...
-                  </span>
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+  @if (effectTypes) {
+    <div class="category">
+      <mat-form-field class="category-selector">
+        <mat-label>Catégorie</mat-label>
+        <mat-select [ngModel]="selectedType"
+          (selectionChange)="selectType($event.value)"
+>
+          @for (type of effectTypes; track type) {
+            <mat-option [value]="type">{{type.name}}</mat-option>
           }
-        </div>
+          <mat-option [value]="'new'">
+            <span class="secondary-text">
+              Ajouter...
+            </span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      @if (selectedType) {
+        <mat-form-field class="sub-category-selector">
+          <mat-label>Sous-catégorie</mat-label>
+          <mat-select [ngModel]="selectedSubCategory"
+            (selectionChange)="selectSubCategory($event.value)"
+>
+            @for (subCategory of selectedType.subCategories; track subCategory) {
+              <mat-option [value]="subCategory">
+                {{subCategory.name}}
+              </mat-option>
+            }
+            <mat-option [value]="'new'">
+              <span class="secondary-text">
+                Ajouter...
+              </span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       }
-      <ng-container [formGroup]="form">
-        <h2>Informations de base</h2>
-        <div class="name-dice">
-          <mat-form-field>
-            <input matInput
-              autocomplete="off"
-              formControlName="name"
-              placeholder="Nom">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput
-              autocomplete="off"
-              inputmode="number"
-              type="number"
-              formControlName="dice"
-              placeholder="Dé">
-          </mat-form-field>
-        </div>
-        <div class="description">
-          <mat-form-field>
-            <textarea matInput
-              cdkTextareaAutosize
-              cdkAutosizeMinRows="1"
-              cdkAutosizeMaxRows="5"
-              autocomplete="off"
-              formControlName="description"
-              placeholder="Description">
-            </textarea>
-          </mat-form-field>
-        </div>
-      </ng-container>
-      <h2>Durée</h2>
-      <duration-selector [durable]="duration"></duration-selector>
-      <h2>Modificateurs</h2>
-      <modifiers-editor [modifiers]="statModifiers"></modifiers-editor>
-    </mat-card-content>
-  </mat-card>
+    </div>
+  }
+  <ng-container [formGroup]="form">
+    <h2>Informations de base</h2>
+    <div class="name-dice">
+      <mat-form-field>
+        <mat-label>Nom</mat-label>
+        <input matInput
+          autocomplete="off"
+          formControlName="name"
+>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Dé</mat-label>
+        <input matInput
+          autocomplete="off"
+          inputmode="number"
+          type="number"
+          formControlName="dice"
+>
+      </mat-form-field>
+    </div>
+    <div class="description">
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea matInput
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="1"
+          cdkAutosizeMaxRows="5"
+          autocomplete="off"
+          formControlName="description"
+>
+        </textarea>
+      </mat-form-field>
+    </div>
+  </ng-container>
+  <h2>Durée</h2>
+  <duration-selector [durable]="duration"></duration-selector>
+  <h2>Modificateurs</h2>
+  <modifiers-editor [modifiers]="statModifiers"></modifiers-editor>
 </div>

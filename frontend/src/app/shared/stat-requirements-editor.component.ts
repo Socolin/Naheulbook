@@ -4,7 +4,7 @@ import {Stat} from './stat.model';
 import {MiscService} from './misc.service';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatSelect } from '@angular/material/select';
@@ -15,7 +15,7 @@ import { MatDivider } from '@angular/material/list';
     selector: 'stat-requirements-editor',
     styleUrls: ['./stat-requirements-editor.component.scss'],
     templateUrl: './stat-requirements-editor.component.html',
-    imports: [MatIconButton, MatIcon, MatFormField, MatInput, FormsModule, MatSelect, MatOption, MatDivider, MatButton]
+    imports: [MatLabel, MatIconButton, MatIcon, MatFormField, MatInput, FormsModule, MatSelect, MatOption, MatDivider, MatButton]
 })
 export class StatRequirementsEditorComponent implements OnInit {
     public basicStats: string[] = ['AD', 'CHA', 'COU', 'INT', 'FO'];

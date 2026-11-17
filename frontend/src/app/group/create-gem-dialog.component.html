@@ -63,9 +63,9 @@
       <div class="name-icon">
         <icon (click)="openSelectIconDialog()" [icon]="newItem.data.icon"></icon>
         <mat-form-field>
+          <mat-label>Nom</mat-label>
           <input matInput
             #newItemName
-            placeholder="Nom"
             [(ngModel)]="newItem.data.name"/>
           @if (newItem.data.notIdentified) {
             <mat-hint align="end">

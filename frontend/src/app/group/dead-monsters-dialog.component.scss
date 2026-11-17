@@ -1,0 +1,49 @@
+.dead-monster {
+    padding: 12px 0;
+
+    .header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+
+        .name {
+            font: var(--mat-sys-title-medium);
+            color: var(--mat-sys-on-surface);
+        }
+
+        .xp {
+            font: var(--mat-sys-label-large);
+            color: var(--mat-sys-primary);
+            white-space: nowrap;
+        }
+    }
+
+    .note {
+        margin: 4px 0 0;
+        font: var(--mat-sys-body-medium);
+        white-space: pre-line;
+
+        &.collapsed {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            overflow: hidden;
+        }
+    }
+
+    .toggle-note {
+        margin-left: -12px;
+    }
+}
+
+.empty {
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    padding: 16px 0;
+}

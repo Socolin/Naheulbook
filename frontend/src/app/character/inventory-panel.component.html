@@ -1,6 +1,7 @@
 <div class="inventory-header">
   <mat-form-field class="filter" appearance="fill">
-    <input matInput [(ngModel)]="itemFilterName" placeholder="Filtre" autocomplete="off" autocapitalize="off"/>
+    <mat-label>Filtre</mat-label>
+    <input matInput [(ngModel)]="itemFilterName" autocomplete="off" autocapitalize="off"/>
     @if (itemFilterName?.length) {
       <button matSuffix mat-icon-button (click)="itemFilterName = undefined" aria-label="Réinitialiser le filtre">
         <mat-icon>close</mat-icon>

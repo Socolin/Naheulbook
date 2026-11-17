@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDia
 import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {IconDescription} from '../shared/icon.model';
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 
@@ -22,7 +22,7 @@ export interface EditItemDialogResult {
     selector: 'app-edit-item-dialog',
     templateUrl: './edit-item-dialog.component.html',
     styleUrls: ['./edit-item-dialog.component.scss'],
-    imports: [MatDialogTitle, FormsModule, ReactiveFormsModule, CdkScrollable, MatDialogContent, MatFormField, MatInput, MatDialogActions, MatButton, MatDialogClose]
+    imports: [MatLabel, MatDialogTitle, FormsModule, ReactiveFormsModule, CdkScrollable, MatDialogContent, MatFormField, MatInput, MatDialogActions, MatButton, MatDialogClose]
 })
 export class EditItemDialogComponent implements OnInit {
     public form = new UntypedFormGroup({

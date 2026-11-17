@@ -8,7 +8,7 @@ import {removeDiacritics} from '../shared';
 import {Map, MapMarker, MapMarkerLink} from './map.model';
 import {MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {MatFormField, MatHint} from '@angular/material/form-field';
+import {MatFormField, MatHint, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
 import {MatButton} from '@angular/material/button';
@@ -27,7 +27,7 @@ export interface AddMapMarkerLinkDialogResult {
 @Component({
     templateUrl: './map-marker-link-dialog.component.html',
     styleUrls: ['./map-marker-link-dialog.component.scss'],
-    imports: [MatDialogTitle, MatDialogContent, MatProgressSpinner, MatFormField, MatInput, MatAutocompleteTrigger, FormsModule, ReactiveFormsModule, MatAutocomplete, MatOption, MatHint, MatDialogActions, MatButton, MatDialogClose, AsyncPipe]
+    imports: [MatLabel, MatDialogTitle, MatDialogContent, MatProgressSpinner, MatFormField, MatInput, MatAutocompleteTrigger, FormsModule, ReactiveFormsModule, MatAutocomplete, MatOption, MatHint, MatDialogActions, MatButton, MatDialogClose, AsyncPipe]
 })
 export class MapMarkerLinkDialogComponent implements OnInit {
     maps?: MapSummaryResponse[];

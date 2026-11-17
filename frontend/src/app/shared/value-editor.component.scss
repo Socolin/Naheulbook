@@ -1,16 +1,21 @@
+// Editable value, displayed inline in the text
 .ve-value {
     position: relative;
-    border-radius: 6px;
-    padding: 2px;
+    padding: 0 6px;
+    border-radius: var(--mat-sys-corner-small);
+    background: color-mix(in srgb, var(--mat-sys-primary) 12%, transparent);
+    color: var(--mat-sys-primary);
+    font-weight: 500;
     cursor: pointer;
 
     user-select: none;
     -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-
     -webkit-user-drag: none;
     -webkit-tap-highlight-color: transparent;
+
+    &:hover {
+        background: color-mix(in srgb, var(--mat-sys-primary) 20%, transparent);
+    }
 }
 
 $ve-button-width: 70px;
@@ -22,12 +27,19 @@ $ve-valid-button-width: 64px;
     position: absolute;
 }
 
+// Touch keypad
 .ve-mobile-container {
     display: grid;
     align-items: stretch;
     justify-items: stretch;
+    gap: 2px;
+    padding: 8px;
+    border-radius: var(--mat-sys-corner-large);
+    background: var(--mat-sys-surface-container);
+    color: var(--mat-sys-on-surface);
+    box-shadow: var(--mat-sys-level3);
     grid-template-columns: 40px $ve-button-width $ve-button-width $ve-button-width $ve-valid-button-width;
-    grid-template-rows: 16px $ve-button-height $ve-button-height $ve-button-height 30px 15px $ve-summary-height;
+    grid-template-rows: 20px $ve-button-height $ve-button-height $ve-button-height 30px 15px $ve-summary-height;
     grid-template-areas:
         ".        label   label   label   valid"
         ".        s500    reset   a500    valid"
@@ -37,63 +49,66 @@ $ve-valid-button-width: 64px;
         "settings s1      delta   a1      valid"
         "settings summary summary summary valid";
 
+    button {
+        line-height: 36px;
+        font: var(--mat-sys-title-medium);
+        font-size: 20px;
+        outline: none;
+    }
+
     .ve-button {
         border: 0;
+        border-radius: var(--mat-sys-corner-small);
+        background: var(--mat-sys-primary-container);
+        color: var(--mat-sys-on-primary-container);
+        cursor: pointer;
+
+        &:disabled,
+        &.disabled {
+            background: color-mix(in srgb, var(--mat-sys-on-surface) 12%, transparent);
+            color: color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent);
+            cursor: default;
+        }
+    }
+
+    .ve-button-s500,
+    .ve-button-s50,
+    .ve-button-s5,
+    .ve-button-s1 {
+        background: var(--mat-sys-secondary-container);
+        color: var(--mat-sys-on-secondary-container);
+    }
+
+    .ve-button-reset,
+    .ve-button-max,
+    .ve-button-zero {
+        background: var(--mat-sys-surface-container-highest);
+        color: var(--mat-sys-on-surface);
     }
 
     .ve-settings {
         grid-area: settings;
+        align-self: end;
     }
 
-    .ve-button-s500 {
-        grid-area: s500;
-    }
-
-    .ve-button-s50 {
-        grid-area: s50;
-    }
-
-    .ve-button-s5 {
-        grid-area: s5;
-    }
-
-    .ve-button-s1 {
-        grid-area: s1;
-    }
-
-    .ve-button-reset {
-        grid-area: reset;
-    }
-
-    .ve-button-max {
-        grid-area: max;
-    }
-
-    .ve-button-zero {
-        grid-area: zero;
-    }
-
-    .ve-button-a500 {
-        grid-area: a500;
-    }
-
-    .ve-button-a50 {
-        grid-area: a50;
-    }
-
-    .ve-button-a5 {
-        grid-area: a5;
-    }
-
-    .ve-button-a1 {
-        grid-area: a1;
-    }
+    .ve-button-s500 { grid-area: s500; }
+    .ve-button-s50 { grid-area: s50; }
+    .ve-button-s5 { grid-area: s5; }
+    .ve-button-s1 { grid-area: s1; }
+    .ve-button-reset { grid-area: reset; }
+    .ve-button-max { grid-area: max; }
+    .ve-button-zero { grid-area: zero; }
+    .ve-button-a500 { grid-area: a500; }
+    .ve-button-a50 { grid-area: a50; }
+    .ve-button-a5 { grid-area: a5; }
+    .ve-button-a1 { grid-area: a1; }
 
     .ve-button-valid {
         grid-area: valid;
-        -webkit-box-shadow: 3px 4px 5px -1px rgba(0, 0, 0, 0.6);
-        -moz-box-shadow: 3px 4px 5px -1px rgba(0, 0, 0, 0.6);
-        box-shadow: 3px 4px 5px -1px rgba(0, 0, 0, 0.6);
+        margin-left: 6px;
+        border-radius: var(--mat-sys-corner-medium);
+        background: var(--mat-sys-primary);
+        color: var(--mat-sys-on-primary);
     }
 
     .ve-delta-value {
@@ -101,68 +116,80 @@ $ve-valid-button-width: 64px;
         display: grid;
         align-items: center;
         justify-items: center;
-        font-size: 24px;
+        font: var(--mat-sys-headline-small);
+        color: var(--mat-sys-on-surface);
     }
 
     .ve-summary {
         grid-area: summary;
         display: flex;
-        flex-direction: column;
-        -webkit-box-shadow: 3px 4px 5px -1px rgba(0, 0, 0, 0.6);
-        -moz-box-shadow: 3px 4px 5px -1px rgba(0, 0, 0, 0.6);
-        box-shadow: 3px 4px 5px -1px rgba(0, 0, 0, 0.6);
-
-        div {
-            padding-top: 5px;
-            padding-bottom: 4px;
-            width: $ve-button-width * 3;
-            font-size: 14px;
-            text-align: center;
-        }
+        align-items: center;
+        justify-content: center;
+        font: var(--mat-sys-body-medium);
+        color: var(--mat-sys-on-surface-variant);
+        white-space: nowrap;
     }
 
     .ve-title {
         grid-area: label;
-        font-size: 14px;
+        font: var(--mat-sys-label-large);
+        color: var(--mat-sys-on-surface-variant);
         text-align: center;
-    }
-
-    button {
-        line-height: 36px;
-        font-weight: 500;
-        text-decoration: none;
-        font-size: 20px;
-        outline: none !important;
     }
 }
 
+// Keyboard input
 .ve-keyboard-container {
     display: grid;
     grid-template-columns: 160px auto auto;
     grid-template-areas:
-        "label . ."
+        "label label label"
         "input valid settings";
+    align-items: center;
+    column-gap: 8px;
+    row-gap: 4px;
+    padding: 12px 8px 12px 16px;
+    border-radius: var(--mat-sys-corner-medium);
+    background: var(--mat-sys-surface-container);
+    color: var(--mat-sys-on-surface);
+    box-shadow: var(--mat-sys-level3);
 
     .ve-title {
         grid-area: label;
-        border-bottom-style: solid;
-        border-bottom-width: 1px;
+        font: var(--mat-sys-label-large);
+        color: var(--mat-sys-on-surface-variant);
     }
+
     .ve-input {
         grid-area: input;
+        box-sizing: border-box;
         width: 160px;
-        font-size: 32px;
-        outline: none !important;
-        border: 0;
+        height: 48px;
+        padding: 0 12px;
+        border: 1px solid var(--mat-sys-outline);
+        border-radius: var(--mat-sys-corner-extra-small);
+        background: transparent;
+        color: var(--mat-sys-on-surface);
+        caret-color: var(--mat-sys-primary);
+        font: var(--mat-sys-title-large);
+
+        &::placeholder {
+            color: var(--mat-sys-on-surface-variant);
+            opacity: 0.6;
+        }
+
+        &:focus {
+            outline: 2px solid var(--mat-sys-primary);
+            outline-offset: -2px;
+            border-color: transparent;
+        }
     }
+
     .ve-valid {
         grid-area: valid;
     }
+
     .ve-settings {
         grid-area: settings;
-    }
-
-    button {
-        outline: none !important;
     }
 }

@@ -1,13 +1,15 @@
-<mat-form-field><input matInput placeholder="Nom" [(ngModel)]="modifier.name" required>
+<mat-form-field><mat-label>Nom</mat-label><input matInput [(ngModel)]="modifier.name" required>
 </mat-form-field>
 @if (!options?.noType) {
   <mat-form-field>
-    <input matInput placeholder="Type" [(ngModel)]="modifier.type">
+    <mat-label>Type</mat-label>
+    <input matInput [(ngModel)]="modifier.type">
   </mat-form-field>
 }
 @if (!options?.noDescription) {
   <mat-form-field>
-    <textarea matInput placeholder="Description"
+    <mat-label>Description</mat-label>
+    <textarea matInput
       [(ngModel)]="modifier.description"
       cdkTextareaAutosize
       cdkAutosizeMinRows="1"

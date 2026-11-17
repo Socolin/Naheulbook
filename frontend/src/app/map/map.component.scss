@@ -163,6 +163,10 @@
                         grid-column-gap: 8px;
                         grid-template-columns: auto 1fr;
                         align-items: center;
+
+                        &:hover, &:focus {
+                            background: color-mix(in srgb, var(--mat-sys-on-surface) 8%, transparent);
+                        }
                     }
 
                     .actions {

@@ -1,24 +1,30 @@
 import {Component} from '@angular/core';
-import {ThemeService} from '../theme.service';
-import { MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatButton } from '@angular/material/button';
+import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatRipple} from '@angular/material/core';
+import {ThemeInfo, ThemeService} from '../theme.service';
 
 @Component({
     selector: 'app-theme-selector-dialog',
     templateUrl: './theme-selector-dialog.component.html',
     styleUrls: ['./theme-selector-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatButton, MatDialogActions, MatDialogClose]
+    imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButton, MatIcon, MatRipple]
 })
 export class ThemeSelectorDialogComponent {
+    readonly themes: ThemeInfo[];
 
     constructor(
         private readonly themeService: ThemeService,
     ) {
+        this.themes = themeService.themes;
     }
 
-    changeTheme(theme: string) {
-        this.themeService.setTheme(theme);
+    get currentTheme(): string {
+        return this.themeService.currentTheme;
     }
 
+    changeTheme(theme: ThemeInfo) {
+        this.themeService.setTheme(theme.id);
+    }
 }

@@ -11,7 +11,8 @@
     <mat-step [completed]="selectedItemTemplate !== undefined" #searchStep>
       <ng-template matStepLabel>Chercher un objet</ng-template>
       <mat-form-field class="filter-field">
-        <input #filter matInput placeholder="Nom de l'objet" (keyup)="updateFilter(filter.value)">
+        <mat-label>Nom de l'objet</mat-label>
+        <input #filter matInput (keyup)="updateFilter(filter.value)">
       </mat-form-field>
       <mat-action-list>
         @for (result of filteredItemTemplates; track result) {
@@ -37,27 +38,27 @@
           <div class="name-line">
             <icon [icon]="selectedItemTemplate?.data?.icon"></icon>
             <mat-form-field>
+              <mat-label>Nom personnalisé</mat-label>
               <input matInput type="text"
-                placeholder="Nom personnalisé"
                 [(ngModel)]="itemData.name"/>
             </mat-form-field>
           </div>
           <mat-form-field>
+            <mat-label>Description personnalisé</mat-label>
             <input matInput type="text"
-              placeholder="Description personnalisé"
               [(ngModel)]="itemData.description"/>
           </mat-form-field>
           @if (selectedItemTemplate.data.quantifiable) {
             <mat-form-field>
+              <mat-label>Quantité</mat-label>
               <input matInput type="number"
-                placeholder="Quantité"
                 [(ngModel)]="itemData.quantity"/>
             </mat-form-field>
           }
           @if (selectedItemTemplate.data.useUG) {
             <mat-form-field>
+              <mat-label>Unité Goltor (Taille)</mat-label>
               <input matInput type="number"
-                placeholder="Unité Goltor (Taille)"
                 [(ngModel)]="itemData.ug"/>
             </mat-form-field>
           }

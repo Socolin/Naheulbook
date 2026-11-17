@@ -16,7 +16,7 @@ import {MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle,
 import {NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
@@ -35,7 +35,7 @@ import {NhbkActionComponent} from '../action/nhbk-action.component';
     selector: 'item-template-editor-module',
     styleUrls: ['./item-template-editor-module.component.scss'],
     templateUrl: './item-template-editor-module.component.html',
-    imports: [MatCard, NgSwitch, MatIconButton, MatIcon, NgSwitchCase, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, NgFor, NgIf, NhbkActionComponent, MatMenuTrigger, MatMenu, MatMenuItem, MatButton, MatSuffix, MatSelect, MatOption, MatDivider, MatCardSubtitle, MatCheckbox, MatCardActions, DurationSelectorComponent, ModifiersEditorComponent, StatRequirementsEditorComponent, MatRadioGroup, MatRadioButton, SkillModifiersEditorComponent, MatPrefix, NgSwitchDefault, CdkPortal, MatExpansionPanelActionRow]
+    imports: [MatCard, NgSwitch, MatIconButton, MatIcon, NgSwitchCase, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatHint, MatInput, FormsModule, NgFor, NgIf, NhbkActionComponent, MatMenuTrigger, MatMenu, MatMenuItem, MatButton, MatSuffix, MatSelect, MatOption, MatDivider, MatCardSubtitle, MatCheckbox, MatCardActions, DurationSelectorComponent, ModifiersEditorComponent, StatRequirementsEditorComponent, MatRadioGroup, MatRadioButton, SkillModifiersEditorComponent, NgSwitchDefault, CdkPortal, MatExpansionPanelActionRow]
 })
 export class ItemTemplateEditorModuleComponent implements OnInit {
     @Input() itemTemplate: ItemTemplate;
@@ -127,6 +127,17 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
         this.newItemTypeDisplayName = '';
         this.newItemTypeTechName = '';
         this.closeCreateItemTypeDialog();
+    }
+
+    // Damage in the game notation, e.g. "1D+3", "2D", "-1"
+    get damageSummary(): string {
+        const dice = this.itemTemplate.data.damageDice;
+        const bonus = this.itemTemplate.data.bonusDamage;
+        let summary = dice ? `${dice}D` : '';
+        if (bonus) {
+            summary += bonus > 0 && dice ? `+${bonus}` : `${bonus}`;
+        }
+        return summary;
     }
 
     deleteModule() {

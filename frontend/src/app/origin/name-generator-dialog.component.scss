@@ -1,7 +1,8 @@
 :host {
     .sex-selector {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
 
         mat-radio-button {
             margin: 8px 0;

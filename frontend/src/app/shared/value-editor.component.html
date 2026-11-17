@@ -28,7 +28,7 @@
             </div>
           }
           <div class="ve-settings">
-            <button mat-mini-fab color="primary" aria-label="Configuration" (click)="openSettings()">
+            <button mat-icon-button aria-label="Configuration" (click)="openSettings()">
               <mat-icon>settings</mat-icon>
             </button>
           </div>
@@ -72,17 +72,22 @@
         <div class="ve-container ve-keyboard-container"
           [style.bottom]="(-15 - yOffset) + 'px'"
           [style.left]="(40 + xOffset)+ 'px'">
-          <span class="ve-title">{{title}}</span>
+          @if (title) {
+            <span class="ve-title">{{title}}</span>
+          }
           <input #valueInput class="ve-input"
             type="text"
-            [matTooltip]="'Vous pouvez choisir la nouvelle valeur, ou utiliser des valeur relative tel que +8 ou -16'"
+            inputmode="numeric"
+            [attr.aria-label]="title"
+            [placeholder]="value"
+            [matTooltip]="'Vous pouvez choisir la nouvelle valeur, ou utiliser des valeurs relatives telles que +8 ou -16'"
             (keydown.enter)="changeValue(valueInput.value);commitValue()">
-          <button mat-raised-button color="primary" class="ve-valid"
+          <button mat-flat-button class="ve-valid"
             (click)="changeValue(valueInput.value);commitValue()"
             [matTooltip]="'Vous pouvez aussi appuyer sur Entrée pour valider'">
             OK
           </button>
-          <button mat-mini-fab aria-label="Configuration"  class="ve-settings" (click)="openSettings()" color="primary">
+          <button mat-icon-button aria-label="Configuration" class="ve-settings" (click)="openSettings()">
             <mat-icon>settings</mat-icon>
           </button>
         </div>

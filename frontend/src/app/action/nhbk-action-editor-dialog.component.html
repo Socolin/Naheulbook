@@ -22,9 +22,9 @@
         @if (selectedItemTemplate?.data?.quantifiable) {
           <div>
             <mat-form-field align="end">
+              <mat-label>Quantité</mat-label>
               <input matInput
                 type="number"
-                placeholder="Quantité"
                 [(ngModel)]="asNhbkAddItemAction(action).data.quantity"/>
             </mat-form-field>
           </div>
@@ -34,9 +34,9 @@
       }
       @case ('addEv') {
         <mat-form-field align="end">
+          <mat-label>Energie vitale</mat-label>
           <input matInput
             type="number"
-            placeholder="Energie vitale"
             [(ngModel)]="asNhbkAddEvAction(action).data.ev"/>
           <span matPrefix>Redonner&nbsp;</span>
           <span matSuffix>E.V.</span>
@@ -44,9 +44,9 @@
       }
       @case ('addEa') {
         <mat-form-field align="end">
+          <mat-label>Energie astrale</mat-label>
           <input matInput
             type="number"
-            placeholder="Energie astrale"
             [(ngModel)]="asNhbkAddEaAction(action).data.ea"/>
           <span matPrefix>Redonner&nbsp;</span>
           <span matSuffix>E.A.</span>
@@ -54,8 +54,8 @@
       }
       @case ('custom') {
         <mat-form-field align="end" style="width: 100%">
+          <mat-label>Action</mat-label>
           <input matInput
-            placeholder="Action"
             [(ngModel)]="asNhbkCustomAction(action).data.text"/>
         </mat-form-field>
       }

@@ -37,6 +37,10 @@
 
     .main-row {
         cursor: pointer;
+
+        &:hover {
+            background-color: color-mix(in srgb, var(--mat-sys-on-surface) 8%, transparent);
+        }
     }
 
     tr.main-row td {

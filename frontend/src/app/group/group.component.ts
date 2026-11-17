@@ -45,14 +45,13 @@ import { ValueEditorComponent } from '../shared/value-editor.component';
 import { DateComponent } from '../date/date.component';
 import { EventsComponent } from '../event/events.component';
 import { ItemListComponent } from '../item/item-list.component';
-import { MatListItemIcon, MatList, MatListItem, MatDivider } from '@angular/material/list';
+import {MatDivider, MatList, MatListItem, MatListItemIcon, MatListItemLine, MatListItemMeta, MatListItemTitle} from '@angular/material/list';
 import { MatChipSet, MatChip } from '@angular/material/chips';
-import { MatLine } from '@angular/material/grid-list';
 import { MatRipple } from '@angular/material/core';
 import { FighterPanelComponent } from './fighter-panel.component';
 import { GroupLootPanelComponent } from './group-loot-panel.component';
 import { GroupHistoryComponent } from './group-history.component';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
@@ -63,7 +62,7 @@ import { MarkdownPipe } from '../markdown/markdown.pipe';
     templateUrl: './group.component.html',
     styleUrls: ['./group.component.scss'],
     providers: [GroupActionService],
-    imports: [MatProgressSpinner, MatTabGroup, MatTab, MatCard, MatToolbar, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatCardContent, ValueEditorComponent, DateComponent, EventsComponent, MatCardActions, MatButton, MatCardHeader, ItemListComponent, MatListItemIcon, MatChipSet, MatChip, MatList, MatListItem, MatLine, MatRipple, MatDivider, FighterPanelComponent, GroupLootPanelComponent, GroupHistoryComponent, CdkPortal, MatCardSubtitle, MatFormField, MatInput, FormsModule, MatRadioGroup, MatRadioButton, UsefulDataComponent, MarkdownPipe]
+    imports: [MatLabel, MatProgressSpinner, MatTabGroup, MatTab, MatCard, MatToolbar, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatCardContent, ValueEditorComponent, DateComponent, EventsComponent, MatCardActions, MatButton, MatCardHeader, ItemListComponent, MatListItemIcon, MatChipSet, MatChip, MatList, MatListItem, MatListItemTitle, MatListItemLine, MatListItemMeta, MatRipple, MatDivider, FighterPanelComponent, GroupLootPanelComponent, GroupHistoryComponent, CdkPortal, MatCardSubtitle, MatFormField, MatInput, FormsModule, MatRadioGroup, MatRadioButton, UsefulDataComponent, MarkdownPipe]
 })
 export class GroupComponent implements OnInit, OnDestroy {
     public group: Group;

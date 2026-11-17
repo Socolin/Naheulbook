@@ -23,42 +23,42 @@
   <div [formGroup]="form">
     <mat-card-content class="basic-stats" formGroupName="stats">
       <mat-form-field class="cou">
+        <mat-label>Courage</mat-label>
         <input matInput
           type="number"
           formControlName="cou"
-          placeholder="Courage"
           step="1"
           min=0 />
       </mat-form-field>
       <mat-form-field class="int">
+        <mat-label>Intelligence</mat-label>
         <input matInput
           type="number"
           formControlName="int"
-          placeholder="Intelligence"
           step="1"
           min=0 />
       </mat-form-field>
       <mat-form-field class="cha">
+        <mat-label>Charisme</mat-label>
         <input matInput
           type="number"
           formControlName="cha"
-          placeholder="Charisme"
           step="1"
           min=0 />
       </mat-form-field>
       <mat-form-field class="ad">
+        <mat-label>Adresse</mat-label>
         <input matInput
           type="number"
           formControlName="ad"
-          placeholder="Adresse"
           step="1"
           min=0 />
       </mat-form-field>
       <mat-form-field class="fo">
+        <mat-label>Force</mat-label>
         <input matInput
           type="number"
           formControlName="fo"
-          placeholder="Force"
           step="1"
           min=0 />
       </mat-form-field>
@@ -73,7 +73,8 @@
   </mat-card-header>
   <mat-card-content>
     <mat-form-field>
-      <mat-select placeholder="Origine" [(ngModel)]="selectedOrigin" (selectionChange)="updateAvailableJobs()">
+      <mat-label>Origine</mat-label>
+      <mat-select [(ngModel)]="selectedOrigin" (selectionChange)="updateAvailableJobs()">
         @for (origin of origins; track origin) {
           <mat-option [value]="origin">
             {{origin.name}}
@@ -111,7 +112,8 @@
           <div class="speciality">
             @if (job.specialities.length > 0) {
               <mat-form-field class="speciality-selector">
-                <mat-select placeholder="Spécialité" (selectionChange)="addSpeciality(job, $event.value)">
+                <mat-label>Spécialité</mat-label>
+                <mat-select (selectionChange)="addSpeciality(job, $event.value)">
                   @for (speciality of job.specialities; track speciality) {
                     @if (!isSpecialitySelected(job, speciality)) {
                       <mat-option [value]="speciality">
@@ -126,7 +128,8 @@
         </div>
       }
       <mat-form-field class="job-selector">
-        <mat-select placeholder="Métier" (selectionChange)="addJob($event.value)">
+        <mat-label>Métier</mat-label>
+        <mat-select (selectionChange)="addJob($event.value)">
           @for (job of availableJobs; track job) {
             @if (!isJobSelected(job)) {
               <mat-option [value]="job">
@@ -171,9 +174,10 @@
   <mat-card-content>
     <div class="name-sex">
       <mat-form-field class="name">
+        <mat-label>Nom</mat-label>
         <input matInput
           formControlName="name"
-          placeholder="Nom" />
+ />
       </mat-form-field>
 
       <div class="sex">
@@ -189,60 +193,60 @@
     </div>
     <div class="level-exp-fate">
       <mat-form-field>
+        <mat-label>Niveau</mat-label>
         <input matInput
           type="number"
           formControlName="level"
-          placeholder="Niveau"
           step="1"
           min=0 />
       </mat-form-field>
       <mat-form-field>
+        <mat-label>Experience</mat-label>
         <input matInput
           type="number"
           formControlName="experience"
-          placeholder="Experience"
           step="1"
           min=0 />
       </mat-form-field>
       <mat-form-field>
+        <mat-label>Point de destin</mat-label>
         <input matInput
           type="number"
           formControlName="fatePoint"
-          placeholder="Point de destin"
           step="1"
           min=0 />
       </mat-form-field>
     </div>
     <div class="ev-ea-at-prd" formGroupName="basicStatsOverrides">
       <mat-form-field>
+        <mat-label>Énergie Vitale</mat-label>
         <input matInput
           type="number"
           formControlName="ev"
-          placeholder="Énergie Vitale"
           step="1"
           min=0 />
       </mat-form-field>
       <mat-form-field>
+        <mat-label>Énergie Astrale</mat-label>
         <input matInput
           type="number"
           formControlName="ea"
-          placeholder="Énergie Astrale"
           step="1"
           min=0 />
       </mat-form-field>
       <mat-form-field>
+        <mat-label>AT</mat-label>
         <input matInput
           type="number"
           formControlName="at"
-          placeholder="AT"
           step="1"
           min=0 />
       </mat-form-field>
       <mat-form-field>
+        <mat-label>PRD</mat-label>
         <input matInput
           type="number"
           formControlName="prd"
-          placeholder="PRD"
           step="1"
           min=0 />
       </mat-form-field>

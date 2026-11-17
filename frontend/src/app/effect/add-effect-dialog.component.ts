@@ -9,7 +9,7 @@ import {EffectService} from './effect.service';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatActionList } from '@angular/material/list';
 import { MatRipple } from '@angular/material/core';
@@ -25,7 +25,7 @@ export interface AddEffectDialogData {
 @Component({
     templateUrl: './add-effect-dialog.component.html',
     styleUrls: ['./add-effect-dialog.component.scss', '../shared/full-screen-dialog.scss'],
-    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, MatStepper, MatStep, MatStepLabel, MatFormField, MatInput, MatActionList, MatRipple, StatModifierEditorComponent]
+    imports: [MatLabel, MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatButton, MatStepper, MatStep, MatStepLabel, MatFormField, MatInput, MatActionList, MatRipple, StatModifierEditorComponent]
 })
 export class AddEffectDialogComponent {
     @ViewChild('stepper', {static: true})

@@ -18,8 +18,8 @@
     <mat-step [completed]="searchCompleted" #searchStep>
       <ng-template matStepLabel>Chercher un effet pré-existant</ng-template>
       <mat-form-field>
+        <mat-label>Effet</mat-label>
         <input matInput
-          placeholder="Effet"
           #filter
           (keyup)="updateFilter(filter.value)">
       </mat-form-field>

@@ -1,5 +1,13 @@
+@use '@angular/material' as mat;
+
 .event-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+.past-event {
+    @include mat.card-overrides((
+        elevated-container-color: light-dark(#d7fde4, #2c3e30),
+    ));
 }

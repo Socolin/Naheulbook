@@ -8,14 +8,14 @@ import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/f
 import {startWith} from 'rxjs/operators';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatNavList, MatListItem } from '@angular/material/list';
 
 @Component({
     templateUrl: './map-list.component.html',
     styleUrls: ['./map-list.component.scss'],
-    imports: [MatButton, MatIcon, MatFormField, MatInput, FormsModule, ReactiveFormsModule, MatNavList, MatListItem, RouterLink]
+    imports: [MatLabel, MatButton, MatIcon, MatFormField, MatInput, FormsModule, ReactiveFormsModule, MatNavList, MatListItem, RouterLink]
 })
 export class MapListComponent implements OnInit, OnDestroy {
     public maps?: MapSummaryResponse[];

@@ -6,7 +6,7 @@ import {HistoryEntry} from '../shared';
 import {Group} from './group.model';
 import {GroupService} from './group.service';
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -18,7 +18,8 @@ import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 @Component({
     selector: 'group-history',
     templateUrl: './group-history.component.html',
-    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatInput, FormsModule, MatCheckbox, MatCardActions, MatButton, DateComponent, DatePipe, NhbkDateDurationPipe]
+    styleUrls: ['./group-history.component.scss'],
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, MatCheckbox, MatCardActions, MatButton, DateComponent, DatePipe, NhbkDateDurationPipe]
 })
 export class GroupHistoryComponent implements OnInit {
     @Input() group: Group;
@@ -73,8 +74,15 @@ export class GroupHistoryComponent implements OnInit {
         return false;
     }
 
+    canAddLog(): boolean {
+        return this.historyNewEntryText.trim().length > 0;
+    }
+
     addLog() {
-        this.groupService.addLog(this.group.id, this.historyNewEntryText, this.historyNewEntryGm).subscribe(
+        if (!this.canAddLog()) {
+            return false;
+        }
+        this.groupService.addLog(this.group.id, this.historyNewEntryText.trim(), this.historyNewEntryGm).subscribe(
             () => {
                 this.historyNewEntryText = '';
                 this.notification.success('Historique', 'Entrée ajoutée');

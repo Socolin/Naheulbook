@@ -10,15 +10,17 @@
 
 @if (preSelectedEffect) {
   <mat-card class="effect-selected">
-    <mat-card-title class="effect-name">
-      {{preSelectedEffect.name}}
-      <button mat-icon-button (click)="unselectEffect()">
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-card-title>
-    <mat-card-subtitle>
-      {{preSelectedEffect.subCategory.name}}
-    </mat-card-subtitle>
+    <mat-card-header>
+      <mat-card-title class="effect-name">
+        {{preSelectedEffect.name}}
+        <button mat-icon-button (click)="unselectEffect()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{preSelectedEffect.subCategory.name}}
+      </mat-card-subtitle>
+    </mat-card-header>
     <mat-card-content>
       <div class="effect-description">
         {{preSelectedEffect.description}}
@@ -58,7 +60,9 @@
 
 @if (preSelectedEffect) {
   <mat-card>
-    <mat-card-subtitle>Customisation</mat-card-subtitle>
+    <mat-card-header>
+      <mat-card-subtitle>Personnalisation</mat-card-subtitle>
+    </mat-card-header>
     <div class="effect-reusable">
       @if (reusableToggle) {
         <mat-slide-toggle color="primary"

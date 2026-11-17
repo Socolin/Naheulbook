@@ -1,10 +1,44 @@
-:host {
-    mat-dialog-content {
-        display: grid;
-        grid-template-columns: minmax(50px, 100px) 52px minmax(45px, 100px);
-        grid-gap: 16px;
-        > * {
-            width: 100%;
+mat-dialog-content {
+    display: grid;
+    grid-template-columns: auto minmax(140px, 1fr);
+    grid-template-areas:
+        "stat      stat"
+        "operation value"
+        "preview   preview";
+    column-gap: 16px;
+    align-items: start;
+    max-width: 400px;
+
+    .stat {
+        grid-area: stat;
+    }
+
+    .operation {
+        grid-area: operation;
+        // Align with the 56px input of the value field
+        margin-top: 4px;
+        height: 48px;
+        align-items: center;
+
+        mat-button-toggle {
+            min-width: 48px;
+            font: var(--mat-sys-title-medium);
+        }
+    }
+
+    .value {
+        grid-area: value;
+    }
+
+    .preview {
+        grid-area: preview;
+        margin-top: 16px;
+        font: var(--mat-sys-body-medium);
+        color: var(--mat-sys-on-surface-variant);
+
+        strong {
+            font: var(--mat-sys-title-medium);
+            color: var(--mat-sys-on-surface);
         }
     }
 }

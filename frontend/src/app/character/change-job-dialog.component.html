@@ -18,8 +18,8 @@
   <mat-list>
     @for (job of jobs; track job) {
       <mat-list-item>
-        <span matLine>{{ job.name }}</span>
-        <button mat-icon-button [matMenuTriggerFor]="confirmDelete">
+        <span matListItemTitle>{{ job.name }}</span>
+        <button mat-icon-button matListItemMeta [matMenuTriggerFor]="confirmDelete">
           <mat-icon>delete</mat-icon>
         </button>
         <mat-menu #confirmDelete="matMenu">

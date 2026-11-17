@@ -1,12 +1,11 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {IconDescription} from './icon.model';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { CdkOverlayOrigin, CdkConnectedOverlay } from '@angular/cdk/overlay';
 import { MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { MatNavList, MatListItem } from '@angular/material/list';
+import {MatListItem, MatListItemAvatar, MatListItemLine, MatListItemTitle, MatNavList} from '@angular/material/list';
 import { IconComponent } from './icon.component';
-import { MatLine } from '@angular/material/grid-list';
 import { MatIcon } from '@angular/material/icon';
 
 export class AutocompleteValue {
@@ -29,7 +28,7 @@ export class AutocompleteValue {
     selector: 'autocomplete-input',
     templateUrl: './autocomplete-input.component.html',
     styleUrls: ['./autocomplete-input.component.scss'],
-    imports: [MatFormField, CdkOverlayOrigin, MatInput, FormsModule, CdkConnectedOverlay, MatNavList, MatListItem, IconComponent, MatLine, MatIcon]
+    imports: [MatLabel, MatFormField, CdkOverlayOrigin, MatInput, FormsModule, CdkConnectedOverlay, MatNavList, MatListItem, MatListItemAvatar, MatListItemTitle, MatListItemLine, IconComponent, MatIcon]
 })
 export class AutocompleteInputComponent {
     @Input() callback: Function;

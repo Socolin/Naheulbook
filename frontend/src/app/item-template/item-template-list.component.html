@@ -40,6 +40,9 @@
         [formControl]="categoryNameControl"
         required
         [matAutocomplete]="autoCompleteCategory">
+      <button matIconButton matSuffix (click)="categoryNameControl.reset()">
+        <mat-icon>close</mat-icon>
+      </button>
 
       <mat-autocomplete #autoCompleteCategory="matAutocomplete" [displayWith]="getSubCategoryName"
         (optionSelected)="selectSubCategory($event.option.value, false)">
@@ -64,7 +67,9 @@
 
 @if (selectedSection && selectedSection.note) {
   <mat-card class="panel panel-default">
-    <mat-card-subtitle>Note</mat-card-subtitle>
+    <mat-card-header>
+      <mat-card-subtitle>Note</mat-card-subtitle>
+    </mat-card-header>
     <mat-card-content>
       <div class="panel-body" [innerHTML]="selectedSection.note|textFormatter">
       </div>
@@ -77,18 +82,14 @@
     <mat-form-field class="search">
       <mat-label>Chercher un objet</mat-label>
       <input matInput #searchInput (keyup)="updateAutocompleteItem(searchInput.value)"/>
-      @if (searchInput.value !== '') {
+      @if (searching) {
+        <mat-spinner matSuffix class="search-spinner" diameter="24"></mat-spinner>
+      } @else if (searchInput.value !== '') {
         <button matSuffix mat-icon-button (click)="searchInput.value = ''; updateAutocompleteItem(searchInput.value)">
           <mat-icon>close</mat-icon>
         </button>
       }
     </mat-form-field>
-
-    <div class="search-loader">
-      @if (searching) {
-        <mat-spinner diameter="24" color="accent"></mat-spinner>
-      }
-    </div>
 
     <mat-checkbox class="table-view" [(ngModel)]="tableView">Vue tableau</mat-checkbox>
     <mat-checkbox class="display-community" (change)="updateViewCommunityItems($event.checked)">Objets communautaires</mat-checkbox>

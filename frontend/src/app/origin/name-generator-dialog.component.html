@@ -1,7 +1,8 @@
 <h2 mat-dialog-title>Générer un nom</h2>
 <mat-dialog-content [formGroup]="form">
   <mat-form-field>
-    <mat-select formControlName="originId" placeholder="Origine">
+    <mat-label>Origine</mat-label>
+    <mat-select formControlName="originId">
       @for (origin of origins; track origin) {
         <mat-option [value]="origin.id">
           {{origin.name}}
@@ -20,9 +21,13 @@
     </mat-radio-button>
   </mat-radio-group>
   <mat-form-field>
-    <input matInput formControlName="name" placeholder="Nom"/>
+    <mat-label>Nom</mat-label>
+    <input matInput formControlName="name"/>
+    <button matSuffix mat-button type="button" (click)="randomName()">
+      <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random"></mat-icon>
+      Générer
+    </button>
   </mat-form-field>
-  <button mat-stroked-button (click)="randomName()">Générer</button>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close color="primary">

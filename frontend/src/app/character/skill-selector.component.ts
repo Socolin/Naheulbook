@@ -6,15 +6,14 @@ import {Job} from '../job';
 import {Origin} from '../origin';
 
 import {Skill, SkillService} from '../skill';
-import { MatSelectionListChange, MatSelectionList, MatListOption } from '@angular/material/list';
+import {MatListItemLine, MatListItemTitle, MatListOption, MatSelectionList, MatSelectionListChange} from '@angular/material/list';
 import {Guid} from '../api/shared/util';
-import { MatLine } from '@angular/material/grid-list';
 
 @Component({
     selector: 'skill-selector',
     templateUrl: './skill-selector.component.html',
     styleUrls: ['./skill-selector.component.scss'],
-    imports: [MatSelectionList, MatListOption, MatLine]
+    imports: [MatSelectionList, MatListOption, MatListItemTitle, MatListItemLine]
 })
 export class SkillSelectorComponent implements OnInit {
     // Inputs

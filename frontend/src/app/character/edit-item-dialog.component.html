@@ -3,12 +3,14 @@
 <form [formGroup]="form">
     <mat-dialog-content>
         <mat-form-field>
-            <input matInput placeholder="&#x2063;Nom" formControlName="name" autocomplete="off">
+            <mat-label>&#x2063;Nom</mat-label>
+            <input matInput formControlName="name" autocomplete="off">
         </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-content>
         <mat-form-field>
-            <input matInput placeholder="Description" formControlName="description" autocomplete="off">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description" autocomplete="off">
         </mat-form-field>
     </mat-dialog-content>
 </form>

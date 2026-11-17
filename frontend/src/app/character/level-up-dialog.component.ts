@@ -10,7 +10,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatStepper, MatStep, MatStepLabel, MatStepperNext } from '@angular/material/stepper';
 import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
-import { MatFormField, MatHint } from '@angular/material/form-field';
+import {MatFormField, MatHint, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { SkillSelectorComponent } from './skill-selector.component';
 import { SpecialitySelectorComponent } from './speciality-selector.component';
@@ -40,7 +40,7 @@ export class LevelUpInfo {
 @Component({
     templateUrl: './level-up-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './level-up-dialog.component.scss'],
-    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatStepper, MatStep, MatStepLabel, MatButtonToggleGroup, FormsModule, MatButtonToggle, MatFormField, MatInput, MatHint, MatButton, MatStepperNext, SkillSelectorComponent, SpecialitySelectorComponent]
+    imports: [MatLabel, MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatStepper, MatStep, MatStepLabel, MatButtonToggleGroup, FormsModule, MatButtonToggle, MatFormField, MatInput, MatHint, MatButton, MatStepperNext, SkillSelectorComponent, SpecialitySelectorComponent]
 })
 export class LevelUpDialogComponent {
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();

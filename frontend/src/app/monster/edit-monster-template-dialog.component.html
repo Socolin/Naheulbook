@@ -27,7 +27,8 @@
     <mat-card-content>
       <div class="category-selection">
         <mat-form-field class="type-selector">
-          <mat-select [ngModel]="selectedType" (selectionChange)="selectType($event.value);" placeholder="Catégorie">
+          <mat-label>Catégorie</mat-label>
+          <mat-select [ngModel]="selectedType" (selectionChange)="selectType($event.value);">
             @for (type of monsterTemplateTypes; track type) {
               <mat-option [value]="type">{{type.name}}</mat-option>
             }
@@ -40,8 +41,9 @@
         </mat-form-field>
         @if (selectedType) {
           <mat-form-field class="category-selector">
+            <mat-label>Sous-catégorie</mat-label>
             <mat-select [ngModel]="selectedSubCategory" (selectionChange)="selectSubCategory($event.value)"
-              placeholder="Sous-catégorie">
+>
               @for (subCategory of selectedType.subCategories; track subCategory) {
                 <mat-option [value]="subCategory">
                   {{subCategory.name}}

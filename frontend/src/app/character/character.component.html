@@ -117,7 +117,7 @@
               <div class="money">
                 {{character.computedData.totalMoney | itemPrice}} (Lingot & Pièces)
               </div>
-              @if (character.computedData.totalGemValue > 0 && character.group?.config.allowPlayersToSeeGemPriceWhenIdentified) {
+              @if (character.computedData.totalGemValue > 0 && character.group?.config?.allowPlayersToSeeGemPriceWhenIdentified) {
                 <div class="gem">
                   {{character.computedData.totalGemValue | itemPrice}} (Gemmes & Pierres précieuses)
                 </div>

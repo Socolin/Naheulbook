@@ -1,11 +1,15 @@
 @use "../../app/style/responsive-utils" as responsive;
 
-mat-card-content {
-    .name {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        grid-column-gap: 8px;
-        align-items: center;
+.content {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px;
+
+    .name button[matSuffix] {
+        margin-right: 8px;
     }
 
     .location-origin {
@@ -13,29 +17,31 @@ mat-card-content {
         flex-direction: row;
         gap: 16px;
 
+        @include responsive.for-phone-only {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        mat-form-field {
+            flex: 1;
+        }
     }
 
     .sex-selector {
         display: flex;
         flex-direction: row;
+        gap: 16px;
+        margin-bottom: 16px;
 
         @include responsive.for-phone-only {
             flex-direction: column;
+            gap: 0;
         }
 
-        mat-radio-button {
-            padding: 8px;
-            @include responsive.for-phone-only {
-                padding: 8px 0;
-            }
-        }
-
-        .mat-radio-label-content {
-            display: flex;
+        .sex-label {
+            display: inline-flex;
             align-items: center;
+            gap: 4px;
         }
-    }
-    .note {
-        display: flex;
     }
 }

@@ -11,8 +11,7 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { MatCard, MatCardContent } from '@angular/material/card';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatInput } from '@angular/material/input';
@@ -28,7 +27,7 @@ export interface EditEffectDialogData {
 @Component({
     templateUrl: './edit-effect-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './edit-effect-dialog.component.scss'],
-    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, MatCard, MatCardContent, MatFormField, MatSelect, FormsModule, MatOption, ReactiveFormsModule, MatInput, CdkTextareaAutosize, DurationSelectorComponent, ModifiersEditorComponent]
+    imports: [MatLabel, MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, MatFormField, MatSelect, FormsModule, MatOption, ReactiveFormsModule, MatInput, CdkTextareaAutosize, DurationSelectorComponent, ModifiersEditorComponent]
 })
 export class EditEffectDialogComponent implements OnInit {
     public saving = false;

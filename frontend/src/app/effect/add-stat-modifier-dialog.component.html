@@ -1,57 +1,52 @@
+<h2 mat-dialog-title>Ajouter un modificateur</h2>
 <mat-dialog-content>
-
-  <mat-form-field>
-    <mat-select placeholder="Stat" [(ngModel)]="selectedStat">
-      @for (stat of basicStats; track stat) {
-        <mat-option [value]="stat">
-          {{stat}}
-        </mat-option>
-      }
-      <mat-divider></mat-divider>
-      @for (stat of lifeStats; track stat) {
-        <mat-option [value]="stat">
-          {{stat}}
-        </mat-option>
-      }
-      <mat-divider></mat-divider>
-      @for (stat of combatStats; track stat) {
-        <mat-option [value]="stat">
-          {{stat}}
-        </mat-option>
-      }
-      <mat-divider></mat-divider>
-      @for (stat of magicStats; track stat) {
-        <mat-option [value]="stat">
-          {{stat}}
-        </mat-option>
-      }
-      <mat-divider></mat-divider>
-      @for (stat of stats; track stat) {
-        <mat-option [value]="stat">
-          {{stat}}
-        </mat-option>
+  <mat-form-field class="stat">
+    <mat-label>Caractéristique</mat-label>
+    <mat-select [(ngModel)]="selectedStat">
+      @for (group of statGroups; track group.label) {
+        @if (group.stats.length) {
+          <mat-optgroup [label]="group.label">
+            @for (stat of group.stats; track stat) {
+              <mat-option [value]="stat">{{ stat }}</mat-option>
+            }
+          </mat-optgroup>
+        }
       }
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field>
-    <mat-select placeholder="Operation" [(ngModel)]="selectedType">
-      <mat-option [value]="'ADD'">+</mat-option>
-      <mat-option [value]="'MUL'">*</mat-option>
-      <mat-option [value]="'DIV'">/</mat-option>
-      <mat-option [value]="'SET'">=</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <mat-button-toggle-group class="operation"
+                           [(ngModel)]="selectedType"
+                           hideSingleSelectionIndicator
+                           aria-label="Opération">
+    @for (operation of operations; track operation.type) {
+      <mat-button-toggle [value]="operation.type"
+                         [matTooltip]="operation.label"
+                         [attr.aria-label]="operation.label">
+        {{ operation.symbol }}
+      </mat-button-toggle>
+    }
+  </mat-button-toggle-group>
 
-  <mat-form-field>
+  <mat-form-field class="value" subscriptSizing="dynamic">
+    <mat-label>Valeur</mat-label>
+    <mat-hint>Peut être négatif</mat-hint>
     <input matInput
-      [(ngModel)]="value"
-      type="number"
-      placeholder="Valeur"/>
+           [(ngModel)]="value"
+           type="number"
+           (keydown.enter)="addModifier()"/>
   </mat-form-field>
+
+  <div class="preview">
+    @if (canAddModifier()) {
+      <strong>{{ selectedStat }} {{ operationSymbol }} {{ value }}</strong>
+    } @else {
+      Choisissez une caractéristique et une valeur
+    }
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close color="primary">ANNULER</button>
-  <button mat-button color="primary" [disabled]="!canAddModifier()" (click)="addModifier()">AJOUTER</button>
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button mat-flat-button [disabled]="!canAddModifier()" (click)="addModifier()">Ajouter</button>
 </mat-dialog-actions>

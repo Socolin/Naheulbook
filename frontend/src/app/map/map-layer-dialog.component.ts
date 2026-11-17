@@ -3,7 +3,7 @@ import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, Reactive
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {MapLayer} from './map.model';
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/autocomplete';
@@ -23,7 +23,7 @@ export interface MapLayerDialogResult {
 @Component({
     templateUrl: './map-layer-dialog.component.html',
     styleUrls: ['./map-layer-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatInput, MatSelect, MatOption, MatCheckbox, MatDialogActions, MatButton, MatDialogClose]
+    imports: [MatLabel, MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatInput, MatSelect, MatOption, MatCheckbox, MatDialogActions, MatButton, MatDialogClose]
 })
 export class MapLayerDialogComponent {
 

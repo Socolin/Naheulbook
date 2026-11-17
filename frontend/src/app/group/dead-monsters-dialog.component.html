@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>Monstres morts</h2>
+<mat-dialog-content>
+  @for (monster of deadMonsters; track monster.id; let last = $last) {
+    <div class="dead-monster">
+      <div class="header">
+        <span class="name">{{ monster.name }}</span>
+        <span class="xp">{{ monster.data.xp }} XP</span>
+      </div>
+      @if (monster.data.note) {
+        <p class="note" [class.collapsed]="isNoteCollapsible(monster) && !isNoteExpanded(monster)">{{ monster.data.note }}</p>
+        @if (isNoteCollapsible(monster)) {
+          <button mat-button class="toggle-note" (click)="toggleNote(monster)">
+            {{ isNoteExpanded(monster) ? 'Voir moins' : 'Voir plus' }}
+          </button>
+        }
+      }
+    </div>
+    @if (!last) {
+      <mat-divider></mat-divider>
+    }
+  } @empty {
+    @if (!loading) {
+      <p class="empty">Aucun monstre mort</p>
+    }
+  }
+  @if (loading) {
+    <div class="loading">
+      <mat-spinner diameter="32"></mat-spinner>
+    </div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [disabled]="allLoaded || loading" (click)="loadMore()">Charger plus</button>
+  <button mat-button mat-dialog-close>Fermer</button>
+</mat-dialog-actions>

@@ -4,6 +4,14 @@
     .fighter {
         padding-bottom: 4px;
 
+        &.combat-row-selected {
+            background: color-mix(in srgb, var(--mat-sys-on-surface) 12%, transparent);
+        }
+
+        .incompatible-item {
+            color: var(--mat-sys-error);
+        }
+
         display: grid;
         align-items: center;
         grid-column-gap: 8px;

@@ -101,6 +101,8 @@ mat-card {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    // Same spacing as between the cards, so their shadows are not clipped by the tab body
+    padding: 8px;
 
     .stats-area {
         display: flex;
@@ -142,9 +144,16 @@ mat-card {
 
         .stat-details {
             font-size: smaller;
+
+            .stat-element,
+            .stat-detail-reason {
+                color: var(--mat-sys-on-surface-variant);
+            }
+
             .detail-row {
                 border-top-width: 1px;
                 border-top-style: solid;
+                border-top-color: var(--mat-sys-outline-variant);
             }
         }
 

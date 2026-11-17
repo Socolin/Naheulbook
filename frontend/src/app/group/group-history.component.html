@@ -2,22 +2,24 @@
   <mat-card-header>
     <mat-card-title>Ajouter une entrée</mat-card-title>
   </mat-card-header>
-  <mat-card-content style="display: flex">
-    <mat-form-field style="flex: 1 auto">
+  <mat-card-content class="new-entry">
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>Message</mat-label>
       <input matInput
         type="text"
-        placeholder="Message"
-        [(ngModel)]="historyNewEntryText"/>
+         required
+        [(ngModel)]="historyNewEntryText"
+        (keydown.enter)="addLog()"/>
     </mat-form-field>
-    <mat-checkbox [(ngModel)]=historyNewEntryGm style="flex: 0 auto">
-      Visible par le DM seulement
+    <mat-checkbox [(ngModel)]=historyNewEntryGm>
+      Visible par le MJ seulement
     </mat-checkbox>
   </mat-card-content>
   <mat-card-actions align="end">
     <button mat-button
-      color="primary"
+      [disabled]="!canAddLog()"
       (click)="addLog()">
-      AJOUTER
+      Ajouter
     </button>
   </mat-card-actions>
 </mat-card>
@@ -27,10 +29,9 @@
   </mat-card-header>
   <mat-card-content>
     @for (loggroup of history; track loggroup) {
-      <div>
-        {{loggroup.date | date:'mediumDate'}}
-        <div
-          style="padding-bottom: 5px; margin-left: 10px; padding-left: 10px; padding-top: 5px; border-left: 1px solid #E2D7D7">
+      <div class="log-group">
+        <div class="log-date">{{loggroup.date | date:'mediumDate'}}</div>
+        <div class="logs">
           @for (log of loggroup.logs; track log) {
             <div>
               {{log.date | date:'shortTime'}}:
@@ -52,7 +53,7 @@
                     Fin de combat
                   }
                   @case ('START_COMBAT') {
-                    Debut d'un combat
+                    Début d'un combat
                   }
                   @case ('ADD_TIME') {
                     Modification du temps: {{log.data.offset | nhbkDuration}}
@@ -60,10 +61,10 @@
                   @case ('CHANGE_DATE') {
                     Modification de la date
                     @if (log.data.oldValue) {
-                      <div style="padding-left: 20px">Ancienne date: <date
+                      <div class="log-detail">Ancienne date: <date
                       [date]="log.data.oldValue"></date></div>
                     }
-                    <div style="padding-left: 20px">Nouvelle date: <date [date]="log.data.newValue"></date></div>
+                    <div class="log-detail">Nouvelle date: <date [date]="log.data.newValue"></date></div>
                   }
                   @default {
                     {{log.action}}
@@ -78,7 +79,6 @@
   </mat-card-content>
   <mat-card-actions align="end">
     <button mat-button
-      color="primary"
       [disabled]="!loadMore"
       (click)="loadHistory(true)">
       Charger plus

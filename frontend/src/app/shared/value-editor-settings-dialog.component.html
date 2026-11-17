@@ -1,26 +1,26 @@
-<h2 mat-dialog-title>Configuration editeur de valeur</h2>
+<h2 mat-dialog-title>Éditeur de valeur</h2>
 <mat-dialog-content>
-    <mat-radio-group class="modes" [(ngModel)]="mode">
-        <mat-radio-button value="mobile">Mobile</mat-radio-button>
-        <p (click)="mode = modes.mobile">
-            Une interface pour mobile
-        </p>
-        <mat-radio-button value="keyboard">Clavier</mat-radio-button>
-        <p (click)="mode = modes.keyboard">
-            Utilise une boite de texte, qui permet de définir la valeur en écrivant un nombre, ou de modifier la valeur avec
-            une valeur relative commençant par + ou -.
-        </p>
-    </mat-radio-group>
+  <p class="intro">Choisissez comment modifier les valeurs (points de vie, d'expérience…)</p>
+  <div class="modes" role="radiogroup" aria-label="Mode d'édition">
+    @for (option of options; track option.mode) {
+      <button class="mode-option"
+              type="button"
+              role="radio"
+              matRipple
+              [attr.aria-checked]="mode === option.mode"
+              [class.selected]="mode === option.mode"
+              (click)="mode = option.mode">
+        <mat-icon class="mode-icon">{{ option.icon }}</mat-icon>
+        <span class="mode-text">
+          <span class="mode-title">{{ option.title }}</span>
+          <span class="mode-description">{{ option.description }}</span>
+        </span>
+        <mat-icon class="mode-check">{{ mode === option.mode ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+      </button>
+    }
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button
-            color="primary"
-            mat-dialog-close>
-        ANNULER
-    </button>
-    <button mat-button
-            color="primary"
-            (click)="save()">
-        SAUVEGARDER
-    </button>
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button mat-flat-button (click)="save()">Enregistrer</button>
 </mat-dialog-actions>

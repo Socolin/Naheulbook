@@ -6,6 +6,12 @@
 }
 .trait-label {
     text-align: center;
+    color: var(--mat-sys-on-surface-variant);
+}
+
+// Trait images are black on transparent background, invert them on dark themes
+.monster-trait-image {
+    filter: invert(var(--nhbk-dark-scheme));
 }
 
 .trait-levels {

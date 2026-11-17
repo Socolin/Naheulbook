@@ -69,7 +69,7 @@ export class FighterStat {
     }
 
     get dmg(): { name: string, damage: string, incompatible?: boolean }[] {
-        return this.fighter.isMonster ? this.fighter.monster.computedData.dmg : this.fighter.character.computedData.weaponsDamages;
+        return this.fighter.isMonster ? [] : this.fighter.character.computedData.weaponsDamages;
     }
 
     get cou(): number {

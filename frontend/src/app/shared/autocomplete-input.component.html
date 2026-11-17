@@ -1,9 +1,11 @@
 <span class="autocomplete-container">
   <mat-form-field #autocompleteOrigin="cdkOverlayOrigin" cdk-overlay-origin>
+    @if (placeholder) {
+      <mat-label>{{placeholder}}</mat-label>
+    }
     <input matInput
       #inputField
       [disabled]="disabled"
-      [placeholder]="placeholder"
       (keydown)="onKey($event)"
       [(ngModel)]="value"
       (ngModelChange)="updateList()"
@@ -22,16 +24,17 @@
       @for (item of matchingValues; track item; let i = $index) {
         <mat-list-item (click)="selectValue(item)" [class.selected]="preSelectedValueIndex === i">
           @if (item.icon) {
-            <span mat-list-avatar><icon [size]="'40px'" [icon]="item.icon"></icon></span>
+            <icon matListItemAvatar [size]="'40px'" [icon]="item.icon"></icon>
           }
-          <span matLine style="display: flex; align-items: center">
+          <span matListItemTitle class="title">
             @if (item.mdIcon) {
               <mat-icon>{{item.mdIcon}}</mat-icon>
-              }{{item.text}}
-            </span>
-            @if (item.secondaryText) {
-              <span matLine class="secondary-text">{{item.secondaryText}}</span>
             }
+            {{item.text}}
+          </span>
+          @if (item.secondaryText) {
+            <span matListItemLine>{{item.secondaryText}}</span>
+          }
           </mat-list-item>
         }
       </mat-nav-list>

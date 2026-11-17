@@ -7,3 +7,19 @@ mat-card {
         padding-bottom: 8px;
     }
 }
+
+// Community / private source of the item, shown above the card header
+.item-source {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 16px 0;
+    font: var(--mat-sys-label-medium);
+    color: var(--mat-sys-on-surface-variant);
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+}

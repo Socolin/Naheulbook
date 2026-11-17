@@ -1,9 +1,6 @@
 import {forkJoin} from 'rxjs';
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {OverlayRef} from '@angular/cdk/overlay';
-import { Portal, CdkPortal } from '@angular/cdk/portal';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 
-import {NhbkDialogService} from '../shared';
 import {ItemService} from '../item';
 import {Monster, MonsterService, MonsterTemplateService} from '../monster';
 
@@ -17,9 +14,9 @@ import {NhbkMatDialog} from '../material-workaround';
 import {EndCombatDialogComponent, EndCombatDialogResult} from './end-combat-dialog.component';
 import {CommandSuggestionType, QuickAction, QuickCommandService} from '../quick-command';
 import {Router} from '@angular/router';
-import {DeadMonsterResponse} from '../api/responses/dead-monster-response';
+import {DeadMonstersDialogComponent, DeadMonstersDialogData} from './dead-monsters-dialog.component';
 import {CreateFightDialogComponent, CreateFightDialogResult} from './create-fight-dialog.component';
-import { MatCard, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatCard } from '@angular/material/card';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -33,19 +30,13 @@ import { FighterIconComponent } from './fighter-icon.component';
     selector: 'fighter-panel',
     templateUrl: './fighter-panel.component.html',
     styleUrls: ['./fighter.component.scss', './fighter-panel.component.scss'],
-    imports: [MatCard, MatToolbar, MatButton, MatIcon, FighterComponent, MatIconButton, MatMenuTrigger, MatMenu, MatMenuItem, MatDivider, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, FighterIconComponent, MatExpansionPanelDescription, CdkPortal, MatCardTitle, MatCardContent, MatCardActions]
+    imports: [MatCard, MatToolbar, MatButton, MatIcon, FighterComponent, MatIconButton, MatMenuTrigger, MatMenu, MatMenuItem, MatDivider, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, FighterIconComponent, MatExpansionPanelDescription]
 })
 export class FighterPanelComponent implements OnInit, OnDestroy {
     @Input() group: Group;
 
     public loadingNextLap = false;
 
-    public deadMonsters: DeadMonsterResponse[] = [];
-    public allDeadMonstersLoaded = false;
-
-    @ViewChild('deadMonstersDialog', {static: true})
-    public deadMonstersDialog: Portal<any>;
-    public deadMonstersOverlayRef: OverlayRef | undefined;
     public isMobile: boolean;
 
     constructor(
@@ -54,7 +45,6 @@ export class FighterPanelComponent implements OnInit, OnDestroy {
         private readonly itemService: ItemService,
         private readonly monsterService: MonsterService,
         private readonly monsterTemplateService: MonsterTemplateService,
-        private readonly nhbkDialogService: NhbkDialogService,
         private readonly dialog: NhbkMatDialog,
         private readonly router: Router,
         private readonly breakpointObserver: BreakpointObserver,
@@ -139,15 +129,9 @@ export class FighterPanelComponent implements OnInit, OnDestroy {
     }
 
     openDeadMonstersDialog() {
-        this.deadMonstersOverlayRef = this.nhbkDialogService.openCenteredBackdropDialog(this.deadMonstersDialog);
-    }
-
-    closeDeadMonstersDialog() {
-        if (!this.deadMonstersOverlayRef) {
-            return;
-        }
-        this.deadMonstersOverlayRef.detach();
-        this.deadMonstersOverlayRef = undefined;
+        this.dialog.open<DeadMonstersDialogComponent, DeadMonstersDialogData>(DeadMonstersDialogComponent, {
+            data: {groupId: this.group.id}
+        });
     }
 
     /**
@@ -158,7 +142,6 @@ export class FighterPanelComponent implements OnInit, OnDestroy {
         this.monsterService.killMonster(monster.id).subscribe(
             () => {
                 this.group.removeMonster(monster.id);
-                this.deadMonsters.unshift(monster);
                 this.group.notify('killMonster', 'Monstre tué: ' + monster.name, monster);
                 if (this.group.pendingModifierChanges) {
                     this.groupService.saveChangedTime(this.group.id, this.group.pendingModifierChanges).subscribe();
@@ -196,19 +179,6 @@ export class FighterPanelComponent implements OnInit, OnDestroy {
                 }
             }
         );
-    }
-
-    loadMoreDeadMonsters(): boolean {
-        this.groupService.loadDeadMonsters(this.group.id, this.deadMonsters.length, 10).subscribe(
-            monsters => {
-                if (monsters.length === 0) {
-                    this.allDeadMonstersLoaded = true;
-                } else {
-                    this.deadMonsters = this.deadMonsters.concat(monsters);
-                }
-            }
-        );
-        return false;
     }
 
     selectNextFighter() {
@@ -270,11 +240,6 @@ export class FighterPanelComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.groupService.loadDeadMonsters(this.group.id, 0, 10).subscribe(
-            monsters => {
-                this.deadMonsters = monsters;
-            }
-        );
         this.registerQuickActions();
         this.registerCombatQuickActions();
     }

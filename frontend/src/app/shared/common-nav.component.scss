@@ -5,6 +5,11 @@
 
     .gm-toggle {
         cursor: pointer;
+
+        &:hover, &:focus {
+            background: color-mix(in srgb, var(--mat-sys-on-surface) 8%, transparent);
+        }
+
         > mat-slide-toggle {
             padding: 16px;
         }

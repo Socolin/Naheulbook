@@ -9,7 +9,7 @@ import {Job, JobService} from '../job';
 import {statModifierSpecialsValues} from './stat-modifier-specials.constants';
 import {Guid} from '../api/shared/util';
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatFormField } from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatOption as MatOption_1 } from '@angular/material/autocomplete';
 import { MatButton } from '@angular/material/button';
@@ -24,7 +24,7 @@ export interface StatModifierAdvancedDialogData {
     selector: 'app-stat-modifier-advanced-dialog',
     templateUrl: './stat-modifier-advanced-dialog.component.html',
     styleUrls: ['./stat-modifier-advanced-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatFormField, MatSelect, FormsModule, MatOption_1, MatSelectionList, MatListOption, MatDialogActions, MatButton, MatDialogClose]
+    imports: [MatLabel, MatDialogTitle, CdkScrollable, MatDialogContent, MatFormField, MatSelect, FormsModule, MatOption_1, MatSelectionList, MatListOption, MatDialogActions, MatButton, MatDialogClose]
 })
 export class StatModifierAdvancedDialogComponent implements OnInit {
     public origins: Origin[];

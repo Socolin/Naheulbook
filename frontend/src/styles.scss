@@ -6,6 +6,8 @@
 body {
     font-family: Roboto, 'Helvetica Neue', sans-serif;
     margin: 0;
+    background: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
 }
 
 .font-20px {
@@ -24,22 +26,107 @@ body {
     font-size: 48px;
 }
 
-.ra-mat-button-icon-40 {
-    font-size: 40px;
-    padding-right: 15px !important;
-}
+// Larger font icons (rpg-awesome / game-icons) used in buttons.
+// The icon box must match the font size, otherwise the glyph overflows and is not centered.
+@each $size, $spacing in (40: 15px, 32: 8px, 24: 2px) {
+    .ra-mat-button-icon-#{$size} {
+        font-size: #{$size}px;
+        line-height: #{$size}px;
 
-.ra-mat-button-icon-32 {
-    font-size: 32px;
-    padding-right: 8px !important;
-}
+        // `.mat-icon` sets a 24px box and its styles are loaded after this file
+        &.mat-icon {
+            width: #{$size}px;
+            height: #{$size}px;
+        }
+    }
 
-.ra-mat-button-icon-24 {
-    font-size: 24px;
-    padding-right: 2px !important;
+    // Space between the icon and the label, except in icon-only buttons
+    .ra-mat-button-icon-#{$size}:not(.mat-mdc-icon-button > *, .mat-mdc-fab-base > *) {
+        padding-right: $spacing !important;
+    }
+
+    // Icon buttons compute their padding from the icon size to keep the icon centered
+    .mat-mdc-icon-button:has(> .ra-mat-button-icon-#{$size}) {
+        --mat-icon-button-icon-size: #{$size}px;
+    }
 }
 
 .toolbar-spacer {
     flex: 1 1 auto;
 }
 
+
+// Global styles relying on Material system tokens (see theme.scss)
+a {
+    color: var(--mat-sys-primary);
+    text-decoration: none;
+}
+
+hr {
+    color: var(--mat-sys-outline-variant);
+}
+
+.secondary-text {
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.text-warning {
+    color: var(--mat-sys-error);
+}
+
+.text-info {
+    color: var(--mat-sys-primary);
+}
+
+.separator {
+    border-color: var(--mat-sys-outline-variant);
+}
+
+// Applied through `panelClass` by NhbkMatDialog
+.nhbk-full-screen-dialog {
+    --mat-dialog-container-color: var(--mat-sys-surface);
+    --mat-dialog-supporting-text-color: var(--mat-sys-on-surface);
+}
+
+// Leaflet tooltips are created outside of Angular templates
+.map-marker-tooltip {
+    font: var(--mat-sys-body-medium);
+}
+
+// Legacy typography classes (`mat-h1`, `mat-title`, ...) used in templates.
+// M3 `typography-hierarchy` maps them to display levels which are far too large for this app,
+// so they are mapped to M3 type scale levels close to their M2 sizes.
+.mat-typography {
+    font: var(--mat-sys-body-medium);
+    letter-spacing: var(--mat-sys-body-medium-tracking);
+}
+
+.mat-h1 {
+    font: var(--mat-sys-headline-small);
+    letter-spacing: var(--mat-sys-headline-small-tracking);
+    margin: 0 0 16px;
+}
+
+.mat-h2,
+.mat-title {
+    font: var(--mat-sys-title-large);
+    letter-spacing: var(--mat-sys-title-large-tracking);
+    margin: 0 0 16px;
+}
+
+.mat-h3 {
+    font: var(--mat-sys-title-medium);
+    letter-spacing: var(--mat-sys-title-medium-tracking);
+    margin: 0 0 16px;
+}
+
+.mat-h4 {
+    font: var(--mat-sys-title-small);
+    letter-spacing: var(--mat-sys-title-small-tracking);
+    margin: 0 0 16px;
+}
+
+.mat-caption {
+    font: var(--mat-sys-body-small);
+    letter-spacing: var(--mat-sys-body-small-tracking);
+}

@@ -7,7 +7,7 @@ import {ItemTemplateDialogComponent} from '../item-template/item-template-dialog
 import {MonsterInventoryElement} from './monster.model';
 import {NhbkMatDialog} from '../material-workaround';
 import {MatCardContent} from '@angular/material/card';
-import {MatFormField} from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
@@ -24,7 +24,7 @@ export interface AddMonsterItemDialogData {
 @Component({
     templateUrl: './add-monster-item-dialog.component.html',
     styleUrls: ['./add-monster-item-dialog.component.scss'],
-    imports: [MatDialogTitle, MatDialogContent, MatCardContent, MatFormField, MatInput, MatIconButton, MatIcon, MatActionList, MatListItem, IconComponent, MatRipple, FormsModule, MatCheckbox, MatDialogActions, MatButton, MatDialogClose]
+    imports: [MatLabel, MatDialogTitle, MatDialogContent, MatCardContent, MatFormField, MatInput, MatIconButton, MatIcon, MatActionList, MatListItem, IconComponent, MatRipple, FormsModule, MatCheckbox, MatDialogActions, MatButton, MatDialogClose]
 })
 export class AddMonsterItemDialogComponent implements OnInit {
     public filteredItemTemplates?: {

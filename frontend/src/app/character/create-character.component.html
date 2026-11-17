@@ -29,12 +29,12 @@
   }
   <mat-card-content>
     <mat-form-field>
+      <mat-label>Courage</mat-label>
       <input matInput
         type="number"
         required
         [(ngModel)]="cou"
         [disabled]="step > 0"
-        placeholder="Courage"
         min=8
         max=13
         [formControl]="couStatControl"
@@ -42,12 +42,12 @@
       <mat-error>Valeur valide: 8 à 13</mat-error>
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Intelligence</mat-label>
       <input matInput
         type="number"
         required
         [(ngModel)]="int"
         [disabled]="step > 0"
-        placeholder="Inteligence"
         min=8
         max=13
         [formControl]="intStatControl"
@@ -55,12 +55,12 @@
       <mat-error>Valeur valide: 8 à 13</mat-error>
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Charisme</mat-label>
       <input matInput
         type="number"
         required
         [(ngModel)]="cha"
         [disabled]="step > 0"
-        placeholder="Charisme"
         min=8
         max=13
         [formControl]="chaStatControl"
@@ -68,24 +68,24 @@
       <mat-error>Valeur valide: 8 à 13</mat-error>
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Adresse</mat-label>
       <input matInput
         type="number"
         required
         [(ngModel)]="ad"
         [disabled]="step > 0"
-        placeholder="Adresse"
         min=8
         [formControl]="adStatControl"
         />
       <mat-error>Valeur valide: 8 à 13</mat-error>
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Force</mat-label>
       <input matInput
         type="number"
         required
         [(ngModel)]="fo"
         [disabled]="step > 0"
-        placeholder="Force"
         min=8
         max=13
         [formControl]="foStatControl"
@@ -284,11 +284,11 @@
       }
       <div [hidden]="step > 4">
         <mat-form-field>
+          <mat-label>Fortune</mat-label>
           <input matInput
             required
             type="number"
             [(ngModel)]="money"
-            placeholder="Fortune"
             min=2
             max=12
             [formControl]="fortuneControl"
@@ -297,11 +297,11 @@
         </mat-form-field>
         @if (has2MoneyRoll()) {
           <mat-form-field>
+            <mat-label>Fortune jet 2</mat-label>
             <input matInput
               required
               type="number"
               [(ngModel)]="money2"
-              placeholder="Fortune jet 2"
               [formControl]="fortune2Control"
               min=2
               max=12
@@ -420,19 +420,24 @@
           </div>
           <div class="move-stat-point-values">
             <mat-form-field>
-              <input matInput [ngModel]="cou + move1PointStatValues['cou']" disabled placeholder="Courage"/>
+              <mat-label>Courage</mat-label>
+              <input matInput [ngModel]="cou + move1PointStatValues['cou']" disabled/>
             </mat-form-field>
             <mat-form-field>
-              <input matInput [ngModel]="int + move1PointStatValues['int']" disabled placeholder="Inteligence" />
+              <mat-label>Intelligence</mat-label>
+              <input matInput [ngModel]="int + move1PointStatValues['int']" disabled />
             </mat-form-field>
             <mat-form-field>
-              <input matInput [ngModel]="cha + move1PointStatValues['cha']" disabled placeholder="Charisme" />
+              <mat-label>Charisme</mat-label>
+              <input matInput [ngModel]="cha + move1PointStatValues['cha']" disabled />
             </mat-form-field>
             <mat-form-field>
-              <input matInput [ngModel]="ad + move1PointStatValues['ad']" disabled placeholder="Adresse" />
+              <mat-label>Adresse</mat-label>
+              <input matInput [ngModel]="ad + move1PointStatValues['ad']" disabled />
             </mat-form-field>
             <mat-form-field>
-              <input matInput [ngModel]="fo + move1PointStatValues['fo']" disabled placeholder="Force" />
+              <mat-label>Force</mat-label>
+              <input matInput [ngModel]="fo + move1PointStatValues['fo']" disabled />
             </mat-form-field>
           </div>
           <div class="move-stat-point-selector">
@@ -585,7 +590,7 @@
                 </mat-card-title>
               </mat-card-header>
               <mat-card-content>
-                <p>{{speciality.description}}</p>
+                {{speciality.description}}
               </mat-card-content>
               <mat-card-actions align="end">
                 <button mat-button color="primary" (click)="selectSpeciality(speciality)">
@@ -631,6 +636,7 @@
     <mat-card-content class="sex-name-step">
       <div>
         <mat-radio-group name="sexe" [(ngModel)]="sex" [disabled]="step > 7" aria-label="Choix du sexe du personnage">
+          <mat-label>Sexe</mat-label>
           <mat-radio-button name="sexe" [value]="'Homme'">
             Homme
           </mat-radio-button>
@@ -641,29 +647,26 @@
       </div>
       <div class="name-selector">
         <mat-form-field>
+          <mat-label>Nom du personnage</mat-label>
           <input matInput
             type="text"
             [(ngModel)]="name"
             [disabled]="step > 7"
-            placeholder="Nom"
             required/>
-        </mat-form-field>
-        @if ((step === 7)) {
-          <div >
             @if (!loadingRandomName) {
               <button
+                matSuffix
                 mat-icon-button
                 type="button"
-                [disabled]="!randomNameAvailable"
+                [disabled]="!randomNameAvailable || step !== 7"
                 (click)="randomName()">
                 <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-32"></mat-icon>
               </button>
+            } @else {
+              <mat-spinner
+                matSuffix [diameter]="32"></mat-spinner>
             }
-            @if (loadingRandomName) {
-              <mat-spinner [diameter]="32"></mat-spinner>
-            }
-          </div>
-        }
+        </mat-form-field>
       </div>
     </mat-card-content>
     @if (step === 7) {
@@ -701,18 +704,18 @@
     </mat-toolbar>
     <mat-card-content>
       @if (step === 8) {
-        <div>
+        <p>
           Tirez 1D4-1 pour determiner votre nombre de point de destins.
           Cela donne un score de 0 à 3... Oui, les guignards n'ont pas de point de destin.
-        </div>
+        </p>
       }
       <div>
         <mat-form-field>
+          <mat-label>Points de destin</mat-label>
           <input matInput
             type="number"
             [(ngModel)]="fatePoint"
             [disabled]="step > 8"
-            placeholder="Point de destins"
             min=0 />
         </mat-form-field>
       </div>
@@ -728,9 +731,9 @@
 }
 
 @if ((step === 9)) {
-  <div>
+  <div class="create-character-button">
     <button
-      mat-raised-button
+      mat-stroked-button
       [disabled]="creating"
       (click)="createCharacter()">
       Creer

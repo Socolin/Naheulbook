@@ -31,13 +31,15 @@
         align-items: center;
         grid-template-columns: 1fr 32px 1fr 32px;
         grid-template-areas:
-            "search search search search-loader"
+            "search search search search"
             "table-view table-view display-community display-community";
         .search {
             grid-area: search;
-        }
-        .search-loader {
-            grid-area: search-loader;
+
+            // Same spacing as an icon suffix (mat-icon / icon button get it from the form field)
+            .search-spinner {
+                margin-right: 12px;
+            }
         }
         .table-view {
             grid-area: table-view;

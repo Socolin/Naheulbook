@@ -1,7 +1,8 @@
-<h2 mat-dialog-title>{{data.modifier.name}}</h2>
-@if (data.modifier.type) {
-  <div class="secondary-text">{{data.modifier.type!}}</div>
-}
+<h2 mat-dialog-title>{{data.modifier.name}}
+  @if (data.modifier.type) {
+    <span class="subtitle">{{data.modifier.type}}</span>
+  }
+</h2>
 <mat-dialog-content class="mat-typography">
   @if (data.modifier.description) {
     <p>{{data.modifier.description!}}</p>

@@ -2,7 +2,8 @@
 
 <mat-dialog-content>
   <mat-form-field>
-    <mat-select #jobSelector [ngModel]="data.selectedJobId" placeholder="Métier applicable">
+    <mat-label>Métier applicable</mat-label>
+    <mat-select #jobSelector [ngModel]="data.selectedJobId">
       <mat-option [value]="undefined"></mat-option>
       @for (job of jobs; track job) {
         <mat-option [value]="job.id">
@@ -13,7 +14,8 @@
   </mat-form-field>
 
   <mat-form-field>
-    <mat-select #originSelector [ngModel]="data.selectedOriginId" placeholder="Origine applicable">
+    <mat-label>Origine applicable</mat-label>
+    <mat-select #originSelector [ngModel]="data.selectedOriginId">
       <mat-option [value]="undefined"></mat-option>
       @for (origin of origins; track origin) {
         <mat-option [value]="origin.id">
