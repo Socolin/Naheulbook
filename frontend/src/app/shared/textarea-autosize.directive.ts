@@ -11,8 +11,8 @@ export class TextareaAutosizeDirective implements OnInit {
         this.element.nativeElement.style.height = this.element.nativeElement.scrollHeight + 'px';
     }
 
-    @HostListener('input', ['$event.target'])
-    onInput(t: HTMLTextAreaElement) {
+    @HostListener('input')
+    onInput() {
         this.updateSize();
     }
 

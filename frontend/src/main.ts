@@ -1,5 +1,5 @@
 import './polyfills';
-import {enableProdMode, ErrorHandler, importProvidersFrom, inject, provideAppInitializer} from '@angular/core';
+import {enableProdMode, ErrorHandler, importProvidersFrom, inject, provideAppInitializer, provideZoneChangeDetection} from '@angular/core';
 import {environment} from './environments/environment';
 
 import {ThemeService} from './app/theme.service';
@@ -19,6 +19,7 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
     providers: [
+        provideZoneChangeDetection(),
         importProvidersFrom(BrowserModule),
         ThemeService,
         ErrorReportService,
