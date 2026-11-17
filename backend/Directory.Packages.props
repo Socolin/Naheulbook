@@ -9,7 +9,7 @@
     <PackageVersion Include="CliWrap" Version="3.10.5" />
     <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
     <PackageVersion Include="FluentMigrator" Version="8.0.1" />
-    <PackageVersion Include="FluentMigrator.Runner" Version="8.0.1" />
+    <PackageVersion Include="FluentMigrator.Runner.Core" Version="8.0.1" />
     <PackageVersion Include="FluentMigrator.Runner.MySql" Version="8.0.1" />
     <PackageVersion Include="FluentValidation" Version="12.2.0" />
     <PackageVersion Include="FluentValidation.AspNetCore" Version="11.3.1" />
@@ -30,6 +30,7 @@
     <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="11.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
     <PackageVersion Include="MySql.Data" Version="26.10.0" />
+    <PackageVersion Include="MySqlConnector" Version="2.6.2" />
     <PackageVersion Include="MySql.EntityFrameworkCore" Version="10.0.12" />
     <PackageVersion Include="NSubstitute" Version="6.2.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="6.3.1" />

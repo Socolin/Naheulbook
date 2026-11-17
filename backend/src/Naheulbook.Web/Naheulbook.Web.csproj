@@ -9,6 +9,8 @@
 
     <ItemGroup>
         <PackageReference Include="AspNetCore.HealthChecks.MySql" />
+        <!-- Override vulnerable MySqlConnector 2.3.1 pulled by AspNetCore.HealthChecks.MySql (GHSA-473q-m89c-ghf8) -->
+        <PackageReference Include="MySqlConnector" />
         <PackageReference Include="AspNetCore.HealthChecks.Redis" />
         <PackageReference Include="FluentValidation.AspNetCore" />
         <PackageReference Include="jose-jwt" />
