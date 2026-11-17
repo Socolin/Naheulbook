@@ -2,10 +2,8 @@
     mat-dialog-content {
         max-width: 640px;
     }
-    .icon-filter {
-        display: grid;
-        grid-template-columns: 1fr 32px;
-        align-items: center;
+    .icon-filter mat-form-field {
+        width: 100%;
     }
     .icon-list {
         padding-bottom: 8px;

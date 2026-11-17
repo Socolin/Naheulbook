@@ -11,11 +11,13 @@
         autocomplete="off"
         [(ngModel)]="filter"
         (ngModelChange)="updateFiltered()">
+      <button mat-icon-button matSuffix aria-label="Icône aléatoire" (click)="selectRandom()">
+        <span class="ra ra-perspective-dice-random"></span>
+      </button>
       <mat-hint align="end">
         Icône actuelle: {{data.icon?.name || 'Non défini'}}
       </mat-hint>
     </mat-form-field>
-    <button mat-icon-button (click)="selectRandom()"><span class="ra ra-perspective-dice-random ra-2x"></span></button>
   </div>
   <div class="icon-list">
     @for (iconName of filteredIcons; track iconName) {

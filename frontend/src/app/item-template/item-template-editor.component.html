@@ -9,7 +9,13 @@
           required
           [(ngModel)]="itemTemplate.name"/>
       </mat-form-field>
-      <icon [icon]="itemTemplate.data.icon" (click)="openSelectIconDialog()"></icon>
+        <button mat-icon-button
+                class="icon-button"
+                matTooltip="Changer l'icône"
+                aria-label="Changer l'icône"
+                (click)="openSelectIconDialog()">
+            <icon [icon]="itemTemplate.data.icon"></icon>
+        </button>
     </div>
     <div class="not-identified-name-line">
       <mat-form-field>

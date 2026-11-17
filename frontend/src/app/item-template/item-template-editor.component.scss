@@ -7,7 +7,16 @@
         display: grid;
         grid-template-columns: 1fr 40px;
         grid-gap: 8px;
-        align-items: center;
+        align-items: baseline;
+
+        .icon-button {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
     }
 
     .not-identified-name-line {
