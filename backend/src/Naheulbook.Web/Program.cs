@@ -1,5 +1,5 @@
-﻿using Naheulbook.Web.Sentry;
-using Serilog;
+﻿using Serilog;
+using Serilog.Extensions.Logging;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Naheulbook.Web;
@@ -21,56 +21,54 @@ public static class Program
             .AddCommandLine(args)
             .Build();
 
-        using (SentrySdk.Init(configuration["Sentry:DSN"]))
+        // Forward Serilog events to the Microsoft.Extensions.Logging providers (OpenTelemetry)
+        var loggerProviders = new LoggerProviderCollection();
+        var logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .WriteTo.Console(theme: AnsiConsoleTheme.Code)
+            .WriteTo.Providers(loggerProviders)
+            .CreateLogger();
+
+        var server = new HostBuilder()
+            .ConfigureWebHost(builder =>
+            {
+                builder.ConfigureKestrel((context, options) =>
+                    {
+                        options.Limits.MaxRequestBodySize = 60000000;
+                        var unixSocketPath = context.Configuration.GetValue<string>("socket");
+                        if (File.Exists(unixSocketPath))
+                            File.Delete(unixSocketPath);
+                        if (!string.IsNullOrEmpty(unixSocketPath))
+                            options.ListenUnixSocket(unixSocketPath);
+                    })
+                    .UseKestrel()
+                    .UseConfiguration(configuration)
+                    .UseStartup<Startup>();
+            })
+            .UseContentRoot(Directory.GetCurrentDirectory())
+            .UseEnvironment(environment)
+            .UseSerilog(logger, providers: loggerProviders)
+            .Build();
+
+        await server.StartAsync();
+        logger.Information("Server started.");
+
+        var unixSocketPath = configuration.GetValue<string>("socket");
+        var unixSocketPermission = configuration.GetValue<string>("socketPermission");
+
+        if (OperatingSystem.IsLinux() && !string.IsNullOrEmpty(unixSocketPath) && !string.IsNullOrEmpty(unixSocketPermission))
         {
-            var logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .WriteTo.Sentry()
-                .WriteTo.Console(theme: AnsiConsoleTheme.Code)
-                .CreateLogger();
+            logger.Information("Changing socket permission {Socket} to {Permission}.", unixSocketPath, unixSocketPermission);
+            var fileMode = Convert.ToInt32(unixSocketPermission, 8);
+            File.SetUnixFileMode(unixSocketPath, (UnixFileMode)fileMode);
+        }
 
-            var server = new HostBuilder()
-                .ConfigureWebHost(builder =>
-                {
-                    builder.ConfigureKestrel((context, options) =>
-                        {
-                            options.Limits.MaxRequestBodySize = 60000000;
-                            var unixSocketPath = context.Configuration.GetValue<string>("socket");
-                            if (File.Exists(unixSocketPath))
-                                File.Delete(unixSocketPath);
-                            if (!string.IsNullOrEmpty(unixSocketPath))
-                                options.ListenUnixSocket(unixSocketPath);
-                        })
-                        .UseKestrel()
-                        .UseSentry(o => o.AddExceptionProcessorProvider(() => [new DefaultSentryEventExceptionProcessor()]))
-                        .UseConfiguration(configuration)
-                        .UseStartup<Startup>();
-                })
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseEnvironment(environment)
-                .UseSerilog(logger)
-                .Build();
+        await server.WaitForShutdownAsync();
 
-            await server.StartAsync();
+        if (OperatingSystem.IsLinux() && !string.IsNullOrEmpty(unixSocketPath))
+        {
             logger.Information("Server started.");
-
-            var unixSocketPath = configuration.GetValue<string>("socket");
-            var unixSocketPermission = configuration.GetValue<string>("socketPermission");
-
-            if (OperatingSystem.IsLinux() && !string.IsNullOrEmpty(unixSocketPath) && !string.IsNullOrEmpty(unixSocketPermission))
-            {
-                logger.Information("Changing socket permission {Socket} to {Permission}.", unixSocketPath, unixSocketPermission);
-                var fileMode = Convert.ToInt32(unixSocketPermission, 8);
-                File.SetUnixFileMode(unixSocketPath, (UnixFileMode)fileMode);
-            }
-
-            await server.WaitForShutdownAsync();
-
-            if (OperatingSystem.IsLinux() && !string.IsNullOrEmpty(unixSocketPath))
-            {
-                logger.Information("Server started.");
-                File.Delete(unixSocketPath);
-            }
+            File.Delete(unixSocketPath);
         }
     }
 }

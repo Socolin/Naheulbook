@@ -35,6 +35,7 @@ using Naheulbook.Web.Hubs;
 using Naheulbook.Web.Middlewares;
 using Naheulbook.Web.Notifications;
 using Naheulbook.Web.Services;
+using Naheulbook.Web.Telemetry;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -78,6 +79,7 @@ public class Startup(IConfiguration configuration)
         services.AddValidatorsFromAssemblyContaining<ValidateUserRequest>();
 
         services.AddHttpContextAccessor();
+        services.AddNaheulbookTelemetry(configuration);
         services.AddHealthChecks()
             .AddMySql(sp => sp.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection").NotNull());
 
