@@ -48,10 +48,6 @@ public class UserRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
 
     #endregion
 
-    #region GetByTwitterIdAsync
-
-    #endregion
-
     #region GetByMicrosoftIdAsync
 
     #endregion

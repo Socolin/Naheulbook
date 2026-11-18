@@ -80,23 +80,6 @@ export class LoginService {
         return microsoftLogin;
     }
 
-    doTwitterLogin(oauthToken: string, oauthVerifier: string): Observable<JwtResponse> {
-        let twitterLogin = this.httpClient.post<JwtResponse>('/api/v2/authentications/twitter/completeAuthentication', {
-            oauthToken: oauthToken,
-            oauthVerifier: oauthVerifier
-        }).pipe(
-            share()
-        );
-
-        twitterLogin.subscribe(user => {
-            this.loggedUser.next(user.userInfo);
-            this.currentLoggedUser = user.userInfo;
-            this.currentJwt = user.token;
-        });
-
-        return twitterLogin;
-    }
-
     logout(): Observable<UserInfoResponse> {
         let logout = this.httpClient.get<UserInfoResponse>('/api/v2/users/me/logout').pipe(share());
 
@@ -192,13 +175,6 @@ export class LoginService {
                 + '&scope=openid,User.Read'
                 + '&response_type=code'
                 + '&redirect_uri=' + window.location.origin + '/logged';
-        }, errorCb);
-    }
-
-    redirectToTwitterLogin(redirectPage: string, errorCb?: (error) => void) {
-        localStorage.setItem('redirectPage', redirectPage);
-        this.getLoginToken('twitter').subscribe(authInfos => {
-            window.location.href = 'https://api.twitter.com/oauth/authenticate?oauth_token=' + authInfos.loginToken;
         }, errorCb);
     }
 

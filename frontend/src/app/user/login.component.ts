@@ -41,8 +41,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.loginService.redirectToFbLogin(this.redirectPage, this.onLoginError.bind(this));
         } else if (method === 'google') {
             this.loginService.redirectToGoogleLogin(this.redirectPage, this.onLoginError.bind(this));
-        } else if (method === 'twitter') {
-            this.loginService.redirectToTwitterLogin(this.redirectPage, this.onLoginError.bind(this));
         } else if (method === 'microsoft') {
             this.loginService.redirectToMicrosoftLogin(this.redirectPage, this.onLoginError.bind(this));
         }

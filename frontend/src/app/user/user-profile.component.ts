@@ -60,8 +60,6 @@ export class UserProfileComponent implements OnInit {
             this.loginService.redirectToFbLogin('profile');
         } else if (method === 'google') {
             this.loginService.redirectToGoogleLogin('profile');
-        } else if (method === 'twitter') {
-            this.loginService.redirectToTwitterLogin('profile');
         } else if (method === 'microsoft') {
             this.loginService.redirectToMicrosoftLogin('profile');
         }

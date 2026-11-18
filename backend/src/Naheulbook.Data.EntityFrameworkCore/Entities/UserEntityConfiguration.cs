@@ -39,11 +39,6 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
             .HasColumnName("liveid")
             .HasMaxLength(255);
 
-        builder.Property(e => e.TwitterId)
-            .IsRequired(false)
-            .HasColumnName("twitterid")
-            .HasMaxLength(255);
-
         builder.Property(e => e.HashedPassword)
             .IsRequired(false)
             .HasColumnName("password")

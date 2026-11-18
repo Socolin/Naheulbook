@@ -27,7 +27,6 @@ using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Clients.Facebook;
 using Naheulbook.Shared.Clients.Google;
 using Naheulbook.Shared.Clients.MicrosoftGraph;
-using Naheulbook.Shared.Clients.Twitter;
 using Naheulbook.Shared.Extensions;
 using Naheulbook.Web.Configurations;
 using Naheulbook.Web.Extensions;
@@ -135,7 +134,6 @@ public class Startup(IConfiguration configuration)
         services.AddFacebookClient();
         services.AddGoogleClient();
         services.AddMicrosoftGraphClient();
-        services.AddTwitterClient();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

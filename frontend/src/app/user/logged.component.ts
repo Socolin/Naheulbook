@@ -87,19 +87,6 @@ export class LoggedComponent implements OnInit, OnDestroy {
                         this.isInErrorState = true;
                         this.notification.error('Échec de l\'authentification', params);
                     }
-                } else if (app === 'twitter') {
-                    if (params.hasOwnProperty('oauth_token') && params.hasOwnProperty('oauth_verifier')) {
-                        this.loginService.doTwitterLogin(params['oauth_token'], params['oauth_verifier']).subscribe(
-                            () => {
-                                this.router.navigateByUrl(redirectUrl, {replaceUrl: true, });
-                            }, () => {
-                                this.isInErrorState = true;
-                            }
-                        );
-                    } else {
-                        this.isInErrorState = true;
-                        this.notification.error('Échec de l\'authentification', params);
-                    }
                 } else {
                     this.isInErrorState = true;
                     this.notification.error('Invalid app', params);

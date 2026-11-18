@@ -4,7 +4,6 @@ export class UserInfoResponse {
     admin: boolean;
     linkedWithFb: boolean;
     linkedWithGoogle: boolean;
-    linkedWithTwitter: boolean;
     linkedWithMicrosoft: boolean;
     showInSearch: boolean;
 }

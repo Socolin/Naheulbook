@@ -41,9 +41,6 @@ public class NaheulbookApiServer(
             ["Authentication:Facebook:AppSecret"] = "unused",
             ["Authentication:MicrosoftGraph:AppId"] = "unused",
             ["Authentication:MicrosoftGraph:AppSecret"] = "unused",
-            ["Authentication:Twitter:AppId"] = "unused",
-            ["Authentication:Twitter:AppSecret"] = "unused",
-            ["Authentication:Twitter:Callback"] = "unused",
             ["Authentication:Google:AppId"] = "unused",
             ["Authentication:Google:AppSecret"] = "unused",
         };

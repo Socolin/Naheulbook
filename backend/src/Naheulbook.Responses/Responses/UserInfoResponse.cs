@@ -11,6 +11,5 @@ public class UserInfoResponse
     public bool Admin { get; set; }
     public bool LinkedWithFb { get; set; }
     public bool LinkedWithGoogle { get; set; }
-    public bool LinkedWithTwitter { get; set; }
     public bool LinkedWithMicrosoft { get; set; }
 }

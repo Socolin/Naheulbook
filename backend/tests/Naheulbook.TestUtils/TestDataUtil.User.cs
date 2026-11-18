@@ -22,7 +22,6 @@ public partial class TestDataUtil
             ActivationCode = "some-activation-code",
             FbId = $"some-fb-id-{suffix}",
             GoogleId = $"some-google-id-{suffix}",
-            TwitterId = $"some-twitter-id-{suffix}",
             MicrosoftId = $"some-microsoft-id-{suffix}",
             ShowInSearchUntil = DateTime.UtcNow.RoundToSeconds(),
         };

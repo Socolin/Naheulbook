@@ -10,7 +10,6 @@ public interface IUserRepository : IRepository<UserEntity>
     Task<UserEntity?> GetByUsernameAsync(string username, CancellationToken cancellationToken = default);
     Task<UserEntity?> GetByFacebookIdAsync(string facebookId, CancellationToken cancellationToken = default);
     Task<UserEntity?> GetByGoogleIdAsync(string googleId, CancellationToken cancellationToken = default);
-    Task<UserEntity?> GetByTwitterIdAsync(string twitterId, CancellationToken cancellationToken = default);
     Task<UserEntity?> GetByMicrosoftIdAsync(string microsoftId, CancellationToken cancellationToken = default);
     Task<List<UserEntity>> SearchUsersAsync(string filter, CancellationToken cancellationToken = default);
 }
@@ -35,13 +34,6 @@ public class UserRepository(NaheulbookDbContext naheulbookDbContext) : Repositor
     {
         return Context.Users
             .Where(u => u.GoogleId == googleId)
-            .SingleOrDefaultAsync(cancellationToken);
-    }
-
-    public Task<UserEntity?> GetByTwitterIdAsync(string twitterId, CancellationToken cancellationToken = default)
-    {
-        return Context.Users
-            .Where(u => u.TwitterId == twitterId)
             .SingleOrDefaultAsync(cancellationToken);
     }
 

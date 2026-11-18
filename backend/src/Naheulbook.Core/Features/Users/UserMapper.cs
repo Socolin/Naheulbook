@@ -23,7 +23,6 @@ public class UserMapper : IUserMapper
             Admin = user.Admin,
             LinkedWithFb = user.FbId != null,
             LinkedWithGoogle = user.GoogleId != null,
-            LinkedWithTwitter = user.TwitterId != null,
             LinkedWithMicrosoft = user.MicrosoftId != null,
         };
     }

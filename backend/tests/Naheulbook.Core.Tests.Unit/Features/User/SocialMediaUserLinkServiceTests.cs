@@ -99,45 +99,6 @@ public class SocialMediaUserLinkServiceTests
     }
 
     [Test]
-    public async Task GetOrCreateUserFromTwitterAsync_ShouldReturnAlreadyExistingUser()
-    {
-        const string twitterId = "some-twitter-id";
-        var expectedUser = new UserEntity();
-
-        _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByTwitterIdAsync(twitterId)
-            .Returns(expectedUser);
-
-        var actual = await _service.GetOrCreateUserFromTwitterAsync("some-name", twitterId);
-
-        actual.Should().BeSameAs(expectedUser);
-        await _fakeUnitOfWorkFactory.GetUnitOfWork().DidNotReceive().SaveChangesAsync();
-    }
-
-    [Test]
-    public async Task GetOrCreateUserFromTwitterAsync_ShouldCreateUserWhenItDoesNotExists()
-    {
-        const string twitterId = "some-twitter-id";
-
-        _fakeUnitOfWorkFactory.GetUnitOfWork().Users.GetByTwitterIdAsync(twitterId)
-            .Returns((UserEntity) null);
-
-        var actual = await _service.GetOrCreateUserFromTwitterAsync("some-name", twitterId);
-
-        var userRepository = _fakeUnitOfWorkFactory.GetUnitOfWork().Users;
-        Received.InOrder(() =>
-        {
-            userRepository.Add(actual);
-            _fakeUnitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
-        });
-        actual.Should().BeEquivalentTo(new UserEntity
-        {
-            TwitterId = twitterId,
-            Admin = false,
-            DisplayName = "some-name",
-        });
-    }
-
-    [Test]
     public async Task GetOrCreateUserFromMicrosoftAsync_ShouldReturnAlreadyExistingUser()
     {
         const string microsoftId = "some-microsoft-id";

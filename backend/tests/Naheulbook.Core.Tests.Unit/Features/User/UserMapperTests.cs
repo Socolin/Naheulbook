@@ -29,7 +29,6 @@ public class UserMapperTests
             ShowInSearchUntil = DateTime.UtcNow.AddHours(1),
             FbId = "some-fb-id",
             GoogleId = "some-google-id",
-            TwitterId = "some-twitter-id",
             MicrosoftId = "some-microsoft-id",
         };
 
@@ -43,7 +42,6 @@ public class UserMapperTests
             ShowInSearch = true,
             LinkedWithFb = true,
             LinkedWithGoogle = true,
-            LinkedWithTwitter = true,
             LinkedWithMicrosoft = true,
         });
     }
@@ -65,7 +63,6 @@ public class UserMapperTests
             ShowInSearch = false,
             LinkedWithFb = false,
             LinkedWithGoogle = false,
-            LinkedWithTwitter = false,
             LinkedWithMicrosoft = false,
         });
     }
@@ -73,12 +70,12 @@ public class UserMapperTests
     [Test]
     public void ToInfoResponse_LinkedWithGoogle_DependsOnGoogleIdOnly()
     {
-        var user = new UserEntity {GoogleId = null, TwitterId = "some-twitter-id"};
+        var user = new UserEntity {GoogleId = null, FbId = "some-fb-id"};
 
         var actual = _mapper.ToInfoResponse(user);
 
         actual.LinkedWithGoogle.Should().BeFalse();
-        actual.LinkedWithTwitter.Should().BeTrue();
+        actual.LinkedWithFb.Should().BeTrue();
     }
 
     [Test]
