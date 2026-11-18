@@ -10,6 +10,7 @@ import {HomeDatabaseComponent} from './home-database.component';
 import {DatabaseSectionsComponent} from './database-sections.component';
 import {AptitudeListComponent} from '../aptitude/aptitude-list.component';
 import {AptitudeGroupComponent} from '../aptitude/aptitude-group.component';
+import {SpecialAttacksComponent} from '../special-attack/special-attacks.component';
 import {EditItemTemplateDialogComponent} from '../item-template/edit-item-template-dialog.component';
 import {ItemTemplateListComponent} from '../item-template/item-template-list.component';
 
@@ -69,6 +70,14 @@ export const routes: Routes = [
             {
                 path: 'aptitudes',
                 component: AptitudeListComponent
+            },
+            {
+                path: 'special-attacks/:specialAttackGroupId',
+                component: SpecialAttacksComponent
+            },
+            {
+                path: 'special-attacks',
+                component: SpecialAttacksComponent
             }
         ]
     }

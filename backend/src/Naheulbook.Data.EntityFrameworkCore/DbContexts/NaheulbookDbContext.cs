@@ -34,6 +34,8 @@ public class NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options) 
     public DbSet<OriginEntity> Origins { get; set; } = null!;
     public DbSet<JobEntity> Jobs { get; set; } = null!;
     public DbSet<SpecialityEntity> Specialities { get; set; } = null!;
+    public DbSet<SpecialAttackEntity> SpecialAttacks { get; set; } = null!;
+    public DbSet<SpecialAttackGroupEntity> SpecialAttackGroups { get; set; } = null!;
     public DbSet<UserEntity> Users { get; set; } = null!;
     public DbSet<UserAccessTokenEntity> UserAccessTokens { get; set; } = null!;
     public DbSet<LootEntity> Loots { get; set; } = null!;

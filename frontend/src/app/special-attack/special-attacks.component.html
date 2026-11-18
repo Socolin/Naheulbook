@@ -1,0 +1,161 @@
+@if (!groups) {
+  <mat-spinner></mat-spinner>
+} @else {
+  <div class="page">
+    <div class="page-header">
+      <h2 class="mat-h2">Coups spéciaux</h2>
+      <mat-form-field class="filter" appearance="outline" subscriptSizing="dynamic">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Rechercher</mat-label>
+        <input matInput [(ngModel)]="filter" (ngModelChange)="updateFilter()" placeholder="Nom, métier, origine, effet…">
+        @if (filter) {
+          <button matSuffix mat-icon-button (click)="clearFilter()" aria-label="Effacer la recherche">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectTab($event)"
+                   mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0ms">
+      @for (group of groups; track group.id) {
+        <mat-tab>
+          <ng-template mat-tab-label>
+            {{ group.name }}
+            <span class="tab-count" [class.tab-count-empty]="!group.visibleSpecialAttacks.length">
+              {{ group.visibleSpecialAttacks.length }}
+            </span>
+          </ng-template>
+
+          <div class="tab-content">
+            @if (group.descriptionParagraphs.length) {
+              <details class="group-description">
+                <summary>
+                  <mat-icon>info</mat-icon>
+                  Règles d'utilisation
+                </summary>
+                @for (paragraph of group.descriptionParagraphs; track $index) {
+                  <p>{{ paragraph }}</p>
+                }
+              </details>
+            }
+
+            @if (!group.visibleSpecialAttacks.length) {
+              <p class="empty-state">Aucun coup spécial ne correspond à « {{ filter }} ».</p>
+            }
+
+            <div class="attacks">
+              @for (attack of group.visibleSpecialAttacks; track attack.id) {
+                <article class="attack">
+                  <header class="attack-header">
+                    <div class="title-row">
+                      <h3 class="attack-name">{{ attack.name }}</h3>
+                      @if (attack.xp) {
+                        <span class="xp" title="XP gagnée en cas de réussite">+{{ attack.xp }} XP</span>
+                      }
+                    </div>
+                    <div class="chips">
+                      @if (attack.range) {
+                        <span class="chip">{{ attack.range }}</span>
+                      }
+                      @if (attack.requiredLevel) {
+                        <span class="chip">Niveau {{ attack.requiredLevel }}</span>
+                      }
+                      @if (attack.learning) {
+                        <span class="chip chip-learning" title="Apprentissage">
+                          <mat-icon inline>school</mat-icon>{{ attack.learning }}
+                        </span>
+                      }
+                    </div>
+                    @if (attack.usableBy) {
+                      <p class="usable-by">
+                        <mat-icon inline>person</mat-icon>
+                        <span>
+                          {{ attack.usableBy.headline }}
+                          @for (detail of attack.usableBy.details; track $index) {
+                            {{ detail }}
+                          }
+                        </span>
+                      </p>
+                    }
+                  </header>
+
+                  <div class="quick-info">
+                    @if (attack.test) {
+                      <div class="quick-item">
+                        <span class="label">Épreuve</span>
+                        <span class="value" [class.muted]="attack.test.empty">{{ attack.test.headline }}</span>
+                        @for (detail of attack.test.details; track $index) {
+                          <span class="detail">{{ detail }}</span>
+                        }
+                      </div>
+                    }
+                    @if (attack.usage) {
+                      <div class="quick-item">
+                        <span class="label">Utilisation</span>
+                        <span class="value">{{ attack.usage.headline }}</span>
+                        @for (detail of attack.usage.details; track $index) {
+                          <span class="detail">{{ detail }}</span>
+                        }
+                      </div>
+                    }
+                  </div>
+
+                  @for (section of attack.sections; track section.label) {
+                    <div class="section">
+                      <span class="label">{{ section.label }}</span>
+                      @if (section.text.headline) {
+                        <p class="section-headline">{{ section.text.headline }}</p>
+                      }
+                      @if (section.text.details.length) {
+                        <ul>
+                          @for (detail of section.text.details; track $index) {
+                            <li>{{ detail }}</li>
+                          }
+                        </ul>
+                      }
+                    </div>
+                  }
+
+                  @if (attack.criticalFailure || attack.criticalSuccess || attack.criticalNotes) {
+                    <footer class="criticals">
+                      @if (attack.criticalFailure) {
+                        <div class="critical critical-failure">
+                          <span class="label"><mat-icon inline>trending_down</mat-icon> Échec critique</span>
+                          <span [class.muted]="attack.criticalFailure.empty">{{ attack.criticalFailure.headline }}</span>
+                          @for (detail of attack.criticalFailure.details; track $index) {
+                            <span class="detail">{{ detail }}</span>
+                          }
+                        </div>
+                      }
+                      @if (attack.criticalSuccess) {
+                        <div class="critical critical-success">
+                          <span class="label"><mat-icon inline>trending_up</mat-icon> Réussite critique</span>
+                          <span [class.muted]="attack.criticalSuccess.empty">{{ attack.criticalSuccess.headline }}</span>
+                          @for (detail of attack.criticalSuccess.details; track $index) {
+                            <span class="detail">{{ detail }}</span>
+                          }
+                        </div>
+                      }
+                      @if (attack.criticalNotes) {
+                        <div class="critical critical-notes">
+                          <span class="label">Critiques et maladresses</span>
+                          @if (attack.criticalNotes.headline) {
+                            <span>{{ attack.criticalNotes.headline }}</span>
+                          }
+                          @for (detail of attack.criticalNotes.details; track $index) {
+                            <span>{{ detail }}</span>
+                          }
+                        </div>
+                      }
+                    </footer>
+                  }
+                </article>
+              }
+            </div>
+          </div>
+        </mat-tab>
+      }
+    </mat-tab-group>
+  </div>
+}

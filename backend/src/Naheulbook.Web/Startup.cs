@@ -18,6 +18,7 @@ using Naheulbook.Core.Features.Npc;
 using Naheulbook.Core.Features.Origin;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Features.Skill;
+using Naheulbook.Core.Features.SpecialAttack;
 using Naheulbook.Core.Features.Stat;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Core.Notifications;
@@ -115,6 +116,7 @@ public class Startup(IConfiguration configuration)
         services.AddNpcService();
         services.AddOriginService();
         services.AddSkillService();
+        services.AddSpecialAttackService();
         services.AddStatService();
         services.AddUserService();
 

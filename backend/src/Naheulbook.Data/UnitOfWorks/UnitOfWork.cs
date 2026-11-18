@@ -45,6 +45,7 @@ public interface IUnitOfWork : IDisposable
     IOriginRandomNameUrlRepository OriginRandomNameUrls{ get; }
     ISkillRepository Skills { get; }
     ISlotRepository Slots { get; }
+    ISpecialAttackGroupRepository SpecialAttackGroups { get; }
     IStatRepository Stats { get; }
     IUserRepository Users { get; }
     IUserAccessTokenRepository UserAccessTokenRepository { get; }
@@ -96,6 +97,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public IOriginRandomNameUrlRepository OriginRandomNameUrls => new OriginRandomNameUrlRepository(_naheulbookDbContext);
     public ISkillRepository Skills => new SkillRepository(_naheulbookDbContext);
     public ISlotRepository Slots => new SlotRepository(_naheulbookDbContext);
+    public ISpecialAttackGroupRepository SpecialAttackGroups => new SpecialAttackGroupRepository(_naheulbookDbContext);
     public IStatRepository Stats => new StatRepository(_naheulbookDbContext);
     public IUserRepository Users => new UserRepository(_naheulbookDbContext);
     public IUserAccessTokenRepository UserAccessTokenRepository => new UserAccessTokenRepository(_naheulbookDbContext);
