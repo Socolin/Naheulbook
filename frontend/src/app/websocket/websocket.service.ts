@@ -149,8 +149,10 @@ export class WebSocketService {
                         }
                     }
                 }
-                for (const pendingMessage of this.pendingMessages) {
-                    await hubConnection.send.apply(this.hubConnection, [pendingMessage.methodName].concat(pendingMessage.args));
+                const pendingMessages = this.pendingMessages;
+                this.pendingMessages = [];
+                for (const pendingMessage of pendingMessages) {
+                    await hubConnection.send.apply(hubConnection, [pendingMessage.methodName].concat(pendingMessage.args));
                 }
             })
             .catch((err) => {

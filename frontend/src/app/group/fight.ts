@@ -29,6 +29,10 @@ export class Fight extends WsRegistrable {    id: number;
         }
         this.monsters.push(addedMonster);
         this.fighters.push(new Fighter(addedMonster));
+        if (this.wsSubscribtion) {
+            this.wsSubscribtion.service.registerElement(addedMonster);
+        }
+        return true;
     }
 
     removeMonster(monsterId: number) {
@@ -36,8 +40,12 @@ export class Fight extends WsRegistrable {    id: number;
         if (fighterIndex !== -1)
             this.fighters.splice(fighterIndex, 1);
         let monsterIndex = this.monsters.findIndex(x => x.id === monsterId);
-        if (monsterIndex !== -1)
-            this.monsters.splice(monsterIndex, 1);
+        if (monsterIndex !== -1) {
+            let removedMonster = this.monsters.splice(monsterIndex, 1)[0];
+            if (this.wsSubscribtion && removedMonster.wsSubscribtion) {
+                this.wsSubscribtion.service.unregisterElement(removedMonster);
+            }
+        }
     }
 
     getWsTypeName(): string {

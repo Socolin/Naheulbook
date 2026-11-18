@@ -141,7 +141,7 @@ public class ChangeNotifierHub(
 
     public async Task UnsubscribeFight(int fightId)
     {
-        await Groups.RemoveFromGroupAsync(Context.ConnectionId, hubGroupUtil.GetMonsterGroupName(fightId));
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, hubGroupUtil.GetFightGroupName(fightId));
     }
 
     private HttpContext GetHttpContext()

@@ -13,6 +13,7 @@
     <mat-card-actions align="end">
         <button mat-button
                 color="primary"
+                [disabled]="!groupName?.trim()"
                 (click)="create()">
             CREER
         </button>

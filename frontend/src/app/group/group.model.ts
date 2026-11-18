@@ -501,6 +501,9 @@ export class Group extends WsRegistrable {
         }
         let removedFight = this.fights.splice(i, 1)[0];
         this.fightRemoved.next(removedFight);
+        if (this.wsSubscribtion && removedFight.wsSubscribtion) {
+            this.wsSubscribtion.service.unregisterElement(removedFight);
+        }
 
         return true;
     }

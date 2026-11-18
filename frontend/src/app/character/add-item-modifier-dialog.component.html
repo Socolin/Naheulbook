@@ -6,6 +6,7 @@
         Ajouter un modificateur
     </span>
     <button mat-button
+            [disabled]="!newItemModifier.name"
             (click)="valid()">
         AJOUTER
     </button>
