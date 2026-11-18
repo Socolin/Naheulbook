@@ -1,4 +1,4 @@
-using Naheulbook.Core.Features.Item;
+using Newtonsoft.Json.Linq;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Shared.Utils;
 
@@ -31,10 +31,7 @@ public interface ICharacterHistoryUtil
     CharacterHistoryEntryEntity CreateRemoveAptitude(int characterId, AptitudeEntity aptitude);
 }
 
-public class CharacterHistoryUtil(
-    IJsonUtil jsonUtil,
-    IItemDataUtil itemDataUtil
-) : ICharacterHistoryUtil
+public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
 {
     private const string AddItemActionName = "ADD_ITEM";
     private const string ChangeEvActionName = "MODIFY_EV";
@@ -66,7 +63,7 @@ public class CharacterHistoryUtil(
         {
             Character = character,
             Action = ChangeEvActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
@@ -77,7 +74,7 @@ public class CharacterHistoryUtil(
         {
             Character = character,
             Action = ChangeEaActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
@@ -88,7 +85,7 @@ public class CharacterHistoryUtil(
         {
             Character = character,
             Action = ChangeFatePointActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
@@ -99,7 +96,7 @@ public class CharacterHistoryUtil(
         {
             Character = character,
             Action = ChangeExperienceActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
@@ -110,7 +107,7 @@ public class CharacterHistoryUtil(
         {
             Character = character,
             Action = ChangeSexActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
@@ -121,7 +118,7 @@ public class CharacterHistoryUtil(
         {
             Character = character,
             Action = ChangeNameActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
     }
@@ -132,7 +129,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = AddItemActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {item = GetItemLogData(item)}),
         };
     }
@@ -143,7 +140,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = EquipActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {item = GetItemLogData(item)}),
         };
     }
@@ -154,7 +151,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = UnEquipActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {item = GetItemLogData(item)}),
         };
     }
@@ -165,7 +162,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = character.Id,
             Action = ApplyModifierActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {modifier = GetModifierLogData(characterModifier)}),
         };
     }
@@ -176,7 +173,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = RemoveModifierActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {modifier = GetModifierLogData(characterModifier)}),
         };
     }
@@ -187,7 +184,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = ActiveModifierActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {modifier = GetModifierLogData(characterModifier)}),
         };
     }
@@ -198,7 +195,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = DisableModifierActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {modifier = GetModifierLogData(characterModifier)}),
         };
     }
@@ -209,7 +206,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = GiveItemActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {item = GetItemLogData(item), characterName = targetCharacterName}),
         };
     }
@@ -220,7 +217,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = GivenItemActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {item = GetItemLogData(item), characterName = sourceCharacterName}),
         };
     }
@@ -231,7 +228,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = LootItemActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {item = GetItemLogData(item)}),
         };
     }
@@ -242,7 +239,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = ChangeQuantityActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {item = GetItemLogData(item), oldValue, newValue}),
         };
     }
@@ -253,7 +250,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = UseChargeActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {item = GetItemLogData(item), oldValue, newValue}),
         };
     }
@@ -264,7 +261,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = ReadBookActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {item = GetItemLogData(item)}),
         };
     }
@@ -275,7 +272,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = IdentifyActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {item = GetItemLogData(item)}),
         };
     }
@@ -286,7 +283,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = LevelUpActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {level}),
         };
     }
@@ -297,7 +294,7 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = AddAptitudeActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {aptitude = GetAptitudeLogData(aptitude)}),
         };
     }
@@ -308,25 +305,31 @@ public class CharacterHistoryUtil(
         {
             CharacterId = characterId,
             Action = RemoveAptitudeActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {aptitude = GetAptitudeLogData(aptitude)}),
         };
     }
 
+    /// <summary>
+    /// Snapshot of the item, so the history can display it as it was at the time of the log, even after it was deleted
+    /// </summary>
     private object GetItemLogData(ItemEntity item)
     {
-        var itemData = itemDataUtil.GetItemData(item);
         return new
         {
-            name = itemData.Name,
-            quantity = itemData.Quantity,
-            icon = itemData.Icon,
+            templateId = item.ItemTemplateId,
+            data = jsonUtil.Deserialize<JObject>(item.Data) ?? new JObject(),
+            modifiers = jsonUtil.Deserialize<JArray>(item.Modifiers),
         };
     }
 
     private static object GetModifierLogData(CharacterModifierEntity characterModifier)
     {
-        return new {name = characterModifier.Name};
+        return new
+        {
+            name = characterModifier.Name,
+            values = characterModifier.Values.Select(v => new {stat = v.StatName, type = v.Type, value = v.Value}),
+        };
     }
 
     private static object GetAptitudeLogData(AptitudeEntity aptitude)

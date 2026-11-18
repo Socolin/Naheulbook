@@ -1,18 +1,32 @@
-import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 
 import {Character} from './character.model';
 import {CharacterService} from './character.service';
-import {HistoryEntry} from '../shared';
-import { DateComponent } from '../date/date.component';
-import { MatButton } from '@angular/material/button';
-import { DatePipe } from '@angular/common';
-import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
+import {
+    ActiveStatsModifier,
+    getHistoryEntryIcon,
+    HistoryEntry,
+    HistoryItemData,
+    IconComponent,
+    ModifierPipe,
+    ValueChangePipe
+} from '../shared';
+import {Item, ItemData} from '../item';
+import {ItemDialogComponent, ItemDialogData} from '../item/item-dialog.component';
+import {ItemTemplateService} from '../item-template';
+import {NhbkMatDialog} from '../material-workaround';
+import {NotificationsService} from '../notifications';
+import {DateComponent} from '../date/date.component';
+import {MatButton} from '@angular/material/button';
+import {DatePipe, NgTemplateOutlet} from '@angular/common';
+import {NhbkDateDurationPipe} from '../date/nhbk-duration.pipe';
 
 @Component({
     selector: 'character-history',
     templateUrl: './character-history.component.html',
+    styleUrls: ['./character-history.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [DateComponent, MatButton, DatePipe, NhbkDateDurationPipe]
+    imports: [DateComponent, MatButton, DatePipe, NhbkDateDurationPipe, IconComponent, ModifierPipe, ValueChangePipe, NgTemplateOutlet]
 })
 export class CharacterHistoryComponent implements OnInit {
     @Input() character: Character;
@@ -20,12 +34,34 @@ export class CharacterHistoryComponent implements OnInit {
     public historyPage = 0;
     public currentDay: string | undefined;
     public history: {logs: any[]; date: string}[] = [];
+
+    public readonly getLogIcon = getHistoryEntryIcon;
     public loadMore: boolean;
     public loading: boolean;
 
     constructor(
-        private readonly characterService: CharacterService
+        private readonly characterService: CharacterService,
+        private readonly itemTemplateService: ItemTemplateService,
+        private readonly dialog: NhbkMatDialog,
+        private readonly notifications: NotificationsService,
     ) {
+    }
+
+    openItem(historyItem: HistoryItemData) {
+        this.itemTemplateService.getItem(historyItem.templateId).subscribe({
+            next: (template) => {
+                const item = new Item();
+                item.id = 0;
+                item.data = new ItemData(historyItem.data);
+                item.modifiers = ActiveStatsModifier.modifiersFromJson(historyItem.modifiers);
+                item.template = template;
+                this.dialog.open<ItemDialogComponent, ItemDialogData>(ItemDialogComponent, {
+                    data: {item, readonly: true},
+                    autoFocus: false,
+                });
+            },
+            error: (err) => this.notifications.error('Impossible de charger l\'objet', err),
+        });
     }
 
     loadHistory(next?: boolean) {

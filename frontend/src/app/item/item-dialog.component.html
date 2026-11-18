@@ -1,6 +1,10 @@
 <mat-dialog-content>
   <mat-card-header>
-    <icon matRipple matCardAvatar [icon]="item.data.icon" [size]="'40px'" (click)="openSelectIconDialog()"></icon>
+    @if (data.readonly) {
+      <icon matCardAvatar [icon]="item.data.icon" [size]="'40px'"></icon>
+    } @else {
+      <icon matRipple matCardAvatar [icon]="item.data.icon" [size]="'40px'" (click)="openSelectIconDialog()"></icon>
+    }
     <mat-card-title>
       @if (item.template.data.quantifiable || item.data.quantity) {
         <span>
@@ -104,10 +108,14 @@
           <mat-icon fontSet="game-icon" fontIcon="game-icon-stack" class="ra-mat-button-icon-24"></mat-icon>
           <div>
             Quantité:
-            <value-editor [value]="data.item.data.quantity"
-              [title]="'Quantité'"
-              (valueChanged)="updateItemQuantity($event)">
-            </value-editor>
+            @if (data.readonly) {
+              {{data.item.data.quantity}}
+            } @else {
+              <value-editor [value]="data.item.data.quantity"
+                [title]="'Quantité'"
+                (valueChanged)="updateItemQuantity($event)">
+              </value-editor>
+            }
           </div>
         </div>
       }

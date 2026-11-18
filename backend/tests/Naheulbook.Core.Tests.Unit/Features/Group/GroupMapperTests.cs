@@ -127,7 +127,7 @@ public class GroupMapperTests
             Id = 3,
             Action = "some-action",
             Data = new JObject {["key"] = "value"},
-            Date = "2024-03-04T05:06:07",
+            Date = "2024-03-04T05:06:07Z",
             Gm = true,
         });
     }

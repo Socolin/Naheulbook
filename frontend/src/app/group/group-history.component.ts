@@ -1,7 +1,7 @@
 import {Input, Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import {NotificationsService} from '../notifications';
-import {HistoryEntry} from '../shared';
+import {getHistoryEntryIcon, HistoryEntry, IconComponent, ValueChangePipe} from '../shared';
 
 import {Group} from './group.model';
 import {GroupService} from './group.service';
@@ -20,7 +20,7 @@ import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
     templateUrl: './group-history.component.html',
     styleUrls: ['./group-history.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, MatCheckbox, MatCardActions, MatButton, DateComponent, DatePipe, NhbkDateDurationPipe]
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, MatCheckbox, MatCardActions, MatButton, DateComponent, DatePipe, NhbkDateDurationPipe, IconComponent, ValueChangePipe]
 })
 export class GroupHistoryComponent implements OnInit {
     @Input() group: Group;
@@ -31,6 +31,7 @@ export class GroupHistoryComponent implements OnInit {
     public loadMore = true;
 
     public historyNewEntryText = '';
+    public readonly getLogIcon = getHistoryEntryIcon;
     public historyNewEntryGm = false;
 
     constructor(

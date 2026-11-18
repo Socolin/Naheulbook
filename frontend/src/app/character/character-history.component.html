@@ -1,37 +1,42 @@
 @for (loggroup of history; track loggroup) {
-  <div>
-    {{loggroup.date | date:'mediumDate'}}
-    <div style="padding-bottom: 5px; margin-left: 10px; padding-left: 10px; padding-top: 5px; border-left: 1px solid #E2D7D7">
+  <div class="log-group">
+    <div class="log-date">{{loggroup.date | date:'mediumDate'}}</div>
+    <div class="logs">
       @for (log of loggroup.logs; track log) {
-        <div>
-          {{log.date | date:'shortTime'}}:
-          @if (log.isGroup) {
-            <span>
+        <div class="log">
+          <span class="log-time">{{log.date | date:'shortTime'}}</span>
+          <span class="log-icon">
+            @if (getLogIcon(log); as icon) {
+              <icon [icon]="icon" size="20px"></icon>
+            }
+          </span>
+          <span class="log-text">
+            @if (log.isGroup) {
               @switch (log.action) {
                 @case ('EVENT_RP') {
                   {{log.data.text}}
                 }
                 @case ('MANKDEBOL') {
-                  Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
+                  Mankdebol: {{log.data | valueChange}}
                 }
                 @case ('DEBILIBEUK') {
-                  Debilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
+                  Debilibeuk: {{log.data | valueChange}}
                 }
                 @case ('END_COMBAT') {
                   Fin de combat
                 }
                 @case ('START_COMBAT') {
-                  Debut d'un combat
+                  Début d'un combat
                 }
                 @case ('ADD_TIME') {
-                  Modification du temps: {{log.data.offset | nhbkDuration}}
+                  Modification du temps: {{(log.data.timeOffset ?? log.data.offset) | nhbkDuration}}
                 }
                 @case ('CHANGE_DATE') {
                   Modification de la date
                   @if (log.data.oldValue) {
-                    <div style="padding-left: 20px">Ancienne date: <date [date]="log.data.oldValue"></date></div>
+                    <div class="log-detail">Ancienne date: <date [date]="log.data.oldValue"></date></div>
                   }
-                  <div style="padding-left: 20px">Nouvelle date: <date [date]="log.data.newValue"></date></div>
+                  <div class="log-detail">Nouvelle date: <date [date]="log.data.newValue"></date></div>
                 }
                 @default {
                   {{log.action}}
@@ -40,33 +45,31 @@
                   }
                 }
               }
-            </span>
-          } @else {
-            <span>
+            } @else {
               @switch (log.action) {
                 @case ('EQUIP') {
-                  Equipe: {{log.data.item?.name}}
+                  Équipe: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container>
                 }
                 @case ('UNEQUIP') {
-                  Désquipe: {{log.data.item?.name}}
+                  Déséquipe: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container>
                 }
                 @case ('ADD_ITEM') {
-                  Ajout de l'objet: {{log.data.item?.name}}
+                  Ajout de l'objet: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container>
                 }
                 @case ('READ_BOOK') {
-                  Lecture du livre: {{log.data.item?.name}}
+                  Lecture du livre: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container>
                 }
                 @case ('DELETE_ITEM') {
-                  Suppression de l'objet: {{log.data.item?.name}}
+                  Suppression de l'objet: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container>
                 }
                 @case ('GIVE_ITEM') {
-                  Don de l'objet: {{log.data.item?.name}}
+                  Don de l'objet: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container>
                   @if (log.data.characterName) {
                     à {{log.data.characterName}}
                   }
                 }
                 @case ('GIVEN_ITEM') {
-                  Objet reçu: {{log.data.item?.name}}
+                  Objet reçu: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container>
                   @if (log.data.characterName) {
                     de {{log.data.characterName}}
                   }
@@ -78,22 +81,26 @@
                   Activation de l'effet: {{log.data.effect?.name}}
                 }
                 @case ('DISABLE_EFFECT') {
-                  Desactivation de l'effet: {{log.data.effect?.name}}
+                  Désactivation de l'effet: {{log.data.effect?.name}}
                 }
                 @case ('REMOVE_EFFECT') {
                   Suppression de l'effet: {{log.data.effect?.name}}
                 }
                 @case ('ACTIVE_MODIFIER') {
                   Activation du modificateur: {{log.data.modifier?.name}}
+                  <ng-container *ngTemplateOutlet="modifierValues; context: {$implicit: log.data.modifier}"></ng-container>
                 }
                 @case ('DISABLE_MODIFIER') {
-                  Desactivation du modificateur: {{log.data.modifier?.name}}
+                  Désactivation du modificateur: {{log.data.modifier?.name}}
+                  <ng-container *ngTemplateOutlet="modifierValues; context: {$implicit: log.data.modifier}"></ng-container>
                 }
                 @case ('APPLY_MODIFIER') {
                   Ajout du modificateur: {{log.data.modifier?.name}}
+                  <ng-container *ngTemplateOutlet="modifierValues; context: {$implicit: log.data.modifier}"></ng-container>
                 }
                 @case ('REMOVE_MODIFIER') {
                   Suppression du modificateur: {{log.data.modifier?.name}}
+                  <ng-container *ngTemplateOutlet="modifierValues; context: {$implicit: log.data.modifier}"></ng-container>
                 }
                 @case ('ADD_APTITUDE') {
                   Ajout de l'aptitude: {{log.data.aptitude?.name}}
@@ -102,16 +109,16 @@
                   Suppression de l'aptitude: {{log.data.aptitude?.name}}
                 }
                 @case ('CHANGE_QUANTITY') {
-                  Modification quantité: {{log.data.item?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
+                  Modification quantité: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container> {{log.data | valueChange}}
                 }
                 @case ('USE_CHARGE') {
-                  Utilisation de charge: {{log.data.item?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
+                  Utilisation de charge: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container> {{log.data | valueChange}}
                 }
                 @case ('ADD_XP') {
                   @if (log.data.info) {
-                    Ajout d'experience: {{log.data.info}}
+                    Ajout d'expérience: {{log.data.info}}
                   } @else {
-                    Experience: {{log.data.oldValue}} -> {{log.data.newValue}}
+                    Expérience: {{log.data | valueChange}}
                   }
                 }
                 @case ('LEVEL_UP') {
@@ -121,16 +128,16 @@
                   Utilisation d'un point de destin
                 }
                 @case ('MODIFY_EV') {
-                  Modification EV: {{log.data.oldValue}} -> {{log.data.newValue}}
+                  Modification EV: {{log.data | valueChange}}
                 }
                 @case ('MODIFY_EA') {
-                  Modification EA: {{log.data.oldValue}} -> {{log.data.newValue}}
+                  Modification EA: {{log.data | valueChange}}
                 }
                 @case ('IDENTIFY') {
-                  Identification de l'objet: {{log.data.item?.name}}
+                  Identification de l'objet: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container>
                 }
                 @case ('LOOT_ITEM') {
-                  Loot de l'objet: {{log.data.item?.name}}
+                  Loot de l'objet: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container>
                 }
                 @default {
                   {{log.action}}
@@ -139,15 +146,31 @@
                   }
                 }
               }
-            </span>
-          }
+            }
+          </span>
         </div>
       }
     </div>
   </div>
 }
 @if (loadMore) {
-  <div>
+  <div class="load-more">
     <button mat-button color="primary" (click)="loadHistory(true)" [disabled]="loading">CHARGER PLUS</button>
   </div>
 }
+
+<ng-template #itemName let-item>
+  @if (item) {
+    <button type="button" class="item-link" (click)="openItem(item)">{{item.data?.name}}</button>
+  }
+</ng-template>
+
+<ng-template #modifierValues let-modifier>
+  @if (modifier?.values?.length) {
+    <span class="modifier-values">
+      @for (value of modifier.values; track $index) {
+        <span class="modifier-value">{{value | modifier}}</span>
+      }
+    </span>
+  }
+</ng-template>

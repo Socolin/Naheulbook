@@ -25,6 +25,8 @@ import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 
 export interface ItemDialogData {
     readonly item: Item;
+    /** Only display the item, without allowing to change it (e.g. a copy of the item from the history) */
+    readonly readonly?: boolean;
 }
 
 @Component({

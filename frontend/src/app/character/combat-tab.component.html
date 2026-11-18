@@ -2,7 +2,7 @@
   <mat-card-content>
     <div class="stat">
       <div class="stat-icon">
-        <span class="game-icon game-icon-hearts"></span>
+        <span class="game-icon game-icon-hearts nhbk-icon-color"></span>
       </div>
       <div class="stat-value">
         <div [class.life-danger]="character.ev > character.computedData.stats['EV']">
@@ -18,7 +18,7 @@
     @if (character.computedData.stats['EA']) {
       <div class="stat">
         <div class="stat-icon">
-          <span class="game-icon game-icon-abstract-061"></span>
+          <span class="game-icon game-icon-abstract-061 nhbk-icon-color"></span>
         </div>
         <div class="stat-value">
           <div [class.bg-danger]="character.ea > character.computedData.stats['EA']">

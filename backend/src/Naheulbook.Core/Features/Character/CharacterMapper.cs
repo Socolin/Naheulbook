@@ -126,7 +126,7 @@ public class CharacterMapper(
             Id = historyEntry.Id,
             Action = historyEntry.Action,
             Data = MapperHelpers.FromJson<JObject>(historyEntry.Data) ?? new JObject(),
-            Date = historyEntry.Date.ToString("s"),
+            Date = MapperHelpers.ToUtcIsoString(historyEntry.Date),
             Gm = historyEntry.Gm,
         };
     }

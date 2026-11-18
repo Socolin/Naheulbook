@@ -441,7 +441,7 @@ Feature: Character
     [
       {
         "id": "!{GroupHistoryEntry.Id}",
-        "date": "2020-10-05T05:07:08",
+        "date": "2020-10-05T05:07:08Z",
         "action": "${GroupHistoryEntry.Action}",
         "gm": "!{GroupHistoryEntry.Gm}",
         "isGroup": true,
@@ -449,7 +449,7 @@ Feature: Character
       },
       {
         "id": "!{CharacterHistoryEntry.Id}",
-        "date": "2019-10-05T05:07:08",
+        "date": "2019-10-05T05:07:08Z",
         "action": "${CharacterHistoryEntry.Action}",
         "gm": "!{CharacterHistoryEntry.Gm}",
         "isGroup": false,

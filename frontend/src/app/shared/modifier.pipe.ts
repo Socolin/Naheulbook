@@ -2,7 +2,7 @@ import {Injectable, Pipe, PipeTransform} from '@angular/core';
 
 export function formatModifierValue(modifier) {
     if (modifier.type === undefined || modifier.type === 'ADD') {
-        if (modifier.value <= 0) {
+        if (modifier.value < 0) {
             return modifier.value;
         } else {
             return '+' + modifier.value;

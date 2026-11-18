@@ -19,6 +19,7 @@ export * from './gm-mode.service';
 export * from './nhbk-dialog.service';
 
 export * from './modifier.pipe';
+export * from './value-change.pipe';
 export * from './plus-minus.pipe';
 export * from './text-formatter.pipe';
 

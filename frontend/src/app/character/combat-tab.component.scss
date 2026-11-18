@@ -101,12 +101,13 @@
                 color: var(--mat-sys-error);
             }
 
+            // Same colors as the EV / EA icons in the history (see `getHistoryEntryIcon`)
             .game-icon-hearts {
-                color: light-dark(#ff0d26, #a01219);
+                --nhbk-icon-color: #ff0d26;
             }
 
             .game-icon-abstract-061 {
-                color: light-dark(blueviolet, #400a71);
+                --nhbk-icon-color: #8a2be2;
             }
 
             @media (max-width: 475px) {

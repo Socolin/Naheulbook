@@ -30,7 +30,7 @@ public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
         {
             Group = group,
             Action = StartCombatActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Gm = false,
         };
     }
@@ -41,7 +41,7 @@ public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
         {
             Group = group,
             Action = EndCombatActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Gm = false,
         };
     }
@@ -52,7 +52,7 @@ public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
         {
             Group = group,
             Action = UpdateMankdebolActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Gm = true,
             Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
@@ -64,7 +64,7 @@ public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
         {
             Group = group,
             Action = UpdateDebilibeukActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Gm = true,
             Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
@@ -76,7 +76,7 @@ public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
         {
             Group = group,
             Action = UpdateDateActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Gm = false,
             Data = jsonUtil.Serialize(new {oldValue, newValue}),
         };
@@ -88,7 +88,7 @@ public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
         {
             Group = group,
             Action = AddTimeActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Gm = false,
             Data = jsonUtil.Serialize(new {timeOffset, date}),
         };
@@ -100,7 +100,7 @@ public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
         {
             Group = group,
             Action = EventRpActionName,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Gm = isGm,
             Data = jsonUtil.Serialize(new {text}),
         };

@@ -1,12 +1,15 @@
+import {IconDescription} from './icon.model';
+import {IActiveStatsModifier, IItemData} from '../api/shared';
+
 export type HistoryEntry = GroupHistoryEntryResponse | CharacterHistoryEntryResponse;
 
 /**
- * Snapshot of the item at the time of the log, stored in the `data` of the history entry
+ * Copy of the item at the time of the log, stored in the `data` of the history entry
  */
 export interface HistoryItemData {
-    name?: string;
-    quantity?: number;
-    icon?: any;
+    templateId: string;
+    data: IItemData;
+    modifiers?: IActiveStatsModifier[];
 }
 
 export interface GroupHistoryEntryResponse {
@@ -40,4 +43,57 @@ export interface CharacterHistoryEntryResponse {
         info?: string;
         [key: string]: any;
     };
+}
+
+function icon(name: string, color: string): IconDescription {
+    return {name, color, rotation: 0};
+}
+
+const evIcon = icon('hearts', '#ff0d26');
+const eaIcon = icon('abstract-061', '#8a2be2');
+const defaultItemIcon = icon('knapsack', '#8d6e63');
+const modifierIcon = icon('magic-swirl', '#7e57c2');
+const effectIcon = icon('bubbling-flask', '#26a69a');
+
+const groupHistoryIcons: Partial<Record<GroupHistoryEntryResponse['action'], IconDescription>> = {
+    START_COMBAT: icon('crossed-swords', '#c62828'),
+    END_COMBAT: icon('truce', '#2e7d32'),
+    ADD_TIME: icon('hourglass', '#c9a227'),
+    CHANGE_DATE: icon('calendar', '#5c6bc0'),
+    EVENT_RP: icon('quill-ink', '#78909c'),
+    MANKDEBOL: icon('rolling-dices', '#ef6c00'),
+    DEBILIBEUK: icon('rolling-dices', '#ef6c00'),
+};
+
+const characterHistoryIcons: Partial<Record<string, IconDescription>> = {
+    MODIFY_EV: evIcon,
+    MODIFY_EA: eaIcon,
+    ADD_XP: icon('trophy', '#d4a017'),
+    LEVEL_UP: icon('upgrade', '#43a047'),
+    USE_FATE_POINT: icon('clover', '#2e7d32'),
+    CHANGE_NAME: icon('id-card', '#78909c'),
+    CHANGE_SEX: icon('id-card', '#78909c'),
+    APPLY_MODIFIER: modifierIcon,
+    REMOVE_MODIFIER: modifierIcon,
+    ACTIVE_MODIFIER: modifierIcon,
+    DISABLE_MODIFIER: modifierIcon,
+    APPLY_EFFECT: effectIcon,
+    REMOVE_EFFECT: effectIcon,
+    ACTIVE_EFFECT: effectIcon,
+    DISABLE_EFFECT: effectIcon,
+    ADD_APTITUDE: icon('skills', '#1e88e5'),
+    REMOVE_APTITUDE: icon('skills', '#1e88e5'),
+};
+
+/**
+ * Icon to display next to an history entry: the icon of the item the entry is about, or an icon for the action.
+ */
+export function getHistoryEntryIcon(entry: HistoryEntry): IconDescription | undefined {
+    if (entry.isGroup) {
+        return groupHistoryIcons[entry.action];
+    }
+    if (entry.data.item) {
+        return entry.data.item.data?.icon ?? defaultItemIcon;
+    }
+    return characterHistoryIcons[entry.action];
 }

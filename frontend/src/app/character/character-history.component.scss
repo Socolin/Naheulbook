@@ -1,0 +1,81 @@
+:host {
+    display: block;
+}
+
+.log-group {
+    margin-top: 8px;
+}
+
+// Keeps the button touch target (48px, larger than the button) inside the tab,
+// otherwise it overflows the tab body and adds a second scrollbar.
+.load-more {
+    padding: 8px 0;
+}
+
+.log-date {
+    font: var(--mat-sys-title-small);
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.logs {
+    margin: 4px 0 0 8px;
+    padding: 4px 0 4px 12px;
+    border-left: 2px solid var(--mat-sys-outline-variant);
+}
+
+.log {
+    display: grid;
+    grid-template-columns: 4.5em 20px 1fr;
+    column-gap: 8px;
+    align-items: center;
+    min-height: 24px;
+}
+
+.log-time {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.log-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.log-detail {
+    padding-left: 20px;
+}
+
+.modifier-values {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.modifier-value {
+    padding: 0 6px;
+    border-radius: 8px;
+    font: var(--mat-sys-label-medium);
+    background: var(--mat-sys-surface-container-highest);
+    color: var(--mat-sys-on-surface-variant);
+}
+
+// Item name opening the item details: looks like text, underlined to show it can be clicked
+.item-link {
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+
+    &:hover {
+        color: var(--mat-sys-primary);
+    }
+}

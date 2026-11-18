@@ -33,9 +33,14 @@
         <div class="log-date">{{loggroup.date | date:'mediumDate'}}</div>
         <div class="logs">
           @for (log of loggroup.logs; track log) {
-            <div>
-              {{log.date | date:'shortTime'}}:
-              <span>
+            <div class="log">
+              <span class="log-time">{{log.date | date:'shortTime'}}</span>
+              <span class="log-icon">
+                @if (getLogIcon(log); as icon) {
+                  <icon [icon]="icon" size="20px"></icon>
+                }
+              </span>
+              <span class="log-text">
                 @switch (log.action) {
                   @case ('EVENT_RP') {
                     Event: {{log.data.text}}
@@ -44,10 +49,10 @@
                     Avance temps: {{log.data.info}}
                   }
                   @case ('DEBILIBEUK') {
-                    Débilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
+                    Débilibeuk: {{log.data | valueChange}}
                   }
                   @case ('MANKDEBOL') {
-                    Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
+                    Mankdebol: {{log.data | valueChange}}
                   }
                   @case ('END_COMBAT') {
                     Fin de combat
@@ -56,7 +61,7 @@
                     Début d'un combat
                   }
                   @case ('ADD_TIME') {
-                    Modification du temps: {{log.data.offset | nhbkDuration}}
+                    Modification du temps: {{(log.data.timeOffset ?? log.data.offset) | nhbkDuration}}
                   }
                   @case ('CHANGE_DATE') {
                     Modification de la date

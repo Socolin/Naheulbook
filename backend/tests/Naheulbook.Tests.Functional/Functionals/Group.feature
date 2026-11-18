@@ -104,7 +104,7 @@ Feature: Group
     [
       {
         "id": "!{GroupHistoryEntry.Id}",
-        "date": "2020-10-05T05:07:08",
+        "date": "2020-10-05T05:07:08Z",
         "action": "${GroupHistoryEntry.Action}",
         "gm": "!{GroupHistoryEntry.Gm}",
         "action": "${GroupHistoryEntry.Action}",

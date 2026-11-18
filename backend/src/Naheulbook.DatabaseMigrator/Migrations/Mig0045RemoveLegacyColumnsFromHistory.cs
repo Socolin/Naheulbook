@@ -11,11 +11,13 @@ namespace Naheulbook.DatabaseMigrator.Migrations;
 /// deleting those (and showed the current name instead of the name at the time of the log).
 /// Now everything needed to display an entry is stored as a snapshot in the `data` json column:
 /// <list type="bullet">
-/// <item><c>item</c> -> <c>{"item": {"name": "...", "quantity": 2, "icon": {...}}}</c></item>
-/// <item><c>modifier</c> -> <c>{"modifier": {"name": "..."}}</c></item>
+/// <item><c>item</c> -> <c>{"item": {"templateId": "...", "data": {...}, "modifiers": [...]}}</c>: a copy of the item, as returned by the API</item>
+/// <item><c>modifier</c> -> <c>{"modifier": {"name": "...", "values": [{"stat": "FO", "type": "ADD", "value": 1}]}}</c></item>
 /// <item><c>effect</c> -> <c>{"effect": {"name": "..."}}</c></item>
 /// <item><c>aptitudeId</c> -> <c>{"aptitude": {"id": "...", "name": "..."}}</c></item>
 /// <item><c>info</c> -> <c>{"level": 3}</c> for LEVEL_UP, <c>{"text": "..."}</c> for EVENT_RP, <c>{"info": "..."}</c> otherwise</item>
+/// <item>GIVE_ITEM / GIVEN_ITEM -> <c>{"characterName": "..."}</c>: the other character of the exchange, found by pairing
+/// the entries of the giver and of the receiver (see <see cref="FillGiveItemCharacterNames"/>)</item>
 /// </list>
 /// Then the legacy columns are dropped.
 /// </summary>
@@ -75,7 +77,9 @@ public class Mig0045RemoveLegacyColumnsFromHistory : Migration
 
     private static void MigrateCharacterHistoryData(IDbConnection connection, IDbTransaction transaction)
     {
-        var updates = new List<(long Id, string Data)>();
+        var modifierValues = LoadHistoryModifierValues(connection, transaction);
+        var updates = new List<(long Id, JsonObject Data)>();
+        var giveItemEntries = new List<GiveItemEntry>();
 
         using (var select = connection.CreateCommand())
         {
@@ -85,8 +89,11 @@ public class Mig0045RemoveLegacyColumnsFromHistory : Migration
                        h.`item`, i.`data`, it.`name`,
                        h.`modifier`, m.`name`,
                        h.`effect`, e.`name`,
-                       h.`aptitudeId`, a.`name`
+                       h.`aptitudeId`, a.`name`,
+                       h.`character`, c.`name`, h.`date`,
+                       i.`itemTemplateId`, i.`modifiers`
                 FROM `{CharacterHistoryTable}` h
+                JOIN `characters` c ON c.`id` = h.`character`
                 LEFT JOIN `items` i ON i.`id` = h.`item`
                 LEFT JOIN `item_templates` it ON it.`id` = i.`itemTemplateId`
                 LEFT JOIN `character_modifiers` m ON m.`id` = h.`modifier`
@@ -97,6 +104,7 @@ public class Mig0045RemoveLegacyColumnsFromHistory : Migration
                    OR h.`effect` IS NOT NULL
                    OR h.`aptitudeId` IS NOT NULL
                    OR h.`info` IS NOT NULL
+                   OR h.`action` IN ('GIVE_ITEM', 'GIVEN_ITEM')
                 """;
             using var reader = select.ExecuteReader();
             while (reader.Read())
@@ -106,9 +114,18 @@ public class Mig0045RemoveLegacyColumnsFromHistory : Migration
                 var data = ParseData(GetNullableString(reader, 2));
 
                 if (!reader.IsDBNull(4))
-                    data["item"] = BuildItemSnapshot(GetNullableString(reader, 5), GetNullableString(reader, 6));
+                    data["item"] = BuildItemSnapshot(GetNullableString(reader, 16), GetNullableString(reader, 5), GetNullableString(reader, 17), GetNullableString(reader, 6));
                 if (!reader.IsDBNull(7))
-                    data["modifier"] = new JsonObject {["name"] = GetNullableString(reader, 8)};
+                {
+                    var modifierId = Convert.ToInt64(reader.GetValue(7));
+                    data["modifier"] = new JsonObject
+                    {
+                        ["name"] = GetNullableString(reader, 8),
+                        ["values"] = modifierValues.TryGetValue(modifierId, out var values)
+                            ? new JsonArray(values.Select(v => (JsonNode)v.DeepClone()).ToArray())
+                            : new JsonArray(),
+                    };
+                }
                 if (!reader.IsDBNull(9))
                     data["effect"] = new JsonObject {["name"] = GetNullableString(reader, 10)};
                 if (!reader.IsDBNull(11))
@@ -122,11 +139,95 @@ public class Mig0045RemoveLegacyColumnsFromHistory : Migration
                         data.TryAdd("info", info);
                 }
 
-                updates.Add((id, data.ToJsonString(JsonOptions)));
+                if (action is "GIVE_ITEM" or "GIVEN_ITEM")
+                {
+                    giveItemEntries.Add(new GiveItemEntry(
+                        action == "GIVE_ITEM",
+                        Convert.ToInt64(reader.GetValue(13)),
+                        GetNullableString(reader, 14),
+                        Convert.ToDateTime(reader.GetValue(15)),
+                        reader.IsDBNull(4) ? null : Convert.ToInt64(reader.GetValue(4)),
+                        data["item"]?["data"]?["name"]?.GetValue<string>(),
+                        data
+                    ));
+                }
+
+                updates.Add((id, data));
             }
         }
 
-        UpdateData(connection, transaction, CharacterHistoryTable, updates);
+        FillGiveItemCharacterNames(giveItemEntries);
+
+        UpdateData(connection, transaction, CharacterHistoryTable, updates.Select(u => (u.Id, u.Data.ToJsonString(JsonOptions))).ToList());
+    }
+
+    private record GiveItemEntry(bool IsGiver, long CharacterId, string? CharacterName, DateTime Date, long? ItemId, string? ItemName, JsonObject Data);
+
+    /// <summary>
+    /// When an item was given, the giver got a GIVE_ITEM entry and the receiver a GIVEN_ITEM entry, at the same time but
+    /// without any link between them. Pair them to store the name of the other character in each entry.
+    /// The item is the same when the whole stack was given, but when only a part was given the receiver got a new item
+    /// (with the same name), so try in order: same item, same item name, then the only receiver at that time.
+    /// Entries that cannot be paired without ambiguity are left without a character name.
+    /// </summary>
+    private static void FillGiveItemCharacterNames(List<GiveItemEntry> entries)
+    {
+        var receivers = entries.Where(e => !e.IsGiver).ToList();
+        var pairedReceivers = new HashSet<GiveItemEntry>();
+
+        foreach (var giver in entries.Where(e => e.IsGiver))
+        {
+            var candidates = receivers
+                .Where(r => !pairedReceivers.Contains(r))
+                .Where(r => r.CharacterId != giver.CharacterId)
+                .Where(r => Math.Abs((r.Date - giver.Date).TotalSeconds) <= 2)
+                .ToList();
+
+            var receiver = SingleOrNull(candidates.Where(r => giver.ItemId != null && r.ItemId == giver.ItemId))
+                           ?? SingleOrNull(candidates.Where(r => giver.ItemName != null && r.ItemName == giver.ItemName))
+                           ?? (candidates.Select(r => r.CharacterId).Distinct().Count() == 1 ? candidates.MinBy(r => Math.Abs((r.Date - giver.Date).Ticks)) : null);
+            if (receiver == null)
+                continue;
+
+            pairedReceivers.Add(receiver);
+            giver.Data["characterName"] = receiver.CharacterName;
+            receiver.Data["characterName"] = giver.CharacterName;
+        }
+    }
+
+    private static GiveItemEntry? SingleOrNull(IEnumerable<GiveItemEntry> entries)
+    {
+        var list = entries.Take(2).ToList();
+        return list.Count == 1 ? list[0] : null;
+    }
+
+    private static Dictionary<long, List<JsonObject>> LoadHistoryModifierValues(IDbConnection connection, IDbTransaction transaction)
+    {
+        var valuesByModifierId = new Dictionary<long, List<JsonObject>>();
+
+        using var select = connection.CreateCommand();
+        select.Transaction = transaction;
+        select.CommandText = $"""
+            SELECT v.`characterModifierId`, v.`stat`, v.`type`, v.`value`
+            FROM `character_modifier_values` v
+            WHERE v.`characterModifierId` IN (SELECT h.`modifier` FROM `{CharacterHistoryTable}` h WHERE h.`modifier` IS NOT NULL)
+            ORDER BY v.`id`
+            """;
+        using var reader = select.ExecuteReader();
+        while (reader.Read())
+        {
+            var modifierId = Convert.ToInt64(reader.GetValue(0));
+            if (!valuesByModifierId.TryGetValue(modifierId, out var values))
+                valuesByModifierId[modifierId] = values = [];
+            values.Add(new JsonObject
+            {
+                ["stat"] = reader.GetValue(1).ToString(),
+                ["type"] = reader.GetValue(2).ToString(),
+                ["value"] = Convert.ToInt32(reader.GetValue(3)),
+            });
+        }
+
+        return valuesByModifierId;
     }
 
     private static void MigrateGroupHistoryData(IDbConnection connection, IDbTransaction transaction)
@@ -154,20 +255,19 @@ public class Mig0045RemoveLegacyColumnsFromHistory : Migration
         UpdateData(connection, transaction, GroupHistoryTable, updates);
     }
 
-    private static JsonObject BuildItemSnapshot(string? itemDataJson, string? itemTemplateName)
+    private static JsonObject BuildItemSnapshot(string? itemTemplateId, string? itemDataJson, string? itemModifiersJson, string? itemTemplateName)
     {
-        var snapshot = new JsonObject();
-        var itemData = string.IsNullOrEmpty(itemDataJson) ? null : JsonNode.Parse(itemDataJson) as JsonObject;
+        var itemData = string.IsNullOrEmpty(itemDataJson) ? new JsonObject() : JsonNode.Parse(itemDataJson) as JsonObject ?? new JsonObject();
+        if (itemData["name"] is not JsonValue nameValue || !nameValue.TryGetValue<string>(out var name) || string.IsNullOrEmpty(name))
+            itemData["name"] = itemTemplateName;
 
-        var name = itemData?["name"] is JsonValue nameValue && nameValue.TryGetValue<string>(out var n) && !string.IsNullOrEmpty(n)
-            ? n
-            : itemTemplateName;
-        snapshot["name"] = name;
-
-        if (itemData?["quantity"] is JsonValue quantity)
-            snapshot["quantity"] = quantity.DeepClone();
-        if (itemData?["icon"] is { } icon)
-            snapshot["icon"] = icon.DeepClone();
+        var snapshot = new JsonObject
+        {
+            ["templateId"] = itemTemplateId,
+            ["data"] = itemData,
+        };
+        if (!string.IsNullOrEmpty(itemModifiersJson) && JsonNode.Parse(itemModifiersJson) is JsonArray modifiers)
+            snapshot["modifiers"] = modifiers;
 
         return snapshot;
     }

@@ -50,6 +50,15 @@ public static class MapperHelpers
         return list.Split(",").ToList();
     }
 
+    /// <summary>
+    /// Format a date stored as UTC (but read as <see cref="DateTimeKind.Unspecified"/> from the database)
+    /// as an ISO 8601 string with the `Z` suffix, so the clients can convert it to their local time.
+    /// </summary>
+    public static string ToUtcIsoString(DateTime date)
+    {
+        return DateTime.SpecifyKind(date, DateTimeKind.Utc).ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", System.Globalization.CultureInfo.InvariantCulture);
+    }
+
     public static string? FromDateTimeToString(DateTime? date)
     {
         return date?.ToString("s");
