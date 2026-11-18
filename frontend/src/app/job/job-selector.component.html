@@ -80,6 +80,26 @@
                 </ul>
               </div>
             }
+            @if (job.bonuses.length) {
+              <div class="bonuses">
+                Bonus :
+                <ul>
+                  @for (bonus of job.bonuses; track bonus) {
+                    <li [innerHTML]="bonus.description | textFormatter"></li>
+                  }
+                </ul>
+              </div>
+            }
+            @if (job.restrictions.length) {
+              <div class="restrictions">
+                Restrictions :
+                <ul>
+                  @for (restriction of job.restrictions; track restriction) {
+                    <li [innerHTML]="restriction.description | textFormatter"></li>
+                  }
+                </ul>
+              </div>
+            }
             @if (availabilityOk.state === 'ok') {
               <mat-action-row align="end">
                 <button color="primary" mat-button (click)="selectJob(job)">CHOISIR</button>

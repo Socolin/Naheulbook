@@ -489,6 +489,25 @@
           }
         </div>
       }
+      @if (hasAdd1AtOrPrd()) {
+        <div>
+          <h3 class="mat-h3">Point d'attaque ou de parade supplémentaire</h3>
+          @if (step === 5) {
+            <p class="mat-body">
+              Au niveau 1, gagne +1 en ATTAQUE ou en PARADE
+            </p>
+            <mat-button-toggle-group [(ngModel)]="add1AtOrPrdStat" (change)="updateAdd1AtOrPrd()">
+              <mat-button-toggle value="AT">+1 AT</mat-button-toggle>
+              <mat-button-toggle value="PRD">+1 PRD</mat-button-toggle>
+            </mat-button-toggle-group>
+          }
+          @if (step > 5) {
+            <div>
+              Ajouter un point <em>{{add1AtOrPrdStat === 'AT' ? "d'attaque" : 'de parade'}}</em>
+            </div>
+          }
+        </div>
+      }
       @if (hasRemoveAttOrPrdToIntOrCha()) {
         <div>
           <h3 class="mat-h3">Marchand</h3>

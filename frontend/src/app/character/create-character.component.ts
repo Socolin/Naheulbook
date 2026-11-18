@@ -90,6 +90,8 @@ export class CreateCharacterComponent implements OnInit {
     public superBourrinValuePrd = 0;
     /// CHANGE_1_AT_PRD
     public changeAtPrdValue = 0;
+    /// ADD_1_AT_OR_PRD
+    public add1AtOrPrdStat: 'AT' | 'PRD' = 'AT';
     /// REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA
     public removeAttOrPrdToIntOrChaRemoveStat = 'AT';
     public removeAttOrPrdToIntOrChaAddStat = 'INT';
@@ -181,6 +183,7 @@ export class CreateCharacterComponent implements OnInit {
                 this.superBourrinValueAt = 0;
                 this.superBourrinValuePrd = 0;
                 this.initChangeAtPrd();
+                this.initAdd1AtOrPrd();
                 this.initRemoveAttOrPrdToIntOrCha();
                 this.initRemoveAttOrPrdToIntOrAd();
                 this.initMove1PointStatValues();
@@ -299,6 +302,7 @@ export class CreateCharacterComponent implements OnInit {
         return this.hasSuperBourin()
             || this.hasMove1PointStat()
             || this.hasChangeAtPrd()
+            || this.hasAdd1AtOrPrd()
             || this.hasRemoveAttOrPrdToIntOrCha()
             || this.hasRemoveAttOrPrdToIntOrAd()
             ;
@@ -317,6 +321,11 @@ export class CreateCharacterComponent implements OnInit {
         }
         if (this.hasChangeAtPrd()) {
             if (!this.isChangeAtPrdValid()) {
+                return false;
+            }
+        }
+        if (this.hasAdd1AtOrPrd()) {
+            if (!this.isAdd1AtOrPrdValid()) {
                 return false;
             }
         }
@@ -457,6 +466,31 @@ export class CreateCharacterComponent implements OnInit {
     }
 
     /// END CHANGE_1_AT_PRD
+
+    /// ADD_1_AT_OR_PRD
+
+    hasAdd1AtOrPrd() {
+        return this.hasFlag('ADD_1_AT_OR_PRD');
+    }
+
+    isAdd1AtOrPrdValid() {
+        return this.add1AtOrPrdStat === 'AT' || this.add1AtOrPrdStat === 'PRD';
+    }
+
+    initAdd1AtOrPrd() {
+        this.add1AtOrPrdStat = 'AT';
+        if (this.hasAdd1AtOrPrd()) {
+            this.updateAdd1AtOrPrd();
+        }
+    }
+
+    updateAdd1AtOrPrd() {
+        this.modifiedStat['ADD_1_AT_OR_PRD'] = {stats: {}};
+        this.modifiedStat['ADD_1_AT_OR_PRD'].stats[this.add1AtOrPrdStat] = 1;
+        this.modifiedStat['ADD_1_AT_OR_PRD'].name = 'Guerrier Lvl 1 (+1 AT/PRD)';
+    }
+
+    /// END ADD_1_AT_OR_PRD
 
     /// REMOVE_1_AT_OR_PRD_TO_INT_OR_CHA
 

@@ -386,6 +386,11 @@
                 </div>
               }
             </div>
+            @if (character.computedData.maxArmorPr !== undefined && character.computedData.armorPr > character.computedData.maxArmorPr) {
+              <p class="text-warning">
+                Armure trop lourde : PR {{character.computedData.armorPr}} pour un maximum autorisé de PR {{character.computedData.maxArmorPr}}
+              </p>
+            }
           </mat-card-content>
           <mat-card-actions align="end">
             <button mat-button [color]="'primary'" (click)="character.computedData.details.show.atprd = !character.computedData.details.show.atprd">

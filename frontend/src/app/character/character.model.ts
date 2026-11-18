@@ -199,6 +199,8 @@ export class CharacterComputedData {
     weaponsDamages: {name: string, damage: string, incompatible?: boolean}[] = [];
     flags: {[flagName: string]: FlagData[]} = {};
     shownItemsToGm: Item[] = [];
+    armorPr = 0;
+    maxArmorPr?: number;
 
     init() {
         this.details.init();
@@ -213,6 +215,8 @@ export class CharacterComputedData {
         this.modifiers = [];
         this.tacticalMovement = new TacticalMovementInfo();
         this.flags = {};
+        this.armorPr = 0;
+        this.maxArmorPr = undefined;
     }
 }
 
@@ -827,7 +831,7 @@ export class Character extends WsRegistrable {
                 let noSkills = flagsData['NO_SKILL'];
                 for (let noSkill of noSkills) {
                     if (skill.skillDef.hasFlag(noSkill.data)) {
-                        skill.canceled = 'Origine incompatible';
+                        skill.canceled = 'Incompatible avec ' + noSkill.source.name;
                         break;
                     }
                 }
@@ -985,6 +989,7 @@ export class Character extends WsRegistrable {
             if (item.template.data.protection) {
                 modifications['PR'] = item.template.data.protection;
                 this.computedData.stats['PR'] += item.template.data.protection;
+                this.computedData.armorPr += item.template.data.protection;
             }
             if (item.template.data.magicProtection) {
                 modifications['PR_MAGIC'] = item.template.data.magicProtection;
@@ -1071,7 +1076,27 @@ export class Character extends WsRegistrable {
             this.computedData.countExceptionalStats++;
         }
 
+        this.computedData.maxArmorPr = this.computeMaxArmorPr();
+
         this.computeTacticalMovement();
+    }
+
+    private computeMaxArmorPr(): number | undefined {
+        let maxArmorPr: number | undefined;
+        let originMaxArmorPr = this.origin.data.maxArmorPr ?? undefined;
+        for (let job of this.jobs) {
+            const jobData = job.getStatData(this.origin);
+            if (jobData.maxArmorPr !== undefined && jobData.maxArmorPr !== null) {
+                maxArmorPr = maxArmorPr === undefined ? jobData.maxArmorPr : Math.min(maxArmorPr, jobData.maxArmorPr);
+            }
+            if (originMaxArmorPr !== undefined && jobData.bonusOriginMaxArmorPr) {
+                originMaxArmorPr += jobData.bonusOriginMaxArmorPr;
+            }
+        }
+        if (originMaxArmorPr !== undefined) {
+            maxArmorPr = maxArmorPr === undefined ? originMaxArmorPr : Math.min(maxArmorPr, originMaxArmorPr);
+        }
+        return maxArmorPr;
     }
 
     private computeTacticalMovement() {

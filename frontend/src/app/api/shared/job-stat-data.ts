@@ -1,6 +1,7 @@
 export interface JobStatData {
     readonly maxLoad?: number;
     readonly maxArmorPr?: number;
+    readonly bonusOriginMaxArmorPr?: number;
     readonly factorEv?: number;
     readonly baseEv?: number;
     readonly bonusEv?: number;
