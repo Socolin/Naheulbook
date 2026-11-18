@@ -55,6 +55,9 @@ public class CharacterEntity
     private ICollection<CharacterAptitudeEntity>? _aptitudes;
     public ICollection<CharacterAptitudeEntity> Aptitudes { get => _aptitudes.ThrowIfNotLoaded(); set => _aptitudes = value; }
 
+    private ICollection<CharacterSpecialAttackEntity>? _specialAttacks;
+    public ICollection<CharacterSpecialAttackEntity> SpecialAttacks { get => _specialAttacks.ThrowIfNotLoaded(); set => _specialAttacks = value; }
+
     private ICollection<CharacterJobEntity>? _jobs;
     public ICollection<CharacterJobEntity> Jobs { get => _jobs.ThrowIfNotLoaded(); set => _jobs = value; }
 

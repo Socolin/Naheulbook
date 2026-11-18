@@ -10,30 +10,12 @@ import {MatIconButton} from '@angular/material/button';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {SpecialAttackService} from './special-attack.service';
 import {SpecialAttackGroupResponse, SpecialAttackResponse} from '../api/responses';
+import {normalizeForSearch, specialAttackSearchText} from './special-attack-view';
+import {SpecialAttackCardComponent} from './special-attack-card.component';
 
-/**
- * Text from the special attack cards: a first line, optionally followed by detail lines starting with "- ".
- */
-export interface FormattedText {
-    headline?: string;
-    details: string[];
-    empty: boolean;
-}
-
-export interface SpecialAttackView {
+interface SpecialAttackItem {
     id: string;
-    name: string;
-    requiredLevel?: number;
-    range?: string;
-    xp?: number;
-    learning?: string;
-    usableBy?: FormattedText;
-    test?: FormattedText;
-    usage?: FormattedText;
-    sections: { label: string, text: FormattedText }[];
-    criticalFailure?: FormattedText;
-    criticalSuccess?: FormattedText;
-    criticalNotes?: FormattedText;
+    specialAttack: SpecialAttackResponse;
     searchText: string;
 }
 
@@ -41,62 +23,8 @@ export interface SpecialAttackGroupView {
     id: string;
     name: string;
     descriptionParagraphs: string[];
-    specialAttacks: SpecialAttackView[];
-    visibleSpecialAttacks: SpecialAttackView[];
-}
-
-const EMPTY_VALUES = ['aucun', 'aucune', 'aucun effet', 'non'];
-
-function normalizeForSearch(text: string): string {
-    return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-}
-
-export function formatText(text?: string): FormattedText | undefined {
-    if (!text) {
-        return undefined;
-    }
-    const headlines: string[] = [];
-    const details: string[] = [];
-    for (const line of text.split('\n').map(l => l.trim()).filter(l => l)) {
-        if (line.startsWith('- ')) {
-            details.push(line.substring(2));
-        } else {
-            headlines.push(line);
-        }
-    }
-    const headline = headlines.length ? headlines.join(' ') : undefined;
-    return {
-        headline,
-        details,
-        empty: !details.length && !!headline && EMPTY_VALUES.includes(headline.toLowerCase()),
-    };
-}
-
-function toView(specialAttack: SpecialAttackResponse): SpecialAttackView {
-    const data = specialAttack.data;
-    const sections: { label: string, text: FormattedText }[] = [];
-    for (const [label, value] of [['Effets', data.effects], ['Dégâts', data.damage], ['Conditions', data.conditions]]) {
-        const text = formatText(value);
-        if (text && !text.empty) {
-            sections.push({label: label!, text});
-        }
-    }
-    return {
-        id: specialAttack.id,
-        name: specialAttack.name,
-        requiredLevel: data.requiredLevel,
-        range: data.range,
-        xp: data.xp,
-        learning: data.learning,
-        usableBy: formatText(data.usableBy),
-        test: formatText(data.test),
-        usage: formatText(data.usage),
-        sections,
-        criticalFailure: formatText(data.criticalFailure),
-        criticalSuccess: formatText(data.criticalSuccess),
-        criticalNotes: formatText(data.criticalNotes),
-        searchText: normalizeForSearch([specialAttack.name, data.usableBy, data.effects, data.range].filter(x => x).join(' ')),
-    };
+    specialAttacks: SpecialAttackItem[];
+    visibleSpecialAttacks: SpecialAttackItem[];
 }
 
 @Component({
@@ -114,6 +42,7 @@ function toView(specialAttack: SpecialAttackResponse): SpecialAttackView {
         MatIcon,
         MatIconButton,
         MatProgressSpinner,
+        SpecialAttackCardComponent,
     ],
     templateUrl: './special-attacks.component.html',
     styleUrl: './special-attacks.component.scss',
@@ -141,7 +70,11 @@ export class SpecialAttacksComponent implements OnInit, OnDestroy {
         }));
         this.subscription.add(this.specialAttackService.getSpecialAttackGroups().subscribe(groups => {
             this.groups = groups.map((group: SpecialAttackGroupResponse) => {
-                const specialAttacks = group.specialAttacks.map(toView);
+                const specialAttacks = group.specialAttacks.map(specialAttack => ({
+                    id: specialAttack.id,
+                    specialAttack,
+                    searchText: specialAttackSearchText(specialAttack),
+                }));
                 return {
                     id: group.id,
                     name: group.name,

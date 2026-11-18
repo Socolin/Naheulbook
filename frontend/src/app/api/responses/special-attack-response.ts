@@ -44,3 +44,28 @@ export type SpecialAttackGroupResponse = {
 export type SpecialAttackGroupsResponse = {
     specialAttackGroups: SpecialAttackGroupResponse[];
 }
+
+/**
+ * A running cooldown: same fields as the modifiers durations so the group duration updates can decrement it.
+ */
+export type SpecialAttackCooldown = IDurable & {
+    currentCombatCount?: number;
+    currentLapCount?: number;
+    currentTimeDuration?: number;
+    failure: boolean;
+}
+
+export type CharacterSpecialAttackData = {
+    successCount: number;
+    cooldowns: SpecialAttackCooldown[];
+}
+
+export type CharacterSpecialAttackResponse = {
+    specialAttack: SpecialAttackResponse;
+    data: CharacterSpecialAttackData;
+}
+
+export type UseCharacterSpecialAttackResponse = CharacterSpecialAttackResponse & {
+    /** Experience of the character after the use (a success gives the XP of the special attack) */
+    experience: number;
+}

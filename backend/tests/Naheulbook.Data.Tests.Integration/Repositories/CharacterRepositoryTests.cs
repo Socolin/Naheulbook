@@ -26,7 +26,10 @@ public class CharacterRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
             .AddUser()
             .AddGroup(out var group)
             .AddCharacterWithAllData(out var character)
-            .AddGroupInvite(out var groupInvite, true);
+            .AddGroupInvite(out var groupInvite, true)
+            .AddSpecialAttackGroup()
+            .AddSpecialAttack(out var specialAttack)
+            .AddCharacterSpecialAttack(out var characterSpecialAttack);
 
         var actualCharacter = await _characterRepository.GetWithAllDataAsync(character.Id);
 
@@ -38,6 +41,8 @@ public class CharacterRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
         AssertEntitiesAreLoaded(actualCharacter.Modifiers, TestDataUtil.GetAll<CharacterModifierEntity>());
         AssertEntitiesAreLoaded(actualCharacter.Aptitudes, TestDataUtil.GetAll<CharacterAptitudeEntity>());
         AssertEntitiesAreLoaded(actualCharacter.Aptitudes.Select(x => x.Aptitude), TestDataUtil.GetAll<AptitudeEntity>());
+        AssertEntitiesAreLoaded(actualCharacter.SpecialAttacks, [characterSpecialAttack]);
+        AssertEntitiesAreLoaded(actualCharacter.SpecialAttacks.Select(x => x.SpecialAttack), [specialAttack]);
     }
 
     #endregion
@@ -322,6 +327,43 @@ public class CharacterRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
     #endregion
 
     #region GetWithItemsWithModifiersByGroupAndByIdAsync
+
+    [Test]
+    public async Task GetWithItemsWithModifiersByGroupAndByIdAsync_ShouldLoadDataUsedToUpdateDurations()
+    {
+        TestDataUtil
+            .AddUser()
+            .AddOrigin()
+            .AddGroup(out var group)
+            .AddCharacter(out var character, c => c.GroupId = group.Id)
+            .AddSpecialAttackGroup()
+            .AddSpecialAttack(out var specialAttack)
+            .AddCharacterSpecialAttack(out var characterSpecialAttack);
+
+        var actualCharacters = await _characterRepository.GetWithItemsWithModifiersByGroupAndByIdAsync(group.Id, [character.Id]);
+
+        AssertEntitiesAreLoaded(actualCharacters, [character]);
+        var actualCharacter = actualCharacters.Single();
+        actualCharacter.Items.Should().BeEmpty();
+        actualCharacter.Modifiers.Should().BeEmpty();
+        AssertEntitiesAreLoaded(actualCharacter.SpecialAttacks, [characterSpecialAttack]);
+        AssertEntitiesAreLoaded(actualCharacter.SpecialAttacks.Select(x => x.SpecialAttack), [specialAttack]);
+    }
+
+    [Test]
+    public async Task GetWithItemsWithModifiersByGroupAndByIdAsync_ShouldNotLoadCharactersFromAnotherGroup()
+    {
+        TestDataUtil
+            .AddUser()
+            .AddOrigin()
+            .AddGroup(out var group)
+            .AddGroup(out var otherGroup)
+            .AddCharacter(out var character, c => c.GroupId = otherGroup.Id);
+
+        var actualCharacters = await _characterRepository.GetWithItemsWithModifiersByGroupAndByIdAsync(group.Id, [character.Id]);
+
+        actualCharacters.Should().BeEmpty();
+    }
 
     #endregion
 }

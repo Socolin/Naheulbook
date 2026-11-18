@@ -4,6 +4,7 @@ using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Group;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Job;
+using Naheulbook.Core.Features.SpecialAttack;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Responses.Responses;
 using Naheulbook.Shared.TransientModels;
@@ -22,6 +23,7 @@ public class CharacterMapperTests
     private IGroupMapper _groupMapper;
     private IItemMapper _itemMapper;
     private ISpecialityMapper _specialityMapper;
+    private ISpecialAttackMapper _specialAttackMapper;
     private CharacterMapper _mapper;
 
     [SetUp]
@@ -32,7 +34,8 @@ public class CharacterMapperTests
         _groupMapper = Substitute.For<IGroupMapper>();
         _itemMapper = Substitute.For<IItemMapper>();
         _specialityMapper = Substitute.For<ISpecialityMapper>();
-        _mapper = new CharacterMapper(_aptitudeMapper, _characterModifierMapper, _groupMapper, _itemMapper, _specialityMapper);
+        _specialAttackMapper = Substitute.For<ISpecialAttackMapper>();
+        _mapper = new CharacterMapper(_aptitudeMapper, _characterModifierMapper, _groupMapper, _itemMapper, _specialityMapper, _specialAttackMapper);
     }
 
     [Test]
@@ -290,6 +293,7 @@ public class CharacterMapperTests
         private readonly Guid _skillId = Guid.NewGuid();
         private readonly CharacterGroupResponse _groupResponse = new();
         private readonly CharacterAptitudeResponse _aptitudeResponse = new();
+        private readonly CharacterSpecialAttackResponse _specialAttackResponse = new();
         private readonly ActiveStatsModifier _modifierResponse = new();
         private readonly SpecialityResponse _specialityResponse = new();
         private readonly ItemResponse _itemResponse = new();
@@ -299,6 +303,7 @@ public class CharacterMapperTests
         {
             var group = new GroupEntity();
             var aptitude = new CharacterAptitudeEntity();
+            var specialAttack = new CharacterSpecialAttackEntity();
             var modifier = new CharacterModifierEntity();
             var speciality = new SpecialityEntity();
             var item = new ItemEntity();
@@ -328,6 +333,7 @@ public class CharacterMapperTests
                 Jobs = [new CharacterJobEntity {JobId = _jobId}],
                 Skills = [new CharacterSkillEntity {SkillId = _skillId}],
                 Aptitudes = [aptitude],
+                SpecialAttacks = [specialAttack],
                 Modifiers = [modifier],
                 Specialities = [new CharacterSpecialityEntity {Speciality = speciality}],
                 Items = [item],
@@ -336,6 +342,7 @@ public class CharacterMapperTests
 
             tests._groupMapper.ToCharacterGroupResponse(group).Returns(_groupResponse);
             tests._aptitudeMapper.ToResponse(aptitude).Returns(_aptitudeResponse);
+            tests._specialAttackMapper.ToResponse(specialAttack).Returns(_specialAttackResponse);
             tests._characterModifierMapper.ToResponse(modifier).Returns(_modifierResponse);
             tests._specialityMapper.ToResponse(speciality).Returns(_specialityResponse);
             tests._itemMapper.ToResponse(item).Returns(_itemResponse);
@@ -364,6 +371,7 @@ public class CharacterMapperTests
                 SkillIds = [_skillId],
                 Group = _groupResponse,
                 Aptitudes = [_aptitudeResponse],
+                SpecialAttacks = [_specialAttackResponse],
                 Modifiers = [_modifierResponse],
                 Specialities = [_specialityResponse],
                 Items = [_itemResponse],

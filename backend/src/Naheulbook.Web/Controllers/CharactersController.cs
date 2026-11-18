@@ -7,6 +7,7 @@ using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Job;
 using Naheulbook.Core.Features.Loot;
 using Naheulbook.Core.Features.Shared;
+using Naheulbook.Core.Features.SpecialAttack;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Responses.Responses;
 using Naheulbook.Shared.TransientModels;
@@ -25,7 +26,9 @@ public class CharactersController(
     IItemMapper itemMapper,
     ILootMapper lootMapper,
     ICharacterBackupService characterBackupService,
-    ICharacterAptitudeService characterAptitudeService
+    ICharacterAptitudeService characterAptitudeService,
+    ICharacterSpecialAttackService characterSpecialAttackService,
+    ISpecialAttackMapper specialAttackMapper
 ) : ControllerBase
 {
     [HttpGet]
@@ -551,5 +554,96 @@ public class CharactersController(
         {
             throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
         }
+    }
+
+    [HttpPost("{CharacterId:int:min(1)}/specialAttacks")]
+    public async Task<ActionResult<CharacterSpecialAttackResponse>> PostCharacterAddSpecialAttackAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int characterId,
+        [FromBody] AddCharacterSpecialAttackRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        try
+        {
+            var characterSpecialAttack = await characterSpecialAttackService.AddSpecialAttackAsync(executionContext, characterId, request, cancellationToken);
+            return specialAttackMapper.ToResponse(characterSpecialAttack);
+        }
+        catch (Exception ex) when (TryGetSpecialAttackHttpError(ex, out var httpError))
+        {
+            throw httpError;
+        }
+    }
+
+    [HttpDelete("{CharacterId:int:min(1)}/specialAttacks/{SpecialAttackId:guid}")]
+    public async Task<ActionResult> DeleteCharacterSpecialAttackAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int characterId,
+        [FromRoute] Guid specialAttackId,
+        CancellationToken cancellationToken
+    )
+    {
+        try
+        {
+            await characterSpecialAttackService.RemoveSpecialAttackAsync(executionContext, characterId, specialAttackId, cancellationToken);
+            return NoContent();
+        }
+        catch (Exception ex) when (TryGetSpecialAttackHttpError(ex, out var httpError))
+        {
+            throw httpError;
+        }
+    }
+
+    [HttpPost("{CharacterId:int:min(1)}/specialAttacks/{SpecialAttackId:guid}/use")]
+    public async Task<ActionResult<UseCharacterSpecialAttackResponse>> PostCharacterUseSpecialAttackAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int characterId,
+        [FromRoute] Guid specialAttackId,
+        [FromBody] UseCharacterSpecialAttackRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        try
+        {
+            var result = await characterSpecialAttackService.UseSpecialAttackAsync(executionContext, characterId, specialAttackId, request, cancellationToken);
+            return specialAttackMapper.ToResponse(result);
+        }
+        catch (Exception ex) when (TryGetSpecialAttackHttpError(ex, out var httpError))
+        {
+            throw httpError;
+        }
+    }
+
+    [HttpPut("{CharacterId:int:min(1)}/specialAttacks/{SpecialAttackId:guid}")]
+    public async Task<ActionResult<CharacterSpecialAttackResponse>> PutCharacterSpecialAttackAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int characterId,
+        [FromRoute] Guid specialAttackId,
+        [FromBody] UpdateCharacterSpecialAttackRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        try
+        {
+            var characterSpecialAttack = await characterSpecialAttackService.UpdateSpecialAttackAsync(executionContext, characterId, specialAttackId, request, cancellationToken);
+            return specialAttackMapper.ToResponse(characterSpecialAttack);
+        }
+        catch (Exception ex) when (TryGetSpecialAttackHttpError(ex, out var httpError))
+        {
+            throw httpError;
+        }
+    }
+
+    private static bool TryGetSpecialAttackHttpError(Exception ex, out HttpErrorException httpError)
+    {
+        int? statusCode = ex switch
+        {
+            SpecialAttackNotFoundException or SpecialAttackAlreadyKnownException or SpecialAttackNotAvailableException => StatusCodes.Status400BadRequest,
+            ForbiddenAccessException => StatusCodes.Status403Forbidden,
+            CharacterNotFoundException or CharacterSpecialAttackNotFoundException => StatusCodes.Status404NotFound,
+            _ => null,
+        };
+        httpError = statusCode.HasValue ? new HttpErrorException(statusCode.Value, ex) : null!;
+        return statusCode.HasValue;
     }
 }

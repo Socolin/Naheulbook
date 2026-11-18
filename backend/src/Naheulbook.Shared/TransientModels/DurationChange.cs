@@ -60,6 +60,18 @@ public class ModifierDurationChange : IModifierChange
     public NewModifierDurationValue Modifier { get; set; } = null!;
 }
 
+/// <summary>
+/// New state of the running cooldowns of a special attack known by a character (expired cooldowns are removed)
+/// </summary>
+[Serializable]
+public class SpecialAttackDurationChange : IDurationChange
+{
+    public const string TypeValue = "specialAttack";
+    public string Type => TypeValue;
+    public Guid SpecialAttackId { get; set; }
+    public List<SpecialAttackCooldown> Cooldowns { get; set; } = [];
+}
+
 [Serializable]
 public class NewModifierDurationValue
 {

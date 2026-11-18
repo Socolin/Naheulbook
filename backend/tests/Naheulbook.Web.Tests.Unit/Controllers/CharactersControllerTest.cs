@@ -7,6 +7,7 @@ using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Loot;
 using Naheulbook.Core.Features.Shared;
+using Naheulbook.Core.Features.SpecialAttack;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Responses.Responses;
@@ -49,7 +50,9 @@ public class CharactersControllerTest
             _itemMapper,
             _lootMapper,
             _characterBackupService,
-            _characterAptitudeService
+            _characterAptitudeService,
+            Substitute.For<ICharacterSpecialAttackService>(),
+            Substitute.For<ISpecialAttackMapper>()
         );
 
         _executionContext = new NaheulbookExecutionContext();

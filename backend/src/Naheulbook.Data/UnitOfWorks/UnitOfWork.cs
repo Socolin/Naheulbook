@@ -10,6 +10,7 @@ public interface IUnitOfWork : IDisposable
     ICalendarRepository Calendar { get; }
     ICharacterRepository Characters { get; }
     ICharacterAptitudeRepository CharacterAptitudes { get; }
+    ICharacterSpecialAttackRepository CharacterSpecialAttacks { get; }
     ICharacterSkillRepository CharacterSkills { get; }
     ICharacterSpecialityRepository CharacterSpecialities { get; }
     ICharacterModifierRepository CharacterModifiers { get; }
@@ -45,6 +46,7 @@ public interface IUnitOfWork : IDisposable
     IOriginRandomNameUrlRepository OriginRandomNameUrls{ get; }
     ISkillRepository Skills { get; }
     ISlotRepository Slots { get; }
+    ISpecialAttackRepository SpecialAttacks { get; }
     ISpecialAttackGroupRepository SpecialAttackGroups { get; }
     IStatRepository Stats { get; }
     IUserRepository Users { get; }
@@ -62,6 +64,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public ICalendarRepository Calendar => new CalendarRepository(_naheulbookDbContext);
     public ICharacterRepository Characters => new CharacterRepository(_naheulbookDbContext);
     public ICharacterAptitudeRepository CharacterAptitudes => new CharacterAptitudeRepository(_naheulbookDbContext);
+    public ICharacterSpecialAttackRepository CharacterSpecialAttacks => new CharacterSpecialAttackRepository(_naheulbookDbContext);
     public ICharacterSkillRepository CharacterSkills => new CharacterSkillRepository(_naheulbookDbContext);
     public ICharacterSpecialityRepository CharacterSpecialities => new CharacterSpecialityRepository(_naheulbookDbContext);
     public ICharacterModifierRepository CharacterModifiers => new CharacterModifierRepository(_naheulbookDbContext);
@@ -97,6 +100,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public IOriginRandomNameUrlRepository OriginRandomNameUrls => new OriginRandomNameUrlRepository(_naheulbookDbContext);
     public ISkillRepository Skills => new SkillRepository(_naheulbookDbContext);
     public ISlotRepository Slots => new SlotRepository(_naheulbookDbContext);
+    public ISpecialAttackRepository SpecialAttacks => new SpecialAttackRepository(_naheulbookDbContext);
     public ISpecialAttackGroupRepository SpecialAttackGroups => new SpecialAttackGroupRepository(_naheulbookDbContext);
     public IStatRepository Stats => new StatRepository(_naheulbookDbContext);
     public IUserRepository Users => new UserRepository(_naheulbookDbContext);

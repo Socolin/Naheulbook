@@ -6,6 +6,7 @@ using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Loot;
 using Naheulbook.Core.Features.Merchant;
 using Naheulbook.Core.Features.Monster;
+using Naheulbook.Core.Features.SpecialAttack;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
@@ -15,7 +16,7 @@ using Naheulbook.Web.Services;
 
 namespace Naheulbook.Web.Notifications;
 
-public class NotificationPacketBuilder(IAptitudeMapper aptitudeMapper, ICharacterMapper characterMapper, ICharacterModifierMapper characterModifierMapper, IFightMapper fightMapper, IGroupMapper groupMapper, IItemMapper itemMapper, ILootMapper lootMapper, IMerchantMapper merchantMapper, IMonsterMapper monsterMapper, IHubGroupUtil hubGroupUtil) : INotificationPacketBuilder
+public class NotificationPacketBuilder(IAptitudeMapper aptitudeMapper, ICharacterMapper characterMapper, ICharacterModifierMapper characterModifierMapper, IFightMapper fightMapper, IGroupMapper groupMapper, IItemMapper itemMapper, ILootMapper lootMapper, IMerchantMapper merchantMapper, IMonsterMapper monsterMapper, ISpecialAttackMapper specialAttackMapper, IHubGroupUtil hubGroupUtil) : INotificationPacketBuilder
 {
     private enum ElementType
     {
@@ -94,6 +95,21 @@ public class NotificationPacketBuilder(IAptitudeMapper aptitudeMapper, ICharacte
     public INotificationPacket BuildCharacterUpdateAptitude(int characterId, CharacterAptitudeEntity characterAptitude)
     {
         return BuildCharacterChange(characterId, "updateAptitude", aptitudeMapper.ToResponse(characterAptitude));
+    }
+
+    public INotificationPacket BuildCharacterAddSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack)
+    {
+        return BuildCharacterChange(characterId, "addSpecialAttack", specialAttackMapper.ToResponse(characterSpecialAttack));
+    }
+
+    public INotificationPacket BuildCharacterRemoveSpecialAttack(int characterId, Guid specialAttackId)
+    {
+        return BuildCharacterChange(characterId, "removeSpecialAttack", new {SpecialAttackId = specialAttackId});
+    }
+
+    public INotificationPacket BuildCharacterUpdateSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack)
+    {
+        return BuildCharacterChange(characterId, "updateSpecialAttack", specialAttackMapper.ToResponse(characterSpecialAttack));
     }
 
     public INotificationPacket BuildCharacterChangeColor(CharacterEntity character)

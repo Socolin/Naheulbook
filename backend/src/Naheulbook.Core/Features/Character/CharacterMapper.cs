@@ -3,6 +3,7 @@ using Naheulbook.Core.Features.Group;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Job;
 using Naheulbook.Core.Features.Shared;
+using Naheulbook.Core.Features.SpecialAttack;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Responses.Responses;
 using Naheulbook.Shared.TransientModels;
@@ -29,7 +30,8 @@ public class CharacterMapper(
     ICharacterModifierMapper characterModifierMapper,
     IGroupMapper groupMapper,
     IItemMapper itemMapper,
-    ISpecialityMapper specialityMapper
+    ISpecialityMapper specialityMapper,
+    ISpecialAttackMapper specialAttackMapper
 ) : ICharacterMapper
 {
     public NamedIdResponse ToNamedIdResponse(CharacterEntity character)
@@ -158,6 +160,7 @@ public class CharacterMapper(
         response.SkillIds = character.Skills.Select(s => s.SkillId).ToList();
         response.Group = character.Group is { } group ? groupMapper.ToCharacterGroupResponse(group) : null;
         response.Aptitudes = character.Aptitudes.Select(aptitudeMapper.ToResponse).ToList();
+        response.SpecialAttacks = character.SpecialAttacks.Select(specialAttackMapper.ToResponse).ToList();
         response.Modifiers = character.Modifiers.Select(characterModifierMapper.ToResponse).ToList();
         response.Specialities = character.Specialities.Select(s => specialityMapper.ToResponse(s.Speciality)).ToList();
         response.Items = character.Items.Select(itemMapper.ToResponse).ToList();

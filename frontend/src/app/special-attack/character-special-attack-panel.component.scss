@@ -1,0 +1,106 @@
+.count {
+    margin-left: 12px;
+    padding: 0 10px;
+    border-radius: 10px;
+    font: var(--mat-sys-label-large);
+    background: var(--mat-sys-secondary-container);
+    color: var(--mat-sys-on-secondary-container);
+
+    &.over-limit {
+        background: var(--mat-sys-error-container);
+        color: var(--mat-sys-on-error-container);
+    }
+}
+
+.empty {
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.special-attacks {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    container-type: inline-size;
+}
+
+.special-attack {
+    border-radius: 12px;
+    border: 1px solid var(--mat-sys-outline-variant);
+    background: var(--mat-sys-surface-container-low);
+
+    &.unavailable .name {
+        color: var(--mat-sys-on-surface-variant);
+    }
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px 0;
+}
+
+.name {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1 1 200px;
+    min-width: 0;
+    padding: 4px;
+    border: none;
+    background: none;
+    color: var(--mat-sys-on-surface);
+    font: var(--mat-sys-title-medium);
+    text-align: left;
+    cursor: pointer;
+
+    span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.status {
+    padding: 2px 10px;
+    border-radius: 8px;
+    font: var(--mat-sys-label-medium);
+    white-space: nowrap;
+
+    &.status-available {
+        background: color-mix(in srgb, var(--mat-sys-tertiary) 18%, transparent);
+        color: var(--mat-sys-tertiary);
+    }
+
+    &.status-cooldown {
+        background: var(--mat-sys-surface-container-highest);
+        color: var(--mat-sys-on-surface-variant);
+    }
+
+    &.status-failure {
+        background: color-mix(in srgb, var(--mat-sys-error) 15%, transparent);
+        color: var(--mat-sys-error);
+    }
+
+    &.status-unlimited {
+        background: var(--mat-sys-secondary-container);
+        color: var(--mat-sys-on-secondary-container);
+    }
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 16px;
+    padding: 0 16px 8px 40px;
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-on-surface-variant);
+}

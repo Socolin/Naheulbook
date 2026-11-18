@@ -13,5 +13,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ISpecialAttackMapper, SpecialAttackMapper>();
 
         services.AddSingleton<ISpecialAttackService, SpecialAttackService>();
+        services.AddSingleton<ISpecialAttackCooldownUtil, SpecialAttackCooldownUtil>();
+        services.AddSingleton<ICharacterSpecialAttackService, CharacterSpecialAttackService>();
     }
 }

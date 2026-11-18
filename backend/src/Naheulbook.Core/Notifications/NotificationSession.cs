@@ -31,6 +31,9 @@ public interface INotificationSession
     void NotifyCharacterAddAptitude(int characterId, CharacterAptitudeEntity characterAptitude);
     void NotifyCharacterRemoveAptitude(int characterId, CharacterAptitudeEntity characterAptitude);
     void NotifyCharacterUpdateAptitude(int characterId, CharacterAptitudeEntity characterAptitude);
+    void NotifyCharacterAddSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack);
+    void NotifyCharacterRemoveSpecialAttack(int characterId, Guid specialAttackId);
+    void NotifyCharacterUpdateSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack);
 
     void NotifyCharacterGmChangeColor(CharacterEntity character);
     void NotifyCharacterGmChangeTarget(CharacterEntity character, TargetRequest requestTarget);
@@ -161,6 +164,21 @@ public class NotificationSession(
     public void NotifyCharacterUpdateAptitude(int characterId, CharacterAptitudeEntity characterAptitude)
     {
         _packets.Add(packetBuilder.BuildCharacterUpdateAptitude(characterId, characterAptitude));
+    }
+
+    public void NotifyCharacterAddSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack)
+    {
+        _packets.Add(packetBuilder.BuildCharacterAddSpecialAttack(characterId, characterSpecialAttack));
+    }
+
+    public void NotifyCharacterRemoveSpecialAttack(int characterId, Guid specialAttackId)
+    {
+        _packets.Add(packetBuilder.BuildCharacterRemoveSpecialAttack(characterId, specialAttackId));
+    }
+
+    public void NotifyCharacterUpdateSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack)
+    {
+        _packets.Add(packetBuilder.BuildCharacterUpdateSpecialAttack(characterId, characterSpecialAttack));
     }
 
     public void NotifyCharacterGmChangeColor(CharacterEntity character)

@@ -34,6 +34,10 @@ public class DurationChangeMapper : IDurationChangeMapper
                 return new ItemLifetimeDurationChange {ItemId = request.ItemId.Value, LifeTime = request.LifeTime!};
             case ModifierDurationChange.TypeValue:
                 return new ModifierDurationChange {Modifier = request.Modifier!};
+            case SpecialAttackDurationChange.TypeValue:
+                if (!request.SpecialAttackId.HasValue)
+                    throw new NotSupportedException($"Missing specialAttackId when converting DurationChange of type `{request.Type}`");
+                return new SpecialAttackDurationChange {SpecialAttackId = request.SpecialAttackId.Value, Cooldowns = request.Cooldowns ?? []};
             default:
                 throw new NotSupportedException($"Invalid ChangeDurationType `{request.Type}`");
         }

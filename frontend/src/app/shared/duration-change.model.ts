@@ -1,5 +1,6 @@
 import {ActiveStatsModifier} from './stat-modifier.model';
 import {IDurable} from '../api/shared';
+import {SpecialAttackCooldown} from '../api/responses';
 
 export type FighterDurationChanges =
     | IMonsterDurationChanges
@@ -19,6 +20,7 @@ export type DurationChange =
     IItemModifierDurationChange
     | IItemLifetimeDurationChange
     | IModifierDurationChange
+    | ISpecialAttackDurationChange
     ;
 
 export interface IItemModifierDurationChange {
@@ -36,4 +38,10 @@ export interface IItemLifetimeDurationChange {
 export interface IModifierDurationChange {
     type: 'modifier';
     modifier: ActiveStatsModifier;
+}
+
+export interface ISpecialAttackDurationChange {
+    type: 'specialAttack';
+    specialAttackId: string;
+    cooldowns: SpecialAttackCooldown[];
 }

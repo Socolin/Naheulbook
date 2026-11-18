@@ -9,7 +9,7 @@ public interface ICharacterHistoryUtil
     CharacterHistoryEntryEntity CreateLogChangeEv(CharacterEntity character, int? oldValue, int? newValue);
     CharacterHistoryEntryEntity CreateLogChangeEa(CharacterEntity character, int? oldValue, int? newValue);
     CharacterHistoryEntryEntity CreateLogChangeFatePoint(CharacterEntity character, short oldValue, short? newValue);
-    CharacterHistoryEntryEntity CreateLogChangeExperience(CharacterEntity character, int oldValue, int? newValue);
+    CharacterHistoryEntryEntity CreateLogChangeExperience(CharacterEntity character, int oldValue, int? newValue, string? info = null);
     CharacterHistoryEntryEntity CreateLogChangeSex(CharacterEntity character, string oldValue, string newValue);
     CharacterHistoryEntryEntity CreateLogChangeName(CharacterEntity character, string oldValue, string newValue);
     CharacterHistoryEntryEntity CreateLogAddItem(int characterId, ItemEntity item);
@@ -29,6 +29,9 @@ public interface ICharacterHistoryUtil
     CharacterHistoryEntryEntity CreateLogLevelUp(int characterId, int characterLevel);
     CharacterHistoryEntryEntity CreateAddAptitude(int characterId, AptitudeEntity aptitude);
     CharacterHistoryEntryEntity CreateRemoveAptitude(int characterId, AptitudeEntity aptitude);
+    CharacterHistoryEntryEntity CreateAddSpecialAttack(int characterId, SpecialAttackEntity specialAttack);
+    CharacterHistoryEntryEntity CreateRemoveSpecialAttack(int characterId, SpecialAttackEntity specialAttack);
+    CharacterHistoryEntryEntity CreateUseSpecialAttack(int characterId, SpecialAttackEntity specialAttack, bool success);
 }
 
 public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
@@ -56,6 +59,9 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
     private const string LevelUpActionName = "LEVEL_UP";
     private const string AddAptitudeActionName = "ADD_APTITUDE";
     private const string RemoveAptitudeActionName = "REMOVE_APTITUDE";
+    private const string AddSpecialAttackActionName = "ADD_SPECIAL_ATTACK";
+    private const string RemoveSpecialAttackActionName = "REMOVE_SPECIAL_ATTACK";
+    private const string UseSpecialAttackActionName = "USE_SPECIAL_ATTACK";
 
     public CharacterHistoryEntryEntity CreateLogChangeEv(CharacterEntity character, int? oldValue, int? newValue)
     {
@@ -90,14 +96,14 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
         };
     }
 
-    public CharacterHistoryEntryEntity CreateLogChangeExperience(CharacterEntity character, int oldValue, int? newValue)
+    public CharacterHistoryEntryEntity CreateLogChangeExperience(CharacterEntity character, int oldValue, int? newValue, string? info = null)
     {
         return new CharacterHistoryEntryEntity
         {
             Character = character,
             Action = ChangeExperienceActionName,
             Date = DateTime.UtcNow,
-            Data = jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {oldValue, newValue, info}),
         };
     }
 
@@ -310,6 +316,39 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
         };
     }
 
+    public CharacterHistoryEntryEntity CreateAddSpecialAttack(int characterId, SpecialAttackEntity specialAttack)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = AddSpecialAttackActionName,
+            Date = DateTime.UtcNow,
+            Data = jsonUtil.Serialize(new {specialAttack = GetSpecialAttackLogData(specialAttack)}),
+        };
+    }
+
+    public CharacterHistoryEntryEntity CreateRemoveSpecialAttack(int characterId, SpecialAttackEntity specialAttack)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = RemoveSpecialAttackActionName,
+            Date = DateTime.UtcNow,
+            Data = jsonUtil.Serialize(new {specialAttack = GetSpecialAttackLogData(specialAttack)}),
+        };
+    }
+
+    public CharacterHistoryEntryEntity CreateUseSpecialAttack(int characterId, SpecialAttackEntity specialAttack, bool success)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = UseSpecialAttackActionName,
+            Date = DateTime.UtcNow,
+            Data = jsonUtil.Serialize(new {specialAttack = GetSpecialAttackLogData(specialAttack), success}),
+        };
+    }
+
     /// <summary>
     /// Snapshot of the item, so the history can display it as it was at the time of the log, even after it was deleted
     /// </summary>
@@ -335,5 +374,10 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
     private static object GetAptitudeLogData(AptitudeEntity aptitude)
     {
         return new {id = aptitude.Id, name = aptitude.Name};
+    }
+
+    private static object GetSpecialAttackLogData(SpecialAttackEntity specialAttack)
+    {
+        return new {id = specialAttack.Id, name = specialAttack.Name};
     }
 }

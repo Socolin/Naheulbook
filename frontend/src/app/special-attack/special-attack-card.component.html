@@ -1,0 +1,110 @@
+@if (view) {
+  <article class="attack" [class.compact]="compact">
+    <header class="attack-header">
+      <div class="title-row">
+        <h3 class="attack-name">{{ view.name }}</h3>
+        @if (view.xp) {
+          <span class="xp" title="XP gagnée en cas de réussite">+{{ view.xp }} XP</span>
+        }
+      </div>
+      <div class="chips">
+        @if (view.range) {
+          <span class="chip">{{ view.range }}</span>
+        }
+        @if (view.requiredLevel) {
+          <span class="chip">Niveau {{ view.requiredLevel }}</span>
+        }
+        @if (view.learning) {
+          <span class="chip chip-learning" title="Apprentissage">
+            <mat-icon inline>school</mat-icon>{{ view.learning }}
+          </span>
+        }
+      </div>
+      @if (view.usableBy) {
+        <p class="usable-by">
+          <mat-icon inline>person</mat-icon>
+          <span>
+            {{ view.usableBy.headline }}
+            @for (detail of view.usableBy.details; track $index) {
+              {{ detail }}
+            }
+          </span>
+        </p>
+      }
+    </header>
+
+    <ng-content select="[cardStatus]"></ng-content>
+
+    <div class="quick-info">
+      @if (view.test) {
+        <div class="quick-item">
+          <span class="label">Épreuve</span>
+          <span class="value" [class.muted]="view.test.empty">{{ view.test.headline }}</span>
+          @for (detail of view.test.details; track $index) {
+            <span class="detail">{{ detail }}</span>
+          }
+        </div>
+      }
+      @if (view.usage) {
+        <div class="quick-item">
+          <span class="label">Utilisation</span>
+          <span class="value">{{ view.usage.headline }}</span>
+          @for (detail of view.usage.details; track $index) {
+            <span class="detail">{{ detail }}</span>
+          }
+        </div>
+      }
+    </div>
+
+    @for (section of view.sections; track section.label) {
+      <div class="section">
+        <span class="label">{{ section.label }}</span>
+        @if (section.text.headline) {
+          <p class="section-headline">{{ section.text.headline }}</p>
+        }
+        @if (section.text.details.length) {
+          <ul>
+            @for (detail of section.text.details; track $index) {
+              <li>{{ detail }}</li>
+            }
+          </ul>
+        }
+      </div>
+    }
+
+    @if (view.criticalFailure || view.criticalSuccess || view.criticalNotes) {
+      <footer class="criticals">
+        @if (view.criticalFailure) {
+          <div class="critical critical-failure">
+            <span class="label"><mat-icon inline>trending_down</mat-icon> Échec critique</span>
+            <span [class.muted]="view.criticalFailure.empty">{{ view.criticalFailure.headline }}</span>
+            @for (detail of view.criticalFailure.details; track $index) {
+              <span class="detail">{{ detail }}</span>
+            }
+          </div>
+        }
+        @if (view.criticalSuccess) {
+          <div class="critical critical-success">
+            <span class="label"><mat-icon inline>trending_up</mat-icon> Réussite critique</span>
+            <span [class.muted]="view.criticalSuccess.empty">{{ view.criticalSuccess.headline }}</span>
+            @for (detail of view.criticalSuccess.details; track $index) {
+              <span class="detail">{{ detail }}</span>
+            }
+          </div>
+        }
+        @if (view.criticalNotes) {
+          <div class="critical critical-notes">
+            <span class="label">Critiques et maladresses</span>
+            @if (view.criticalNotes.headline) {
+              <span>{{ view.criticalNotes.headline }}</span>
+            }
+            @for (detail of view.criticalNotes.details; track $index) {
+              <span>{{ detail }}</span>
+            }
+          </div>
+        }
+      </footer>
+    }
+    <ng-content select="[cardActions]"></ng-content>
+  </article>
+}

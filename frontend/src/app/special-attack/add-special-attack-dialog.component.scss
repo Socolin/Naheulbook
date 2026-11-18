@@ -1,0 +1,70 @@
+.toolbar-title {
+    flex: 1;
+}
+
+.content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.filter {
+    width: 100%;
+}
+
+.group-name {
+    margin: 24px 0 8px;
+    font: var(--mat-sys-title-medium);
+}
+
+.candidates {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.candidate {
+    border-radius: 12px;
+    border: 1px solid var(--mat-sys-outline-variant);
+    background: var(--mat-sys-surface-container);
+
+    &.selected {
+        border-color: var(--mat-sys-primary);
+        background: color-mix(in srgb, var(--mat-sys-primary) 8%, var(--mat-sys-surface-container));
+    }
+}
+
+.candidate-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 4px 4px 8px;
+}
+
+.candidate-info {
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+    padding: 6px 0;
+}
+
+.candidate-name {
+    font: var(--mat-sys-title-small);
+}
+
+.candidate-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.warning {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-error);
+}

@@ -108,6 +108,15 @@
                 @case ('REMOVE_APTITUDE') {
                   Suppression de l'aptitude: {{log.data.aptitude?.name}}
                 }
+                @case ('ADD_SPECIAL_ATTACK') {
+                  Nouveau coup spécial: {{log.data.specialAttack?.name}}
+                }
+                @case ('REMOVE_SPECIAL_ATTACK') {
+                  Coup spécial oublié: {{log.data.specialAttack?.name}}
+                }
+                @case ('USE_SPECIAL_ATTACK') {
+                  Coup spécial {{log.data.success ? 'réussi' : 'raté'}}: {{log.data.specialAttack?.name}}
+                }
                 @case ('CHANGE_QUANTITY') {
                   Modification quantité: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container> {{log.data | valueChange}}
                 }

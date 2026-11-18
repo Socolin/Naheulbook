@@ -17,4 +17,6 @@ public class DurationChangeRequest
     public int? ItemId { get; set; }
     public NewModifierDurationValue? Modifier { get; set; }
     public LifeTime? LifeTime { get; set; }
+    public Guid? SpecialAttackId { get; set; }
+    public List<SpecialAttackCooldown>? Cooldowns { get; set; }
 }

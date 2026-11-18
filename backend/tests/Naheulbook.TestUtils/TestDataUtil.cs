@@ -92,6 +92,7 @@ public partial class TestDataUtil : IDisposable
                 "DELETE FROM `character_modifier_values`;" +
                 "DELETE FROM `character_skills`;" +
                 "DELETE FROM `character_specialities`;" +
+                "DELETE FROM `characters_special_attacks`;" +
                 "DELETE FROM `effects`;" +
                 "DELETE FROM `effect_subcategories`;" +
                 "DELETE FROM `effect_modifiers`;" +

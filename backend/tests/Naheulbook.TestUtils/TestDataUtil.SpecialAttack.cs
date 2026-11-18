@@ -43,4 +43,23 @@ public partial class TestDataUtil
 
         return SaveEntity(specialAttack, customizer);
     }
+
+    public TestDataUtil AddCharacterSpecialAttack(Action<CharacterSpecialAttackEntity> customizer = null)
+    {
+        return AddCharacterSpecialAttack(out _, customizer);
+    }
+
+    public TestDataUtil AddCharacterSpecialAttack(out CharacterSpecialAttackEntity characterSpecialAttack, Action<CharacterSpecialAttackEntity> customizer = null)
+    {
+        var character = GetLast<CharacterEntity>();
+        var specialAttack = GetLast<SpecialAttackEntity>();
+        characterSpecialAttack = new CharacterSpecialAttackEntity
+        {
+            CharacterId = character.Id,
+            SpecialAttackId = specialAttack.Id,
+            Data = """{"successCount": 0, "cooldowns": []}""",
+        };
+
+        return SaveEntity(characterSpecialAttack, customizer);
+    }
 }

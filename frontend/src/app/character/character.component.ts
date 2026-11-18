@@ -43,6 +43,7 @@ import {CharacterHistoryComponent} from './character-history.component';
 import {ItemPricePipe} from '../item-template/item-price.pipe';
 import {MarkdownPipe} from '../markdown/markdown.pipe';
 import {AptitudePanelComponent} from './aptitude-panel.component';
+import {CharacterSpecialAttackPanelComponent} from '../special-attack/character-special-attack-panel.component';
 
 @Component({
     selector: 'character',
@@ -50,7 +51,7 @@ import {AptitudePanelComponent} from './aptitude-panel.component';
     styleUrls: ['./character.component.scss'],
     providers: [ItemActionService],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [MatTabGroup, MatTab, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions, MatButton, MatToolbar, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, ValueEditorComponent, MatFormField, MatInput, CdkTextareaAutosize, MatButtonToggleGroup, FormsModule, MatButtonToggle, CombatTabComponent, EffectPanelComponent, InventoryPanelComponent, MatTabLabel, MatBadge, CharacterLootPanelComponent, CharacterHistoryComponent, MatFabButton, PlusMinusPipe, ItemPricePipe, MarkdownPipe, AptitudePanelComponent]
+    imports: [MatTabGroup, MatTab, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions, MatButton, MatToolbar, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, ValueEditorComponent, MatFormField, MatInput, CdkTextareaAutosize, MatButtonToggleGroup, FormsModule, MatButtonToggle, CombatTabComponent, EffectPanelComponent, InventoryPanelComponent, MatTabLabel, MatBadge, CharacterLootPanelComponent, CharacterHistoryComponent, MatFabButton, PlusMinusPipe, ItemPricePipe, MarkdownPipe, AptitudePanelComponent, CharacterSpecialAttackPanelComponent]
 })
 export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;

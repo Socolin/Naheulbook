@@ -31,6 +31,9 @@ public interface INotificationPacketBuilder
     INotificationPacket BuildCharacterAddAptitude(int characterId, CharacterAptitudeEntity characterAptitude);
     INotificationPacket BuildCharacterRemoveAptitude(int characterId, CharacterAptitudeEntity characterAptitude);
     INotificationPacket BuildCharacterUpdateAptitude(int characterId, CharacterAptitudeEntity characterAptitude);
+    INotificationPacket BuildCharacterAddSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack);
+    INotificationPacket BuildCharacterRemoveSpecialAttack(int characterId, Guid specialAttackId);
+    INotificationPacket BuildCharacterUpdateSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack);
 
     INotificationPacket BuildCharacterChangeColor(CharacterEntity character);
     INotificationPacket BuildCharacterChangeTarget(CharacterEntity character, TargetRequest requestTarget);

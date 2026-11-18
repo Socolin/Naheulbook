@@ -1,0 +1,63 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button mat-dialog-close aria-label="Fermer">
+    <mat-icon>close</mat-icon>
+  </button>
+  <span class="toolbar-title">Apprendre des coups spéciaux</span>
+  <button mat-button (click)="valid()" [disabled]="selectedIds.size === 0">
+    AJOUTER @if (selectedIds.size) { ({{ selectedIds.size }}) }
+  </button>
+</mat-toolbar>
+
+<div class="content">
+  <mat-form-field class="filter" appearance="outline" subscriptSizing="dynamic">
+    <mat-icon matPrefix>search</mat-icon>
+    <mat-label>Rechercher</mat-label>
+    <input matInput [(ngModel)]="filter" (ngModelChange)="updateFilter()" placeholder="Nom, métier, origine, effet…">
+  </mat-form-field>
+
+  @if (!groups) {
+    <mat-spinner></mat-spinner>
+  } @else {
+    @for (group of groups; track group.name) {
+      @if (group.visibleCandidates.length) {
+        <h3 class="group-name">{{ group.name }}</h3>
+        <div class="candidates">
+          @for (candidate of group.visibleCandidates; track candidate.specialAttack.id) {
+            <div class="candidate" [class.selected]="selectedIds.has(candidate.specialAttack.id)">
+              <div class="candidate-row">
+                <mat-checkbox [checked]="selectedIds.has(candidate.specialAttack.id)"
+                              (change)="toggleSelection(candidate.specialAttack.id)"
+                              [aria-label]="'Sélectionner ' + candidate.specialAttack.name">
+                </mat-checkbox>
+                <div class="candidate-info" (click)="toggleSelection(candidate.specialAttack.id)">
+                  <div class="candidate-name">{{ candidate.specialAttack.name }}</div>
+                  <div class="candidate-meta">
+                    @if (candidate.specialAttack.data.requiredLevel) {
+                      <span>Niveau {{ candidate.specialAttack.data.requiredLevel }}</span>
+                    }
+                    @if (candidate.specialAttack.data.range) {
+                      <span>{{ candidate.specialAttack.data.range }}</span>
+                    }
+                    @if (candidate.specialAttack.data.usableBy) {
+                      <span class="usable-by">{{ candidate.specialAttack.data.usableBy }}</span>
+                    }
+                  </div>
+                  @for (warning of candidate.warnings; track warning) {
+                    <div class="warning"><mat-icon inline>warning</mat-icon> {{ warning }}</div>
+                  }
+                </div>
+                <button mat-icon-button (click)="toggleDetails(candidate.specialAttack.id)"
+                        [attr.aria-expanded]="expandedId === candidate.specialAttack.id" aria-label="Afficher les détails">
+                  <mat-icon>{{ expandedId === candidate.specialAttack.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+                </button>
+              </div>
+              @if (expandedId === candidate.specialAttack.id) {
+                <special-attack-card [specialAttack]="candidate.specialAttack" [compact]="true"></special-attack-card>
+              }
+            </div>
+          }
+        </div>
+      }
+    }
+  }
+</div>

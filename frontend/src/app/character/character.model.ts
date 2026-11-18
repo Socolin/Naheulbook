@@ -21,10 +21,12 @@ import {
     CharacterGroupResponse,
     CharacterLevelUpResponse,
     CharacterResponse,
+    CharacterSpecialAttackResponse,
     ItemPartialResponse
 } from '../api/responses';
 import {CharacterSex} from '../api/shared/enums';
 import {Guid} from '../api/shared/util';
+import {CharacterSpecialAttack} from '../special-attack/character-special-attack.model';
 
 export interface CharacterGiveDestination {
     id: number;
@@ -265,6 +267,7 @@ export class Character extends WsRegistrable {
     gmData: any;
     group?: CharacterGroupResponse;
     aptitudes: CharacterAptitudeResponse[];
+    specialAttacks: CharacterSpecialAttack[] = [];
     invites: CharacterGroupInviteResponse[];
     isNpc: boolean;
 
@@ -290,6 +293,7 @@ export class Character extends WsRegistrable {
             skills: [],
             items: [],
             aptitudes: response.aptitudes,
+            specialAttacks: (response.specialAttacks ?? []).map(CharacterSpecialAttack.fromResponse),
             modifiers: ActiveStatsModifier.modifiersFromJson(response.modifiers),
             specialities: Speciality.fromResponses(response.specialities)
         });
@@ -1493,7 +1497,36 @@ export class Character extends WsRegistrable {
                 changes.push({type: 'modifier', modifier: modifier});
             }
         }
+        for (let specialAttack of this.specialAttacks) {
+            if (specialAttack.updateDuration(type, data)) {
+                changes.push({type: 'specialAttack', specialAttackId: specialAttack.specialAttack.id, cooldowns: specialAttack.cooldowns});
+            }
+        }
         return changes;
+    }
+
+    /**
+     * Number of special attacks the character can know: level + 1, or level + 2 for some jobs (guerrier, ménestrel)
+     */
+    get specialAttackLimit(): number {
+        let bonus = 1;
+        for (const job of this.jobs) {
+            bonus = Math.max(bonus, job.getStatData(this.origin).specialAttackLimitBonus ?? 1);
+        }
+        return this.level + bonus;
+    }
+
+    updateSpecialAttack(response: CharacterSpecialAttackResponse) {
+        const existing = this.specialAttacks.find(x => x.specialAttack.id === response.specialAttack.id);
+        if (existing) {
+            existing.update(response);
+        } else {
+            this.specialAttacks.push(CharacterSpecialAttack.fromResponse(response));
+        }
+    }
+
+    removeSpecialAttack(specialAttackId: string) {
+        this.specialAttacks = this.specialAttacks.filter(x => x.specialAttack.id !== specialAttackId);
     }
 
     updateLapDecrement(data: { deleted: Fighter; previous: Fighter; next: Fighter }): DurationChange[] {
@@ -1608,6 +1641,15 @@ export class Character extends WsRegistrable {
             }
             case 'updateAptitude': {
                 this.updateAptitude(data.aptitude, data.count, data.active);
+                break;
+            }
+            case 'addSpecialAttack':
+            case 'updateSpecialAttack': {
+                this.updateSpecialAttack(data);
+                break;
+            }
+            case 'removeSpecialAttack': {
+                this.removeSpecialAttack(data.specialAttackId);
                 break;
             }
             case 'updateModifier': {

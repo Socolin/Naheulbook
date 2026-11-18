@@ -9,6 +9,8 @@ public interface ISpecialAttackMapper
 {
     SpecialAttackResponse ToResponse(SpecialAttackEntity specialAttack);
     SpecialAttackGroupResponse ToResponse(SpecialAttackGroupEntity specialAttackGroup);
+    CharacterSpecialAttackResponse ToResponse(CharacterSpecialAttackEntity characterSpecialAttack);
+    UseCharacterSpecialAttackResponse ToResponse(UseSpecialAttackResult useSpecialAttackResult);
 }
 
 public class SpecialAttackMapper : ISpecialAttackMapper
@@ -34,6 +36,25 @@ public class SpecialAttackMapper : ISpecialAttackMapper
                 .OrderBy(x => x.DisplayOrder)
                 .Select(ToResponse)
                 .ToList(),
+        };
+    }
+
+    public CharacterSpecialAttackResponse ToResponse(CharacterSpecialAttackEntity characterSpecialAttack)
+    {
+        return new CharacterSpecialAttackResponse
+        {
+            SpecialAttack = ToResponse(characterSpecialAttack.SpecialAttack),
+            Data = MapperHelpers.FromJsonNotNull<CharacterSpecialAttackData>(characterSpecialAttack.Data),
+        };
+    }
+
+    public UseCharacterSpecialAttackResponse ToResponse(UseSpecialAttackResult useSpecialAttackResult)
+    {
+        return new UseCharacterSpecialAttackResponse
+        {
+            SpecialAttack = ToResponse(useSpecialAttackResult.CharacterSpecialAttack.SpecialAttack),
+            Data = MapperHelpers.FromJsonNotNull<CharacterSpecialAttackData>(useSpecialAttackResult.CharacterSpecialAttack.Data),
+            Experience = useSpecialAttackResult.Experience,
         };
     }
 }

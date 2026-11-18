@@ -261,6 +261,7 @@ Feature: Character
             }
           }
         ],
+        "specialAttacks": [],
         "items": [
           {
             "id": "!{Item.Id}",

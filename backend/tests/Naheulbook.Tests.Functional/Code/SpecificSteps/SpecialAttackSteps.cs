@@ -17,4 +17,33 @@ public class SpecialAttackSteps(TestDataUtil testDataUtil)
     {
         testDataUtil.AddSpecialAttack();
     }
+
+    [Given("a special attack usable once per hour, with a 30 minutes cooldown on failure, giving 2 XP")]
+    public void GivenASpecialAttackUsableOncePerHour()
+    {
+        testDataUtil.AddSpecialAttack(s => s.Data = """
+                                                    {
+                                                      "cooldown": {"durationType": "time", "timeDuration": 3600},
+                                                      "failureCooldown": {"durationType": "time", "timeDuration": 1800},
+                                                      "xp": 2
+                                                    }
+                                                    """);
+    }
+
+    [Given("that the character knows the special attack")]
+    public void GivenThatTheCharacterKnowsTheSpecialAttack()
+    {
+        testDataUtil.AddCharacterSpecialAttack();
+    }
+
+    [Given("that the character knows the special attack, with a running cooldown")]
+    public void GivenThatTheCharacterKnowsTheSpecialAttackWithARunningCooldown()
+    {
+        testDataUtil.AddCharacterSpecialAttack(c => c.Data = """
+                                                             {
+                                                               "successCount": 1,
+                                                               "cooldowns": [{"durationType": "time", "timeDuration": 3600, "currentTimeDuration": 600, "failure": false}]
+                                                             }
+                                                             """);
+    }
 }

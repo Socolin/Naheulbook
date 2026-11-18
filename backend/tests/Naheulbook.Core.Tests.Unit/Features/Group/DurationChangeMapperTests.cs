@@ -116,4 +116,26 @@ public class DurationChangeMapperTests
 
         act.Should().Throw<NotSupportedException>();
     }
+
+    [Test]
+    public void ToDurationChange_WithSpecialAttackType_ReturnsSpecialAttackDurationChange()
+    {
+        var specialAttackId = Guid.NewGuid();
+        var cooldown = new SpecialAttackCooldown {DurationType = "time", TimeDuration = 3600, CurrentTimeDuration = 600};
+        var request = new DurationChangeRequest {Type = SpecialAttackDurationChange.TypeValue, SpecialAttackId = specialAttackId, Cooldowns = [cooldown]};
+
+        var actual = _mapper.ToDurationChange(request);
+
+        actual.Should().BeEquivalentTo(new SpecialAttackDurationChange {SpecialAttackId = specialAttackId, Cooldowns = [cooldown]});
+    }
+
+    [Test]
+    public void ToDurationChange_WithSpecialAttackTypeWithoutSpecialAttackId_Throws()
+    {
+        var request = new DurationChangeRequest {Type = SpecialAttackDurationChange.TypeValue};
+
+        var act = () => _mapper.ToDurationChange(request);
+
+        act.Should().Throw<NotSupportedException>();
+    }
 }

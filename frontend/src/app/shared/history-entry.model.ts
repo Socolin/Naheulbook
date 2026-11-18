@@ -27,7 +27,7 @@ export interface GroupHistoryEntryResponse {
 
 export interface CharacterHistoryEntryResponse {
     id: number;
-    action: 'ADD_ITEM' | 'MODIFY_EV' | 'MODIFY_EA' | 'USE_FATE_POINT' | 'ADD_XP' | 'CHANGE_SEX' | 'CHANGE_NAME' | 'EQUIP' | 'UNEQUIP' | 'APPLY_MODIFIER' | 'REMOVE_MODIFIER' | 'ACTIVE_MODIFIER' | 'DISABLE_MODIFIER' | 'GIVE_ITEM' | 'GIVEN_ITEM' | 'LOOT_ITEM' | 'CHANGE_QUANTITY' | 'USE_CHARGE' | 'READ_BOOK' | 'IDENTIFY' | 'LEVEL_UP' | 'ADD_APTITUDE' | 'REMOVE_APTITUDE';
+    action: 'ADD_ITEM' | 'MODIFY_EV' | 'MODIFY_EA' | 'USE_FATE_POINT' | 'ADD_XP' | 'CHANGE_SEX' | 'CHANGE_NAME' | 'EQUIP' | 'UNEQUIP' | 'APPLY_MODIFIER' | 'REMOVE_MODIFIER' | 'ACTIVE_MODIFIER' | 'DISABLE_MODIFIER' | 'GIVE_ITEM' | 'GIVEN_ITEM' | 'LOOT_ITEM' | 'CHANGE_QUANTITY' | 'USE_CHARGE' | 'READ_BOOK' | 'IDENTIFY' | 'LEVEL_UP' | 'ADD_APTITUDE' | 'REMOVE_APTITUDE' | 'ADD_SPECIAL_ATTACK' | 'REMOVE_SPECIAL_ATTACK' | 'USE_SPECIAL_ATTACK';
     date: any;
     gm: boolean;
     isGroup: false;
@@ -36,6 +36,8 @@ export interface CharacterHistoryEntryResponse {
         modifier?: { name: string };
         effect?: { name: string };
         aptitude?: { id: string, name: string };
+        specialAttack?: { id: string, name: string };
+        success?: boolean;
         characterName?: string;
         level?: number;
         oldValue?: any;
@@ -83,6 +85,9 @@ const characterHistoryIcons: Partial<Record<string, IconDescription>> = {
     DISABLE_EFFECT: effectIcon,
     ADD_APTITUDE: icon('skills', '#1e88e5'),
     REMOVE_APTITUDE: icon('skills', '#1e88e5'),
+    ADD_SPECIAL_ATTACK: icon('sword-spin', '#e65100'),
+    REMOVE_SPECIAL_ATTACK: icon('sword-spin', '#e65100'),
+    USE_SPECIAL_ATTACK: icon('sword-spin', '#e65100'),
 };
 
 /**

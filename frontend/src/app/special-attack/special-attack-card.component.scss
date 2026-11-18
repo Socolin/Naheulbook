@@ -1,0 +1,193 @@
+.label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font: var(--mat-sys-label-small);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.muted {
+    color: var(--mat-sys-on-surface-variant);
+    font-style: italic;
+}
+
+.detail {
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.attack {
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--mat-sys-surface-container);
+    color: var(--mat-sys-on-surface);
+    border: 1px solid var(--mat-sys-outline-variant);
+    font: var(--mat-sys-body-medium);
+}
+
+.attack-header {
+    padding: 16px 16px 12px;
+
+    .title-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .attack-name {
+        margin: 0;
+        font: var(--mat-sys-title-large);
+    }
+
+    .xp {
+        flex-shrink: 0;
+        font: var(--mat-sys-label-large);
+        color: var(--mat-sys-primary);
+    }
+
+    .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+
+        &:empty {
+            display: none;
+        }
+    }
+
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 10px;
+        border-radius: 8px;
+        font: var(--mat-sys-label-medium);
+        background: var(--mat-sys-secondary-container);
+        color: var(--mat-sys-on-secondary-container);
+
+        &.chip-learning {
+            background: var(--mat-sys-tertiary-container);
+            color: var(--mat-sys-on-tertiary-container);
+        }
+    }
+
+    .usable-by {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        margin: 10px 0 0;
+        color: var(--mat-sys-on-surface-variant);
+
+        mat-icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+    }
+}
+
+.quick-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--mat-sys-outline-variant);
+    border-top: 1px solid var(--mat-sys-outline-variant);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+    .quick-item {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 10px 16px;
+        background: var(--mat-sys-surface-container-high);
+
+        .value {
+            font: var(--mat-sys-title-small);
+        }
+    }
+}
+
+.section {
+    padding: 10px 16px 0;
+
+    .section-headline {
+        margin: 2px 0 0;
+    }
+
+    ul {
+        margin: 4px 0 0;
+        padding-left: 20px;
+
+        li {
+            margin: 2px 0;
+        }
+    }
+}
+
+.criticals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: auto;
+    padding: 16px;
+
+    .critical {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border-left: 3px solid transparent;
+    }
+
+    .critical-failure {
+        background: color-mix(in srgb, var(--mat-sys-error) 10%, transparent);
+        border-left-color: var(--mat-sys-error);
+
+        .label {
+            color: var(--mat-sys-error);
+        }
+    }
+
+    .critical-success {
+        background: color-mix(in srgb, var(--mat-sys-tertiary) 12%, transparent);
+        border-left-color: var(--mat-sys-tertiary);
+
+        .label {
+            color: var(--mat-sys-tertiary);
+        }
+    }
+
+    .critical-notes {
+        grid-column: 1 / -1;
+        background: var(--mat-sys-surface-container-high);
+        border-left-color: var(--mat-sys-outline);
+    }
+}
+
+// The sections have no bottom padding: keep some space before the end of the card when there are no criticals
+.section:last-of-type {
+    padding-bottom: 16px;
+}
+
+:host {
+    display: block;
+}
+
+.attack.compact {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+}
+
+@media (max-width: 480px) {
+    .quick-info,
+    .criticals {
+        grid-template-columns: 1fr;
+    }
+}

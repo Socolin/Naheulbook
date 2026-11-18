@@ -1,0 +1,97 @@
+<mat-card>
+  <mat-toolbar>
+    <span>Coups spéciaux</span>
+    <span class="count" [class.over-limit]="character.specialAttacks.length > character.specialAttackLimit"
+          matTooltip="Nombre de coups spéciaux connus / maximum (niveau + bonus du métier)">
+      {{ character.specialAttacks.length }} / {{ character.specialAttackLimit }}
+    </span>
+    <span class="toolbar-spacer"></span>
+    <button mat-icon-button (click)="openAddDialog()" aria-label="Apprendre un coup spécial">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-card-content>
+    @if (!character.specialAttacks.length) {
+      <p class="empty">Aucun coup spécial connu. Utilisez <mat-icon inline>add</mat-icon> pour en apprendre un.</p>
+    }
+
+    <div class="special-attacks">
+      @for (characterSpecialAttack of sortedSpecialAttacks; track characterSpecialAttack.specialAttack.id) {
+        @let attack = characterSpecialAttack.specialAttack;
+        @let currentStatus = status(characterSpecialAttack);
+        <div class="special-attack" [class.unavailable]="currentStatus === 'cooldown' || currentStatus === 'failure'">
+          <div class="row">
+            <button class="name" (click)="toggleDetails(attack.id)" [attr.aria-expanded]="expandedId === attack.id">
+              <mat-icon>{{ expandedId === attack.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+              <span>{{ attack.name }}</span>
+            </button>
+
+            <span class="status status-{{ currentStatus }}">{{ statusText(characterSpecialAttack) }}</span>
+
+            <div class="actions">
+              <button mat-stroked-button class="use-success"
+                      [disabled]="!characterSpecialAttack.isAvailable || pendingIds.has(attack.id)"
+                      (click)="use(characterSpecialAttack, true)">
+                <mat-icon>check</mat-icon>
+                Réussi
+              </button>
+              @if (characterSpecialAttack.canFail) {
+                <button mat-stroked-button class="use-failure"
+                        [disabled]="!characterSpecialAttack.isAvailable || pendingIds.has(attack.id)"
+                        (click)="use(characterSpecialAttack, false)">
+                  <mat-icon>close</mat-icon>
+                  Raté
+                </button>
+              }
+              <button mat-icon-button [matMenuTriggerFor]="specialAttackMenu"
+                      [matMenuTriggerData]="{characterSpecialAttack: characterSpecialAttack}"
+                      aria-label="Afficher le menu du coup spécial">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="meta">
+            @if (attack.data.test) {
+              <span>Épreuve : {{ attack.data.test.split('\n')[0] }}</span>
+            }
+            @if (characterSpecialAttack.successCount) {
+              <span>Réussi {{ characterSpecialAttack.successCount }} fois</span>
+            }
+            @if (attack.data.xp) {
+              <span>+{{ attack.data.xp }} XP par réussite (ajoutée automatiquement)</span>
+            }
+          </div>
+
+          @if (expandedId === attack.id) {
+            <special-attack-card [specialAttack]="attack" [compact]="true"></special-attack-card>
+          }
+        </div>
+      }
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-menu #specialAttackMenu>
+  <ng-template matMenuContent let-characterSpecialAttack="characterSpecialAttack">
+    @if (characterSpecialAttack.cooldowns.length) {
+      <button mat-menu-item (click)="resetCooldowns(characterSpecialAttack)">
+        <mat-icon>restart_alt</mat-icon>
+        Réinitialiser la recharge
+      </button>
+    }
+    <button mat-menu-item [matMenuTriggerFor]="deleteSpecialAttackMenu" [matMenuTriggerData]="{characterSpecialAttack: characterSpecialAttack}">
+      <mat-icon>delete</mat-icon>
+      Oublier ce coup spécial
+    </button>
+  </ng-template>
+</mat-menu>
+<mat-menu #deleteSpecialAttackMenu>
+  <ng-template matMenuContent let-characterSpecialAttack="characterSpecialAttack">
+    <button mat-menu-item (click)="remove(characterSpecialAttack)">
+      <mat-icon>check</mat-icon>
+      Confirmer
+    </button>
+  </ng-template>
+</mat-menu>

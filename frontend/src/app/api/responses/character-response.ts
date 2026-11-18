@@ -6,6 +6,7 @@ import {CharacterSex} from '../shared/enums';
 import {Guid} from '../shared/util';
 import {CharacterGroupResponse} from './character-group-response';
 import {CharacterAptitudeResponse} from './character-aptitude-response';
+import {CharacterSpecialAttackResponse} from './special-attack-response';
 
 export interface CharacterResponse {
     id: number;
@@ -32,6 +33,7 @@ export interface CharacterResponse {
     group?: CharacterGroupResponse;
     modifiers: IActiveStatsModifier[];
     aptitudes: CharacterAptitudeResponse[];
+    specialAttacks: CharacterSpecialAttackResponse[];
     specialities: SpecialityResponse[];
     items: ItemResponse[];
     invites: CharacterGroupInviteResponse[];

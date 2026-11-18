@@ -37,6 +37,8 @@ public class CharacterRepository(NaheulbookDbContext context) : Repository<Chara
             .ThenInclude(s => s.Modifiers)
             .Include(c => c.Aptitudes)
             .ThenInclude(i => i.Aptitude)
+            .Include(c => c.SpecialAttacks)
+            .ThenInclude(i => i.SpecialAttack)
             .Include(c => c.Jobs)
             .Include(c => c.Invites)
             .ThenInclude(i => i.Group)
@@ -135,6 +137,8 @@ public class CharacterRepository(NaheulbookDbContext context) : Repository<Chara
             .Include(x => x.Modifiers)
             .ThenInclude(x => x.Values)
             .Include(x => x.Items)
+            .Include(x => x.SpecialAttacks)
+            .ThenInclude(x => x.SpecialAttack)
             .Where(x => characterIds.Contains(x.Id) && x.GroupId == groupId)
             .ToListAsync(cancellationToken);
     }

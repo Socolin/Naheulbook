@@ -82,6 +82,33 @@ public class DurationUtil(
         }
 
         UpdateItemsDuration(character.Items, changes.OfType<IITemDurationChange>(), notificationSession);
+
+        foreach (var change in changes.OfType<SpecialAttackDurationChange>())
+            ApplyChangeOnCharacterSpecialAttack(character, change, notificationSession);
+    }
+
+    private void ApplyChangeOnCharacterSpecialAttack(CharacterEntity character, SpecialAttackDurationChange change, INotificationSession notificationSession)
+    {
+        var characterSpecialAttack = character.SpecialAttacks.FirstOrDefault(x => x.SpecialAttackId == change.SpecialAttackId);
+        if (characterSpecialAttack == null)
+            return;
+
+        var state = jsonUtil.DeserializeOrCreate<CharacterSpecialAttackData>(characterSpecialAttack.Data);
+        state.Cooldowns = change.Cooldowns.Where(IsCooldownRunning).ToList();
+        characterSpecialAttack.Data = jsonUtil.SerializeNonNull(state);
+
+        notificationSession.NotifyCharacterUpdateSpecialAttack(character.Id, characterSpecialAttack);
+    }
+
+    private static bool IsCooldownRunning(SpecialAttackCooldown cooldown)
+    {
+        return cooldown.DurationType switch
+        {
+            "time" => cooldown.CurrentTimeDuration > 0,
+            "combat" => cooldown.CurrentCombatCount > 0,
+            "lap" => cooldown.CurrentLapCount > 0,
+            _ => true,
+        };
     }
 
     private void ApplyChangeOnCharacterModifier(CharacterEntity character, ICollection<CharacterModifierEntity> modifiers, ModifierDurationChange change, INotificationSession notificationSession)
