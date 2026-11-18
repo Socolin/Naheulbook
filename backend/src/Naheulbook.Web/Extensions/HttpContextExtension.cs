@@ -1,4 +1,5 @@
 using Naheulbook.Core.Features.Shared;
+using Naheulbook.Shared.Extensions;
 using Naheulbook.Web.Exceptions;
 
 namespace Naheulbook.Web.Extensions;
@@ -14,19 +15,17 @@ public static class HttpContextExtension
 
     public static NaheulbookExecutionContext GetExecutionContext(this HttpContext context)
     {
-        if (!context.Items.ContainsKey(NaheulbookExecutionContextKey))
-        {
-            throw new HttpErrorException(StatusCodes.Status401Unauthorized, "Not authenticated");
-        }
+        if (context.Items.TryGetValue(NaheulbookExecutionContextKey, out var item))
+            return (NaheulbookExecutionContext)item.NotNull();
 
-        return (NaheulbookExecutionContext) context.Items[NaheulbookExecutionContextKey]!;
+        throw new HttpErrorException(StatusCodes.Status401Unauthorized, "Not authenticated");
     }
 
     public static OptionalNaheulbookExecutionContext GetIfExistsExecutionContext(this HttpContext context)
     {
-        if (!context.Items.ContainsKey(NaheulbookExecutionContextKey))
-            return new OptionalNaheulbookExecutionContext();
+        if (context.Items.TryGetValue(NaheulbookExecutionContextKey, out var item))
+            return new OptionalNaheulbookExecutionContext((NaheulbookExecutionContext?)item);
 
-        return new OptionalNaheulbookExecutionContext((NaheulbookExecutionContext?) context.Items[NaheulbookExecutionContextKey]);
+        return new OptionalNaheulbookExecutionContext();
     }
 }
