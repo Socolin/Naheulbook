@@ -521,9 +521,7 @@ public class CharacterServiceTests
 
         Received.InOrder(() =>
         {
-            // TODO: Change after rework of character history
-            characterModifier.CharacterId.Should().BeNull();
-            // _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.Remove(characterModifier);
+            _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.Remove(characterModifier);
             _unitOfWorkFactory.GetUnitOfWork().SaveChangesAsync();
         });
     }
@@ -533,14 +531,15 @@ public class CharacterServiceTests
     {
         const int characterId = 4;
         const int characterModifierId = 2;
+        var characterModifier = new CharacterModifierEntity();
         var characterHistoryEntry = new CharacterHistoryEntryEntity();
 
-        _characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId)
+        _characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifier)
             .Returns(characterHistoryEntry);
         _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(Arg.Any<int>())
             .Returns(new CharacterEntity());
         _unitOfWorkFactory.GetUnitOfWork().CharacterModifiers.GetByIdAndCharacterIdAsync(Arg.Any<int>(), Arg.Any<int>())
-            .Returns(new CharacterModifierEntity());
+            .Returns(characterModifier);
 
         await _service.DeleteModifiersAsync(new NaheulbookExecutionContext(), characterId, characterModifierId);
 

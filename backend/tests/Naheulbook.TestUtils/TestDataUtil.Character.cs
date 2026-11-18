@@ -132,7 +132,6 @@ public partial class TestDataUtil
             Date = new DateTime(2019, 10, 5, 5, 7, 8, DateTimeKind.Utc),
             CharacterId = character.Id,
             Action = RngUtil.GetRandomString("some-character-history-action"),
-            Info = RngUtil.GetRandomString("some-info"),
         };
 
         return SaveEntity(characterHistoryEntry, customizer);

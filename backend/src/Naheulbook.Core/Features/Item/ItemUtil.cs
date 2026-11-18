@@ -33,9 +33,9 @@ public class ItemUtil(
         if (previouslyEquipped != newlyEquipped && item.Character != null)
         {
             if (previouslyEquipped)
-                item.Character.AddHistoryEntry(characterHistoryUtil.CreateLogUnEquipItem(item.Character.Id, item.Id));
+                item.Character.AddHistoryEntry(characterHistoryUtil.CreateLogUnEquipItem(item.Character.Id, item));
             else
-                item.Character.AddHistoryEntry(characterHistoryUtil.CreateLogEquipItem(item.Character.Id, item.Id));
+                item.Character.AddHistoryEntry(characterHistoryUtil.CreateLogEquipItem(item.Character.Id, item));
         }
     }
 
@@ -55,6 +55,7 @@ public class ItemUtil(
             if (originalItem == null)
                 throw new ItemNotFoundException(itemId);
             var originalItemData = itemDataUtil.GetItemData(originalItem);
+            var sourceCharacterName = originalItem.CharacterId != null ? originalItem.Character?.Name : null;
 
             if (quantity == null || originalItemData.Quantity == null || quantity >= originalItemData.Quantity)
             {
@@ -64,7 +65,7 @@ public class ItemUtil(
                 {
                     notificationSession.NotifyItemDeleteItem(originalItem);
                     if (originalItem.CharacterId != null)
-                        originalItem.Character!.AddHistoryEntry(characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem));
+                        originalItem.Character!.AddHistoryEntry(characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem, targetCharacter.Name));
                 }
 
                 originalItem.Character = targetCharacter;
@@ -81,7 +82,7 @@ public class ItemUtil(
                 if (trigger == MoveItemTrigger.TakeItemFromLoot)
                     targetCharacter.AddHistoryEntry(characterHistoryUtil.CreateLogLootItem(targetCharacter.Id, takenItem));
                 else if (trigger == MoveItemTrigger.GiveItem)
-                    targetCharacter.AddHistoryEntry(characterHistoryUtil.CreateLogGivenItem(targetCharacter.Id, takenItem));
+                    targetCharacter.AddHistoryEntry(characterHistoryUtil.CreateLogGivenItem(targetCharacter.Id, takenItem, sourceCharacterName));
             }
             else
             {
@@ -100,8 +101,8 @@ public class ItemUtil(
                 else if (trigger == MoveItemTrigger.GiveItem)
                 {
                     if (originalItem.CharacterId != null)
-                        originalItem.Character!.AddHistoryEntry(characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, originalItem));
-                    targetCharacter.AddHistoryEntry(characterHistoryUtil.CreateLogGivenItem(targetCharacter.Id, takenItem));
+                        originalItem.Character!.AddHistoryEntry(characterHistoryUtil.CreateLogGiveItem(originalItem.CharacterId.Value, takenItem, targetCharacter.Name));
+                    targetCharacter.AddHistoryEntry(characterHistoryUtil.CreateLogGivenItem(targetCharacter.Id, takenItem, sourceCharacterName));
                     notificationSession.NotifyItemDataChanged(originalItem);
                 }
                 notificationSession.NotifyCharacterAddItem(targetCharacter.Id, splitItem, true);

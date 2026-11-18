@@ -262,10 +262,8 @@ public class CharacterService(
         if (characterModifier == null)
             throw new CharacterModifierNotFoundException(characterModifierId);
 
-        // TODO: workaround, will change after character history rework
-        characterModifier.CharacterId = null;
-        // uow.CharacterModifiers.Remove(characterModifier);
-        uow.CharacterHistoryEntries.Add(characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifierId));
+        uow.CharacterModifiers.Remove(characterModifier);
+        uow.CharacterHistoryEntries.Add(characterHistoryUtil.CreateLogRemoveModifier(characterId, characterModifier));
 
         await uow.SaveChangesAsync(DoNotInterrupt.Token);
 

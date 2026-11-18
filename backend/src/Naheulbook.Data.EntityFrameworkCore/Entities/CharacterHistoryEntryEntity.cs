@@ -11,25 +11,8 @@ public class CharacterHistoryEntryEntity : IHistoryEntry
     #warning convert to date time offset + utc
     public DateTime Date { get; set; }
     public bool Gm { get; set; }
-    public string? Info { get; set; }
-
-    public int? EffectId { get; set; }
-    private EffectEntity? _effect;
-    public EffectEntity? Effect { get => _effect.ThrowIfNotLoadedAndNotNull(EffectId); set => _effect = value; }
-
-    public int? CharacterModifierId { get; set; }
-    private CharacterModifierEntity? _characterModifier;
-    public CharacterModifierEntity? CharacterModifier { get => _characterModifier.ThrowIfNotLoadedAndNotNull(CharacterModifierId); set => _characterModifier = value; }
-
-    public int? ItemId { get; set; }
-    private ItemEntity? _item;
-    public ItemEntity? Item { get => _item.ThrowIfNotLoadedAndNotNull(ItemId); set => _item = value; }
 
     public int CharacterId { get; set; }
     private CharacterEntity? _character;
     public CharacterEntity Character { get => _character.ThrowIfNotLoaded(); set => _character = value; }
-
-    public Guid? AptitudeId { get; set; }
-    private AptitudeEntity? _aptitude;
-    public AptitudeEntity? Aptitude { get => _aptitude.ThrowIfNotLoadedAndNotNull(AptitudeId); set => _aptitude = value; }
 }

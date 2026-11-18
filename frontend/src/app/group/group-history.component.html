@@ -38,10 +38,10 @@
               <span>
                 @switch (log.action) {
                   @case ('EVENT_RP') {
-                    Event: {{log.info}}
+                    Event: {{log.data.text}}
                   }
                   @case ('TIME_CHANGE') {
-                    Avance temps: {{log.info}}
+                    Avance temps: {{log.data.info}}
                   }
                   @case ('DEBILIBEUK') {
                     Débilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}

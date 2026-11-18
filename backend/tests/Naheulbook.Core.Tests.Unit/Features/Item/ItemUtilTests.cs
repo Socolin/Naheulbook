@@ -56,9 +56,9 @@ public class ItemUtilTests
         const int itemId = 12;
         var item = new ItemEntity {Id = itemId, CharacterId = characterId, Character = new CharacterEntity {Id = characterId}};
 
-        _characterHistoryUtil.CreateLogEquipItem(characterId, itemId)
+        _characterHistoryUtil.CreateLogEquipItem(characterId, item)
             .Returns(new CharacterHistoryEntryEntity {Action = "equip"});
-        _characterHistoryUtil.CreateLogUnEquipItem(characterId, itemId)
+        _characterHistoryUtil.CreateLogUnEquipItem(characterId, item)
             .Returns(new CharacterHistoryEntryEntity {Action = "unEquip"});
         _itemDataUtil.IsItemEquipped(item)
             .Returns(wasEquipped, isNowEquipped);

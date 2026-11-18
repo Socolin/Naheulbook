@@ -5,119 +5,142 @@
       @for (log of loggroup.logs; track log) {
         <div>
           {{log.date | date:'shortTime'}}:
-          <!-- GROUP -->
-          <span>
-            @switch (log.action) {
-              @case ('EVENT_RP') {
-                {{log.info}}
-              }
-              @case ('MANKDEBOL') {
-                Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
-              }
-              @case ('DEBILIBEUK') {
-                Debilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
-              }
-              @case ('END_COMBAT') {
-                Fin de combat
-              }
-              @case ('START_COMBAT') {
-                Debut d'un combat
-              }
-              @case ('ADD_TIME') {
-                Modification du temps: {{log.data.offset | nhbkDuration}}
-              }
-              @case ('CHANGE_DATE') {
-                Modification de la date
-                @if (log.data.oldValue) {
-                  <div style="padding-left: 20px">Ancienne date: <date [date]="log.data.oldValue"></date></div>
+          @if (log.isGroup) {
+            <span>
+              @switch (log.action) {
+                @case ('EVENT_RP') {
+                  {{log.data.text}}
                 }
-                <div style="padding-left: 20px">Nouvelle date: <date [date]="log.data.newValue"></date></div>
+                @case ('MANKDEBOL') {
+                  Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
+                }
+                @case ('DEBILIBEUK') {
+                  Debilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
+                }
+                @case ('END_COMBAT') {
+                  Fin de combat
+                }
+                @case ('START_COMBAT') {
+                  Debut d'un combat
+                }
+                @case ('ADD_TIME') {
+                  Modification du temps: {{log.data.offset | nhbkDuration}}
+                }
+                @case ('CHANGE_DATE') {
+                  Modification de la date
+                  @if (log.data.oldValue) {
+                    <div style="padding-left: 20px">Ancienne date: <date [date]="log.data.oldValue"></date></div>
+                  }
+                  <div style="padding-left: 20px">Nouvelle date: <date [date]="log.data.newValue"></date></div>
+                }
+                @default {
+                  {{log.action}}
+                  @if (log.data.info) {
+                    : {{log.data.info}}
+                  }
+                }
               }
-              @default {
-                {{log.action}}: {{log.info}}
+            </span>
+          } @else {
+            <span>
+              @switch (log.action) {
+                @case ('EQUIP') {
+                  Equipe: {{log.data.item?.name}}
+                }
+                @case ('UNEQUIP') {
+                  Désquipe: {{log.data.item?.name}}
+                }
+                @case ('ADD_ITEM') {
+                  Ajout de l'objet: {{log.data.item?.name}}
+                }
+                @case ('READ_BOOK') {
+                  Lecture du livre: {{log.data.item?.name}}
+                }
+                @case ('DELETE_ITEM') {
+                  Suppression de l'objet: {{log.data.item?.name}}
+                }
+                @case ('GIVE_ITEM') {
+                  Don de l'objet: {{log.data.item?.name}}
+                  @if (log.data.characterName) {
+                    à {{log.data.characterName}}
+                  }
+                }
+                @case ('GIVEN_ITEM') {
+                  Objet reçu: {{log.data.item?.name}}
+                  @if (log.data.characterName) {
+                    de {{log.data.characterName}}
+                  }
+                }
+                @case ('APPLY_EFFECT') {
+                  Ajout de l'effet: {{log.data.effect?.name}}
+                }
+                @case ('ACTIVE_EFFECT') {
+                  Activation de l'effet: {{log.data.effect?.name}}
+                }
+                @case ('DISABLE_EFFECT') {
+                  Desactivation de l'effet: {{log.data.effect?.name}}
+                }
+                @case ('REMOVE_EFFECT') {
+                  Suppression de l'effet: {{log.data.effect?.name}}
+                }
+                @case ('ACTIVE_MODIFIER') {
+                  Activation du modificateur: {{log.data.modifier?.name}}
+                }
+                @case ('DISABLE_MODIFIER') {
+                  Desactivation du modificateur: {{log.data.modifier?.name}}
+                }
+                @case ('APPLY_MODIFIER') {
+                  Ajout du modificateur: {{log.data.modifier?.name}}
+                }
+                @case ('REMOVE_MODIFIER') {
+                  Suppression du modificateur: {{log.data.modifier?.name}}
+                }
+                @case ('ADD_APTITUDE') {
+                  Ajout de l'aptitude: {{log.data.aptitude?.name}}
+                }
+                @case ('REMOVE_APTITUDE') {
+                  Suppression de l'aptitude: {{log.data.aptitude?.name}}
+                }
+                @case ('CHANGE_QUANTITY') {
+                  Modification quantité: {{log.data.item?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
+                }
+                @case ('USE_CHARGE') {
+                  Utilisation de charge: {{log.data.item?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
+                }
+                @case ('ADD_XP') {
+                  @if (log.data.info) {
+                    Ajout d'experience: {{log.data.info}}
+                  } @else {
+                    Experience: {{log.data.oldValue}} -> {{log.data.newValue}}
+                  }
+                }
+                @case ('LEVEL_UP') {
+                  Level Up: {{log.data.level ?? log.data.info}}
+                }
+                @case ('USE_FATE_POINT') {
+                  Utilisation d'un point de destin
+                }
+                @case ('MODIFY_EV') {
+                  Modification EV: {{log.data.oldValue}} -> {{log.data.newValue}}
+                }
+                @case ('MODIFY_EA') {
+                  Modification EA: {{log.data.oldValue}} -> {{log.data.newValue}}
+                }
+                @case ('IDENTIFY') {
+                  Identification de l'objet: {{log.data.item?.name}}
+                }
+                @case ('LOOT_ITEM') {
+                  Loot de l'objet: {{log.data.item?.name}}
+                }
+                @default {
+                  {{log.action}}
+                  @if (log.data.info) {
+                    : {{log.data.info}}
+                  }
+                }
               }
-            }
-          </span>
-          <!-- Character -->
-          <span>
-            @switch (log.action) {
-              @case ('EQUIP') {
-                Equipe: {{log.item?.name}}
-              }
-              @case ('UNEQUIP') {
-                Désquipe: {{log.item?.name}}
-              }
-              @case ('ADD_ITEM') {
-                Ajout de l'objet: {{log.item?.name}}
-              }
-              @case ('READ_BOOK') {
-                Lecture du livre: {{log.item?.name}}
-              }
-              @case ('DELETE_ITEM') {
-                Suppression de l'objet: {{log.item?.name}}
-              }
-              @case ('APPLY_EFFECT') {
-                Ajout de l'effet: {{log.effect.name}}
-              }
-              @case ('ACTIVE_EFFECT') {
-                Activation de l'effet: {{log.effect.name}}
-              }
-              @case ('DISABLE_EFFECT') {
-                Desactivation de l'effet: {{log.effect.name}}
-              }
-              @case ('ACTIVE_MODIFIER') {
-                Activation du modificateur: {{log.modifier.name}}
-              }
-              @case ('DISABLE_MODIFIER') {
-                Desactivation du modificateur: {{log.modifier.name}}
-              }
-              @case ('APPLY_MODIFIER') {
-                Ajout du modificateur: {{log.modifier.name}}
-              }
-              @case ('REMOVE_MODIFIER') {
-                Suppression du modificateur: {{log.modifier.name}}
-              }
-              @case ('CHANGE_QUANTITY') {
-                Modification quantité: {{log.item?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
-              }
-              @case ('USE_CHARGE') {
-                Utilisation de charge: {{log.item?.name}} {{log.data.oldValue}} -> {{log.data.newValue}}
-              }
-              @case ('REMOVE_EFFECT') {
-                Suppression de l'effet: {{log.effect?.name}}
-              }
-              @case ('ADD_XP') {
-                Ajout d'experience: {{log.info}}
-              }
-              @case ('LEVEL_UP') {
-                Level Up: {{log.info}}
-              }
-              @case ('USE_FATE_POINT') {
-                Utilisation d'un point de destin
-              }
-              @case ('MODIFY_EV') {
-                Modification EV: {{log.data.oldValue}} -> {{log.data.newValue}}
-              }
-              @case ('MODIFY_EA') {
-                Modification EA: {{log.data.oldValue}} -> {{log.data.newValue}}
-              }
-              @case ('MANKDEBOL') {
-                Mankdebol: {{log.data.oldValue}} -> {{log.data.newValue}}
-              }
-              @case ('DEBILIBEUK') {
-                Debilibeuk: {{log.data.oldValue}} -> {{log.data.newValue}}
-              }
-              @case ('IDENTIFY') {
-                Identification de l'objet: {{log.item?.name}}
-              }
-              @case ('LOOT_ITEM') {
-                Loot de l'objet: {{log.item?.name}}
-              }
-              @default {
-                {{log.action}}
-              }
-            }
-          </span>
+            </span>
+          }
         </div>
       }
     </div>

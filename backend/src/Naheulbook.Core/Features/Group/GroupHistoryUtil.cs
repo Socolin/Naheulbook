@@ -11,7 +11,7 @@ public interface IGroupHistoryUtil
     GroupHistoryEntryEntity CreateLogChangeDebilibeuk(GroupEntity group, int? oldValue, int newValue);
     GroupHistoryEntryEntity CreateLogChangeDate(GroupEntity group, NhbkDate? oldValue, NhbkDate newValue);
     GroupHistoryEntryEntity CreateLogAddTime(GroupEntity group, NhbkDate date, NhbkDateOffset timeOffset);
-    GroupHistoryEntryEntity CreateLogEventRp(GroupEntity @group, bool isGm, string info);
+    GroupHistoryEntryEntity CreateLogEventRp(GroupEntity group, bool isGm, string text);
 }
 
 public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
@@ -94,7 +94,7 @@ public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
         };
     }
 
-    public GroupHistoryEntryEntity CreateLogEventRp(GroupEntity @group, bool isGm, string info)
+    public GroupHistoryEntryEntity CreateLogEventRp(GroupEntity group, bool isGm, string text)
     {
         return new GroupHistoryEntryEntity
         {
@@ -102,7 +102,7 @@ public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
             Action = EventRpActionName,
             Date = DateTime.Now,
             Gm = isGm,
-            Info = info,
+            Data = jsonUtil.Serialize(new {text}),
         };
     }
 }

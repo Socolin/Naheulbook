@@ -20,44 +20,14 @@ public class CharacterHistoryEntryEntityConfiguration : IEntityTypeConfiguration
             .HasColumnType("json");
         builder.Property(e => e.Date)
             .HasColumnName("date");
-        builder.Property(e => e.Info)
-            .HasColumnName("info");
         builder.Property(e => e.Action)
             .HasColumnName("action");
         builder.Property(e => e.Gm)
             .HasColumnName("gm");
-        builder.Property(e => e.EffectId)
-            .HasColumnName("effect");
-        builder.Property(e => e.ItemId)
-            .HasColumnName("item");
-        builder.Property(e => e.CharacterModifierId)
-            .HasColumnName("modifier");
-        builder.Property(e => e.AptitudeId)
-            .HasColumnName("aptitudeId");
 
         builder.HasOne(e => e.Character)
             .WithMany(g => g.HistoryEntries)
             .HasForeignKey(e => e.CharacterId)
             .HasConstraintName("FK_character_history_character_character");
-
-        builder.HasOne(e => e.CharacterModifier)
-            .WithMany()
-            .HasForeignKey(e => e.CharacterModifierId)
-            .HasConstraintName("FK_character_history_character_modifier_modifier");
-
-        builder.HasOne(e => e.Effect)
-            .WithMany()
-            .HasForeignKey(e => e.EffectId)
-            .HasConstraintName("FK_character_history_effect_effect");
-
-        builder.HasOne(e => e.Item)
-            .WithMany()
-            .HasForeignKey(e => e.ItemId)
-            .HasConstraintName("FK_character_history_item_item");
-
-        builder.HasOne(e => e.Aptitude)
-            .WithMany()
-            .HasForeignKey(e => e.AptitudeId)
-            .HasConstraintName("FK_character_aptitude");
     }
 }

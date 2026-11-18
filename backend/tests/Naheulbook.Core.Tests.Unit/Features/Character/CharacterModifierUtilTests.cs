@@ -72,7 +72,7 @@ public class CharacterModifierUtilTests
             Reusable = true,
         };
 
-        _characterHistoryUtil.CreateLogActiveModifier(characterId, characterModifierId)
+        _characterHistoryUtil.CreateLogActiveModifier(characterId, characterModifier)
             .Returns(characterHistoryEntry);
 
         _util.ToggleModifier(character, characterModifier);
@@ -94,7 +94,7 @@ public class CharacterModifierUtilTests
             Reusable = true,
         };
 
-        _characterHistoryUtil.CreateLogDisableModifier(characterId, characterModifierId)
+        _characterHistoryUtil.CreateLogDisableModifier(characterId, characterModifier)
             .Returns(characterHistoryEntry);
 
         _util.ToggleModifier(character, characterModifier);

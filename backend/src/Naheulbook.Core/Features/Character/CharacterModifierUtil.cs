@@ -21,11 +21,11 @@ public class CharacterModifierUtil(ICharacterHistoryUtil characterHistoryUtil) :
             modifier.CurrentLapCount = modifier.LapCount;
             modifier.CurrentTimeDuration = modifier.TimeDuration;
 
-            character.AddHistoryEntry(characterHistoryUtil.CreateLogActiveModifier(character.Id, modifier.Id));
+            character.AddHistoryEntry(characterHistoryUtil.CreateLogActiveModifier(character.Id, modifier));
         }
         else
         {
-            character.AddHistoryEntry(characterHistoryUtil.CreateLogDisableModifier(character.Id, modifier.Id));
+            character.AddHistoryEntry(characterHistoryUtil.CreateLogDisableModifier(character.Id, modifier));
         }
     }
 }

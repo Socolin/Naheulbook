@@ -63,7 +63,6 @@ public class GroupMapper : IGroupMapper
             Data = MapperHelpers.FromJson<JObject>(historyEntry.Data) ?? new JObject(),
             Date = historyEntry.Date.ToString("s"),
             Gm = historyEntry.Gm,
-            Info = historyEntry.Info,
         };
     }
 

@@ -443,7 +443,6 @@ Feature: Character
         "id": "!{GroupHistoryEntry.Id}",
         "date": "2020-10-05T05:07:08",
         "action": "${GroupHistoryEntry.Action}",
-        "info": "${GroupHistoryEntry.Info}",
         "gm": "!{GroupHistoryEntry.Gm}",
         "isGroup": true,
         "data": "!{GroupHistoryEntry.Data}"
@@ -452,7 +451,6 @@ Feature: Character
         "id": "!{CharacterHistoryEntry.Id}",
         "date": "2019-10-05T05:07:08",
         "action": "${CharacterHistoryEntry.Action}",
-        "info": "${CharacterHistoryEntry.Info}",
         "gm": "!{CharacterHistoryEntry.Gm}",
         "isGroup": false,
         "data": "!{CharacterHistoryEntry.Data}"

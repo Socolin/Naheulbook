@@ -233,13 +233,6 @@ public class CharacterMapperTests
             Data = """{"key":"value"}""",
             Date = new DateTime(2024, 3, 4, 5, 6, 7, DateTimeKind.Utc),
             Gm = true,
-            Info = "some-info",
-            ItemId = 4,
-            Item = new ItemEntity {Data = """{"name":"some-item-name"}"""},
-            CharacterModifierId = 5,
-            CharacterModifier = new CharacterModifierEntity {Name = "some-modifier-name"},
-            EffectId = 6,
-            Effect = new EffectEntity {Name = "some-effect-name"},
         };
 
         var actual = _mapper.ToResponse(historyEntry);
@@ -251,24 +244,17 @@ public class CharacterMapperTests
             Data = new JObject {["key"] = "value"},
             Date = "2024-03-04T05:06:07",
             Gm = true,
-            Info = "some-info",
-            Item = new CharacterHistoryEntryResponse.ItemHistoryResponse {Name = "some-item-name"},
-            Modifier = new CharacterHistoryEntryResponse.ModifierHistoryResponse {Name = "some-modifier-name"},
-            Effect = new CharacterHistoryEntryResponse.EffectHistoryResponse {Name = "some-effect-name"},
         });
     }
 
     [Test]
-    public void ToResponse_CharacterHistoryEntryWithoutRelatedEntitiesAndData_ReturnsNullRelatedEntitiesAndEmptyData()
+    public void ToResponse_CharacterHistoryEntryWithoutData_ReturnsEmptyData()
     {
         var historyEntry = new CharacterHistoryEntryEntity {Action = "some-action", Data = null};
 
         var actual = _mapper.ToResponse(historyEntry);
 
         actual.Data.Should().BeEquivalentTo(new JObject());
-        actual.Item.Should().BeNull();
-        actual.Modifier.Should().BeNull();
-        actual.Effect.Should().BeNull();
     }
 
     [Test]

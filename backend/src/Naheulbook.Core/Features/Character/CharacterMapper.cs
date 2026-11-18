@@ -128,16 +128,6 @@ public class CharacterMapper(
             Data = MapperHelpers.FromJson<JObject>(historyEntry.Data) ?? new JObject(),
             Date = historyEntry.Date.ToString("s"),
             Gm = historyEntry.Gm,
-            Info = historyEntry.Info,
-            Item = historyEntry.Item is { } item
-                ? new CharacterHistoryEntryResponse.ItemHistoryResponse {Name = MapperHelpers.ItemNameFromData(item.Data)}
-                : null,
-            Modifier = historyEntry.CharacterModifier is { } modifier
-                ? new CharacterHistoryEntryResponse.ModifierHistoryResponse {Name = modifier.Name}
-                : null,
-            Effect = historyEntry.Effect is { } effect
-                ? new CharacterHistoryEntryResponse.EffectHistoryResponse {Name = effect.Name}
-                : null,
         };
     }
 

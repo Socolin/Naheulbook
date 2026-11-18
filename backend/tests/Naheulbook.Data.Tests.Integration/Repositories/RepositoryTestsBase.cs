@@ -171,9 +171,6 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
             case EquivalencyOptions<CharacterHistoryEntryEntity> entityOptions:
                 equivalencyOptions = entityOptions
                     .Excluding(x => x.Character)
-                    .Excluding(x => x.CharacterModifier)
-                    .Excluding(x => x.Effect)
-                    .Excluding(x => x.Item)
                     .As<EquivalencyOptions<T>>();
                 break;
             case EquivalencyOptions<ItemEntity> entityOptions:

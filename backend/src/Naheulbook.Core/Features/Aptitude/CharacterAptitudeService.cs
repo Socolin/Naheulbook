@@ -79,7 +79,7 @@ public class CharacterAptitudeService(
             uow.CharacterAptitudes.Add(characterAptitude);
         }
 
-        character.AddHistoryEntry(characterHistoryUtil.CreateAddAptitude(characterId, aptitude.Id));
+        character.AddHistoryEntry(characterHistoryUtil.CreateAddAptitude(characterId, aptitude));
 
         notificationSession.NotifyCharacterAddAptitude(characterId, characterAptitude);
 
@@ -112,7 +112,7 @@ public class CharacterAptitudeService(
         characterAptitude.Count--;
         if (characterAptitude.Count <= 0)
             uow.CharacterAptitudes.Remove(characterAptitude);
-        character.AddHistoryEntry(characterHistoryUtil.CreateRemoveAptitude(characterId, aptitudeId));
+        character.AddHistoryEntry(characterHistoryUtil.CreateRemoveAptitude(characterId, characterAptitude.Aptitude));
 
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyCharacterRemoveAptitude(characterId, characterAptitude);

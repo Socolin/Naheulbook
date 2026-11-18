@@ -1,3 +1,4 @@
+using Naheulbook.Core.Features.Item;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Shared.Utils;
 
@@ -12,25 +13,28 @@ public interface ICharacterHistoryUtil
     CharacterHistoryEntryEntity CreateLogChangeSex(CharacterEntity character, string oldValue, string newValue);
     CharacterHistoryEntryEntity CreateLogChangeName(CharacterEntity character, string oldValue, string newValue);
     CharacterHistoryEntryEntity CreateLogAddItem(int characterId, ItemEntity item);
-    CharacterHistoryEntryEntity CreateLogEquipItem(int characterId, int itemId);
-    CharacterHistoryEntryEntity CreateLogUnEquipItem(int characterId, int itemId);
+    CharacterHistoryEntryEntity CreateLogEquipItem(int characterId, ItemEntity item);
+    CharacterHistoryEntryEntity CreateLogUnEquipItem(int characterId, ItemEntity item);
     CharacterHistoryEntryEntity CreateLogAddModifier(CharacterEntity character, CharacterModifierEntity characterModifier);
-    CharacterHistoryEntryEntity CreateLogRemoveModifier(int characterId, int characterModifierId);
-    CharacterHistoryEntryEntity CreateLogActiveModifier(int characterId, int characterModifierId);
-    CharacterHistoryEntryEntity CreateLogDisableModifier(int characterId, int characterModifierId);
-    CharacterHistoryEntryEntity CreateLogGiveItem(int characterId, ItemEntity item);
-    CharacterHistoryEntryEntity CreateLogGivenItem(int characterId, ItemEntity item);
+    CharacterHistoryEntryEntity CreateLogRemoveModifier(int characterId, CharacterModifierEntity characterModifier);
+    CharacterHistoryEntryEntity CreateLogActiveModifier(int characterId, CharacterModifierEntity characterModifier);
+    CharacterHistoryEntryEntity CreateLogDisableModifier(int characterId, CharacterModifierEntity characterModifier);
+    CharacterHistoryEntryEntity CreateLogGiveItem(int characterId, ItemEntity item, string? targetCharacterName);
+    CharacterHistoryEntryEntity CreateLogGivenItem(int characterId, ItemEntity item, string? sourceCharacterName);
     CharacterHistoryEntryEntity CreateLogLootItem(int characterId, ItemEntity item);
     CharacterHistoryEntryEntity CreateLogChangeItemQuantity(int characterId, ItemEntity item, int? oldValue, int? newValue);
     CharacterHistoryEntryEntity CreateLogUseItemCharge(int characterId, ItemEntity item, int? oldValue, int? newValue);
     CharacterHistoryEntryEntity CreateLogReadBook(int characterId, ItemEntity item);
     CharacterHistoryEntryEntity CreateLogIdentifyItem(int characterId, ItemEntity item);
     CharacterHistoryEntryEntity CreateLogLevelUp(int characterId, int characterLevel);
-    CharacterHistoryEntryEntity CreateAddAptitude(int characterId, Guid aptitudeId);
-    CharacterHistoryEntryEntity CreateRemoveAptitude(int characterId, Guid aptitudeId);
+    CharacterHistoryEntryEntity CreateAddAptitude(int characterId, AptitudeEntity aptitude);
+    CharacterHistoryEntryEntity CreateRemoveAptitude(int characterId, AptitudeEntity aptitude);
 }
 
-public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
+public class CharacterHistoryUtil(
+    IJsonUtil jsonUtil,
+    IItemDataUtil itemDataUtil
+) : ICharacterHistoryUtil
 {
     private const string AddItemActionName = "ADD_ITEM";
     private const string ChangeEvActionName = "MODIFY_EV";
@@ -129,29 +133,29 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = AddItemActionName,
             Date = DateTime.Now,
-            ItemId = item.Id,
+            Data = jsonUtil.Serialize(new {item = GetItemLogData(item)}),
         };
     }
 
-    public CharacterHistoryEntryEntity CreateLogEquipItem(int characterId, int itemId)
+    public CharacterHistoryEntryEntity CreateLogEquipItem(int characterId, ItemEntity item)
     {
         return new CharacterHistoryEntryEntity
         {
             CharacterId = characterId,
             Action = EquipActionName,
             Date = DateTime.Now,
-            ItemId = itemId,
+            Data = jsonUtil.Serialize(new {item = GetItemLogData(item)}),
         };
     }
 
-    public CharacterHistoryEntryEntity CreateLogUnEquipItem(int characterId, int itemId)
+    public CharacterHistoryEntryEntity CreateLogUnEquipItem(int characterId, ItemEntity item)
     {
         return new CharacterHistoryEntryEntity
         {
             CharacterId = characterId,
             Action = UnEquipActionName,
             Date = DateTime.Now,
-            ItemId = itemId,
+            Data = jsonUtil.Serialize(new {item = GetItemLogData(item)}),
         };
     }
 
@@ -162,62 +166,62 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
             CharacterId = character.Id,
             Action = ApplyModifierActionName,
             Date = DateTime.Now,
-            CharacterModifier = characterModifier,
+            Data = jsonUtil.Serialize(new {modifier = GetModifierLogData(characterModifier)}),
         };
     }
 
-    public CharacterHistoryEntryEntity CreateLogRemoveModifier(int characterId, int characterModifierId)
+    public CharacterHistoryEntryEntity CreateLogRemoveModifier(int characterId, CharacterModifierEntity characterModifier)
     {
         return new CharacterHistoryEntryEntity
         {
             CharacterId = characterId,
             Action = RemoveModifierActionName,
             Date = DateTime.Now,
-            CharacterModifierId = characterModifierId,
+            Data = jsonUtil.Serialize(new {modifier = GetModifierLogData(characterModifier)}),
         };
     }
 
-    public CharacterHistoryEntryEntity CreateLogActiveModifier(int characterId, int characterModifierId)
+    public CharacterHistoryEntryEntity CreateLogActiveModifier(int characterId, CharacterModifierEntity characterModifier)
     {
         return new CharacterHistoryEntryEntity
         {
             CharacterId = characterId,
             Action = ActiveModifierActionName,
             Date = DateTime.Now,
-            CharacterModifierId = characterModifierId,
+            Data = jsonUtil.Serialize(new {modifier = GetModifierLogData(characterModifier)}),
         };
     }
 
-    public CharacterHistoryEntryEntity CreateLogDisableModifier(int characterId, int characterModifierId)
+    public CharacterHistoryEntryEntity CreateLogDisableModifier(int characterId, CharacterModifierEntity characterModifier)
     {
         return new CharacterHistoryEntryEntity
         {
             CharacterId = characterId,
             Action = DisableModifierActionName,
             Date = DateTime.Now,
-            CharacterModifierId = characterModifierId,
+            Data = jsonUtil.Serialize(new {modifier = GetModifierLogData(characterModifier)}),
         };
     }
 
-    public CharacterHistoryEntryEntity CreateLogGiveItem(int characterId, ItemEntity item)
+    public CharacterHistoryEntryEntity CreateLogGiveItem(int characterId, ItemEntity item, string? targetCharacterName)
     {
         return new CharacterHistoryEntryEntity
         {
             CharacterId = characterId,
             Action = GiveItemActionName,
             Date = DateTime.Now,
-            ItemId = item.Id,
+            Data = jsonUtil.Serialize(new {item = GetItemLogData(item), characterName = targetCharacterName}),
         };
     }
 
-    public CharacterHistoryEntryEntity CreateLogGivenItem(int characterId, ItemEntity item)
+    public CharacterHistoryEntryEntity CreateLogGivenItem(int characterId, ItemEntity item, string? sourceCharacterName)
     {
         return new CharacterHistoryEntryEntity
         {
             CharacterId = characterId,
             Action = GivenItemActionName,
             Date = DateTime.Now,
-            Item = item,
+            Data = jsonUtil.Serialize(new {item = GetItemLogData(item), characterName = sourceCharacterName}),
         };
     }
 
@@ -228,7 +232,7 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = LootItemActionName,
             Date = DateTime.Now,
-            Item = item,
+            Data = jsonUtil.Serialize(new {item = GetItemLogData(item)}),
         };
     }
 
@@ -239,8 +243,7 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = ChangeQuantityActionName,
             Date = DateTime.Now,
-            ItemId = item.Id,
-            Data = jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {item = GetItemLogData(item), oldValue, newValue}),
         };
     }
 
@@ -251,8 +254,7 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = UseChargeActionName,
             Date = DateTime.Now,
-            ItemId = item.Id,
-            Data = jsonUtil.Serialize(new {oldValue, newValue}),
+            Data = jsonUtil.Serialize(new {item = GetItemLogData(item), oldValue, newValue}),
         };
     }
 
@@ -263,7 +265,7 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = ReadBookActionName,
             Date = DateTime.Now,
-            ItemId = item.Id,
+            Data = jsonUtil.Serialize(new {item = GetItemLogData(item)}),
         };
     }
 
@@ -274,7 +276,7 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = IdentifyActionName,
             Date = DateTime.Now,
-            ItemId = item.Id,
+            Data = jsonUtil.Serialize(new {item = GetItemLogData(item)}),
         };
     }
 
@@ -285,29 +287,50 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
             CharacterId = characterId,
             Action = LevelUpActionName,
             Date = DateTime.Now,
-            Info = level.ToString(),
+            Data = jsonUtil.Serialize(new {level}),
         };
     }
 
-    public CharacterHistoryEntryEntity CreateAddAptitude(int characterId, Guid aptitudeId)
+    public CharacterHistoryEntryEntity CreateAddAptitude(int characterId, AptitudeEntity aptitude)
     {
         return new CharacterHistoryEntryEntity
         {
             CharacterId = characterId,
             Action = AddAptitudeActionName,
             Date = DateTime.Now,
-            AptitudeId = aptitudeId,
+            Data = jsonUtil.Serialize(new {aptitude = GetAptitudeLogData(aptitude)}),
         };
     }
 
-    public CharacterHistoryEntryEntity CreateRemoveAptitude(int characterId, Guid aptitudeId)
+    public CharacterHistoryEntryEntity CreateRemoveAptitude(int characterId, AptitudeEntity aptitude)
     {
         return new CharacterHistoryEntryEntity
         {
             CharacterId = characterId,
             Action = RemoveAptitudeActionName,
             Date = DateTime.Now,
-            AptitudeId = aptitudeId,
+            Data = jsonUtil.Serialize(new {aptitude = GetAptitudeLogData(aptitude)}),
         };
+    }
+
+    private object GetItemLogData(ItemEntity item)
+    {
+        var itemData = itemDataUtil.GetItemData(item);
+        return new
+        {
+            name = itemData.Name,
+            quantity = itemData.Quantity,
+            icon = itemData.Icon,
+        };
+    }
+
+    private static object GetModifierLogData(CharacterModifierEntity characterModifier)
+    {
+        return new {name = characterModifier.Name};
+    }
+
+    private static object GetAptitudeLogData(AptitudeEntity aptitude)
+    {
+        return new {id = aptitude.Id, name = aptitude.Name};
     }
 }

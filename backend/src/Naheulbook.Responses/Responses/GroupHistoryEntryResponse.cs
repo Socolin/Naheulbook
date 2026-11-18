@@ -11,6 +11,5 @@ public class GroupHistoryEntryResponse : IHistoryEntryResponse
     public JObject? Data { get; set; }
     public string Date { get; set; } = null!;
     public bool Gm { get; set; }
-    public string? Info { get; set; }
     public bool IsGroup => true;
 }

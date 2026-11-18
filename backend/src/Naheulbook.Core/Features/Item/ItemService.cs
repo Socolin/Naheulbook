@@ -185,16 +185,7 @@ public class ItemService(
         var session = notificationSessionFactory.CreateSession();
         session.NotifyItemDeleteItem(item);
 
-        // TODO: Rework history to be able to delete items in all case
-        if (item.CharacterId.HasValue)
-        {
-            item.CharacterId = null;
-            item.ContainerId = null;
-        }
-        else
-        {
-            uow.Items.Remove(item);
-        }
+        uow.Items.Remove(item);
 
         await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await session.CommitAsync();

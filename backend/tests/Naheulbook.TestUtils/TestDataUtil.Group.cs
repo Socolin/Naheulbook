@@ -107,7 +107,6 @@ public partial class TestDataUtil
             Date = new DateTime(2020, 10, 5, 5, 7, 8, DateTimeKind.Utc),
             GroupId = group.Id,
             Action = RngUtil.GetRandomString("some-group-history-action"),
-            Info = RngUtil.GetRandomString("some-info"),
         };
 
         return SaveEntity(groupHistoryEntry, customizer);

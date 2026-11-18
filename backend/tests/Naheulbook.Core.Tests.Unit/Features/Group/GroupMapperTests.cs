@@ -117,7 +117,6 @@ public class GroupMapperTests
             Data = """{"key":"value"}""",
             Date = new DateTime(2024, 3, 4, 5, 6, 7, DateTimeKind.Utc),
             Gm = true,
-            Info = "some-info",
             GroupId = 4,
         };
 
@@ -130,7 +129,6 @@ public class GroupMapperTests
             Data = new JObject {["key"] = "value"},
             Date = "2024-03-04T05:06:07",
             Gm = true,
-            Info = "some-info",
         });
     }
 

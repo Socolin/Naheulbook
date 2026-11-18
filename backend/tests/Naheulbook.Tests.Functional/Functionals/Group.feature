@@ -106,7 +106,6 @@ Feature: Group
         "id": "!{GroupHistoryEntry.Id}",
         "date": "2020-10-05T05:07:08",
         "action": "${GroupHistoryEntry.Action}",
-        "info": "${GroupHistoryEntry.Info}",
         "gm": "!{GroupHistoryEntry.Gm}",
         "action": "${GroupHistoryEntry.Action}",
         "isGroup": true,
