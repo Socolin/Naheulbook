@@ -10,6 +10,8 @@ import {Router} from '@angular/router';
 if (environment.production) {
     Sentry.init({
         dsn: environment.sentryDsn,
+        // Same build is deployed on every server, so detect the environment from the hostname
+        environment: window.location.hostname.startsWith('staging.') ? 'staging' : 'production',
         beforeSend(event: Event, hint?: EventHint) {
             const processedEvent = {...event};
             if (hint && hint.originalException && hint.originalException instanceof Error) {

@@ -1,5 +1,5 @@
-﻿using Serilog;
-using Serilog.Extensions.Logging;
+﻿using Naheulbook.Web.Telemetry;
+using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Naheulbook.Web;
@@ -21,12 +21,10 @@ public static class Program
             .AddCommandLine(args)
             .Build();
 
-        // Forward Serilog events to the Microsoft.Extensions.Logging providers (OpenTelemetry)
-        var loggerProviders = new LoggerProviderCollection();
         var logger = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .WriteTo.Console(theme: AnsiConsoleTheme.Code)
-            .WriteTo.Providers(loggerProviders)
+            .WriteToNaheulbookOpenTelemetry(configuration)
             .CreateLogger();
 
         var server = new HostBuilder()
@@ -47,7 +45,7 @@ public static class Program
             })
             .UseContentRoot(Directory.GetCurrentDirectory())
             .UseEnvironment(environment)
-            .UseSerilog(logger, providers: loggerProviders)
+            .UseSerilog(logger, dispose: true)
             .Build();
 
         await server.StartAsync();
