@@ -47,6 +47,11 @@ public class NotificationPacketBuilder(IAptitudeMapper aptitudeMapper, ICharacte
         return BuildCharacterChange(character.Id, "update", new {Stat = "experience", Value = character.Experience});
     }
 
+    public INotificationPacket BuildCharacterChangeAptitudeGroup(CharacterEntity character)
+    {
+        return BuildCharacterChange(character.Id, "update", new {Stat = "aptitudeGroupId", Value = character.AptitudeGroupId});
+    }
+
     public INotificationPacket BuildCharacterChangeSex(CharacterEntity character)
     {
         return BuildCharacterChange(character.Id, "update", new {Stat = "sex", Value = character.Sex});

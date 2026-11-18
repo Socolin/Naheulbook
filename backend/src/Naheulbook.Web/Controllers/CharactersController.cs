@@ -524,6 +524,37 @@ public class CharactersController(
         }
     }
 
+    [HttpPut("{CharacterId:int:min(1)}/aptitudeGroup")]
+    public async Task<ActionResult> PutCharacterAptitudeGroupAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int characterId,
+        [FromBody] SetCharacterAptitudeGroupRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        try
+        {
+            await characterAptitudeService.SetCharacterAptitudeGroupAsync(executionContext, characterId, request, cancellationToken);
+            return NoContent();
+        }
+        catch (AptitudeGroupNotAvailableForOriginException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+        }
+        catch (AptitudeGroupAlreadyUsedException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (CharacterNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
     [HttpPut("{CharacterId:int:min(1)}/aptitudes/{AptitudeId:guid}")]
     public async Task<ActionResult<CharacterAddAptitudeResponse>> PatchCharacterAptitudeAsync(
         [FromServices] NaheulbookExecutionContext executionContext,

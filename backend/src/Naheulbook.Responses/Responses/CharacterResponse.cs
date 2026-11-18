@@ -29,6 +29,7 @@ public class CharacterResponse
     public string Name { get; set; } = null!;
     public string Sex { get; set; } = null!;
     public Guid OriginId { get; set; }
+    public Guid? AptitudeGroupId { get; set; }
     public bool IsNpc { get; set; }
 
     public int? Ev { get; set; }

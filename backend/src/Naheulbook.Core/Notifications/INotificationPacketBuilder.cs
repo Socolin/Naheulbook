@@ -12,6 +12,7 @@ public interface INotificationPacketBuilder
     INotificationPacket BuildCharacterChangeEa(CharacterEntity character);
     INotificationPacket BuildCharacterChangeFatePoint(CharacterEntity character);
     INotificationPacket BuildCharacterChangeExperience(CharacterEntity character);
+    INotificationPacket BuildCharacterChangeAptitudeGroup(CharacterEntity character);
     INotificationPacket BuildCharacterChangeSex(CharacterEntity character);
     INotificationPacket BuildCharacterChangeName(CharacterEntity character);
     INotificationPacket BuildCharacterChangeNotes(CharacterEntity character);

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable, ReplaySubject} from 'rxjs';
 import {AptitudeGroupResponse, AptitudeGroupsResponse, CharacterAddAptitudeResponse} from '../api/responses';
 import {HttpClient} from '@angular/common/http';
-import {AddCharacterAptitudeRequest, UpdateCharacterAptitudeRequest} from '../api/requests';
+import {AddCharacterAptitudeRequest, SetCharacterAptitudeGroupRequest, UpdateCharacterAptitudeRequest} from '../api/requests';
 
 @Injectable({providedIn: 'root'})
 export class AptitudeService {
@@ -71,5 +71,9 @@ export class AptitudeService {
         request: UpdateCharacterAptitudeRequest
     ) {
         return this.httpClient.put<CharacterAddAptitudeResponse>(`/api/v2/characters/${characterId}/aptitudes/${aptitudeId}`, request)
+    }
+
+    setCharacterAptitudeGroup(characterId: number, request: SetCharacterAptitudeGroupRequest) {
+        return this.httpClient.put<void>(`/api/v2/characters/${characterId}/aptitudeGroup`, request);
     }
 }

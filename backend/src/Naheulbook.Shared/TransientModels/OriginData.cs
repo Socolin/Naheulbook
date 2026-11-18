@@ -10,4 +10,6 @@ public class OriginData
     public int? MaxArmorPr { get; set; }
     public int? MaxLoad { get; set; }
     public int? SpeedModifier { get; set; }
+    public Dictionary<string, int>? CreationStatModifiers { get; set; }
+    public List<Guid>? AlternativeAptitudeGroupIds { get; set; }
 }

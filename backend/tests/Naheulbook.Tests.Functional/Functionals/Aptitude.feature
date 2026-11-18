@@ -106,3 +106,45 @@ Feature: Aptitude
 
     When performing a DELETE to the url "/api/v2/characters/${Character.Id}/aptitudes/${Aptitude.Id}" with the current jwt
     Then the response status code is 204
+  Scenario: A hybrid character can choose its aptitude table, before getting its first aptitude
+    Given a JWT for a user
+    And a hybrid origin which can choose its aptitude table, with an aptitude in the alternative table
+    And a character
+
+    When performing a PUT to the url "/api/v2/characters/${Character.Id}/aptitudeGroup" with the following json content and the current jwt
+    """json
+    {
+      "aptitudeGroupId": "${Aptitude.AptitudeGroupId}"
+    }
+    """
+    Then the response status code is 204
+
+    When performing a POST to the url "/api/v2/characters/${Character.Id}/aptitudes" with the following json content and the current jwt
+    """json
+    {
+      "aptitudeId": "${Aptitude.Id}"
+    }
+    """
+    Then the response status code is 200
+
+    When performing a PUT to the url "/api/v2/characters/${Character.Id}/aptitudeGroup" with the following json content and the current jwt
+    """json
+    {
+      "aptitudeGroupId": "${Origin.AptitudeGroupId}"
+    }
+    """
+    Then the response status code is 400
+
+  Scenario: A character cannot choose an aptitude table not allowed by its origin
+    Given a JWT for a user
+    And a character
+    And an aptitude group
+    And an aptitude
+
+    When performing a PUT to the url "/api/v2/characters/${Character.Id}/aptitudeGroup" with the following json content and the current jwt
+    """json
+    {
+      "aptitudeGroupId": "${Aptitude.AptitudeGroupId}"
+    }
+    """
+    Then the response status code is 400

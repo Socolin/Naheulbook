@@ -140,6 +140,7 @@ public class CharacterMapper(
         response.Name = character.Name;
         response.Sex = character.Sex;
         response.OriginId = character.OriginId;
+        response.AptitudeGroupId = character.AptitudeGroupId;
         response.IsNpc = character.IsNpc;
         response.Ev = character.Ev;
         response.Ea = character.Ea;

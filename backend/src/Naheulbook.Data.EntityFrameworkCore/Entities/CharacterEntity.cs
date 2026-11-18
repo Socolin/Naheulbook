@@ -37,6 +37,8 @@ public class CharacterEntity
     public UserEntity Owner { get => _owner.ThrowIfNotLoaded(); set => _owner = value; }
 
     public Guid OriginId { get; set; }
+
+    public Guid? AptitudeGroupId { get; set; }
     private OriginEntity? _origin;
     public OriginEntity Origin { get => _origin.ThrowIfNotLoaded(); set => _origin = value; }
 

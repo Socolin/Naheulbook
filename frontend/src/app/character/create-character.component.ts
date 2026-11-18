@@ -183,6 +183,7 @@ export class CreateCharacterComponent implements OnInit {
                 this.superBourrinValueAt = 0;
                 this.superBourrinValuePrd = 0;
                 this.initChangeAtPrd();
+                this.initOriginStatModifiers();
                 this.initAdd1AtOrPrd();
                 this.initRemoveAttOrPrdToIntOrCha();
                 this.initRemoveAttOrPrdToIntOrAd();
@@ -301,6 +302,7 @@ export class CreateCharacterComponent implements OnInit {
     public hasStatModification() {
         return this.hasSuperBourin()
             || this.hasMove1PointStat()
+            || this.hasOriginStatModifiers()
             || this.hasChangeAtPrd()
             || this.hasAdd1AtOrPrd()
             || this.hasRemoveAttOrPrdToIntOrCha()
@@ -466,6 +468,26 @@ export class CreateCharacterComponent implements OnInit {
     }
 
     /// END CHANGE_1_AT_PRD
+
+    /// ORIGIN_STAT_MODIFIERS (e.g. Homme-Bête versions: applied automatically after the roll)
+
+    hasOriginStatModifiers(): boolean {
+        return !!this.selectedOrigin?.data.creationStatModifiers;
+    }
+
+    get originStatModifiers(): { stat: string, value: number }[] {
+        return Object.entries(this.selectedOrigin?.data.creationStatModifiers ?? {}).map(([stat, value]) => ({stat, value}));
+    }
+
+    initOriginStatModifiers() {
+        if (!this.hasOriginStatModifiers() || !this.selectedOrigin) {
+            return;
+        }
+        this.modifiedStat['ORIGIN_STAT_MODIFIERS'] = {
+            stats: {...this.selectedOrigin.data.creationStatModifiers},
+            name: this.selectedOrigin.name,
+        };
+    }
 
     /// ADD_1_AT_OR_PRD
 

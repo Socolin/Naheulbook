@@ -1,4 +1,4 @@
-import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy, OnInit} from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -10,7 +10,8 @@ import {AptitudeService} from '../aptitude/aptitude.service';
 import {firstValueFrom} from 'rxjs';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {MatMenuModule} from '@angular/material/menu';
-import {CharacterAptitudeResponse} from '../api/responses';
+import {CharacterAptitudeResponse, SummaryAptitudeGroupResponse} from '../api/responses';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
 
 @Component({
     selector: 'aptitude-panel',
@@ -21,18 +22,41 @@ import {CharacterAptitudeResponse} from '../api/responses';
         MatToolbarModule,
         MatCheckbox,
         MatMenuModule,
+        MatButtonToggleGroup,
+        MatButtonToggle,
     ],
     templateUrl: './aptitude-panel.component.html',
     changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './aptitude-panel.component.scss'
 })
-export class AptitudePanelComponent {
+export class AptitudePanelComponent implements OnInit {
     @Input() character: Character;
+
+    aptitudeGroupNames: { [aptitudeGroupId: string]: string } = {};
 
     constructor(
         private readonly dialog: NhbkMatDialog,
         private readonly aptitudeService: AptitudeService,
     ) {
+    }
+
+    ngOnInit() {
+        this.aptitudeService.getAptitudeGroups().subscribe(response => {
+            this.aptitudeGroupNames = Object.fromEntries(response.aptitudeGroups.map((g: SummaryAptitudeGroupResponse) => [g.id, g.name]));
+        });
+    }
+
+    /**
+     * Hybrids can choose their aptitude table, until they get their first aptitude
+     */
+    get canChooseAptitudeGroup(): boolean {
+        return this.character.availableAptitudeGroupIds.length > 1;
+    }
+
+    changeAptitudeGroup(aptitudeGroupId: string) {
+        this.aptitudeService.setCharacterAptitudeGroup(this.character.id, {aptitudeGroupId}).subscribe(() => {
+            this.character.aptitudeGroupId = aptitudeGroupId;
+        });
     }
 
     openAddAptitudeDialog() {
@@ -41,7 +65,7 @@ export class AptitudePanelComponent {
             AddAptitudeDialogComponent,
             {
                 data: {
-                    aptitudeGroupId: this.character.origin.aptitudeGroupId
+                    aptitudeGroupId: this.character.effectiveAptitudeGroupId
                 }
             }
         );

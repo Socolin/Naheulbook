@@ -267,6 +267,7 @@ export class Character extends WsRegistrable {
     gmData: any;
     group?: CharacterGroupResponse;
     aptitudes: CharacterAptitudeResponse[];
+    aptitudeGroupId?: string;
     specialAttacks: CharacterSpecialAttack[] = [];
     invites: CharacterGroupInviteResponse[];
     isNpc: boolean;
@@ -1215,7 +1216,7 @@ export class Character extends WsRegistrable {
     }
 
     shouldNotifyStatChange(stat: string): boolean {
-        if (stat === 'notes') {
+        if (stat === 'notes' || stat === 'aptitudeGroupId') {
             return false;
         }
 
@@ -1503,6 +1504,20 @@ export class Character extends WsRegistrable {
             }
         }
         return changes;
+    }
+
+    /**
+     * Aptitude (APE) table used by the character: the one it chose (hybrids), or the one of its origin
+     */
+    get effectiveAptitudeGroupId(): string {
+        return this.aptitudeGroupId ?? this.origin.aptitudeGroupId;
+    }
+
+    /**
+     * Aptitude (APE) tables the character can choose from: the origin one and the alternatives (hybrids)
+     */
+    get availableAptitudeGroupIds(): string[] {
+        return [this.origin.aptitudeGroupId, ...(this.origin.data.alternativeAptitudeGroupIds ?? [])];
     }
 
     /**

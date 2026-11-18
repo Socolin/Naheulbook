@@ -14,6 +14,7 @@ export interface CharacterResponse {
     sex: CharacterSex;
     notes?: string;
     originId: Guid;
+    aptitudeGroupId?: Guid;
     isNpc: boolean;
     ev?: number;
     ea?: number;

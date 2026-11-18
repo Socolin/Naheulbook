@@ -4,6 +4,7 @@ using Naheulbook.Core.Notifications;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
 
 namespace Naheulbook.Core.Features.Aptitude;
@@ -24,6 +25,13 @@ public interface ICharacterAptitudeService
         CancellationToken cancellationToken = default
     );
 
+    Task SetCharacterAptitudeGroupAsync(
+        NaheulbookExecutionContext executionContext,
+        int characterId,
+        SetCharacterAptitudeGroupRequest request,
+        CancellationToken cancellationToken = default
+    );
+
     Task UpdateCharacterAptitudeAsync(
         NaheulbookExecutionContext executionContext,
         int characterId,
@@ -37,7 +45,8 @@ public class CharacterAptitudeService(
     IUnitOfWorkFactory unitOfWorkFactory,
     IAuthorizationUtil authorizationUtil,
     INotificationSessionFactory notificationSessionFactory,
-    ICharacterHistoryUtil characterHistoryUtil
+    ICharacterHistoryUtil characterHistoryUtil,
+    IJsonUtil jsonUtil
 ) : ICharacterAptitudeService
 {
     public async Task<CharacterAptitudeEntity> AddAptitudeAsync(
@@ -59,7 +68,7 @@ public class CharacterAptitudeService(
         if (aptitude == null)
             throw new AptitudeNotFoundException(request.AptitudeId);
 
-        if (aptitude.AptitudeGroupId != character.Origin.AptitudeGroupId)
+        if (aptitude.AptitudeGroupId != (character.AptitudeGroupId ?? character.Origin.AptitudeGroupId))
             throw new AptitudeNotAvailableForOriginException(request.AptitudeId);
 
         var notificationSession = notificationSessionFactory.CreateSession();
@@ -145,6 +154,38 @@ public class CharacterAptitudeService(
 
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyCharacterUpdateAptitude(characterId, characterAptitude);
+
+        await uow.SaveChangesAsync(DoNotInterrupt.Token);
+        await notificationSession.CommitAsync();
+    }
+
+    public async Task SetCharacterAptitudeGroupAsync(
+        NaheulbookExecutionContext executionContext,
+        int characterId,
+        SetCharacterAptitudeGroupRequest request,
+        CancellationToken cancellationToken = default
+    )
+    {
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+
+        var character = await uow.Characters.GetWithGroupWithOriginAsync(characterId, cancellationToken);
+        if (character == null)
+            throw new CharacterNotFoundException(characterId);
+
+        authorizationUtil.EnsureCharacterAccess(executionContext, character);
+
+        var originData = jsonUtil.DeserializeOrCreate<OriginData>(character.Origin.Data);
+        var allowedAptitudeGroupIds = (originData.AlternativeAptitudeGroupIds ?? []).Append(character.Origin.AptitudeGroupId);
+        if (!allowedAptitudeGroupIds.Contains(request.AptitudeGroupId))
+            throw new AptitudeGroupNotAvailableForOriginException(request.AptitudeGroupId);
+
+        if (await uow.CharacterAptitudes.HasAptitudesAsync(characterId, cancellationToken))
+            throw new AptitudeGroupAlreadyUsedException(characterId);
+
+        character.AptitudeGroupId = request.AptitudeGroupId;
+
+        var notificationSession = notificationSessionFactory.CreateSession();
+        notificationSession.NotifyCharacterChangeAptitudeGroup(character);
 
         await uow.SaveChangesAsync(DoNotInterrupt.Token);
         await notificationSession.CommitAsync();

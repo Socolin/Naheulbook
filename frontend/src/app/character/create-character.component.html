@@ -339,6 +339,17 @@
       }
     </mat-toolbar>
     <mat-card-content>
+      @if (hasOriginStatModifiers()) {
+        <div>
+          <h3 class="mat-h3">{{ selectedOrigin?.name }}</h3>
+          <p class="mat-body">
+            Modifications des caractéristiques appliquées automatiquement après le tirage :
+            @for (modifier of originStatModifiers; track modifier.stat; let last = $last) {
+              <strong>{{ modifier.stat }} {{ modifier.value > 0 ? '+' : '' }}{{ modifier.value }}</strong>@if (!last) {, }
+            }
+          </p>
+        </div>
+      }
       @if (hasSuperBourin()) {
         <div>
           <h3 class="mat-h3">SUPER-BOURRIN</h3>

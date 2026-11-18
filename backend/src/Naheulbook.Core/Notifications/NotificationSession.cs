@@ -12,6 +12,7 @@ public interface INotificationSession
     void NotifyCharacterChangeEa(CharacterEntity character);
     void NotifyCharacterChangeFatePoint(CharacterEntity character);
     void NotifyCharacterChangeExperience(CharacterEntity character);
+    void NotifyCharacterChangeAptitudeGroup(CharacterEntity character);
     void NotifyCharacterChangeSex(CharacterEntity character);
     void NotifyCharacterChangeName(CharacterEntity character);
     void NotifyCharacterChangeNotes(CharacterEntity character);
@@ -106,6 +107,11 @@ public class NotificationSession(
     public void NotifyCharacterChangeExperience(CharacterEntity character)
     {
         _packets.Add(packetBuilder.BuildCharacterChangeExperience(character));
+    }
+
+    public void NotifyCharacterChangeAptitudeGroup(CharacterEntity character)
+    {
+        _packets.Add(packetBuilder.BuildCharacterChangeAptitudeGroup(character));
     }
 
     public void NotifyCharacterChangeSex(CharacterEntity character)

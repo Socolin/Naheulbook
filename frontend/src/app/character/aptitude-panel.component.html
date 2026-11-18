@@ -6,6 +6,26 @@
       <mat-icon>add</mat-icon>
     </button>
   </mat-toolbar>
+  @if (canChooseAptitudeGroup) {
+    <mat-card-content class="aptitude-group-choice">
+      <span>Table d'APE :</span>
+      <mat-button-toggle-group [value]="character.effectiveAptitudeGroupId"
+                               [disabled]="character.aptitudes.length > 0"
+                               (change)="changeAptitudeGroup($event.value)"
+                               aria-label="Table d'APE">
+        @for (aptitudeGroupId of character.availableAptitudeGroupIds; track aptitudeGroupId) {
+          <mat-button-toggle [value]="aptitudeGroupId">{{ aptitudeGroupNames[aptitudeGroupId] ?? '…' }}</mat-button-toggle>
+        }
+      </mat-button-toggle-group>
+      <span class="hint">
+        @if (character.aptitudes.length > 0) {
+          Le choix est définitif une fois la première aptitude obtenue.
+        } @else {
+          En tant qu'hybride, vous choisissez la table utilisée, avant la première aptitude.
+        }
+      </span>
+    </mat-card-content>
+  }
   @if (character.aptitudes.length > 0) {
     <mat-card-content class="aptitudes-list">
       <p>

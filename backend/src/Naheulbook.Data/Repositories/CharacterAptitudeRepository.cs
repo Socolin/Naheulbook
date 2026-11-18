@@ -11,6 +11,8 @@ public interface ICharacterAptitudeRepository : IRepository<CharacterAptitudeEnt
         Guid aptitudeId,
         CancellationToken cancellationToken = default
     );
+
+    Task<bool> HasAptitudesAsync(int characterId, CancellationToken cancellationToken = default);
 }
 
 public class CharacterAptitudeRepository(NaheulbookDbContext naheulbookDbContext)
@@ -26,5 +28,10 @@ public class CharacterAptitudeRepository(NaheulbookDbContext naheulbookDbContext
             .Include(x => x.Aptitude)
             .Where(x => x.CharacterId == characterId && x.AptitudeId == aptitudeId)
             .SingleOrDefaultAsync(cancellationToken);
+    }
+
+    public Task<bool> HasAptitudesAsync(int characterId, CancellationToken cancellationToken = default)
+    {
+        return Context.CharacterAptitudes.AnyAsync(x => x.CharacterId == characterId, cancellationToken);
     }
 }

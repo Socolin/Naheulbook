@@ -6,4 +6,6 @@ export interface OriginData {
     readonly maxArmorPr?: number;
     readonly maxLoad?: number;
     readonly speedModifier?: number;
+    readonly creationStatModifiers?: { [statName: string]: number };
+    readonly alternativeAptitudeGroupIds?: string[];
 }
