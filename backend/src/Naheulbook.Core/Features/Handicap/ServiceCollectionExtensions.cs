@@ -13,5 +13,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IHandicapMapper, HandicapMapper>();
 
         services.AddSingleton<IHandicapService, HandicapService>();
+        services.AddSingleton<ICharacterHandicapService, CharacterHandicapService>();
     }
 }

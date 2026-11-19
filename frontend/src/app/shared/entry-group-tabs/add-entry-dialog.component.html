@@ -1,0 +1,81 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button mat-dialog-close aria-label="Fermer">
+    <mat-icon>close</mat-icon>
+  </button>
+  <span class="toolbar-title">{{ data.title }}</span>
+  <button mat-button (click)="valid()" [disabled]="selectedIds.size === 0">
+    AJOUTER @if (selectedIds.size) { ({{ selectedIds.size }}) }
+  </button>
+</mat-toolbar>
+
+<div class="content">
+  <div class="search-row">
+    <mat-form-field class="filter" appearance="outline" subscriptSizing="dynamic">
+      <mat-icon matPrefix>search</mat-icon>
+      <mat-label>Rechercher</mat-label>
+      <input matInput [(ngModel)]="filter" (ngModelChange)="updateFilter()" placeholder="Nom, origine, métier, effet…">
+    </mat-form-field>
+    @if (data.diceRollSides) {
+      <button mat-stroked-button (click)="rollDice()">
+        <mat-icon>casino</mat-icon>
+        Tirer au D{{ data.diceRollSides }}
+      </button>
+    }
+  </div>
+
+  @if (lastRoll) {
+    <p class="roll-result" role="status">
+      D{{ data.diceRollSides }} : <strong>{{ lastRoll.value }}</strong> →
+      @if (lastRoll.entry) {
+        {{ lastRoll.entry.name }} (sélectionné)
+      } @else {
+        déjà obtenu, relancez.
+      }
+    </p>
+  }
+
+  @if (!hasVisibleCandidates) {
+    <p class="empty-state">
+      @if (filter) {
+        Aucun résultat pour « {{ filter }} ».
+      } @else {
+        Rien d'autre à ajouter.
+      }
+    </p>
+  }
+
+  @for (candidateGroup of groups; track candidateGroup.group.id) {
+    @if (candidateGroup.visibleCandidates.length) {
+      @if (groups.length > 1) {
+        <h3 class="group-name">{{ candidateGroup.group.name }}</h3>
+      }
+      <div class="candidates">
+        @for (entry of candidateGroup.visibleCandidates; track entry.id) {
+          <label class="candidate" [class.selected]="selectedIds.has(entry.id)">
+            <mat-checkbox [checked]="selectedIds.has(entry.id)" (change)="toggleSelection(entry.id)"></mat-checkbox>
+            <div class="candidate-info">
+              <div class="candidate-title">
+                @if (entry.badge) {
+                  <span class="badge">{{ entry.badge }}</span>
+                }
+                <span class="candidate-name">{{ entry.name }}</span>
+                @if (entry.restriction) {
+                  <span class="chip">{{ entry.restriction }}</span>
+                }
+                @if (entry.requiredLevel) {
+                  <span class="chip">Niveau {{ entry.requiredLevel }}+</span>
+                }
+              </div>
+              @for (line of entry.effectLines; track $index) {
+                <div class="candidate-effect">{{ line }}</div>
+              }
+              @for (warning of data.warnings[entry.id] ?? []; track warning) {
+                <div class="warning"><mat-icon inline>warning</mat-icon> {{ warning }}</div>
+              }
+            </div>
+          </label>
+        }
+      </div>
+    }
+  }
+</div>

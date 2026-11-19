@@ -35,6 +35,12 @@ public interface INotificationSession
     void NotifyCharacterAddSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack);
     void NotifyCharacterRemoveSpecialAttack(int characterId, Guid specialAttackId);
     void NotifyCharacterUpdateSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack);
+    void NotifyCharacterAddTalent(int characterId, TalentEntity talent);
+    void NotifyCharacterRemoveTalent(int characterId, Guid talentId);
+    void NotifyCharacterAddMastery(int characterId, MasteryEntity mastery);
+    void NotifyCharacterRemoveMastery(int characterId, Guid masteryId);
+    void NotifyCharacterAddHandicap(int characterId, HandicapEntity handicap);
+    void NotifyCharacterRemoveHandicap(int characterId, Guid handicapId);
 
     void NotifyCharacterGmChangeColor(CharacterEntity character);
     void NotifyCharacterGmChangeTarget(CharacterEntity character, TargetRequest requestTarget);
@@ -185,6 +191,36 @@ public class NotificationSession(
     public void NotifyCharacterUpdateSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack)
     {
         _packets.Add(packetBuilder.BuildCharacterUpdateSpecialAttack(characterId, characterSpecialAttack));
+    }
+
+    public void NotifyCharacterAddTalent(int characterId, TalentEntity talent)
+    {
+        _packets.Add(packetBuilder.BuildCharacterAddTalent(characterId, talent));
+    }
+
+    public void NotifyCharacterRemoveTalent(int characterId, Guid talentId)
+    {
+        _packets.Add(packetBuilder.BuildCharacterRemoveTalent(characterId, talentId));
+    }
+
+    public void NotifyCharacterAddMastery(int characterId, MasteryEntity mastery)
+    {
+        _packets.Add(packetBuilder.BuildCharacterAddMastery(characterId, mastery));
+    }
+
+    public void NotifyCharacterRemoveMastery(int characterId, Guid masteryId)
+    {
+        _packets.Add(packetBuilder.BuildCharacterRemoveMastery(characterId, masteryId));
+    }
+
+    public void NotifyCharacterAddHandicap(int characterId, HandicapEntity handicap)
+    {
+        _packets.Add(packetBuilder.BuildCharacterAddHandicap(characterId, handicap));
+    }
+
+    public void NotifyCharacterRemoveHandicap(int characterId, Guid handicapId)
+    {
+        _packets.Add(packetBuilder.BuildCharacterRemoveHandicap(characterId, handicapId));
     }
 
     public void NotifyCharacterGmChangeColor(CharacterEntity character)

@@ -29,7 +29,15 @@ public class CharacterRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
             .AddGroupInvite(out var groupInvite, true)
             .AddSpecialAttackGroup()
             .AddSpecialAttack(out var specialAttack)
-            .AddCharacterSpecialAttack(out var characterSpecialAttack);
+            .AddCharacterSpecialAttack(out var characterSpecialAttack)
+            .AddTalentGroup()
+            .AddTalent(out var talent)
+            .AddCharacterTalent(out var characterTalent)
+            .AddMasteryGroup()
+            .AddMastery(out var mastery)
+            .AddCharacterMastery(out var characterMastery)
+            .AddHandicap(out var handicap)
+            .AddCharacterHandicap(out var characterHandicap);
 
         var actualCharacter = await _characterRepository.GetWithAllDataAsync(character.Id);
 
@@ -43,6 +51,12 @@ public class CharacterRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
         AssertEntitiesAreLoaded(actualCharacter.Aptitudes.Select(x => x.Aptitude), TestDataUtil.GetAll<AptitudeEntity>());
         AssertEntitiesAreLoaded(actualCharacter.SpecialAttacks, [characterSpecialAttack]);
         AssertEntitiesAreLoaded(actualCharacter.SpecialAttacks.Select(x => x.SpecialAttack), [specialAttack]);
+        AssertEntitiesAreLoaded(actualCharacter.Talents, [characterTalent]);
+        AssertEntitiesAreLoaded(actualCharacter.Talents.Select(x => x.Talent), [talent]);
+        AssertEntitiesAreLoaded(actualCharacter.Masteries, [characterMastery]);
+        AssertEntitiesAreLoaded(actualCharacter.Masteries.Select(x => x.Mastery), [mastery]);
+        AssertEntitiesAreLoaded(actualCharacter.Handicaps, [characterHandicap]);
+        AssertEntitiesAreLoaded(actualCharacter.Handicaps.Select(x => x.Handicap), [handicap]);
     }
 
     #endregion

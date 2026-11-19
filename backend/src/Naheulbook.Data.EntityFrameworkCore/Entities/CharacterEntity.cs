@@ -60,6 +60,15 @@ public class CharacterEntity
     private ICollection<CharacterSpecialAttackEntity>? _specialAttacks;
     public ICollection<CharacterSpecialAttackEntity> SpecialAttacks { get => _specialAttacks.ThrowIfNotLoaded(); set => _specialAttacks = value; }
 
+    private ICollection<CharacterTalentEntity>? _talents;
+    public ICollection<CharacterTalentEntity> Talents { get => _talents.ThrowIfNotLoaded(); set => _talents = value; }
+
+    private ICollection<CharacterMasteryEntity>? _masteries;
+    public ICollection<CharacterMasteryEntity> Masteries { get => _masteries.ThrowIfNotLoaded(); set => _masteries = value; }
+
+    private ICollection<CharacterHandicapEntity>? _handicaps;
+    public ICollection<CharacterHandicapEntity> Handicaps { get => _handicaps.ThrowIfNotLoaded(); set => _handicaps = value; }
+
     private ICollection<CharacterJobEntity>? _jobs;
     public ICollection<CharacterJobEntity> Jobs { get => _jobs.ThrowIfNotLoaded(); set => _jobs = value; }
 

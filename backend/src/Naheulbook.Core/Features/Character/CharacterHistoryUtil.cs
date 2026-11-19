@@ -32,6 +32,12 @@ public interface ICharacterHistoryUtil
     CharacterHistoryEntryEntity CreateAddSpecialAttack(int characterId, SpecialAttackEntity specialAttack);
     CharacterHistoryEntryEntity CreateRemoveSpecialAttack(int characterId, SpecialAttackEntity specialAttack);
     CharacterHistoryEntryEntity CreateUseSpecialAttack(int characterId, SpecialAttackEntity specialAttack, bool success);
+    CharacterHistoryEntryEntity CreateAddTalent(int characterId, TalentEntity talent);
+    CharacterHistoryEntryEntity CreateRemoveTalent(int characterId, TalentEntity talent);
+    CharacterHistoryEntryEntity CreateAddMastery(int characterId, MasteryEntity mastery);
+    CharacterHistoryEntryEntity CreateRemoveMastery(int characterId, MasteryEntity mastery);
+    CharacterHistoryEntryEntity CreateAddHandicap(int characterId, HandicapEntity handicap);
+    CharacterHistoryEntryEntity CreateRemoveHandicap(int characterId, HandicapEntity handicap);
 }
 
 public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
@@ -62,6 +68,12 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
     private const string AddSpecialAttackActionName = "ADD_SPECIAL_ATTACK";
     private const string RemoveSpecialAttackActionName = "REMOVE_SPECIAL_ATTACK";
     private const string UseSpecialAttackActionName = "USE_SPECIAL_ATTACK";
+    private const string AddTalentActionName = "ADD_TALENT";
+    private const string RemoveTalentActionName = "REMOVE_TALENT";
+    private const string AddMasteryActionName = "ADD_MASTERY";
+    private const string RemoveMasteryActionName = "REMOVE_MASTERY";
+    private const string AddHandicapActionName = "ADD_HANDICAP";
+    private const string RemoveHandicapActionName = "REMOVE_HANDICAP";
 
     public CharacterHistoryEntryEntity CreateLogChangeEv(CharacterEntity character, int? oldValue, int? newValue)
     {
@@ -346,6 +358,72 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
             Action = UseSpecialAttackActionName,
             Date = DateTime.UtcNow,
             Data = jsonUtil.Serialize(new {specialAttack = GetSpecialAttackLogData(specialAttack), success}),
+        };
+    }
+
+    public CharacterHistoryEntryEntity CreateAddTalent(int characterId, TalentEntity talent)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = AddTalentActionName,
+            Date = DateTime.UtcNow,
+            Data = jsonUtil.Serialize(new {talent = new {id = talent.Id, name = talent.Name}}),
+        };
+    }
+
+    public CharacterHistoryEntryEntity CreateRemoveTalent(int characterId, TalentEntity talent)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = RemoveTalentActionName,
+            Date = DateTime.UtcNow,
+            Data = jsonUtil.Serialize(new {talent = new {id = talent.Id, name = talent.Name}}),
+        };
+    }
+
+    public CharacterHistoryEntryEntity CreateAddMastery(int characterId, MasteryEntity mastery)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = AddMasteryActionName,
+            Date = DateTime.UtcNow,
+            Data = jsonUtil.Serialize(new {mastery = new {id = mastery.Id, name = mastery.Name}}),
+        };
+    }
+
+    public CharacterHistoryEntryEntity CreateRemoveMastery(int characterId, MasteryEntity mastery)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = RemoveMasteryActionName,
+            Date = DateTime.UtcNow,
+            Data = jsonUtil.Serialize(new {mastery = new {id = mastery.Id, name = mastery.Name}}),
+        };
+    }
+
+    public CharacterHistoryEntryEntity CreateAddHandicap(int characterId, HandicapEntity handicap)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = AddHandicapActionName,
+            Date = DateTime.UtcNow,
+            Data = jsonUtil.Serialize(new {handicap = new {id = handicap.Id, name = handicap.Name}}),
+        };
+    }
+
+    public CharacterHistoryEntryEntity CreateRemoveHandicap(int characterId, HandicapEntity handicap)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = RemoveHandicapActionName,
+            Date = DateTime.UtcNow,
+            Data = jsonUtil.Serialize(new {handicap = new {id = handicap.Id, name = handicap.Name}}),
         };
     }
 

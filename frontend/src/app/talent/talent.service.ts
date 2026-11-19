@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, ReplaySubject} from 'rxjs';
-import {TalentGroupResponse, TalentGroupsResponse} from '../api/responses';
+import {TalentGroupResponse, TalentGroupsResponse, TalentResponse} from '../api/responses';
+import {AddCharacterTalentRequest} from '../api/requests';
 
 @Injectable({providedIn: 'root'})
 export class TalentService {
@@ -27,5 +28,13 @@ export class TalentService {
             });
         }
         return this.cache;
+    }
+
+    addCharacterTalent(characterId: number, request: AddCharacterTalentRequest): Observable<TalentResponse> {
+        return this.httpClient.post<TalentResponse>(`/api/v2/characters/${characterId}/talents`, request);
+    }
+
+    removeCharacterTalent(characterId: number, talentId: string): Observable<void> {
+        return this.httpClient.delete<void>(`/api/v2/characters/${characterId}/talents/${talentId}`);
     }
 }

@@ -10,6 +10,7 @@ import {AptitudeService} from '../aptitude/aptitude.service';
 import {firstValueFrom} from 'rxjs';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatTooltip} from '@angular/material/tooltip';
 import {CharacterAptitudeResponse, SummaryAptitudeGroupResponse} from '../api/responses';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
 
@@ -24,6 +25,7 @@ import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-to
         MatMenuModule,
         MatButtonToggleGroup,
         MatButtonToggle,
+        MatTooltip,
     ],
     templateUrl: './aptitude-panel.component.html',
     changeDetection: ChangeDetectionStrategy.Eager,

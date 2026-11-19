@@ -2,11 +2,14 @@ using Naheulbook.Core.Features.Aptitude;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Fight;
 using Naheulbook.Core.Features.Group;
+using Naheulbook.Core.Features.Handicap;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Loot;
+using Naheulbook.Core.Features.Mastery;
 using Naheulbook.Core.Features.Merchant;
 using Naheulbook.Core.Features.Monster;
 using Naheulbook.Core.Features.SpecialAttack;
+using Naheulbook.Core.Features.Talent;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
@@ -16,7 +19,7 @@ using Naheulbook.Web.Services;
 
 namespace Naheulbook.Web.Notifications;
 
-public class NotificationPacketBuilder(IAptitudeMapper aptitudeMapper, ICharacterMapper characterMapper, ICharacterModifierMapper characterModifierMapper, IFightMapper fightMapper, IGroupMapper groupMapper, IItemMapper itemMapper, ILootMapper lootMapper, IMerchantMapper merchantMapper, IMonsterMapper monsterMapper, ISpecialAttackMapper specialAttackMapper, IHubGroupUtil hubGroupUtil) : INotificationPacketBuilder
+public class NotificationPacketBuilder(IAptitudeMapper aptitudeMapper, ICharacterMapper characterMapper, ICharacterModifierMapper characterModifierMapper, IFightMapper fightMapper, IGroupMapper groupMapper, IItemMapper itemMapper, ILootMapper lootMapper, IMerchantMapper merchantMapper, IMonsterMapper monsterMapper, ISpecialAttackMapper specialAttackMapper, ITalentMapper talentMapper, IMasteryMapper masteryMapper, IHandicapMapper handicapMapper, IHubGroupUtil hubGroupUtil) : INotificationPacketBuilder
 {
     private enum ElementType
     {
@@ -115,6 +118,36 @@ public class NotificationPacketBuilder(IAptitudeMapper aptitudeMapper, ICharacte
     public INotificationPacket BuildCharacterUpdateSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack)
     {
         return BuildCharacterChange(characterId, "updateSpecialAttack", specialAttackMapper.ToResponse(characterSpecialAttack));
+    }
+
+    public INotificationPacket BuildCharacterAddTalent(int characterId, TalentEntity talent)
+    {
+        return BuildCharacterChange(characterId, "addTalent", talentMapper.ToResponse(talent));
+    }
+
+    public INotificationPacket BuildCharacterRemoveTalent(int characterId, Guid talentId)
+    {
+        return BuildCharacterChange(characterId, "removeTalent", new {TalentId = talentId});
+    }
+
+    public INotificationPacket BuildCharacterAddMastery(int characterId, MasteryEntity mastery)
+    {
+        return BuildCharacterChange(characterId, "addMastery", masteryMapper.ToResponse(mastery));
+    }
+
+    public INotificationPacket BuildCharacterRemoveMastery(int characterId, Guid masteryId)
+    {
+        return BuildCharacterChange(characterId, "removeMastery", new {MasteryId = masteryId});
+    }
+
+    public INotificationPacket BuildCharacterAddHandicap(int characterId, HandicapEntity handicap)
+    {
+        return BuildCharacterChange(characterId, "addHandicap", handicapMapper.ToResponse(handicap));
+    }
+
+    public INotificationPacket BuildCharacterRemoveHandicap(int characterId, Guid handicapId)
+    {
+        return BuildCharacterChange(characterId, "removeHandicap", new {HandicapId = handicapId});
     }
 
     public INotificationPacket BuildCharacterChangeColor(CharacterEntity character)

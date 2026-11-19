@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, ReplaySubject} from 'rxjs';
-import {MasteryGroupResponse, MasteryGroupsResponse} from '../api/responses';
+import {MasteryGroupResponse, MasteryGroupsResponse, MasteryResponse} from '../api/responses';
+import {AddCharacterMasteryRequest} from '../api/requests';
 
 @Injectable({providedIn: 'root'})
 export class MasteryService {
@@ -27,5 +28,13 @@ export class MasteryService {
             });
         }
         return this.cache;
+    }
+
+    addCharacterMastery(characterId: number, request: AddCharacterMasteryRequest): Observable<MasteryResponse> {
+        return this.httpClient.post<MasteryResponse>(`/api/v2/characters/${characterId}/masteries`, request);
+    }
+
+    removeCharacterMastery(characterId: number, masteryId: string): Observable<void> {
+        return this.httpClient.delete<void>(`/api/v2/characters/${characterId}/masteries/${masteryId}`);
     }
 }

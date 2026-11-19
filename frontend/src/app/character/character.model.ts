@@ -22,7 +22,10 @@ import {
     CharacterLevelUpResponse,
     CharacterResponse,
     CharacterSpecialAttackResponse,
-    ItemPartialResponse
+    HandicapResponse,
+    ItemPartialResponse,
+    MasteryResponse,
+    TalentResponse
 } from '../api/responses';
 import {CharacterSex} from '../api/shared/enums';
 import {Guid} from '../api/shared/util';
@@ -269,6 +272,9 @@ export class Character extends WsRegistrable {
     aptitudes: CharacterAptitudeResponse[];
     aptitudeGroupId?: string;
     specialAttacks: CharacterSpecialAttack[] = [];
+    talents: TalentResponse[] = [];
+    masteries: MasteryResponse[] = [];
+    handicaps: HandicapResponse[] = [];
     invites: CharacterGroupInviteResponse[];
     isNpc: boolean;
 
@@ -295,6 +301,9 @@ export class Character extends WsRegistrable {
             items: [],
             aptitudes: response.aptitudes,
             specialAttacks: (response.specialAttacks ?? []).map(CharacterSpecialAttack.fromResponse),
+            talents: response.talents ?? [],
+            masteries: response.masteries ?? [],
+            handicaps: response.handicaps ?? [],
             modifiers: ActiveStatsModifier.modifiersFromJson(response.modifiers),
             specialities: Speciality.fromResponses(response.specialities)
         });
@@ -1544,6 +1553,36 @@ export class Character extends WsRegistrable {
         this.specialAttacks = this.specialAttacks.filter(x => x.specialAttack.id !== specialAttackId);
     }
 
+    addTalent(talent: TalentResponse) {
+        if (!this.talents.some(x => x.id === talent.id)) {
+            this.talents = [...this.talents, talent];
+        }
+    }
+
+    removeTalent(talentId: string) {
+        this.talents = this.talents.filter(x => x.id !== talentId);
+    }
+
+    addMastery(mastery: MasteryResponse) {
+        if (!this.masteries.some(x => x.id === mastery.id)) {
+            this.masteries = [...this.masteries, mastery];
+        }
+    }
+
+    removeMastery(masteryId: string) {
+        this.masteries = this.masteries.filter(x => x.id !== masteryId);
+    }
+
+    addHandicap(handicap: HandicapResponse) {
+        if (!this.handicaps.some(x => x.id === handicap.id)) {
+            this.handicaps = [...this.handicaps, handicap];
+        }
+    }
+
+    removeHandicap(handicapId: string) {
+        this.handicaps = this.handicaps.filter(x => x.id !== handicapId);
+    }
+
     updateLapDecrement(data: { deleted: Fighter; previous: Fighter; next: Fighter }): DurationChange[] {
         let changes: DurationChange[] = [];
 
@@ -1665,6 +1704,30 @@ export class Character extends WsRegistrable {
             }
             case 'removeSpecialAttack': {
                 this.removeSpecialAttack(data.specialAttackId);
+                break;
+            }
+            case 'addTalent': {
+                this.addTalent(data);
+                break;
+            }
+            case 'removeTalent': {
+                this.removeTalent(data.talentId);
+                break;
+            }
+            case 'addMastery': {
+                this.addMastery(data);
+                break;
+            }
+            case 'removeMastery': {
+                this.removeMastery(data.masteryId);
+                break;
+            }
+            case 'addHandicap': {
+                this.addHandicap(data);
+                break;
+            }
+            case 'removeHandicap': {
+                this.removeHandicap(data.handicapId);
                 break;
             }
             case 'updateModifier': {

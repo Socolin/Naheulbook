@@ -52,6 +52,9 @@ public class CharacterResponse
 
     public IList<CharacterAptitudeResponse> Aptitudes { get; set; } = null!;
     public IList<CharacterSpecialAttackResponse> SpecialAttacks { get; set; } = null!;
+    public IList<TalentResponse> Talents { get; set; } = null!;
+    public IList<MasteryResponse> Masteries { get; set; } = null!;
+    public IList<HandicapResponse> Handicaps { get; set; } = null!;
     public IList<ActiveStatsModifier> Modifiers { get; set; } = null!;
     public IList<SpecialityResponse> Specialities { get; set; } = null!;
 

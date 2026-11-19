@@ -117,6 +117,24 @@
                 @case ('USE_SPECIAL_ATTACK') {
                   Coup spécial {{log.data.success ? 'réussi' : 'raté'}}: {{log.data.specialAttack?.name}}
                 }
+                @case ('ADD_TALENT') {
+                  Nouveau talent: {{log.data.talent?.name}}
+                }
+                @case ('REMOVE_TALENT') {
+                  Talent retiré: {{log.data.talent?.name}}
+                }
+                @case ('ADD_MASTERY') {
+                  Nouvelle maîtrise: {{log.data.mastery?.name}}
+                }
+                @case ('REMOVE_MASTERY') {
+                  Maîtrise retirée: {{log.data.mastery?.name}}
+                }
+                @case ('ADD_HANDICAP') {
+                  Nouveau handicap: {{log.data.handicap?.name}}
+                }
+                @case ('REMOVE_HANDICAP') {
+                  Handicap guéri: {{log.data.handicap?.name}}
+                }
                 @case ('CHANGE_QUANTITY') {
                   Modification quantité: <ng-container *ngTemplateOutlet="itemName; context: {$implicit: log.data.item}"></ng-container> {{log.data | valueChange}}
                 }

@@ -13,5 +13,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IMasteryMapper, MasteryMapper>();
 
         services.AddSingleton<IMasteryService, MasteryService>();
+        services.AddSingleton<ICharacterMasteryService, CharacterMasteryService>();
     }
 }

@@ -262,6 +262,9 @@ Feature: Character
           }
         ],
         "specialAttacks": [],
+        "talents": [],
+        "masteries": [],
+        "handicaps": [],
         "items": [
           {
             "id": "!{Item.Id}",

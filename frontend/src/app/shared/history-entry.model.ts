@@ -27,7 +27,7 @@ export interface GroupHistoryEntryResponse {
 
 export interface CharacterHistoryEntryResponse {
     id: number;
-    action: 'ADD_ITEM' | 'MODIFY_EV' | 'MODIFY_EA' | 'USE_FATE_POINT' | 'ADD_XP' | 'CHANGE_SEX' | 'CHANGE_NAME' | 'EQUIP' | 'UNEQUIP' | 'APPLY_MODIFIER' | 'REMOVE_MODIFIER' | 'ACTIVE_MODIFIER' | 'DISABLE_MODIFIER' | 'GIVE_ITEM' | 'GIVEN_ITEM' | 'LOOT_ITEM' | 'CHANGE_QUANTITY' | 'USE_CHARGE' | 'READ_BOOK' | 'IDENTIFY' | 'LEVEL_UP' | 'ADD_APTITUDE' | 'REMOVE_APTITUDE' | 'ADD_SPECIAL_ATTACK' | 'REMOVE_SPECIAL_ATTACK' | 'USE_SPECIAL_ATTACK';
+    action: 'ADD_ITEM' | 'MODIFY_EV' | 'MODIFY_EA' | 'USE_FATE_POINT' | 'ADD_XP' | 'CHANGE_SEX' | 'CHANGE_NAME' | 'EQUIP' | 'UNEQUIP' | 'APPLY_MODIFIER' | 'REMOVE_MODIFIER' | 'ACTIVE_MODIFIER' | 'DISABLE_MODIFIER' | 'GIVE_ITEM' | 'GIVEN_ITEM' | 'LOOT_ITEM' | 'CHANGE_QUANTITY' | 'USE_CHARGE' | 'READ_BOOK' | 'IDENTIFY' | 'LEVEL_UP' | 'ADD_APTITUDE' | 'REMOVE_APTITUDE' | 'ADD_SPECIAL_ATTACK' | 'REMOVE_SPECIAL_ATTACK' | 'USE_SPECIAL_ATTACK' | 'ADD_TALENT' | 'REMOVE_TALENT' | 'ADD_MASTERY' | 'REMOVE_MASTERY' | 'ADD_HANDICAP' | 'REMOVE_HANDICAP';
     date: any;
     gm: boolean;
     isGroup: false;
@@ -37,6 +37,9 @@ export interface CharacterHistoryEntryResponse {
         effect?: { name: string };
         aptitude?: { id: string, name: string };
         specialAttack?: { id: string, name: string };
+        talent?: { id: string, name: string };
+        mastery?: { id: string, name: string };
+        handicap?: { id: string, name: string };
         success?: boolean;
         characterName?: string;
         level?: number;
@@ -88,6 +91,12 @@ const characterHistoryIcons: Partial<Record<string, IconDescription>> = {
     ADD_SPECIAL_ATTACK: icon('sword-spin', '#e65100'),
     REMOVE_SPECIAL_ATTACK: icon('sword-spin', '#e65100'),
     USE_SPECIAL_ATTACK: icon('sword-spin', '#e65100'),
+    ADD_TALENT: icon('star-medal', '#6a1b9a'),
+    REMOVE_TALENT: icon('star-medal', '#6a1b9a'),
+    ADD_MASTERY: icon('crossed-swords', '#2e7d32'),
+    REMOVE_MASTERY: icon('crossed-swords', '#2e7d32'),
+    ADD_HANDICAP: icon('broken-bone', '#c62828'),
+    REMOVE_HANDICAP: icon('broken-bone', '#c62828'),
 };
 
 /**

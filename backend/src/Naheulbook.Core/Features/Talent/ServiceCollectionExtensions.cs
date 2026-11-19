@@ -13,5 +13,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ITalentMapper, TalentMapper>();
 
         services.AddSingleton<ITalentService, TalentService>();
+        services.AddSingleton<ICharacterTalentService, CharacterTalentService>();
     }
 }

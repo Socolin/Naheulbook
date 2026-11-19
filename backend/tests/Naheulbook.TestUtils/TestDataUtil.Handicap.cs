@@ -21,4 +21,22 @@ public partial class TestDataUtil
 
         return SaveEntity(handicap, customizer);
     }
+
+    public TestDataUtil AddCharacterHandicap(Action<CharacterHandicapEntity> customizer = null)
+    {
+        return AddCharacterHandicap(out _, customizer);
+    }
+
+    public TestDataUtil AddCharacterHandicap(out CharacterHandicapEntity characterHandicap, Action<CharacterHandicapEntity> customizer = null)
+    {
+        var character = GetLast<CharacterEntity>();
+        var handicap = GetLast<HandicapEntity>();
+        characterHandicap = new CharacterHandicapEntity
+        {
+            CharacterId = character.Id,
+            HandicapId = handicap.Id,
+        };
+
+        return SaveEntity(characterHandicap, customizer);
+    }
 }

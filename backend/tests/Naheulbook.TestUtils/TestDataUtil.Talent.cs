@@ -44,4 +44,21 @@ public partial class TestDataUtil
         return SaveEntity(talent, customizer);
     }
 
+    public TestDataUtil AddCharacterTalent(Action<CharacterTalentEntity> customizer = null)
+    {
+        return AddCharacterTalent(out _, customizer);
+    }
+
+    public TestDataUtil AddCharacterTalent(out CharacterTalentEntity characterTalent, Action<CharacterTalentEntity> customizer = null)
+    {
+        var character = GetLast<CharacterEntity>();
+        var talent = GetLast<TalentEntity>();
+        characterTalent = new CharacterTalentEntity
+        {
+            CharacterId = character.Id,
+            TalentId = talent.Id,
+        };
+
+        return SaveEntity(characterTalent, customizer);
+    }
 }

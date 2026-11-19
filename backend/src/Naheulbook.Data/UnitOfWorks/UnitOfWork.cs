@@ -11,6 +11,9 @@ public interface IUnitOfWork : IDisposable
     ICharacterRepository Characters { get; }
     ICharacterAptitudeRepository CharacterAptitudes { get; }
     ICharacterSpecialAttackRepository CharacterSpecialAttacks { get; }
+    ICharacterTalentRepository CharacterTalents { get; }
+    ICharacterMasteryRepository CharacterMasteries { get; }
+    ICharacterHandicapRepository CharacterHandicaps { get; }
     ICharacterSkillRepository CharacterSkills { get; }
     ICharacterSpecialityRepository CharacterSpecialities { get; }
     ICharacterModifierRepository CharacterModifiers { get; }
@@ -36,6 +39,7 @@ public interface IUnitOfWork : IDisposable
     IMapLayerRepository MapLayers { get; }
     IMapMarkerRepository MapMarkers { get; }
     IMapMarkerLinkRepository MapMarkerLinks { get; }
+    IMasteryRepository Masteries { get; }
     IMasteryGroupRepository MasteryGroups { get; }
     IMerchantRepository Merchants { get; }
     IMonsterRepository Monsters { get; }
@@ -52,6 +56,7 @@ public interface IUnitOfWork : IDisposable
     ISpecialAttackGroupRepository SpecialAttackGroups { get; }
     IStatRepository Stats { get; }
     ITalentGroupRepository TalentGroups { get; }
+    ITalentRepository Talents { get; }
     IUserRepository Users { get; }
     IUserAccessTokenRepository UserAccessTokenRepository { get; }
 
@@ -68,6 +73,9 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public ICharacterRepository Characters => new CharacterRepository(_naheulbookDbContext);
     public ICharacterAptitudeRepository CharacterAptitudes => new CharacterAptitudeRepository(_naheulbookDbContext);
     public ICharacterSpecialAttackRepository CharacterSpecialAttacks => new CharacterSpecialAttackRepository(_naheulbookDbContext);
+    public ICharacterTalentRepository CharacterTalents => new CharacterTalentRepository(_naheulbookDbContext);
+    public ICharacterMasteryRepository CharacterMasteries => new CharacterMasteryRepository(_naheulbookDbContext);
+    public ICharacterHandicapRepository CharacterHandicaps => new CharacterHandicapRepository(_naheulbookDbContext);
     public ICharacterSkillRepository CharacterSkills => new CharacterSkillRepository(_naheulbookDbContext);
     public ICharacterSpecialityRepository CharacterSpecialities => new CharacterSpecialityRepository(_naheulbookDbContext);
     public ICharacterModifierRepository CharacterModifiers => new CharacterModifierRepository(_naheulbookDbContext);
@@ -93,6 +101,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public IMapLayerRepository MapLayers => new MapLayerRepository(_naheulbookDbContext);
     public IMapMarkerRepository MapMarkers => new MapMarkerRepository(_naheulbookDbContext);
     public IMapMarkerLinkRepository MapMarkerLinks => new MapMarkerLinkRepository(_naheulbookDbContext);
+    public IMasteryRepository Masteries => new MasteryRepository(_naheulbookDbContext);
     public IMasteryGroupRepository MasteryGroups => new MasteryGroupRepository(_naheulbookDbContext);
     public IMerchantRepository Merchants => new MerchantRepository(_naheulbookDbContext);
     public IMonsterRepository Monsters => new MonsterRepository(_naheulbookDbContext);
@@ -109,6 +118,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public ISpecialAttackGroupRepository SpecialAttackGroups => new SpecialAttackGroupRepository(_naheulbookDbContext);
     public IStatRepository Stats => new StatRepository(_naheulbookDbContext);
     public ITalentGroupRepository TalentGroups => new TalentGroupRepository(_naheulbookDbContext);
+    public ITalentRepository Talents => new TalentRepository(_naheulbookDbContext);
     public IUserRepository Users => new UserRepository(_naheulbookDbContext);
     public IUserAccessTokenRepository UserAccessTokenRepository => new UserAccessTokenRepository(_naheulbookDbContext);
 

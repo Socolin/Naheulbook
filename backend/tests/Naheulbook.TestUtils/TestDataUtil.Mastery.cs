@@ -44,4 +44,21 @@ public partial class TestDataUtil
         return SaveEntity(mastery, customizer);
     }
 
+    public TestDataUtil AddCharacterMastery(Action<CharacterMasteryEntity> customizer = null)
+    {
+        return AddCharacterMastery(out _, customizer);
+    }
+
+    public TestDataUtil AddCharacterMastery(out CharacterMasteryEntity characterMastery, Action<CharacterMasteryEntity> customizer = null)
+    {
+        var character = GetLast<CharacterEntity>();
+        var mastery = GetLast<MasteryEntity>();
+        characterMastery = new CharacterMasteryEntity
+        {
+            CharacterId = character.Id,
+            MasteryId = mastery.Id,
+        };
+
+        return SaveEntity(characterMastery, customizer);
+    }
 }

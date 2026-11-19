@@ -1,4 +1,5 @@
 export * from './add-character-aptitude-request';
+export * from './character-reference-requests';
 export * from './character-special-attack-requests';
 export * from './character-level-up-request';
 export * from './create-access-token-request';

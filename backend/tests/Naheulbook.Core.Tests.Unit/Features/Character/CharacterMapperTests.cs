@@ -4,7 +4,10 @@ using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Group;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Job;
+using Naheulbook.Core.Features.Handicap;
+using Naheulbook.Core.Features.Mastery;
 using Naheulbook.Core.Features.SpecialAttack;
+using Naheulbook.Core.Features.Talent;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Responses.Responses;
 using Naheulbook.Shared.TransientModels;
@@ -24,6 +27,9 @@ public class CharacterMapperTests
     private IItemMapper _itemMapper;
     private ISpecialityMapper _specialityMapper;
     private ISpecialAttackMapper _specialAttackMapper;
+    private ITalentMapper _talentMapper;
+    private IMasteryMapper _masteryMapper;
+    private IHandicapMapper _handicapMapper;
     private CharacterMapper _mapper;
 
     [SetUp]
@@ -35,7 +41,10 @@ public class CharacterMapperTests
         _itemMapper = Substitute.For<IItemMapper>();
         _specialityMapper = Substitute.For<ISpecialityMapper>();
         _specialAttackMapper = Substitute.For<ISpecialAttackMapper>();
-        _mapper = new CharacterMapper(_aptitudeMapper, _characterModifierMapper, _groupMapper, _itemMapper, _specialityMapper, _specialAttackMapper);
+        _talentMapper = Substitute.For<ITalentMapper>();
+        _masteryMapper = Substitute.For<IMasteryMapper>();
+        _handicapMapper = Substitute.For<IHandicapMapper>();
+        _mapper = new CharacterMapper(_aptitudeMapper, _characterModifierMapper, _groupMapper, _itemMapper, _specialityMapper, _specialAttackMapper, _talentMapper, _masteryMapper, _handicapMapper);
     }
 
     [Test]
@@ -294,6 +303,9 @@ public class CharacterMapperTests
         private readonly CharacterGroupResponse _groupResponse = new();
         private readonly CharacterAptitudeResponse _aptitudeResponse = new();
         private readonly CharacterSpecialAttackResponse _specialAttackResponse = new();
+        private readonly TalentResponse _talentResponse = new() {Name = "some-talent"};
+        private readonly MasteryResponse _masteryResponse = new() {Name = "some-mastery"};
+        private readonly HandicapResponse _handicapResponse = new() {DiceRoll = 4};
         private readonly ActiveStatsModifier _modifierResponse = new();
         private readonly SpecialityResponse _specialityResponse = new();
         private readonly ItemResponse _itemResponse = new();
@@ -304,6 +316,9 @@ public class CharacterMapperTests
             var group = new GroupEntity();
             var aptitude = new CharacterAptitudeEntity();
             var specialAttack = new CharacterSpecialAttackEntity();
+            var talent = new TalentEntity();
+            var mastery = new MasteryEntity();
+            var handicap = new HandicapEntity();
             var modifier = new CharacterModifierEntity();
             var speciality = new SpecialityEntity();
             var item = new ItemEntity();
@@ -334,6 +349,9 @@ public class CharacterMapperTests
                 Skills = [new CharacterSkillEntity {SkillId = _skillId}],
                 Aptitudes = [aptitude],
                 SpecialAttacks = [specialAttack],
+                Talents = [new CharacterTalentEntity {Talent = talent}],
+                Masteries = [new CharacterMasteryEntity {Mastery = mastery}],
+                Handicaps = [new CharacterHandicapEntity {Handicap = handicap}],
                 Modifiers = [modifier],
                 Specialities = [new CharacterSpecialityEntity {Speciality = speciality}],
                 Items = [item],
@@ -343,6 +361,9 @@ public class CharacterMapperTests
             tests._groupMapper.ToCharacterGroupResponse(group).Returns(_groupResponse);
             tests._aptitudeMapper.ToResponse(aptitude).Returns(_aptitudeResponse);
             tests._specialAttackMapper.ToResponse(specialAttack).Returns(_specialAttackResponse);
+            tests._talentMapper.ToResponse(talent).Returns(_talentResponse);
+            tests._masteryMapper.ToResponse(mastery).Returns(_masteryResponse);
+            tests._handicapMapper.ToResponse(handicap).Returns(_handicapResponse);
             tests._characterModifierMapper.ToResponse(modifier).Returns(_modifierResponse);
             tests._specialityMapper.ToResponse(speciality).Returns(_specialityResponse);
             tests._itemMapper.ToResponse(item).Returns(_itemResponse);
@@ -372,6 +393,9 @@ public class CharacterMapperTests
                 Group = _groupResponse,
                 Aptitudes = [_aptitudeResponse],
                 SpecialAttacks = [_specialAttackResponse],
+                Talents = [_talentResponse],
+                Masteries = [_masteryResponse],
+                Handicaps = [_handicapResponse],
                 Modifiers = [_modifierResponse],
                 Specialities = [_specialityResponse],
                 Items = [_itemResponse],

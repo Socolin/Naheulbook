@@ -44,6 +44,9 @@ import {ItemPricePipe} from '../item-template/item-price.pipe';
 import {MarkdownPipe} from '../markdown/markdown.pipe';
 import {AptitudePanelComponent} from './aptitude-panel.component';
 import {CharacterSpecialAttackPanelComponent} from '../special-attack/character-special-attack-panel.component';
+import {CharacterTalentPanelComponent} from '../talent/character-talent-panel.component';
+import {CharacterMasteryPanelComponent} from '../mastery/character-mastery-panel.component';
+import {CharacterHandicapPanelComponent} from '../handicap/character-handicap-panel.component';
 
 @Component({
     selector: 'character',
@@ -51,7 +54,7 @@ import {CharacterSpecialAttackPanelComponent} from '../special-attack/character-
     styleUrls: ['./character.component.scss'],
     providers: [ItemActionService],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [MatTabGroup, MatTab, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions, MatButton, MatToolbar, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, ValueEditorComponent, MatFormField, MatInput, CdkTextareaAutosize, MatButtonToggleGroup, FormsModule, MatButtonToggle, CombatTabComponent, EffectPanelComponent, InventoryPanelComponent, MatTabLabel, MatBadge, CharacterLootPanelComponent, CharacterHistoryComponent, MatFabButton, PlusMinusPipe, ItemPricePipe, MarkdownPipe, AptitudePanelComponent, CharacterSpecialAttackPanelComponent]
+    imports: [MatTabGroup, MatTab, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions, MatButton, MatToolbar, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, ValueEditorComponent, MatFormField, MatInput, CdkTextareaAutosize, MatButtonToggleGroup, FormsModule, MatButtonToggle, CombatTabComponent, EffectPanelComponent, InventoryPanelComponent, MatTabLabel, MatBadge, CharacterLootPanelComponent, CharacterHistoryComponent, MatFabButton, PlusMinusPipe, ItemPricePipe, MarkdownPipe, AptitudePanelComponent, CharacterSpecialAttackPanelComponent, CharacterTalentPanelComponent, CharacterMasteryPanelComponent, CharacterHandicapPanelComponent]
 })
 export class CharacterComponent implements OnInit, OnDestroy {
     @Input() id: number;

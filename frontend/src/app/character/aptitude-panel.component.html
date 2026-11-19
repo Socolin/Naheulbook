@@ -1,69 +1,90 @@
 <mat-card>
   <mat-toolbar>
-    Aptitudes Parfois Étranges (APE)
+    <span>Aptitudes Parfois Étranges (APE)</span>
+    <span class="count">{{ character.aptitudes.length }}</span>
     <span class="toolbar-spacer"></span>
-    <button mat-icon-button (click)="openAddAptitudeDialog()" aria-label="Ajouter un effet">
+    <button mat-icon-button (click)="openAddAptitudeDialog()" aria-label="Ajouter une APE" matTooltip="Ajouter une APE">
       <mat-icon>add</mat-icon>
     </button>
   </mat-toolbar>
-  @if (canChooseAptitudeGroup) {
-    <mat-card-content class="aptitude-group-choice">
-      <span>Table d'APE :</span>
-      <mat-button-toggle-group [value]="character.effectiveAptitudeGroupId"
-                               [disabled]="character.aptitudes.length > 0"
-                               (change)="changeAptitudeGroup($event.value)"
-                               aria-label="Table d'APE">
-        @for (aptitudeGroupId of character.availableAptitudeGroupIds; track aptitudeGroupId) {
-          <mat-button-toggle [value]="aptitudeGroupId">{{ aptitudeGroupNames[aptitudeGroupId] ?? '…' }}</mat-button-toggle>
-        }
-      </mat-button-toggle-group>
-      <span class="hint">
-        @if (character.aptitudes.length > 0) {
-          Le choix est définitif une fois la première aptitude obtenue.
-        } @else {
-          En tant qu'hybride, vous choisissez la table utilisée, avant la première aptitude.
-        }
-      </span>
-    </mat-card-content>
-  }
-  @if (character.aptitudes.length > 0) {
-    <mat-card-content class="aptitudes-list">
-      <p>
-        Les statistiques des APE ne sont pas automatiquement calculé. Vous pouvez cocher les case pour vous aider à
-        suivre les compétences qui s'applique selon la situation. Une APE ne devrait pas être cumulé plus que 3 fois.
+
+  <mat-card-content>
+    <p class="stats-note">
+      <mat-icon>info</mat-icon>
+      <span>Les modifications de caractéristiques des APE ne sont pas appliquées automatiquement au calcul des stats.</span>
+    </p>
+
+    @if (canChooseAptitudeGroup) {
+      <div class="aptitude-group-choice">
+        <span>Table d'APE :</span>
+        <mat-button-toggle-group [value]="character.effectiveAptitudeGroupId"
+                                 [disabled]="character.aptitudes.length > 0"
+                                 (change)="changeAptitudeGroup($event.value)"
+                                 aria-label="Table d'APE">
+          @for (aptitudeGroupId of character.availableAptitudeGroupIds; track aptitudeGroupId) {
+            <mat-button-toggle [value]="aptitudeGroupId">{{ aptitudeGroupNames[aptitudeGroupId] ?? '…' }}</mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+        <span class="hint">
+          @if (character.aptitudes.length > 0) {
+            Le choix est définitif une fois la première aptitude obtenue.
+          } @else {
+            En tant qu'hybride, vous choisissez la table utilisée, avant la première aptitude.
+          }
+        </span>
+      </div>
+    }
+
+    @if (!character.aptitudes.length) {
+      <p class="empty">Aucune APE.</p>
+    } @else {
+      <p class="hint">
+        Cochez les APE qui s'appliquent selon la situation. Une APE ne devrait pas être cumulée plus de 3 fois.
       </p>
-      @for (characterAptitude of character.aptitudes; track characterAptitude) {
-        <div class="character-aptitude">
-          <div class="active"><mat-checkbox [checked]="characterAptitude.active" (change)="updateActiveAptitude(characterAptitude, $event.checked)" aria-label="Activé l'aptitude {{characterAptitude.aptitude.name}}"></mat-checkbox></div>
-          <div class="name">{{ characterAptitude.aptitude.name }}</div>
-          <div class="count">x {{ characterAptitude.count }}</div>
-          <div class="description">{{ characterAptitude.aptitude.description }}</div>
-          <div class="effect">{{ characterAptitude.aptitude.effect }}</div>
-          <div class="actions">
-            <button mat-icon-button
+      <ul class="entries">
+        @for (characterAptitude of character.aptitudes; track characterAptitude.aptitude.id) {
+          @let aptitude = characterAptitude.aptitude;
+          <li class="entry" [class.inactive]="!characterAptitude.active">
+            <mat-checkbox class="active"
+                          [checked]="characterAptitude.active"
+                          (change)="updateActiveAptitude(characterAptitude, $event.checked)"
+                          [aria-label]="'Activer l\'aptitude ' + aptitude.name"></mat-checkbox>
+            <div class="entry-main">
+              <div class="entry-title">
+                <span class="entry-name">{{ aptitude.name }}</span>
+                @if (characterAptitude.count > 1) {
+                  <span class="chip" [matTooltip]="'Obtenue ' + characterAptitude.count + ' fois'">×{{ characterAptitude.count }}</span>
+                }
+              </div>
+              @if (aptitude.description) {
+                <p class="entry-description">{{ aptitude.description }}</p>
+              }
+              @if (aptitude.effect) {
+                <p class="entry-effect">{{ aptitude.effect }}</p>
+              }
+            </div>
+            <button mat-icon-button class="actions"
                     [matMenuTriggerFor]="characterAptitudeAction"
                     [matMenuTriggerData]="{characterAptitude: characterAptitude}"
-                    aria-label="Afficher le menu de l'aptitude">
+                    [attr.aria-label]="'Afficher le menu de ' + aptitude.name">
               <mat-icon>more_vert</mat-icon>
             </button>
-          </div>
-        </div>
-      }
-    </mat-card-content>
-  } @else {
-    <mat-card-content>
-      <p>
-        Aucune APE connu.
-      </p>
-    </mat-card-content>
-  }
+          </li>
+        }
+      </ul>
+    }
+  </mat-card-content>
 </mat-card>
 
 <mat-menu #characterAptitudeAction>
   <ng-template matMenuContent let-characterAptitude="characterAptitude">
     <button mat-menu-item [matMenuTriggerFor]="deleteCharacterAptitudeMenu" [matMenuTriggerData]="{characterAptitude: characterAptitude}">
       <mat-icon>delete</mat-icon>
-      Supprimer
+      @if (characterAptitude.count > 1) {
+        Supprimer une fois
+      } @else {
+        Supprimer
+      }
     </button>
   </ng-template>
 </mat-menu>

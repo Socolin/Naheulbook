@@ -1,0 +1,67 @@
+<mat-card>
+  <mat-toolbar>
+    <span>{{ title }}</span>
+    <span class="count">{{ entries.length }}</span>
+    <span class="toolbar-spacer"></span>
+    <button mat-icon-button (click)="add.emit()" [attr.aria-label]="addLabel" [matTooltip]="addLabel">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-card-content>
+    <p class="stats-note">
+      <mat-icon>info</mat-icon>
+      <span>Les modifications de caractéristiques ne sont pas appliquées automatiquement au calcul des stats.</span>
+    </p>
+    @if (!entries.length) {
+      <p class="empty">{{ emptyText }}</p>
+    } @else {
+      <ul class="entries">
+        @for (entry of entries; track entry.id) {
+          <li class="entry">
+            <div class="entry-main">
+              <div class="entry-title">
+                @if (entry.badge) {
+                  <span class="badge">{{ entry.badge }}</span>
+                }
+                <span class="entry-name">{{ entry.name }}</span>
+                @if (entry.restriction) {
+                  <span class="chip">{{ entry.restriction }}</span>
+                }
+              </div>
+              @for (line of entry.effectLines; track $index) {
+                <p class="entry-effect">{{ line }}</p>
+              }
+              @for (warning of warnings[entry.id] ?? []; track warning) {
+                <p class="warning"><mat-icon inline>warning</mat-icon> {{ warning }}</p>
+              }
+            </div>
+            <button mat-icon-button class="actions"
+                    [matMenuTriggerFor]="entryActions"
+                    [matMenuTriggerData]="{entry: entry}"
+                    [attr.aria-label]="'Afficher le menu de ' + entry.name">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </mat-card-content>
+</mat-card>
+
+<mat-menu #entryActions>
+  <ng-template matMenuContent let-entry="entry">
+    <button mat-menu-item [matMenuTriggerFor]="confirmRemove" [matMenuTriggerData]="{entry: entry}">
+      <mat-icon>delete</mat-icon>
+      Supprimer
+    </button>
+  </ng-template>
+</mat-menu>
+<mat-menu #confirmRemove>
+  <ng-template matMenuContent let-entry="entry">
+    <button mat-menu-item (click)="remove.emit(entry)">
+      <mat-icon>check</mat-icon>
+      Confirmer
+    </button>
+  </ng-template>
+</mat-menu>

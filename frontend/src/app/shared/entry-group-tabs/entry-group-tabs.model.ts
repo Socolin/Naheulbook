@@ -4,6 +4,8 @@
 export interface EntryView {
     id: string;
     name: string;
+    /** Short text shown before the name (e.g. the D100 roll of a handicap) */
+    badge?: string;
     restriction?: string;
     effectLines: string[];
     notes?: string;

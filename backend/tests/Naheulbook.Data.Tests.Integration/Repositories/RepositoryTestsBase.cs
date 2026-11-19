@@ -69,6 +69,24 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
                     .Excluding(x => x.Aptitudes)
                     .As<EquivalencyOptions<T>>();
                 break;
+            case EquivalencyOptions<CharacterTalentEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.Character)
+                    .Excluding(x => x.Talent)
+                    .As<EquivalencyOptions<T>>();
+                break;
+            case EquivalencyOptions<CharacterMasteryEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.Character)
+                    .Excluding(x => x.Mastery)
+                    .As<EquivalencyOptions<T>>();
+                break;
+            case EquivalencyOptions<CharacterHandicapEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.Character)
+                    .Excluding(x => x.Handicap)
+                    .As<EquivalencyOptions<T>>();
+                break;
             case EquivalencyOptions<CharacterSpecialAttackEntity> entityOptions:
                 equivalencyOptions = entityOptions
                     .Excluding(x => x.Character)
@@ -142,6 +160,9 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
                 equivalencyOptions = entityOptions
                     .Excluding(x => x.Aptitudes)
                     .Excluding(x => x.SpecialAttacks)
+                    .Excluding(x => x.Talents)
+                    .Excluding(x => x.Masteries)
+                    .Excluding(x => x.Handicaps)
                     .Excluding(x => x.Owner)
                     .Excluding(x => x.Origin)
                     .Excluding(x => x.Group)

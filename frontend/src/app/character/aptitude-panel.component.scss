@@ -1,44 +1,28 @@
-.aptitudes-list {
-    container-type: inline-size;
+// Same look as the talents / masteries / handicaps cards (shared/entry-group-tabs/character-entry-panel)
+.count {
+    margin-left: 8px;
+    padding: 0 8px;
+    border-radius: 10px;
+    font: var(--mat-sys-label-medium);
+    line-height: 22px;
+    background: var(--mat-sys-secondary-container);
+    color: var(--mat-sys-on-secondary-container);
 }
 
-.character-aptitude {
-    display: grid;
-    grid-template-areas: "active name count description effect actions";
-    grid-template-columns: auto 1fr 30px 2fr 2fr auto;
-    gap: 8px;
+.stats-note {
+    display: flex;
     align-items: center;
+    gap: 8px;
+    margin: 8px 0 0;
+    font: var(--mat-sys-body-medium);
+    color: var(--mat-sys-on-surface-variant);
 
-    @container (width <= 600px) {
-        grid-template-areas: "active name count actions" "active description description actions" "active effect effect actions";
-        grid-template-columns: auto 1fr 1fr auto;
+    mat-icon {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
     }
-
-    .active {
-        grid-area: active;
-    }
-
-    .name {
-        grid-area: name;
-    }
-
-    .count {
-        grid-area: count;
-        justify-self: center;
-    }
-
-    .description {
-        grid-area: description;
-    }
-
-    .effect {
-        grid-area: effect;
-    }
-
-    .actions {
-        grid-area: actions;
-    }
-
 }
 
 .aptitude-group-choice {
@@ -46,9 +30,85 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 8px 12px;
+    margin-top: 12px;
+}
 
-    .hint {
-        font: var(--mat-sys-body-small);
+.hint {
+    margin: 8px 0 0;
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.empty {
+    margin: 16px 0 8px;
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.entries {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+}
+
+.entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 8px 0;
+
+    & + .entry {
+        border-top: 1px solid var(--mat-sys-outline-variant);
+    }
+
+    &.inactive .entry-name {
         color: var(--mat-sys-on-surface-variant);
     }
+}
+
+.active {
+    flex-shrink: 0;
+    margin-top: -8px;
+}
+
+.entry-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.entry-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 8px;
+}
+
+.entry-name {
+    font: var(--mat-sys-title-small);
+}
+
+.chip {
+    padding: 0 8px;
+    border-radius: 8px;
+    font: var(--mat-sys-label-small);
+    line-height: 20px;
+    background: var(--mat-sys-surface-container-high);
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.entry-description {
+    margin: 2px 0 0;
+    font: var(--mat-sys-body-medium);
+    font-style: italic;
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.entry-effect {
+    margin: 2px 0 0;
+    font: var(--mat-sys-body-medium);
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.actions {
+    flex-shrink: 0;
+    margin-top: -4px;
 }
