@@ -1,0 +1,78 @@
+<div class="page">
+  <div class="page-header">
+    <h2 class="mat-h2">{{ title }}</h2>
+    <mat-form-field class="filter" appearance="outline" subscriptSizing="dynamic">
+      <mat-icon matPrefix>search</mat-icon>
+      <mat-label>Rechercher</mat-label>
+      <input matInput [(ngModel)]="filter" (ngModelChange)="updateFilter()" placeholder="Nom, origine, métier, effet…">
+      @if (filter) {
+        <button matSuffix mat-icon-button (click)="clearFilter()" aria-label="Effacer la recherche">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+  </div>
+
+  <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectTab($event)"
+                 mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0ms">
+    @for (tab of tabs; track tab.group.id) {
+      <mat-tab>
+        <ng-template mat-tab-label>
+          {{ tab.group.name }}
+          <span class="tab-count" [class.tab-count-empty]="!tab.visibleEntries.length">
+            {{ tab.visibleEntries.length }}
+          </span>
+        </ng-template>
+
+        <div class="tab-content">
+          @if (tab.descriptionParagraphs.length) {
+            <details class="group-description">
+              <summary>
+                <mat-icon>info</mat-icon>
+                Règles
+              </summary>
+              @for (paragraph of tab.descriptionParagraphs; track $index) {
+                <p>{{ paragraph }}</p>
+              }
+            </details>
+          }
+
+          @if (!tab.visibleEntries.length) {
+            <p class="empty-state">Aucun résultat pour « {{ filter }} ».</p>
+          } @else {
+            <ul class="entries">
+              @for (entry of tab.visibleEntries; track entry.id) {
+                <li class="entry">
+                  <div class="entry-heading">
+                    <span class="entry-name">{{ entry.name }}</span>
+                    @if (entry.restriction || entry.requiredLevel || entry.prerequisiteName) {
+                      <span class="entry-conditions">
+                        @if (entry.restriction) {
+                          <span class="chip">{{ entry.restriction }}</span>
+                        }
+                        @if (entry.requiredLevel) {
+                          <span class="chip chip-level">Niveau {{ entry.requiredLevel }}+</span>
+                        }
+                        @if (entry.prerequisiteName) {
+                          <span class="chip chip-prerequisite">Requiert : {{ entry.prerequisiteName }}</span>
+                        }
+                      </span>
+                    }
+                  </div>
+                  <div class="entry-effect">
+                    @for (line of entry.effectLines; track $index) {
+                      <p>{{ line }}</p>
+                    }
+                    @if (entry.notes) {
+                      <p class="entry-notes">{{ entry.notes }}</p>
+                    }
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </mat-tab>
+    }
+  </mat-tab-group>
+</div>

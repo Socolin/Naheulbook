@@ -11,6 +11,9 @@ import {DatabaseSectionsComponent} from './database-sections.component';
 import {AptitudeListComponent} from '../aptitude/aptitude-list.component';
 import {AptitudeGroupComponent} from '../aptitude/aptitude-group.component';
 import {SpecialAttacksComponent} from '../special-attack/special-attacks.component';
+import {TalentsComponent} from '../talent/talents.component';
+import {MasteriesComponent} from '../mastery/masteries.component';
+import {HandicapsComponent} from '../handicap/handicaps.component';
 import {EditItemTemplateDialogComponent} from '../item-template/edit-item-template-dialog.component';
 import {ItemTemplateListComponent} from '../item-template/item-template-list.component';
 
@@ -78,6 +81,26 @@ export const routes: Routes = [
             {
                 path: 'special-attacks',
                 component: SpecialAttacksComponent
+            },
+            {
+                path: 'talents/:groupId',
+                component: TalentsComponent
+            },
+            {
+                path: 'talents',
+                component: TalentsComponent
+            },
+            {
+                path: 'masteries/:groupId',
+                component: MasteriesComponent
+            },
+            {
+                path: 'masteries',
+                component: MasteriesComponent
+            },
+            {
+                path: 'handicaps',
+                component: HandicapsComponent
             }
         ]
     }

@@ -99,6 +99,7 @@ public partial class TestDataUtil : IDisposable
                 "DELETE FROM `effect_types`;" +
                 "DELETE FROM `events`;" +
                 "DELETE FROM `gods`;" +
+                "DELETE FROM `handicaps`;" +
                 "DELETE FROM `groups`;" +
                 "DELETE FROM `group_history_entries`;" +
                 "DELETE FROM `group_invitations`;" +
@@ -118,6 +119,8 @@ public partial class TestDataUtil : IDisposable
                 "DELETE FROM `job_requirements`;" +
                 "DELETE FROM `job_restrictions`;" +
                 "DELETE FROM `job_skills`;" +
+                "DELETE FROM `masteries`;" +
+                "DELETE FROM `mastery_groups`;" +
                 "DELETE FROM `loots`;" +
                 "DELETE FROM `maps`;" +
                 "DELETE FROM `map_marker_links`;" +
@@ -148,6 +151,8 @@ public partial class TestDataUtil : IDisposable
                 // "DELETE FROM `spells`;" +
                 // "DELETE FROM `spell_categories`;" +
                 "DELETE FROM `stats`;" +
+                "DELETE FROM `talents`;" +
+                "DELETE FROM `talent_groups`;" +
                 "DELETE FROM `users`;" +
                 // "DELETE FROM `user_sessions`;" +
                 "SET FOREIGN_KEY_CHECKS=1;";

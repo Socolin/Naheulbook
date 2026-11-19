@@ -1,0 +1,63 @@
+@if (!handicaps) {
+  <mat-spinner></mat-spinner>
+} @else {
+  <div class="page">
+    <div class="page-header">
+      <h2 class="mat-h2">Handicaps</h2>
+      <mat-form-field class="filter" appearance="outline" subscriptSizing="dynamic">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Rechercher</mat-label>
+        <input matInput [(ngModel)]="filter" (ngModelChange)="updateFilter()" placeholder="Nom, condition, effet…">
+        @if (filter) {
+          <button matSuffix mat-icon-button (click)="clearFilter()" aria-label="Effacer la recherche">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    </div>
+
+    <details class="group-description">
+      <summary>
+        <mat-icon>info</mat-icon>
+        Règles
+      </summary>
+      <p>
+        Lors de la création d’un héros, il est possible d’obtenir un talent en contrepartie d’un handicap tiré au D100.
+        Ces handicaps sont PERMANENTS.
+      </p>
+      <p>
+        Le MJ peut aussi infliger des handicaps au cours des aventures, par exemple après un nombre d’échecs critiques
+        (entre 2 et 5) face à certains opposants ou dans certaines conditions (ex : deux EC pendant un orage donnent
+        « Astraphobie »). Il peut demander une épreuve de COU ou d’INT pour savoir si le personnage en est affligé.
+        Un personnage ne peut pas obtenir deux fois le même handicap.
+      </p>
+      <p>
+        Les handicaps obtenus au cours des aventures peuvent être soignés pour 1.000 PO chez un prêtre de Slanoush ou de
+        Youclidh (une décade de traitement), ou pour 1.500 PO chez les autres prêtres et paladins (deux décades).
+      </p>
+    </details>
+
+    @if (!visibleHandicaps.length) {
+      <p class="empty-state">Aucun résultat pour « {{ filter }} ».</p>
+    } @else {
+      <ul class="entries">
+        @for (item of visibleHandicaps; track item.handicap.id) {
+          <li class="entry handicap">
+            <span class="dice-roll" [attr.aria-label]="'D100 : ' + item.handicap.diceRoll">{{ item.handicap.diceRoll }}</span>
+            <div class="entry-heading">
+              <span class="entry-name">{{ item.handicap.name }}</span>
+              @if (item.handicap.data.condition) {
+                <span class="entry-conditions">
+                  <span class="chip">{{ item.handicap.data.condition }}</span>
+                </span>
+              }
+            </div>
+            <div class="entry-effect">
+              <p>{{ item.handicap.data.effect }}</p>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+}

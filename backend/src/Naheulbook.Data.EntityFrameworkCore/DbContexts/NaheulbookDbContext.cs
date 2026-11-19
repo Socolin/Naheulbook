@@ -37,6 +37,11 @@ public class NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options) 
     public DbSet<SpecialityEntity> Specialities { get; set; } = null!;
     public DbSet<SpecialAttackEntity> SpecialAttacks { get; set; } = null!;
     public DbSet<SpecialAttackGroupEntity> SpecialAttackGroups { get; set; } = null!;
+    public DbSet<TalentEntity> Talents { get; set; } = null!;
+    public DbSet<TalentGroupEntity> TalentGroups { get; set; } = null!;
+    public DbSet<MasteryEntity> Masteries { get; set; } = null!;
+    public DbSet<MasteryGroupEntity> MasteryGroups { get; set; } = null!;
+    public DbSet<HandicapEntity> Handicaps { get; set; } = null!;
     public DbSet<UserEntity> Users { get; set; } = null!;
     public DbSet<UserAccessTokenEntity> UserAccessTokens { get; set; } = null!;
     public DbSet<LootEntity> Loots { get; set; } = null!;

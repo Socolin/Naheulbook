@@ -11,7 +11,11 @@ import {NhbkMatDialog} from '../material-workaround';
 import {SpecialAttackService} from './special-attack.service';
 import {CharacterSpecialAttack} from './character-special-attack.model';
 import {SpecialAttackCardComponent} from './special-attack-card.component';
-import {AddSpecialAttackDialogComponent, AddSpecialAttackDialogData, AddSpecialAttackDialogResult} from './add-special-attack-dialog.component';
+import {
+    AddSpecialAttackDialogComponent,
+    AddSpecialAttackDialogData,
+    AddSpecialAttackDialogResult
+} from './add-special-attack-dialog.component';
 import {duration2shortText} from '../date/util';
 
 type AvailabilityStatus = 'available' | 'cooldown' | 'failure' | 'unlimited';

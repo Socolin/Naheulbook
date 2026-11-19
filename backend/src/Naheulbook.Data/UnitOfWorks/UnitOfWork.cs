@@ -24,6 +24,7 @@ public interface IUnitOfWork : IDisposable
     IGroupRepository Groups { get; }
     IGroupHistoryEntryRepository GroupHistoryEntries { get; }
     IGroupInviteRepository GroupInvites { get; }
+    IHandicapRepository Handicaps { get; }
     IItemRepository Items { get; }
     IItemTemplateRepository ItemTemplates { get; }
     IItemTemplateSubCategoryRepository ItemTemplateSubCategories { get; }
@@ -35,6 +36,7 @@ public interface IUnitOfWork : IDisposable
     IMapLayerRepository MapLayers { get; }
     IMapMarkerRepository MapMarkers { get; }
     IMapMarkerLinkRepository MapMarkerLinks { get; }
+    IMasteryGroupRepository MasteryGroups { get; }
     IMerchantRepository Merchants { get; }
     IMonsterRepository Monsters { get; }
     IMonsterTypeRepository MonsterTypes { get; }
@@ -49,6 +51,7 @@ public interface IUnitOfWork : IDisposable
     ISpecialAttackRepository SpecialAttacks { get; }
     ISpecialAttackGroupRepository SpecialAttackGroups { get; }
     IStatRepository Stats { get; }
+    ITalentGroupRepository TalentGroups { get; }
     IUserRepository Users { get; }
     IUserAccessTokenRepository UserAccessTokenRepository { get; }
 
@@ -78,6 +81,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public IGroupRepository Groups => new GroupRepository(_naheulbookDbContext);
     public IGroupHistoryEntryRepository GroupHistoryEntries => new GroupHistoryEntryRepository(_naheulbookDbContext);
     public IGroupInviteRepository GroupInvites => new GroupInviteRepository(_naheulbookDbContext);
+    public IHandicapRepository Handicaps => new HandicapRepository(_naheulbookDbContext);
     public IItemRepository Items => new ItemRepository(_naheulbookDbContext);
     public IItemTemplateRepository ItemTemplates => new ItemTemplateRepository(_naheulbookDbContext);
     public IItemTemplateSectionRepository ItemTemplateSections => new ItemTemplateSectionRepository(_naheulbookDbContext);
@@ -89,6 +93,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public IMapLayerRepository MapLayers => new MapLayerRepository(_naheulbookDbContext);
     public IMapMarkerRepository MapMarkers => new MapMarkerRepository(_naheulbookDbContext);
     public IMapMarkerLinkRepository MapMarkerLinks => new MapMarkerLinkRepository(_naheulbookDbContext);
+    public IMasteryGroupRepository MasteryGroups => new MasteryGroupRepository(_naheulbookDbContext);
     public IMerchantRepository Merchants => new MerchantRepository(_naheulbookDbContext);
     public IMonsterRepository Monsters => new MonsterRepository(_naheulbookDbContext);
     public IMonsterTypeRepository MonsterTypes => new MonsterTypeRepository(_naheulbookDbContext);
@@ -103,6 +108,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public ISpecialAttackRepository SpecialAttacks => new SpecialAttackRepository(_naheulbookDbContext);
     public ISpecialAttackGroupRepository SpecialAttackGroups => new SpecialAttackGroupRepository(_naheulbookDbContext);
     public IStatRepository Stats => new StatRepository(_naheulbookDbContext);
+    public ITalentGroupRepository TalentGroups => new TalentGroupRepository(_naheulbookDbContext);
     public IUserRepository Users => new UserRepository(_naheulbookDbContext);
     public IUserAccessTokenRepository UserAccessTokenRepository => new UserAccessTokenRepository(_naheulbookDbContext);
 
