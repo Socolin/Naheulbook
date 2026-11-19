@@ -43,6 +43,7 @@ import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { ValueEditorComponent } from '../shared/value-editor.component';
 import { DateComponent } from '../date/date.component';
+import { TimeSliderComponent } from '../date/time-slider.component';
 import { EventsComponent } from '../event/events.component';
 import { ItemListComponent } from '../item/item-list.component';
 import {MatDivider, MatList, MatListItem, MatListItemIcon, MatListItemLine, MatListItemMeta, MatListItemTitle} from '@angular/material/list';
@@ -63,7 +64,7 @@ import { MarkdownPipe } from '../markdown/markdown.pipe';
     styleUrls: ['./group.component.scss'],
     providers: [GroupActionService],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [MatLabel, MatProgressSpinner, MatTabGroup, MatTab, MatCard, MatToolbar, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatCardContent, ValueEditorComponent, DateComponent, EventsComponent, MatCardActions, MatButton, MatCardHeader, ItemListComponent, MatListItemIcon, MatChipSet, MatChip, MatList, MatListItem, MatListItemTitle, MatListItemLine, MatListItemMeta, MatRipple, MatDivider, FighterPanelComponent, GroupLootPanelComponent, GroupHistoryComponent, CdkPortal, MatCardSubtitle, MatFormField, MatInput, FormsModule, MatRadioGroup, MatRadioButton, UsefulDataComponent, MarkdownPipe]
+    imports: [MatLabel, MatProgressSpinner, MatTabGroup, MatTab, MatCard, MatToolbar, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatCardContent, ValueEditorComponent, DateComponent, TimeSliderComponent, EventsComponent, MatCardActions, MatButton, MatCardHeader, ItemListComponent, MatListItemIcon, MatChipSet, MatChip, MatList, MatListItem, MatListItemTitle, MatListItemLine, MatListItemMeta, MatRipple, MatDivider, FighterPanelComponent, GroupLootPanelComponent, GroupHistoryComponent, CdkPortal, MatCardSubtitle, MatFormField, MatInput, FormsModule, MatRadioGroup, MatRadioButton, UsefulDataComponent, MarkdownPipe]
 })
 export class GroupComponent implements OnInit, OnDestroy {
     public group: Group;

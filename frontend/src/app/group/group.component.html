@@ -55,6 +55,9 @@
                   <date [date]="group.data.date"></date>
                 </dd>
               </dl>
+              @if (group.data.date) {
+                <time-slider [date]="group.data.date" (timeAdded)="addTime($event)"></time-slider>
+              }
             </mat-card-content>
           </mat-card>
           <mat-card>

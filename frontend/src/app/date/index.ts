@@ -6,3 +6,4 @@ export * from './date.component';
 export * from './duration-selector-dialog.component';
 export * from './nhbk-duration.pipe';
 export * from './duration-selector.component';
+export * from './time-slider.component';

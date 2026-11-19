@@ -1,0 +1,153 @@
+:host {
+    display: block;
+}
+
+.time-slider {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.track {
+    position: relative;
+    height: 48px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+
+    &.dragging {
+        cursor: grabbing;
+    }
+}
+
+.strip {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    pointer-events: none;
+
+    &.animated {
+        transition: left 800ms ease-in-out;
+    }
+}
+
+// One 24h cycle: midnight on the left edge, noon in the middle
+.cycle {
+    position: relative;
+    flex: 1 1 0;
+    height: 100%;
+    background: linear-gradient(
+            to right,
+            #0b1026 0%,
+            #1b2350 16%,
+            #e8875a 25%,
+            #87c4ee 34%,
+            #a9d8f7 50%,
+            #87c4ee 66%,
+            #e8875a 75%,
+            #1b2350 84%,
+            #0b1026 100%
+    );
+}
+
+.tick {
+    position: absolute;
+    bottom: 0;
+    width: 1px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.5);
+
+    &.major {
+        height: 12px;
+        background: rgba(255, 255, 255, 0.8);
+    }
+}
+
+.celestial {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    &.sun {
+        color: #ffd54a;
+        filter: drop-shadow(0 0 6px rgba(255, 200, 50, 0.9));
+    }
+
+    &.moon {
+        color: #e8ecff;
+        filter: drop-shadow(0 0 4px rgba(200, 210, 255, 0.7));
+    }
+}
+
+.selection {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.25);
+    border-top: 2px solid rgba(255, 255, 255, 0.8);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.8);
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.start-marker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+}
+
+.thumb {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 40px;
+    transform: translate(-50%, -50%);
+    border-radius: 7px;
+    background: #fff;
+    border: 2px solid var(--mat-sys-primary);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    cursor: grab;
+
+    .dragging & {
+        cursor: grabbing;
+    }
+
+    &:focus-visible {
+        outline: 3px solid var(--mat-sys-primary);
+        outline-offset: 2px;
+    }
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+}
+
+.summary {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 8px;
+    align-items: baseline;
+
+    .duration {
+        font: var(--mat-sys-title-small);
+    }
+
+    .target,
+    .hint {
+        font: var(--mat-sys-body-medium);
+        color: var(--mat-sys-on-surface-variant);
+    }
+}

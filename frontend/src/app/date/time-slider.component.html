@@ -1,0 +1,61 @@
+<div class="time-slider">
+  <div #track
+    class="track"
+    [class.dragging]="dragging()"
+    (pointerdown)="onPointerDown($event)"
+    (pointermove)="onPointerMove($event)"
+    (pointerup)="onPointerUp($event)"
+    (pointercancel)="onPointerUp($event)">
+    <div class="strip"
+      [class.animated]="animateBackground()"
+      [style.left.%]="stripLeftPercent()"
+      [style.width.%]="cycleWidthPercent() * cycles().length"
+      (transitionend)="onBackgroundTransitionEnd($event)">
+      @for (cycle of cycles(); track cycle) {
+        <div class="cycle">
+          @for (hour of hourTicks; track hour) {
+            <div class="tick" [class.major]="hour % 6 === 0" [style.left.%]="hour / 24 * 100"></div>
+          }
+          <mat-icon class="celestial moon" [style.left.%]="0">dark_mode</mat-icon>
+          <mat-icon class="celestial sun" [style.left.%]="50">light_mode</mat-icon>
+        </div>
+      }
+    </div>
+
+    <div class="selection"
+      [style.left.%]="startPercent"
+      [style.width.%]="thumbPercent() - startPercent"></div>
+    <div class="start-marker" [style.left.%]="startPercent"></div>
+
+    <div class="thumb"
+      role="slider"
+      tabindex="0"
+      aria-label="Faire avancer le temps"
+      aria-valuemin="0"
+      [attr.aria-valuemax]="maxSteps()"
+      [attr.aria-valuenow]="steps()"
+      [attr.aria-valuetext]="durationText() || 'Aucun changement'"
+      [style.left.%]="thumbPercent()"
+      (keydown)="onKeyDown($event)">
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="summary">
+      @if (steps() > 0) {
+        <span class="duration">+{{durationText()}}</span>
+        <span class="target">→ {{targetTimeText()}}</span>
+      } @else {
+        <span class="hint">Glisser pour faire avancer le temps</span>
+      }
+    </div>
+    @if (steps() > 0) {
+      <button mat-icon-button (click)="reset()" aria-label="Annuler">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+    <button mat-flat-button [disabled]="steps() === 0" (click)="validate()">
+      Valider
+    </button>
+  </div>
+</div>
