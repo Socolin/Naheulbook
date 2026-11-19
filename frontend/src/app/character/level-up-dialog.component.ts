@@ -10,10 +10,26 @@ import { MatIcon } from '@angular/material/icon';
 import { MatStepper, MatStep, MatStepLabel, MatStepperNext } from '@angular/material/stepper';
 import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
-import {MatFormField, MatHint, MatLabel} from '@angular/material/form-field';
+import {MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { SkillSelectorComponent } from './skill-selector.component';
 import { SpecialitySelectorComponent } from './speciality-selector.component';
+import {firstValueFrom} from 'rxjs';
+import {NhbkMatDialog} from '../material-workaround';
+import {MasteryResponse, TalentResponse} from '../api/responses';
+import {TalentService} from '../talent/talent.service';
+import {MasteryService} from '../mastery/mastery.service';
+import {getTalentPrerequisiteId, toTalentLearnableGroups} from '../talent/character-talent-panel.component';
+import {getMasteryPrerequisiteId, toMasteryLearnableGroups} from '../mastery/character-mastery-panel.component';
+import {buildCandidates, Candidates} from '../shared/entry-group-tabs/entry-candidates';
+import {AddEntryDialogComponent, AddEntryDialogData, AddEntryDialogResult} from '../shared/entry-group-tabs/add-entry-dialog.component';
+
+/**
+ * At each odd level from level 3 (3, 5, 7...), the character gets 1 point to learn either a talent or a mastery
+ */
+export function givesTalentOrMasteryPoint(level: number): boolean {
+    return level >= 3 && level % 2 === 1;
+}
 
 export interface LevelUpDialogData {
     readonly character: Character;
@@ -26,6 +42,8 @@ export interface LevelUpDialogResult {
     statToUp: string;
     skillId?: Guid;
     specialityIds: Guid[];
+    talentId?: Guid;
+    masteryId?: Guid;
 }
 
 export class LevelUpInfo {
@@ -35,13 +53,17 @@ export class LevelUpInfo {
     statToUp?: string;
     skill?: Skill;
     specialities: { [jobId: string]: Speciality } = {};
+    /** What the talent or mastery point is spent on */
+    pointKind: 'talent' | 'mastery' = 'talent';
+    talent?: TalentResponse;
+    mastery?: MasteryResponse;
 }
 
 @Component({
     templateUrl: './level-up-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './level-up-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [MatLabel, MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatStepper, MatStep, MatStepLabel, MatButtonToggleGroup, FormsModule, MatButtonToggle, MatFormField, MatInput, MatHint, MatButton, MatStepperNext, SkillSelectorComponent, SpecialitySelectorComponent]
+    imports: [MatLabel, MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatStepper, MatStep, MatStepLabel, MatButtonToggleGroup, FormsModule, MatButtonToggle, MatFormField, MatInput, MatHint, MatSuffix, MatButton, MatStepperNext, SkillSelectorComponent, SpecialitySelectorComponent]
 })
 export class LevelUpDialogComponent {
     public levelUpInfo: LevelUpInfo = new LevelUpInfo();
@@ -49,6 +71,9 @@ export class LevelUpDialogComponent {
     constructor(
         private readonly dialogRef: MatDialogRef<LevelUpDialogComponent, LevelUpDialogResult>,
         @Inject(MAT_DIALOG_DATA) public readonly data: LevelUpDialogData,
+        private readonly dialog: NhbkMatDialog,
+        private readonly talentService: TalentService,
+        private readonly masteryService: MasteryService,
     ) {
         this.initLevelUp();
     }
@@ -129,6 +154,59 @@ export class LevelUpDialogComponent {
         }
     }
 
+    levelUpShouldChooseTalentOrMastery(): boolean {
+        return givesTalentOrMasteryPoint(this.levelUpInfo.targetLevelUp);
+    }
+
+    get chosenTalentOrMastery(): TalentResponse | MasteryResponse | undefined {
+        return this.levelUpInfo.pointKind === 'talent' ? this.levelUpInfo.talent : this.levelUpInfo.mastery;
+    }
+
+    changePointKind(kind: 'talent' | 'mastery') {
+        this.levelUpInfo.pointKind = kind;
+        this.levelUpInfo.talent = undefined;
+        this.levelUpInfo.mastery = undefined;
+    }
+
+    clearTalentOrMastery() {
+        this.levelUpInfo.talent = undefined;
+        this.levelUpInfo.mastery = undefined;
+    }
+
+    async chooseTalentOrMastery() {
+        const kind = this.levelUpInfo.pointKind;
+        // Conditions are checked against the level the character is reaching
+        const level = this.levelUpInfo.targetLevelUp;
+        let candidates: Candidates;
+        let all: (TalentResponse | MasteryResponse)[];
+        if (kind === 'talent') {
+            const groups = await firstValueFrom(this.talentService.getTalentGroups());
+            const knownIds = new Set(this.data.character.talents.map(x => x.id));
+            candidates = buildCandidates(toTalentLearnableGroups(groups), knownIds, level, getTalentPrerequisiteId);
+            all = groups.flatMap(g => g.talents);
+        } else {
+            const groups = await firstValueFrom(this.masteryService.getMasteryGroups());
+            const knownIds = new Set(this.data.character.masteries.map(x => x.id));
+            candidates = buildCandidates(toMasteryLearnableGroups(groups), knownIds, level, getMasteryPrerequisiteId);
+            all = groups.flatMap(g => g.masteries);
+        }
+
+        const dialogRef = this.dialog.openFullScreen<AddEntryDialogComponent, AddEntryDialogData, AddEntryDialogResult>(
+            AddEntryDialogComponent,
+            {data: {title: kind === 'talent' ? 'Choisir un talent' : 'Choisir une maîtrise', singleChoice: true, ...candidates}}
+        );
+        const result = await firstValueFrom(dialogRef.afterClosed());
+        const chosen = all.find(x => x.id === result?.selectedIds[0]);
+        if (!chosen || kind !== this.levelUpInfo.pointKind) {
+            return;
+        }
+        if (kind === 'talent') {
+            this.levelUpInfo.talent = chosen as TalentResponse;
+        } else {
+            this.levelUpInfo.mastery = chosen as MasteryResponse;
+        }
+    }
+
     levelUpFormReady() {
         if (!this.levelUpInfo.evOrEaValue) {
             return false;
@@ -144,6 +222,9 @@ export class LevelUpDialogComponent {
             if (!this.levelUpInfo.skill) {
                 return false;
             }
+        }
+        if (this.levelUpShouldChooseTalentOrMastery() && !this.chosenTalentOrMastery) {
+            return false;
         }
         return true;
     }
@@ -180,6 +261,8 @@ export class LevelUpDialogComponent {
             statToUp: this.levelUpInfo.statToUp,
             skillId: skillId,
             specialityIds: specialityIds,
+            talentId: this.levelUpShouldChooseTalentOrMastery() ? this.levelUpInfo.talent?.id : undefined,
+            masteryId: this.levelUpShouldChooseTalentOrMastery() ? this.levelUpInfo.mastery?.id : undefined,
         })
 
     }

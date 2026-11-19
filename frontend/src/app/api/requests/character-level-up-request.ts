@@ -7,4 +7,8 @@ export interface CharacterLevelUpRequest {
     statToUp: string;
     skillId?: Guid;
     specialityIds: Guid[];
+    /** Talent learned with the talent or mastery point of odd levels (3, 5, 7...). Exclusive with masteryId. */
+    talentId?: Guid;
+    /** Mastery learned with the talent or mastery point of odd levels (3, 5, 7...). Exclusive with talentId. */
+    masteryId?: Guid;
 }

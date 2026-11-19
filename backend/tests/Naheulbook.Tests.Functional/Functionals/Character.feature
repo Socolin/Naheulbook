@@ -642,9 +642,89 @@ Feature: Character
         "${Skill.Id}"
       ],
       "newLevel": 2,
-      "newSpecialities": []
+      "newSpecialities": [],
+      "newTalents": [],
+      "newMasteries": []
     }
     """
+
+  Scenario: On odd levels, a character can learn a talent or a mastery when leveling up
+    Given a JWT for a user
+    And a level 2 character
+    And a talent group
+    And a talent
+
+    When performing a POST to the url "/api/v2/characters/${Character.Id}/levelUp" with the following json content and the current jwt
+    """json
+    {
+      "evOrEa": "EV",
+      "evOrEaValue": 4,
+      "targetLevelUp": 3,
+      "statToUp": "AT",
+      "specialityIds": [],
+      "talentId": "${Talent.Id}"
+    }
+    """
+    Then the response status code is 200
+    And the response should contains the following json
+    """json
+    {"__partial": {
+      "newLevel": 3,
+      "newTalents": [{"__partial": {"id": "${Talent.Id}", "name": "${Talent.Name}"}}],
+      "newMasteries": []
+    }}
+    """
+
+    When performing a GET to the url "/api/v2/characters/${Character.Id}" with the current jwt
+    Then the response status code is 200
+    And the response should contains the following json
+    """json
+    {"__partial": {
+      "level": 3,
+      "talents": [{"__partial": {"id": "${Talent.Id}"}}]
+    }}
+    """
+
+  Scenario: A level up cannot give a talent or a mastery on levels without a talent or mastery point
+    Given a JWT for a user
+    And a character
+    And a mastery group
+    And a mastery
+
+    When performing a POST to the url "/api/v2/characters/${Character.Id}/levelUp" with the following json content and the current jwt
+    """json
+    {
+      "evOrEa": "EV",
+      "evOrEaValue": 4,
+      "targetLevelUp": 2,
+      "statToUp": "AD",
+      "specialityIds": [],
+      "masteryId": "${Mastery.Id}"
+    }
+    """
+    Then the response status code is 400
+
+  Scenario: A level up gives either a talent or a mastery, not both
+    Given a JWT for a user
+    And a level 2 character
+    And a talent group
+    And a talent
+    And a mastery group
+    And a mastery
+
+    When performing a POST to the url "/api/v2/characters/${Character.Id}/levelUp" with the following json content and the current jwt
+    """json
+    {
+      "evOrEa": "EV",
+      "evOrEaValue": 4,
+      "targetLevelUp": 3,
+      "statToUp": "AT",
+      "specialityIds": [],
+      "talentId": "${Talent.Id}",
+      "masteryId": "${Mastery.Id}"
+    }
+    """
+    Then the response status code is 400
 
   Scenario: A character can learn new job
     Given a JWT for a user

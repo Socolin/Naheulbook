@@ -114,6 +114,8 @@ public class CharacterMapper(
             NewSkillIds = levelUpResult.NewSkills.Select(s => s.SkillId).ToList(),
             NewLevel = levelUpResult.NewLevel,
             NewSpecialities = levelUpResult.NewSpecialities.Select(s => specialityMapper.ToResponse(s.Speciality)).ToList(),
+            NewTalents = levelUpResult.NewTalents.Select(talentMapper.ToResponse).ToList(),
+            NewMasteries = levelUpResult.NewMasteries.Select(masteryMapper.ToResponse).ToList(),
         };
     }
 

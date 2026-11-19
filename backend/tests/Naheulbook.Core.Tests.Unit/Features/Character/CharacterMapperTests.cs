@@ -204,8 +204,12 @@ public class CharacterMapperTests
     }
 
     [Test]
-    public void ToResponse_LevelUpResult_MapsNewModifiersSkillsAndSpecialities()
+    public void ToResponse_LevelUpResult_MapsNewModifiersSkillsSpecialitiesTalentsAndMasteries()
     {
+        var talent = new TalentEntity();
+        var talentResponse = new TalentResponse();
+        var mastery = new MasteryEntity();
+        var masteryResponse = new MasteryResponse();
         var modifier = new CharacterModifierEntity();
         var modifierResponse = new ActiveStatsModifier();
         var speciality = new SpecialityEntity();
@@ -217,12 +221,18 @@ public class CharacterMapperTests
             NewModifiers = [modifier],
             NewSkills = [new CharacterSkillEntity {SkillId = skillId}],
             NewSpecialities = [new CharacterSpecialityEntity {Speciality = speciality}],
+            NewTalents = [talent],
+            NewMasteries = [mastery],
         };
 
         _characterModifierMapper.ToResponse(modifier)
             .Returns(modifierResponse);
         _specialityMapper.ToResponse(speciality)
             .Returns(specialityResponse);
+        _talentMapper.ToResponse(talent)
+            .Returns(talentResponse);
+        _masteryMapper.ToResponse(mastery)
+            .Returns(masteryResponse);
 
         var actual = _mapper.ToResponse(levelUpResult);
 
@@ -232,6 +242,8 @@ public class CharacterMapperTests
             NewModifiers = [modifierResponse],
             NewSkillIds = [skillId],
             NewSpecialities = [specialityResponse],
+            NewTalents = [talentResponse],
+            NewMasteries = [masteryResponse],
         });
     }
 

@@ -8,6 +8,8 @@ using Naheulbook.Core.Features.Job;
 using Naheulbook.Core.Features.Loot;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Features.SpecialAttack;
+using Naheulbook.Core.Features.Mastery;
+using Naheulbook.Core.Features.Talent;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Responses.Responses;
 using Naheulbook.Shared.TransientModels;
@@ -355,7 +357,10 @@ public class CharactersController(
             var levelUpResult = await characterService.LevelUpCharacterAsync(executionContext, characterId, request, cancellationToken);
             return characterMapper.ToResponse(levelUpResult);
         }
-        catch (SpecialityNotFoundException ex)
+        catch (Exception ex) when (ex is SpecialityNotFoundException
+                                       or InvalidLevelUpTalentOrMasteryException
+                                       or TalentNotFoundException or TalentAlreadyKnownException
+                                       or MasteryNotFoundException or MasteryAlreadyKnownException)
         {
             throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
         }

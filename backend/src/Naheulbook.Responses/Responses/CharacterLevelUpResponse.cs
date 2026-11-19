@@ -10,4 +10,6 @@ public class CharacterLevelUpResponse
     public List<Guid> NewSkillIds { get; set; } = null!;
     public int NewLevel { get; set; }
     public List<SpecialityResponse> NewSpecialities { get; set; } = null!;
+    public List<TalentResponse> NewTalents { get; set; } = null!;
+    public List<MasteryResponse> NewMasteries { get; set; } = null!;
 }

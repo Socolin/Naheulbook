@@ -1,7 +1,9 @@
 using Naheulbook.Core.Features.Group;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Features.Job;
+using Naheulbook.Core.Features.Mastery;
 using Naheulbook.Core.Features.Shared;
+using Naheulbook.Core.Features.Talent;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.UnitOfWorks;
@@ -323,6 +325,9 @@ public class CharacterService(
         if (specialities.Count < request.SpecialityIds.Distinct().Count())
             throw new SpecialityNotFoundException();
 
+        var talent = await GetLevelUpTalentAsync(uow, characterId, request, cancellationToken);
+        var mastery = await GetLevelUpMasteryAsync(uow, characterId, request, cancellationToken);
+
         var origin = await uow.Origins.GetWithAllDataAsync(character.OriginId, cancellationToken);
 
         var levelUpResult = characterUtil.LevelUpCharacter(character, origin.NotNull(), specialities, request);
@@ -332,6 +337,18 @@ public class CharacterService(
         uow.CharacterSpecialities.AddRange(levelUpResult.NewSpecialities);
 
         character.AddHistoryEntry(characterHistoryUtil.CreateLogLevelUp(character.Id, character.Level));
+        if (talent != null)
+        {
+            uow.CharacterTalents.Add(new CharacterTalentEntity {Character = character, Talent = talent});
+            levelUpResult.NewTalents.Add(talent);
+            character.AddHistoryEntry(characterHistoryUtil.CreateAddTalent(character.Id, talent));
+        }
+        if (mastery != null)
+        {
+            uow.CharacterMasteries.Add(new CharacterMasteryEntity {Character = character, Mastery = mastery});
+            levelUpResult.NewMasteries.Add(mastery);
+            character.AddHistoryEntry(characterHistoryUtil.CreateAddMastery(character.Id, mastery));
+        }
         var notificationSession = notificationSessionFactory.CreateSession();
         notificationSession.NotifyCharacterLevelUp(character.Id, levelUpResult);
 
@@ -339,6 +356,50 @@ public class CharacterService(
         await notificationSession.CommitAsync();
 
         return levelUpResult;
+    }
+
+    /// <summary>
+    /// Talent chosen with the talent or mastery point of the level up, if any (only on levels giving such a point)
+    /// </summary>
+    private static async Task<TalentEntity?> GetLevelUpTalentAsync(IUnitOfWork uow, int characterId, CharacterLevelUpRequest request, CancellationToken cancellationToken)
+    {
+        EnsureValidTalentOrMasteryChoice(request);
+        if (!request.TalentId.HasValue)
+            return null;
+
+        var talent = await uow.Talents.GetAsync(request.TalentId.Value, cancellationToken);
+        if (talent == null)
+            throw new TalentNotFoundException(request.TalentId.Value);
+        if (await uow.CharacterTalents.GetByCharacterIdAndTalentIdAsync(characterId, talent.Id, cancellationToken) != null)
+            throw new TalentAlreadyKnownException(talent.Id);
+        return talent;
+    }
+
+    /// <summary>
+    /// Mastery chosen with the talent or mastery point of the level up, if any (only on levels giving such a point)
+    /// </summary>
+    private static async Task<MasteryEntity?> GetLevelUpMasteryAsync(IUnitOfWork uow, int characterId, CharacterLevelUpRequest request, CancellationToken cancellationToken)
+    {
+        EnsureValidTalentOrMasteryChoice(request);
+        if (!request.MasteryId.HasValue)
+            return null;
+
+        var mastery = await uow.Masteries.GetAsync(request.MasteryId.Value, cancellationToken);
+        if (mastery == null)
+            throw new MasteryNotFoundException(request.MasteryId.Value);
+        if (await uow.CharacterMasteries.GetByCharacterIdAndMasteryIdAsync(characterId, mastery.Id, cancellationToken) != null)
+            throw new MasteryAlreadyKnownException(mastery.Id);
+        return mastery;
+    }
+
+    private static void EnsureValidTalentOrMasteryChoice(CharacterLevelUpRequest request)
+    {
+        if (!request.TalentId.HasValue && !request.MasteryId.HasValue)
+            return;
+        if (request.TalentId.HasValue && request.MasteryId.HasValue)
+            throw new InvalidLevelUpTalentOrMasteryException("A level up gives either a talent or a mastery, not both");
+        if (!TalentOrMasteryPointRule.GivesPointAtLevel(request.TargetLevelUp))
+            throw new InvalidLevelUpTalentOrMasteryException($"Level {request.TargetLevelUp} does not give a talent or mastery point");
     }
 
     public async Task AddJobAsync(NaheulbookExecutionContext executionContext, int characterId, CharacterAddJobRequest request, CancellationToken cancellationToken = default)

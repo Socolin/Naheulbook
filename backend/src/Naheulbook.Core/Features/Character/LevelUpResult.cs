@@ -9,4 +9,6 @@ public class LevelUpResult
     public int NewLevel { get; set; }
     public IList<CharacterSkillEntity> NewSkills { get; set; } = new List<CharacterSkillEntity>();
     public IList<CharacterSpecialityEntity> NewSpecialities { get; set; } = new List<CharacterSpecialityEntity>();
+    public IList<TalentEntity> NewTalents { get; set; } = new List<TalentEntity>();
+    public IList<MasteryEntity> NewMasteries { get; set; } = new List<MasteryEntity>();
 }

@@ -4,18 +4,18 @@
         display: flex;
 
         mat-form-field {
-            flex: 1 1 auto;
-            margin-right: 6px;
-        }
-
-        button {
-            flex: 0 0 auto;
+            flex: 1;
         }
     }
 
     .lean-skill {
         display: flex;
         align-items: center;
+    }
+
+    .talent-or-mastery-effect {
+        margin-top: 0;
+        color: var(--mat-sys-on-surface-variant);
     }
 
     .next-button {

@@ -35,26 +35,26 @@
 
 
 
-    <div class="level-up-ea-ev">
-      <mat-form-field align="end">
-        <mat-label>Valeur</mat-label>
-        <input matInput type="number" [(ngModel)]="levelUpInfo.evOrEaValue">
-        @if (levelUpInfo.evOrEa === 'EV') {
-          <mat-hint align="end">
-            Lancer 1D{{data.character.origin.data.diceEvLevelUp}}@if (characterHasToken('LEVELUP_DICE_EV_-1')) {
-            <span>-1</span>
+      <div class="level-up-ea-ev">
+        <mat-form-field>
+          <mat-label>Valeur</mat-label>
+          <input matInput type="number" [(ngModel)]="levelUpInfo.evOrEaValue">
+          @if (levelUpInfo.evOrEa === 'EV') {
+            <mat-hint align="end">
+              Lancer 1D{{ data.character.origin.data.diceEvLevelUp }}@if (characterHasToken('LEVELUP_DICE_EV_-1')) {
+              <span>-1</span>
+            }
+            </mat-hint>
           }
-        </mat-hint>
-      }
-      @if (levelUpInfo.evOrEa === 'EA') {
-        <mat-hint align="end">
-          Lancer 1D{{data.character.diceEaLevelUp}}
-        </mat-hint>
-      }
-    </mat-form-field>
-    <button mat-icon-button (click)="rollLevelUp()">
-      <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-24"></mat-icon>
-    </button>
+          @if (levelUpInfo.evOrEa === 'EA') {
+            <mat-hint align="end">
+              Lancer 1D{{ data.character.diceEaLevelUp }}
+            </mat-hint>
+          }
+          <button matSuffix mat-icon-button (click)="rollLevelUp()">
+            <mat-icon fontSet="ra" fontIcon="ra-perspective-dice-random" class="ra-mat-button-icon-24" />
+          </button>
+        </mat-form-field>
   </div>
   <div class="next-button">
     <button mat-button color="primary" [disabled]="!levelUpInfo.evOrEaValue" matStepperNext>SUIVANT</button>
@@ -120,6 +120,45 @@
   </mat-step>
 }
 
+@if (levelUpShouldChooseTalentOrMastery()) {
+  <mat-step [completed]="!!chosenTalentOrMastery">
+    <ng-template matStepLabel>
+      Talent ou maîtrise
+    </ng-template>
+    <p>Au niveau {{levelUpInfo.targetLevelUp}}, on gagne 1 point à dépenser pour apprendre un talent OU une maîtrise.</p>
+    <mat-button-toggle-group [value]="levelUpInfo.pointKind" (change)="changePointKind($event.value)" aria-label="Talent ou maîtrise">
+      <mat-button-toggle value="talent">Talent</mat-button-toggle>
+      <mat-button-toggle value="mastery">Maîtrise</mat-button-toggle>
+    </mat-button-toggle-group>
+    @if (chosenTalentOrMastery; as chosen) {
+      <p class="lean-skill">
+        @if (levelUpInfo.pointKind === 'talent') {
+          J'apprends le talent : {{chosen.name}}
+        } @else {
+          J'apprends la maîtrise : {{chosen.name}}
+        }
+        <button mat-icon-button (click)="clearTalentOrMastery()" aria-label="Changer de choix">
+          <mat-icon>close</mat-icon>
+        </button>
+      </p>
+      <p class="talent-or-mastery-effect">{{chosen.data.effect}}</p>
+    } @else {
+      <p>
+        <button mat-stroked-button (click)="chooseTalentOrMastery()">
+          @if (levelUpInfo.pointKind === 'talent') {
+            Choisir un talent
+          } @else {
+            Choisir une maîtrise
+          }
+        </button>
+      </p>
+    }
+    <div class="next-button">
+      <button mat-button color="primary" [disabled]="!chosenTalentOrMastery" matStepperNext>SUIVANT</button>
+    </div>
+  </mat-step>
+}
+
 @for (job of data.character.jobs; track job) {
   @if (levelUpShouldSelectSpeciality(job)) {
     <mat-step #specialityStep [completed]="!!levelUpInfo.specialities[job.id]">
@@ -154,6 +193,15 @@
     @if (levelUpInfo.skill) {
       <li >
         J'apprends la compétence: {{levelUpInfo.skill.name}}
+      </li>
+    }
+    @if (levelUpShouldChooseTalentOrMastery() && chosenTalentOrMastery; as chosen) {
+      <li>
+        @if (levelUpInfo.pointKind === 'talent') {
+          J'apprends le talent : {{chosen.name}}
+        } @else {
+          J'apprends la maîtrise : {{chosen.name}}
+        }
       </li>
     }
     @for (job of data.character.jobs; track job) {

@@ -4,7 +4,11 @@
   </button>
   <span class="toolbar-title">{{ data.title }}</span>
   <button mat-button (click)="valid()" [disabled]="selectedIds.size === 0">
-    AJOUTER @if (selectedIds.size) { ({{ selectedIds.size }}) }
+    @if (data.singleChoice) {
+      CHOISIR
+    } @else {
+      AJOUTER @if (selectedIds.size) { ({{ selectedIds.size }}) }
+    }
   </button>
 </mat-toolbar>
 

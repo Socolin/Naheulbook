@@ -1255,6 +1255,12 @@ export class Character extends WsRegistrable {
             for (const speciality of result.newSpecialities) {
                 this.specialities.push(Speciality.fromResponse(speciality));
             }
+            for (const talent of result.newTalents ?? []) {
+                this.addTalent(talent);
+            }
+            for (const mastery of result.newMasteries ?? []) {
+                this.addMastery(mastery);
+            }
             this.notify('levelUp', this.name + ' gagne un niveau !');
             this.update();
         }

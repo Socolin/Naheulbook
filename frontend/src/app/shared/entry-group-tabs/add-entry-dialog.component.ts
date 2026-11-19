@@ -18,6 +18,8 @@ export type AddEntryDialogData = {
     warnings: Record<string, string[]>;
     /** Offer to roll a die and select the entry whose badge is the result (D100 table of handicaps) */
     diceRollSides?: number;
+    /** Only one entry can be chosen (e.g. the talent or mastery point of a level up) */
+    singleChoice?: boolean;
 }
 
 export type AddEntryDialogResult = {
@@ -83,6 +85,9 @@ export class AddEntryDialogComponent {
         if (this.selectedIds.has(id)) {
             this.selectedIds.delete(id);
         } else {
+            if (this.data.singleChoice) {
+                this.selectedIds.clear();
+            }
             this.selectedIds.add(id);
         }
     }
@@ -92,6 +97,9 @@ export class AddEntryDialogComponent {
         const entry = this.groups.flatMap(g => g.candidates).find(c => c.entry.badge === String(value))?.entry;
         this.lastRoll = {value, entry};
         if (entry) {
+            if (this.data.singleChoice) {
+                this.selectedIds.clear();
+            }
             this.selectedIds.add(entry.id);
         }
     }

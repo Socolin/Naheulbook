@@ -38,6 +38,18 @@ public class CharacterSteps(
         }
     }
 
+    [Given(@"^a level (\d+) character$")]
+    public void GivenALevelCharacter(int level)
+    {
+        if (!testDataUtil.Contains<OriginEntity>())
+            testDataUtil.AddOrigin();
+        testDataUtil.AddCharacter(c =>
+        {
+            c.GroupId = null;
+            c.Level = level;
+        });
+    }
+
     [Given(@"^a character modifier$")]
     public void GivenACharacterModifier()
     {
