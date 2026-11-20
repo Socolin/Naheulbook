@@ -140,6 +140,16 @@
   </div>
 }
 
+@if (itemTemplate.data.confinsDuGivre?.price) {
+  <div class="icon-label">
+    <mat-icon fontSet="game-icon" fontIcon="game-icon-fangs" class="ra-mat-button-icon-24"></mat-icon>
+    <div>
+      <span>Prix local (Confins du Givre):</span>
+      {{itemTemplate.data.confinsDuGivre | zgarugPrice}}
+    </div>
+  </div>
+}
+
 <!-- Charge / Action -->
 
 @if (itemTemplate.data.charge) {

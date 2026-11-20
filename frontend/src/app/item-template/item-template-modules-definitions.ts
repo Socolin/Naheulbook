@@ -5,6 +5,7 @@ export const itemTemplateModulesDefinitions: ItemTemplateModuleDefinition[] = [
     {name: 'bourrin',      displayName: 'Arme de bourrin',          icon: 'muscle-up ', description: 'Requiert la compétence Armes de bourrin pour pouvoir utiliser cet objet'},
     {name: 'charge',       displayName: 'Charges/Utilisations',     icon: 'usable', description: 'Peut être utilisé (ex: potions, bagues)'},
     {name: 'collect',      displayName: 'Possibilités de récolte',  icon: 'sickle', description: ''},
+    {name: 'confinsDuGivre', displayName: 'Confins du Givre',        icon: 'fangs', description: 'Prix local en dents de zgarug'},
     {name: 'container',    displayName: 'Conteneur',                icon: 'backpack', description: 'Cette objet peut contenir d\'autres objets'},
     {name: 'currency',     displayName: 'Monnaie',                  icon: 'coins', description: ''},
     {name: 'damage',       displayName: 'Dégât',                    icon: 'sword-wound', description: 'Défini les dégats de l\'arme'},

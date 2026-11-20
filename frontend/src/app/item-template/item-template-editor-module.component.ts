@@ -10,6 +10,7 @@ import {LoginService} from '../user';
 import {ItemSlot, ItemTemplate} from './item-template.model';
 import {ItemTemplateService} from './item-template.service';
 import {itemTemplateModulesDefinitions} from './item-template-modules-definitions';
+import {zgarugCurrencies} from './confins-du-givre-currency';
 import {ItemTypeResponse} from '../api/responses';
 import {NhbkMatDialog} from '../material-workaround';
 import {MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
@@ -54,6 +55,7 @@ export class ItemTemplateEditorModuleComponent implements OnInit {
     public createItemTypeOverlayRef?: OverlayRef;
     public newItemTypeDisplayName = '';
     public newItemTypeTechName = '';
+    public readonly zgarugCurrencies = zgarugCurrencies;
     public moduleDefinitionByName = itemTemplateModulesDefinitions.reduce((result, value) => {
         result[value.name] = value;
         return result;

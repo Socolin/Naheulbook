@@ -10,13 +10,14 @@ import { PlusMinusPipe } from '../shared/plus-minus.pipe';
 import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 import { ItemTemplateDataProtectionPipe } from './item-template-data-protection.pipe';
 import { ItemPricePipe } from './item-price.pipe';
+import { ZgarugPricePipe } from './zgarug-price.pipe';
 
 @Component({
     selector: 'app-item-template-details',
     templateUrl: './item-template-details.component.html',
     styleUrls: ['./item-template-details.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [MatIcon, MatChipSet, MatChip, NhbkActionComponent, MatDivider, ModifierPipe, PlusMinusPipe, NhbkDateDurationPipe, ItemTemplateDataProtectionPipe, ItemPricePipe]
+    imports: [MatIcon, MatChipSet, MatChip, NhbkActionComponent, MatDivider, ModifierPipe, PlusMinusPipe, NhbkDateDurationPipe, ItemTemplateDataProtectionPipe, ItemPricePipe, ZgarugPricePipe]
 })
 export class ItemTemplateDetailsComponent implements OnInit {
     @Input() itemTemplate: ItemTemplate;

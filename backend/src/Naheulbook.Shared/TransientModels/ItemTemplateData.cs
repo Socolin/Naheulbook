@@ -11,6 +11,7 @@ public class ItemTemplateData
     public bool? BruteWeapon { get; set; }
     public int? Charge { get; set; }
     public bool? Container { get; set; }
+    public ItemTemplateConfinsDuGivreData? ConfinsDuGivre { get; set; }
     public int? DamageDice { get; set; }
     public JToken? DamageType { get; set; }
     public string? Description { get; set; }

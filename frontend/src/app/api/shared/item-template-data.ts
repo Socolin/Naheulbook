@@ -2,6 +2,7 @@ import {IIconDescription} from './icon-description';
 import {IDurable} from './durable';
 import {IItemTemplateGunData} from './item-template-gun-data';
 import {IItemTemplateInstrumentData} from './item-template-instrument-data';
+import {IItemTemplateConfinsDuGivreData} from './item-template-confins-du-givre-data';
 
 export interface IItemTemplateData {
     actions?: any[];
@@ -10,6 +11,7 @@ export interface IItemTemplateData {
     bruteWeapon?: boolean;
     charge?: number;
     container?: boolean;
+    confinsDuGivre?: IItemTemplateConfinsDuGivreData;
     damageDice?: number;
     damageType?: any;
     description?: string;

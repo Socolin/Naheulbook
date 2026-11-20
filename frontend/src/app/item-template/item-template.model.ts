@@ -1,7 +1,14 @@
 import {ItemStatModifier} from '../shared';
 import {Skill, SkillDictionary} from '../skill';
 import {IconDescription} from '../shared/icon.model';
-import {IDurable, IItemTemplateData, IItemTemplateGunData, IItemTemplateInstrumentData} from '../api/shared';
+import {
+    IDurable,
+    IItemTemplateConfinsDuGivreData,
+    IItemTemplateData,
+    IItemTemplateGunData,
+    IItemTemplateInstrumentData
+} from '../api/shared';
+import {ZgarugCurrency} from '../api/shared/enums';
 import {ItemTemplateResponse, ItemTemplateSectionResponse, ItemTemplateSubCategoryResponse, ItemTypeResponse} from '../api/responses';
 import {Guid} from '../api/shared/util';
 
@@ -115,12 +122,27 @@ export class ItemTemplateInstrumentData implements IItemTemplateInstrumentData {
     }
 }
 
+export class ItemTemplateConfinsDuGivreData implements IItemTemplateConfinsDuGivreData {
+    price?: number;
+    currency?: ZgarugCurrency;
+
+    static fromResponse(response?: IItemTemplateConfinsDuGivreData): ItemTemplateConfinsDuGivreData | undefined {
+        if (!response) {
+            return undefined;
+        }
+        let confinsDuGivreData = new ItemTemplateConfinsDuGivreData();
+        Object.assign(confinsDuGivreData, response);
+        return confinsDuGivreData;
+    }
+}
+
 export class ItemTemplateData implements IItemTemplateData {
     actions?: any[];
     availableLocation?: string;
     bonusDamage?: number;
     bruteWeapon?: boolean;
     charge?: number;
+    confinsDuGivre?: ItemTemplateConfinsDuGivreData;
     container?: boolean;
     damageDice?: number;
     damageType?: any;
@@ -158,7 +180,8 @@ export class ItemTemplateData implements IItemTemplateData {
         let itemTemplateData = new ItemTemplateData();
         Object.assign(itemTemplateData, response, {
             gun: ItemTemplateGunData.fromResponse(response.gun),
-            instrument: ItemTemplateInstrumentData.fromResponse(response.instrument)
+            instrument: ItemTemplateInstrumentData.fromResponse(response.instrument),
+            confinsDuGivre: ItemTemplateConfinsDuGivreData.fromResponse(response.confinsDuGivre),
         });
         return itemTemplateData;
     }

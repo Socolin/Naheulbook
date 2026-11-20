@@ -7,7 +7,14 @@ import {Skill, SkillService} from '../skill';
 import {JobService} from '../job';
 import {OriginService} from '../origin';
 
-import {ItemSlot, ItemTemplate, ItemTemplateGunData, ItemTemplateInstrumentData, ItemTemplateSection} from './item-template.model';
+import {
+    ItemSlot,
+    ItemTemplate,
+    ItemTemplateConfinsDuGivreData,
+    ItemTemplateGunData,
+    ItemTemplateInstrumentData,
+    ItemTemplateSection
+} from './item-template.model';
 import {ItemTemplateService} from './item-template.service'
 import {IconDescription} from '../shared/icon.model';
 import {AddItemTemplateEditorModuleDialogComponent} from './add-item-template-editor-module-dialog.component';
@@ -152,6 +159,10 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
             case 'collect':
                 this.itemTemplate.data.availableLocation = '';
                 break;
+            case 'confinsDuGivre':
+                this.itemTemplate.data.confinsDuGivre = new ItemTemplateConfinsDuGivreData();
+                this.itemTemplate.data.confinsDuGivre.currency = 'pz';
+                break;
             case 'container':
                 this.itemTemplate.data.container = true;
                 break;
@@ -255,6 +266,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
                 break;
             case 'collect':
                 this.itemTemplate.data.availableLocation = undefined;
+                break;
+            case 'confinsDuGivre':
+                this.itemTemplate.data.confinsDuGivre = undefined;
                 break;
             case 'container':
                 this.itemTemplate.data.container = undefined;
@@ -360,6 +374,9 @@ export class ItemTemplateEditorComponent implements OnInit, OnChanges {
         }
         if (this.itemTemplate.data.availableLocation) {
             modules.push('collect');
+        }
+        if (this.itemTemplate.data.confinsDuGivre) {
+            modules.push('confinsDuGivre');
         }
         if (this.itemTemplate.data.container) {
             modules.push('container');
