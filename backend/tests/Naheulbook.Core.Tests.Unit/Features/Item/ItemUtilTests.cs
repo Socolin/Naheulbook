@@ -3,6 +3,7 @@ using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Item;
 using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
+using Naheulbook.Shared.TransientModels;
 using Naheulbook.Shared.Utils;
 using NSubstitute;
 using NUnit.Framework;
@@ -69,5 +70,41 @@ public class ItemUtilTests
             item.Character.HistoryEntries.Last().Action.Should().BeEquivalentTo(expectedAction);
         else
             item.Character.HistoryEntries.Should().BeNullOrEmpty();
+    }
+
+    [Test]
+    public void DecrementQuantityOrDeleteItem_WhenQuantityGreaterThanOne_ShouldDecrementQuantityAndResetCharge()
+    {
+        var jsonUtil = new JsonUtil();
+        var util = new ItemUtil(
+            _characterHistoryUtil,
+            new ItemDataUtil(jsonUtil),
+            jsonUtil,
+            new FakeUnitOfWorkFactory(),
+            new FakeNotificationSessionFactory(),
+            _itemFactory
+        );
+        var item = new ItemEntity
+        {
+            Data = jsonUtil.SerializeNonNull(new ItemData {Quantity = 3, Charge = 0}),
+            ItemTemplate = new ItemTemplateEntity {Data = jsonUtil.SerializeNonNull(new ItemTemplateData {Charge = 2})},
+        };
+
+        var shouldDelete = util.DecrementQuantityOrDeleteItem(item);
+
+        shouldDelete.Should().BeFalse();
+        var itemData = jsonUtil.Deserialize<ItemData>(item.Data)!;
+        itemData.Quantity.Should().Be(2);
+        itemData.Charge.Should().Be(2);
+    }
+
+    [Test]
+    public void DecrementQuantityOrDeleteItem_WhenQuantityIsOne_ShouldReturnTrue()
+    {
+        var jsonUtil = new JsonUtil();
+        var util = new ItemUtil(_characterHistoryUtil, new ItemDataUtil(jsonUtil), jsonUtil, new FakeUnitOfWorkFactory(), new FakeNotificationSessionFactory(), _itemFactory);
+        var item = new ItemEntity {Data = jsonUtil.SerializeNonNull(new ItemData {Quantity = 1, Charge = 0})};
+
+        util.DecrementQuantityOrDeleteItem(item).Should().BeTrue();
     }
 }

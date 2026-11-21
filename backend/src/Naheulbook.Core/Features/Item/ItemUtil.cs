@@ -145,7 +145,6 @@ public class ItemUtil(
             itemDataUtil.UpdateChargeCount(item, itemTemplateData.Charge.Value);
 
         itemDataUtil.UpdateRelativeQuantity(item, -1);
-        itemDataUtil.SetItemData(item, itemData);
 
         return false;
     }
