@@ -1,0 +1,87 @@
+<h2 matDialogTitle>{{title}}</h2>
+<mat-dialog-content>
+  <p class="points">
+    Points actuels : <strong>{{data.points}}</strong>
+    — {{pointsNeeded}} points seront consommés à la validation.
+  </p>
+
+  @if (loading) {
+    <div class="loading"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else {
+    <section>
+      <div class="section-header">
+        <h3>Tirage</h3>
+        <button mat-stroked-button (click)="rollEvent()" [disabled]="entries.length === 0">
+          <mat-icon>casino</mat-icon>
+          {{diceRoll ? 'Relancer le D100' : 'Lancer le D100'}}
+        </button>
+      </div>
+
+      @if (selectedEvent) {
+        <div class="event" [class.mankdebol]="isMankdebol" [class.debilibeuk]="!isMankdebol">
+          <div class="event-roll">{{selectedEvent.diceRoll}}</div>
+          <div class="event-content">
+            <div class="event-name">{{selectedEvent.name}}</div>
+            <div class="event-effect">{{selectedEvent.effect}}</div>
+          </div>
+        </div>
+      } @else if (diceRoll) {
+        <p>D100 : {{diceRoll}} — aucune entrée pour ce résultat.</p>
+      }
+
+      <mat-form-field subscriptSizing="dynamic" class="full-width">
+        <mat-label>Ou choisir dans la table</mat-label>
+        <mat-select [ngModel]="selectedEvent" (ngModelChange)="selectEvent($event)">
+          @for (entry of entries; track entry.id) {
+            <mat-option [value]="entry">{{entry.diceRoll}} — {{entry.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    <section>
+      <div class="section-header">
+        <h3>Personnage concerné</h3>
+        <button mat-stroked-button (click)="rollCharacter()" [disabled]="data.characters.length === 0">
+          <mat-icon>casino</mat-icon>
+          Tirer au D6
+        </button>
+      </div>
+      <p class="hint">{{characterRule}} (seulement si l'évènement ne touche qu'un personnage).</p>
+
+      @if (characterRolls.length) {
+        <ul class="character-rolls">
+          @for (characterRoll of characterRolls; track characterRoll.character.id) {
+            <li [class.selected]="isSelectedCharacter(characterRoll)">
+              <span class="character-name">{{characterRoll.character.name}}</span>
+              <span class="character-dice">{{characterRoll.rolls.join(' puis ')}}</span>
+            </li>
+          }
+        </ul>
+      }
+
+      <mat-form-field subscriptSizing="dynamic" class="full-width">
+        <mat-label>Personnage</mat-label>
+        <mat-select [(ngModel)]="selectedCharacterId">
+          <mat-option [value]="undefined">Tout le groupe / aucun</mat-option>
+          @for (character of data.characters; track character.id) {
+            <mat-option [value]="character.id">{{character.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </section>
+  }
+
+  @if (error) {
+    <p class="error">{{error}}</p>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>ANNULER</button>
+  <button mat-button
+    color="primary"
+    [disabled]="!selectedEvent || saving"
+    (click)="validate()">
+    VALIDER
+  </button>
+</mat-dialog-actions>

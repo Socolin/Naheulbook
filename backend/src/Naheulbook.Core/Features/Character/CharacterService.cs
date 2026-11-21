@@ -167,7 +167,7 @@ public class CharacterService(
 
         authorizationUtil.EnsureCharacterAccess(executionContext, character);
 
-        return await uow.Characters.GetHistoryByCharacterIdAsync(character.Id, character.GroupId, page, character.Group?.MasterId == characterId, cancellationToken);
+        return await uow.Characters.GetHistoryByCharacterIdAsync(character.Id, character.GroupId, page, character.Group?.MasterId == executionContext.UserId, cancellationToken);
     }
 
     public async Task<bool> EnsureUserCanAccessCharacterAndGetIfIsGroupMasterAsync(NaheulbookExecutionContext executionContext, int characterId, CancellationToken cancellationToken = default)

@@ -29,6 +29,8 @@ public interface IUnitOfWork : IDisposable
     IGroupHistoryEntryRepository GroupHistoryEntries { get; }
     IGroupInviteRepository GroupInvites { get; }
     IHandicapRepository Handicaps { get; }
+    IMankdebolCalamityRepository MankdebolCalamities { get; }
+    IDebilibeukBlessingRepository DebilibeukBlessings { get; }
     IItemRepository Items { get; }
     IItemTemplateRepository ItemTemplates { get; }
     IItemTemplateSubCategoryRepository ItemTemplateSubCategories { get; }
@@ -93,6 +95,8 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public IGroupHistoryEntryRepository GroupHistoryEntries => new GroupHistoryEntryRepository(_naheulbookDbContext);
     public IGroupInviteRepository GroupInvites => new GroupInviteRepository(_naheulbookDbContext);
     public IHandicapRepository Handicaps => new HandicapRepository(_naheulbookDbContext);
+    public IMankdebolCalamityRepository MankdebolCalamities => new MankdebolCalamityRepository(_naheulbookDbContext);
+    public IDebilibeukBlessingRepository DebilibeukBlessings => new DebilibeukBlessingRepository(_naheulbookDbContext);
     public IItemRepository Items => new ItemRepository(_naheulbookDbContext);
     public IItemTemplateRepository ItemTemplates => new ItemTemplateRepository(_naheulbookDbContext);
     public IItemTemplateSectionRepository ItemTemplateSections => new ItemTemplateSectionRepository(_naheulbookDbContext);

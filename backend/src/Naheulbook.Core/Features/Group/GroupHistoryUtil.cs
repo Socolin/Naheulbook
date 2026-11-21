@@ -1,3 +1,4 @@
+using Naheulbook.Core.Features.Entropy;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Shared.Utils;
 
@@ -12,6 +13,7 @@ public interface IGroupHistoryUtil
     GroupHistoryEntryEntity CreateLogChangeDate(GroupEntity group, NhbkDate? oldValue, NhbkDate newValue);
     GroupHistoryEntryEntity CreateLogAddTime(GroupEntity group, NhbkDate date, NhbkDateOffset timeOffset);
     GroupHistoryEntryEntity CreateLogEventRp(GroupEntity group, bool isGm, string text);
+    GroupHistoryEntryEntity CreateLogEntropyEvent(GroupEntity group, EntropyKind kind, IEntropyEventEntity entropyEvent, CharacterEntity? character, int? oldValue, int newValue);
 }
 
 public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
@@ -23,6 +25,8 @@ public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
     private const string UpdateDateActionName = "CHANGE_DATE";
     private const string AddTimeActionName = "ADD_TIME";
     private const string EventRpActionName = "EVENT_RP";
+    private const string MankdebolCalamityActionName = "MANKDEBOL_CALAMITY";
+    private const string DebilibeukBlessingActionName = "DEBILIBEUK_BLESSING";
 
     public GroupHistoryEntryEntity CreateLogStartCombat(GroupEntity group)
     {
@@ -103,6 +107,31 @@ public class GroupHistoryUtil(IJsonUtil jsonUtil) : IGroupHistoryUtil
             Date = DateTime.UtcNow,
             Gm = isGm,
             Data = jsonUtil.Serialize(new {text}),
+        };
+    }
+
+    public GroupHistoryEntryEntity CreateLogEntropyEvent(
+        GroupEntity group,
+        EntropyKind kind,
+        IEntropyEventEntity entropyEvent,
+        CharacterEntity? character,
+        int? oldValue,
+        int newValue
+    )
+    {
+        return new GroupHistoryEntryEntity
+        {
+            Group = group,
+            Action = kind == EntropyKind.MankdebolCalamity ? MankdebolCalamityActionName : DebilibeukBlessingActionName,
+            Date = DateTime.UtcNow,
+            Gm = true,
+            Data = jsonUtil.Serialize(new
+            {
+                @event = new {id = entropyEvent.Id, diceRoll = entropyEvent.DiceRoll, name = entropyEvent.Name, effect = entropyEvent.Effect},
+                character = character == null ? null : new {id = character.Id, name = character.Name},
+                oldValue,
+                newValue,
+            }),
         };
     }
 }

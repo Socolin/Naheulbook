@@ -4,6 +4,7 @@ using Naheulbook.Core.Features.Aptitude;
 using Naheulbook.Core.Features.Calendar;
 using Naheulbook.Core.Features.Character;
 using Naheulbook.Core.Features.Effect;
+using Naheulbook.Core.Features.Entropy;
 using Naheulbook.Core.Features.Event;
 using Naheulbook.Core.Features.Fight;
 using Naheulbook.Core.Features.God;
@@ -125,6 +126,7 @@ public class Startup(IConfiguration configuration)
         services.AddTalentService();
         services.AddMasteryService();
         services.AddHandicapService();
+        services.AddEntropyService();
         services.AddStatService();
         services.AddUserService();
 

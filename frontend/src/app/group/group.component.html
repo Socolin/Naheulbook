@@ -34,6 +34,12 @@
                     [title]="'Mankdebol du groupe'"
                     (valueChanged)="changeGroupValue('mankdebol', $event)">
                   </value-editor>
+                  @if ((group.data.mankdebol ?? 0) >= entropyPointsNeeded) {
+                    <button mat-stroked-button class="entropy-roll-button" (click)="openEntropyRollDialog('mankdebol')">
+                      <mat-icon>casino</mat-icon>
+                      Tirer une calamité
+                    </button>
+                  }
                 </dd>
                 <dt>Débilibeuk</dt>
                 <dd>
@@ -41,6 +47,12 @@
                     [title]="'Débilibeuk du groupe'"
                     (valueChanged)="changeGroupValue('debilibeuk', $event)">
                   </value-editor>
+                  @if ((group.data.debilibeuk ?? 0) >= entropyPointsNeeded) {
+                    <button mat-stroked-button class="entropy-roll-button" (click)="openEntropyRollDialog('debilibeuk')">
+                      <mat-icon>casino</mat-icon>
+                      Tirer un bienfait
+                    </button>
+                  }
                 </dd>
                 <dt>Date</dt>
                 <dd>
@@ -352,7 +364,7 @@
     <group-loot-panel [group]="group"></group-loot-panel>
   </mat-tab>
   <mat-tab label="Historique">
-    <group-history [group]="group"></group-history>
+    <group-history #groupHistory [group]="group"></group-history>
   </mat-tab>
 </mat-tab-group>
 </div>

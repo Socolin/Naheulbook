@@ -21,3 +21,4 @@ export * from './monster-template-request';
 export * from './move-monster-to-fight-request';
 export * from './update-user-request';
 export * from './update-character-aptitude-request';
+export * from './apply-entropy-event-request';

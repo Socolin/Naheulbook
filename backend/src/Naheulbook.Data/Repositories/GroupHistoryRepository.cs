@@ -17,6 +17,8 @@ public class GroupHistoryEntryRepository(NaheulbookDbContext naheulbookDbContext
     {
         return Context.GroupHistory
             .Where(h => h.GroupId == groupId)
+            .OrderByDescending(h => h.Date)
+            .ThenByDescending(h => h.Id)
             .Skip(PageSize * page)
             .Take(PageSize)
             .ToListAsync(cancellationToken);

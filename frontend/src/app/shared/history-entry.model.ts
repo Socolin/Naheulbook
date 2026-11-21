@@ -14,7 +14,7 @@ export interface HistoryItemData {
 
 export interface GroupHistoryEntryResponse {
     id: number;
-    action: 'START_COMBAT' | 'END_COMBAT' | 'MANKDEBOL' | 'DEBILIBEUK' | 'CHANGE_DATE' | 'ADD_TIME' | 'EVENT_RP';
+    action: 'START_COMBAT' | 'END_COMBAT' | 'MANKDEBOL' | 'DEBILIBEUK' | 'MANKDEBOL_CALAMITY' | 'DEBILIBEUK_BLESSING' | 'CHANGE_DATE' | 'ADD_TIME' | 'EVENT_RP';
     date: any;
     gm: boolean;
     isGroup: true;
@@ -68,6 +68,8 @@ const groupHistoryIcons: Partial<Record<GroupHistoryEntryResponse['action'], Ico
     EVENT_RP: icon('quill-ink', '#78909c'),
     MANKDEBOL: icon('rolling-dices', '#ef6c00'),
     DEBILIBEUK: icon('rolling-dices', '#ef6c00'),
+    MANKDEBOL_CALAMITY: icon('lightning-storm', '#c62828'),
+    DEBILIBEUK_BLESSING: icon('angel-wings', '#2e7d32'),
 };
 
 const characterHistoryIcons: Partial<Record<string, IconDescription>> = {

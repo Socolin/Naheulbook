@@ -104,6 +104,7 @@ public class CharacterRepository(NaheulbookDbContext context) : Repository<Chara
         {
             var groupHistory = await Context.GroupHistory
                 .Where(x => x.GroupId == groupId.Value)
+                .Where(x => x.Gm && isGm || !x.Gm)
                 .Where(x => x.Date >= characterHistory.Last().Date)
                 .Where(x => page == 0 || x.Date < characterHistory.First().Date)
                 .OrderByDescending(x => x.Date)

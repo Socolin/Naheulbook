@@ -104,6 +104,8 @@ public partial class TestDataUtil : IDisposable
                 "DELETE FROM `events`;" +
                 "DELETE FROM `gods`;" +
                 "DELETE FROM `handicaps`;" +
+                "DELETE FROM `mankdebol_calamities`;" +
+                "DELETE FROM `debilibeuk_blessings`;" +
                 "DELETE FROM `groups`;" +
                 "DELETE FROM `group_history_entries`;" +
                 "DELETE FROM `group_invitations`;" +

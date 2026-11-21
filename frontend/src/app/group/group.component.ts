@@ -58,6 +58,7 @@ import { FormsModule } from '@angular/forms';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 import { UsefulDataComponent } from '../useful-data/useful-data.component';
 import { MarkdownPipe } from '../markdown/markdown.pipe';
+import {EntropyKind, entropyPointsNeeded, EntropyRollDialogComponent, EntropyRollDialogData, EntropyRollDialogResult} from '../entropy';
 
 @Component({
     templateUrl: './group.component.html',
@@ -80,6 +81,9 @@ export class GroupComponent implements OnInit, OnDestroy {
     ];
 
     public loadingGroup = false;
+
+    @ViewChild('groupHistory')
+    public groupHistory?: GroupHistoryComponent;
 
     @ViewChild('changeOwnershipDialog', {static: true})
     public changeOwnershipDialog: Portal<any>;
@@ -104,6 +108,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     private groupNotificationSub: Subscription;
 
     public npcs: Npc[] = [];
+    public readonly entropyPointsNeeded = entropyPointsNeeded;
 
     constructor(
         private readonly route: ActivatedRoute,
@@ -638,6 +643,33 @@ export class GroupComponent implements OnInit, OnDestroy {
                 item.data.shownToGm = partialItem.data.shownToGm;
             }));
         }
+    }
+
+    openEntropyRollDialog(kind: EntropyKind): void {
+        const dialogRef = this.dialog.open<EntropyRollDialogComponent, EntropyRollDialogData, EntropyRollDialogResult>(
+            EntropyRollDialogComponent,
+            {
+                autoFocus: false,
+                data: {
+                    groupId: this.group.id,
+                    kind,
+                    points: (kind === 'mankdebol' ? this.group.data.mankdebol : this.group.data.debilibeuk) ?? 0,
+                    characters: this.group.characters
+                        .filter(c => c.active)
+                        .map(c => ({id: c.id, name: c.name})),
+                }
+            }
+        );
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) {
+                return;
+            }
+            const currentPoints = (kind === 'mankdebol' ? this.group.data.mankdebol : this.group.data.debilibeuk) ?? 0;
+            this.group.data.changeValue(kind, Math.max(0, currentPoints - entropyPointsNeeded));
+            this.groupHistory?.loadHistory();
+            this.notification.success('Groupe', kind === 'mankdebol' ? 'Calamité enregistrée' : 'Bienfait enregistré');
+        });
     }
 
     openGroupConfigDialog(): void {

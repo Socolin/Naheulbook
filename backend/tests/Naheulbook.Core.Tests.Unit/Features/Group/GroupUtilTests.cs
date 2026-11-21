@@ -1,4 +1,5 @@
 using AwesomeAssertions;
+using Naheulbook.Core.Features.Entropy;
 using Naheulbook.Core.Features.Group;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
@@ -124,6 +125,42 @@ public class GroupUtilTests
         _util.ApplyChangesAndNotify(group, new PatchGroupRequest(), _notificationSession);
 
 
+        _notificationSession.Received(1).NotifyGroupChangeGroupData(GroupId, groupData);
+    }
+
+    [Test]
+    [TestCase(EntropyKind.MankdebolCalamity, 7, 2)]
+    [TestCase(EntropyKind.MankdebolCalamity, 3, 0)]
+    [TestCase(EntropyKind.DebilibeukBlessing, 5, 0)]
+    public void ApplyEntropyEventAndNotify_ConsumePoints_LogInGroupHistory_AndNotify(EntropyKind kind, int points, int expectedPoints)
+    {
+        var groupData = new GroupData {Mankdebol = points, Debilibeuk = points};
+        var group = new GroupEntity {Data = GroupDataJson, Id = GroupId};
+        var character = new CharacterEntity {Id = 4, Name = "some-character-name"};
+        var entropyEvent = new MankdebolCalamityEntity {Id = Guid.NewGuid(), DiceRoll = 37, Name = "some-name", Effect = "some-effect"};
+        var groupHistoryEntry = new GroupHistoryEntryEntity();
+
+        _jsonUtil.Deserialize<GroupData>(GroupDataJson)
+            .Returns(groupData);
+        _jsonUtil.Serialize(groupData)
+            .Returns(UpdatedGroupDataJson);
+        _groupHistoryUtil.CreateLogEntropyEvent(group, kind, entropyEvent, character, points, expectedPoints)
+            .Returns(groupHistoryEntry);
+
+        _util.ApplyEntropyEventAndNotify(group, kind, entropyEvent, character, _notificationSession);
+
+        if (kind == EntropyKind.MankdebolCalamity)
+        {
+            groupData.Mankdebol.Should().Be(expectedPoints);
+            groupData.Debilibeuk.Should().Be(points);
+        }
+        else
+        {
+            groupData.Debilibeuk.Should().Be(expectedPoints);
+            groupData.Mankdebol.Should().Be(points);
+        }
+        group.Data.Should().Be(UpdatedGroupDataJson);
+        group.HistoryEntries.Should().Contain(groupHistoryEntry);
         _notificationSession.Received(1).NotifyGroupChangeGroupData(GroupId, groupData);
     }
 }

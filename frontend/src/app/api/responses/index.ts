@@ -13,6 +13,7 @@ export * from './delete-invite-response';
 export * from './described-flag-response';
 export * from './effect-sub-category-response';
 export * from './handicap-response';
+export * from './entropy-response';
 export * from './effect-response';
 export * from './effect-type-response';
 export * from './event-response';

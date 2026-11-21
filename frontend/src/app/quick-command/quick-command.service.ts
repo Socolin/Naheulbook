@@ -17,6 +17,8 @@ export class QuickCommandService {
         this.createPageSuggestion('Database: Bestiaires', ['/database', 'monsters'], 'game-icon-dragon-head', 'game-icon', true),
         this.createPageSuggestion('Database: Objets', ['/database', 'items'], 'game-icon-swap-bag', 'game-icon', true),
         this.createPageSuggestion('Database: Effets', ['/database', 'effects'], 'game-icon-broken-bone', 'game-icon', true),
+        this.createPageSuggestion('Database: Calamités (Mankdebol)', ['/database', 'mankdebol'], 'game-icon-lightning-storm', 'game-icon', true),
+        this.createPageSuggestion('Database: Bienfaits (Débilibeuk)', ['/database', 'debilibeuk'], 'game-icon-angel-wings', 'game-icon', true),
         this.createPageSuggestion('Database: Cartographie', ['/map'], 'game-icon-compass', 'game-icon', false),
     ]
 

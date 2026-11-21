@@ -1,3 +1,4 @@
+using Naheulbook.Core.Features.Entropy;
 using Naheulbook.Core.Notifications;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Requests.Requests;
@@ -11,6 +12,11 @@ public interface IGroupUtil
     void StartCombat(GroupEntity group, INotificationSession notificationSession);
     void EndCombat(GroupEntity group, INotificationSession notificationSession);
     NhbkDate AddTimeAndNotify(GroupEntity @group, NhbkDateOffset request, INotificationSession notificationSession);
+
+    /// <summary>
+    /// Consume the points spent to draw a calamity / blessing and log the drawn event in the group history (GM only)
+    /// </summary>
+    void ApplyEntropyEventAndNotify(GroupEntity group, EntropyKind kind, IEntropyEventEntity entropyEvent, CharacterEntity? character, INotificationSession notificationSession);
 }
 
 public class GroupUtil(
@@ -18,6 +24,11 @@ public class GroupUtil(
     IGroupHistoryUtil groupHistoryUtil
 ) : IGroupUtil
 {
+    /// <summary>
+    /// "Dès que vous avez 5 points, vous tirez une calamité / un bienfait"
+    /// </summary>
+    public const int PointsNeededForEntropyEvent = 5;
+
     public void ApplyChangesAndNotify(GroupEntity group, PatchGroupRequest request, INotificationSession notificationSession)
     {
         var groupData = jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
@@ -110,5 +121,28 @@ public class GroupUtil(
         group.Data = jsonUtil.Serialize(groupData);
 
         return groupData.Date;
+    }
+
+    public void ApplyEntropyEventAndNotify(
+        GroupEntity group,
+        EntropyKind kind,
+        IEntropyEventEntity entropyEvent,
+        CharacterEntity? character,
+        INotificationSession notificationSession
+    )
+    {
+        var groupData = jsonUtil.Deserialize<GroupData>(group.Data) ?? new GroupData();
+
+        var oldValue = kind == EntropyKind.MankdebolCalamity ? groupData.Mankdebol : groupData.Debilibeuk;
+        var newValue = Math.Max(0, (oldValue ?? 0) - PointsNeededForEntropyEvent);
+        if (kind == EntropyKind.MankdebolCalamity)
+            groupData.Mankdebol = newValue;
+        else
+            groupData.Debilibeuk = newValue;
+
+        group.AddHistoryEntry(groupHistoryUtil.CreateLogEntropyEvent(group, kind, entropyEvent, character, oldValue, newValue));
+        notificationSession.NotifyGroupChangeGroupData(group.Id, groupData);
+
+        group.Data = jsonUtil.Serialize(groupData);
     }
 }

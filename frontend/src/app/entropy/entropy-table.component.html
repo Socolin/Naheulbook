@@ -1,0 +1,66 @@
+@if (!entries) {
+  <mat-spinner></mat-spinner>
+} @else {
+  <div class="page">
+    <div class="page-header">
+      <h2 class="mat-h2">{{ title }}</h2>
+      <mat-form-field class="filter" appearance="outline" subscriptSizing="dynamic">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Rechercher</mat-label>
+        <input matInput [(ngModel)]="filter" (ngModelChange)="updateFilter()" placeholder="Nom, effet…">
+        @if (filter) {
+          <button matSuffix mat-icon-button (click)="clearFilter()" aria-label="Effacer la recherche">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    </div>
+
+    <details class="group-description">
+      <summary>
+        <mat-icon>info</mat-icon>
+        Règles
+      </summary>
+      @if (kind === 'mankdebol') {
+        <p>
+          Notez un « Point de Mankdebol » à chaque fois que les aventuriers ratent une action d’éclat, qu’ils tentent
+          quelque chose de risqué ou d’idiot, ou qu’ils se mettent volontairement en danger. Les points sont plus
+          amusants à gérer sur le groupe entier.
+        </p>
+        <p>
+          Dès que le groupe a 5 points, Mankdebol se manifeste : tirez une calamité au D100. Quand la calamité ne
+          concerne qu’un personnage, c’est celui qui fait le plus petit score au D6.
+        </p>
+      } @else {
+        <p>
+          Une remarque particulièrement drôle ou une action d’éclat réussie vaut la faveur des dieux : chaque action
+          particulièrement réussie ou intelligente du groupe fait gagner 1 « Point de Débilibeuk ».
+        </p>
+        <p>
+          Dès que le groupe a 5 points, tirez un bienfait au D100. Quand le bienfait ne concerne qu’un personnage,
+          c’est celui qui fait le plus haut score au D6. En version « de groupe », le MJ peut aussi effacer un point de
+          Mankdebol pour chaque point de Débilibeuk gagné.
+        </p>
+      }
+      <p>Le tirage peut se faire automatiquement depuis l’onglet « Infos » du groupe.</p>
+    </details>
+
+    @if (!visibleEntries.length) {
+      <p class="empty-state">Aucun résultat pour « {{ filter }} ».</p>
+    } @else {
+      <ul class="entries">
+        @for (item of visibleEntries; track item.entry.id) {
+          <li class="entry entropy-event">
+            <span class="dice-roll" [attr.aria-label]="'D100 : ' + item.entry.diceRoll">{{ item.entry.diceRoll }}</span>
+            <div class="entry-heading">
+              <span class="entry-name">{{ item.entry.name }}</span>
+            </div>
+            <div class="entry-effect">
+              <p>{{ item.entry.effect }}</p>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+}

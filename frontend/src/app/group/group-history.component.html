@@ -54,6 +54,22 @@
                   @case ('MANKDEBOL') {
                     Mankdebol: {{log.data | valueChange}}
                   }
+                  @case ('MANKDEBOL_CALAMITY') {
+                    Calamité de Mankdebol ({{log.data.event.diceRoll}}) : <strong>{{log.data.event.name}}</strong>
+                    @if (log.data.character) {
+                      sur {{log.data.character.name}}
+                    }
+                    <div class="log-detail">{{log.data.event.effect}}</div>
+                    <div class="log-detail">Mankdebol : {{log.data | valueChange}}</div>
+                  }
+                  @case ('DEBILIBEUK_BLESSING') {
+                    Bienfait de Débilibeuk ({{log.data.event.diceRoll}}) : <strong>{{log.data.event.name}}</strong>
+                    @if (log.data.character) {
+                      pour {{log.data.character.name}}
+                    }
+                    <div class="log-detail">{{log.data.event.effect}}</div>
+                    <div class="log-detail">Débilibeuk : {{log.data | valueChange}}</div>
+                  }
                   @case ('END_COMBAT') {
                     Fin de combat
                   }
@@ -62,6 +78,9 @@
                   }
                   @case ('ADD_TIME') {
                     Modification du temps: {{(log.data.timeOffset ?? log.data.offset) | nhbkDuration}}
+                    @if (log.data.date) {
+                      <div class="log-detail">Nouvelle date: <date [date]="log.data.date"></date></div>
+                    }
                   }
                   @case ('CHANGE_DATE') {
                     Modification de la date

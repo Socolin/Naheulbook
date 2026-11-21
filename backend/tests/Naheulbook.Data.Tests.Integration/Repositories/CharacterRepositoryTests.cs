@@ -188,6 +188,27 @@ public class CharacterRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
     }
 
     [Test]
+    public async Task GetHistoryByCharacterIdAsync_ShouldNotLoadGmGroupEntryWhenIsGmIsFalse()
+    {
+        TestDataUtil
+            .AddUser()
+            .AddGroup()
+            .AddCharacterWithRequiredDependencies(c => c.Group = TestDataUtil.GetLast<GroupEntity>())
+            .AddCharacterHistoryEntry(out var characterHistoryEntry, h => h.Date = NowUtc.AddMinutes(100).UtcDateTime)
+            .AddGroupHistoryEntry(h =>
+                {
+                    h.Date = NowUtc.AddMinutes(200).UtcDateTime;
+                    h.Gm = true;
+                }
+            );
+
+        var character = TestDataUtil.Get<CharacterEntity>();
+        var historyEntries = await _characterRepository.GetHistoryByCharacterIdAsync(character.Id, character.GroupId, 0, false);
+
+        historyEntries.Select(h => h.Action).Should().BeEquivalentTo([characterHistoryEntry.Action]);
+    }
+
+    [Test]
     public async Task GetHistoryByCharacterIdAsync_ShouldLoadGmEntryTooWhenIsGmIsTrue()
     {
         TestDataUtil

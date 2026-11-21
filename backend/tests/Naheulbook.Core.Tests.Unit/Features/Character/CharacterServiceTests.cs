@@ -263,13 +263,14 @@ public class CharacterServiceTests
 
     [Test]
     [TestCase(3, false)]
-    [TestCase(4, true)]
+    [TestCase(10, true)]
     public async Task GetCharacterHistoryEntryAsync_ShouldGetResultFromCharacterRepository(int masterId, bool isGm)
     {
         const int characterId = 4;
         const int groupId = 6;
+        const int userId = 10;
         var character = new CharacterEntity {Id = characterId, GroupId = groupId, Group = new GroupEntity {Id = groupId, MasterId = masterId}};
-        var executionContext = new NaheulbookExecutionContext();
+        var executionContext = new NaheulbookExecutionContext {UserId = userId};
         var expectedHistoryEntries = new List<IHistoryEntry>();
 
         _unitOfWorkFactory.GetUnitOfWork().Characters.GetWithGroupAsync(characterId)
