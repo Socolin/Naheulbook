@@ -8,14 +8,16 @@ import {NhbkMatDialog} from '../material-workaround';
 import {EffectService} from './effect.service';
 import {Effect, EffectSubCategory, EffectType} from './effect.model';
 import {EditEffectDialogComponent, EditEffectDialogData} from './edit-effect-dialog.component';
-import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardAvatar, MatCardTitle } from '@angular/material/card';
-import { MatFormField } from '@angular/material/form-field';
-import { MatSelect } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatIconButton, MatFabButton } from '@angular/material/button';
-import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
-import { MatIcon } from '@angular/material/icon';
+import {MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
+import {MatOption} from '@angular/material/core';
+import {FormsModule} from '@angular/forms';
+import {MatIconButton, MatFabButton} from '@angular/material/button';
+import {MatMenuTrigger, MatMenu, MatMenuItem} from '@angular/material/menu';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {removeDiacritics} from '../shared';
 import { ModifierPipe } from '../shared/modifier.pipe';
 import { NhbkDateDurationPipe } from '../date/nhbk-duration.pipe';
 import { MarkdownPipe } from '../markdown/markdown.pipe';
@@ -23,9 +25,13 @@ import { MarkdownPipe } from '../markdown/markdown.pipe';
 @Component({
     selector: 'effect-list',
     templateUrl: './effect-list.component.html',
-    styleUrls: ['../shared/number-shadow.scss', './effect-list.component.scss'],
+    styleUrls: ['./effect-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [MatCard, MatCardContent, MatFormField, MatSelect, FormsModule, MatOption, MatCardHeader, MatCardSubtitle, MatCardAvatar, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatFabButton, ModifierPipe, NhbkDateDurationPipe, MarkdownPipe]
+    imports: [
+        MatFormField, MatLabel, MatPrefix, MatSuffix, MatInput, MatSelect, MatOption, FormsModule, MatIconButton,
+        MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatFabButton, MatProgressSpinner,
+        ModifierPipe, NhbkDateDurationPipe, MarkdownPipe,
+    ]
 })
 export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() inputSubCategoryId: number | undefined;
@@ -38,6 +44,7 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
     public selectedSubCategory?: EffectSubCategory;
     public effects: { [subcategoryId: number]: Effect[] } = {};
     public editable = false;
+    public filter = '';
     public sub: Subscription;
 
     constructor(
@@ -71,6 +78,21 @@ export class EffectListComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedType = this.effectTypes[i];
         let ci = this.selectedType.subCategories.findIndex(c => c.id === subCategoryId);
         this.selectSubCategory(this.selectedType.subCategories[ci]);
+    }
+
+    filterEffects(effects: Effect[]): Effect[] {
+        const terms = removeDiacritics(this.filter.trim().toLowerCase()).split(/\s+/).filter(t => t);
+        if (!terms.length) {
+            return effects;
+        }
+        return effects.filter(effect => {
+            const text = removeDiacritics([
+                effect.name,
+                effect.description,
+                ...(effect.modifiers ?? []).map(m => m.stat),
+            ].join(' ').toLowerCase());
+            return terms.every(t => text.includes(t));
+        });
     }
 
     hasOption(option: string): boolean {

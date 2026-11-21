@@ -1,73 +1,194 @@
 :host {
+    display: block;
+}
+
+.page {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 16px 24px;
+}
+
+.page-header {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    .effect-sub-category-selector {
-        display: flex;
-        flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding: 8px 0 16px;
 
-        .selector {
-            margin: 0 8px;
-            flex: 1 auto;
-            width: 100px;
-
-            > mat-form-field {
-                width: 100%;
-            }
-        }
-    }
-
-    .effect {
-        .actions-button {
-            margin-left: auto;
-        }
-
-        .modifiers {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 8px;
-            align-items: center;
-            .stats {
-                > * {
-                    white-space: nowrap;
-                }
-            }
-        }
-
-        .duration {
-            margin-bottom: 8px;
-            display: grid;
-            align-items: center;
-            grid-template-columns: auto 1fr;
-            gap: 8px;
-        }
-
-
-        .dice-number {
-            display: grid;
-            grid-template-columns: 40px;
-            font-size: 40px;
-            grid-template-areas: "stack";
-            align-items: center;
-            justify-content: center;
-
-            > span {
-                grid-area: stack;
-            }
-            .number {
-                line-height: 40px;
-            }
-            .icon {
-                opacity: 0.4;
-            }
-        }
-    }
-
-    .add-button {
-        z-index: 1;
-        position: fixed;
-        right: 16px;
-        bottom: 16px;
+    h2 {
+        margin: 0;
     }
 }
 
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+
+    .category {
+        flex: 0 1 220px;
+        min-width: 160px;
+    }
+
+    .search {
+        flex: 1 1 280px;
+        max-width: 380px;
+    }
+}
+
+.note {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: var(--mat-sys-tertiary-container);
+    color: var(--mat-sys-on-tertiary-container);
+    font: var(--mat-sys-body-medium);
+
+    > mat-icon {
+        flex-shrink: 0;
+    }
+
+    .note-content {
+        min-width: 0;
+
+        ::ng-deep p {
+            margin: 0 0 6px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+mat-spinner {
+    margin: 32px auto;
+}
+
+.count, .empty-state {
+    margin: 0 0 12px;
+    font: var(--mat-sys-body-medium);
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.effects {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    align-items: start;
+}
+
+.effect {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 8px 12px 16px;
+    border-radius: 16px;
+    background: var(--mat-sys-surface-container);
+    color: var(--mat-sys-on-surface);
+    border: 1px solid var(--mat-sys-outline-variant);
+    font: var(--mat-sys-body-medium);
+}
+
+.effect-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 40px;
+
+    .effect-name {
+        flex: 1 1 auto;
+        margin: 0;
+        font: var(--mat-sys-title-medium);
+    }
+
+    .actions-button {
+        flex-shrink: 0;
+        margin: -4px 0;
+    }
+}
+
+.dice {
+    display: grid;
+    grid-template-areas: "stack";
+    place-items: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+
+    > span {
+        grid-area: stack;
+    }
+
+    .icon {
+        font-size: 40px;
+        opacity: 0.3;
+    }
+
+    .number {
+        font: var(--mat-sys-title-large);
+        font-weight: 700;
+        color: var(--mat-sys-primary);
+    }
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-right: 8px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 10px;
+    border-radius: 8px;
+    font: var(--mat-sys-label-medium);
+    white-space: nowrap;
+
+    mat-icon {
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
+    }
+}
+
+.chip-duration {
+    white-space: normal;
+    min-width: 0;
+    background: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+}
+
+.chip-modifier {
+    background: var(--mat-sys-secondary-container);
+    color: var(--mat-sys-on-secondary-container);
+}
+
+.effect-body {
+    padding-right: 8px;
+    color: var(--mat-sys-on-surface-variant);
+
+    ::ng-deep p {
+        margin: 0 0 6px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.add-button {
+    z-index: 1;
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+}

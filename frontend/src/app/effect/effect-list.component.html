@@ -1,138 +1,130 @@
-<h2>Effets</h2>
-<mat-card>
-  <mat-card-content class="effect-sub-category-selector">
-    <div class="selector">
-      <mat-form-field>
-        <mat-select
-          [(ngModel)]="selectedType"
-          (selectionChange)="selectType($event.value)">
-          @for (type of effectTypes; track type) {
-            <mat-option [value]="type">
-              {{type.name}}
-            </mat-option>
+<div class="page">
+  <div class="page-header">
+    <h2 class="mat-h2">Effets</h2>
+    <div class="filters">
+      <mat-form-field class="category" appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="selectedType" (selectionChange)="selectType($event.value)">
+          @for (type of effectTypes; track type.id) {
+            <mat-option [value]="type">{{ type.name }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
-    </div>
-    <div class="selector">
       @if (selectedType) {
-        <mat-form-field>
-          <mat-select [(ngModel)]="selectedSubCategory"
-            (selectionChange)="selectSubCategory($event.value)">
-            @for (subCategory of selectedType.subCategories; track subCategory) {
-              <mat-option [value]="subCategory">
-                {{subCategory.name}}
-              </mat-option>
+        <mat-form-field class="category" appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Catégorie</mat-label>
+          <mat-select [(ngModel)]="selectedSubCategory" (selectionChange)="selectSubCategory($event.value)">
+            @for (subCategory of selectedType.subCategories; track subCategory.id) {
+              <mat-option [value]="subCategory">{{ subCategory.name }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
       }
-    </div>
-  </mat-card-content>
-</mat-card>
-
-@if (selectedSubCategory && (editable || selectedSubCategory.note)) {
-  <mat-card>
-    <mat-card-header>
-      <mat-card-subtitle>Note</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content [innerHTML]="selectedSubCategory.note | markdown">
-    </mat-card-content>
-  </mat-card>
-}
-
-@if (effects && selectedSubCategory) {
-  @for (effect of effects[selectedSubCategory.id]; track effect) {
-    <mat-card class="effect">
-      <mat-card-header>
-        @if (selectedSubCategory.diceCount) {
-          <div matCardAvatar class="dice-number">
-            <span class="icon game-icon game-icon-perspective-dice-six-faces-random"></span>
-            <span class="number number-shadow-24">{{effect.dice}}</span>
-          </div>
-        }
-        <mat-card-title>
-          {{effect.name}}
-        </mat-card-title>
-        @if (editable || hasOption('applyButton')) {
-          <button mat-icon-button
-            class="actions-button"
-            [matMenuTriggerFor]="effectMenu">
-            <mat-icon>more_vert</mat-icon>
+      <mat-form-field class="search" appearance="outline" subscriptSizing="dynamic">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Rechercher</mat-label>
+        <input matInput
+               [(ngModel)]="filter"
+               (keydown.escape)="filter = ''"
+               placeholder="Nom, description, modificateur…">
+        @if (filter) {
+          <button matSuffix mat-icon-button (click)="filter = ''" aria-label="Effacer la recherche">
+            <mat-icon>close</mat-icon>
           </button>
         }
-        <mat-menu #effectMenu>
-          @if (hasOption('applyButton')) {
-            <button mat-menu-item
-              (click)="emitAction('applyEffect', effect)">
-              <mat-icon>add</mat-icon>
-              Appliquer sur un membre du groupe
-            </button>
-          }
-          @if (editable) {
-            <button mat-menu-item
-              (click)=editEffect(effect)>
-              <mat-icon>edit</mat-icon>
-              Éditer
-            </button>
-          }
-        </mat-menu>
-      </mat-card-header>
-      <mat-card-content>
-        <p class="mat-body" [innerHTML]="effect.description | markdown"></p>
-        @if (effect.duration) {
-          <div class="duration">
-            <mat-icon>timelapse</mat-icon>
-            {{effect.duration}}
-          </div>
-        }
-        @if (effect.timeDuration) {
-          <div class="duration">
-            <mat-icon>timelapse</mat-icon>
-            {{effect.timeDuration | nhbkDuration}}
-          </div>
-        }
-        @if (effect.combatCount) {
-          <div class="duration">
-            <mat-icon>timelapse</mat-icon>
-            {{effect.combatCount}} combats
-          </div>
-        }
-        @if (effect.lapCount) {
-          <div class="duration">
-            <mat-icon>timelapse</mat-icon>
-            {{effect.lapCount}} tours
-          </div>
-        }
-        @if (!effect.lapCount && !effect.combatCount && !effect.timeDuration && !effect.duration) {
-          <div class="duration">
-            <mat-icon>timelapse</mat-icon>
-            permanent
-          </div>
-        }
-        @if (effect.modifiers?.length) {
-          <div class="modifiers">
-            <mat-icon fontSet="game-icon" fontIcon="game-icon-skills" class="ra-mat-button-icon-24"></mat-icon>
-            <div class="stats">
-              @for (modifier of effect.modifiers; track modifier) {
-                <div>
-                  {{modifier | modifier}}
-                </div>
-              }
-            </div>
-          </div>
-        }
-      </mat-card-content>
-    </mat-card>
+      </mat-form-field>
+    </div>
+  </div>
+
+  @if (selectedSubCategory?.note) {
+    <aside class="note">
+      <mat-icon>info</mat-icon>
+      <div class="note-content" [innerHTML]="selectedSubCategory!.note | markdown"></div>
+    </aside>
   }
-}
+
+  @if (!selectedSubCategory || !effects[selectedSubCategory.id]) {
+    <mat-spinner diameter="48"></mat-spinner>
+  } @else {
+    @let allEffects = effects[selectedSubCategory.id];
+    @let visibleEffects = filterEffects(allEffects);
+    @if (filter) {
+      <p class="count">{{ visibleEffects.length }} / {{ allEffects.length }} effets</p>
+    }
+    @if (!visibleEffects.length) {
+      <p class="empty-state">
+        @if (filter) {
+          Aucun effet ne correspond à « {{ filter }} ».
+        } @else {
+          Aucun effet dans cette catégorie.
+        }
+      </p>
+    }
+    <div class="effects">
+      @for (effect of visibleEffects; track effect.id) {
+        <article class="effect">
+          <header class="effect-header">
+            @if (selectedSubCategory.diceCount) {
+              <div class="dice" [title]="'Résultat du dé: ' + effect.dice">
+                <span class="icon game-icon game-icon-perspective-dice-six-faces-random"></span>
+                <span class="number">{{ effect.dice }}</span>
+              </div>
+            }
+            <h3 class="effect-name">{{ effect.name }}</h3>
+            @if (editable || hasOption('applyButton')) {
+              <button mat-icon-button class="actions-button" [matMenuTriggerFor]="effectMenu" aria-label="Actions">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #effectMenu>
+                @if (hasOption('applyButton')) {
+                  <button mat-menu-item (click)="emitAction('applyEffect', effect)">
+                    <mat-icon>add</mat-icon>
+                    Appliquer sur un membre du groupe
+                  </button>
+                }
+                @if (editable) {
+                  <button mat-menu-item (click)="editEffect(effect)">
+                    <mat-icon>edit</mat-icon>
+                    Éditer
+                  </button>
+                }
+              </mat-menu>
+            }
+          </header>
+
+          <div class="chips">
+            <span class="chip chip-duration" title="Durée">
+              <mat-icon>timelapse</mat-icon>
+              @if (effect.duration) {
+                {{ effect.duration }}
+              } @else if (effect.timeDuration) {
+                {{ effect.timeDuration | nhbkDuration }}
+              } @else if (effect.combatCount) {
+                {{ effect.combatCount }} combat{{ effect.combatCount > 1 ? 's' : '' }}
+              } @else if (effect.lapCount) {
+                {{ effect.lapCount }} tour{{ effect.lapCount > 1 ? 's' : '' }}
+              } @else {
+                Permanent
+              }
+            </span>
+            @for (modifier of effect.modifiers; track $index) {
+              <span class="chip chip-modifier">{{ modifier | modifier }}</span>
+            }
+          </div>
+
+          @if (effect.description) {
+            <div class="effect-body" [innerHTML]="effect.description | markdown"></div>
+          }
+        </article>
+      }
+    </div>
+  }
+</div>
 
 @if (editable) {
   <div class="add-button">
-    <button mat-fab (click)="createEffect()">
-      <mat-icon>
-        add
-      </mat-icon>
+    <button mat-fab (click)="createEffect()" aria-label="Créer un effet">
+      <mat-icon>add</mat-icon>
     </button>
   </div>
 }
