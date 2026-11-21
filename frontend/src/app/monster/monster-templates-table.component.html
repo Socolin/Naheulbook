@@ -1,0 +1,73 @@
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows class="monsters-table">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom</th>
+      <td mat-cell *matCellDef="let monster" class="name">{{asMonster(monster).name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Catégorie</th>
+      <td mat-cell *matCellDef="let monster" class="category">
+        {{asMonster(monster).subCategory.type.name}} › {{asMonster(monster).subCategory.name}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="at">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>AT</th>
+      <td mat-cell *matCellDef="let monster">{{attacksAt(asMonster(monster))}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="dmg">
+      <th mat-header-cell *matHeaderCellDef>DMG</th>
+      <td mat-cell *matCellDef="let monster">{{attacksDmg(asMonster(monster))}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="defense">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>PRD/ESQ</th>
+      <td mat-cell *matCellDef="let monster" class="nowrap">{{defense(asMonster(monster))}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ev">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>EV</th>
+      <td mat-cell *matCellDef="let monster">{{asMonster(monster).data.ev}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="pr">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>PR</th>
+      <td mat-cell *matCellDef="let monster">
+        {{asMonster(monster).data.pr}}@if (asMonster(monster).data.pr_magic) {<span class="secondary"> ({{asMonster(monster).data.pr_magic}})</span>}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cou">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>COU</th>
+      <td mat-cell *matCellDef="let monster">{{asMonster(monster).data.cou}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="xp">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>XP</th>
+      <td mat-cell *matCellDef="let monster">{{asMonster(monster).data.xp}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let monster" [attr.colspan]="columnsToDisplay.length">
+        @if (expandedElement === monster) {
+          <div class="monster-detail">
+            <monster-template [monsterTemplate]="asMonster(monster)"
+                              [isAdmin]="isAdmin"
+                              (edit)="edit.emit($event)">
+            </monster-template>
+          </div>
+        }
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+    <tr mat-row *matRowDef="let monster; columns: columnsToDisplay"
+        class="main-row"
+        [class.expanded]="expandedElement === monster"
+        (click)="toggle(monster)">
+    </tr>
+    <tr mat-row *matRowDef="let monster; columns: ['expandedDetail']" class="detail-row"></tr>
+  </table>
+</div>

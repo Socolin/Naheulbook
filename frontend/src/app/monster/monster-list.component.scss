@@ -13,24 +13,58 @@
         min-height: calc(100vh - 16px - 56px - #{$padding-create-button});
     }
 
-    .monster-category-selector {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+    .monster-filters {
+        display: flex;
+        align-items: flex-start;
         gap: 8px;
 
-        @include responsive.for-phone-only {
-            grid-template-columns: 1fr;
+        .search {
+            flex: 1;
         }
+
+        .view-mode {
+            margin-top: 4px;
+        }
+    }
+
+    .monster-type-selector {
+        width: 100%;
+    }
+
+    .sub-category-index {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .count {
+        margin-left: 6px;
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--mat-sys-on-surface-variant);
+    }
+
+    .monster-group {
+        margin-bottom: 24px;
+    }
+
+    .sub-category-title {
+        margin: 0 0 8px;
+        padding-bottom: 4px;
+        border-bottom: 1px solid var(--mat-sys-outline-variant);
+        scroll-margin-top: 80px;
+    }
+
+    .search-summary {
+        margin-bottom: 8px;
+        color: var(--mat-sys-on-surface-variant);
     }
 
     .monster-templates {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
         gap: 8px;
-
-        > mat-form-field {
-            width: 100%;
-        }
     }
 
     .add-button {
@@ -39,5 +73,4 @@
         right: 16px;
         bottom: 16px;
     }
-
 }

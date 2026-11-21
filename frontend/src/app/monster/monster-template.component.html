@@ -1,130 +1,109 @@
-<mat-card>
+<mat-card [class.highlighted]="highlighted">
   <mat-card-header>
     <mat-card-title>
       {{monsterTemplate.name}}
     </mat-card-title>
-    @if (isAdmin) {
-      <button mat-icon-button [matMenuTriggerFor]="menuMonster" aria-label="Ouvrir le menu d'édition du monstre">
-        <mat-icon>more_vert</mat-icon>
-      </button>
+    @if (showCategory) {
+      <mat-card-subtitle>
+        {{monsterTemplate.subCategory.type.name}} › {{monsterTemplate.subCategory.name}}
+      </mat-card-subtitle>
     }
+    <button mat-icon-button [matMenuTriggerFor]="menuMonster" aria-label="Ouvrir le menu du monstre">
+      <mat-icon>more_vert</mat-icon>
+    </button>
   </mat-card-header>
   <mat-menu #menuMonster="matMenu">
-    <button mat-menu-item
-      (click)="openEditMonsterDialog()">
-      <mat-icon>edit</mat-icon>
-      Éditer
+    <button mat-menu-item (click)="copyLink()">
+      <mat-icon>link</mat-icon>
+      Copier le lien
     </button>
+    @if (isAdmin) {
+      <button mat-menu-item (click)="openEditMonsterDialog()">
+        <mat-icon>edit</mat-icon>
+        Éditer
+      </button>
+    }
   </mat-menu>
   <mat-card-content>
     @if (monsterTemplate.data.special) {
       <div>{{monsterTemplate.data.note}}</div>
     }
     @if (!monsterTemplate.data.special) {
-      <div class="section-title">
-        Caractéristiques
-      </div>
+      <div class="section-title">Caractéristiques</div>
       <div class="section-content monster-stats-row">
-        @if (monsterTemplate.data.prd) {
-          <div class="field prd">
-            <span class="label">PRD</span>
-            <span class="value">{{monsterTemplate.data.prd}}</span>
+        @for (stat of stats; track stat.label) {
+          <div class="stat" [matTooltip]="stat.tooltip">
+            <span class="label">{{stat.label}}</span>
+            <span class="value">{{stat.value}}</span>
           </div>
         }
-        @if (monsterTemplate.data.esq) {
-          <div class="field esq">
-            <span class="label">ESQ</span>
-            <span class="value">{{monsterTemplate.data.esq}}</span>
-          </div>
-        }
-        <div class="field ev">
-          <span class="label">EV</span>
-          <span class="value">{{monsterTemplate.data.ev}}</span>
-        </div>
-        @if (monsterTemplate.data.ea) {
-          <div class="field ea">
-            <span class="label">EA</span>
-            <span class="value">{{monsterTemplate.data.ea}}</span>
-          </div>
-        }
-        <div class="field pr">
-          <span class="label">PR</span>
-          <span class="value">
-            {{monsterTemplate.data.pr}} @if (monsterTemplate.data.pr_magic) {
-            <span>({{monsterTemplate.data.pr_magic}})</span>
-          }
-        </span>
       </div>
-      <div class="field cou">
-        <span class="label">COU</span>
-        <span class="value">{{monsterTemplate.data.cou}}</span>
-      </div>
-      <div class="field xp">
-        <span class="label">XP</span>
-        <span class="value">{{monsterTemplate.data.xp}}</span>
-      </div>
-    </div>
-    @if (monsterTemplate.data.attacks?.length) {
-      <div class="section-title">
-        Attaques
-      </div>
-      <div class="section-content monster-attacks">
-        @for (attack of monsterTemplate.data.attacks; track $index) {
-          <div class="monster-attack">
-            @if (attack.name) {
-              <span class="attack-name">{{attack.name}}</span>
-            }
-            <span class="field at">
-              <span class="label">AT</span>
-              <span class="value">{{attack.at}}</span>
-            </span>
-            @if (attack.dmg) {
-              <span class="field dmg">
-                <span class="label">DMG</span>
-                <span class="value">{{attack.dmg}}</span>
+
+      @if (monsterTemplate.data.attacks?.length) {
+        <div class="section-title">Attaques</div>
+        <div class="section-content monster-attacks">
+          @for (attack of monsterTemplate.data.attacks; track $index) {
+            <div class="monster-attack">
+              @if (attack.name) {
+                <span class="attack-name">{{attack.name}}</span>
+              }
+              <span class="attack-values">
+                <span class="field" matTooltip="Attaque">
+                  <span class="label">AT</span>
+                  <span class="value">{{attack.at}}</span>
+                </span>
+                @if (attack.dmg) {
+                  <span class="field" matTooltip="Dégâts">
+                    <span class="label">DMG</span>
+                    <span class="value">{{attack.dmg}}</span>
+                  </span>
+                }
               </span>
-            }
-          </div>
-        }
-      </div>
-    }
-    @if (monsterTemplate.data.note) {
-      <div class="section-title">
-        Note
-      </div>
-      <div class="section-content" [innerHTML]="monsterTemplate.data.note | markdown"></div>
-    }
-    @if (monsterTemplate.data.spellBooks?.length) {
-      <monster-spells-summary class="section-content"
-        [name]="monsterTemplate.name"
-        [spellBooks]="monsterTemplate.data.spellBooks!">
-      </monster-spells-summary>
-    }
-  }
-
-  @if (traisById && monsterTemplate.data.traits && monsterTemplate.data.traits.length) {
-    <div class="section-title">
-      Traits
-    </div>
-    <div class="section-content monster-traits-row">
-      @for (trait of monsterTemplate.data.traits; track trait.traitId) {
-        @if (traisById[trait.traitId]; as monsterTrait) {
-          <monster-trait class="trait-tile"
-                         matRipple
-                         [trait]="monsterTrait"
-                         [traitInfo]="trait"
-                         (click)="openTraitInfo(monsterTrait, trait.level)">
-          </monster-trait>
-        }
+            </div>
+          }
+        </div>
       }
-    </div>
-  }
 
-  @if (monsterTemplate.inventory && monsterTemplate.inventory.length) {
-    <div>
-      <div class="section-title">
-        Inventaire
+      @if (monsterTemplate.data.note) {
+        <div class="section-title">Note</div>
+        <div class="section-content" [innerHTML]="monsterTemplate.data.note | markdown"></div>
+      }
+
+      @if (monsterTemplate.data.spellBooks?.length) {
+        <monster-spells-summary class="section-content"
+          [name]="monsterTemplate.name"
+          [spellBooks]="monsterTemplate.data.spellBooks!">
+        </monster-spells-summary>
+      }
+    }
+
+    @if (traisById && monsterTemplate.data.traits && monsterTemplate.data.traits.length) {
+      <div class="section-title">Traits</div>
+      <div class="section-content monster-traits-row">
+        @for (trait of monsterTemplate.data.traits; track trait.traitId) {
+          @if (traisById[trait.traitId]; as monsterTrait) {
+            <button type="button"
+                    class="trait-chip"
+                    matRipple
+                    [matTooltip]="monsterTrait.description"
+                    (click)="openTraitInfo(monsterTrait, trait.level)">
+              <img class="trait-image" [src]="traitImageUrl(monsterTrait)" alt=""/>
+              <span class="trait-name">{{monsterTrait.name}}</span>
+              @if (monsterTrait.levels?.length) {
+                <span class="trait-level" [attr.aria-label]="'Niveau ' + trait.level">
+                  @for (level of monsterTrait.levels; track $index) {
+                    <span class="dot" [class.filled]="$index < trait.level"></span>
+                  }
+                </span>
+              }
+            </button>
+          }
+        }
       </div>
+    }
+
+    @if (monsterTemplate.inventory && monsterTemplate.inventory.length) {
+      <div class="section-title">Inventaire</div>
       <div class="section-content">
         @for (inventoryElement of monsterTemplate.inventory; track inventoryElement) {
           <div class="inventory-element" mat-ripple (click)="openItemInfo(inventoryElement.itemTemplate)">
@@ -144,12 +123,10 @@
                 <span>({{inventoryElement.minUg}} U.G.)</span>
               }
             </span>
-            <span>{{inventoryElement.chance * 100 | number:'1.0-2'}}%</span>
+            <span class="chance">{{inventoryElement.chance * 100 | number:'1.0-2'}}%</span>
           </div>
         }
       </div>
-    </div>
-  }
-</mat-card-content>
+    }
+  </mat-card-content>
 </mat-card>
-

@@ -1,41 +1,91 @@
 <h2>Bestiaires</h2>
 @if (isAdmin) {
   <div class="add-button">
-    <button mat-fab (click)="openCreateMonsterTemplateDialog()">
-      <mat-icon>
-        add
-      </mat-icon>
+    <button mat-fab (click)="openCreateMonsterTemplateDialog()" aria-label="Ajouter un monstre">
+      <mat-icon>add</mat-icon>
     </button>
   </div>
 }
-<div class="monster-category-selector">
-  <mat-form-field>
+<div class="monster-filters">
+  <mat-form-field class="search">
+    <mat-icon matPrefix>search</mat-icon>
+    <mat-label>Rechercher dans tous les bestiaires</mat-label>
+    <input matInput [ngModel]="searchText" (ngModelChange)="updateSearch($event)" autocomplete="off"/>
+    @if (searchText) {
+      <button matSuffix mat-icon-button aria-label="Effacer la recherche" (click)="updateSearch('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+  <mat-button-toggle-group class="view-mode"
+                           [value]="viewMode"
+                           (change)="setViewMode($event.value)"
+                           hideSingleSelectionIndicator
+                           aria-label="Mode d'affichage">
+    <mat-button-toggle value="cards" matTooltip="Fiches" aria-label="Fiches">
+      <mat-icon>view_agenda</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="table" matTooltip="Tableau" aria-label="Tableau">
+      <mat-icon>table_rows</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+@if (!isSearching) {
+  <mat-form-field class="monster-type-selector">
+    <mat-label>Catégorie</mat-label>
     <mat-select [(ngModel)]="selectedMonsterType" (selectionChange)="selectMonsterType($event.value)">
-      @for (monsterType of monsterTypes; track monsterType) {
+      @for (monsterType of visibleMonsterTypes; track monsterType) {
         <mat-option [value]="monsterType">
           {{monsterType.name}}
         </mat-option>
       }
     </mat-select>
   </mat-form-field>
-  @if (selectedMonsterType) {
-    <mat-form-field>
-      <mat-select [(ngModel)]="selectedMonsterSubCategory" (selectionChange)="selectMonsterSubCategory($event.value)">
-        @for (monsterSubCategory of selectedMonsterType.subCategories; track monsterSubCategory) {
-          <mat-option [value]="monsterSubCategory">
-            {{monsterSubCategory.name}}
-          </mat-option>
+} @else {
+  <div class="search-summary">
+    {{searchResultCount}} résultat{{searchResultCount > 1 ? 's' : ''}}
+  </div>
+}
+
+@if (!isSearching && displayedGroups.length > 1) {
+  <nav class="sub-category-index" aria-label="Sous-catégories">
+    @for (group of displayedGroups; track group.subCategory?.id) {
+      <button mat-stroked-button type="button" (click)="scrollToSubCategory(group.subCategory!)">
+        {{group.subCategory?.name}}
+        <span class="count">{{group.monsters.length}}</span>
+      </button>
+    }
+  </nav>
+}
+
+@for (group of displayedGroups; track group.subCategory?.id) {
+  <section class="monster-group">
+    @if (group.subCategory) {
+      <h3 class="sub-category-title" [id]="'monster-sub-category-' + group.subCategory.id">
+        {{group.subCategory.name}}
+        <span class="count">{{group.monsters.length}}</span>
+      </h3>
+    }
+    @if (viewMode === 'table') {
+      <monster-templates-table [monsterTemplates]="group.monsters"
+                               [isAdmin]="isAdmin"
+                               [showCategory]="isSearching"
+                               [expandedMonsterId]="highlightedMonsterId"
+                               (edit)="editMonster($event)">
+      </monster-templates-table>
+    } @else {
+      <div class="monster-templates">
+        @for (monster of group.monsters; track monster.id) {
+          <monster-template [id]="'monster-' + monster.id"
+                            [monsterTemplate]="monster"
+                            [isAdmin]="isAdmin"
+                            [showCategory]="isSearching"
+                            [highlighted]="monster.id === highlightedMonsterId"
+                            (edit)="editMonster($event)">
+          </monster-template>
         }
-      </mat-select>
-    </mat-form-field>
-  }
-</div>
-<div class="monster-templates">
-  @if (selectedMonsterSubCategory) {
-    @for (monster of monsterBySubCategory[selectedMonsterSubCategory.id]; track monster) {
-      <div>
-        <monster-template (edit)="editMonster($event)" [isAdmin]="isAdmin" [monsterTemplate]="monster"></monster-template>
       </div>
     }
-  }
-</div>
+  </section>
+}

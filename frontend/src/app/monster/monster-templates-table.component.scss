@@ -1,0 +1,48 @@
+:host {
+    display: block;
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        font-variant-numeric: tabular-nums;
+    }
+
+    th, td {
+        padding: 0 8px;
+    }
+
+    td.name {
+        font-weight: 500;
+    }
+
+    td.category, .secondary {
+        color: var(--mat-sys-on-surface-variant);
+    }
+
+    .nowrap {
+        white-space: nowrap;
+    }
+
+    tr.main-row {
+        cursor: pointer;
+
+        &:hover, &.expanded {
+            background-color: color-mix(in srgb, var(--mat-sys-on-surface) 8%, transparent);
+        }
+
+        td {
+            border-bottom-width: 0;
+        }
+    }
+
+    tr.detail-row {
+        height: 0;
+    }
+
+    .monster-detail {
+        padding: 8px 0;
+    }
+}

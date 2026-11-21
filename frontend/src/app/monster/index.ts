@@ -12,3 +12,4 @@ export * from './monster-template.component';
 export * from './monster-trait-dialog.component';
 export * from './monster-trait.component';
 export * from './select-monster-traits-dialog.component';
+export * from './monster-templates-table.component';
