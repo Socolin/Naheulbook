@@ -20,6 +20,10 @@ export class WebSocketService {
     public registeredObserverElements: { [type: string]: { [id: number]: Observer<WsEvent> } } = {};
     private hubConnection?: signalR.HubConnection;
     private connecting = false;
+    private reconnectAttempts = 0;
+    private reconnectTimeout?: ReturnType<typeof setTimeout>;
+    private static readonly minReconnectDelayMs = 2000;
+    private static readonly maxReconnectDelayMs = 60000;
 
     constructor(
         private readonly jobService: JobService,
@@ -131,11 +135,12 @@ export class WebSocketService {
         });
         hubConnection.onclose(err => {
             console.error(err);
-            setTimeout(() => this.connect(true), 2000);
+            this.scheduleReconnect();
         });
         hubConnection.start()
             .then(async () => {
                 this.connecting = false;
+                this.reconnectAttempts = 0;
                 if (reconnect) {
                     for (let type in this.registeredElements) {
                         if (!this.registeredElements.hasOwnProperty(type)) {
@@ -158,9 +163,44 @@ export class WebSocketService {
             .catch((err) => {
                 this.connecting = false;
                 console.error(err);
-                setTimeout(() => this.connect(true), 2000);
+                const unauthorized = WebSocketService.isUnauthorizedError(err);
+                if (unauthorized) {
+                    // The JWT is probably expired (e.g. the tab was asleep and the renewal timer did not run).
+                    // Ask for a fresh one using the session: the next attempt reads it via accessTokenFactory.
+                    this.loginService.checkLogged();
+                }
+                this.scheduleReconnect(unauthorized);
             });
         this.hubConnection = hubConnection;
+    }
+
+    private scheduleReconnect(unauthorized = false) {
+        if (this.reconnectTimeout) {
+            return;
+        }
+        const delay = Math.min(
+            WebSocketService.minReconnectDelayMs * Math.pow(2, this.reconnectAttempts),
+            WebSocketService.maxReconnectDelayMs
+        );
+        this.reconnectAttempts++;
+        this.reconnectTimeout = setTimeout(() => {
+            this.reconnectTimeout = undefined;
+            if (unauthorized && !this.loginService.currentJwt) {
+                // Session expired too: not logged anymore: stop retrying, the next register() will open a new connection.
+                this.hubConnection = undefined;
+                this.reconnectAttempts = 0;
+                return;
+            }
+            this.connect(true);
+        }, delay);
+    }
+
+    private static isUnauthorizedError(err: any): boolean {
+        // The negotiate failure is wrapped in a FailedToNegotiateWithServerError which only keeps the status code in the message.
+        if (err instanceof signalR.HttpError) {
+            return err.statusCode === 401;
+        }
+        return typeof err?.message === 'string' && err.message.includes('Status code \'401\'');
     }
 
     private unregister(type: string, elementId: number): Promise<void> {
