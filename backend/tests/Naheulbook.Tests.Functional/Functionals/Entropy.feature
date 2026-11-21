@@ -49,9 +49,9 @@ Feature: Entropy
     Then the response status code is 200
     And the response should contains the following json
     """json
-    {
+    {"__partial": {
       "data": {"mankdebol": 2}
-    }
+    }}
     """
 
     When performing a GET to the url "/api/v2/groups/${Group.Id}/history?page=0" with the current jwt

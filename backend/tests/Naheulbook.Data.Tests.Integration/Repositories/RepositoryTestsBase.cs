@@ -220,6 +220,14 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
                     .Excluding(x => x.Group)
                     .As<EquivalencyOptions<T>>();
                 break;
+            case EquivalencyOptions<MankdebolCalamityEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .As<EquivalencyOptions<T>>();
+                break;
+            case EquivalencyOptions<DebilibeukBlessingEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .As<EquivalencyOptions<T>>();
+                break;
             case EquivalencyOptions<EffectEntity> entityOptions:
                 equivalencyOptions = entityOptions
                     .Excluding(x => x.SubCategory)
@@ -250,6 +258,11 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
             case EquivalencyOptions<CharacterHistoryEntryEntity> entityOptions:
                 equivalencyOptions = entityOptions
                     .Excluding(x => x.Character)
+                    .As<EquivalencyOptions<T>>();
+                break;
+            case EquivalencyOptions<GroupHistoryEntryEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.Group)
                     .As<EquivalencyOptions<T>>();
                 break;
             case EquivalencyOptions<ItemEntity> entityOptions:

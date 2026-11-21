@@ -60,24 +60,26 @@ Feature: MonsterTemplates
     When performing a GET to the url "/api/v2/monsterTypes/"
 
     Then the response status code is 200
-    And the response should contains a json array containing the following element identified by id
+    And the response should contains the following json
     """json
-    {
-        "id": "!{MonsterType.Id}",
-        "name": "${MonsterType.Name}",
-        "subCategories": [
-            {
-                "id": "!{MonsterSubCategory.[0].Id}",
-                "name": "${MonsterSubCategory.[0].Name}",
-                "typeid": "!{MonsterType.Id}"
-            },
-            {
-                "id": "!{MonsterSubCategory.[1].Id}",
-                "name": "${MonsterSubCategory.[1].Name}",
-                "typeid": "!{MonsterType.Id}"
-            }
-        ]
-    }
+    {"__partialArray": {"key": "id", "array": [
+        {
+            "id": "!{MonsterType.Id}",
+            "name": "${MonsterType.Name}",
+            "subCategories": [
+                {
+                    "id": "!{MonsterSubCategory.[0].Id}",
+                    "name": "${MonsterSubCategory.[0].Name}",
+                    "typeid": "!{MonsterType.Id}"
+                },
+                {
+                    "id": "!{MonsterSubCategory.[1].Id}",
+                    "name": "${MonsterSubCategory.[1].Name}",
+                    "typeid": "!{MonsterType.Id}"
+                }
+            ]
+        }
+    ]}}
     """
 
   Scenario: Listing traits
@@ -86,14 +88,16 @@ Feature: MonsterTemplates
     When performing a GET to the url "/api/v2/monsterTraits/"
 
     Then the response status code is 200
-    And the response should contains a json array containing the following element identified by id
+    And the response should contains the following json
     """json
-    {
-        "id": "!{MonsterTrait.Id}",
-        "name": "${MonsterTrait.Name}",
-        "description": "${MonsterTrait.Description}",
-        "levels": ["level1", "level2"]
-    }
+    {"__partialArray": {"key": "id", "array": [
+        {
+            "id": "!{MonsterTrait.Id}",
+            "name": "${MonsterTrait.Name}",
+            "description": "${MonsterTrait.Description}",
+            "levels": ["level1", "level2"]
+        }
+    ]}}
     """
 
   Scenario: Listing monster templates
@@ -102,26 +106,28 @@ Feature: MonsterTemplates
     When performing a GET to the url "/api/v2/monsterTemplates/"
 
     Then the response status code is 200
-    And the response should contains a json array containing the following element identified by id
+    And the response should contains the following json
     """json
-    {
-      "id": "!{MonsterTemplate.Id}",
-      "name": "${MonsterTemplate.Name}",
-      "data": "!{MonsterTemplate.Data}",
-      "subCategoryId": "!{MonsterTemplate.SubCategoryId}",
-      "inventory": [
+    {"__partialArray": {"key": "id", "array": [
         {
-          "id": "!{MonsterTemplate.Items.[0].Id}",
-          "chance": "!{MonsterTemplate.Items.[0].Chance}",
-          "maxCount": "!{MonsterTemplate.Items.[0].MaxCount}",
-          "minCount": "!{MonsterTemplate.Items.[0].MinCount}",
-          "itemTemplate": { "__partial": {
-            "id": "${ItemTemplate.Id}",
-            "name": "${ItemTemplate.Name}"
-          }}
+          "id": "!{MonsterTemplate.Id}",
+          "name": "${MonsterTemplate.Name}",
+          "data": "!{MonsterTemplate.Data}",
+          "subCategoryId": "!{MonsterTemplate.SubCategoryId}",
+          "inventory": [
+            {
+              "id": "!{MonsterTemplate.Items.[0].Id}",
+              "chance": "!{MonsterTemplate.Items.[0].Chance}",
+              "maxCount": "!{MonsterTemplate.Items.[0].MaxCount}",
+              "minCount": "!{MonsterTemplate.Items.[0].MinCount}",
+              "itemTemplate": { "__partial": {
+                "id": "${ItemTemplate.Id}",
+                "name": "${ItemTemplate.Name}"
+              }}
+            }
+          ]
         }
-      ]
-    }
+    ]}}
     """
 
   Scenario: Create monster category type
@@ -168,26 +174,28 @@ Feature: MonsterTemplates
 
     When performing a GET to the url "/api/v2/monsterTemplates/search?filter=${MonsterTemplate.Name}"
     Then the response status code is 200
-    And the response should contains a json array containing the following element identified by id
+    And the response should contains the following json
     """json
-    {
-      "id": "!{MonsterTemplate.Id}",
-      "name": "${MonsterTemplate.Name}",
-      "data": "!{MonsterTemplate.Data}",
-      "subCategoryId": "!{MonsterTemplate.SubCategoryId}",
-      "inventory": [
+    {"__partialArray": {"key": "id", "array": [
         {
-          "id": "!{MonsterTemplate.Items.[0].Id}",
-          "chance": "!{MonsterTemplate.Items.[0].Chance}",
-          "maxCount": "!{MonsterTemplate.Items.[0].MaxCount}",
-          "minCount": "!{MonsterTemplate.Items.[0].MinCount}",
-          "itemTemplate": { "__partial": {
-            "id": "${ItemTemplate.Id}",
-            "name": "${ItemTemplate.Name}"
-          }}
+          "id": "!{MonsterTemplate.Id}",
+          "name": "${MonsterTemplate.Name}",
+          "data": "!{MonsterTemplate.Data}",
+          "subCategoryId": "!{MonsterTemplate.SubCategoryId}",
+          "inventory": [
+            {
+              "id": "!{MonsterTemplate.Items.[0].Id}",
+              "chance": "!{MonsterTemplate.Items.[0].Chance}",
+              "maxCount": "!{MonsterTemplate.Items.[0].MaxCount}",
+              "minCount": "!{MonsterTemplate.Items.[0].MinCount}",
+              "itemTemplate": { "__partial": {
+                "id": "${ItemTemplate.Id}",
+                "name": "${ItemTemplate.Name}"
+              }}
+            }
+          ]
         }
-      ]
-    }
+    ]}}
     """
 
   Scenario: Edit a monster template

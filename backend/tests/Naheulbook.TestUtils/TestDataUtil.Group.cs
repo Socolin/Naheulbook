@@ -103,7 +103,7 @@ public partial class TestDataUtil
         groupHistoryEntry = new GroupHistoryEntryEntity
         {
             Data = "{}",
-            Gm = true,
+            Gm = false,
             Date = new DateTime(2020, 10, 5, 5, 7, 8, DateTimeKind.Utc),
             GroupId = group.Id,
             Action = RngUtil.GetRandomString("some-group-history-action"),

@@ -4,7 +4,6 @@ using ImageMagick;
 using ImageMagick.Drawing;
 using Naheulbook.Tests.Functional.Code.Extensions.ScenarioContextExtensions;
 using Naheulbook.Tests.Functional.Code.HttpClients;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Socolin.TestUtils.JsonComparer;
@@ -154,38 +153,5 @@ public class HttpSteps(
         var jsonContent = scenarioContext.GetLastJsonHttpResponseContent();
 
         Assert.That(jsonContent, IsJson.EquivalentTo(expectedJson).WithComparer(jsonComparer).WithColorOptions(jsonComparerColorOptions));
-    }
-
-    [Then(@"^the response should contains a json array containing the following element identified by (.+)$")]
-    public void TheResponseShouldContainsAJsonArrayContainingTheFollowingElementIdentifiedBy(string identityField, string expectedJson)
-    {
-        var content = scenarioContext.GetLastHttpResponseContent();
-
-        JObject expectedObject;
-        try
-        {
-            expectedObject = JObject.Parse(expectedJson);
-        }
-        catch (JsonReaderException ex)
-        {
-            throw new Exception($"Invalid expected JSON: {ex.Message} Line:\n '{expectedJson.Split('\n')[ex.LineNumber - 1]}'", ex);
-        }
-
-        var identityValue = (JValue)expectedObject.Property(identityField)?.Value;
-        var array = JArray.Parse(content);
-
-        foreach (var element in array)
-        {
-            if (element.Type != JTokenType.Object || !(element is JObject actualObject))
-                continue;
-
-            if (identityValue?.Equals((JValue)actualObject.Property(identityField)?.Value) == false)
-                continue;
-
-            Assert.That(element, IsJson.EquivalentTo(expectedObject).WithComparer(jsonComparer).WithColorOptions(jsonComparerColorOptions));
-            return;
-        }
-
-        Assert.Fail($"Failed to find expected element using `{identityField}`.\nExpected identifier value: `{identityValue}` but found values: {string.Join(",", array.Select(s => s[identityField]))}\nResponse:\n{content}");
     }
 }

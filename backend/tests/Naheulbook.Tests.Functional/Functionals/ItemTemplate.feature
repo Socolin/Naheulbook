@@ -64,36 +64,38 @@ Feature: ItemTemplate
     When performing a GET to the url "/api/v2/itemTemplateSections/"
 
     Then the response status code is 200
-    And the response should contains a json array containing the following element identified by id
+    And the response should contains the following json
     """json
-    {
-        "id": "!{ItemTemplateSection.Id}",
-        "name": "${ItemTemplateSection.Name}",
-        "note": "${ItemTemplateSection.Note}",
-        "icon": "${ItemTemplateSection.Icon}",
-        "specials": [
-            "${ItemTemplateSection.Special}"
-        ],
-        "subCategories": [
-            {
-                "id": "!{ItemTemplateSubCategory.[0].Id}",
-                "name": "${ItemTemplateSubCategory.[0].Name}",
-                "techName": "${ItemTemplateSubCategory.[0].TechName}",
-                "description": "${ItemTemplateSubCategory.[0].Description}",
-                "note": "${ItemTemplateSubCategory.[0].Note}",
-                "sectionId": "!{ItemTemplateSubCategory.[0].SectionId}"
-            },
-            {
-                "id": "!{ItemTemplateSubCategory.[1].Id}",
-                "name": "${ItemTemplateSubCategory.[1].Name}",
-                "techName": "${ItemTemplateSubCategory.[1].TechName}",
-                "description": "${ItemTemplateSubCategory.[1].Description}",
-                "note": "${ItemTemplateSubCategory.[1].Note}",
-                "sectionId": "!{ItemTemplateSubCategory.[1].SectionId}"
-            }
+    {"__partialArray": {"key": "id", "array": [
+        {
+            "id": "!{ItemTemplateSection.Id}",
+            "name": "${ItemTemplateSection.Name}",
+            "note": "${ItemTemplateSection.Note}",
+            "icon": "${ItemTemplateSection.Icon}",
+            "specials": [
+                "${ItemTemplateSection.Special}"
+            ],
+            "subCategories": [
+                {
+                    "id": "!{ItemTemplateSubCategory.[0].Id}",
+                    "name": "${ItemTemplateSubCategory.[0].Name}",
+                    "techName": "${ItemTemplateSubCategory.[0].TechName}",
+                    "description": "${ItemTemplateSubCategory.[0].Description}",
+                    "note": "${ItemTemplateSubCategory.[0].Note}",
+                    "sectionId": "!{ItemTemplateSubCategory.[0].SectionId}"
+                },
+                {
+                    "id": "!{ItemTemplateSubCategory.[1].Id}",
+                    "name": "${ItemTemplateSubCategory.[1].Name}",
+                    "techName": "${ItemTemplateSubCategory.[1].TechName}",
+                    "description": "${ItemTemplateSubCategory.[1].Description}",
+                    "note": "${ItemTemplateSubCategory.[1].Note}",
+                    "sectionId": "!{ItemTemplateSubCategory.[1].SectionId}"
+                }
 
-        ]
-    }
+            ]
+        }
+    ]}}
     """
 
   Scenario: Can create an item template
@@ -203,13 +205,15 @@ Feature: ItemTemplate
 
     When performing a GET to the url "/api/v2/itemSlots"
     Then the response status code is 200
-    And the response should contains a json array containing the following element identified by id
+    And the response should contains the following json
     """json
-    {
-        "id": "!{Slot.Id}",
-        "name": "${Slot.Name}",
-        "techName": "${Slot.TechName}"
-    }
+    {"__partialArray": {"key": "id", "array": [
+        {
+            "id": "!{Slot.Id}",
+            "name": "${Slot.Name}",
+            "techName": "${Slot.TechName}"
+        }
+    ]}}
     """
 
   Scenario: Can get item template details
@@ -272,54 +276,56 @@ Feature: ItemTemplate
 
     When performing a GET to the url "/api/v2/itemTemplateSections/${ItemTemplateSection.Id}"
     Then the response status code is 200
-    And the response should contains a json array containing the following element identified by id
+    And the response should contains the following json
     """json
-    {
-        "id": "${ItemTemplate.Id}",
-        "name": "${ItemTemplate.Name}",
-        "techName": "${ItemTemplate.TechName}",
-        "source": "official",
-        "subCategoryId": "!{ItemTemplateSubCategory.Id}",
-        "data": {
-            "key": "value"
-        },
-        "slots": [
-            {
-                "id": "!{Slot.[-1].Id}",
-                "name": "${Slot.[-1].Name}",
-                "techName": "${Slot.[-1].TechName}"
-            }
-        ],
-        "modifiers": [
-            {
-                "stat": "${Stat.Name}",
-                "value": -2,
-                "jobId": "${Job.Id}",
-                "originId": "${Origin.Id}",
-                "special": [],
-                "type": "ADD"
-            }
-        ],
-        "requirements": [
-            {
-                "stat": "${Stat.Name}",
-                "min": 2,
-                "max": 12
-            }
-        ],
-        "skillModifiers": [
-            {
-                "skillId": "${Skill.[-3].Id}",
-                "value": 2
-            }
-        ],
-        "skillIds": [
-          "${Skill.[-1].Id}"
-        ],
-        "unSkillIds": [
-           "${Skill.[-2].Id}"
-        ]
-    }
+    {"__partialArray": {"key": "id", "array": [
+        {
+            "id": "${ItemTemplate.Id}",
+            "name": "${ItemTemplate.Name}",
+            "techName": "${ItemTemplate.TechName}",
+            "source": "official",
+            "subCategoryId": "!{ItemTemplateSubCategory.Id}",
+            "data": {
+                "key": "value"
+            },
+            "slots": [
+                {
+                    "id": "!{Slot.[-1].Id}",
+                    "name": "${Slot.[-1].Name}",
+                    "techName": "${Slot.[-1].TechName}"
+                }
+            ],
+            "modifiers": [
+                {
+                    "stat": "${Stat.Name}",
+                    "value": -2,
+                    "jobId": "${Job.Id}",
+                    "originId": "${Origin.Id}",
+                    "special": [],
+                    "type": "ADD"
+                }
+            ],
+            "requirements": [
+                {
+                    "stat": "${Stat.Name}",
+                    "min": 2,
+                    "max": 12
+                }
+            ],
+            "skillModifiers": [
+                {
+                    "skillId": "${Skill.[-3].Id}",
+                    "value": 2
+                }
+            ],
+            "skillIds": [
+              "${Skill.[-1].Id}"
+            ],
+            "unSkillIds": [
+               "${Skill.[-2].Id}"
+            ]
+        }
+    ]}}
     """
 
   Scenario: Can edit item template

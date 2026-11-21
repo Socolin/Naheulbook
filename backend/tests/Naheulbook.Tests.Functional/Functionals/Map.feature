@@ -98,21 +98,23 @@ Feature: Map
 
     When performing a GET to the url "/api/v2/maps/"
     Then the response status code is 200
-    And the response should contains a json array containing the following element identified by id
+    And the response should contains the following json
     """json
-    {
-      "id": "!{Map.[-1].Id}",
-      "name": "${Map.[-1].Name}",
-      "data": {"__partial": {
-        "isGm": true,
-        "attribution": [
-          {
-            "name": "some-attribution-name",
-            "url": "some-attribution-url"
-          }
-        ]
-      }}
-    }
+    {"__partialArray": {"key": "id", "array": [
+        {
+          "id": "!{Map.[-1].Id}",
+          "name": "${Map.[-1].Name}",
+          "data": {"__partial": {
+            "isGm": true,
+            "attribution": [
+              {
+                "name": "some-attribution-name",
+                "url": "some-attribution-url"
+              }
+            ]
+          }}
+        }
+    ]}}
     """
 
   Scenario: Can edit a map

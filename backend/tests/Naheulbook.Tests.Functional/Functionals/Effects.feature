@@ -5,54 +5,58 @@ Feature: Effect
 
     When performing a GET to the url "/api/v2/effectSubCategories/${EffectSubCategory.Id}/effects"
     Then the response status code is 200
-    And the response should contains a json array containing the following element identified by id
+    And the response should contains the following json
     """json
-    {
-        "id": "!{Effect.Id}",
-        "name": "${Effect.Name}",
-        "description": "${Effect.Description}",
-        "durationType": "${Effect.DurationType}",
-        "combatCount": "!{Effect.CombatCount}",
-        "dice": "!{Effect.Dice}",
-        "subCategoryId": "!{EffectSubCategory.Id}",
-        "modifiers": [
-            {
-                "stat": "${Effect.Modifiers.[0].StatName}",
-                "value": "!{Effect.Modifiers.[0].Value}",
-                "type": "${Effect.Modifiers.[0].Type}"
-            }
-        ]
-    }
+    {"__partialArray": {"key": "id", "array": [
+        {
+            "id": "!{Effect.Id}",
+            "name": "${Effect.Name}",
+            "description": "${Effect.Description}",
+            "durationType": "${Effect.DurationType}",
+            "combatCount": "!{Effect.CombatCount}",
+            "dice": "!{Effect.Dice}",
+            "subCategoryId": "!{EffectSubCategory.Id}",
+            "modifiers": [
+                {
+                    "stat": "${Effect.Modifiers.[0].StatName}",
+                    "value": "!{Effect.Modifiers.[0].Value}",
+                    "type": "${Effect.Modifiers.[0].Type}"
+                }
+            ]
+        }
+    ]}}
     """
 
   Scenario: Listing effect sub categories
     Given 2 effect sub-categories
     When performing a GET to the url "/api/v2/effectSubCategories/"
     Then the response status code is 200
-    And the response should contains a json array containing the following element identified by id
+    And the response should contains the following json
     """json
-    {
-        "id": "!{EffectType.Id}",
-        "name": "${EffectType.Name}",
-        "subCategories": [
-            {
-                "id": "!{EffectSubCategory.[0].Id}",
-                "name": "${EffectSubCategory.[0].Name}",
-                "diceCount": "!{EffectSubCategory.[0].DiceCount}",
-                "diceSize": "!{EffectSubCategory.[0].DiceSize}",
-                "note": "${EffectSubCategory.[0].Note}",
-                "typeId": "!{EffectType.Id}"
-            },
-            {
-                "id": "!{EffectSubCategory.[1].Id}",
-                "name": "${EffectSubCategory.[1].Name}",
-                "diceCount": "!{EffectSubCategory.[1].DiceCount}",
-                "diceSize": "!{EffectSubCategory.[1].DiceSize}",
-                "note": "${EffectSubCategory.[1].Note}",
-                "typeId": "!{EffectType.Id}"
-            }
-        ]
-    }
+    {"__partialArray": {"key": "id", "array": [
+        {
+            "id": "!{EffectType.Id}",
+            "name": "${EffectType.Name}",
+            "subCategories": [
+                {
+                    "id": "!{EffectSubCategory.[0].Id}",
+                    "name": "${EffectSubCategory.[0].Name}",
+                    "diceCount": "!{EffectSubCategory.[0].DiceCount}",
+                    "diceSize": "!{EffectSubCategory.[0].DiceSize}",
+                    "note": "${EffectSubCategory.[0].Note}",
+                    "typeId": "!{EffectType.Id}"
+                },
+                {
+                    "id": "!{EffectSubCategory.[1].Id}",
+                    "name": "${EffectSubCategory.[1].Name}",
+                    "diceCount": "!{EffectSubCategory.[1].DiceCount}",
+                    "diceSize": "!{EffectSubCategory.[1].DiceSize}",
+                    "note": "${EffectSubCategory.[1].Note}",
+                    "typeId": "!{EffectType.Id}"
+                }
+            ]
+        }
+    ]}}
     """
 
   Scenario: Create an effect type
@@ -223,22 +227,24 @@ Feature: Effect
 
     When performing a GET to the url "/api/v2/effects/search?filter=${Effect.Name}"
     Then the response status code is 200
-    And the response should contains a json array containing the following element identified by id
+    And the response should contains the following json
     """json
-    {
-        "id": "!{Effect.Id}",
-        "name": "${Effect.Name}",
-        "description": "${Effect.Description}",
-        "durationType": "${Effect.DurationType}",
-        "combatCount": "!{Effect.CombatCount}",
-        "dice": "!{Effect.Dice}",
-        "subCategoryId": "!{EffectSubCategory.Id}",
-        "modifiers": [
-            {
-                "stat": "${Effect.Modifiers.[0].StatName}",
-                "value": "!{Effect.Modifiers.[0].Value}",
-                "type": "${Effect.Modifiers.[0].Type}"
-            }
-        ]
-    }
+    {"__partialArray": {"key": "id", "array": [
+        {
+            "id": "!{Effect.Id}",
+            "name": "${Effect.Name}",
+            "description": "${Effect.Description}",
+            "durationType": "${Effect.DurationType}",
+            "combatCount": "!{Effect.CombatCount}",
+            "dice": "!{Effect.Dice}",
+            "subCategoryId": "!{EffectSubCategory.Id}",
+            "modifiers": [
+                {
+                    "stat": "${Effect.Modifiers.[0].StatName}",
+                    "value": "!{Effect.Modifiers.[0].Value}",
+                    "type": "${Effect.Modifiers.[0].Type}"
+                }
+            ]
+        }
+    ]}}
     """
