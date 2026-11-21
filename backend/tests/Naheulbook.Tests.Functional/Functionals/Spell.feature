@@ -78,8 +78,7 @@ Feature: Spell
     And the response should contains the following json
     """json
     {
-      "spellBookId": "${SpellBook.Id}",
-      "maxLevel": null
+      "spellBookId": "${SpellBook.Id}"
     }
     """
 
@@ -90,8 +89,7 @@ Feature: Spell
     {"__partial": {
       "spellBooks": [
         {
-          "spellBookId": "${SpellBook.Id}",
-          "maxLevel": null
+          "spellBookId": "${SpellBook.Id}"
         }
       ]
     }}
