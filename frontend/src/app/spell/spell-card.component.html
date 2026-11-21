@@ -1,0 +1,125 @@
+<article class="spell">
+  <header class="spell-header">
+    <div class="title-row">
+      <h3 class="spell-name">{{ spell.name }}</h3>
+      @if (spell.levelLabel) {
+        <span class="level">{{ spell.levelLabel }}</span>
+      }
+    </div>
+    <div class="chips">
+      <span class="chip chip-kind" [attr.data-kind]="spell.kind">{{ kindLabel }}</span>
+      @if (spell.category) {
+        <span class="chip">{{ spell.category }}</span>
+      }
+      @for (tag of spell.data.tags; track tag) {
+        <span class="chip chip-tag">{{ tag }}</span>
+      }
+    </div>
+  </header>
+
+  @if (spell.description) {
+    <div class="description markdown" [innerHTML]="spell.description | markdown"></div>
+  }
+
+  @if (quickInfos.length) {
+    <div class="quick-info">
+      @for (info of quickInfos; track info.label) {
+        <div class="quick-item">
+          <span class="label">{{ info.label }}</span>
+          <span class="value">{{ info.value }}</span>
+          @for (detail of info.details; track $index) {
+            <span class="detail">@if (detail.levelPrefix) {<strong>{{ detail.levelPrefix }}</strong> }{{ detail.text }}</span>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @if (spell.data.levelDetails) {
+    <div class="section level-details">
+      <span class="label">Selon le niveau</span>
+      <div class="markdown" [innerHTML]="spell.data.levelDetails | markdown"></div>
+    </div>
+  }
+
+  @if (hasDetails) {
+    <details class="more">
+      <summary>
+        <mat-icon>expand_more</mat-icon>
+        Détails
+      </summary>
+
+      @if (creatureStats.length) {
+        <div class="section">
+          <span class="label">Créature</span>
+          <div class="stats">
+            @for (stat of creatureStats; track stat.label) {
+              <div class="stat">
+                <span class="stat-label">{{ stat.label }}</span>
+                <span class="stat-value">{{ stat.value }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (invocationInfos.length) {
+        <div class="section">
+          <div class="quick-info nested">
+            @for (info of invocationInfos; track info.label) {
+              <div class="quick-item">
+                <span class="label">{{ info.label }}</span>
+                <span class="value">{{ info.value }}</span>
+                @for (detail of info.details; track $index) {
+                  <span class="detail">@if (detail.levelPrefix) {<strong>{{ detail.levelPrefix }}</strong> }{{ detail.text }}</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @for (section of listSections; track section.label) {
+        <div class="section">
+          <span class="label">{{ section.label }}</span>
+          <ul>
+            @for (item of section.items; track $index) {
+              <li>@if (item.levelPrefix) {<strong>{{ item.levelPrefix }}</strong> }{{ item.text }}</li>
+            }
+          </ul>
+        </div>
+      }
+
+      @if (spell.data.ritualDetails) {
+        <div class="section">
+          <span class="label">Détails du rituel</span>
+          <div class="markdown" [innerHTML]="spell.data.ritualDetails | markdown"></div>
+        </div>
+      }
+
+      @if (spell.data.notes) {
+        <div class="section">
+          <span class="label">Notes diverses</span>
+          <div class="markdown" [innerHTML]="spell.data.notes | markdown"></div>
+        </div>
+      }
+    </details>
+  }
+
+  @if (spell.data.criticalFailure || spell.data.criticalSuccess) {
+    <footer class="criticals">
+      @if (spell.data.criticalFailure) {
+        <div class="critical critical-failure">
+          <span class="label"><mat-icon inline>trending_down</mat-icon> Échec critique</span>
+          <div class="markdown" [innerHTML]="spell.data.criticalFailure | markdown"></div>
+        </div>
+      }
+      @if (spell.data.criticalSuccess) {
+        <div class="critical critical-success">
+          <span class="label"><mat-icon inline>trending_up</mat-icon> Réussite critique</span>
+          <div class="markdown" [innerHTML]="spell.data.criticalSuccess | markdown"></div>
+        </div>
+      }
+    </footer>
+  }
+</article>

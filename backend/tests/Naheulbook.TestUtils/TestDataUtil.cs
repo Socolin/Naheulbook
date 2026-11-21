@@ -151,8 +151,8 @@ public partial class TestDataUtil : IDisposable
                 "DELETE FROM `specialities`;" +
                 "DELETE FROM `speciality_modifiers`;" +
                 "DELETE FROM `speciality_specials`;" +
-                // "DELETE FROM `spells`;" +
-                // "DELETE FROM `spell_categories`;" +
+                "DELETE FROM `spells`;" +
+                "DELETE FROM `spell_books`;" +
                 "DELETE FROM `stats`;" +
                 "DELETE FROM `talents`;" +
                 "DELETE FROM `talent_groups`;" +

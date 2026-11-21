@@ -54,6 +54,7 @@ public interface IUnitOfWork : IDisposable
     ISlotRepository Slots { get; }
     ISpecialAttackRepository SpecialAttacks { get; }
     ISpecialAttackGroupRepository SpecialAttackGroups { get; }
+    ISpellBookRepository SpellBooks { get; }
     IStatRepository Stats { get; }
     ITalentGroupRepository TalentGroups { get; }
     ITalentRepository Talents { get; }
@@ -116,6 +117,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public ISlotRepository Slots => new SlotRepository(_naheulbookDbContext);
     public ISpecialAttackRepository SpecialAttacks => new SpecialAttackRepository(_naheulbookDbContext);
     public ISpecialAttackGroupRepository SpecialAttackGroups => new SpecialAttackGroupRepository(_naheulbookDbContext);
+    public ISpellBookRepository SpellBooks => new SpellBookRepository(_naheulbookDbContext);
     public IStatRepository Stats => new StatRepository(_naheulbookDbContext);
     public ITalentGroupRepository TalentGroups => new TalentGroupRepository(_naheulbookDbContext);
     public ITalentRepository Talents => new TalentRepository(_naheulbookDbContext);

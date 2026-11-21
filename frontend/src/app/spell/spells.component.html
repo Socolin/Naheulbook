@@ -1,0 +1,60 @@
+@if (!kindGroups) {
+  <mat-spinner></mat-spinner>
+} @else {
+  <div class="page">
+    <div class="page-header">
+      <h2 class="mat-h2">Grimoires</h2>
+      <mat-form-field class="filter" appearance="outline" subscriptSizing="dynamic">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Rechercher</mat-label>
+        <input matInput [(ngModel)]="filter" (ngModelChange)="updateFilter()" placeholder="Nom, catégorie, usage…">
+        @if (filter) {
+          <button matSuffix mat-icon-button (click)="clearFilter()" aria-label="Effacer la recherche">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="layout">
+      <nav class="books" aria-label="Grimoires">
+        @for (group of kindGroups; track group.kind) {
+          <div class="book-group">
+            <span class="book-group-label">{{ group.label }}</span>
+            <div class="book-list">
+              @for (view of group.books; track view.book.id) {
+                <button type="button" class="book" [class.selected]="view === selectedBook"
+                        [class.empty]="!view.visibleCount" (click)="selectBook(view)">
+                  <span class="book-name">{{ view.book.name }}</span>
+                  <span class="book-count">{{ view.visibleCount }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </nav>
+
+      @if (selectedBook) {
+        <section class="content">
+          <h3 class="mat-h3 book-title">{{ selectedBook.book.name }}</h3>
+          @if (selectedBook.book.data.description) {
+            <p class="book-description">{{ selectedBook.book.data.description }}</p>
+          }
+
+          @if (!selectedBook.visibleCount) {
+            <p class="empty-state">Aucun sort de ce grimoire ne correspond à « {{ filter }} ».</p>
+          }
+
+          @for (group of selectedBook.levelGroups; track group.label) {
+            <h4 class="level-title">{{ group.label }}</h4>
+            <div class="spells">
+              @for (spell of group.spells; track spell.id) {
+                <spell-card [spell]="spell" [bookKind]="selectedBook.book.kind"></spell-card>
+              }
+            </div>
+          }
+        </section>
+      }
+    </div>
+  </div>
+}

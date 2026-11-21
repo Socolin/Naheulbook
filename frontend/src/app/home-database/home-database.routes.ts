@@ -14,6 +14,7 @@ import {SpecialAttacksComponent} from '../special-attack/special-attacks.compone
 import {TalentsComponent} from '../talent/talents.component';
 import {MasteriesComponent} from '../mastery/masteries.component';
 import {HandicapsComponent} from '../handicap/handicaps.component';
+import {SpellsComponent} from '../spell/spells.component';
 import {EditItemTemplateDialogComponent} from '../item-template/edit-item-template-dialog.component';
 import {ItemTemplateListComponent} from '../item-template/item-template-list.component';
 
@@ -101,6 +102,14 @@ export const routes: Routes = [
             {
                 path: 'handicaps',
                 component: HandicapsComponent
+            },
+            {
+                path: 'spells/:spellBookTechName',
+                component: SpellsComponent
+            },
+            {
+                path: 'spells',
+                component: SpellsComponent
             }
         ]
     }

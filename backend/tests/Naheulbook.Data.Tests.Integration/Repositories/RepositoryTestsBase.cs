@@ -103,6 +103,16 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
                     .Excluding(x => x.SpecialAttacks)
                     .As<EquivalencyOptions<T>>();
                 break;
+            case EquivalencyOptions<SpellEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.SpellBook)
+                    .As<EquivalencyOptions<T>>();
+                break;
+            case EquivalencyOptions<SpellBookEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.Spells)
+                    .As<EquivalencyOptions<T>>();
+                break;
             case EquivalencyOptions<HandicapEntity> entityOptions:
                 equivalencyOptions = entityOptions
                     .As<EquivalencyOptions<T>>();

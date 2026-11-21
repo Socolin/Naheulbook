@@ -21,6 +21,7 @@ using Naheulbook.Core.Features.Origin;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Features.Skill;
 using Naheulbook.Core.Features.SpecialAttack;
+using Naheulbook.Core.Features.Spell;
 using Naheulbook.Core.Features.Stat;
 using Naheulbook.Core.Features.Talent;
 using Naheulbook.Core.Features.Users;
@@ -120,6 +121,7 @@ public class Startup(IConfiguration configuration)
         services.AddOriginService();
         services.AddSkillService();
         services.AddSpecialAttackService();
+        services.AddSpellService();
         services.AddTalentService();
         services.AddMasteryService();
         services.AddHandicapService();

@@ -40,6 +40,8 @@ public class NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options) 
     public DbSet<SpecialityEntity> Specialities { get; set; } = null!;
     public DbSet<SpecialAttackEntity> SpecialAttacks { get; set; } = null!;
     public DbSet<SpecialAttackGroupEntity> SpecialAttackGroups { get; set; } = null!;
+    public DbSet<SpellBookEntity> SpellBooks { get; set; } = null!;
+    public DbSet<SpellEntity> Spells { get; set; } = null!;
     public DbSet<TalentEntity> Talents { get; set; } = null!;
     public DbSet<TalentGroupEntity> TalentGroups { get; set; } = null!;
     public DbSet<MasteryEntity> Masteries { get; set; } = null!;
