@@ -27,6 +27,7 @@ import { ValueEditorComponent } from '../shared/value-editor.component';
 import { MatRipple } from '@angular/material/core';
 import { NhbkDateShortDurationPipe } from '../date/nhbk-duration.pipe';
 import { MarkdownPipe } from '../markdown/markdown.pipe';
+import {MonsterSpellsSummaryComponent} from '../spell/monster-spells-summary.component';
 
 @Component({
     selector: 'fighter',
@@ -34,7 +35,7 @@ import { MarkdownPipe } from '../markdown/markdown.pipe';
     styleUrls: ['./fighter.component.scss'],
     providers: [ItemActionService],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [MonsterColorSelectorComponent, CharacterColorSelectorComponent, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatTooltip, ValueEditorComponent, MatRipple, NhbkDateShortDurationPipe, MarkdownPipe]
+    imports: [MonsterColorSelectorComponent, CharacterColorSelectorComponent, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatTooltip, ValueEditorComponent, MatRipple, NhbkDateShortDurationPipe, MarkdownPipe, MonsterSpellsSummaryComponent]
 })
 export class FighterComponent implements OnInit {
     @Input() group: Group;

@@ -9,7 +9,7 @@ import {WebSocketService, WsEventServices, WsRegistrable} from '../websocket';
 import {TargetJsonData} from '../group/target.model';
 import {Fighter} from '../group';
 import {MonsterResponse, MonsterSubCategoryResponse, MonsterTemplateResponse, MonsterTypeResponse} from '../api/responses';
-import {IMonsterData, MonsterAttackData, MonsterTemplateData} from '../api/shared';
+import {IMonsterData, MonsterAttackData, MonsterSpellBookData, MonsterTemplateData} from '../api/shared';
 
 export class MonsterData implements IMonsterData {
     attacks: MonsterAttackData[] = [];
@@ -30,6 +30,7 @@ export class MonsterData implements IMonsterData {
     number: number;
     sex?: string;
     page?: number;
+    spellBooks?: MonsterSpellBookData[];
 
     static fromJson(jsonData: IMonsterData): MonsterData {
         let monsterData = new MonsterData();
@@ -42,6 +43,7 @@ export class MonsterData implements IMonsterData {
         if (monsterData) {
             Object.assign(this, monsterData);
             this.attacks = (monsterData.attacks || []).map(attack => ({...attack}));
+            this.spellBooks = monsterData.spellBooks?.map(spellBook => ({...spellBook}));
         }
     }
 }

@@ -24,7 +24,7 @@
     <mat-form-field>
       <mat-label>Niveau maximum des sorts</mat-label>
       <input matInput type="number" min="1" [(ngModel)]="maxLevel" (keyup.enter)="valid()">
-      <mat-hint>Vide : jusqu'au niveau du personnage. Sinon limité aussi par le niveau du personnage.</mat-hint>
+      <mat-hint>{{ data.maxLevelHint ?? "Vide : jusqu'au niveau du personnage. Sinon limité aussi par le niveau du personnage." }}</mat-hint>
     </mat-form-field>
   </div>
 </mat-dialog-content>

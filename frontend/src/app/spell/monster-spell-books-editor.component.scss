@@ -1,0 +1,24 @@
+.spell-books {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    padding: 8px 0;
+}
+
+.label {
+    font: var(--mat-sys-title-small);
+}
+
+.spell-book {
+    display: inline-flex;
+    align-items: center;
+    padding-left: 12px;
+    border: 1px solid var(--mat-sys-outline-variant);
+    border-radius: 8px;
+}
+
+.max-level,
+.none {
+    color: var(--mat-sys-on-surface-variant);
+}

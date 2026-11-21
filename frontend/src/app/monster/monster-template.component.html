@@ -94,6 +94,12 @@
       </div>
       <div class="section-content" [innerHTML]="monsterTemplate.data.note | markdown"></div>
     }
+    @if (monsterTemplate.data.spellBooks?.length) {
+      <monster-spells-summary class="section-content"
+        [name]="monsterTemplate.name"
+        [spellBooks]="monsterTemplate.data.spellBooks!">
+      </monster-spells-summary>
+    }
   }
 
   @if (traisById && monsterTemplate.data.traits && monsterTemplate.data.traits.length) {

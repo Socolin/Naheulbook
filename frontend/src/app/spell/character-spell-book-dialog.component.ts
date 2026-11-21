@@ -14,6 +14,8 @@ export interface CharacterSpellBookDialogData {
     /** Set when editing the max level of a book already added */
     editedBook?: SpellBookResponse;
     maxLevel?: number | null;
+    /** Help text of the max level field */
+    maxLevelHint?: string;
 }
 
 export interface CharacterSpellBookDialogResult {

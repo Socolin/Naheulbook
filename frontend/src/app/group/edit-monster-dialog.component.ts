@@ -2,7 +2,7 @@ import {Component, Inject, OnInit, ChangeDetectionStrategy} from '@angular/core'
 import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import {Monster} from '../monster';
-import {MonsterAttackData} from '../api/shared';
+import {MonsterAttackData, MonsterSpellBookData} from '../api/shared';
 import {cleanMonsterAttacks, createMonsterAttacksFormArray} from '../monster/monster-attacks-editor.component';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconButton, MatButton } from '@angular/material/button';
@@ -30,6 +30,7 @@ export interface EditMonsterDialogResult {
     xp: number;
     note: string;
     sex: string;
+    spellBooks?: MonsterSpellBookData[];
 }
 
 @Component({
@@ -63,6 +64,7 @@ export class EditMonsterDialogComponent implements OnInit {
             xp: new UntypedFormControl(data.monster.data.xp),
             note: new UntypedFormControl(data.monster.data.note),
             sex: new UntypedFormControl(data.monster.data.sex),
+            spellBooks: new UntypedFormControl(data.monster.data.spellBooks),
         });
     }
 

@@ -261,6 +261,12 @@
       <span [innerHTML]="fighter.monster.data.note | markdown"></span>
     </div>
   }
+  @if ((expandedView || moreInfo) && fighter.isMonster && fighter.monster.data.spellBooks?.length) {
+    <monster-spells-summary class="spells"
+      [name]="fighter.monster.name"
+      [spellBooks]="fighter.monster.data.spellBooks!">
+    </monster-spells-summary>
+  }
   @if (!expandedView) {
     <div class="expd" matRipple (click)="toggleMoreInfo()">
       @if (!moreInfo) {

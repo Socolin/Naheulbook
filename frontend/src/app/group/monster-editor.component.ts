@@ -7,13 +7,14 @@ import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/autocomplete';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { MonsterAttacksEditorComponent } from '../monster/monster-attacks-editor.component';
+import {MonsterSpellBooksEditorComponent} from '../spell/monster-spell-books-editor.component';
 
 @Component({
     selector: 'app-monster-editor',
     templateUrl: './monster-editor.component.html',
     styleUrls: ['./monster-editor.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatCheckbox, MatSelect, MatOption, CdkTextareaAutosize, MonsterAttacksEditorComponent]
+    imports: [FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatCheckbox, MatSelect, MatOption, CdkTextareaAutosize, MonsterAttacksEditorComponent, MonsterSpellBooksEditorComponent]
 })
 export class MonsterEditorComponent implements OnInit {
     @Input()

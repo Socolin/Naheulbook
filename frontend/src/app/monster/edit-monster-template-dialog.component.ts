@@ -43,6 +43,7 @@ import {
     MonsterAttacksEditorComponent,
     setMonsterAttacksFormArrayValue
 } from './monster-attacks-editor.component';
+import {MonsterSpellBooksEditorComponent} from '../spell/monster-spell-books-editor.component';
 
 export interface EditMonsterTemplateDialogData {
     monsterTemplate?: MonsterTemplate;
@@ -54,7 +55,7 @@ export interface EditMonsterTemplateDialogData {
     templateUrl: './edit-monster-template-dialog.component.html',
     styleUrls: ['../shared/full-screen-dialog.scss', './edit-monster-template-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, MatCard, MatCardContent, MatFormField, MatSelect, FormsModule, MatOption, ReactiveFormsModule, MatLabel, MatInput, MatCheckbox, CdkTextareaAutosize, IconComponent, MatMenuTrigger, MatMenu, MatMenuItem, DecimalPipe, MonsterAttacksEditorComponent, MonsterTraitComponent, MatRipple]
+    imports: [MatToolbar, MatIconButton, MatDialogClose, MatIcon, MatProgressSpinner, MatButton, MatCard, MatCardContent, MatFormField, MatSelect, FormsModule, MatOption, ReactiveFormsModule, MatLabel, MatInput, MatCheckbox, CdkTextareaAutosize, IconComponent, MatMenuTrigger, MatMenu, MatMenuItem, DecimalPipe, MonsterAttacksEditorComponent, MonsterTraitComponent, MatRipple, MonsterSpellBooksEditorComponent]
 })
 export class EditMonsterTemplateDialogComponent implements OnInit {
     public saving = false;
@@ -74,6 +75,7 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
             xp: new UntypedFormControl(),
             note: new UntypedFormControl(),
             sex: new UntypedFormControl(),
+            spellBooks: new UntypedFormControl(),
             page: new UntypedFormControl()
         })
     });
@@ -94,6 +96,10 @@ export class EditMonsterTemplateDialogComponent implements OnInit {
     ) {
         setMonsterAttacksFormArrayValue(this.attacksFormArray, data.monsterTemplate?.data.attacks);
         this.form.reset(data.monsterTemplate);
+    }
+
+    get spellBooksControl(): UntypedFormControl {
+        return this.form.get('data.spellBooks') as UntypedFormControl;
     }
 
     get attacksFormArray(): UntypedFormArray {

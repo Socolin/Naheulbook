@@ -1,0 +1,132 @@
+:host {
+    display: block;
+}
+
+.browser-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding: 8px 0;
+
+    .filter {
+        flex: 0 1 360px;
+        min-width: 220px;
+    }
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.books {
+    position: sticky;
+    top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.book {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    color: var(--mat-sys-on-surface);
+    font: var(--mat-sys-label-large);
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+        background: var(--mat-sys-surface-container-high);
+    }
+
+    &.selected {
+        background: var(--mat-sys-secondary-container);
+        color: var(--mat-sys-on-secondary-container);
+    }
+
+    .book-count {
+        font: var(--mat-sys-label-small);
+        color: var(--mat-sys-on-surface-variant);
+    }
+}
+
+.book-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.book-title {
+    margin: 0 0 4px;
+    font: var(--mat-sys-headline-small);
+}
+
+.book-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    font: var(--mat-sys-body-medium);
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.book-actions {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.book-description {
+    margin: 0 0 8px;
+    max-width: 90ch;
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.level-title {
+    margin: 24px 0 12px;
+    font: var(--mat-sys-title-medium);
+    color: var(--mat-sys-primary);
+}
+
+.empty-state {
+    color: var(--mat-sys-on-surface-variant);
+    font: var(--mat-sys-body-large);
+    text-align: center;
+    padding: 32px 0;
+}
+
+.spells {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+    gap: 16px;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .books {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .book {
+        border: 1px solid var(--mat-sys-outline-variant);
+        padding: 4px 12px;
+    }
+}

@@ -28,6 +28,7 @@
             ". dmg dmg  dmg  dmg  dmg  dmg    .    .    .    . "
             ". effects effects effects effects effects effects effects effects effects effects"
             ". note note note note note note note note note note"
+            ". spells spells spells spells spells spells spells spells spells spells"
             ". expd expd expd expd expd expd expd expd expd expd";
 
         @include responsive.for-tablet-portrait-up {
@@ -44,7 +45,8 @@
             "dmg dmg resm ea ."
             "dmg dmg . . ."
             "effects effects effects effects effects"
-            "note note note note note";
+            "note note note note note"
+            "spells spells spells spells spells";
         }
 
         @include responsive.for-tablet-landscape-up {
@@ -53,6 +55,7 @@
                 "icon .    at   ev   prd  esq     pr       cou    resm    ea      ."
                 ".    dmg  dmg  dmg  dmg  effects effects effects effects effects ."
                 ".    note note note note note    note    note    note    note    ."
+                ".    spells spells spells spells spells spells spells spells spells ."
                 ".    expd expd expd expd expd    expd    expd    expd    expd    .";
         }
 
@@ -153,6 +156,10 @@
 
         .note {
             grid-area: note;
+        }
+
+        .spells {
+            grid-area: spells;
         }
 
         .expd {

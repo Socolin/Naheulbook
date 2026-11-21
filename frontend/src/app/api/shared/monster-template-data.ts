@@ -1,4 +1,5 @@
 import {MonsterAttackData} from './monster-attack-data';
+import {MonsterSpellBookData} from './monster-spell-book-data';
 
 export interface MonsterTemplateData {
     attacks: MonsterAttackData[];
@@ -19,4 +20,5 @@ export interface MonsterTemplateData {
         level: number;
     }[];
     page: number;
+    spellBooks?: MonsterSpellBookData[];
 }

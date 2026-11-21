@@ -1,0 +1,75 @@
+<div class="browser-header">
+  <mat-form-field class="filter" appearance="outline" subscriptSizing="dynamic">
+    <mat-icon matPrefix>search</mat-icon>
+    <mat-label>Rechercher un sort</mat-label>
+    <input matInput [(ngModel)]="filter" placeholder="Nom, catégorie, usage…">
+    @if (filter) {
+      <button matSuffix mat-icon-button (click)="clearFilter()" aria-label="Effacer la recherche">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+  <ng-content></ng-content>
+</div>
+
+@if (!books.length) {
+  <ng-content select="[empty]"></ng-content>
+} @else {
+  <div class="layout">
+    <nav class="books" aria-label="Grimoires">
+      @for (entry of books; track entry.book.id) {
+        <button type="button" class="book" [class.selected]="entry === selectedBook" (click)="selectBook(entry)">
+          <span class="book-name">{{ entry.book.name }}</span>
+          <span class="book-count">{{ entry.spells.length }}</span>
+        </button>
+      }
+    </nav>
+
+    @if (selectedBook; as selected) {
+      <section class="content">
+        <div class="book-header">
+          <div>
+            <h3 class="book-title">{{ selected.book.name }}</h3>
+            <div class="book-meta">
+              @if (bookMetaTemplate) {
+                <ng-container *ngTemplateOutlet="bookMetaTemplate; context: {$implicit: selected}"></ng-container>
+              } @else if (selected.maxLevel) {
+                <span>Sorts jusqu'au niveau {{ selected.maxLevel }}</span>
+              }
+              @if (selected.lockedCount) {
+                <span class="locked">· {{ selected.lockedCount }} sort(s) de niveau supérieur</span>
+              }
+            </div>
+          </div>
+          @if (bookActionsTemplate) {
+            <div class="book-actions">
+              <ng-container *ngTemplateOutlet="bookActionsTemplate; context: {$implicit: selected}"></ng-container>
+            </div>
+          }
+        </div>
+        @if (selected.book.data.description) {
+          <p class="book-description">{{ selected.book.data.description }}</p>
+        }
+
+        @let groups = levelGroups;
+        @if (!countVisible(groups)) {
+          <p class="empty-state">
+            @if (filter) {
+              Aucun sort disponible ne correspond à « {{ filter }} ».
+            } @else {
+              Aucun sort disponible à ce niveau.
+            }
+          </p>
+        }
+        @for (group of groups; track group.label) {
+          <h4 class="level-title">{{ group.label }}</h4>
+          <div class="spells">
+            @for (spell of group.spells; track spell.id) {
+              <spell-card [spell]="spell" [bookKind]="selected.book.kind"></spell-card>
+            }
+          </div>
+        }
+      </section>
+    }
+  </div>
+}

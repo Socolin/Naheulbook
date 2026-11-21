@@ -19,7 +19,7 @@ import { MatActionList } from '@angular/material/list';
 import { MatRipple } from '@angular/material/core';
 import { MonsterEditorComponent } from './monster-editor.component';
 import { ItemListComponent } from '../item/item-list.component';
-import {MonsterAttackData} from '../api/shared';
+import {MonsterAttackData, MonsterSpellBookData} from '../api/shared';
 import {
     cleanMonsterAttacks,
     createMonsterAttacksFormArray,
@@ -44,6 +44,7 @@ export interface AddMonsterDialogResult {
     xp: number;
     note: string;
     sex?: 'f' | 'h';
+    spellBooks?: MonsterSpellBookData[];
     items: Item[];
 }
 
@@ -81,6 +82,7 @@ export class AddMonsterDialogComponent implements OnInit {
         xp: new UntypedFormControl(),
         note: new UntypedFormControl(),
         sex: new UntypedFormControl(),
+        spellBooks: new UntypedFormControl(),
     });
 
     constructor(
@@ -171,6 +173,7 @@ export class AddMonsterDialogComponent implements OnInit {
             xp: monster.data.xp,
             resm: monster.data.resm || 0,
             note: monster.data.note,
+            spellBooks: monster.data.spellBooks,
         });
 
         this.randomMonsterInventory();

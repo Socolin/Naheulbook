@@ -1,0 +1,25 @@
+<div class="spell-books">
+  <span class="label">Grimoires</span>
+  @for (spellBook of spellBooks; track spellBook.spellBookId) {
+    <span class="spell-book">
+      <span>
+        {{ booksById.get(spellBook.spellBookId)?.name ?? 'Grimoire inconnu' }}
+        @if (spellBook.maxLevel) {
+          <span class="max-level">(niv. 1 à {{ spellBook.maxLevel }})</span>
+        }
+      </span>
+      <button mat-icon-button type="button" (click)="openEditDialog(spellBook)" matTooltip="Changer le niveau maximum">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button type="button" (click)="remove(spellBook)" matTooltip="Retirer ce grimoire">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </span>
+  } @empty {
+    <span class="none">Aucun</span>
+  }
+  <button mat-stroked-button type="button" (click)="openAddDialog()">
+    <mat-icon>add</mat-icon>
+    Grimoire
+  </button>
+</div>

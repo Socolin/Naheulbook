@@ -12,7 +12,8 @@
         "attacks attacks attacks"
         "cou chercheNoise chercheNoise"
         "xp sex sex"
-        "note note note";
+        "note note note"
+        "spellBooks spellBooks spellBooks";
 
         mat-form-field {
             width: 100%;
@@ -84,5 +85,9 @@
 
     .sex {
         grid-area: sex;
+    }
+
+    .spell-books {
+        grid-area: spellBooks;
     }
 }

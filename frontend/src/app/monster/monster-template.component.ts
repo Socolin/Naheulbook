@@ -19,12 +19,14 @@ import { IconComponent } from '../shared/icon.component';
 import { DecimalPipe } from '@angular/common';
 import { MarkdownPipe } from '../markdown/markdown.pipe';
 
+import {MonsterSpellsSummaryComponent} from '../spell/monster-spells-summary.component';
+
 @Component({
     selector: 'monster-template',
     styleUrls: ['./monster-template.component.scss'],
     templateUrl: './monster-template.component.html',
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [MatCard, MatCardHeader, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatCardContent, MonsterTraitComponent, MatRipple, IconComponent, DecimalPipe, MarkdownPipe]
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem, MatCardContent, MonsterTraitComponent, MatRipple, IconComponent, DecimalPipe, MarkdownPipe, MonsterSpellsSummaryComponent]
 })
 export class MonsterTemplateComponent implements OnInit {
     @Input() monsterTemplate: MonsterTemplate;

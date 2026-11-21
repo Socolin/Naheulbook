@@ -28,7 +28,8 @@ Feature: Monster
         "prd": 10,
         "resm": 0,
         "sex": null,
-        "xp": 0
+        "xp": 0,
+        "spellBooks": [{"spellBookId": "8d53d0a2-8224-502d-92b6-51d7621ed7a4", "maxLevel": 4}]
       },
       "items": [
         {
@@ -83,7 +84,8 @@ Feature: Monster
         "pr_magic": 4,
         "prd": 10,
         "resm": 0,
-        "xp": 0
+        "xp": 0,
+        "spellBooks": [{"spellBookId": "8d53d0a2-8224-502d-92b6-51d7621ed7a4", "maxLevel": 4}]
       },
       "items": [
         {

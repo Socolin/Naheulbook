@@ -1,0 +1,17 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button mat-dialog-close aria-label="Fermer">
+    <mat-icon>close</mat-icon>
+  </button>
+  <span>Sorts : {{ data.name }}</span>
+  <span></span>
+</mat-toolbar>
+
+<div class="spells-content">
+  @if (!books) {
+    <mat-spinner></mat-spinner>
+  } @else {
+    <spell-book-browser [books]="books">
+      <p empty class="empty-state">Aucun grimoire.</p>
+    </spell-book-browser>
+  }
+</div>
