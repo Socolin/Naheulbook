@@ -1,15 +1,63 @@
-<mat-card-title>
-    <mat-card-header>
-        {{skill.name}} <span *ngIf="skill.stat?.length">({{skill.stat.join(',')}}<span *ngIf=skill.test> + {{skill.test}}</span>)</span>
-    </mat-card-header>
-</mat-card-title>
-<mat-card-content>
-    <div *ngIf=skill.description class="infos">
-        <b>Description: </b>
-        {{skill.description}}
+<article class="skill">
+  <header class="skill-header">
+    <div class="title-row">
+      <h3 class="skill-name">{{ skill.name }}</h3>
+      @if (skill.stat?.length) {
+        <span class="chip chip-test" title="Épreuve">
+          {{ skill.stat.join(', ') }}@if (skill.test) { + {{ skill.test }}}
+        </span>
+      }
     </div>
-    <div *ngIf=skill.using class="infos"><b>Utilisation: </b>{{skill.using}}</div>
-    <div *ngIf=skill.resist class="infos"><b>Resistance: </b>{{skill.resist}}</div>
-    <div *ngIf=skill.roleplay class="infos"><b>Roleplay: </b>{{skill.roleplay}}</div>
-    <div *ngIf=skill.require class="infos"><b>Prerequis: </b>{{skill.require}}</div>
-</mat-card-content>
+    @if (skill.effects.length) {
+      <div class="chips">
+        @for (effect of skill.effects; track $index) {
+          <span class="chip chip-effect">{{ effect | modifier }}</span>
+        }
+      </div>
+    }
+  </header>
+
+  <div class="skill-body">
+    @if (skill.description) {
+      <p><b>Description : </b>{{ skill.description }}</p>
+    }
+    @if (skill.playerDescription) {
+      <p><b>Description joueur : </b>{{ skill.playerDescription }}</p>
+    }
+    @if (skill.using) {
+      <p><b>Utilisation : </b>{{ skill.using }}</p>
+    }
+    @if (skill.resist) {
+      <p><b>Résistance : </b>{{ skill.resist }}</p>
+    }
+    @if (skill.roleplay) {
+      <p><b>Roleplay : </b>{{ skill.roleplay }}</p>
+    }
+    @if (skill.require) {
+      <p><b>Prérequis : </b>{{ skill.require }}</p>
+    }
+  </div>
+
+  @if (sources && (sources.origins.length || sources.jobs.length)) {
+    <footer class="skill-sources">
+      @if (sources.origins.length) {
+        <div class="source-row">
+          <span class="label">Origines</span>
+          @for (source of sources.origins; track source.name) {
+            <span class="source" [class.base]="source.base"
+                  [title]="source.base ? 'Acquise de base' : 'Au choix'">{{ source.name }}</span>
+          }
+        </div>
+      }
+      @if (sources.jobs.length) {
+        <div class="source-row">
+          <span class="label">Métiers</span>
+          @for (source of sources.jobs; track source.name) {
+            <span class="source" [class.base]="source.base"
+                  [title]="source.base ? 'Acquise de base' : 'Au choix'">{{ source.name }}</span>
+          }
+        </div>
+      }
+    </footer>
+  }
+</article>

@@ -1,18 +1,55 @@
-<h2>Compétences</h2>
-<mat-form-field style="width: 100%">
-  <mat-label>Filtre</mat-label>
-  <input matInput
-    (keydown.esc)="filter = undefined"
-    [(ngModel)]="filter">
-</mat-form-field>
-@for (skill of skills; track skill) {
-  <div>
-    @if (isFiltered(skill)) {
-      <div>
-        <mat-card style="margin-bottom: 10px">
-          <skill [skill]="skill"></skill>
-        </mat-card>
-      </div>
-    }
+<div class="page">
+  <div class="page-header">
+    <h2 class="mat-h2">Compétences</h2>
+    <div class="filters">
+      <mat-form-field class="search" appearance="outline" subscriptSizing="dynamic">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Rechercher</mat-label>
+        <input matInput
+               [(ngModel)]="filter"
+               (ngModelChange)="updateFilter()"
+               (keydown.escape)="clearFilter()"
+               placeholder="Nom, description, caractéristique…">
+        @if (filter) {
+          <button matSuffix mat-icon-button (click)="clearFilter()" aria-label="Effacer la recherche">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+      <mat-form-field class="source" appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Origine</mat-label>
+        <mat-select [(ngModel)]="selectedOrigin" (ngModelChange)="updateFilter()">
+          <mat-option [value]="undefined">Toutes</mat-option>
+          @for (origin of origins; track origin.id) {
+            <mat-option [value]="origin">{{ origin.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="source" appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Métier</mat-label>
+        <mat-select [(ngModel)]="selectedJob" (ngModelChange)="updateFilter()">
+          <mat-option [value]="undefined">Tous</mat-option>
+          @for (job of jobs; track job.id) {
+            <mat-option [value]="job">{{ job.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
-}
+
+  @if (!views) {
+    <mat-spinner></mat-spinner>
+  } @else {
+    @if (hasActiveFilter) {
+      <p class="count">{{ visibleViews.length }} / {{ views.length }} compétences</p>
+    }
+    @if (!visibleViews.length) {
+      <p class="empty-state">Aucune compétence ne correspond{{ filter ? ' à « ' + filter + ' »' : '' }}.</p>
+    }
+    <div class="skills">
+      @for (view of visibleViews; track view.skill.id) {
+        <skill [skill]="view.skill" [sources]="view.sources"></skill>
+      }
+    </div>
+  }
+</div>
