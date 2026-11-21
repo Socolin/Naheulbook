@@ -123,6 +123,15 @@
                 @case ('REMOVE_TALENT') {
                   Talent retiré: {{log.data.talent?.name}}
                 }
+                @case ('ADD_SPELL_BOOK') {
+                  Nouveau grimoire: {{log.data.spellBook?.name}}@if (log.data.maxLevel) { (jusqu'au niveau {{log.data.maxLevel}})}
+                }
+                @case ('UPDATE_SPELL_BOOK') {
+                  Grimoire {{log.data.spellBook?.name}}: niveau maximum {{log.data.oldMaxLevel ?? 'aucun'}} → {{log.data.newMaxLevel ?? 'aucun'}}
+                }
+                @case ('REMOVE_SPELL_BOOK') {
+                  Grimoire retiré: {{log.data.spellBook?.name}}
+                }
                 @case ('ADD_MASTERY') {
                   Nouvelle maîtrise: {{log.data.mastery?.name}}
                 }

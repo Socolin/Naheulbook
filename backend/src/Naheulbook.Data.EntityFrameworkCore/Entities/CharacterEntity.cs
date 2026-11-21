@@ -69,6 +69,9 @@ public class CharacterEntity
     private ICollection<CharacterHandicapEntity>? _handicaps;
     public ICollection<CharacterHandicapEntity> Handicaps { get => _handicaps.ThrowIfNotLoaded(); set => _handicaps = value; }
 
+    private ICollection<CharacterSpellBookEntity>? _spellBooks;
+    public ICollection<CharacterSpellBookEntity> SpellBooks { get => _spellBooks.ThrowIfNotLoaded(); set => _spellBooks = value; }
+
     private ICollection<CharacterJobEntity>? _jobs;
     public ICollection<CharacterJobEntity> Jobs { get => _jobs.ThrowIfNotLoaded(); set => _jobs = value; }
 

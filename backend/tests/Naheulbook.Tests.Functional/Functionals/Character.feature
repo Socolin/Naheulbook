@@ -265,6 +265,7 @@ Feature: Character
         "talents": [],
         "masteries": [],
         "handicaps": [],
+        "spellBooks": [],
         "items": [
           {
             "id": "!{Item.Id}",

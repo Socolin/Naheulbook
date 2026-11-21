@@ -37,6 +37,9 @@ public interface INotificationSession
     void NotifyCharacterUpdateSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack);
     void NotifyCharacterAddTalent(int characterId, TalentEntity talent);
     void NotifyCharacterRemoveTalent(int characterId, Guid talentId);
+    void NotifyCharacterAddSpellBook(int characterId, CharacterSpellBookEntity characterSpellBook);
+    void NotifyCharacterUpdateSpellBook(int characterId, CharacterSpellBookEntity characterSpellBook);
+    void NotifyCharacterRemoveSpellBook(int characterId, Guid spellBookId);
     void NotifyCharacterAddMastery(int characterId, MasteryEntity mastery);
     void NotifyCharacterRemoveMastery(int characterId, Guid masteryId);
     void NotifyCharacterAddHandicap(int characterId, HandicapEntity handicap);
@@ -201,6 +204,21 @@ public class NotificationSession(
     public void NotifyCharacterRemoveTalent(int characterId, Guid talentId)
     {
         _packets.Add(packetBuilder.BuildCharacterRemoveTalent(characterId, talentId));
+    }
+
+    public void NotifyCharacterAddSpellBook(int characterId, CharacterSpellBookEntity characterSpellBook)
+    {
+        _packets.Add(packetBuilder.BuildCharacterAddSpellBook(characterId, characterSpellBook));
+    }
+
+    public void NotifyCharacterUpdateSpellBook(int characterId, CharacterSpellBookEntity characterSpellBook)
+    {
+        _packets.Add(packetBuilder.BuildCharacterUpdateSpellBook(characterId, characterSpellBook));
+    }
+
+    public void NotifyCharacterRemoveSpellBook(int characterId, Guid spellBookId)
+    {
+        _packets.Add(packetBuilder.BuildCharacterRemoveSpellBook(characterId, spellBookId));
     }
 
     public void NotifyCharacterAddMastery(int characterId, MasteryEntity mastery)

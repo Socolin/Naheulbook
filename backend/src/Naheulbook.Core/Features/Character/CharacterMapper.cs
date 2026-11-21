@@ -6,6 +6,7 @@ using Naheulbook.Core.Features.Job;
 using Naheulbook.Core.Features.Mastery;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Features.SpecialAttack;
+using Naheulbook.Core.Features.Spell;
 using Naheulbook.Core.Features.Talent;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Responses.Responses;
@@ -37,7 +38,8 @@ public class CharacterMapper(
     ISpecialAttackMapper specialAttackMapper,
     ITalentMapper talentMapper,
     IMasteryMapper masteryMapper,
-    IHandicapMapper handicapMapper
+    IHandicapMapper handicapMapper,
+    ISpellMapper spellMapper
 ) : ICharacterMapper
 {
     public NamedIdResponse ToNamedIdResponse(CharacterEntity character)
@@ -173,6 +175,7 @@ public class CharacterMapper(
         response.Talents = character.Talents.Select(x => talentMapper.ToResponse(x.Talent)).OrderBy(x => x.Name).ToList();
         response.Masteries = character.Masteries.Select(x => masteryMapper.ToResponse(x.Mastery)).OrderBy(x => x.Name).ToList();
         response.Handicaps = character.Handicaps.Select(x => handicapMapper.ToResponse(x.Handicap)).OrderBy(x => x.DiceRoll).ToList();
+        response.SpellBooks = character.SpellBooks.Select(spellMapper.ToResponse).ToList();
         response.Modifiers = character.Modifiers.Select(characterModifierMapper.ToResponse).ToList();
         response.Specialities = character.Specialities.Select(s => specialityMapper.ToResponse(s.Speciality)).ToList();
         response.Items = character.Items.Select(itemMapper.ToResponse).ToList();

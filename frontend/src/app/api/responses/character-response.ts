@@ -8,6 +8,7 @@ import {CharacterGroupResponse} from './character-group-response';
 import {CharacterAptitudeResponse} from './character-aptitude-response';
 import {CharacterSpecialAttackResponse} from './special-attack-response';
 import {TalentResponse} from './talent-response';
+import {CharacterSpellBookResponse} from './spell-response';
 import {MasteryResponse} from './mastery-response';
 import {HandicapResponse} from './handicap-response';
 
@@ -41,6 +42,7 @@ export interface CharacterResponse {
     talents: TalentResponse[];
     masteries: MasteryResponse[];
     handicaps: HandicapResponse[];
+    spellBooks: CharacterSpellBookResponse[];
     specialities: SpecialityResponse[];
     items: ItemResponse[];
     invites: CharacterGroupInviteResponse[];

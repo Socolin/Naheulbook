@@ -13,5 +13,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ISpellMapper, SpellMapper>();
 
         services.AddSingleton<ISpellService, SpellService>();
+        services.AddSingleton<ICharacterSpellBookService, CharacterSpellBookService>();
     }
 }

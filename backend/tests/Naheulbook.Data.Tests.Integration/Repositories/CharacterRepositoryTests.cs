@@ -37,7 +37,9 @@ public class CharacterRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
             .AddMastery(out var mastery)
             .AddCharacterMastery(out var characterMastery)
             .AddHandicap(out var handicap)
-            .AddCharacterHandicap(out var characterHandicap);
+            .AddCharacterHandicap(out var characterHandicap)
+            .AddSpellBook()
+            .AddCharacterSpellBook(out var characterSpellBook);
 
         var actualCharacter = await _characterRepository.GetWithAllDataAsync(character.Id);
 
@@ -57,6 +59,7 @@ public class CharacterRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
         AssertEntitiesAreLoaded(actualCharacter.Masteries.Select(x => x.Mastery), [mastery]);
         AssertEntitiesAreLoaded(actualCharacter.Handicaps, [characterHandicap]);
         AssertEntitiesAreLoaded(actualCharacter.Handicaps.Select(x => x.Handicap), [handicap]);
+        AssertEntitiesAreLoaded(actualCharacter.SpellBooks, [characterSpellBook]);
     }
 
     #endregion

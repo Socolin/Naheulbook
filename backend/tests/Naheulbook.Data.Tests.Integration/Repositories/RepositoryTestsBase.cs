@@ -75,6 +75,12 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
                     .Excluding(x => x.Talent)
                     .As<EquivalencyOptions<T>>();
                 break;
+            case EquivalencyOptions<CharacterSpellBookEntity> entityOptions:
+                equivalencyOptions = entityOptions
+                    .Excluding(x => x.Character)
+                    .Excluding(x => x.SpellBook)
+                    .As<EquivalencyOptions<T>>();
+                break;
             case EquivalencyOptions<CharacterMasteryEntity> entityOptions:
                 equivalencyOptions = entityOptions
                     .Excluding(x => x.Character)
@@ -173,6 +179,7 @@ public class RepositoryTestsBase<TDbContext> where TDbContext : DbContext
                     .Excluding(x => x.Talents)
                     .Excluding(x => x.Masteries)
                     .Excluding(x => x.Handicaps)
+                    .Excluding(x => x.SpellBooks)
                     .Excluding(x => x.Owner)
                     .Excluding(x => x.Origin)
                     .Excluding(x => x.Group)

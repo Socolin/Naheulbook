@@ -7,6 +7,7 @@ using Naheulbook.Core.Features.Job;
 using Naheulbook.Core.Features.Handicap;
 using Naheulbook.Core.Features.Mastery;
 using Naheulbook.Core.Features.SpecialAttack;
+using Naheulbook.Core.Features.Spell;
 using Naheulbook.Core.Features.Talent;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Responses.Responses;
@@ -30,6 +31,7 @@ public class CharacterMapperTests
     private ITalentMapper _talentMapper;
     private IMasteryMapper _masteryMapper;
     private IHandicapMapper _handicapMapper;
+    private ISpellMapper _spellMapper;
     private CharacterMapper _mapper;
 
     [SetUp]
@@ -44,7 +46,8 @@ public class CharacterMapperTests
         _talentMapper = Substitute.For<ITalentMapper>();
         _masteryMapper = Substitute.For<IMasteryMapper>();
         _handicapMapper = Substitute.For<IHandicapMapper>();
-        _mapper = new CharacterMapper(_aptitudeMapper, _characterModifierMapper, _groupMapper, _itemMapper, _specialityMapper, _specialAttackMapper, _talentMapper, _masteryMapper, _handicapMapper);
+        _spellMapper = Substitute.For<ISpellMapper>();
+        _mapper = new CharacterMapper(_aptitudeMapper, _characterModifierMapper, _groupMapper, _itemMapper, _specialityMapper, _specialAttackMapper, _talentMapper, _masteryMapper, _handicapMapper, _spellMapper);
     }
 
     [Test]
@@ -318,6 +321,7 @@ public class CharacterMapperTests
         private readonly TalentResponse _talentResponse = new() {Name = "some-talent"};
         private readonly MasteryResponse _masteryResponse = new() {Name = "some-mastery"};
         private readonly HandicapResponse _handicapResponse = new() {DiceRoll = 4};
+        private readonly CharacterSpellBookResponse _spellBookResponse = new() {MaxLevel = 2};
         private readonly ActiveStatsModifier _modifierResponse = new();
         private readonly SpecialityResponse _specialityResponse = new();
         private readonly ItemResponse _itemResponse = new();
@@ -331,6 +335,7 @@ public class CharacterMapperTests
             var talent = new TalentEntity();
             var mastery = new MasteryEntity();
             var handicap = new HandicapEntity();
+            var spellBook = new CharacterSpellBookEntity();
             var modifier = new CharacterModifierEntity();
             var speciality = new SpecialityEntity();
             var item = new ItemEntity();
@@ -364,6 +369,7 @@ public class CharacterMapperTests
                 Talents = [new CharacterTalentEntity {Talent = talent}],
                 Masteries = [new CharacterMasteryEntity {Mastery = mastery}],
                 Handicaps = [new CharacterHandicapEntity {Handicap = handicap}],
+                SpellBooks = [spellBook],
                 Modifiers = [modifier],
                 Specialities = [new CharacterSpecialityEntity {Speciality = speciality}],
                 Items = [item],
@@ -376,6 +382,7 @@ public class CharacterMapperTests
             tests._talentMapper.ToResponse(talent).Returns(_talentResponse);
             tests._masteryMapper.ToResponse(mastery).Returns(_masteryResponse);
             tests._handicapMapper.ToResponse(handicap).Returns(_handicapResponse);
+            tests._spellMapper.ToResponse(spellBook).Returns(_spellBookResponse);
             tests._characterModifierMapper.ToResponse(modifier).Returns(_modifierResponse);
             tests._specialityMapper.ToResponse(speciality).Returns(_specialityResponse);
             tests._itemMapper.ToResponse(item).Returns(_itemResponse);
@@ -408,6 +415,7 @@ public class CharacterMapperTests
                 Talents = [_talentResponse],
                 Masteries = [_masteryResponse],
                 Handicaps = [_handicapResponse],
+                SpellBooks = [_spellBookResponse],
                 Modifiers = [_modifierResponse],
                 Specialities = [_specialityResponse],
                 Items = [_itemResponse],

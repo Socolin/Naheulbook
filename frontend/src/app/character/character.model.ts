@@ -22,6 +22,7 @@ import {
     CharacterLevelUpResponse,
     CharacterResponse,
     CharacterSpecialAttackResponse,
+    CharacterSpellBookResponse,
     HandicapResponse,
     ItemPartialResponse,
     MasteryResponse,
@@ -275,6 +276,7 @@ export class Character extends WsRegistrable {
     talents: TalentResponse[] = [];
     masteries: MasteryResponse[] = [];
     handicaps: HandicapResponse[] = [];
+    spellBooks: CharacterSpellBookResponse[] = [];
     invites: CharacterGroupInviteResponse[];
     isNpc: boolean;
 
@@ -304,6 +306,7 @@ export class Character extends WsRegistrable {
             talents: response.talents ?? [],
             masteries: response.masteries ?? [],
             handicaps: response.handicaps ?? [],
+            spellBooks: response.spellBooks ?? [],
             modifiers: ActiveStatsModifier.modifiersFromJson(response.modifiers),
             specialities: Speciality.fromResponses(response.specialities)
         });
@@ -1569,6 +1572,14 @@ export class Character extends WsRegistrable {
         this.talents = this.talents.filter(x => x.id !== talentId);
     }
 
+    addOrUpdateSpellBook(spellBook: CharacterSpellBookResponse) {
+        this.spellBooks = [...this.spellBooks.filter(x => x.spellBookId !== spellBook.spellBookId), spellBook];
+    }
+
+    removeSpellBook(spellBookId: string) {
+        this.spellBooks = this.spellBooks.filter(x => x.spellBookId !== spellBookId);
+    }
+
     addMastery(mastery: MasteryResponse) {
         if (!this.masteries.some(x => x.id === mastery.id)) {
             this.masteries = [...this.masteries, mastery];
@@ -1718,6 +1729,15 @@ export class Character extends WsRegistrable {
             }
             case 'removeTalent': {
                 this.removeTalent(data.talentId);
+                break;
+            }
+            case 'addSpellBook':
+            case 'updateSpellBook': {
+                this.addOrUpdateSpellBook(data);
+                break;
+            }
+            case 'removeSpellBook': {
+                this.removeSpellBook(data.spellBookId);
                 break;
             }
             case 'addMastery': {

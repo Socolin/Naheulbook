@@ -45,6 +45,7 @@ public class CharacterRepository(NaheulbookDbContext context) : Repository<Chara
             .ThenInclude(i => i.Mastery)
             .Include(c => c.Handicaps)
             .ThenInclude(i => i.Handicap)
+            .Include(c => c.SpellBooks)
             .Include(c => c.Jobs)
             .Include(c => c.Invites)
             .ThenInclude(i => i.Group)

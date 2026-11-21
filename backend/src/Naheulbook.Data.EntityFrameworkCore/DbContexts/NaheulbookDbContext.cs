@@ -13,6 +13,7 @@ public class NaheulbookDbContext(DbContextOptions<NaheulbookDbContext> options) 
     public DbSet<CharacterAptitudeEntity> CharacterAptitudes { get; set; } = null!;
     public DbSet<CharacterSpecialAttackEntity> CharacterSpecialAttacks { get; set; } = null!;
     public DbSet<CharacterTalentEntity> CharacterTalents { get; set; } = null!;
+    public DbSet<CharacterSpellBookEntity> CharacterSpellBooks { get; set; } = null!;
     public DbSet<CharacterMasteryEntity> CharacterMasteries { get; set; } = null!;
     public DbSet<CharacterHandicapEntity> CharacterHandicaps { get; set; } = null!;
     public DbSet<CharacterModifierEntity> CharacterModifiers { get; set; } = null!;

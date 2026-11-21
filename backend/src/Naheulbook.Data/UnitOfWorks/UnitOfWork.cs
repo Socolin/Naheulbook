@@ -12,6 +12,7 @@ public interface IUnitOfWork : IDisposable
     ICharacterAptitudeRepository CharacterAptitudes { get; }
     ICharacterSpecialAttackRepository CharacterSpecialAttacks { get; }
     ICharacterTalentRepository CharacterTalents { get; }
+    ICharacterSpellBookRepository CharacterSpellBooks { get; }
     ICharacterMasteryRepository CharacterMasteries { get; }
     ICharacterHandicapRepository CharacterHandicaps { get; }
     ICharacterSkillRepository CharacterSkills { get; }
@@ -75,6 +76,7 @@ public class UnitOfWork(NaheulbookDbContext naheulbookDbContext) : IUnitOfWork
     public ICharacterAptitudeRepository CharacterAptitudes => new CharacterAptitudeRepository(_naheulbookDbContext);
     public ICharacterSpecialAttackRepository CharacterSpecialAttacks => new CharacterSpecialAttackRepository(_naheulbookDbContext);
     public ICharacterTalentRepository CharacterTalents => new CharacterTalentRepository(_naheulbookDbContext);
+    public ICharacterSpellBookRepository CharacterSpellBooks => new CharacterSpellBookRepository(_naheulbookDbContext);
     public ICharacterMasteryRepository CharacterMasteries => new CharacterMasteryRepository(_naheulbookDbContext);
     public ICharacterHandicapRepository CharacterHandicaps => new CharacterHandicapRepository(_naheulbookDbContext);
     public ICharacterSkillRepository CharacterSkills => new CharacterSkillRepository(_naheulbookDbContext);

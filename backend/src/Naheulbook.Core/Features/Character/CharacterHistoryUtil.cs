@@ -38,6 +38,9 @@ public interface ICharacterHistoryUtil
     CharacterHistoryEntryEntity CreateRemoveMastery(int characterId, MasteryEntity mastery);
     CharacterHistoryEntryEntity CreateAddHandicap(int characterId, HandicapEntity handicap);
     CharacterHistoryEntryEntity CreateRemoveHandicap(int characterId, HandicapEntity handicap);
+    CharacterHistoryEntryEntity CreateAddSpellBook(int characterId, SpellBookEntity spellBook, int? maxLevel);
+    CharacterHistoryEntryEntity CreateUpdateSpellBook(int characterId, SpellBookEntity spellBook, int? oldMaxLevel, int? newMaxLevel);
+    CharacterHistoryEntryEntity CreateRemoveSpellBook(int characterId, SpellBookEntity spellBook);
 }
 
 public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
@@ -73,6 +76,9 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
     private const string AddMasteryActionName = "ADD_MASTERY";
     private const string RemoveMasteryActionName = "REMOVE_MASTERY";
     private const string AddHandicapActionName = "ADD_HANDICAP";
+    private const string AddSpellBookActionName = "ADD_SPELL_BOOK";
+    private const string UpdateSpellBookActionName = "UPDATE_SPELL_BOOK";
+    private const string RemoveSpellBookActionName = "REMOVE_SPELL_BOOK";
     private const string RemoveHandicapActionName = "REMOVE_HANDICAP";
 
     public CharacterHistoryEntryEntity CreateLogChangeEv(CharacterEntity character, int? oldValue, int? newValue)
@@ -457,5 +463,38 @@ public class CharacterHistoryUtil(IJsonUtil jsonUtil) : ICharacterHistoryUtil
     private static object GetSpecialAttackLogData(SpecialAttackEntity specialAttack)
     {
         return new {id = specialAttack.Id, name = specialAttack.Name};
+    }
+
+    public CharacterHistoryEntryEntity CreateAddSpellBook(int characterId, SpellBookEntity spellBook, int? maxLevel)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = AddSpellBookActionName,
+            Date = DateTime.UtcNow,
+            Data = jsonUtil.Serialize(new {spellBook = new {id = spellBook.Id, name = spellBook.Name}, maxLevel}),
+        };
+    }
+
+    public CharacterHistoryEntryEntity CreateUpdateSpellBook(int characterId, SpellBookEntity spellBook, int? oldMaxLevel, int? newMaxLevel)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = UpdateSpellBookActionName,
+            Date = DateTime.UtcNow,
+            Data = jsonUtil.Serialize(new {spellBook = new {id = spellBook.Id, name = spellBook.Name}, oldMaxLevel, newMaxLevel}),
+        };
+    }
+
+    public CharacterHistoryEntryEntity CreateRemoveSpellBook(int characterId, SpellBookEntity spellBook)
+    {
+        return new CharacterHistoryEntryEntity
+        {
+            CharacterId = characterId,
+            Action = RemoveSpellBookActionName,
+            Date = DateTime.UtcNow,
+            Data = jsonUtil.Serialize(new {spellBook = new {id = spellBook.Id, name = spellBook.Name}}),
+        };
     }
 }

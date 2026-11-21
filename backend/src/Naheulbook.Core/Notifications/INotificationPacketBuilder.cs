@@ -37,6 +37,9 @@ public interface INotificationPacketBuilder
     INotificationPacket BuildCharacterUpdateSpecialAttack(int characterId, CharacterSpecialAttackEntity characterSpecialAttack);
     INotificationPacket BuildCharacterAddTalent(int characterId, TalentEntity talent);
     INotificationPacket BuildCharacterRemoveTalent(int characterId, Guid talentId);
+    INotificationPacket BuildCharacterAddSpellBook(int characterId, CharacterSpellBookEntity characterSpellBook);
+    INotificationPacket BuildCharacterUpdateSpellBook(int characterId, CharacterSpellBookEntity characterSpellBook);
+    INotificationPacket BuildCharacterRemoveSpellBook(int characterId, Guid spellBookId);
     INotificationPacket BuildCharacterAddMastery(int characterId, MasteryEntity mastery);
     INotificationPacket BuildCharacterRemoveMastery(int characterId, Guid masteryId);
     INotificationPacket BuildCharacterAddHandicap(int characterId, HandicapEntity handicap);

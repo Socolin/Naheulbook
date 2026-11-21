@@ -50,4 +50,23 @@ public partial class TestDataUtil
 
         return SaveEntity(spell, customizer);
     }
+
+    public TestDataUtil AddCharacterSpellBook(Action<CharacterSpellBookEntity> customizer = null)
+    {
+        return AddCharacterSpellBook(out _, customizer);
+    }
+
+    public TestDataUtil AddCharacterSpellBook(out CharacterSpellBookEntity characterSpellBook, Action<CharacterSpellBookEntity> customizer = null)
+    {
+        var character = GetLast<CharacterEntity>();
+        var spellBook = GetLast<SpellBookEntity>();
+        characterSpellBook = new CharacterSpellBookEntity
+        {
+            CharacterId = character.Id,
+            SpellBookId = spellBook.Id,
+            MaxLevel = 2,
+        };
+
+        return SaveEntity(characterSpellBook, customizer);
+    }
 }

@@ -621,6 +621,11 @@
     </div>
     <!-- End of stats tab -->
   </mat-tab>
+  <mat-tab label="Magie">
+    <ng-template matTabContent>
+      <character-spell-panel [character]="character" />
+    </ng-template>
+  </mat-tab>
   <mat-tab label="Inventaire">
     <!-- Start of inventory tab -->
     <inventory-panel #inventoryPanel [inGroupTab]="inGroupTab" [character]="character"></inventory-panel>

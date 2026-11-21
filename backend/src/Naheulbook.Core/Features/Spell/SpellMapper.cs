@@ -9,6 +9,7 @@ public interface ISpellMapper
 {
     SpellResponse ToResponse(SpellEntity spell);
     SpellBookResponse ToResponse(SpellBookEntity spellBook);
+    CharacterSpellBookResponse ToResponse(CharacterSpellBookEntity characterSpellBook);
 }
 
 public class SpellMapper : ISpellMapper
@@ -44,6 +45,15 @@ public class SpellMapper : ISpellMapper
                 .OrderBy(x => x.DisplayOrder)
                 .Select(ToResponse)
                 .ToList(),
+        };
+    }
+
+    public CharacterSpellBookResponse ToResponse(CharacterSpellBookEntity characterSpellBook)
+    {
+        return new CharacterSpellBookResponse
+        {
+            SpellBookId = characterSpellBook.SpellBookId,
+            MaxLevel = characterSpellBook.MaxLevel,
         };
     }
 }

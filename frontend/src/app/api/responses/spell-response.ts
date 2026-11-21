@@ -141,3 +141,10 @@ export type SpellBookResponse = {
 export type SpellBooksResponse = {
     spellBooks: SpellBookResponse[];
 }
+
+/** A spell book given to a character on top of the ones of its job and specialities */
+export type CharacterSpellBookResponse = {
+    spellBookId: string;
+    /** Only the spells up to this level are available. Absent: no limit other than the character level */
+    maxLevel?: number | null;
+}
