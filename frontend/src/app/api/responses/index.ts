@@ -55,3 +55,4 @@ export * from './stat-requirement-response';
 export * from './user-access-token-response';
 export * from './user-info-response';
 export * from './user-search-response';
+export * from './user-admin-response';

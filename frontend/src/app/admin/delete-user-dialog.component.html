@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Supprimer l'utilisateur #{{data.user.id}}</h2>
+<mat-dialog-content>
+  <p class="mat-body">
+    Supprimer <strong>{{data.user.displayName || data.user.username || 'cet utilisateur'}}</strong>
+    @if (data.user.username && data.user.displayName) {
+      ({{data.user.username}})
+    }
+    ? Cette action est <strong>irréversible</strong>.
+  </p>
+  <ul class="mat-body">
+    <li>Ses personnages seront supprimés, avec tout leur contenu.</li>
+    <li>Les groupes dont il est le MJ seront supprimés, avec tout leur contenu (PNJ, monstres, loots, combats, évènements…).
+      Les personnages des autres joueurs de ces groupes sont conservés, ils sont seulement retirés du groupe.</li>
+    <li>Ses calques de carte seront supprimés.</li>
+    <li>Ses tokens d'accès et ses sessions seront supprimés.</li>
+    <li>Les objets qu'il a créés sont conservés, sans propriétaire.</li>
+  </ul>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>ANNULER</button>
+  <button mat-flat-button color="warn" [mat-dialog-close]="true">SUPPRIMER</button>
+</mat-dialog-actions>

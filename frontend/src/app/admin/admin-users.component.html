@@ -1,0 +1,83 @@
+@if (!isSuperAdmin) {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Accès refusé</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="mat-body">La gestion des utilisateurs est réservée aux super administrateurs.</p>
+    </mat-card-content>
+  </mat-card>
+} @else {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Utilisateurs</mat-card-title>
+      <mat-card-subtitle>Rechercher un utilisateur par l'un de ses identifiants (correspondance exacte)</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="search-form" (ngSubmit)="search()">
+        <mat-form-field class="identifier-type">
+          <mat-label>Type d'identifiant</mat-label>
+          <mat-select [(ngModel)]="identifierType" name="identifierType">
+            @for (type of identifierTypes; track type.value) {
+              <mat-option [value]="type.value">{{type.label}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="identifier">
+          <mat-label>Identifiant</mat-label>
+          <input matInput [(ngModel)]="identifier" name="identifier" autocomplete="off">
+        </mat-form-field>
+        <button mat-flat-button color="primary" type="submit" [disabled]="loading || !identifier.trim()">
+          RECHERCHER
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  @if (loading) {
+    <div class="loading">
+      <mat-spinner [diameter]="32"></mat-spinner>
+    </div>
+  } @else if (users !== undefined) {
+    @if (users.length === 0) {
+      <p class="mat-body no-result">Aucun utilisateur trouvé.</p>
+    }
+    @for (user of users; track user.id) {
+      <mat-card class="user">
+        <mat-card-header>
+          <mat-card-title>
+            #{{user.id}} {{user.displayName || '(sans nom)'}}
+            @if (user.adminLevel > 0) {
+              <span class="admin-level">{{user.adminLevel >= 2 ? 'Super admin' : 'Admin'}}</span>
+            }
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <dl>
+            <dt>Nom d'utilisateur</dt>
+            <dd>{{user.username || '-'}}</dd>
+            <dt>Facebook</dt>
+            <dd>{{user.facebookId || '-'}}</dd>
+            <dt>Google</dt>
+            <dd>{{user.googleId || '-'}}</dd>
+            <dt>Microsoft</dt>
+            <dd>{{user.microsoftId || '-'}}</dd>
+            <dt>Twitter</dt>
+            <dd>{{user.twitterId || '-'}}</dd>
+          </dl>
+          <div class="actions">
+            <button mat-stroked-button color="warn"
+                    (click)="openDeleteDialog(user)"
+                    [disabled]="deletingUserId !== undefined || isCurrentUser(user)">
+              <mat-icon>delete</mat-icon>
+              SUPPRIMER
+            </button>
+            @if (deletingUserId === user.id) {
+              <mat-spinner [diameter]="24"></mat-spinner>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  }
+}

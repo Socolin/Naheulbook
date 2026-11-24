@@ -24,6 +24,10 @@ export const routes: Routes = [
         loadChildren: () => import('./home-player/home-player.routes').then(m => m.routes)
     },
     {
+        path: 'admin',
+        loadChildren: () => import('./admin/admin.routes').then(m => m.routes)
+    },
+    {
         path: 'map',
         loadChildren: () => import('./map/map.routes').then(m => m.routes)
     },
