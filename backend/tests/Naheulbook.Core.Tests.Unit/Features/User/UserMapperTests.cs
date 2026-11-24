@@ -25,7 +25,7 @@ public class UserMapperTests
         {
             Id = 3,
             DisplayName = "some-display-name",
-            Admin = true,
+            AdminLevel = UserAdminLevel.Admin,
             ShowInSearchUntil = DateTime.UtcNow.AddHours(1),
             FbId = "some-fb-id",
             GoogleId = "some-google-id",
@@ -39,6 +39,7 @@ public class UserMapperTests
             Id = 3,
             DisplayName = "some-display-name",
             Admin = true,
+            AdminLevel = 1,
             ShowInSearch = true,
             LinkedWithFb = true,
             LinkedWithGoogle = true,

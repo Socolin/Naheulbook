@@ -9,6 +9,7 @@ public class UserInfoResponse
     public string? DisplayName { get; set; }
     public bool ShowInSearch { get; set; }
     public bool Admin { get; set; }
+    public int AdminLevel { get; set; }
     public bool LinkedWithFb { get; set; }
     public bool LinkedWithGoogle { get; set; }
     public bool LinkedWithMicrosoft { get; set; }

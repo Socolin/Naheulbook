@@ -28,7 +28,7 @@ public class AuthorizationUtilTests
     [Test]
     public async Task EnsureAdminAccess_WhenUserIsNotAdmin_Throw()
     {
-        var user = new UserEntity {Admin = false, Id = 1};
+        var user = new UserEntity {AdminLevel = UserAdminLevel.None, Id = 1};
 
         _unitOfWork.Users.GetAsync(1)
             .Returns(user);
@@ -56,7 +56,7 @@ public class AuthorizationUtilTests
         var itemTemplate = new ItemTemplateEntity {Source = "official"};
         var executionContext = new NaheulbookExecutionContext {UserId = 1};
 
-        var user = new UserEntity {Admin = false, Id = 1};
+        var user = new UserEntity {AdminLevel = UserAdminLevel.None, Id = 1};
 
         _unitOfWork.Users.GetAsync(1)
             .Returns(user);
@@ -85,7 +85,7 @@ public class AuthorizationUtilTests
         var itemTemplate = new ItemTemplateEntity {Source = source, SourceUserId = 2};
         var executionContext = new NaheulbookExecutionContext {UserId = 1};
 
-        var user = new UserEntity {Admin = false, Id = 1};
+        var user = new UserEntity {AdminLevel = UserAdminLevel.None, Id = 1};
 
         _unitOfWork.Users.GetAsync(1)
             .Returns(user);

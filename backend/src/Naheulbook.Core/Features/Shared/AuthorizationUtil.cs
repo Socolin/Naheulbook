@@ -26,7 +26,7 @@ public class AuthorizationUtil(IUnitOfWorkFactory unitOfWorkFactory) : IAuthoriz
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
         var user = await uow.Users.GetAsync(executionContext.UserId, cancellationToken);
-        if (user?.Admin != true)
+        if (user == null || user.AdminLevel < UserAdminLevel.Admin)
             throw new ForbiddenAccessException();
     }
 
@@ -159,7 +159,7 @@ public class AuthorizationUtil(IUnitOfWorkFactory unitOfWorkFactory) : IAuthoriz
         if (mapLayer.Source == "official")
         {
             var user = await uow.Users.GetAsync(executionContext.UserId, cancellationToken);
-            if (user?.Admin == true)
+            if (user?.AdminLevel >= UserAdminLevel.Admin)
                 return;
         }
         else

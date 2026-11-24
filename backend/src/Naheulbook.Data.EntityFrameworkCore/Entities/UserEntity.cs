@@ -11,7 +11,7 @@ public class UserEntity
 
     public string? ActivationCode { get; set; }
 
-    public bool Admin { get; set; }
+    public UserAdminLevel AdminLevel { get; set; }
 
     public string? FbId { get; set; }
 

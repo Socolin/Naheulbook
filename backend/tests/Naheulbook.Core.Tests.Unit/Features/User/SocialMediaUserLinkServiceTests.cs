@@ -54,7 +54,7 @@ public class SocialMediaUserLinkServiceTests
         actual.Should().BeEquivalentTo(new UserEntity
         {
             FbId = facebookId,
-            Admin = false,
+            AdminLevel = UserAdminLevel.None,
             DisplayName = "some-name",
         });
     }
@@ -93,7 +93,7 @@ public class SocialMediaUserLinkServiceTests
         actual.Should().BeEquivalentTo(new UserEntity
         {
             GoogleId = googleId,
-            Admin = false,
+            AdminLevel = UserAdminLevel.None,
             DisplayName = "some-name",
         });
     }
@@ -132,7 +132,7 @@ public class SocialMediaUserLinkServiceTests
         actual.Should().BeEquivalentTo(new UserEntity
         {
             MicrosoftId = microsoftId,
-            Admin = false,
+            AdminLevel = UserAdminLevel.None,
             DisplayName = "some-name",
         });
     }

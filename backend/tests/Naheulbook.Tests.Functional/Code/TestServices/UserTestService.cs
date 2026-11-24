@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Naheulbook.Data.EntityFrameworkCore.DbContexts;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Tests.Functional.Code.HttpClients;
 using Naheulbook.Tests.Functional.Code.Steps;
 using Naheulbook.TestUtils;
@@ -65,7 +66,7 @@ public class UserTestService(NaheulbookHttpClient naheulbookHttpClient, IMailRec
         using (var dbContext = new NaheulbookDbContext(dbContextOptions))
         {
             var user = await dbContext.Users.FirstAsync(u => u.Username == username);
-            user.Admin = true;
+            user.AdminLevel = UserAdminLevel.Admin;
             await dbContext.SaveChangesAsync();
         }
     }

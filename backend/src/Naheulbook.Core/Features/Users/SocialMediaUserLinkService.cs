@@ -25,7 +25,7 @@ public class SocialMediaUserLinkService(IUnitOfWorkFactory unitOfWorkFactory) : 
             user = new UserEntity
             {
                 FbId = facebookId,
-                Admin = false,
+                AdminLevel = UserAdminLevel.None,
                 DisplayName = name,
             };
             uow.Users.Add(user);
@@ -54,7 +54,7 @@ public class SocialMediaUserLinkService(IUnitOfWorkFactory unitOfWorkFactory) : 
             user = new UserEntity
             {
                 GoogleId = googleId,
-                Admin = false,
+                AdminLevel = UserAdminLevel.None,
                 DisplayName = name,
             };
             uow.Users.Add(user);
@@ -83,7 +83,7 @@ public class SocialMediaUserLinkService(IUnitOfWorkFactory unitOfWorkFactory) : 
             user = new UserEntity
             {
                 MicrosoftId = microsoftId,
-                Admin = false,
+                AdminLevel = UserAdminLevel.None,
                 DisplayName = name,
             };
             uow.Users.Add(user);

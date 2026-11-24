@@ -86,7 +86,7 @@ public class UserSteps
         _testDataUtil.AddUser(u =>
         {
             u.HashedPassword = hasUtil.HashPassword("some-password");
-            u.Admin = true;
+            u.AdminLevel = UserAdminLevel.Admin;
         });
 
         _scenarioContext.SetUsername(_testDataUtil.GetLast<UserEntity>().Username);

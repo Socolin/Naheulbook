@@ -15,9 +15,9 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
         builder.Property(e => e.Id)
             .HasColumnName("id");
 
-        builder.Property(e => e.Admin)
-            .HasColumnName("admin")
-            .HasDefaultValueSql("false");
+        builder.Property(e => e.AdminLevel)
+            .HasColumnName("adminLevel")
+            .HasDefaultValue(UserAdminLevel.None);
 
         builder.Property(e => e.DisplayName)
             .IsRequired(false)

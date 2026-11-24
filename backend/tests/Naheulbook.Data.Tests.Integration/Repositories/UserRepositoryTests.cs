@@ -1,5 +1,6 @@
 using AwesomeAssertions;
 using Naheulbook.Data.EntityFrameworkCore.DbContexts;
+using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Data.Repositories;
 using Naheulbook.Shared.Extensions;
 using NUnit.Framework;
@@ -21,7 +22,7 @@ public class UserRepositoryTests : RepositoryTestsBase<NaheulbookDbContext>
     [Test]
     public async Task CanGetUserByUsername()
     {
-        TestDataUtil.AddUser(out var user, u => u.Admin = true);
+        TestDataUtil.AddUser(out var user, u => u.AdminLevel = UserAdminLevel.Admin);
 
         var actualUser = await _userRepository.GetByUsernameAsync(user.Username!);
 
