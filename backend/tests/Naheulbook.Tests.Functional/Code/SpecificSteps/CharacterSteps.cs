@@ -134,6 +134,14 @@ public class CharacterSteps(
         testDataUtil.SaveChanges();
     }
 
+    [Given("^that the (.+) character is a member of the (.+) group$")]
+    public void GivenThatXTheCharacterIsAMemberOfTheXGroup(string characterIndexString, string groupIndexString)
+    {
+        var character = testDataUtil.Get<CharacterEntity>(StepArgumentUtil.ParseIndex(characterIndexString));
+        character.GroupId = testDataUtil.Get<GroupEntity>(StepArgumentUtil.ParseIndex(groupIndexString)).Id;
+        testDataUtil.SaveChanges();
+    }
+
     [Given("^that the character is a member of the group$")]
     public void GivenThatTheCharacterIsAMemberOfTheGroup()
     {

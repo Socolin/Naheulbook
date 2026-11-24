@@ -6,6 +6,7 @@ namespace Naheulbook.Core.Features.Shared;
 public interface IAuthorizationUtil
 {
     Task EnsureAdminAccessAsync(NaheulbookExecutionContext executionContext, CancellationToken cancellationToken = default);
+    Task EnsureSuperAdminAccessAsync(NaheulbookExecutionContext executionContext, CancellationToken cancellationToken = default);
     Task EnsureCanEditItemTemplateAsync(NaheulbookExecutionContext executionContext, ItemTemplateEntity itemTemplate, CancellationToken cancellationToken = default);
     void EnsureIsGroupOwner(NaheulbookExecutionContext executionContext, GroupEntity? group);
     bool IsGroupOwner(NaheulbookExecutionContext executionContext, GroupEntity group);
@@ -22,11 +23,21 @@ public interface IAuthorizationUtil
 
 public class AuthorizationUtil(IUnitOfWorkFactory unitOfWorkFactory) : IAuthorizationUtil
 {
-    public async Task EnsureAdminAccessAsync(NaheulbookExecutionContext executionContext, CancellationToken cancellationToken = default)
+    public Task EnsureAdminAccessAsync(NaheulbookExecutionContext executionContext, CancellationToken cancellationToken = default)
+    {
+        return EnsureAdminLevelAsync(executionContext, UserAdminLevel.Admin, cancellationToken);
+    }
+
+    public Task EnsureSuperAdminAccessAsync(NaheulbookExecutionContext executionContext, CancellationToken cancellationToken = default)
+    {
+        return EnsureAdminLevelAsync(executionContext, UserAdminLevel.SuperAdmin, cancellationToken);
+    }
+
+    private async Task EnsureAdminLevelAsync(NaheulbookExecutionContext executionContext, UserAdminLevel requiredLevel, CancellationToken cancellationToken)
     {
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
         var user = await uow.Users.GetAsync(executionContext.UserId, cancellationToken);
-        if (user == null || user.AdminLevel < UserAdminLevel.Admin)
+        if (user == null || user.AdminLevel < requiredLevel)
             throw new ForbiddenAccessException();
     }
 

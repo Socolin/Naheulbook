@@ -82,11 +82,22 @@ public class UserSteps
     [Given("^a JWT for an admin user$")]
     public void GivenAnAdminUser()
     {
+        GivenAJwtForAUserWithAdminLevel(UserAdminLevel.Admin);
+    }
+
+    [Given("^a JWT for a super admin user$")]
+    public void GivenASuperAdminUser()
+    {
+        GivenAJwtForAUserWithAdminLevel(UserAdminLevel.SuperAdmin);
+    }
+
+    private void GivenAJwtForAUserWithAdminLevel(UserAdminLevel adminLevel)
+    {
         var hasUtil = new PasswordHashingService();
         _testDataUtil.AddUser(u =>
         {
             u.HashedPassword = hasUtil.HashPassword("some-password");
-            u.AdminLevel = UserAdminLevel.Admin;
+            u.AdminLevel = adminLevel;
         });
 
         _scenarioContext.SetUsername(_testDataUtil.GetLast<UserEntity>().Username);

@@ -943,3 +943,5 @@ CREATE TABLE `user_sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 -- 2025-04-03 06:50:34
+
+SET foreign_key_checks = 1;

@@ -19,6 +19,8 @@ public class UserEntity
 
     public string? MicrosoftId { get; set; }
 
+    public string? TwitterId { get; set; }
+
     public string? DisplayName { get; set; }
 
     public DateTime? ShowInSearchUntil { get; set; }

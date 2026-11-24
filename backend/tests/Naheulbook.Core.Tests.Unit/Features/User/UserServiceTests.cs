@@ -3,6 +3,8 @@ using Naheulbook.Core.Features.Shared;
 using Naheulbook.Core.Features.Users;
 using Naheulbook.Core.Tests.Unit.TestUtils;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
+using Naheulbook.Data.Repositories;
+using Naheulbook.Requests.Requests;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -157,6 +159,81 @@ public class UserServiceTests
         Func<Task> act = async () => await _service.CheckPasswordAsync(SomeUsername, SomePassword);
 
         await act.Should().ThrowAsync<UserNotFoundException>();
+    }
+
+    [Test]
+    public async Task SearchUserByIdentifiersAsync_EnsureSuperAdminAccess_BeforeSearching()
+    {
+        var executionContext = new NaheulbookExecutionContext {UserId = 1};
+        _authorizationUtil.EnsureSuperAdminAccessAsync(executionContext).Returns(Task.FromException(new ForbiddenAccessException()));
+
+        Func<Task> act = () => _service.SearchUserByIdentifiersAsync(executionContext, new SearchUserByIdentifiersRequest {FacebookId = "some-fb-id"});
+
+        await act.Should().ThrowAsync<ForbiddenAccessException>();
+        await _unitOfWorkFactory.GetUnitOfWork().Users.DidNotReceive().SearchByIdentifiersAsync(Arg.Any<UserIdentifiersFilter>(), Arg.Any<CancellationToken>());
+    }
+
+    [Test]
+    public async Task SearchUserByIdentifiersAsync_SearchWithTrimmedNonBlankIdentifiers()
+    {
+        var executionContext = new NaheulbookExecutionContext {UserId = 1};
+        var users = new List<UserEntity> {new() {Id = 2}};
+        _unitOfWorkFactory.GetUnitOfWork().Users.SearchByIdentifiersAsync(new UserIdentifiersFilter(null, "some-fb-id", null, null, null))
+            .Returns(users);
+
+        var actual = await _service.SearchUserByIdentifiersAsync(executionContext, new SearchUserByIdentifiersRequest {FacebookId = " some-fb-id ", GoogleId = " "});
+
+        actual.Should().BeSameAs(users);
+    }
+
+    [Test]
+    public async Task SearchUserByIdentifiersAsync_WhenNoIdentifierIsGiven_ReturnsEmptyList()
+    {
+        var actual = await _service.SearchUserByIdentifiersAsync(new NaheulbookExecutionContext {UserId = 1}, new SearchUserByIdentifiersRequest());
+
+        actual.Should().BeEmpty();
+        await _unitOfWorkFactory.GetUnitOfWork().Users.DidNotReceive().SearchByIdentifiersAsync(Arg.Any<UserIdentifiersFilter>(), Arg.Any<CancellationToken>());
+    }
+
+    [Test]
+    public async Task DeleteUserAsync_EnsureSuperAdminAccess_BeforeDeleting()
+    {
+        var executionContext = new NaheulbookExecutionContext {UserId = 1};
+        _authorizationUtil.EnsureSuperAdminAccessAsync(executionContext).Returns(Task.FromException(new ForbiddenAccessException()));
+
+        Func<Task> act = () => _service.DeleteUserAsync(executionContext, 2);
+
+        await act.Should().ThrowAsync<ForbiddenAccessException>();
+        await _unitOfWorkFactory.GetUnitOfWork().Users.DidNotReceive().DeleteWithOwnedDataAsync(Arg.Any<int>(), Arg.Any<CancellationToken>());
+    }
+
+    [Test]
+    public async Task DeleteUserAsync_WhenDeletingItself_Throw()
+    {
+        Func<Task> act = () => _service.DeleteUserAsync(new NaheulbookExecutionContext {UserId = 1}, 1);
+
+        await act.Should().ThrowAsync<CannotDeleteOwnUserException>();
+        await _unitOfWorkFactory.GetUnitOfWork().Users.DidNotReceive().DeleteWithOwnedDataAsync(Arg.Any<int>(), Arg.Any<CancellationToken>());
+    }
+
+    [Test]
+    public async Task DeleteUserAsync_WhenUserDoesNotExists_Throw()
+    {
+        _unitOfWorkFactory.GetUnitOfWork().Users.GetAsync(2).Returns((UserEntity) null);
+
+        Func<Task> act = () => _service.DeleteUserAsync(new NaheulbookExecutionContext {UserId = 1}, 2);
+
+        await act.Should().ThrowAsync<UserNotFoundException>();
+    }
+
+    [Test]
+    public async Task DeleteUserAsync_DeleteUserWithOwnedData()
+    {
+        _unitOfWorkFactory.GetUnitOfWork().Users.GetAsync(2).Returns(new UserEntity {Id = 2});
+
+        await _service.DeleteUserAsync(new NaheulbookExecutionContext {UserId = 1}, 2);
+
+        await _unitOfWorkFactory.GetUnitOfWork().Users.Received(1).DeleteWithOwnedDataAsync(2, Arg.Any<CancellationToken>());
     }
 
     private static UserEntity CreateUser()

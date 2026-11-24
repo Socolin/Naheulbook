@@ -174,6 +174,50 @@ public class UsersController(IUserService userService, IJwtService jwtService, I
         }
     }
 
+    [HttpGet]
+    public async Task<ActionResult<List<UserAdminResponse>>> GetSearchByIdentifiersAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromQuery] SearchUserByIdentifiersRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        try
+        {
+            var users = await userService.SearchUserByIdentifiersAsync(executionContext, request, cancellationToken);
+            return users.Select(userMapper.ToAdminResponse).ToList();
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+    }
+
+    [HttpDelete("{UserId:int:min(1)}")]
+    public async Task<IActionResult> DeleteUserAsync(
+        [FromServices] NaheulbookExecutionContext executionContext,
+        [FromRoute] int userId,
+        CancellationToken cancellationToken
+    )
+    {
+        try
+        {
+            await userService.DeleteUserAsync(executionContext, userId, cancellationToken);
+            return NoContent();
+        }
+        catch (ForbiddenAccessException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status403Forbidden, ex);
+        }
+        catch (CannotDeleteOwnUserException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status400BadRequest, ex);
+        }
+        catch (UserNotFoundException ex)
+        {
+            throw new HttpErrorException(StatusCodes.Status404NotFound, ex);
+        }
+    }
+
     [HttpPatch("{UserId:int:min(1)}")]
     public async Task<IActionResult> PatchUserIdAsync(
         [FromServices] NaheulbookExecutionContext executionContext,

@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using Naheulbook.Core.Features.Shared;
 using Naheulbook.Data.EntityFrameworkCore.Entities;
+using Naheulbook.Data.Repositories;
 using Naheulbook.Data.UnitOfWorks;
 using Naheulbook.Requests.Requests;
 using Naheulbook.Shared.Utils;
@@ -15,6 +16,8 @@ public interface IUserService
     Task<UserEntity> GetUserInfoAsync(int userId, CancellationToken cancellationToken = default);
     Task UpdateUserAsync(NaheulbookExecutionContext executionContext, int userId, UpdateUserRequest request, CancellationToken cancellationToken = default);
     Task<List<UserEntity>> SearchUserAsync(NaheulbookExecutionContext executionContext, string filter, CancellationToken cancellationToken = default);
+    Task<List<UserEntity>> SearchUserByIdentifiersAsync(NaheulbookExecutionContext executionContext, SearchUserByIdentifiersRequest request, CancellationToken cancellationToken = default);
+    Task DeleteUserAsync(NaheulbookExecutionContext executionContext, int userId, CancellationToken cancellationToken = default);
 }
 
 public class UserService(
@@ -120,5 +123,47 @@ public class UserService(
 
         using var uow = unitOfWorkFactory.CreateUnitOfWork();
         return await uow.Users.SearchUsersAsync(filter, cancellationToken);
+    }
+
+    public async Task<List<UserEntity>> SearchUserByIdentifiersAsync(
+        NaheulbookExecutionContext executionContext,
+        SearchUserByIdentifiersRequest request,
+        CancellationToken cancellationToken = default
+    )
+    {
+        await authorizationUtil.EnsureSuperAdminAccessAsync(executionContext, cancellationToken);
+
+        var filter = new UserIdentifiersFilter(
+            NullIfBlank(request.Username),
+            NullIfBlank(request.FacebookId),
+            NullIfBlank(request.GoogleId),
+            NullIfBlank(request.MicrosoftId),
+            NullIfBlank(request.TwitterId)
+        );
+        if (filter.IsEmpty)
+            return [];
+
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        return await uow.Users.SearchByIdentifiersAsync(filter, cancellationToken);
+    }
+
+    public async Task DeleteUserAsync(NaheulbookExecutionContext executionContext, int userId, CancellationToken cancellationToken = default)
+    {
+        await authorizationUtil.EnsureSuperAdminAccessAsync(executionContext, cancellationToken);
+
+        if (executionContext.UserId == userId)
+            throw new CannotDeleteOwnUserException();
+
+        using var uow = unitOfWorkFactory.CreateUnitOfWork();
+        var user = await uow.Users.GetAsync(userId, cancellationToken);
+        if (user == null)
+            throw new UserNotFoundException(userId);
+
+        await uow.Users.DeleteWithOwnedDataAsync(userId, DoNotInterrupt.Token);
+    }
+
+    private static string? NullIfBlank(string? value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
     }
 }

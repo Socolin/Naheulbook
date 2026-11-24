@@ -39,6 +39,41 @@ public class AuthorizationUtilTests
     }
 
     [Test]
+    public async Task EnsureAdminAccess_WhenUserIsAdmin_DoNotThrow()
+    {
+        _unitOfWork.Users.GetAsync(1)
+            .Returns(new UserEntity {AdminLevel = UserAdminLevel.Admin, Id = 1});
+
+        Func<Task> act = () => _authorizationUtil.EnsureAdminAccessAsync(new NaheulbookExecutionContext {UserId = 1});
+
+        await act.Should().NotThrowAsync();
+    }
+
+    [Test]
+    [TestCase(UserAdminLevel.None)]
+    [TestCase(UserAdminLevel.Admin)]
+    public async Task EnsureSuperAdminAccess_WhenUserIsNotSuperAdmin_Throw(UserAdminLevel adminLevel)
+    {
+        _unitOfWork.Users.GetAsync(1)
+            .Returns(new UserEntity {AdminLevel = adminLevel, Id = 1});
+
+        Func<Task> act = () => _authorizationUtil.EnsureSuperAdminAccessAsync(new NaheulbookExecutionContext {UserId = 1});
+
+        await act.Should().ThrowAsync<ForbiddenAccessException>();
+    }
+
+    [Test]
+    public async Task EnsureSuperAdminAccess_WhenUserIsSuperAdmin_DoNotThrow()
+    {
+        _unitOfWork.Users.GetAsync(1)
+            .Returns(new UserEntity {AdminLevel = UserAdminLevel.SuperAdmin, Id = 1});
+
+        Func<Task> act = () => _authorizationUtil.EnsureSuperAdminAccessAsync(new NaheulbookExecutionContext {UserId = 1});
+
+        await act.Should().NotThrowAsync();
+    }
+
+    [Test]
     public async Task EnsureAdminAccess_WhenUserDoesNotExists_Throw()
     {
         _unitOfWork.Users.GetAsync(1)

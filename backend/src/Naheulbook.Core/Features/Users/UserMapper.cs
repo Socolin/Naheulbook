@@ -7,6 +7,7 @@ public interface IUserMapper
 {
     UserInfoResponse ToInfoResponse(UserEntity user);
     UserSearchResponse ToSearchResponse(UserEntity user);
+    UserAdminResponse ToAdminResponse(UserEntity user);
     UserAccessTokenResponse ToResponse(UserAccessTokenEntity accessToken);
     UserAccessTokenResponseWithKey ToResponseWithKey(UserAccessTokenEntity accessToken);
 }
@@ -34,6 +35,21 @@ public class UserMapper : IUserMapper
         {
             Id = user.Id,
             DisplayName = user.DisplayName,
+        };
+    }
+
+    public UserAdminResponse ToAdminResponse(UserEntity user)
+    {
+        return new UserAdminResponse
+        {
+            Id = user.Id,
+            Username = user.Username,
+            DisplayName = user.DisplayName,
+            AdminLevel = (int)user.AdminLevel,
+            FacebookId = user.FbId,
+            GoogleId = user.GoogleId,
+            MicrosoftId = user.MicrosoftId,
+            TwitterId = user.TwitterId,
         };
     }
 

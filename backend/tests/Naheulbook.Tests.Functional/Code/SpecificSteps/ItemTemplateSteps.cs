@@ -1,5 +1,6 @@
 using Naheulbook.Data.EntityFrameworkCore.Entities;
 using Naheulbook.Shared.TransientModels;
+using Naheulbook.Tests.Functional.Code.Utils;
 using Naheulbook.TestUtils;
 using Newtonsoft.Json;
 using Reqnroll;
@@ -46,6 +47,20 @@ public class ItemTemplateSteps(TestDataUtil testDataUtil)
         testDataUtil.AddItemTemplate(i => i.TechName = "BIG_PURSE");
         testDataUtil.AddItemTemplate(i => i.TechName = "MEDIUM_PURSE");
         testDataUtil.AddItemTemplate(i => i.TechName = "SMALL_PURSE");
+    }
+
+    [Given("^a (private|community) item template created by the (.+) user$")]
+    public void GivenAnItemTemplateCreatedByTheXUser(string source, string userIndexString)
+    {
+        if (!testDataUtil.Contains<ItemTemplateSectionEntity>())
+            testDataUtil.AddItemTemplateSection();
+        if (!testDataUtil.Contains<ItemTemplateSubCategoryEntity>())
+            testDataUtil.AddItemTemplateSubCategory();
+        testDataUtil.AddItemTemplate(i =>
+        {
+            i.Source = source;
+            i.SourceUserId = testDataUtil.Get<UserEntity>(StepArgumentUtil.ParseIndex(userIndexString)).Id;
+        });
     }
 
     [Given("^an item template$")]
